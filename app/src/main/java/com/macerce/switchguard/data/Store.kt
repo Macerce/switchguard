@@ -2,6 +2,7 @@ package com.macerce.switchguard.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -125,6 +126,29 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
     fun setRules(deviceId: String, r: DeviceRules) { rules = rules + (deviceId to r) }
     fun monitoredIds(): Set<String> = snapshots.map { it.id }.filter { rulesFor(it).monitored }.toSet()
+
+    // --- Otomasyon ---
+    var automations: List<Automation>
+        get() = prefs.getString("automations", null)?.let {
+            runCatching { Automation.listFromJson(it) }.getOrNull()
+        } ?: emptyList()
+        set(v) = put { putString("automations", Automation.listToJson(v)) }
+
+    fun saveAutomation(a: Automation) {
+        val list = automations
+        automations = if (list.any { it.id == a.id }) list.map { if (it.id == a.id) a else it } else list + a
+    }
+
+    fun deleteAutomation(id: String) { automations = automations.filterNot { it.id == id } }
+
+    // --- Günlük özet ---
+    var dailySummaryEnabled: Boolean
+        get() = prefs.getBoolean("summaryEnabled", false)
+        set(v) = put { putBoolean("summaryEnabled", v) }
+    /** Özetin gönderileceği saat (günün dakikası). */
+    var dailySummaryMinute: Int
+        get() = prefs.getInt("summaryMinute", 21 * 60)
+        set(v) = put { putInt("summaryMinute", v) }
 
     /** Kullanıcı kapatana kadar alarmda gösterilen satırlar. */
     var pendingAlarm: List<String>

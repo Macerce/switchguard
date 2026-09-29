@@ -20,7 +20,10 @@ import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
+import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
@@ -33,6 +36,7 @@ import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.LiveState
+import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.Store
 import java.io.IOException
 import java.text.DateFormat
@@ -57,6 +61,8 @@ class MonitorService : Service() {
     private lateinit var worker: HandlerThread
     private lateinit var handler: Handler
     private lateinit var labels: ChangeLabels
+    private lateinit var metrics: MetricsLog
+    private val automations = AutomationEngine()
 
     private val grace = OfflineGrace()
     private var running = false
@@ -79,6 +85,7 @@ class MonitorService : Service() {
         super.onCreate()
         store = Store.get(this)
         log = EventLog.get(this)
+        metrics = MetricsLog.get(this)
         client = EwelinkClient(store)
         notifier = Notifier(this, store)
         labels = labels(this)
@@ -145,6 +152,8 @@ class MonitorService : Service() {
             // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir.
             store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) }
             setState(ConnState.CONNECTING)
+            runCatching { metrics.prune() }
+            SummaryScheduler.schedule(this)
             sync()
             reconnectNow()
             handler.post(loop)
@@ -209,6 +218,7 @@ class MonitorService : Service() {
         val wall = System.currentTimeMillis()
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
+        runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
 
         if (authFailed) return
         socket.sendPingIfDue(wall)
@@ -355,8 +365,54 @@ class MonitorService : Service() {
     private fun process(current: List<DeviceSnapshot>) {
         val previous = store.snapshots.associateBy { it.id }
         store.snapshots = current
+        val wall = System.currentTimeMillis()
+        runCatching { metrics.record(previous, current, wall) }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
+        runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
+    }
+
+    // ---------------------------------------------------------------- otomasyon
+
+    private fun runAutomations(fired: List<Automation>) {
+        fired.forEach(::execute)
+        // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
+        val due = automations.nextDueAt(store.snapshots.associateBy { it.id }, store.automations) ?: return
+        handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
+    }
+
+    private fun execute(a: Automation) {
+        val title = getString(R.string.automation_fired, a.name)
+        when (a.action.kind) {
+            ActionKind.TURN_ON, ActionKind.TURN_OFF -> {
+                val on = a.action.kind == ActionKind.TURN_ON
+                val target = store.snapshots.firstOrNull { it.id == a.action.deviceId }
+                if (target == null) {
+                    log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, "$title: ${getString(R.string.device_missing)}", "")
+                    return
+                }
+                val label = if (target.isMultiChannel) labels.channel(target.name, a.action.channel + 1) else target.name
+                val text = "$title: $label → ${if (on) labels.on else labels.off}"
+                try {
+                    // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
+                    LiveState.expected.expect(target.id, a.action.channel, on, System.currentTimeMillis())
+                    client.setSwitch(target, a.action.channel, on)
+                    log.add(target.id, target.name, EventKind.AUTOMATION, text, "")
+                } catch (e: Exception) {
+                    val failed = getString(R.string.automation_failed, text, e.message.orEmpty())
+                    log.add(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name)
+                    notifier.notifyEvent(failed)
+                }
+            }
+            ActionKind.ALARM, ActionKind.NOTIFY -> {
+                val source = store.snapshots.firstOrNull { it.id == a.trigger.deviceId }
+                val text = if (source != null) "$title (${source.name})" else title
+                val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
+                val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
+                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name)
+                if (effective == AlertAction.ALARM) addAlarm(text) else notifier.notifyEvent(text)
+            }
+        }
     }
 
     private fun handle(change: Change) {

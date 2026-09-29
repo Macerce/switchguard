@@ -11,6 +11,8 @@ class BootReceiver : BroadcastReceiver() {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED &&
             intent.action != Intent.ACTION_MY_PACKAGE_REPLACED
         ) return
+        // Alarmlar yeniden başlatmada silinir.
+        SummaryScheduler.schedule(context)
         if (Store.get(context).monitoringEnabled) {
             MonitorService.send(context, MonitorService.ACTION_START)
         }

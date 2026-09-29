@@ -72,8 +72,31 @@ class EwelinkClient(private val store: Store) {
         } else {
             JSONObject().put("switch", value)
         }
-        val body = JSONObject().put("type", 1).put("id", device.id).put("params", params)
+        setParams(device.id, params)
+    }
+
+    /** Cihaza parametre yazar (durum, zamanlayıcı vb.). */
+    fun setParams(deviceId: String, params: JSONObject) {
+        val body = JSONObject().put("type", 1).put("id", deviceId).put("params", params)
         withTokenRetry { authed("POST", "/v2/device/thing/status", body.toString()) }
+    }
+
+    /** Tek cihazın güncel ham parametreleri (zamanlayıcılar dahil). */
+    fun getDeviceParams(deviceId: String): JSONObject {
+        val body = JSONObject().put("thingList", JSONArray().put(JSONObject().put("itemType", 1).put("id", deviceId)))
+        val text = withTokenRetry { authed("POST", "/v2/device/thing", body.toString()) }
+        return DeviceParser.parseSingleParams(text) ?: JSONObject()
+    }
+
+    fun setTimers(deviceId: String, timers: JSONArray) = setParams(deviceId, JSONObject().put("timers", timers))
+
+    /**
+     * Enerji ölçen cihazdan [seconds] saniye boyunca canlı güç göndermesini ister.
+     * POW R2 düz sayı, yeni modeller nesne biçimi bekler.
+     */
+    fun requestLiveEnergy(device: DeviceSnapshot, seconds: Int = 120) {
+        val value: Any = if (device.uiid == 32) seconds else JSONObject().put("all", 1).put("time", seconds)
+        setParams(device.id, JSONObject().put("uiActive", value))
     }
 
     /** WebSocket sunucusunun adresini döndürür: wss://domain:port/api/ws */

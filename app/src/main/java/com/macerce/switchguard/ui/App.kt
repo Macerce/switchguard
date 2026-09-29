@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Settings
@@ -31,6 +32,7 @@ import com.macerce.switchguard.data.Store
 
 private enum class Tab(val label: Int, val icon: ImageVector) {
     DEVICES(R.string.tab_devices, Icons.Rounded.Devices),
+    AUTOMATIONS(R.string.tab_automations, Icons.Rounded.AutoMode),
     HISTORY(R.string.tab_history, Icons.Rounded.History),
     SETTINGS(R.string.tab_settings, Icons.Rounded.Settings),
 }
@@ -78,6 +80,7 @@ fun App() {
                 val mod = Modifier.padding(bottom = padding.calculateBottomPadding())
                 when (tab) {
                     Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
+                    Tab.AUTOMATIONS -> AutomationsScreen(mod)
                     Tab.HISTORY -> HistoryScreen(mod)
                     Tab.SETTINGS -> SettingsScreen(mod)
                 }

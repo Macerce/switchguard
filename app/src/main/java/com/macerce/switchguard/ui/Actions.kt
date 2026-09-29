@@ -6,13 +6,20 @@ import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
+import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.DeviceTimers
+import com.macerce.switchguard.core.RepeatTimer
+import com.macerce.switchguard.core.TimerEntry
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.DailySummary
 import com.macerce.switchguard.service.MonitorService
+import com.macerce.switchguard.service.Notifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.TimeZone
 
 /** Arayüzden tetiklenen işlemler. Ağ çağrıları IO dispatcher'da çalışır. */
 object Actions {
@@ -59,6 +66,49 @@ object Actions {
                 }
             }
         }
+
+    /** Günlük özeti hemen bildirim olarak gösterir; hiç kayıt yoksa false. */
+    suspend fun previewSummary(context: Context): Boolean = withContext(Dispatchers.IO) {
+        val lines = DailySummary.build(context) ?: return@withContext false
+        Notifier(context, Store.get(context)).notifySummary(context.getString(R.string.summary_title), lines)
+        true
+    }
+
+    /** Cihazdaki eWeLink zamanlayıcıları (uygulamanın tanımadıkları da dahil, korunmak üzere). */
+    suspend fun loadTimers(context: Context, deviceId: String): Result<List<TimerEntry>> = withContext(Dispatchers.IO) {
+        runCatching {
+            val params = EwelinkClient(Store.get(context)).getDeviceParams(deviceId)
+            DeviceTimers.parse(params.optJSONArray("timers"), utcOffsetMinutes())
+        }
+    }
+
+    /**
+     * Zamanlayıcıyı ekler/günceller ([timer] != null) ya da siler ([timer] == null, [id] ile).
+     * Başka bir yerden (eWeLink uygulaması) yapılan değişiklikleri ezmemek için liste önce yeniden okunur.
+     */
+    suspend fun saveTimer(context: Context, device: DeviceSnapshot, id: String, timer: RepeatTimer?): Result<List<TimerEntry>> =
+        withContext(Dispatchers.IO) {
+            runCatching {
+                val client = EwelinkClient(Store.get(context))
+                val offset = utcOffsetMinutes()
+                val fresh = DeviceTimers.parse(client.getDeviceParams(device.id).optJSONArray("timers"), offset)
+                val timers = DeviceTimers.rebuild(fresh, id, timer, device.isMultiChannel, offset)
+                client.setTimers(device.id, timers)
+                DeviceTimers.parse(timers, offset)
+            }
+        }
+
+    /** Enerji ölçen cihazdan bir süre canlı güç ister (detay ekranı açıkken). */
+    suspend fun requestLiveEnergy(context: Context, device: DeviceSnapshot) = withContext(Dispatchers.IO) {
+        runCatching { EwelinkClient(Store.get(context)).requestLiveEnergy(device) }
+    }
+
+    /** Cihaz verisinin ham hali; destek/hata ayıklama için panoya kopyalanır. */
+    suspend fun rawParams(context: Context, deviceId: String): Result<String> = withContext(Dispatchers.IO) {
+        runCatching { EwelinkClient(Store.get(context)).getDeviceParams(deviceId).toString(2) }
+    }
+
+    private fun utcOffsetMinutes() = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 60_000
 
     fun notificationsEnabled(context: Context) =
         context.getSystemService(NotificationManager::class.java).areNotificationsEnabled()

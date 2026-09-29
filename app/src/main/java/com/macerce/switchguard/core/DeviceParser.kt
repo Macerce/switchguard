@@ -13,17 +13,29 @@ object DeviceParser {
             val item = list.getJSONObject(i).optJSONObject("itemData") ?: continue
             val id = item.optString("deviceid")
             if (id.isEmpty()) continue
+            val params = item.optJSONObject("params")
+            val uiid = item.optJSONObject("extra")?.optInt("uiid", 0) ?: 0
+            val energy = params?.let { EnergyParser.parse(uiid, it) }
             result += DeviceSnapshot(
                 id = id,
                 name = item.optString("name", id),
                 online = item.optBoolean("online", false),
-                switches = parseSwitches(item.optJSONObject("params")),
+                switches = parseSwitches(params),
+                uiid = uiid,
+                power = energy?.power,
+                voltage = energy?.voltage,
+                current = energy?.current,
             )
         }
         return result
     }
 
-    private fun parseSwitches(params: JSONObject?): Map<Int, Boolean> {
+    /** Tek cihaz sorgusunun (`POST /v2/device/thing`) ham params nesnesi. */
+    fun parseSingleParams(body: String): JSONObject? =
+        JSONObject(body).optJSONObject("data")?.optJSONArray("thingList")
+            ?.optJSONObject(0)?.optJSONObject("itemData")?.optJSONObject("params")
+
+    fun parseSwitches(params: JSONObject?): Map<Int, Boolean> {
         if (params == null) return emptyMap()
         val multi = params.optJSONArray("switches")
         if (multi != null && multi.length() > 0) {
@@ -43,7 +55,12 @@ object DeviceParser {
         for (d in devices) {
             val sw = JSONObject()
             d.switches.forEach { (k, v) -> sw.put(k.toString(), v) }
-            arr.put(JSONObject().put("id", d.id).put("name", d.name).put("online", d.online).put("switches", sw))
+            val o = JSONObject().put("id", d.id).put("name", d.name).put("online", d.online).put("switches", sw)
+                .put("uiid", d.uiid)
+            d.power?.let { o.put("power", it) }
+            d.voltage?.let { o.put("voltage", it) }
+            d.current?.let { o.put("current", it) }
+            arr.put(o)
         }
         return arr.toString()
     }
@@ -58,7 +75,13 @@ object DeviceParser {
                 name = o.getString("name"),
                 online = o.getBoolean("online"),
                 switches = sw.keys().asSequence().associate { it.toInt() to sw.getBoolean(it) }.toSortedMap(),
+                uiid = o.optInt("uiid", 0),
+                power = o.optDoubleOrNull("power"),
+                voltage = o.optDoubleOrNull("voltage"),
+                current = o.optDoubleOrNull("current"),
             )
         }
     }
+
+    private fun JSONObject.optDoubleOrNull(key: String): Double? = if (has(key)) optDouble(key) else null
 }

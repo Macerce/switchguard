@@ -2,6 +2,7 @@ package com.macerce.switchguard.ui
 
 import android.app.Activity
 import android.app.TimePickerDialog
+import android.widget.Toast
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
@@ -32,6 +33,8 @@ import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.Summarize
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.Timer
@@ -54,6 +57,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,6 +74,8 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.SummaryScheduler
+import kotlinx.coroutines.launch
 import com.macerce.switchguard.service.MonitorService
 import java.util.Calendar
 
@@ -96,6 +102,7 @@ fun SettingsScreen(modifier: Modifier) {
 
     // version okunarak ayarlar her değişimde tazelenir.
     val s = remember(version, resumed) { store }
+    val scope = rememberCoroutineScope()
     val soundName = remember(version) {
         val uri = s.alarmSoundUri?.let(Uri::parse)
             ?: RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
@@ -266,6 +273,40 @@ fun SettingsScreen(modifier: Modifier) {
                 }
             }
 
+            // ---------------------------------------------------------------- Günlük özet
+            SectionTitle(stringResource(R.string.section_summary))
+            SectionCard {
+                InfoRow(Icons.Rounded.Summarize, stringResource(R.string.daily_summary), stringResource(R.string.daily_summary_desc)) {
+                    Switch(checked = s.dailySummaryEnabled, onCheckedChange = {
+                        store.dailySummaryEnabled = it
+                        SummaryScheduler.schedule(context)
+                    })
+                }
+                if (s.dailySummaryEnabled) {
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.Schedule, stringResource(R.string.daily_summary_time), formatMinute(context, s.dailySummaryMinute),
+                        Modifier.clickable {
+                            pickTime(context, s.dailySummaryMinute) {
+                                store.dailySummaryMinute = it
+                                SummaryScheduler.schedule(context)
+                            }
+                        },
+                    )
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.Visibility, stringResource(R.string.daily_summary_preview), null,
+                        Modifier.clickable {
+                            scope.launch {
+                                if (!Actions.previewSummary(context)) {
+                                    Toast.makeText(context, resources.getString(R.string.summary_no_data), Toast.LENGTH_LONG).show()
+                                }
+                            }
+                        },
+                    )
+                }
+            }
+
             // ---------------------------------------------------------------- İzinler
             SectionTitle(stringResource(R.string.section_permissions))
             SectionCard {
@@ -321,14 +362,14 @@ private fun graceLabel(sec: Int): String = when {
     else -> stringResource(R.string.minutes_n, sec / 60)
 }
 
-private fun formatMinute(context: android.content.Context, minute: Int): String {
+fun formatMinute(context: android.content.Context, minute: Int): String {
     val cal = Calendar.getInstance().apply {
         set(Calendar.HOUR_OF_DAY, minute / 60); set(Calendar.MINUTE, minute % 60)
     }
     return AndroidDateFormat.getTimeFormat(context).format(cal.time)
 }
 
-private fun pickTime(context: android.content.Context, minute: Int, onPick: (Int) -> Unit) {
+fun pickTime(context: android.content.Context, minute: Int, onPick: (Int) -> Unit) {
     TimePickerDialog(
         context, { _, h, m -> onPick(h * 60 + m) },
         minute / 60, minute % 60, AndroidDateFormat.is24HourFormat(context),

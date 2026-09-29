@@ -189,4 +189,88 @@
     <string name="notif_alarm_title">⚠ Device change (%d)</string>
     <string name="notif_event_title">Device change</string>
     <string name="warn_session_expired">Your eWeLink session expired. Open SwitchGuard and sign in again to keep monitoring.</string>
+    <!-- Otomasyon -->
+    <string name="tab_automations">Automations</string>
+    <string name="automation_add">Add</string>
+    <string name="automation_new">New automation</string>
+    <string name="automation_edit">Edit automation</string>
+    <string name="automation_name">Name</string>
+    <string name="automation_when">When</string>
+    <string name="automation_then">Then</string>
+    <string name="automation_device">Device</string>
+    <string name="automation_event">Event</string>
+    <string name="automation_channel">Channel</string>
+    <string name="automation_minutes">Duration (minutes)</string>
+    <string name="automation_watts">Threshold (W)</string>
+    <string name="automation_current_power">Current power: %s</string>
+    <string name="automation_action">Action</string>
+    <string name="automation_delay">Delay before action (minutes, 0 = immediately)</string>
+    <string name="automation_hint">Automations run on this phone while monitoring is on. For schedules that must work even when the phone is off, use the timers on the device page.</string>
+    <string name="automation_after">(after %d min)</string>
+    <string name="automation_delete_title">Delete automation?</string>
+    <string name="automation_fired">Automation “%s”</string>
+    <string name="automation_failed">%1$s — failed: %2$s</string>
+    <string name="automations_empty">No automations yet</string>
+    <string name="automations_examples">Examples:\n• When the sump level channel turns on, turn on the lights\n• If the pump stays on for 30 minutes, turn it off and ring the alarm\n• If power goes above 2000 W, notify me</string>
+    <string name="automations_need_monitoring">Monitoring is off — automations will not run until you start it.</string>
+    <string name="event_by_automation">by automation</string>
+    <string name="action_delete">Delete</string>
+    <string name="trigger_turned_on">turns on</string>
+    <string name="trigger_turned_off">turns off</string>
+    <string name="trigger_stayed_on">stays on for</string>
+    <string name="trigger_stayed_off">stays off for</string>
+    <string name="trigger_went_offline">goes offline</string>
+    <string name="trigger_came_online">comes back online</string>
+    <string name="trigger_power_above">power goes above</string>
+    <string name="trigger_power_below">power drops below</string>
+    <string name="auto_action_turn_on">Turn on</string>
+    <string name="auto_action_turn_off">Turn off</string>
+    <string name="auto_action_alarm">Ring alarm</string>
+    <string name="auto_action_notify">Send notification</string>
+
+    <!-- Enerji -->
+    <string name="section_energy">Energy</string>
+    <string name="energy_power">Power</string>
+    <string name="energy_voltage">Voltage</string>
+    <string name="energy_current">Current</string>
+    <string name="energy_today">Today</string>
+    <string name="energy_month">This month</string>
+    <string name="energy_last_7_days">Last 7 days</string>
+    <string name="energy_no_data">Consumption history is recorded while monitoring is on. Check back later.</string>
+    <string name="energy_hint">Consumption is calculated by SwitchGuard from power readings taken while monitoring is on, so it may differ slightly from the eWeLink app.</string>
+
+    <!-- Zamanlayıcılar -->
+    <string name="section_timers">Timers (on the device)</string>
+    <string name="timers_empty">No timers. Timers run on the device itself, even when your phone is off.</string>
+    <string name="timers_load_failed">Could not load timers (%s).</string>
+    <string name="timer_add">Add timer</string>
+    <string name="timer_edit">Edit timer</string>
+    <string name="timer_add_desc">Turn on or off at a set time on chosen days</string>
+    <string name="timer_full">A device can hold at most %d timers</string>
+    <string name="timer_time">Time</string>
+    <string name="timer_other">Other timer</string>
+    <string name="timer_other_desc">Created in the eWeLink app (one-time, countdown…). Kept as is; edit it in eWeLink.</string>
+    <string name="days_every">Every day</string>
+    <string name="days_weekdays">Weekdays</string>
+    <string name="days_weekend">Weekends</string>
+
+    <!-- Günlük özet -->
+    <string name="section_summary">Daily summary</string>
+    <string name="daily_summary">Daily summary notification</string>
+    <string name="daily_summary_desc">How many times each device turned on, how long it stayed on and how much energy it used today</string>
+    <string name="daily_summary_time">Send at</string>
+    <string name="daily_summary_preview">Show today’s summary now</string>
+    <string name="summary_title">Today’s summary</string>
+    <string name="summary_usage">turned on %1$d×, on for %2$s</string>
+    <string name="summary_nothing">No activity recorded today.</string>
+    <string name="summary_no_data">No data recorded yet. Data is collected while monitoring is on.</string>
+    <string name="channel_short">Ch%d</string>
+    <string name="duration_hm">%1$d h %2$d min</string>
+    <string name="duration_m">%d min</string>
+
+    <!-- Gelişmiş -->
+    <string name="section_advanced">Advanced</string>
+    <string name="raw_data">Copy device data</string>
+    <string name="raw_data_desc">Copies the device’s raw data to the clipboard, useful for reporting an unsupported model</string>
+    <string name="raw_data_copied">Copied</string>
 </resources>

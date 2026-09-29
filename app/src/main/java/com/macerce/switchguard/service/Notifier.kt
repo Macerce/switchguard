@@ -74,6 +74,18 @@ class Notifier(private val context: Context, private val store: Store) {
 
     fun clearWarning() = nm.cancel(ID_WARN)
 
+    fun notifySummary(title: String, lines: List<String>) = nm.notify(
+        ID_SUMMARY,
+        Notification.Builder(context, CH_EVENTS)
+            .setSmallIcon(R.drawable.ic_stat_guard)
+            .setContentTitle(title)
+            .setContentText(lines.first())
+            .setStyle(Notification.BigTextStyle().bigText(lines.joinToString("\n")))
+            .setContentIntent(openApp())
+            .setAutoCancel(true)
+            .build()
+    )
+
     /** Alarm bildirimini [lines] ile gösterir/günceller ve ses + titreşimi başlatır. */
     fun showAlarm(lines: List<String>) {
         val dismiss = PendingIntent.getService(
@@ -154,6 +166,7 @@ class Notifier(private val context: Context, private val store: Store) {
         const val ID_STATUS = 1
         const val ID_ALARM = 2
         const val ID_WARN = 3
+        const val ID_SUMMARY = 4
 
         fun createChannels(context: Context) {
             val nm = context.getSystemService(NotificationManager::class.java)

@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Alarm
+import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.DeleteSweep
@@ -154,6 +155,7 @@ private fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventType.CAME_ONLINE.name -> Icons.Rounded.CloudQueue
     EventKind.USER -> Icons.Rounded.TouchApp
     EventKind.SHORT_DROP -> Icons.Rounded.NetworkCheck
+    EventKind.AUTOMATION -> Icons.Rounded.AutoMode
     else -> Icons.Rounded.Alarm
 }
 
@@ -168,6 +170,7 @@ fun EventRow(e: LoggedEvent, showDevice: Boolean) {
             val sub = when (e.kind) {
                 EventKind.USER -> stringResource(R.string.event_by_user)
                 EventKind.SHORT_DROP -> stringResource(R.string.event_short_drop_sub)
+                EventKind.AUTOMATION -> stringResource(R.string.event_by_automation)
                 else -> null
             }
             Text(

@@ -11,6 +11,8 @@ sealed class WsEvent {
         val deviceId: String,
         val online: Boolean?,
         val switches: Map<Int, Boolean>,
+        /** Mesajdaki enerji değerleri; ölçek cihazın uiid'sine bağlı olduğundan [WsMessages.apply] içinde okunur. */
+        val params: JSONObject? = null,
     ) : WsEvent()
     object Other : WsEvent()
 }
@@ -30,7 +32,8 @@ object WsMessages {
             return WsEvent.Update(
                 deviceId = id,
                 online = if (params.has("online")) params.optBoolean("online") else null,
-                switches = parseSwitches(params),
+                switches = DeviceParser.parseSwitches(params),
+                params = params,
             )
         }
         // Handshake yanıtı: action yok, error + config var.
@@ -43,21 +46,16 @@ object WsMessages {
         return WsEvent.Other
     }
 
-    fun apply(snapshot: DeviceSnapshot, update: WsEvent.Update): DeviceSnapshot = snapshot.copy(
-        online = update.online ?: snapshot.online,
-        switches = if (update.switches.isEmpty()) snapshot.switches
-        else (snapshot.switches + update.switches).toSortedMap(),
-    )
-
-    private fun parseSwitches(params: JSONObject): Map<Int, Boolean> {
-        params.optJSONArray("switches")?.let { arr ->
-            return (0 until arr.length()).associate { i ->
-                val s = arr.getJSONObject(i)
-                s.optInt("outlet", i) to (s.optString("switch") == "on")
-            }
-        }
-        val single = params.optString("switch", "")
-        return if (single.isEmpty()) emptyMap() else mapOf(0 to (single == "on"))
+    fun apply(snapshot: DeviceSnapshot, update: WsEvent.Update): DeviceSnapshot {
+        val energy = update.params?.let { EnergyParser.parse(snapshot.uiid, it) }
+        return snapshot.copy(
+            online = update.online ?: snapshot.online,
+            switches = if (update.switches.isEmpty()) snapshot.switches
+            else (snapshot.switches + update.switches).toSortedMap(),
+            power = energy?.power ?: snapshot.power,
+            voltage = energy?.voltage ?: snapshot.voltage,
+            current = energy?.current ?: snapshot.current,
+        )
     }
 
     const val DEFAULT_HB = 145

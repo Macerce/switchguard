@@ -185,4 +185,88 @@
     <string name="notif_alarm_title">⚠ Cihaz değişikliği (%d)</string>
     <string name="notif_event_title">Cihaz değişikliği</string>
     <string name="warn_session_expired">eWeLink oturumunuz sona erdi. İzlemeye devam etmek için SwitchGuard\'ı açıp yeniden giriş yapın.</string>
+    <!-- Otomasyon -->
+    <string name="tab_automations">Otomasyon</string>
+    <string name="automation_add">Ekle</string>
+    <string name="automation_new">Yeni otomasyon</string>
+    <string name="automation_edit">Otomasyonu düzenle</string>
+    <string name="automation_name">Ad</string>
+    <string name="automation_when">Ne zaman</string>
+    <string name="automation_then">Ne yapılsın</string>
+    <string name="automation_device">Cihaz</string>
+    <string name="automation_event">Olay</string>
+    <string name="automation_channel">Kanal</string>
+    <string name="automation_minutes">Süre (dakika)</string>
+    <string name="automation_watts">Eşik (W)</string>
+    <string name="automation_current_power">Şu anki güç: %s</string>
+    <string name="automation_action">İşlem</string>
+    <string name="automation_delay">İşlemden önce bekle (dakika, 0 = hemen)</string>
+    <string name="automation_hint">Otomasyonlar izleme açıkken bu telefonda çalışır. Telefon kapalıyken de çalışması gereken saatli işler için cihaz sayfasındaki zamanlayıcıları kullanın.</string>
+    <string name="automation_after">(%d dk sonra)</string>
+    <string name="automation_delete_title">Otomasyon silinsin mi?</string>
+    <string name="automation_fired">Otomasyon “%s”</string>
+    <string name="automation_failed">%1$s — başarısız: %2$s</string>
+    <string name="automations_empty">Henüz otomasyon yok</string>
+    <string name="automations_examples">Örnekler:\n• Rögar seviye kanalı açılınca aydınlatmayı aç\n• Pompa 30 dakikadan uzun açık kalırsa kapat ve alarm çal\n• Güç 2000 W\'ı geçerse bildirim gönder</string>
+    <string name="automations_need_monitoring">İzleme kapalı — başlatana kadar otomasyonlar çalışmaz.</string>
+    <string name="event_by_automation">otomasyon</string>
+    <string name="action_delete">Sil</string>
+    <string name="trigger_turned_on">açılınca</string>
+    <string name="trigger_turned_off">kapanınca</string>
+    <string name="trigger_stayed_on">şu süre açık kalınca:</string>
+    <string name="trigger_stayed_off">şu süre kapalı kalınca:</string>
+    <string name="trigger_went_offline">çevrimdışı olunca</string>
+    <string name="trigger_came_online">tekrar çevrimiçi olunca</string>
+    <string name="trigger_power_above">güç şunu aşınca:</string>
+    <string name="trigger_power_below">güç şunun altına inince:</string>
+    <string name="auto_action_turn_on">Aç</string>
+    <string name="auto_action_turn_off">Kapat</string>
+    <string name="auto_action_alarm">Alarm çal</string>
+    <string name="auto_action_notify">Bildirim gönder</string>
+
+    <!-- Enerji -->
+    <string name="section_energy">Enerji</string>
+    <string name="energy_power">Güç</string>
+    <string name="energy_voltage">Gerilim</string>
+    <string name="energy_current">Akım</string>
+    <string name="energy_today">Bugün</string>
+    <string name="energy_month">Bu ay</string>
+    <string name="energy_last_7_days">Son 7 gün</string>
+    <string name="energy_no_data">Tüketim geçmişi izleme açıkken kaydedilir. Bir süre sonra tekrar bakın.</string>
+    <string name="energy_hint">Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafından hesaplanır; eWeLink uygulamasındaki değerden biraz farklı olabilir.</string>
+
+    <!-- Zamanlayıcılar -->
+    <string name="section_timers">Zamanlayıcılar (cihazda)</string>
+    <string name="timers_empty">Zamanlayıcı yok. Zamanlayıcılar cihazın kendisinde çalışır, telefon kapalıyken bile.</string>
+    <string name="timers_load_failed">Zamanlayıcılar alınamadı (%s).</string>
+    <string name="timer_add">Zamanlayıcı ekle</string>
+    <string name="timer_edit">Zamanlayıcıyı düzenle</string>
+    <string name="timer_add_desc">Seçilen günlerde belirli saatte aç veya kapat</string>
+    <string name="timer_full">Bir cihazda en fazla %d zamanlayıcı olabilir</string>
+    <string name="timer_time">Saat</string>
+    <string name="timer_other">Diğer zamanlayıcı</string>
+    <string name="timer_other_desc">eWeLink uygulamasında oluşturulmuş (tek seferlik, geri sayım…). Olduğu gibi korunur; eWeLink\'ten düzenleyin.</string>
+    <string name="days_every">Her gün</string>
+    <string name="days_weekdays">Hafta içi</string>
+    <string name="days_weekend">Hafta sonu</string>
+
+    <!-- Günlük özet -->
+    <string name="section_summary">Günlük özet</string>
+    <string name="daily_summary">Günlük özet bildirimi</string>
+    <string name="daily_summary_desc">Bugün her cihaz kaç kez açıldı, ne kadar açık kaldı ve ne kadar enerji harcadı</string>
+    <string name="daily_summary_time">Gönderim saati</string>
+    <string name="daily_summary_preview">Bugünün özetini şimdi göster</string>
+    <string name="summary_title">Günün özeti</string>
+    <string name="summary_usage">%1$d kez açıldı, %2$s açık kaldı</string>
+    <string name="summary_nothing">Bugün kayıtlı hareket yok.</string>
+    <string name="summary_no_data">Henüz kayıt yok. Veriler izleme açıkken toplanır.</string>
+    <string name="channel_short">K%d</string>
+    <string name="duration_hm">%1$d sa %2$d dk</string>
+    <string name="duration_m">%d dk</string>
+
+    <!-- Gelişmiş -->
+    <string name="section_advanced">Gelişmiş</string>
+    <string name="raw_data">Cihaz verisini kopyala</string>
+    <string name="raw_data_desc">Cihazın ham verisini panoya kopyalar; desteklenmeyen bir modeli bildirmek için</string>
+    <string name="raw_data_copied">Kopyalandı</string>
 </resources>

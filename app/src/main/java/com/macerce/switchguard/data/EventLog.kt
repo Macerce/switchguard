@@ -12,6 +12,7 @@ object EventKind {
     const val USER = "USER"            // Uygulamadan yapılan aç/kapa
     const val SHORT_DROP = "SHORT_DROP" // Bekleme süresinde geri gelen kısa kopma
     const val TEST = "TEST"
+    const val AUTOMATION = "AUTOMATION" // Otomasyonun yaptığı işlem
 }
 
 data class LoggedEvent(

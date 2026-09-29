@@ -288,6 +288,16 @@ private fun DeviceCard(device: DeviceSnapshot, monitored: Boolean, onClick: () -
                 Text(device.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 OnlineDot(device.online)
             }
+            // Yalnızca enerji ölçen cihazlarda anlık güç.
+            if (device.hasEnergy && device.online) {
+                Text(
+                    formatWatts(device.power ?: 0.0),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(end = 12.dp),
+                )
+            }
             Icon(
                 if (monitored) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
                 contentDescription = stringResource(if (monitored) R.string.monitored else R.string.not_monitored),

@@ -80,6 +80,11 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                 }
             }
 
+            // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez.
+            if (device.hasEnergy) EnergySection(device)
+
+            TimersSection(device)
+
             SectionTitle(stringResource(R.string.section_monitoring))
             SectionCard {
                 InfoRow(
@@ -118,6 +123,9 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                     }
                 }
             }
+
+            SectionTitle(stringResource(R.string.section_advanced))
+            SectionCard { RawDataRow(deviceId) }
         }
     }
 }
