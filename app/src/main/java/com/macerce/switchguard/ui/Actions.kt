@@ -56,10 +56,11 @@ object Actions {
                 val store = Store.get(context)
                 LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
                 EwelinkClient(store).setSwitch(device, channel, on)
-                if (store.monitoringEnabled) {
-                    MonitorService.send(context, MonitorService.ACTION_SYNC)
+                val service = MonitorService.instance
+                if (store.monitoringEnabled && service != null) {
+                    service.onControlled(device.id, channel, on)
                 } else {
-                    // İzleme kapalı: durumu doğrudan güncelle.
+                    // İzleme kapalı (ya da servis henüz yok): durumu doğrudan güncelle.
                     store.snapshots = store.snapshots.map {
                         if (it.id == device.id) it.copy(switches = it.switches + (channel to on)) else it
                     }

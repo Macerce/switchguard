@@ -353,6 +353,16 @@ class MonitorService : Service() {
         }
     }
 
+    /**
+     * Uygulamadan gönderilen aç/kapa komutu başarılı olunca çağrılır. Bulut, cihazın yeni durumunu
+     * ancak cihaz geri bildirdikten sonra (≈1-2 sn) döndürdüğünden hemen senkron yapmak eski durumu
+     * geri yazar. Bu yüzden yeni durum hemen uygulanır, bulutla karşılaştırma gecikmeli yapılır.
+     */
+    fun onControlled(deviceId: String, channel: Int, on: Boolean) {
+        handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on))) }
+        handler.postDelayed({ if (running) sync() }, CONFIRM_DELAY_MS)
+    }
+
     private fun applyUpdate(update: WsEvent.Update) {
         val list = store.snapshots
         val before = list.firstOrNull { it.id == update.deviceId } ?: return
@@ -494,6 +504,7 @@ class MonitorService : Service() {
         private const val LOOP_MS = 15_000L
         private const val ALARM_TICK_MS = 60_000L
         private const val RESYNC_MS = 5 * 60_000L
+        private const val CONFIRM_DELAY_MS = 5_000L
 
         @Volatile var instance: MonitorService? = null
             private set
