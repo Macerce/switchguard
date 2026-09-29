@@ -65,6 +65,9 @@
     <string name="not_monitored">Not monitored</string>
     <string name="power">Power</string>
     <string name="channel_n">Channel %d</string>
+    <string name="channels_summary">%1$d channels · %2$d on</string>
+    <string name="action_expand">Show channels</string>
+    <string name="action_collapse">Hide channels</string>
     <string name="control_failed">Couldn\'t change device: %s</string>
 
     <!-- Device detail -->

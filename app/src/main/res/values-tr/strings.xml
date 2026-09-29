@@ -61,6 +61,9 @@
     <string name="not_monitored">İzlenmiyor</string>
     <string name="power">Güç</string>
     <string name="channel_n">Kanal %d</string>
+    <string name="channels_summary">%1$d kanal · %2$d açık</string>
+    <string name="action_expand">Kanalları göster</string>
+    <string name="action_collapse">Kanalları gizle</string>
     <string name="control_failed">Cihaz değiştirilemedi: %s</string>
 
     <!-- Cihaz detayı -->

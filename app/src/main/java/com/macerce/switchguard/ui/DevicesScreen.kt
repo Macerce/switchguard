@@ -2,6 +2,8 @@ package com.macerce.switchguard.ui
 
 import android.text.format.DateUtils
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
@@ -24,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.AlarmOff
 import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
@@ -56,9 +59,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -289,8 +295,42 @@ private fun DeviceCard(device: DeviceSnapshot, monitored: Boolean, onClick: () -
             )
         }
         Column(Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
-            device.switches.toSortedMap().forEach { (channel, on) ->
-                ChannelRow(device, channel, on)
+            if (device.isMultiChannel) {
+                // Çok kanallı cihazlarda kanallar varsayılan olarak katlı; özet satırı açıp kapatır.
+                var expanded by rememberSaveable(device.id) { mutableStateOf(false) }
+                val arrowAngle by animateFloatAsState(if (expanded) 180f else 0f, label = "arrow")
+                val onCount = device.switches.values.count { it }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .clickable { expanded = !expanded }
+                        .padding(horizontal = 8.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        stringResource(R.string.channels_summary, device.switches.size, onCount),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (onCount > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Icon(
+                        Icons.Rounded.ExpandMore,
+                        contentDescription = stringResource(if (expanded) R.string.action_collapse else R.string.action_expand),
+                        modifier = Modifier.rotate(arrowAngle),
+                    )
+                }
+                AnimatedVisibility(expanded, enter = expandVertically(), exit = shrinkVertically()) {
+                    Column {
+                        device.switches.toSortedMap().forEach { (channel, on) ->
+                            ChannelRow(device, channel, on)
+                        }
+                    }
+                }
+            } else {
+                device.switches.toSortedMap().forEach { (channel, on) ->
+                    ChannelRow(device, channel, on)
+                }
             }
         }
     }
