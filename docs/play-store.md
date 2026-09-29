@@ -66,8 +66,11 @@
 
 **Hedef kitle:** 18+ · **Reklam:** Yok
 
-## 5. Ekran görüntüleri
-Play en az 2 telefon ekran görüntüsü ister (`docs/screenshots/` içinde hazır olanları kullanabilirsiniz; gerçek cihazlarınızla çekilenler daha iyi görünür).
+## 5. Görseller
+- **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
+- **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
+- **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
+- **Ekran görüntüleri:** `docs/screenshots/` içinde örnek verilerle çekilmiş görüntüler var. Play en az 2 telefon görüntüsü ister; kendi cihazlarınızla çekilenler daha inandırıcı olur.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:

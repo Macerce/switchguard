@@ -50,7 +50,7 @@
     <string name="status_polling">Watching %1$d device(s) · every %2$d s</string>
     <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks</string>
     <string name="detail_reconnecting">Reconnecting for instant updates…</string>
-    <string name="detail_api_error">eWeLink error %d</string>
+    <string name="detail_api_error">Error code %d</string>
     <string name="monitoring_off_hint">Start monitoring to get alarms</string>
     <string name="last_update">Updated %s</string>
     <string name="device_count">%d device(s)</string>

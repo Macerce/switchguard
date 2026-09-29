@@ -46,7 +46,7 @@
     <string name="status_polling">%1$d cihaz izleniyor · %2$d sn\'de bir</string>
     <string name="detail_ws_unsupported">Bu App ID ile anlık bildirim kullanılamıyor; periyodik kontrol yapılıyor</string>
     <string name="detail_reconnecting">Anlık bağlantı yeniden kuruluyor…</string>
-    <string name="detail_api_error">eWeLink hatası %d</string>
+    <string name="detail_api_error">Hata kodu %d</string>
     <string name="monitoring_off_hint">Alarm almak için izlemeyi başlatın</string>
     <string name="last_update">Güncellendi: %s</string>
     <string name="device_count">%d cihaz</string>

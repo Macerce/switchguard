@@ -13,18 +13,22 @@ import kotlinx.coroutines.flow.StateFlow
  * Uygulamanın tüm kalıcı ayar ve durumu (tek örnek). Uygulamaya özel alanda saklanır.
  * Arayüz, [version] değiştikçe yeniden çizilir.
  */
-class Store private constructor(context: Context) {
+class Store private constructor(context: Context) : SharedPreferences.OnSharedPreferenceChangeListener {
     val prefs: SharedPreferences =
         context.applicationContext.getSharedPreferences("switchguard", Context.MODE_PRIVATE)
 
     private val _version = MutableStateFlow(0)
     val version: StateFlow<Int> = _version
 
-    // Güçlü referans: SharedPreferences dinleyicileri zayıf referansla tutar.
-    private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ -> _version.value++ }
-
     init {
-        prefs.registerOnSharedPreferenceChangeListener(listener)
+        // Dinleyici Store'un kendisi: SharedPreferences dinleyicileri zayıf referansla tutar ve
+        // yalnızca yazılan bir alandaki dinleyiciyi R8 silip çöp toplayıcıya bırakabilir.
+        // Store tekil ve güçlü referanslı olduğundan hiç toplanmaz.
+        prefs.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        _version.value++
     }
 
     private fun str(key: String, def: String = "") = prefs.getString(key, def)!!

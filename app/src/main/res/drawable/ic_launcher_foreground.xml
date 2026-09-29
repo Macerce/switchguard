@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Kalkan + güç simgesi. 108dp tuval, içerik 72dp güvenli alanın içinde. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp" android:height="108dp"
     android:viewportWidth="108" android:viewportHeight="108">
-    <group android:translateX="27" android:translateY="25" android:scaleX="2.25" android:scaleY="2.25">
-        <path android:fillColor="#FFFFFF"
-            android:pathData="M12,1L3,5v6c0,5.55 3.84,10.74 9,12 5.16,-1.26 9,-6.45 9,-12V5l-9,-4z" />
+    <!-- Logo: kalkan + güç simgesi + alarm dalgaları. Kaynak: docs/brand/logo.svg -->
+    <path android:pathData="M33.5,37.7 A25,25 0 0 0 33.5,66.3" android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:strokeLineCap="round" android:strokeAlpha="0.95" />
+    <path android:pathData="M74.5,37.7 A25,25 0 0 1 74.5,66.3" android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:strokeLineCap="round" android:strokeAlpha="0.95" />
+    <path android:pathData="M28.6,34.2 A31,31 0 0 0 28.6,69.8" android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:strokeLineCap="round" android:strokeAlpha="0.55" />
+    <path android:pathData="M79.4,34.2 A31,31 0 0 1 79.4,69.8" android:strokeColor="#FFFFFF" android:strokeWidth="3.2" android:strokeLineCap="round" android:strokeAlpha="0.55" />
+    <group android:translateX="27.6" android:translateY="27.6" android:scaleX="2.2" android:scaleY="2.2">
+        <path android:fillColor="#FFFFFF" android:pathData="M12,1L3,5v6c0,5.55 3.84,10.74 9,12 5.16,-1.26 9,-6.45 9,-12V5l-9,-4z" />
     </group>
-    <group android:translateX="40.5" android:translateY="40" android:scaleX="1.125" android:scaleY="1.125">
-        <path android:fillColor="#00696A"
-            android:pathData="M13,3h-2v10h2L13,3zM17.83,5.17l-1.42,1.42C17.99,7.86 19,9.81 19,12c0,3.87 -3.13,7 -7,7s-7,-3.13 -7,-7c0,-2.19 1.01,-4.14 2.58,-5.42L6.17,5.17C4.23,6.82 3,9.26 3,12c0,4.97 4.03,9 9,9s9,-4.03 9,-9c0,-2.74 -1.23,-5.18 -3.17,-6.83z" />
+    <group android:translateX="41.4" android:translateY="39.4" android:scaleX="1.05" android:scaleY="1.05">
+        <path android:fillColor="#FF00796B" android:pathData="M13,3h-2v10h2L13,3zM17.83,5.17l-1.42,1.42C17.99,7.86 19,9.81 19,12c0,3.87 -3.13,7 -7,7s-7,-3.13 -7,-7c0,-2.19 1.01,-4.14 2.58,-5.42L6.17,5.17C4.23,6.82 3,9.26 3,12c0,4.97 4.03,9 9,9s9,-4.03 9,-9c0,-2.74 -1.23,-5.18 -3.17,-6.83z" />
     </group>
 </vector>

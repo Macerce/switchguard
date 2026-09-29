@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -70,7 +71,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             Text(stringResource(R.string.device_missing), Modifier.padding(24.dp))
             return
         }
-        Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
+        Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 24.dp)) {
             SectionTitle(stringResource(R.string.section_control))
             SectionCard {
                 Column(Modifier.padding(vertical = 8.dp)) {

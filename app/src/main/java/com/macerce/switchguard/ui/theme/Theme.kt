@@ -1,6 +1,10 @@
 package com.macerce.switchguard.ui.theme
 
+import android.app.Activity
 import android.os.Build
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
@@ -60,6 +64,18 @@ fun SwitchGuardTheme(content: @Composable () -> Unit) {
         Build.VERSION.SDK_INT >= 31 -> if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         dark -> Dark
         else -> Light
+    }
+    // Durum/gezinme çubuğu simgeleri temanın gerçek rengine uysun (sistemin gece modu ara ayarlarında
+    // ör. "bedtime" otomatik algılama yanılabiliyor).
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as? Activity)?.window ?: return@SideEffect
+            WindowCompat.getInsetsController(window, view).apply {
+                isAppearanceLightStatusBars = !dark
+                isAppearanceLightNavigationBars = !dark
+            }
+        }
     }
     MaterialTheme(colorScheme = scheme, content = content)
 }
