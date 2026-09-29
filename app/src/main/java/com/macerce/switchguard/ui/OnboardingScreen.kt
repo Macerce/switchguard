@@ -267,7 +267,7 @@ private fun PermissionsStep(resumed: Boolean) {
 
 @Composable
 private fun PermissionCard(icon: ImageVector, title: String, desc: String, granted: Boolean, onGrant: () -> Unit) {
-    SectionCard(Modifier.padding(horizontal = 0.dp)) {
+    SectionCard(horizontalPadding = 0) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(icon, null, tint = MaterialTheme.colorScheme.primary)

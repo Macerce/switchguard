@@ -42,9 +42,9 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 
 /** Yuvarlatılmış kart içinde gruplanmış satırlar. */
 @Composable
-fun SectionCard(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun SectionCard(modifier: Modifier = Modifier, horizontalPadding: Int = 16, content: @Composable () -> Unit) {
     Card(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = horizontalPadding.dp),
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {
