@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Sekmeler -->
+    <string name="tab_devices">Cihazlar</string>
+    <string name="tab_history">Geçmiş</string>
+    <string name="tab_settings">Ayarlar</string>
+
+    <!-- Ortak -->
+    <string name="action_back">Geri</string>
+    <string name="action_next">İleri</string>
+    <string name="action_skip">Atla</string>
+    <string name="action_save">Kaydet</string>
+    <string name="action_cancel">İptal</string>
+    <string name="action_clear">Temizle</string>
+    <string name="action_allow">İzin ver</string>
+    <string name="action_refresh">Yenile</string>
+    <string name="action_login">eWeLink ile giriş yap</string>
+    <string name="action_relogin">Yeniden giriş yap</string>
+    <string name="action_logout">Çıkış yap</string>
+    <string name="action_start_monitoring">İzlemeyi başlat</string>
+    <string name="action_stop_monitoring">İzlemeyi durdur</string>
+    <string name="action_dismiss_alarm">ALARMI KAPAT</string>
+    <string name="action_clear_history">Geçmişi temizle</string>
+
+    <string name="action_alarm">Alarm</string>
+    <string name="action_notify">Bildirim</string>
+    <string name="action_ignore">Yok</string>
+
+    <string name="label_on">AÇIK</string>
+    <string name="label_off">KAPALI</string>
+    <string name="label_online">ONLINE</string>
+    <string name="label_offline">OFFLINE</string>
+    <string name="label_channel">%1$s (K%2$d)</string>
+    <string name="label_online_title">Çevrimiçi</string>
+    <string name="label_offline_title">Çevrimdışı</string>
+
+    <!-- Bağlantı -->
+    <string name="state_live_title">Canlı izleniyor</string>
+    <string name="state_polling_title">İzleniyor (periyodik)</string>
+    <string name="state_connecting">Bağlanıyor…</string>
+    <string name="state_no_internet">eWeLink\'e ulaşılamıyor — internet bağlantısını kontrol edin</string>
+    <string name="state_auth_error">Oturum sona erdi — yeniden giriş yapın</string>
+    <string name="state_error">eWeLink hatası</string>
+    <string name="state_stopped">İzleme kapalı</string>
+    <string name="status_live">Canlı · %d cihaz izleniyor</string>
+    <string name="status_polling">%1$d cihaz izleniyor · %2$d sn\'de bir</string>
+    <string name="detail_ws_unsupported">Bu App ID ile anlık bildirim kullanılamıyor; periyodik kontrol yapılıyor</string>
+    <string name="detail_reconnecting">Anlık bağlantı yeniden kuruluyor…</string>
+    <string name="detail_api_error">eWeLink hatası %d</string>
+    <string name="monitoring_off_hint">Alarm almak için izlemeyi başlatın</string>
+    <string name="last_update">Güncellendi: %s</string>
+    <string name="device_count">%d cihaz</string>
+
+    <!-- Cihazlar -->
+    <string name="alarm_banner_title">Alarm · %d değişiklik</string>
+    <string name="alarm_banner_more">+%d daha</string>
+    <string name="login_needed_title">Giriş gerekli</string>
+    <string name="login_needed_body">Cihazlarınızı görmek için eWeLink hesabınızla giriş yapın.</string>
+    <string name="no_devices">Bu hesapta cihaz bulunamadı.</string>
+    <string name="monitored">İzleniyor</string>
+    <string name="not_monitored">İzlenmiyor</string>
+    <string name="power">Güç</string>
+    <string name="channel_n">Kanal %d</string>
+    <string name="control_failed">Cihaz değiştirilemedi: %s</string>
+
+    <!-- Cihaz detayı -->
+    <string name="device_missing">Bu cihaz artık hesabınızda değil.</string>
+    <string name="section_control">Kontrol</string>
+    <string name="section_monitoring">İzleme</string>
+    <string name="section_rules">Şu olduğunda</string>
+    <string name="section_recent_events">Son olaylar</string>
+    <string name="monitor_this_device">Bu cihazı izle</string>
+    <string name="monitor_this_device_desc">Değişiklikler kaydedilir ve aşağıdaki kurallara göre bildirilir</string>
+    <string name="rules_hint">Alarm, siz kapatana kadar çalar. Bildirim, normal bir bildirim gösterir. Yok ise olayı yalnızca geçmişe kaydeder.</string>
+    <string name="event_turned_off">Kapandığında</string>
+    <string name="event_turned_on">Açıldığında</string>
+    <string name="event_went_offline">Bağlantı koptuğunda</string>
+    <string name="event_came_online">Bağlantı geri geldiğinde</string>
+
+    <!-- Geçmiş -->
+    <string name="filter_all">Tümü</string>
+    <string name="no_events">Henüz olay yok</string>
+    <string name="today">Bugün</string>
+    <string name="yesterday">Dün</string>
+    <string name="event_by_user">Uygulamadan değiştirildi</string>
+    <string name="event_short_drop">%s: kısa bağlantı kopması yok sayıldı</string>
+    <string name="event_short_drop_sub">Bekleme süresi içinde geri geldi</string>
+    <string name="clear_history_title">Geçmiş temizlensin mi?</string>
+    <string name="clear_history_body">Kaydedilen tüm olaylar silinecek. Bu işlem geri alınamaz.</string>
+
+    <!-- Ayarlar -->
+    <string name="section_account">Hesap</string>
+    <string name="section_alarm">Alarm</string>
+    <string name="section_quiet_hours">Sessiz saatler</string>
+    <string name="section_permissions">İzinler</string>
+    <string name="section_about">Hakkında</string>
+    <string name="logged_in">Giriş yapıldı</string>
+    <string name="not_logged_in">Giriş yapılmadı</string>
+    <string name="region_x">Bölge: %s</string>
+    <string name="api_credentials">API bilgileri</string>
+    <string name="app_id_x">App ID: %s</string>
+    <string name="not_set">Girilmedi</string>
+    <string name="logout_title">Çıkış yapılsın mı?</string>
+    <string name="logout_body">İzleme duracak. Ayarlarınız ve geçmişiniz korunur.</string>
+    <string name="always_awake">En yüksek güvenilirlik</string>
+    <string name="always_awake_desc">İşlemciyi uyanık tutar, hiçbir olay gecikmez. Daha fazla pil harcar.</string>
+    <string name="offline_grace">Kısa kopmaları yok say</string>
+    <string name="offline_grace_desc">Bir cihazın bağlantısı koptuğunda uyarmadan önce bu kadar bekle. Süre içinde geri gelirse uyarı verilmez.</string>
+    <string name="grace_off">Kapalı (hemen uyar)</string>
+    <string name="seconds_n">%d saniye</string>
+    <string name="minutes_n">%d dakika</string>
+    <string name="poll_interval">Yedek kontrol aralığı</string>
+    <string name="poll_interval_desc">Yalnızca anlık bildirim kullanılamadığında kullanılır.</string>
+    <string name="poll_interval_value">%d sn\'de bir</string>
+    <string name="alarm_sound">Alarm sesi</string>
+    <string name="default_sound">Varsayılan alarm sesi</string>
+    <string name="alarm_volume">Alarm ses seviyesi · %%%d</string>
+    <string name="vibrate">Titreşim</string>
+    <string name="test_alarm">Test alarmı</string>
+    <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
+    <string name="test_alarm_needs_monitoring">Önce izlemeyi başlatın</string>
+    <string name="test_alarm_line">Test alarmı</string>
+    <string name="quiet_hours">Sessiz saatler</string>
+    <string name="quiet_hours_desc">Bu saatlerde alarmlar sessiz bildirime dönüşür</string>
+    <string name="quiet_start">Başlangıç</string>
+    <string name="quiet_end">Bitiş</string>
+    <string name="perm_notifications">Bildirimler</string>
+    <string name="perm_granted">İzin verildi</string>
+    <string name="perm_missing">İzin yok — düzeltmek için dokunun</string>
+    <string name="perm_battery">Arka plan çalışması</string>
+    <string name="perm_battery_ok">Kısıtlama yok</string>
+    <string name="perm_battery_missing">Kısıtlı — alarmlar gecikebilir. Düzeltmek için dokunun.</string>
+    <string name="setup_guide">Kurulum rehberi</string>
+    <string name="setup_guide_desc">İlk kurulum adımlarını tekrar göster</string>
+    <string name="privacy_policy">Gizlilik politikası</string>
+    <string name="version_x">Sürüm %s</string>
+    <string name="disclaimer">eWeLink, CoolKit veya ITEAD ile bağlantılı değildir; onlar tarafından onaylanmamış veya desteklenmemiştir. Sonoff ve eWeLink ilgili sahiplerinin ticari markalarıdır.</string>
+    <string name="redirect_hint">Geliştirici uygulamanızdaki Redirect URL ile birebir aynı olmalı</string>
+
+    <!-- Giriş -->
+    <string name="login_title">eWeLink girişi</string>
+    <string name="login_needs_credentials">Önce App ID ve App Secret girin</string>
+    <string name="login_success">Giriş başarılı</string>
+    <string name="login_failed">Giriş başarısız: %s</string>
+    <string name="login_failed_no_code">Giriş başarısız: yetki kodu dönmedi</string>
+
+    <!-- Kurulum -->
+    <string name="onb_welcome_title">SwitchGuard\'a hoş geldiniz</string>
+    <string name="onb_welcome_body">Sonoff / eWeLink uyumlu cihazlarınız açılıp kapandığında veya bağlantısı koptuğunda anında alarm alın.</string>
+    <string name="onb_feature_alarm">Siz kapatana kadar susmayan alarm</string>
+    <string name="onb_feature_control">Cihazları uygulamadan açıp kapatma</string>
+    <string name="onb_feature_rules">Cihaz başına kurallar ve sessiz saatler</string>
+    <string name="onb_feature_history">Tüm olayların geçmişi</string>
+    <string name="onb_dev_title">Ücretsiz geliştirici uygulaması oluşturun</string>
+    <string name="onb_dev_body">SwitchGuard, cihazlarınıza eWeLink\'in resmi API\'si üzerinden bağlanır. Bunun için size ait ücretsiz bir App ID gerekir; yaklaşık iki dakika sürer.</string>
+    <string name="onb_dev_step1">dev.ewelink.cc adresini açın ve cihazlarınızın bağlı olduğu eWeLink hesabıyla giriş yapın.</string>
+    <string name="onb_dev_step2">Geliştirici olarak kaydolun (ücretsiz standart rol yeterli).</string>
+    <string name="onb_dev_step3">Bir uygulama oluşturun ve Redirect URL olarak %s yazın.</string>
+    <string name="onb_dev_step4">Size verilen App ID ve App Secret\'ı kopyalayın.</string>
+    <string name="onb_open_portal">dev.ewelink.cc\'yi aç</string>
+    <string name="onb_copy_redirect">Redirect URL\'yi kopyala</string>
+    <string name="onb_dev_brand_note">Not: Ücretsiz geliştirici uygulamaları SONOFF markalı cihazlarla çalışır.</string>
+    <string name="onb_cred_title">API bilgilerinizi girin</string>
+    <string name="onb_cred_body">Geliştirici uygulamanızdaki App ID ve App Secret\'ı yapıştırın.</string>
+    <string name="onb_cred_privacy">Bu bilgiler yalnızca bu telefonda saklanır ve eWeLink dışında hiçbir yere gönderilmez.</string>
+    <string name="onb_login_title">eWeLink\'e giriş yapın</string>
+    <string name="onb_login_body">Girişi eWeLink\'in kendi sayfasında yapacaksınız. SwitchGuard şifrenizi hiçbir zaman görmez.</string>
+    <string name="onb_perm_title">Alarmlara izin verin</string>
+    <string name="onb_perm_body">İki izin, ekran kapalıyken bile alarmların size ulaşmasını sağlar.</string>
+    <string name="onb_perm_notif_desc">Alarmları göstermek için gerekli.</string>
+    <string name="onb_perm_battery_desc">İzlemenin arka planda sürmesini ve alarmların gecikmemesini sağlar.</string>
+    <string name="onb_done_title">Hazırsınız!</string>
+    <string name="onb_done_body">İzlemeyi şimdi başlatın. Her şeyi daha sonra ayrıntılı olarak ayarlayabilirsiniz.</string>
+    <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını seçmek için bir cihaza dokunun</string>
+    <string name="onb_done_tip_test">Sesi denemek için Ayarlar\'daki “Test alarmı”nı kullanın</string>
+
+    <!-- Bildirimler -->
+    <string name="channel_alarm">Cihaz alarmı</string>
+    <string name="channel_alarm_desc">Bir cihaz değiştiğinde siz kapatana kadar çalar</string>
+    <string name="channel_events">Cihaz bildirimleri</string>
+    <string name="channel_status">İzleme durumu</string>
+    <string name="notif_alarm_title">⚠ Cihaz değişikliği (%d)</string>
+    <string name="notif_event_title">Cihaz değişikliği</string>
+    <string name="warn_session_expired">eWeLink oturumunuz sona erdi. İzlemeye devam etmek için SwitchGuard\'ı açıp yeniden giriş yapın.</string>
+</resources>

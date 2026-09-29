@@ -1,26 +1,58 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
+// Yayın imzası keystore.properties'ten okunur (git'e girmez). Yoksa debug anahtarı kullanılır.
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("keystore.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
 }
 
 android {
-    namespace = "com.macerce.ewelinkalarm"
+    namespace = "com.macerce.switchguard"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.macerce.ewelinkalarm"
+        applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "2.0.0"
+    }
+
+    signingConfigs {
+        if (keystoreProps.isNotEmpty()) {
+            create("release") {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
+        }
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
-            // Kişisel kullanım: release APK'yı debug anahtarıyla imzala ki doğrudan kurulabilsin.
-            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    androidResources {
+        generateLocaleConfig = true
+        // Kütüphanelerin getirdiği onlarca dili at; uygulama yalnızca EN + TR destekliyor.
+        localeFilters += listOf("en", "tr")
     }
 
     compileOptions {
@@ -34,6 +66,17 @@ kotlin {
 }
 
 dependencies {
+    val composeBom = platform("androidx.compose:compose-bom:2025.12.01")
+    implementation(composeBom)
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material:material-icons-extended")
+    implementation("androidx.compose.ui:ui")
+
+    implementation("androidx.core:core-ktx:1.17.0")
+    implementation("androidx.activity:activity-compose:1.12.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     testImplementation("junit:junit:4.13.2")
     // android.jar içindeki org.json JVM testlerinde boş stub; gerçeğini ekliyoruz.
     testImplementation("org.json:json:20240303")

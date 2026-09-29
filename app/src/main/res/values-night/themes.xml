@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="window_bg">#FF0E1514</color>
+    <style name="Theme.SwitchGuard" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/window_bg</item>
+    </style>
+    <style name="Theme.SwitchGuard.Login" parent="android:Theme.Material" />
+</resources>

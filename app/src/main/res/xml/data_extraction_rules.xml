@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Token ve API anahtarları buluta yedeklenmesin, başka cihaza taşınmasın. -->
+<data-extraction-rules>
+    <cloud-backup><exclude domain="root" /><exclude domain="sharedpref" /><exclude domain="database" /></cloud-backup>
+    <device-transfer><exclude domain="root" /><exclude domain="sharedpref" /><exclude domain="database" /></device-transfer>
+</data-extraction-rules>

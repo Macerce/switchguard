@@ -1,3 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">eWeLink Alarm</string>
+    <string name="app_name" translatable="false">SwitchGuard</string>
+
+    <!-- Tabs -->
+    <string name="tab_devices">Devices</string>
+    <string name="tab_history">History</string>
+    <string name="tab_settings">Settings</string>
+
+    <!-- Common actions -->
+    <string name="action_back">Back</string>
+    <string name="action_next">Next</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_login">Sign in with eWeLink</string>
+    <string name="action_relogin">Sign in again</string>
+    <string name="action_logout">Sign out</string>
+    <string name="action_start_monitoring">Start monitoring</string>
+    <string name="action_stop_monitoring">Stop monitoring</string>
+    <string name="action_dismiss_alarm">DISMISS ALARM</string>
+    <string name="action_clear_history">Clear history</string>
+
+    <!-- Rule actions -->
+    <string name="action_alarm">Alarm</string>
+    <string name="action_notify">Notify</string>
+    <string name="action_ignore">None</string>
+
+    <!-- Labels used in change descriptions -->
+    <string name="label_on">ON</string>
+    <string name="label_off">OFF</string>
+    <string name="label_online">ONLINE</string>
+    <string name="label_offline">OFFLINE</string>
+    <string name="label_channel">%1$s (Ch %2$d)</string>
+    <string name="label_online_title">Online</string>
+    <string name="label_offline_title">Offline</string>
+
+    <!-- Connection states -->
+    <string name="state_live_title">Live monitoring</string>
+    <string name="state_polling_title">Monitoring (periodic)</string>
+    <string name="state_connecting">Connecting…</string>
+    <string name="state_no_internet">Can\'t reach eWeLink — check internet connection</string>
+    <string name="state_auth_error">Session expired — sign in again</string>
+    <string name="state_error">eWeLink error</string>
+    <string name="state_stopped">Monitoring is off</string>
+    <string name="status_live">Live · watching %d device(s)</string>
+    <string name="status_polling">Watching %1$d device(s) · every %2$d s</string>
+    <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks</string>
+    <string name="detail_reconnecting">Reconnecting for instant updates…</string>
+    <string name="detail_api_error">eWeLink error %d</string>
+    <string name="monitoring_off_hint">Start monitoring to get alarms</string>
+    <string name="last_update">Updated %s</string>
+    <string name="device_count">%d device(s)</string>
+
+    <!-- Devices screen -->
+    <string name="alarm_banner_title">Alarm · %d change(s)</string>
+    <string name="alarm_banner_more">+%d more</string>
+    <string name="login_needed_title">Sign-in required</string>
+    <string name="login_needed_body">Sign in with your eWeLink account to see your devices.</string>
+    <string name="no_devices">No devices found in this account.</string>
+    <string name="monitored">Monitored</string>
+    <string name="not_monitored">Not monitored</string>
+    <string name="power">Power</string>
+    <string name="channel_n">Channel %d</string>
+    <string name="control_failed">Couldn\'t change device: %s</string>
+
+    <!-- Device detail -->
+    <string name="device_missing">This device is no longer in your account.</string>
+    <string name="section_control">Control</string>
+    <string name="section_monitoring">Monitoring</string>
+    <string name="section_rules">When this happens</string>
+    <string name="section_recent_events">Recent events</string>
+    <string name="monitor_this_device">Monitor this device</string>
+    <string name="monitor_this_device_desc">Changes are recorded and alerted according to the rules below</string>
+    <string name="rules_hint">Alarm rings until you dismiss it. Notify shows a normal notification. None only records the event in history.</string>
+    <string name="event_turned_off">Turned off</string>
+    <string name="event_turned_on">Turned on</string>
+    <string name="event_went_offline">Went offline</string>
+    <string name="event_came_online">Came back online</string>
+
+    <!-- History -->
+    <string name="filter_all">All</string>
+    <string name="no_events">No events yet</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="event_by_user">Changed from the app</string>
+    <string name="event_short_drop">%s: brief disconnection ignored</string>
+    <string name="event_short_drop_sub">Reconnected within the wait time</string>
+    <string name="clear_history_title">Clear history?</string>
+    <string name="clear_history_body">All recorded events will be deleted. This can\'t be undone.</string>
+
+    <!-- Settings -->
+    <string name="section_account">Account</string>
+    <string name="section_alarm">Alarm</string>
+    <string name="section_quiet_hours">Quiet hours</string>
+    <string name="section_permissions">Permissions</string>
+    <string name="section_about">About</string>
+    <string name="logged_in">Signed in</string>
+    <string name="not_logged_in">Not signed in</string>
+    <string name="region_x">Region: %s</string>
+    <string name="api_credentials">API credentials</string>
+    <string name="app_id_x">App ID: %s</string>
+    <string name="not_set">Not set</string>
+    <string name="logout_title">Sign out?</string>
+    <string name="logout_body">Monitoring will stop. Your settings and history are kept.</string>
+    <string name="always_awake">Maximum reliability</string>
+    <string name="always_awake_desc">Keeps the processor awake so no event is ever delayed. Uses more battery.</string>
+    <string name="offline_grace">Ignore brief disconnections</string>
+    <string name="offline_grace_desc">Wait this long before alerting that a device went offline. If it comes back in time, no alert is raised.</string>
+    <string name="grace_off">Off (alert immediately)</string>
+    <string name="seconds_n">%d seconds</string>
+    <string name="minutes_n">%d minute(s)</string>
+    <string name="poll_interval">Backup check interval</string>
+    <string name="poll_interval_desc">Used only when instant updates aren\'t available.</string>
+    <string name="poll_interval_value">Every %d s</string>
+    <string name="alarm_sound">Alarm sound</string>
+    <string name="default_sound">Default alarm sound</string>
+    <string name="alarm_volume">Alarm volume · %d%%</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="test_alarm">Test alarm</string>
+    <string name="test_alarm_desc">Rings the alarm now so you can check sound and volume</string>
+    <string name="test_alarm_needs_monitoring">Start monitoring first</string>
+    <string name="test_alarm_line">Test alarm</string>
+    <string name="quiet_hours">Quiet hours</string>
+    <string name="quiet_hours_desc">During these hours alarms become silent notifications</string>
+    <string name="quiet_start">Starts</string>
+    <string name="quiet_end">Ends</string>
+    <string name="perm_notifications">Notifications</string>
+    <string name="perm_granted">Allowed</string>
+    <string name="perm_missing">Not allowed — tap to fix</string>
+    <string name="perm_battery">Background activity</string>
+    <string name="perm_battery_ok">Unrestricted</string>
+    <string name="perm_battery_missing">Restricted — alarms may be delayed. Tap to fix.</string>
+    <string name="setup_guide">Setup guide</string>
+    <string name="setup_guide_desc">Show the first-run setup again</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="version_x">Version %s</string>
+    <string name="disclaimer">Not affiliated with, endorsed or sponsored by eWeLink, CoolKit or ITEAD. Sonoff and eWeLink are trademarks of their respective owners.</string>
+    <string name="redirect_hint">Must match the Redirect URL of your developer app exactly</string>
+
+    <!-- Login -->
+    <string name="login_title">eWeLink sign-in</string>
+    <string name="login_needs_credentials">Enter your App ID and App Secret first</string>
+    <string name="login_success">Signed in</string>
+    <string name="login_failed">Sign-in failed: %s</string>
+    <string name="login_failed_no_code">Sign-in failed: no authorization code returned</string>
+
+    <!-- Onboarding -->
+    <string name="onb_welcome_title">Welcome to SwitchGuard</string>
+    <string name="onb_welcome_body">Get an alarm the moment your Sonoff / eWeLink-compatible devices switch on or off or lose their connection.</string>
+    <string name="onb_feature_alarm">An alarm that keeps ringing until you dismiss it</string>
+    <string name="onb_feature_control">Switch devices on and off from the app</string>
+    <string name="onb_feature_rules">Per-device rules and quiet hours</string>
+    <string name="onb_feature_history">Full event history</string>
+    <string name="onb_dev_title">Create a free developer app</string>
+    <string name="onb_dev_body">SwitchGuard talks to your devices through eWeLink\'s official API. You need your own free App ID for this — it takes about two minutes.</string>
+    <string name="onb_dev_step1">Open dev.ewelink.cc and sign in with the eWeLink account your devices are in.</string>
+    <string name="onb_dev_step2">Register as a developer (the free standard role is enough).</string>
+    <string name="onb_dev_step3">Create an app and set its Redirect URL to %s</string>
+    <string name="onb_dev_step4">Copy the App ID and App Secret you are given.</string>
+    <string name="onb_open_portal">Open dev.ewelink.cc</string>
+    <string name="onb_copy_redirect">Copy Redirect URL</string>
+    <string name="onb_dev_brand_note">Note: free developer apps work with SONOFF-branded devices.</string>
+    <string name="onb_cred_title">Enter your API credentials</string>
+    <string name="onb_cred_body">Paste the App ID and App Secret from your developer app.</string>
+    <string name="onb_cred_privacy">These are stored only on this phone and are never sent anywhere except eWeLink.</string>
+    <string name="onb_login_title">Sign in to eWeLink</string>
+    <string name="onb_login_body">You\'ll sign in on eWeLink\'s own page. SwitchGuard never sees your password.</string>
+    <string name="onb_perm_title">Allow alarms</string>
+    <string name="onb_perm_body">Two permissions make sure alarms reach you, even when the screen is off.</string>
+    <string name="onb_perm_notif_desc">Required to show alarms.</string>
+    <string name="onb_perm_battery_desc">Lets monitoring keep running in the background so alarms aren\'t delayed.</string>
+    <string name="onb_done_title">All set!</string>
+    <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
+    <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>
+    <string name="onb_done_tip_test">Use “Test alarm” in Settings to check the sound</string>
+
+    <!-- Notifications -->
+    <string name="channel_alarm">Device alarm</string>
+    <string name="channel_alarm_desc">Rings until you dismiss it when a device changes</string>
+    <string name="channel_events">Device notifications</string>
+    <string name="channel_status">Monitoring status</string>
+    <string name="notif_alarm_title">⚠ Device change (%d)</string>
+    <string name="notif_event_title">Device change</string>
+    <string name="warn_session_expired">Your eWeLink session expired. Open SwitchGuard and sign in again to keep monitoring.</string>
 </resources>
