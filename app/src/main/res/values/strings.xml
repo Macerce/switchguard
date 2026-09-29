@@ -121,6 +121,11 @@
     <string name="poll_interval_value">Every %d s</string>
     <string name="alarm_sound">Alarm sound</string>
     <string name="default_sound">Default alarm sound</string>
+    <string name="device_sound">Sound for this device</string>
+    <string name="device_sound_default">Same as general alarm sound</string>
+    <string name="device_sound_reset">Use general sound</string>
+    <string name="channel_events_custom">Events (device sounds)</string>
+    <string name="channel_events_custom_desc">Notifications for devices that have their own sound. The sound is played by the app.</string>
     <string name="alarm_volume">Alarm volume · %d%%</string>
     <string name="vibrate">Vibrate</string>
     <string name="test_alarm">Test alarm</string>
@@ -189,6 +194,11 @@
     <string name="notif_alarm_title">⚠ Device change (%d)</string>
     <string name="notif_event_title">Device change</string>
     <string name="warn_session_expired">Your eWeLink session expired. Open SwitchGuard and sign in again to keep monitoring.</string>
+    <string name="channel_session">Session warnings</string>
+    <string name="channel_session_desc">Shown when you are signed out and monitoring has stopped.</string>
+    <string name="session_lost_title">Monitoring stopped — signed out</string>
+    <string name="session_lost_body">This eWeLink account was signed in on another device, or the session expired. This phone will NOT receive alarms until you sign in again.</string>
+    <string name="session_lost_tip">Tip: eWeLink allows one session per account. Give each phone its own eWeLink account and share the devices from the eWeLink app.</string>
     <!-- Otomasyon -->
     <string name="tab_automations">Automations</string>
     <string name="automation_add">Add</string>

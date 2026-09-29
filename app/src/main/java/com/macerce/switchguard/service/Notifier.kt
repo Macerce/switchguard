@@ -11,11 +11,14 @@ import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.LoginActivity
 import com.macerce.switchguard.ui.MainActivity
 
 /**
@@ -28,6 +31,9 @@ class Notifier(private val context: Context, private val store: Store) {
 
     private val nm = context.getSystemService(NotificationManager::class.java)
     private var player: MediaPlayer? = null
+    /** Şu an çalan alarm sesinin kaynağı (cihaza özel ya da genel). */
+    private var playing: Uri? = null
+    private val main = Handler(Looper.getMainLooper())
 
     init {
         createChannels(context)
@@ -45,11 +51,17 @@ class Notifier(private val context: Context, private val store: Store) {
 
     fun updateStatus(title: String, text: String) = nm.notify(ID_STATUS, statusNotification(title, text))
 
-    /** Alarm yerine seçilen sessiz/normal bildirim. Her olay ayrı bildirim olarak gruplanır. */
-    fun notifyEvent(text: String) {
+    /**
+     * Alarm yerine seçilen sessiz/normal bildirim. Her olay ayrı bildirim olarak gruplanır.
+     * Cihaza özel ses varsa bildirim sessiz kanala gider ve ses bir kez elle çalınır:
+     * Android'de kanal sesi sonradan değiştirilemediği için cihaz başına ses ancak böyle olur.
+     */
+    fun notifyEvent(text: String, deviceSound: String? = null) {
+        val custom = deviceSound?.let(Uri::parse)
+        if (custom != null) playOnce(custom)
         nm.notify(
             (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
-            Notification.Builder(context, CH_EVENTS)
+            Notification.Builder(context, if (custom != null) CH_EVENTS_CUSTOM else CH_EVENTS)
                 .setSmallIcon(R.drawable.ic_stat_guard)
                 .setContentTitle(context.getString(R.string.notif_event_title))
                 .setContentText(text)
@@ -60,17 +72,31 @@ class Notifier(private val context: Context, private val store: Store) {
         )
     }
 
-    fun warn(text: String) = nm.notify(
-        ID_WARN,
-        Notification.Builder(context, CH_EVENTS)
-            .setSmallIcon(R.drawable.ic_stat_guard)
-            .setContentTitle(context.getString(R.string.app_name))
-            .setContentText(text)
-            .setStyle(Notification.BigTextStyle().bigText(text))
-            .setContentIntent(openApp())
-            .setAutoCancel(true)
-            .build()
-    )
+    /**
+     * Oturum düştü: izleme fiilen durdu. Kaydırılarak kapatılamaz; ancak giriş yapılınca
+     * ([clearWarning]) kalkar. Aksi halde alarm uygulaması sessizce çalışmıyor olurdu.
+     */
+    fun sessionLost(text: String, detail: String) {
+        val login = PendingIntent.getActivity(
+            context, 2,
+            Intent(context, LoginActivity::class.java),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        nm.notify(
+            ID_WARN,
+            Notification.Builder(context, CH_SESSION)
+                .setSmallIcon(R.drawable.ic_stat_alarm)
+                .setColor(0xFFD32F2F.toInt())
+                .setContentTitle(context.getString(R.string.session_lost_title))
+                .setContentText(text)
+                .setStyle(Notification.BigTextStyle().bigText(if (detail.isEmpty()) text else "$text\n\n$detail"))
+                .setCategory(Notification.CATEGORY_ERROR)
+                .setOngoing(true)
+                .setContentIntent(login)
+                .addAction(Notification.Action.Builder(null, context.getString(R.string.action_relogin), login).build())
+                .build()
+        )
+    }
 
     fun clearWarning() = nm.cancel(ID_WARN)
 
@@ -86,8 +112,11 @@ class Notifier(private val context: Context, private val store: Store) {
             .build()
     )
 
-    /** Alarm bildirimini [lines] ile gösterir/günceller ve ses + titreşimi başlatır. */
-    fun showAlarm(lines: List<String>) {
+    /**
+     * Alarm bildirimini [lines] ile gösterir/günceller ve ses + titreşimi başlatır.
+     * [deviceSound] son olayın cihazına özel ses; farklıysa çalan ses ona geçer (en yeni olay duyulsun).
+     */
+    fun showAlarm(lines: List<String>, deviceSound: String? = null) {
         val dismiss = PendingIntent.getService(
             context, 1,
             Intent(context, MonitorService::class.java).setAction(MonitorService.ACTION_DISMISS),
@@ -107,22 +136,43 @@ class Notifier(private val context: Context, private val store: Store) {
             .addAction(Notification.Action.Builder(null, context.getString(R.string.action_dismiss_alarm), dismiss).build())
             .build()
         nm.notify(ID_ALARM, notification)
-        startSound()
+        startSound(deviceSound?.let(Uri::parse))
     }
 
     fun stopAlarm() {
         nm.cancel(ID_ALARM)
-        player?.run { runCatching { stop() }; release() }
-        player = null
+        releasePlayer()
         vibrator().cancel()
     }
 
-    private fun startSound() {
-        if (player == null) player = createPlayer(soundUri())
+    private fun releasePlayer() {
+        player?.run { runCatching { stop() }; release() }
+        player = null
+        playing = null
+    }
+
+    private fun startSound(deviceSound: Uri?) {
+        val wanted = deviceSound ?: globalSound()
+        if (player == null || playing != wanted) {
+            releasePlayer()
+            // Cihaz sesi silinmiş/erişilemezse genel sese düş.
+            player = createPlayer(wanted) ?: deviceSound?.let { createPlayer(globalSound()) }
+        }
         if (store.vibrate) vibrator().vibrate(VibrationEffect.createWaveform(longArrayOf(0, 800, 600), 0))
     }
 
-    private fun soundUri(): Uri =
+    /** Bildirim için cihaz sesini bir kez, en fazla [ONE_SHOT_MS] boyunca çalar (alarm sesleri uzun olabilir). */
+    private fun playOnce(uri: Uri) {
+        val ringtone = runCatching { RingtoneManager.getRingtone(context, uri) }.getOrNull() ?: return
+        ringtone.audioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
+        runCatching { ringtone.play() }
+        main.postDelayed({ runCatching { ringtone.stop() } }, ONE_SHOT_MS)
+    }
+
+    private fun globalSound(): Uri =
         store.alarmSoundUri?.let(Uri::parse)
             ?: RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
             ?: RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -142,10 +192,11 @@ class Notifier(private val context: Context, private val store: Store) {
             start()
         }
     }.getOrNull()
-        // Seçilen ses silinmiş/erişilemez olabilir: varsayılana düş.
-        ?: if (store.alarmSoundUri != null) {
+        ?.also { playing = uri }
+        // Seçilen genel ses silinmiş/erişilemez olabilir: sistem varsayılanına düş.
+        ?: if (uri.toString() == store.alarmSoundUri) {
             store.alarmSoundUri = null
-            createPlayer(soundUri())
+            createPlayer(globalSound())
         } else null
 
     private fun vibrator(): Vibrator =
@@ -161,12 +212,15 @@ class Notifier(private val context: Context, private val store: Store) {
     companion object {
         const val CH_ALARM = "alarm"
         const val CH_EVENTS = "events"
+        const val CH_EVENTS_CUSTOM = "events_custom"
         const val CH_STATUS = "status"
+        const val CH_SESSION = "session"
         const val GROUP_EVENTS = "events"
         const val ID_STATUS = 1
         const val ID_ALARM = 2
         const val ID_WARN = 3
         const val ID_SUMMARY = 4
+        private const val ONE_SHOT_MS = 6_000L
 
         fun createChannels(context: Context) {
             val nm = context.getSystemService(NotificationManager::class.java)
@@ -182,7 +236,18 @@ class Notifier(private val context: Context, private val store: Store) {
                 NotificationChannel(CH_EVENTS, context.getString(R.string.channel_events), NotificationManager.IMPORTANCE_DEFAULT)
             )
             nm.createNotificationChannel(
+                NotificationChannel(CH_EVENTS_CUSTOM, context.getString(R.string.channel_events_custom), NotificationManager.IMPORTANCE_DEFAULT).apply {
+                    description = context.getString(R.string.channel_events_custom_desc)
+                    setSound(null, null) // Cihaza özel ses elle çalınır.
+                }
+            )
+            nm.createNotificationChannel(
                 NotificationChannel(CH_STATUS, context.getString(R.string.channel_status), NotificationManager.IMPORTANCE_LOW)
+            )
+            nm.createNotificationChannel(
+                NotificationChannel(CH_SESSION, context.getString(R.string.channel_session), NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = context.getString(R.string.channel_session_desc)
+                }
             )
         }
     }

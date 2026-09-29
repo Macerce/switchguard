@@ -49,6 +49,7 @@ class RulesTest {
         val rules = mapOf(
             "a" to DeviceRules(monitored = false, actions = mapOf(EventType.TURNED_ON to AlertAction.IGNORE)),
             "b" to DeviceRules(),
+            "c" to DeviceRules(soundUri = "content://media/internal/audio/media/42"),
         )
         assertEquals(rules, DeviceRules.mapFromJson(DeviceRules.mapToJson(rules)))
     }

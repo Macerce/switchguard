@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,8 +16,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudQueue
+import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -110,6 +114,26 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )
+
+                val pickSound = rememberSoundPicker { uri -> store.setRules(deviceId, rules.copy(soundUri = uri?.toString())) }
+                val custom = rules.soundUri?.let(Uri::parse)
+                val soundName = remember(rules.soundUri) {
+                    if (custom == null) null else soundTitle(context, custom)
+                } ?: stringResource(if (custom == null) R.string.device_sound_default else R.string.default_sound)
+                SectionCard {
+                    InfoRow(
+                        Icons.Rounded.MusicNote,
+                        stringResource(R.string.device_sound),
+                        soundName,
+                        Modifier.clickable { pickSound(custom) },
+                    ) {
+                        if (custom != null) {
+                            IconButton(onClick = { store.setRules(deviceId, rules.copy(soundUri = null)) }) {
+                                Icon(Icons.Rounded.Close, stringResource(R.string.device_sound_reset))
+                            }
+                        }
+                    }
+                }
             }
 
             SectionTitle(stringResource(R.string.section_recent_events))

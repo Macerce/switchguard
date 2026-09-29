@@ -27,7 +27,7 @@
 > • Alarm that keeps ringing until you dismiss it, even in silent mode
 > • Live updates within seconds, with automatic backup checks
 > • Per-device rules: alarm, notification or nothing — for on, off, offline and online
-> • Ignore brief disconnections, quiet hours, custom alarm sound, volume and vibration
+> • Ignore brief disconnections, quiet hours, a different alarm sound for each device, volume and vibration
 > • Switch devices on and off from the app
 > • Full event history
 > • No ads, no tracking, no account of ours — your data stays on your phone
@@ -42,7 +42,7 @@
 > • Siz kapatana kadar susmayan alarm; telefon sessizdeyken bile
 > • Saniyeler içinde canlı güncelleme, otomatik yedek kontroller
 > • Cihaz başına kurallar: açıldı, kapandı, koptu, geri geldi için alarm, bildirim veya hiçbiri
-> • Kısa kopmaları yok sayma, sessiz saatler, alarm sesi, ses seviyesi ve titreşim ayarı
+> • Kısa kopmaları yok sayma, sessiz saatler, her cihaz için ayrı alarm sesi, ses seviyesi ve titreşim ayarı
 > • Cihazları uygulamadan açıp kapatma
 > • Tüm olayların geçmişi
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
@@ -65,6 +65,27 @@
 **Pil optimizasyonu izni (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS):** Google bu izni kısıtlı kabul eder. Gerekçe: *"Core function is real-time safety alerts for user-owned devices; delayed alerts defeat the purpose."* Reddedilirse izni manifestten kaldırın; uygulama otomatik olarak sistem ayarları listesini açan yedek yola geçer (`Actions.requestBatteryExemption`).
 
 **Hedef kitle:** 18+ · **Reklam:** Yok
+
+**Uygulama erişimi (App access) – inceleme ekibi için:**
+Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıtlı" seçilir ve aşağıdaki talimat eklenir.
+Önce ayrı bir **inceleme eWeLink hesabı** açın ve eWeLink uygulamasından bir cihazı bu hesaba paylaşın
+(inceleme ekibi gerçek bir cihaz görsün). Kendi ana hesabınızın şifresini vermeyin.
+
+> 1. Open the app and go through the setup screens.
+> 2. When asked for the eWeLink developer credentials, enter — App ID: `<APP_ID>` · App Secret: `<APP_SECRET>` (leave Redirect URL unchanged).
+> 3. Tap "Sign in with eWeLink" and sign in with — Email: `<REVIEW_EMAIL>` · Password: `<REVIEW_PASSWORD>` · Region: Europe.
+> 4. A shared smart plug appears on the Devices tab. Tap "Start monitoring".
+> 5. Settings → "Test alarm" rings the alarm without touching any device; tap "DISMISS ALARM" to stop it.
+> The plug is real hardware at our site; switching it from the app is allowed.
+
+## 4b. Yayın kontrol listesi (sırayla)
+- [x] Gizlilik politikası: https://sites.google.com/view/switchguard-privacy (Google Sites, `Actions.PRIVACY_URL`e yazıldı)
+- [ ] Play Console hesabı (25 $) + kimlik doğrulama
+- [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
+- [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
+- [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz
+- [ ] Kapalı test kanalı → `SwitchGuard.aab` → 12+ testçi e-postası → 14 gün
+- [ ] Üretim erişimi başvurusu → üretim sürümü
 
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`

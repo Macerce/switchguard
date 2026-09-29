@@ -1,6 +1,6 @@
 # SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-_Last updated / Son güncelleme: 29 September 2026_
+_Last updated / Son güncelleme: 30 September 2026_
 
 ## English
 
@@ -9,7 +9,7 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink account a
 **What the app stores (only on your phone):**
 - The eWeLink developer App ID and App Secret you enter.
 - The access/refresh tokens eWeLink issues after you sign in, your eWeLink user key and email address.
-- The names and on/off/online states of your devices, your alert rules and settings.
+- The names and on/off/online states of your devices, energy readings of power-metering devices, your alert rules, automations and settings (including the alarm sounds you pick).
 - A history of device events (at most 2,000 entries).
 
 **Who the app talks to:** only eWeLink's official servers (`*.coolkit.cc` / `*.coolkit.cn`), to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. The app has **no server of its own**, and contains **no analytics, advertising or tracking SDKs**. No data is sold or shared with third parties.
@@ -31,7 +31,7 @@ SwitchGuard ("uygulama"), **size ait** eWeLink hesabındaki akıllı cihazları 
 **Uygulamanın sakladıkları (yalnızca telefonunuzda):**
 - Girdiğiniz eWeLink geliştirici App ID ve App Secret bilgileri.
 - Girişten sonra eWeLink'in verdiği erişim/yenileme token'ları, eWeLink kullanıcı anahtarınız ve e-posta adresiniz.
-- Cihazlarınızın adları ve açık/kapalı/çevrimiçi durumları, alarm kurallarınız ve ayarlarınız.
+- Cihazlarınızın adları, açık/kapalı/çevrimiçi durumları, enerji ölçen cihazların ölçümleri, alarm kurallarınız, otomasyonlarınız ve ayarlarınız (seçtiğiniz alarm sesleri dahil).
 - Cihaz olaylarının geçmişi (en fazla 2.000 kayıt).
 
 **Uygulamanın iletişim kurduğu yerler:** yalnızca eWeLink'in resmi sunucuları (`*.coolkit.cc` / `*.coolkit.cn`). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. Uygulamanın **kendi sunucusu yoktur**; **analiz, reklam veya izleme kütüphanesi içermez**. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.

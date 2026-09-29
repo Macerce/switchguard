@@ -135,5 +135,5 @@ object Actions {
     }
 
     const val DEV_PORTAL_URL = "https://dev.ewelink.cc"
-    const val PRIVACY_URL = "https://github.com/macerce/switchguard/blob/main/docs/privacy-policy.md"
+    const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 }

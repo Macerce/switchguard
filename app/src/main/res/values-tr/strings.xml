@@ -117,6 +117,11 @@
     <string name="poll_interval_value">%d sn\'de bir</string>
     <string name="alarm_sound">Alarm sesi</string>
     <string name="default_sound">Varsayılan alarm sesi</string>
+    <string name="device_sound">Bu cihazın sesi</string>
+    <string name="device_sound_default">Genel alarm sesiyle aynı</string>
+    <string name="device_sound_reset">Genel sesi kullan</string>
+    <string name="channel_events_custom">Olaylar (cihaz sesleri)</string>
+    <string name="channel_events_custom_desc">Kendi sesi seçilmiş cihazların bildirimleri. Sesi uygulama çalar.</string>
     <string name="alarm_volume">Alarm ses seviyesi · %%%d</string>
     <string name="vibrate">Titreşim</string>
     <string name="test_alarm">Test alarmı</string>
@@ -185,6 +190,11 @@
     <string name="notif_alarm_title">⚠ Cihaz değişikliği (%d)</string>
     <string name="notif_event_title">Cihaz değişikliği</string>
     <string name="warn_session_expired">eWeLink oturumunuz sona erdi. İzlemeye devam etmek için SwitchGuard\'ı açıp yeniden giriş yapın.</string>
+    <string name="channel_session">Oturum uyarıları</string>
+    <string name="channel_session_desc">Oturum kapandığında ve izleme durduğunda gösterilir.</string>
+    <string name="session_lost_title">İzleme durdu — oturum kapandı</string>
+    <string name="session_lost_body">Bu eWeLink hesabıyla başka bir cihazda giriş yapıldı ya da oturum sona erdi. Yeniden giriş yapana kadar bu telefona alarm GELMEZ.</string>
+    <string name="session_lost_tip">İpucu: eWeLink her hesaba tek oturum izin verir. Her telefona ayrı eWeLink hesabı açıp cihazları eWeLink uygulamasından paylaşın.</string>
     <!-- Otomasyon -->
     <string name="tab_automations">Otomasyon</string>
     <string name="automation_add">Ekle</string>

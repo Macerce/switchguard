@@ -170,6 +170,8 @@ class MonitorService : Service() {
             socket.close()
             store.pendingAlarm = emptyList()
             notifier.stopAlarm()
+            // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
+            notifier.clearWarning()
         }
         cancelAlarmTick()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -298,6 +300,13 @@ class MonitorService : Service() {
                 if (!authFailed) setState(ConnState.POLLING, getString(R.string.detail_reconnecting))
             }
         }.let { }
+
+        override fun onAuthRejected() = handler.post {
+            if (!running) return@post
+            // 5 dk'lık senkronu bekleme: HTTP isteği token'ı yeniler ya da oturumun düştüğünü hemen ortaya çıkarır.
+            sync()
+            if (!authFailed) scheduleReconnect()
+        }.let { }
     }
 
     private fun reconnectNow() {
@@ -420,7 +429,8 @@ class MonitorService : Service() {
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name)
-                if (effective == AlertAction.ALARM) addAlarm(text) else notifier.notifyEvent(text)
+                val sound = store.rulesFor(a.trigger.deviceId).soundUri
+                if (effective == AlertAction.ALARM) addAlarm(text, sound) else notifier.notifyEvent(text, sound)
             }
         }
     }
@@ -451,17 +461,19 @@ class MonitorService : Service() {
         val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
         val text = change.describe(labels)
         log.add(change.deviceId, change.name, change.eventType.name, text, effective.name)
+        val sound = store.rulesFor(change.deviceId).soundUri
         when (effective) {
-            AlertAction.ALARM -> addAlarm(text)
-            AlertAction.NOTIFY -> notifier.notifyEvent(text)
+            AlertAction.ALARM -> addAlarm(text, sound)
+            AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
             AlertAction.IGNORE -> Unit
         }
     }
 
-    private fun addAlarm(text: String) {
+    /** [sound]: olayın cihazına özel ses (yoksa genel ses). */
+    private fun addAlarm(text: String, sound: String? = null) {
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
-        notifier.showAlarm(store.pendingAlarm)
+        notifier.showAlarm(store.pendingAlarm, sound)
     }
 
     private fun onAuthFailed() {
@@ -469,7 +481,11 @@ class MonitorService : Service() {
         setState(ConnState.AUTH_ERROR)
         if (!authFailed) {
             authFailed = true
-            notifier.warn(getString(R.string.warn_session_expired))
+            if (store.sessionLost) {
+                notifier.sessionLost(getString(R.string.session_lost_body), getString(R.string.session_lost_tip))
+            } else {
+                notifier.sessionLost(getString(R.string.warn_session_expired), "")
+            }
         }
     }
 

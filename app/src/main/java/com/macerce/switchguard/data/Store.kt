@@ -67,6 +67,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     fun logout() = put { remove("at"); remove("rt"); remove("apikey"); remove("email") }
 
+    /** Oturum kullanıcı istemeden düştü (ör. aynı hesapla başka cihazda giriş). Giriş yapınca silinir. */
+    var sessionLost: Boolean
+        get() = prefs.getBoolean("sessionLost", false)
+        set(v) = put { putBoolean("sessionLost", v) }
+
     var onboardingDone: Boolean
         get() = prefs.getBoolean("onboardingDone", false)
         set(v) = put { putBoolean("onboardingDone", v) }

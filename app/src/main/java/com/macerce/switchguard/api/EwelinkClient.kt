@@ -50,6 +50,7 @@ class EwelinkClient(private val store: Store) {
             .put("redirectUrl", store.redirectUrl)
             .put("grantType", "authorization_code")
         saveTokens(postSigned("/v2/user/oauth/token", body))
+        store.sessionLost = false
         runCatching { loadProfile() }
     }
 
@@ -121,7 +122,9 @@ class EwelinkClient(private val store: Store) {
         try {
             saveTokens(postSigned("/v2/user/refresh", JSONObject().put("rt", store.refreshToken)))
         } catch (e: ApiException) {
+            // eWeLink her hesap + App ID için tek oturum tutar: başka cihazda giriş, bu refresh token'ı da iptal eder.
             store.logout()
+            store.sessionLost = true
             throw AuthException(e.code, "session expired")
         }
     }

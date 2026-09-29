@@ -10,6 +10,8 @@ enum class AlertAction { ALARM, NOTIFY, IGNORE }
 data class DeviceRules(
     val monitored: Boolean = true,
     val actions: Map<EventType, AlertAction> = emptyMap(),
+    /** Bu cihazın alarm/bildirim sesi; null ise genel ayardaki ses. */
+    val soundUri: String? = null,
 ) {
     fun actionFor(type: EventType): AlertAction = actions[type] ?: DEFAULTS.getValue(type)
 
@@ -29,7 +31,9 @@ data class DeviceRules(
             for ((id, r) in rules) {
                 val actions = JSONObject()
                 r.actions.forEach { (t, a) -> actions.put(t.name, a.name) }
-                root.put(id, JSONObject().put("monitored", r.monitored).put("actions", actions))
+                val o = JSONObject().put("monitored", r.monitored).put("actions", actions)
+                r.soundUri?.let { o.put("sound", it) }
+                root.put(id, o)
             }
             return root.toString()
         }
@@ -46,6 +50,7 @@ data class DeviceRules(
                         val action = runCatching { AlertAction.valueOf(a.getString(k)) }.getOrNull()
                         if (type != null && action != null) type to action else null
                     }.toMap(),
+                    soundUri = o.optString("sound").ifEmpty { null },
                 )
             }
         }

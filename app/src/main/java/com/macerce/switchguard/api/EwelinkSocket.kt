@@ -23,6 +23,8 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
         fun onEvent(event: WsEvent)
         /** Bağlantı koptu. [fatal] true ise yeniden denemek anlamsız (ör. uygulama yetkisi yok). */
         fun onClosed(reason: String, fatal: Boolean)
+        /** Sunucu token'ı reddetti (401/402): token yenilenmeli ya da oturum başka cihazda açılmış olabilir. */
+        fun onAuthRejected()
     }
 
     private var socket: WebSocket? = null
@@ -72,7 +74,8 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
                         socket = null // Sonraki onClosed geri çağrısı yok sayılsın, olay iki kez bildirilmesin.
                         webSocket.close(1000, null)
                         // 401/402: token sorunu (servis yeniler); diğerleri: bu App ID için WS yok.
-                        listener.onClosed("handshake ${e.error}", fatal = e.error !in setOf(401, 402))
+                        if (e.error in setOf(401, 402)) listener.onAuthRejected()
+                        else listener.onClosed("handshake ${e.error}", fatal = true)
                     }
                     else -> listener.onEvent(e)
                 }

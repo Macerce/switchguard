@@ -63,6 +63,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
@@ -128,7 +129,7 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                     if (loggedIn) {
                         ConnectionCard(connection.state, connection.detail, connection.lastSync, monitoring, devices.size)
                     } else {
-                        LoginPromptCard()
+                        LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
                     }
                 }
                 if (loggedIn && devices.isEmpty()) {
@@ -238,21 +239,37 @@ private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, mon
 }
 
 @Composable
-private fun LoginPromptCard() {
+private fun LoginPromptCard(sessionLost: Boolean) {
     val context = LocalContext.current
     SectionCard {
         Column(Modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(Icons.Rounded.Key, MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.primaryContainer)
+                if (sessionLost) {
+                    IconBadge(Icons.Rounded.Key, MaterialTheme.colorScheme.onErrorContainer, MaterialTheme.colorScheme.errorContainer)
+                } else {
+                    IconBadge(Icons.Rounded.Key, MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.primaryContainer)
+                }
                 Spacer(Modifier.width(16.dp))
                 Column {
-                    Text(stringResource(R.string.login_needed_title), style = MaterialTheme.typography.titleMedium)
-                    Text(stringResource(R.string.login_needed_body), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(
+                        stringResource(if (sessionLost) R.string.session_lost_title else R.string.login_needed_title),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = if (sessionLost) MaterialTheme.colorScheme.error else Color.Unspecified,
+                    )
+                    Text(
+                        stringResource(if (sessionLost) R.string.session_lost_body else R.string.login_needed_body),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
+            }
+            if (sessionLost) {
+                Spacer(Modifier.height(8.dp))
+                Text(stringResource(R.string.session_lost_tip), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(12.dp))
             Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth()) {
-                Text(stringResource(R.string.action_login))
+                Text(stringResource(if (sessionLost) R.string.action_relogin else R.string.action_login))
             }
         }
     }
