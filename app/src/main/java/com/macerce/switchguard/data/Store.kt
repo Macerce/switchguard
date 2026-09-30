@@ -2,6 +2,7 @@ package com.macerce.switchguard.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
@@ -140,7 +141,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     // --- Pro ---
     /** Son bilinen satın alma durumu; Play'e ulaşılamadığında da (çevrimdışı) geçerli kalır. */
     var isPro: Boolean
-        get() = prefs.getBoolean("pro", false)
+        get() = BuildConfig.OWNER_UNLOCK || prefs.getBoolean("pro", false)
         set(v) = put { putBoolean("pro", v) }
     /** Ücretsiz sürümde kullanıcının izlemek için seçtiği cihaz. */
     var freeDeviceId: String?
