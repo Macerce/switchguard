@@ -28,8 +28,10 @@
 > • Live updates within seconds, with automatic backup checks
 > • Per-device rules: alarm, notification or nothing — for on, off, offline and online
 > • Ignore brief disconnections, quiet hours, a different alarm sound for each device, volume and vibration
-> • Switch devices on and off from the app
-> • Full event history
+> • Automations: alarm when a switch stays on too long, or when a channel's power drops while it should be running (e.g. a pump that stalls — SONOFF SPM-4Relay / DUALR3)
+> • Power, voltage and energy readings on power-metering devices
+> • Switch devices on and off from the app and manage their eWeLink timers
+> • Full event history and an optional daily summary
 > • No ads, no tracking, no account of ours — your data stays on your phone
 > • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
@@ -44,8 +46,10 @@
 > • Saniyeler içinde canlı güncelleme, otomatik yedek kontroller
 > • Cihaz başına kurallar: açıldı, kapandı, koptu, geri geldi için alarm, bildirim veya hiçbiri
 > • Kısa kopmaları yok sayma, sessiz saatler, her cihaz için ayrı alarm sesi, ses seviyesi ve titreşim ayarı
-> • Cihazları uygulamadan açıp kapatma
-> • Tüm olayların geçmişi
+> • Otomasyonlar: bir anahtar fazla uzun açık kalınca ya da çalışması gerekirken bir kanalın gücü düşünce alarm (ör. duran bir pompa — SONOFF SPM-4Relay / DUALR3)
+> • Güç ölçen cihazlarda güç, voltaj ve enerji değerleri
+> • Cihazları uygulamadan açıp kapatma ve eWeLink zamanlayıcılarını yönetme
+> • Tüm olayların geçmişi ve isteğe bağlı günlük özet
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
 > • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
@@ -60,6 +64,8 @@
 **Veri güvenliği (Data safety):**
 - Veri toplanıyor mu? → Kullanıcı verisi yalnızca cihazda işlenir ve kullanıcının kendi eWeLink hesabına iletilir. Geliştiriciye hiçbir veri gönderilmez.
 - Beyan: *"Personal info → Email address"* ve *"App activity → Other actions"* **cihazda işlenir, paylaşılmaz**; aktarım şifreli (HTTPS/WSS); kullanıcı verilerini silebilir (çıkış/kaldırma).
+- Pro satın alma: ödemeyi Google Play yürütür; uygulama yalnızca "Pro alındı mı" bilgisini telefonda saklar, geliştiriciye gönderilmez → *"Financial info → Purchase history"* işaretlenmez (Google'ın kendi işlediği veri beyana girmez).
+- Enerji/güç değerleri cihaz durumudur, kişisel veri sayılmaz; yine yalnızca telefonda tutulur.
 
 **Ön plan hizmeti beyanı (Foreground service – specialUse):**
 > The app keeps a live connection to the user's own eWeLink smart plugs/switches and must ring a user-dismissible alarm within seconds when their power or connection state changes (e.g. a freezer or pump switching off). This can't be deferred or done with WorkManager/FCM because the events come from a third-party cloud the app does not control. The service starts only when the user taps "Start monitoring" and shows a persistent status notification.
@@ -79,6 +85,7 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 > 4. A shared smart plug appears on the Devices tab. Tap "Start monitoring".
 > 5. Settings → "Test alarm" rings the alarm without touching any device; tap "DISMISS ALARM" to stop it.
 > The plug is real hardware at our site; switching it from the app is allowed.
+> The free version monitors one device, which is all the reviewer account has; no purchase is needed to review the app.
 
 ## 4b. Yayın kontrol listesi (sırayla)
 - [x] Gizlilik politikası: https://sites.google.com/view/switchguard-privacy (Google Sites, `Actions.PRIVACY_URL`e yazıldı)
@@ -99,14 +106,24 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - **Lisans testi:** Ayarlar → Lisans testi → kendi Gmail'in ve testçilerin → "RESPOND_NORMALLY". Bu hesaplar satın almayı gerçek ödeme olmadan dener.
 - Fiyat istenildiğinde buradan değiştirilir, uygulama güncellemesi gerekmez.
 
+## 4d. Sürüm notları ("Bu sürümdeki yenilikler", ≤500 karakter)
+İlk yayında Play bu alanı ister. Sonraki her güncellemede yalnızca yenilikleri yazın.
+
+**EN:**
+> First release: instant alarms for your SONOFF/eWeLink switches, per-device rules, automations (stayed-on and power-drop alarms), energy readings, device timers, history and daily summary.
+
+**TR:**
+> İlk sürüm: SONOFF/eWeLink anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet.
+
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri:** `docs/screenshots/` içinde örnek verilerle çekilmiş görüntüler var. Play en az 2 telefon görüntüsü ister; kendi cihazlarınızla çekilenler daha inandırıcı olur.
+- **Ekran görüntüleri:** `docs/screenshots/` içindekiler v2.0'dan kalma (Otomasyon sekmesi, enerji, zamanlayıcılar yok) — **yayından önce yenilenmeli.** Önerilen set (en az 2, en fazla 8): Cihazlar, cihaz detayı (kanallar + enerji), Otomasyon listesi, otomasyon düzenleyici, alarm bildirimi, Geçmiş, Ayarlar. Kendi cihazlarınızla çekilenler daha inandırıcı olur.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:
 ```
 ./gradlew bundleRelease   →  app/build/outputs/bundle/release/app-release.aab
 ```
+**Mağaza paketini asla `-PownerUnlock=true` ile derlemeyin** — o bayrak Pro'yu herkese ücretsiz açar. Yüklemeden önce `app/build/generated/source/buildConfig/release/.../BuildConfig.java` içinde `OWNER_UNLOCK = false` olduğunu kontrol edin.
