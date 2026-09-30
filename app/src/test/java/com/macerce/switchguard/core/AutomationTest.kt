@@ -13,6 +13,67 @@ class AutomationTest {
     private fun auto(kind: TriggerKind, channel: Int = 0, minutes: Int = 0, watts: Double = 0.0, delay: Int = 0) =
         Automation("a1", "test", true, Trigger(kind, "d", channel, minutes, watts), AutoAction(ActionKind.TURN_ON, "lamp"), delay)
 
+    // ---- kanal açıkken güç düşmesi (SPM-4Relay gibi kanal başına ölçüm yapan cihazlar)
+
+    private fun spm(k1On: Boolean, k1Watts: Double?) = DeviceSnapshot(
+        "d", "SPM", true, mapOf(0 to false, 1 to k1On),
+        channelPower = listOfNotNull(0 to 0.0, k1Watts?.let { 1 to it }).toMap(),
+    )
+    private val lowPower = listOf(
+        Automation("p1", "pompa", true, Trigger(TriggerKind.CHANNEL_POWER_LOW, "d", channel = 1, minutes = 1, watts = 20.0, graceMinutes = 2),
+            AutoAction(ActionKind.ALARM)),
+    )
+
+    @Test
+    fun `kanal acikken guc esigin altinda kalinca bir kez tetiklenir, toparlaninca yeniden kurulur`() {
+        val e = AutomationEngine()
+        val a = lowPower
+        e.onStates(map(spm(false, 0.0)), map(spm(true, 0.0)), a, 0)
+        // Açılış payı (2 dk) içinde güç 0 olsa da tetiklenmez.
+        assertTrue(e.onTick(map(spm(true, 0.0)), a, 1 * min).isEmpty())
+        e.onStates(map(spm(true, 0.0)), map(spm(true, 100.0)), a, 3 * min)
+        assertTrue(e.onTick(map(spm(true, 100.0)), a, 5 * min).isEmpty())
+
+        e.onStates(map(spm(true, 100.0)), map(spm(true, 5.0)), a, 10 * min)
+        assertTrue(e.onTick(map(spm(true, 5.0)), a, 10 * min + 30_000).isEmpty())
+        assertEquals(11 * min, e.nextDueAt(map(spm(true, 5.0)), a))
+        assertEquals(a, e.onTick(map(spm(true, 5.0)), a, 11 * min))
+        assertTrue(e.onTick(map(spm(true, 5.0)), a, 15 * min).isEmpty())
+
+        e.onStates(map(spm(true, 5.0)), map(spm(true, 100.0)), a, 20 * min)
+        e.onStates(map(spm(true, 100.0)), map(spm(true, 5.0)), a, 30 * min)
+        assertEquals(a, e.onTick(map(spm(true, 5.0)), a, 31 * min))
+    }
+
+    @Test
+    fun `kanal kapaliyken guc sifir olsa da tetiklenmez`() {
+        val e = AutomationEngine()
+        e.onStates(map(spm(true, 100.0)), map(spm(false, 0.0)), lowPower, 0)
+        assertTrue(e.onTick(map(spm(false, 0.0)), lowPower, 60 * min).isEmpty())
+        assertEquals(null, e.nextDueAt(map(spm(false, 0.0)), lowPower))
+    }
+
+    @Test
+    fun `kisa dusus sure dolmadan toparlanirsa tetiklenmez`() {
+        val e = AutomationEngine()
+        e.onStates(map(spm(false, 0.0)), map(spm(true, 100.0)), lowPower, 0)
+        e.onStates(map(spm(true, 100.0)), map(spm(true, 5.0)), lowPower, 10 * min)
+        e.onStates(map(spm(true, 5.0)), map(spm(true, 100.0)), lowPower, 10 * min + 40_000)
+        assertTrue(e.onTick(map(spm(true, 100.0)), lowPower, 12 * min).isEmpty())
+    }
+
+    @Test
+    fun `guc verisi yoksa tetiklenmez`() {
+        val e = AutomationEngine()
+        e.onStates(map(spm(false, null)), map(spm(true, null)), lowPower, 0)
+        assertTrue(e.onTick(map(spm(true, null)), lowPower, 30 * min).isEmpty())
+    }
+
+    @Test
+    fun `kanal guc tetikleyicisi json gidis donus`() {
+        assertEquals(lowPower, Automation.listFromJson(Automation.listToJson(lowPower)))
+    }
+
     @Test
     fun `kanal acilinca tetiklenir, digeri etkilemez`() {
         val e = AutomationEngine()

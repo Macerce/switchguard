@@ -3,7 +3,13 @@ package com.macerce.switchguard.core
 import org.json.JSONObject
 
 /** Bir mesajdan okunan enerji değerleri; mesajda olmayan alan null. */
-data class Energy(val power: Double?, val voltage: Double?, val current: Double?) {
+data class Energy(
+    val power: Double?,
+    val voltage: Double?,
+    val current: Double?,
+    /** Kanal başına güç (W); yalnızca kanal başına ölçen modellerde (DualR3, SPM) dolu. */
+    val channelPowers: Map<Int, Double> = emptyMap(),
+) {
     val isEmpty get() = power == null && voltage == null && current == null
 }
 
@@ -20,7 +26,8 @@ object EnergyParser {
     private val HUNDREDTHS_UIIDS = setOf(126, 130, 182, 190, 276, 277)
 
     fun parse(uiid: Int, params: JSONObject): Energy {
-        val channelPowers = (0..3).mapNotNull { number(params, "actPow_%02d".format(it)) }
+        val channelRaw = (0..3).mapNotNull { ch -> number(params, "actPow_%02d".format(ch))?.let { ch to it } }.toMap()
+        val channelPowers = channelRaw.values.toList()
         val rawPower = number(params, "power") ?: channelPowers.takeIf { it.isNotEmpty() }?.sum()
         val rawVoltage = number(params, "voltage") ?: number(params, "voltage_00")
         val rawCurrent = number(params, "current")
@@ -32,7 +39,7 @@ object EnergyParser {
             uiid in HUNDREDTHS_UIIDS || channelPowers.isNotEmpty() -> 100.0
             else -> 1.0
         }
-        return Energy(rawPower?.div(scale), rawVoltage?.div(scale), rawCurrent?.div(scale))
+        return Energy(rawPower?.div(scale), rawVoltage?.div(scale), rawCurrent?.div(scale), channelRaw.mapValues { it.value / scale })
     }
 
     private fun number(params: JSONObject, key: String): Double? {

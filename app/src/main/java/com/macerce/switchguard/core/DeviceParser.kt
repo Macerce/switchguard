@@ -25,6 +25,7 @@ object DeviceParser {
                 power = energy?.power,
                 voltage = energy?.voltage,
                 current = energy?.current,
+                channelPower = energy?.channelPowers.orEmpty(),
             )
         }
         return result
@@ -74,6 +75,9 @@ object DeviceParser {
             d.power?.let { o.put("power", it) }
             d.voltage?.let { o.put("voltage", it) }
             d.current?.let { o.put("current", it) }
+            if (d.channelPower.isNotEmpty()) {
+                o.put("channelPower", JSONObject().apply { d.channelPower.forEach { (k, v) -> put(k.toString(), v) } })
+            }
             arr.put(o)
         }
         return arr.toString()
@@ -93,6 +97,9 @@ object DeviceParser {
                 power = o.optDoubleOrNull("power"),
                 voltage = o.optDoubleOrNull("voltage"),
                 current = o.optDoubleOrNull("current"),
+                channelPower = o.optJSONObject("channelPower")?.let { cp ->
+                    cp.keys().asSequence().associate { it.toInt() to cp.getDouble(it) }
+                }.orEmpty(),
             )
         }
     }

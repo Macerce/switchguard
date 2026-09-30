@@ -95,7 +95,8 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             }
 
             // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez.
-            if (device.hasEnergy) EnergySection(device)
+            // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
+            if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
 
             TimersSection(device)
 

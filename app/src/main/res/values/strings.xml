@@ -234,6 +234,11 @@
     <string name="trigger_went_offline">goes offline</string>
     <string name="trigger_came_online">comes back online</string>
     <string name="trigger_power_above">power goes above</string>
+    <string name="power_data_stale">%1$s: no channel power data for 5 minutes. The power-drop alarm may not work right now.</string>
+    <string name="trigger_channel_power_low">channel is on but its power drops below:</string>
+    <string name="automation_low_minutes">For at least (minutes, 0 = immediately)</string>
+    <string name="automation_grace">Ignore after the channel turns on (minutes, for start-up)</string>
+    <string name="automation_low_for">(for %1$d min, from %2$d min after turn-on)</string>
     <string name="trigger_power_below">power drops below</string>
     <string name="auto_action_turn_on">Turn on</string>
     <string name="auto_action_turn_off">Turn off</string>

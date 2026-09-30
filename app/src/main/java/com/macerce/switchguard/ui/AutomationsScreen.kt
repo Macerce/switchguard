@@ -167,6 +167,8 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): String {
     val trigger = when (t.kind) {
         TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> stringResource(t.kind.title()) + " " + stringResource(R.string.minutes_n, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts)
+        TriggerKind.CHANNEL_POWER_LOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts) + " " +
+            stringResource(R.string.automation_low_for, t.minutes, t.graceMinutes)
         else -> stringResource(t.kind.title())
     }
     val act = a.action
@@ -192,6 +194,7 @@ fun TriggerKind.title(): Int = when (this) {
     TriggerKind.CAME_ONLINE -> R.string.trigger_came_online
     TriggerKind.POWER_ABOVE -> R.string.trigger_power_above
     TriggerKind.POWER_BELOW -> R.string.trigger_power_below
+    TriggerKind.CHANNEL_POWER_LOW -> R.string.trigger_channel_power_low
 }
 
 fun ActionKind.title(): Int = when (this) {
@@ -220,6 +223,10 @@ private fun AutomationEditor(
     var triggerChannel by rememberSaveable { mutableStateOf(initial?.trigger?.channel ?: 0) }
     var minutes by rememberSaveable { mutableStateOf(initial?.trigger?.minutes?.takeIf { it > 0 }?.toString() ?: "30") }
     var watts by rememberSaveable { mutableStateOf(initial?.trigger?.watts?.takeIf { it > 0 }?.let(::formatNumber) ?: "1000") }
+    var lowMinutes by rememberSaveable {
+        mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes?.toString() ?: "1")
+    }
+    var grace by rememberSaveable { mutableStateOf(initial?.trigger?.graceMinutes?.takeIf { it > 0 }?.toString() ?: "2") }
     var actionKind by rememberSaveable { mutableStateOf(initial?.action?.kind ?: ActionKind.NOTIFY) }
     var actionDevice by rememberSaveable { mutableStateOf(initial?.action?.deviceId?.ifEmpty { null } ?: first?.id.orEmpty()) }
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }
@@ -228,14 +235,23 @@ private fun AutomationEditor(
 
     val src = devices.firstOrNull { it.id == triggerDevice }
     val dst = devices.firstOrNull { it.id == actionDevice }
-    // Güç tetikleyicileri yalnızca enerji ölçen cihazlarda sunulur.
-    val kinds = TriggerKind.entries.filter { !it.usesWatts || src?.hasEnergy == true }
+    // Güç tetikleyicileri yalnızca enerji ölçen, kanal gücü tetikleyicisi kanal başına ölçen cihazlarda sunulur.
+    val kinds = TriggerKind.entries.filter {
+        when {
+            it.usesChannelPower -> src?.hasChannelPower == true
+            it.usesWatts -> src?.hasEnergy == true
+            else -> true
+        }
+    }
     if (triggerKind !in kinds) triggerKind = TriggerKind.TURNED_ON
 
     val minutesValue = minutes.toIntOrNull()
     val wattsValue = watts.replace(',', '.').toDoubleOrNull()
     val delayValue = delay.toIntOrNull()
+    val lowMinutesValue = lowMinutes.toIntOrNull()
+    val graceValue = grace.toIntOrNull()
     val valid = name.isNotBlank() && src != null &&
+        (!triggerKind.usesChannelPower || (lowMinutesValue != null && lowMinutesValue >= 0 && graceValue != null && graceValue >= 0)) &&
         (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
         (!actionKind.usesDevice || dst != null) &&
@@ -278,6 +294,18 @@ private fun AutomationEditor(
                     }
                     if (triggerKind.usesWatts) {
                         NumberField(watts, stringResource(R.string.automation_watts), decimal = true) { watts = it }
+                    }
+                    if (triggerKind.usesChannelPower) {
+                        NumberField(lowMinutes, stringResource(R.string.automation_low_minutes)) { lowMinutes = it }
+                        NumberField(grace, stringResource(R.string.automation_grace)) { grace = it }
+                        src?.channelPower?.get(triggerChannel)?.let {
+                            Text(
+                                stringResource(R.string.automation_current_power, formatWatts(it)),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    } else if (triggerKind.usesWatts) {
                         src?.power?.let {
                             Text(
                                 stringResource(R.string.automation_current_power, formatWatts(it)),
@@ -320,8 +348,13 @@ private fun AutomationEditor(
                             trigger = Trigger(
                                 triggerKind, triggerDevice,
                                 channel = if (triggerKind.usesChannel) triggerChannel else 0,
-                                minutes = if (triggerKind.usesMinutes) minutesValue ?: 0 else 0,
+                                minutes = when {
+                                    triggerKind.usesMinutes -> minutesValue ?: 0
+                                    triggerKind.usesChannelPower -> lowMinutesValue ?: 0
+                                    else -> 0
+                                },
                                 watts = if (triggerKind.usesWatts) wattsValue ?: 0.0 else 0.0,
+                                graceMinutes = if (triggerKind.usesChannelPower) graceValue ?: 0 else 0,
                             ),
                             action = if (actionKind.usesDevice) AutoAction(actionKind, actionDevice, actionChannel) else AutoAction(actionKind),
                             delayMinutes = delayValue ?: 0,

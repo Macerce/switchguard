@@ -15,7 +15,16 @@ data class DeviceSnapshot(
     val power: Double? = null,
     val voltage: Double? = null,
     val current: Double? = null,
+    /** Kanal numarası → güç (W); yalnızca kanal başına ölçen cihazlarda (SPM-4Relay, DualR3) dolu. */
+    val channelPower: Map<Int, Double> = emptyMap(),
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     val hasEnergy: Boolean get() = power != null
+    /** Kanal başına güç ölçer mi: veri geldiyse ya da bilinen model ise (SPM ve DualR3 veriyi ancak istenince gönderir). */
+    val hasChannelPower: Boolean get() = channelPower.isNotEmpty() || uiid in CHANNEL_METERING_UIIDS
+
+    companion object {
+        /** DualR3 (126), SPM-4Relay (130). */
+        val CHANNEL_METERING_UIIDS = setOf(126, 130)
+    }
 }

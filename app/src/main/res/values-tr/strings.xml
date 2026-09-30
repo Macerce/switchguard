@@ -231,6 +231,11 @@
     <string name="trigger_came_online">tekrar çevrimiçi olunca</string>
     <string name="trigger_power_above">güç şunu aşınca:</string>
     <string name="trigger_power_below">güç şunun altına inince:</string>
+    <string name="power_data_stale">%1$s: kanal gücü verisi 5 dakikadır alınamıyor. Güç düşmesi alarmı şu an çalışmayabilir.</string>
+    <string name="trigger_channel_power_low">kanal açıkken gücü şunun altına düşerse:</string>
+    <string name="automation_low_minutes">Bu kadar süre altında kalırsa (dakika, 0 = hemen)</string>
+    <string name="automation_grace">Kanal açıldıktan sonra bekle (dakika, kalkış için)</string>
+    <string name="automation_low_for">(%1$d dk boyunca, açılıştan %2$d dk sonra)</string>
     <string name="auto_action_turn_on">Aç</string>
     <string name="auto_action_turn_off">Kapat</string>
     <string name="auto_action_alarm">Alarm çal</string>

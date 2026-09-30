@@ -109,6 +109,14 @@ fun EnergySection(device: DeviceSnapshot) {
             Metric(stringResource(R.string.energy_voltage), device.voltage?.let { String.format(Locale.getDefault(), "%.0f V", it) } ?: "–")
             Metric(stringResource(R.string.energy_current), device.current?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–")
         }
+        if (device.channelPower.isNotEmpty()) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                device.channelPower.toSortedMap().forEach { (ch, w) ->
+                    Metric(stringResource(R.string.channel_n, ch + 1), formatWatts(w))
+                }
+            }
+        }
         HorizontalDivider(color = MaterialTheme.colorScheme.surface)
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Metric(stringResource(R.string.energy_today), DailySummary.formatKwh(days.last().second))

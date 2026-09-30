@@ -35,6 +35,13 @@ class EnergyTest {
     }
 
     @Test
+    fun `spm kanal gucleri ayri ayri okunur`() {
+        val e = parse(130, """{"actPow_00":1000,"actPow_02":5025}""")
+        assertEquals(mapOf(0 to 10.0, 2 to 50.25), e.channelPowers)
+        assertEquals(60.25, e.power!!, 1e-9)
+    }
+
+    @Test
     fun `olcum yapmayan cihazda enerji yok`() {
         assertTrue(parse(7, """{"switches":[{"switch":"on","outlet":0}],"rssi":-50}""").isEmpty)
     }

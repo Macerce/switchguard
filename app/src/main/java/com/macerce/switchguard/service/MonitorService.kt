@@ -76,6 +76,10 @@ class MonitorService : Service() {
     private var nextReconnectAt = 0L
     private var lastSyncAt = 0L
     private var networkCallback: ConnectivityManager.NetworkCallback? = null
+    /** Kanal gücü izlenen cihazlar: son canlı enerji isteği, son gelen kanal gücü, "veri yok" uyarısı verildi mi. */
+    private val liveEnergyRequestedAt = mutableMapOf<String, Long>()
+    private val channelPowerSeenAt = mutableMapOf<String, Long>()
+    private val powerStaleWarned = mutableSetOf<String>()
 
     private val loop = object : Runnable {
         override fun run() {
@@ -226,6 +230,7 @@ class MonitorService : Service() {
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
 
         if (authFailed) return
+        keepChannelPowerLive(wall)
         socket.sendPingIfDue(wall)
         if (socket.isStale(wall)) {
             socket.close()
@@ -389,6 +394,10 @@ class MonitorService : Service() {
     }
 
     private fun applyUpdate(update: WsEvent.Update) {
+        if (update.params?.keys()?.asSequence()?.any { it.startsWith("actPow_") } == true) {
+            channelPowerSeenAt[update.deviceId] = System.currentTimeMillis()
+            powerStaleWarned.remove(update.deviceId)
+        }
         val list = store.snapshots
         val before = list.firstOrNull { it.id == update.deviceId } ?: return
         val after = WsMessages.apply(before, update)
@@ -408,6 +417,43 @@ class MonitorService : Service() {
     }
 
     // ---------------------------------------------------------------- otomasyon
+
+    /**
+     * SPM gibi cihazlar kanal gücünü yalnızca istenince (uiActive) ve kısa süre gönderir. Kanal gücü
+     * otomasyonunun kanalı açıkken istek yenilenir. Veri uzun süre gelmezse bir kez uyarılır; aksi halde
+     * son değer ekranda donar ve güç düşmesi hiç fark edilmez.
+     */
+    private fun keepChannelPowerLive(wall: Long) {
+        val byId = store.snapshots.associateBy { it.id }
+        val watched = store.automations
+            .filter { it.enabled && it.trigger.kind.usesChannelPower }
+            .filter { byId[it.trigger.deviceId]?.switches?.get(it.trigger.channel) == true }
+            .mapNotNull { byId[it.trigger.deviceId] }
+            .distinctBy { it.id }
+        val ids = watched.map { it.id }.toSet()
+        // Kanal kapanınca sıfırlanır; tekrar açılınca veri beklemesi baştan başlar.
+        liveEnergyRequestedAt.keys.retainAll(ids)
+        powerStaleWarned.retainAll(ids)
+        for (d in watched) {
+            val requested = liveEnergyRequestedAt[d.id]
+            if (requested == null || wall - requested >= LIVE_ENERGY_REFRESH_MS) {
+                if (requested == null) channelPowerSeenAt[d.id] = wall
+                liveEnergyRequestedAt[d.id] = wall
+                try {
+                    client.requestLiveEnergy(d, LIVE_ENERGY_SECONDS)
+                } catch (e: Exception) {
+                    Log.w(TAG, "uiActive failed for ${d.id}", e)
+                }
+            }
+            val seen = channelPowerSeenAt[d.id] ?: wall
+            if (wall - seen >= POWER_STALE_MS && powerStaleWarned.add(d.id)) {
+                val text = getString(R.string.power_data_stale, d.name)
+                Log.w(TAG, "no channel power from ${d.id} for ${(wall - seen) / 1000}s")
+                log.add(d.id, d.name, EventKind.AUTOMATION, text, AlertAction.NOTIFY.name)
+                notifier.notifyEvent(text)
+            }
+        }
+    }
 
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
@@ -541,6 +587,9 @@ class MonitorService : Service() {
         const val ACTION_RESTART = "restart"
 
         private const val TAG = "SwitchGuard"
+        private const val LIVE_ENERGY_REFRESH_MS = 90_000L
+        private const val LIVE_ENERGY_SECONDS = 120
+        private const val POWER_STALE_MS = 5 * 60_000L
         private const val LOOP_MS = 15_000L
         private const val ALARM_TICK_MS = 60_000L
         private const val RESYNC_MS = 5 * 60_000L

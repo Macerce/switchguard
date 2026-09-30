@@ -55,6 +55,8 @@ object WsMessages {
             power = energy?.power ?: snapshot.power,
             voltage = energy?.voltage ?: snapshot.voltage,
             current = energy?.current ?: snapshot.current,
+            channelPower = if (energy == null || energy.channelPowers.isEmpty()) snapshot.channelPower
+            else snapshot.channelPower + energy.channelPowers,
         )
     }
 
