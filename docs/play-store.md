@@ -119,7 +119,7 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri:** `docs/screenshots/` içindekiler v2.0'dan kalma (Otomasyon sekmesi, enerji, zamanlayıcılar yok) — **yayından önce yenilenmeli.** Önerilen set (en az 2, en fazla 8): Cihazlar, cihaz detayı (kanallar + enerji), Otomasyon listesi, otomasyon düzenleyici, alarm bildirimi, Geçmiş, Ayarlar. Kendi cihazlarınızla çekilenler daha inandırıcı olur.
+- **Ekran görüntüleri (TR, v2.4.0, gerçek telefon 1080×2400):** `docs/screenshots/play-tr/gece/` ve `docs/screenshots/play-tr/gunduz/` — Cihazlar, cihaz detayı, kurallar, Otomasyon, otomasyon düzenleyici, Geçmiş, Ayarlar (7'şer adet; Play en az 2, en fazla 8 ister). Türkçe mağaza girişine bunlar yüklenir; tek bir temayı seçmek ya da ikisini karıştırmak mümkün. İngilizce giriş için aynı ekranlar telefon dili İngilizceye alınarak çekilmeli. `docs/screenshots/` kökündekiler v2.0'dan kalma emülatör görüntüleridir, kullanmayın.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:
