@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Stop
+import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -49,6 +50,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -63,9 +65,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -75,6 +77,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.Store
@@ -94,6 +97,10 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
     val alarm = remember(version) { store.pendingAlarm }
     val monitoring = remember(version) { store.monitoringEnabled }
     val loggedIn = remember(version) { store.isLoggedIn }
+    val monitoredIds = remember(version) { store.monitoredIds() }
+    val isPro = remember(version) { store.isPro }
+    var showPro by remember { mutableStateOf(false) }
+    if (showPro) ProDialog(onDismiss = { showPro = false })
     var refreshing by remember { mutableStateOf(false) }
 
     val doRefresh: () -> Unit = {
@@ -135,8 +142,11 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 if (loggedIn && devices.isEmpty()) {
                     item { EmptyDevices() }
                 }
+                if (loggedIn && !isPro && devices.size > Entitlement.FREE_DEVICES) {
+                    item { ProHintCard { showPro = true } }
+                }
                 items(devices, key = { it.id }) { device ->
-                    DeviceCard(device, monitored = store.rulesFor(device.id).monitored, onClick = { onOpenDevice(device.id) })
+                    DeviceCard(device, monitored = device.id in monitoredIds, onClick = { onOpenDevice(device.id) })
                 }
             }
         }
@@ -271,6 +281,23 @@ private fun LoginPromptCard(sessionLost: Boolean) {
             Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth()) {
                 Text(stringResource(if (sessionLost) R.string.action_relogin else R.string.action_login))
             }
+        }
+    }
+}
+
+/** Ücretsiz sürümde birden fazla cihaz varken: yalnızca biri izleniyor. */
+@Composable
+private fun ProHintCard(onUpgrade: () -> Unit) {
+    SectionCard {
+        Row(Modifier.padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Rounded.WorkspacePremium, null, tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.width(16.dp))
+            Text(
+                stringResource(R.string.pro_hint, Entitlement.FREE_DEVICES),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) }
         }
     }
 }

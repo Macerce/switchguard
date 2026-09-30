@@ -427,10 +427,17 @@ class MonitorService : Service() {
                 val source = store.snapshots.firstOrNull { it.id == a.trigger.deviceId }
                 val text = if (source != null) "$title (${source.name})" else title
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
-                val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
+                // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
+                val allowed = store.isPro || a.trigger.deviceId in store.monitoredIds()
+                val effective = if (!allowed) AlertAction.IGNORE
+                    else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name)
                 val sound = store.rulesFor(a.trigger.deviceId).soundUri
-                if (effective == AlertAction.ALARM) addAlarm(text, sound) else notifier.notifyEvent(text, sound)
+                when (effective) {
+                    AlertAction.ALARM -> addAlarm(text, sound)
+                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
+                    AlertAction.IGNORE -> Unit
+                }
             }
         }
     }

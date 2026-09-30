@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.macerce.switchguard.billing.Billing
 import com.macerce.switchguard.service.Notifier
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
 
@@ -27,5 +28,11 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Satın alma/iade başka cihazda ya da Play'de olmuş olabilir: her açılışta tazele.
+        Billing.get(this).refresh()
     }
 }

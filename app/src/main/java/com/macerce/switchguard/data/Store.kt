@@ -6,6 +6,7 @@ import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.QuietHours
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -130,7 +131,21 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
     fun setRules(deviceId: String, r: DeviceRules) { rules = rules + (deviceId to r) }
-    fun monitoredIds(): Set<String> = snapshots.map { it.id }.filter { rulesFor(it).monitored }.toSet()
+    /** Gerçekten izlenen cihazlar: kuralı açık olanlar, ücretsiz sürümde yalnızca biri (bkz. [Entitlement]). */
+    fun monitoredIds(): Set<String> {
+        val all = rules
+        return Entitlement.monitored(snapshots.map { it.id }, { (all[it] ?: DeviceRules()).monitored }, isPro, freeDeviceId)
+    }
+
+    // --- Pro ---
+    /** Son bilinen satın alma durumu; Play'e ulaşılamadığında da (çevrimdışı) geçerli kalır. */
+    var isPro: Boolean
+        get() = prefs.getBoolean("pro", false)
+        set(v) = put { putBoolean("pro", v) }
+    /** Ücretsiz sürümde kullanıcının izlemek için seçtiği cihaz. */
+    var freeDeviceId: String?
+        get() = prefs.getString("freeDevice", null)
+        set(v) = put { if (v == null) remove("freeDevice") else putString("freeDevice", v) }
 
     // --- Otomasyon ---
     var automations: List<Automation>

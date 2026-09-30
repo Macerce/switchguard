@@ -53,6 +53,9 @@ fun App() {
     var tab by rememberSaveable { mutableStateOf(Tab.DEVICES) }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
 
+    // Geri: önce cihaz detayını kapat, sonra diğer sekmelerden Cihazlar'a dön; yalnızca Cihazlar'dan çık.
+    // Sıra önemli: sonra kaydedilen BackHandler önce çalışır.
+    BackHandler(enabled = tab != Tab.DEVICES) { tab = Tab.DEVICES }
     BackHandler(enabled = openDeviceId != null) { openDeviceId = null }
 
     AnimatedContent(

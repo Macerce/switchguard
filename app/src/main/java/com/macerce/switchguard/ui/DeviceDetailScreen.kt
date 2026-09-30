@@ -5,13 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.width
-import androidx.compose.ui.Alignment
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -23,6 +22,7 @@ import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -33,10 +33,14 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -47,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.Store
@@ -62,6 +67,11 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 
     val device = remember(version) { store.snapshots.firstOrNull { it.id == deviceId } }
     val rules = remember(version) { store.rulesFor(deviceId) }
+    // Kural açık olsa bile ücretsiz sürümde başka cihaz izleniyorsa bu cihaz izlenmez.
+    val monitoredIds = remember(version) { store.monitoredIds() }
+    val monitored = deviceId in monitoredIds
+    var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+    dialog?.invoke()
     val events = remember(logVersion) { log.recent(deviceId, limit = 15) }
 
     Column(Modifier.fillMaxSize()) {
@@ -91,16 +101,41 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 
             SectionTitle(stringResource(R.string.section_monitoring))
             SectionCard {
+                val other = monitoredIds.firstOrNull { it != deviceId }
                 InfoRow(
                     Icons.Rounded.NotificationsActive,
                     stringResource(R.string.monitor_this_device),
-                    stringResource(R.string.monitor_this_device_desc),
+                    if (!monitored && !store.isPro && other != null) stringResource(R.string.pro_limit_detail, Entitlement.FREE_DEVICES)
+                    else stringResource(R.string.monitor_this_device_desc),
                 ) {
-                    Switch(checked = rules.monitored, onCheckedChange = { store.setRules(deviceId, rules.copy(monitored = it)) })
+                    Switch(checked = monitored, onCheckedChange = { on ->
+                        when {
+                            !on -> store.setRules(deviceId, rules.copy(monitored = false))
+                            store.isPro || other == null -> {
+                                store.freeDeviceId = deviceId
+                                store.setRules(deviceId, rules.copy(monitored = true))
+                            }
+                            else -> {
+                                val otherName = store.snapshots.firstOrNull { it.id == other }?.name.orEmpty()
+                                dialog = {
+                                    FreeSlotDialog(
+                                        otherName = otherName,
+                                        onSwitch = {
+                                            store.freeDeviceId = deviceId
+                                            store.setRules(deviceId, rules.copy(monitored = true))
+                                            dialog = null
+                                        },
+                                        onUpgrade = { dialog = { ProDialog(onDismiss = { dialog = null }) } },
+                                        onDismiss = { dialog = null },
+                                    )
+                                }
+                            }
+                        }
+                    })
                 }
             }
 
-            if (rules.monitored) {
+            if (monitored) {
                 SectionTitle(stringResource(R.string.section_rules))
                 SectionCard {
                     EventType.entries.forEachIndexed { i, type ->
@@ -152,6 +187,18 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             SectionCard { RawDataRow(deviceId) }
         }
     }
+}
+
+/** Ücretsiz sürümde izleme hakkı başka cihazdayken: hakkı bu cihaza taşı ya da Pro'ya geç. */
+@Composable
+private fun FreeSlotDialog(otherName: String, onSwitch: () -> Unit, onUpgrade: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.pro_limit_title)) },
+        text = { Text(stringResource(R.string.pro_limit_body, Entitlement.FREE_DEVICES, otherName)) },
+        confirmButton = { TextButton(onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) } },
+        dismissButton = { TextButton(onClick = onSwitch) { Text(stringResource(R.string.pro_limit_switch)) } },
+    )
 }
 
 private fun EventType.icon(): ImageVector = when (this) {

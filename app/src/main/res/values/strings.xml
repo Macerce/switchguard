@@ -283,4 +283,22 @@
     <string name="raw_data">Copy device data</string>
     <string name="raw_data_desc">Copies the device’s raw data to the clipboard, useful for reporting an unsupported model</string>
     <string name="raw_data_copied">Copied</string>
+    <string name="action_later">Not now</string>
+    <string name="pro_title">SwitchGuard Pro</string>
+    <string name="pro_body">The free version monitors %1$d device. Pro monitors all your devices, with every feature.</string>
+    <string name="pro_once">One-time payment, no subscription. Linked to your Google account, so it moves with you to a new phone.</string>
+    <string name="pro_pending">Your payment is pending. Pro turns on as soon as Google Play confirms it.</string>
+    <string name="pro_unavailable">Google Play is not available right now. Make sure the app was installed from Google Play and you are online.</string>
+    <string name="pro_buy">Get Pro · %s</string>
+    <string name="pro_loading">Loading price…</string>
+    <string name="pro_active">Active — all devices are monitored. Thank you!</string>
+    <string name="pro_free_status">Free version: %1$d device monitored</string>
+    <string name="pro_restore">Restore</string>
+    <string name="pro_restoring">Checking your purchases…</string>
+    <string name="pro_upgrade">Get Pro</string>
+    <string name="pro_hint">Free version: only %1$d device is monitored. Get Pro to monitor them all.</string>
+    <string name="pro_limit_title">One device in the free version</string>
+    <string name="pro_limit_body">The free version monitors %1$d device, and \"%2$s\" is using it. Monitor this device instead, or get Pro to monitor all of them.</string>
+    <string name="pro_limit_switch">Monitor this one instead</string>
+    <string name="pro_limit_detail">Not monitored — the free version monitors %1$d device</string>
 </resources>

@@ -279,4 +279,22 @@
     <string name="raw_data">Cihaz verisini kopyala</string>
     <string name="raw_data_desc">Cihazın ham verisini panoya kopyalar; desteklenmeyen bir modeli bildirmek için</string>
     <string name="raw_data_copied">Kopyalandı</string>
+    <string name="action_later">Şimdi değil</string>
+    <string name="pro_title">SwitchGuard Pro</string>
+    <string name="pro_body">Ücretsiz sürüm %1$d cihazı izler. Pro tüm cihazlarınızı, bütün özellikleriyle izler.</string>
+    <string name="pro_once">Tek seferlik ödeme, abonelik yok. Google hesabınıza bağlıdır; telefon değiştirseniz de geçerli.</string>
+    <string name="pro_pending">Ödemeniz bekleniyor. Google Play onaylar onaylamaz Pro açılır.</string>
+    <string name="pro_unavailable">Google Play şu an kullanılamıyor. Uygulamanın Google Play\'den yüklendiğinden ve internete bağlı olduğunuzdan emin olun.</string>
+    <string name="pro_buy">Pro\'ya geç · %s</string>
+    <string name="pro_loading">Fiyat yükleniyor…</string>
+    <string name="pro_active">Aktif — tüm cihazlar izleniyor. Teşekkürler!</string>
+    <string name="pro_free_status">Ücretsiz sürüm: %1$d cihaz izleniyor</string>
+    <string name="pro_restore">Geri yükle</string>
+    <string name="pro_restoring">Satın almalarınız kontrol ediliyor…</string>
+    <string name="pro_upgrade">Pro\'ya geç</string>
+    <string name="pro_hint">Ücretsiz sürüm: yalnızca %1$d cihaz izleniyor. Tümünü izlemek için Pro\'ya geçin.</string>
+    <string name="pro_limit_title">Ücretsiz sürümde tek cihaz</string>
+    <string name="pro_limit_body">Ücretsiz sürüm %1$d cihazı izler ve şu an \"%2$s\" izleniyor. Onun yerine bu cihazı izleyebilir ya da tümünü izlemek için Pro\'ya geçebilirsiniz.</string>
+    <string name="pro_limit_switch">Bunu izle</string>
+    <string name="pro_limit_detail">İzlenmiyor — ücretsiz sürüm %1$d cihaz izler</string>
 </resources>

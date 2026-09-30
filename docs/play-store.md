@@ -31,6 +31,7 @@
 > • Switch devices on and off from the app
 > • Full event history
 > • No ads, no tracking, no account of ours — your data stays on your phone
+> • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
 > Requires a free eWeLink developer App ID (the in-app guide takes you through it in two minutes). Works with SONOFF-branded devices.
 >
@@ -46,6 +47,7 @@
 > • Cihazları uygulamadan açıp kapatma
 > • Tüm olayların geçmişi
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
+> • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
 > Ücretsiz bir eWeLink geliştirici App ID'si gerekir (uygulama içi rehber iki dakikada adım adım anlatır). SONOFF markalı cihazlarla çalışır.
 >
@@ -86,6 +88,16 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz
 - [ ] Kapalı test kanalı → `SwitchGuard.aab` → 12+ testçi e-postası → 14 gün
 - [ ] Üretim erişimi başvurusu → üretim sürümü
+
+## 4c. Uygulama içi ürün (Pro)
+- Play Console → **Para kazanma → Ürünler → Uygulama içi ürünler** → Ürün oluştur
+  - Ürün kimliği: **`pro_unlimited`** (koddaki `Billing.PRO_ID` ile birebir aynı olmalı)
+  - Ad: *SwitchGuard Pro* · Açıklama: *Monitor all your devices (free version monitors 1).*
+  - Fiyat: **4,99 USD** → "Diğer ülkeler için fiyatları otomatik ayarla" (Türkiye yerel fiyata çevrilir)
+  - Etkinleştir
+- Ürün oluşturabilmek için önce **ödeme profili** (banka + vergi bilgisi) tamamlanmalı ve Play'e billing izni içeren bir AAB yüklenmiş olmalı (kapalı test yüklemesi yeterli).
+- **Lisans testi:** Ayarlar → Lisans testi → kendi Gmail'in ve testçilerin → "RESPOND_NORMALLY". Bu hesaplar satın almayı gerçek ödeme olmadan dener.
+- Fiyat istenildiğinde buradan değiştirilir, uygulama güncellemesi gerekmez.
 
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`

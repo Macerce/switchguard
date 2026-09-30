@@ -155,6 +155,8 @@ fun SettingsScreen(modifier: Modifier) {
                         },
                     )
                 }
+                Divider()
+                ProRow(s.isPro) { dialog = { ProDialog(onDismiss = { dialog = null }) } }
             }
 
             // ---------------------------------------------------------------- İzleme

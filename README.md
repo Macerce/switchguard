@@ -17,6 +17,7 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - Offline grace period, quiet hours, remote on/off, eWeLink device timers, automations
 - Energy readings for power-metering devices, daily summary, full event history
 - Loud warning when the eWeLink session is lost (e.g. same account signed in on another phone)
+- Free for 1 device; a one-time Pro purchase on Google Play monitors all devices
 - No server, no analytics, no ads — everything stays on the phone ([privacy policy](https://sites.google.com/view/switchguard-privacy))
 
 ## Requirements

@@ -14,6 +14,8 @@ What the app stores (only on your phone):
 
 Who the app talks to: only eWeLink's official servers (*.coolkit.cc / *.coolkit.cn), to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. The app has no server of its own, and contains no analytics, advertising or tracking SDKs. No data is sold or shared with third parties.
 
+Purchases: the optional Pro upgrade is sold through Google Play. Payment is handled entirely by Google; the app only asks Google Play whether Pro was purchased.
+
 Your password is entered on eWeLink's own sign-in page; the app never sees or stores it.
 
 Backups: app data is excluded from Android cloud backup and device transfer.
@@ -35,6 +37,8 @@ Uygulamanın sakladıkları (yalnızca telefonunuzda):
 - Cihaz olaylarının geçmişi (en fazla 2.000 kayıt).
 
 Uygulamanın iletişim kurduğu yerler: yalnızca eWeLink'in resmi sunucuları (*.coolkit.cc / *.coolkit.cn). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. Uygulamanın kendi sunucusu yoktur; analiz, reklam veya izleme kütüphanesi içermez. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.
+
+Satın almalar: İsteğe bağlı Pro yükseltmesi Google Play üzerinden satılır. Ödeme tamamen Google tarafından işlenir; uygulama yalnızca Google Play'e Pro'nun satın alınıp alınmadığını sorar.
 
 Şifreniz eWeLink'in kendi giriş sayfasına girilir; uygulama şifrenizi hiçbir zaman görmez ve saklamaz.
 
