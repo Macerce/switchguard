@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.EventStrings
+import androidx.compose.ui.platform.LocalConfiguration
 import android.text.format.DateUtils
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -159,13 +161,21 @@ private fun LoggedEvent.icon(): ImageVector = when (kind) {
     else -> Icons.Rounded.Alarm
 }
 
+/** Seçili dildeki olay kalıpları; dil değişince yeniden oluşturulur. */
+@Composable
+private fun eventStrings(): EventStrings {
+    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    return remember(context, configuration) { EventLog.strings(context) }
+}
+
 /** Geçmiş satırı: simge, metin, saat ve yapılan işlem rozeti. */
 @Composable
 fun EventRow(e: LoggedEvent, showDevice: Boolean) {
     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(e.icon(), null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
-            Text(e.text, style = MaterialTheme.typography.bodyLarge)
+            Text(e.text(eventStrings()), style = MaterialTheme.typography.bodyLarge)
             val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(e.time))
             val sub = when (e.kind) {
                 EventKind.USER -> stringResource(R.string.event_by_user)

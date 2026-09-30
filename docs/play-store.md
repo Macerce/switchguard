@@ -126,10 +126,9 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri (v2.5.0, gerçek telefon 1080×2400):** `docs/screenshots/play/`
+- **Ekran görüntüleri (v2.5.1, gerçek telefon 1080×2400):** `docs/screenshots/play/`
   - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema; 8.'si dil seçimi.
   - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 7 ekranın tüm koyu/açık halleri (değiştirmek isterseniz).
-  - Not: Geçmiş kayıtları oluştukları andaki dille saklanır; İngilizce görüntülerde eski olaylar Türkçe görünür.
   - `docs/screenshots/` kökündekiler v2.0 emülatör görüntüleridir, kullanmayın.
 
 ## 6. Sürüm güncellemek

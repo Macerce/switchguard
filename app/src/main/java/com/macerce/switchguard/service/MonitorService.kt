@@ -30,6 +30,9 @@ import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
+import com.macerce.switchguard.core.toArgs
+import com.macerce.switchguard.core.EventStrings
+import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.OfflineGrace
 import com.macerce.switchguard.core.RuleEngine
@@ -65,7 +68,8 @@ class MonitorService : Service() {
     private lateinit var socket: EwelinkSocket
     private lateinit var worker: HandlerThread
     private lateinit var handler: Handler
-    private lateinit var labels: ChangeLabels
+    private lateinit var strings: EventStrings
+    private val labels: ChangeLabels get() = strings.labels
     private lateinit var metrics: MetricsLog
     private val automations = AutomationEngine()
 
@@ -99,7 +103,7 @@ class MonitorService : Service() {
         metrics = MetricsLog.get(this)
         client = EwelinkClient(store)
         notifier = Notifier(this, store)
-        labels = labels(this)
+        strings = EventLog.strings(this)
         worker = HandlerThread("monitor").also { it.start() }
         handler = Handler(worker.looper)
         socket = EwelinkSocket(store, socketListener)
@@ -122,7 +126,7 @@ class MonitorService : Service() {
             }
             ACTION_TEST -> {
                 handler.post {
-                    log.add("", getString(R.string.app_name), EventKind.TEST, getString(R.string.test_alarm_line), AlertAction.ALARM.name)
+                    log.add("", getString(R.string.app_name), EventKind.TEST, strings.test, AlertAction.ALARM.name, EventArgs.Test)
                     addAlarm(getString(R.string.test_alarm_line))
                 }
                 return if (running) START_STICKY else START_NOT_STICKY
@@ -451,9 +455,9 @@ class MonitorService : Service() {
             }
             val seen = channelPowerSeenAt[d.id] ?: wall
             if (wall - seen >= POWER_STALE_MS && powerStaleWarned.add(d.id)) {
-                val text = getString(R.string.power_data_stale, d.name)
+                val text = EventArgs.PowerStale.render(d.name, strings)
                 Log.w(TAG, "no channel power from ${d.id} for ${(wall - seen) / 1000}s")
-                log.add(d.id, d.name, EventKind.AUTOMATION, text, AlertAction.NOTIFY.name)
+                log.add(d.id, d.name, EventKind.AUTOMATION, text, AlertAction.NOTIFY.name, EventArgs.PowerStale)
                 notifier.notifyEvent(text)
             }
         }
@@ -467,37 +471,39 @@ class MonitorService : Service() {
     }
 
     private fun execute(a: Automation) {
-        val title = getString(R.string.automation_fired, a.name)
         when (a.action.kind) {
             ActionKind.TURN_ON, ActionKind.TURN_OFF -> {
                 val on = a.action.kind == ActionKind.TURN_ON
                 val target = store.snapshots.firstOrNull { it.id == a.action.deviceId }
                 if (target == null) {
-                    log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, "$title: ${getString(R.string.device_missing)}", "")
+                    val args = EventArgs.AutoMissing(a.name)
+                    log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
                     return
                 }
-                val label = if (target.isMultiChannel) labels.channel(target.name, a.action.channel + 1) else target.name
-                val text = "$title: $label → ${if (on) labels.on else labels.off}"
+                val args = EventArgs.AutoSwitch(a.name, a.action.channel, target.isMultiChannel, on)
+                val text = args.render(target.name, strings)
                 try {
                     // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
                     LiveState.expected.expect(target.id, a.action.channel, on, System.currentTimeMillis())
                     client.setSwitch(target, a.action.channel, on)
-                    log.add(target.id, target.name, EventKind.AUTOMATION, text, "")
+                    log.add(target.id, target.name, EventKind.AUTOMATION, text, "", args)
                 } catch (e: Exception) {
-                    val failed = getString(R.string.automation_failed, text, e.message.orEmpty())
-                    log.add(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name)
+                    val failedArgs = args.copy(error = e.message.orEmpty())
+                    val failed = failedArgs.render(target.name, strings)
+                    log.add(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
                     notifier.notifyEvent(failed)
                 }
             }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
                 val source = store.snapshots.firstOrNull { it.id == a.trigger.deviceId }
-                val text = if (source != null) "$title (${source.name})" else title
+                val args = EventArgs.AutoAlert(a.name, source?.name)
+                val text = args.render(source?.name ?: a.name, strings)
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
                 val allowed = store.isPro || a.trigger.deviceId in store.monitoredIds()
                 val effective = if (!allowed) AlertAction.IGNORE
                     else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
-                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name)
+                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = store.rulesFor(a.trigger.deviceId).soundUri
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound)
@@ -511,7 +517,7 @@ class MonitorService : Service() {
     private fun handle(change: Change) {
         val wall = System.currentTimeMillis()
         if (LiveState.expected.consume(change, wall)) {
-            log.add(change.deviceId, change.name, EventKind.USER, change.describe(labels), "")
+            log.add(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
             return
         }
         val action = store.rulesFor(change.deviceId).actionFor(change.eventType)
@@ -523,7 +529,7 @@ class MonitorService : Service() {
                 return
             }
             if (change.to && grace.cameBack(change.deviceId)) {
-                log.add(change.deviceId, change.name, EventKind.SHORT_DROP, getString(R.string.event_short_drop, change.name), AlertAction.IGNORE.name)
+                log.add(change.deviceId, change.name, EventKind.SHORT_DROP, strings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
                 return
             }
         }
@@ -533,7 +539,7 @@ class MonitorService : Service() {
     private fun dispatch(change: Change, action: AlertAction) {
         val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
         val text = change.describe(labels)
-        log.add(change.deviceId, change.name, change.eventType.name, text, effective.name)
+        log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
         val sound = store.rulesFor(change.deviceId).soundUri
         when (effective) {
             AlertAction.ALARM -> addAlarm(text, sound)
@@ -565,6 +571,7 @@ class MonitorService : Service() {
     /** Uygulama dili değişince (Android 13+ sistem bildirir) durum bildirimi yeni dille yeniden yazılsın. */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        strings = EventLog.strings(this)
         if (!running) return
         LiveState.connection.value.let { setState(it.state, it.detail) }
     }
@@ -608,13 +615,6 @@ class MonitorService : Service() {
 
         @Volatile var instance: MonitorService? = null
             private set
-
-        fun labels(context: Context) = ChangeLabels(
-            on = context.getString(R.string.label_on),
-            off = context.getString(R.string.label_off),
-            online = context.getString(R.string.label_online),
-            offline = context.getString(R.string.label_offline),
-        ) { name, n -> context.getString(R.string.label_channel, name, n) }
 
         fun send(context: Context, action: String) {
             val intent = Intent(context, MonitorService::class.java).setAction(action)

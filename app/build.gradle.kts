@@ -20,8 +20,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 36
-        versionCode = 10
-        versionName = "2.5.0"
+        versionCode = 11
+        versionName = "2.5.1"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
