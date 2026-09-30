@@ -144,6 +144,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = BuildConfig.OWNER_UNLOCK || prefs.getBoolean("pro", false)
         set(v) = put { putBoolean("pro", v) }
     /** Ücretsiz sürümde kullanıcının izlemek için seçtiği cihaz. */
+    /** Geçmiş sekmesinde görülen son olayın kimliği; sonrakiler "görülmemiş" sayılır. Hiç ayarlanmadıysa null. */
+    var historySeenId: Long?
+        get() = if (prefs.contains("historySeen")) prefs.getLong("historySeen", 0) else null
+        set(v) = put { if (v == null) remove("historySeen") else putLong("historySeen", v) }
+
     var freeDeviceId: String?
         get() = prefs.getString("freeDevice", null)
         set(v) = put { if (v == null) remove("freeDevice") else putString("freeDevice", v) }

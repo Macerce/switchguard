@@ -62,8 +62,11 @@ class EwelinkClient(private val store: Store) {
         user.optString("email").takeIf { it.isNotEmpty() }?.let { store.accountEmail = it }
     }
 
-    fun getDevices(): List<DeviceSnapshot> =
-        DeviceParser.parseThingList(withTokenRetry { authed("GET", "/v2/device/thing?num=0", null) })
+    fun getDevices(): List<DeviceSnapshot> {
+        val body = withTokenRetry { authed("GET", "/v2/device/thing?num=0", null) }
+        if (store.userApiKey.isEmpty()) DeviceParser.ownApiKey(body)?.let { store.userApiKey = it }
+        return DeviceParser.parseThingList(body)
+    }
 
     /** Cihazı açar/kapatır. Çok kanallı cihazlarda [channel] 0'dan başlar. */
     fun setSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {

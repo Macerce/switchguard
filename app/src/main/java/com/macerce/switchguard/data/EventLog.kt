@@ -72,6 +72,17 @@ class EventLog private constructor(context: Context) :
         }
     }
 
+    /** En son kaydın kimliği; kayıt yoksa 0. */
+    fun latestId(): Long =
+        readableDatabase.rawQuery("SELECT COALESCE(MAX(_id), 0) FROM events", null).use { c -> if (c.moveToFirst()) c.getLong(0) else 0 }
+
+    /** [afterId]'den sonra eklenen ve alarm/bildirim üretmiş kayıt sayısı (Geçmiş sekmesindeki rozet). */
+    fun unseenAlertCount(afterId: Long): Int =
+        readableDatabase.rawQuery(
+            "SELECT COUNT(*) FROM events WHERE _id > ? AND action IN ('ALARM', 'NOTIFY')",
+            arrayOf(afterId.toString()),
+        ).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
+
     fun clear() {
         writableDatabase.delete("events", null, null)
         _version.value++

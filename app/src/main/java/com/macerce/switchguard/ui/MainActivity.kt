@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.macerce.switchguard.billing.Billing
+import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.MonitorService
 import com.macerce.switchguard.service.Notifier
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
 
@@ -34,5 +36,9 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         // Satın alma/iade başka cihazda ya da Play'de olmuş olabilir: her açılışta tazele.
         Billing.get(this).refresh()
+        // İzleme açık görünüyor ama servis yok (güncelleme/yeniden başlatma yayını engellendi, ör. Xiaomi): yeniden başlat.
+        if (Store.get(this).monitoringEnabled && MonitorService.instance == null) {
+            MonitorService.send(this, MonitorService.ACTION_START)
+        }
     }
 }

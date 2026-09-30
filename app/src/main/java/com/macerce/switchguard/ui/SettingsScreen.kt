@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.Timer
@@ -327,6 +328,15 @@ fun SettingsScreen(modifier: Modifier) {
                     stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
                     Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
                 )
+                if (Actions.isXiaomi()) {
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.RestartAlt,
+                        stringResource(R.string.perm_autostart),
+                        stringResource(R.string.perm_autostart_desc),
+                        Modifier.clickable { Actions.openAutostartSettings(context) },
+                    )
+                }
             }
 
             // ---------------------------------------------------------------- Hakkında

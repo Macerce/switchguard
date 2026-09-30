@@ -124,6 +124,15 @@ object Actions {
             .onFailure { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
     }
 
+    /** Xiaomi/Redmi/POCO (MIUI, HyperOS): otomatik başlatma izni yoksa açılış/güncelleme yayınları uygulamaya ulaşmaz. */
+    fun isXiaomi(): Boolean = android.os.Build.MANUFACTURER.lowercase() in setOf("xiaomi", "redmi", "poco")
+
+    fun openAutostartSettings(context: Context) {
+        val miui = Intent().setClassName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
+        runCatching { context.startActivity(miui) }
+            .onFailure { context.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${context.packageName}"))) }
+    }
+
     fun openNotificationSettings(context: Context) {
         context.startActivity(
             Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)

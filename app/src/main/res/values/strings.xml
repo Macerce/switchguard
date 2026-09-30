@@ -48,7 +48,7 @@
     <string name="state_stopped">Monitoring is off</string>
     <string name="status_live">Live · watching %d device(s)</string>
     <string name="status_polling">Watching %1$d device(s) · every %2$d s</string>
-    <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks</string>
+    <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks (changes shorter than the interval may be missed)</string>
     <string name="detail_reconnecting">Reconnecting for instant updates…</string>
     <string name="detail_api_error">Error code %d</string>
     <string name="monitoring_off_hint">Start monitoring to get alarms</string>
@@ -100,6 +100,8 @@
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Quiet hours</string>
     <string name="section_permissions">Permissions</string>
+    <string name="perm_autostart">Autostart (Xiaomi)</string>
+    <string name="perm_autostart_desc">Needed so monitoring restarts after a reboot or update. Tap and allow SwitchGuard.</string>
     <string name="section_about">About</string>
     <string name="logged_in">Signed in</string>
     <string name="not_logged_in">Not signed in</string>

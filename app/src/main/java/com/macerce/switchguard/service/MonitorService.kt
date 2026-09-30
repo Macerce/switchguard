@@ -15,6 +15,7 @@ import android.os.HandlerThread
 import android.os.IBinder
 import android.os.PowerManager
 import android.os.SystemClock
+import android.util.Log
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
@@ -69,6 +70,8 @@ class MonitorService : Service() {
     private var wakeLock: PowerManager.WakeLock? = null
     private var authFailed = false
     private var wsUnsupported = false
+    /** Anlık bağlantının neden kurulamadığı; periyodik senkron bu açıklamayı silmesin diye saklanır. */
+    private var wsIssue = ""
     private var reconnectAttempt = 0
     private var nextReconnectAt = 0L
     private var lastSyncAt = 0L
@@ -282,6 +285,7 @@ class MonitorService : Service() {
         override fun onReady() = handler.post {
             reconnectAttempt = 0
             nextReconnectAt = 0
+            wsIssue = ""
             // Bağlantı yokken kaçan değişiklikleri yakala.
             sync()
         }.let { }
@@ -292,12 +296,15 @@ class MonitorService : Service() {
 
         override fun onClosed(reason: String, fatal: Boolean) = handler.post {
             if (!running) return@post
+            Log.w(TAG, "WebSocket closed: $reason (fatal=$fatal)")
             if (fatal) {
                 wsUnsupported = true
-                setState(ConnState.POLLING, getString(R.string.detail_ws_unsupported))
+                wsIssue = "${getString(R.string.detail_ws_unsupported)} ($reason)"
+                setState(ConnState.POLLING, wsIssue)
             } else {
                 scheduleReconnect()
-                if (!authFailed) setState(ConnState.POLLING, getString(R.string.detail_reconnecting))
+                wsIssue = "${getString(R.string.detail_reconnecting)} ($reason)"
+                if (!authFailed) setState(ConnState.POLLING, wsIssue)
             }
         }.let { }
 
@@ -313,16 +320,24 @@ class MonitorService : Service() {
         if (!running || authFailed || wsUnsupported) return
         nextReconnectAt = 0
         try {
-            if (store.userApiKey.isEmpty()) client.loadProfile()
+            if (store.userApiKey.isEmpty()) {
+                // Profil yolu bazı App ID'lere kapalı (407); o zaman apikey cihaz listesinden alınır.
+                try { client.loadProfile() } catch (e: ApiException) { Log.w(TAG, "profile unavailable: ${e.message}") }
+                if (store.userApiKey.isEmpty()) client.getDevices()
+            }
             if (store.userApiKey.isEmpty()) {
                 wsUnsupported = true
-                setState(ConnState.POLLING, getString(R.string.detail_ws_unsupported))
+                wsIssue = "${getString(R.string.detail_ws_unsupported)} (no apikey)"
+                Log.w(TAG, "WebSocket unavailable: no apikey")
+                setState(ConnState.POLLING, wsIssue)
                 return
             }
             socket.connect()
         } catch (e: AuthException) {
             onAuthFailed()
         } catch (e: Exception) {
+            Log.w(TAG, "WebSocket connect failed", e)
+            wsIssue = "${getString(R.string.detail_reconnecting)} (${e.javaClass.simpleName}: ${e.message})"
             scheduleReconnect()
         }
     }
@@ -349,7 +364,8 @@ class MonitorService : Service() {
                 authFailed = false
                 notifier.clearWarning()
             }
-            setState(if (socket.ready) ConnState.LIVE else ConnState.POLLING, synced = true)
+            if (socket.ready) setState(ConnState.LIVE, synced = true)
+            else setState(ConnState.POLLING, wsIssue, synced = true)
         } catch (e: AuthException) {
             onAuthFailed()
         } catch (e: IOException) {
@@ -524,6 +540,7 @@ class MonitorService : Service() {
         /** Giriş/ayar değişince: hata durumlarını sıfırla ve yeniden bağlan. */
         const val ACTION_RESTART = "restart"
 
+        private const val TAG = "SwitchGuard"
         private const val LOOP_MS = 15_000L
         private const val ALARM_TICK_MS = 60_000L
         private const val RESYNC_MS = 5 * 60_000L

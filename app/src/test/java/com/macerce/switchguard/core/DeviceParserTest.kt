@@ -28,6 +28,24 @@ class DeviceParserTest {
     }
 
     @Test
+    fun `kullanicinin apikey'i kendi cihazindan alinir, paylasilan atlanir`() {
+        val body = """
+        {"error":0,"data":{"thingList":[
+          {"itemType":1,"itemData":{"deviceid":"s1","apikey":"owner-key","sharedBy":{"apikey":"owner-key"}}},
+          {"itemType":1,"itemData":{"deviceid":"o1","apikey":"my-key"}}
+        ]}}
+        """.trimIndent()
+        assertEquals("my-key", DeviceParser.ownApiKey(body))
+    }
+
+    @Test
+    fun `sadece paylasilan cihaz varsa apikey yok`() {
+        val body = """{"data":{"thingList":[{"itemData":{"deviceid":"s1","apikey":"k","sharedBy":{}}}]}}"""
+        assertEquals(null, DeviceParser.ownApiKey(body))
+        assertEquals(null, DeviceParser.ownApiKey(json))
+    }
+
+    @Test
     fun `snapshot json gidis donus`() {
         val devices = DeviceParser.parseThingList(json)
         assertEquals(devices, DeviceParser.snapshotsFromJson(DeviceParser.snapshotsToJson(devices)))

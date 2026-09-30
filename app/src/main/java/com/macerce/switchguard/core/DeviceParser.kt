@@ -30,6 +30,20 @@ object DeviceParser {
         return result
     }
 
+    /**
+     * Cihaz listesinden kullanıcının apikey'i: kendi cihazının (paylaşılmamış) sahibi kullanıcının kendisidir.
+     * Bazı App ID'ler `/v2/user/profile`'a erişemediği (407) için WebSocket'in apikey kaynağı budur.
+     */
+    fun ownApiKey(body: String): String? {
+        val list = JSONObject(body).optJSONObject("data")?.optJSONArray("thingList") ?: return null
+        for (i in 0 until list.length()) {
+            val item = list.optJSONObject(i)?.optJSONObject("itemData") ?: continue
+            if (item.has("sharedBy")) continue
+            item.optString("apikey").takeIf { it.isNotEmpty() }?.let { return it }
+        }
+        return null
+    }
+
     /** Tek cihaz sorgusunun (`POST /v2/device/thing`) ham params nesnesi. */
     fun parseSingleParams(body: String): JSONObject? =
         JSONObject(body).optJSONObject("data")?.optJSONArray("thingList")
