@@ -103,6 +103,10 @@
     <string name="perm_autostart">Autostart (Xiaomi)</string>
     <string name="perm_autostart_desc">Needed so monitoring restarts after a reboot or update. Tap and allow SwitchGuard.</string>
     <string name="section_about">About</string>
+    <string name="section_general">General</string>
+    <string name="language">Language</string>
+    <string name="language_desc">Choose the language of the app, notifications and alarms.</string>
+    <string name="language_system">Phone language</string>
     <string name="logged_in">Signed in</string>
     <string name="not_logged_in">Not signed in</string>
     <string name="region_x">Region: %s</string>

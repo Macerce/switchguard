@@ -99,6 +99,10 @@
     <string name="perm_autostart">Otomatik başlatma (Xiaomi)</string>
     <string name="perm_autostart_desc">Telefon yeniden başlayınca ya da güncellemeden sonra izlemenin kendiliğinden açılması için gerekli. Dokunun ve SwitchGuard için izni açın.</string>
     <string name="section_about">Hakkında</string>
+    <string name="section_general">Genel</string>
+    <string name="language">Dil</string>
+    <string name="language_desc">Uygulamanın, bildirimlerin ve alarmların dilini seçin.</string>
+    <string name="language_system">Telefonun dili</string>
     <string name="logged_in">Giriş yapıldı</string>
     <string name="not_logged_in">Giriş yapılmadı</string>
     <string name="region_x">Bölge: %s</string>

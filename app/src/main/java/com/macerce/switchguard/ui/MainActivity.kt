@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,12 +10,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.macerce.switchguard.billing.Billing
+import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.MonitorService
 import com.macerce.switchguard.service.Notifier
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
 
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLanguage.wrap(newBase))
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

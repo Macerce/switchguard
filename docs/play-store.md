@@ -32,6 +32,7 @@
 > • Power, voltage and energy readings on power-metering devices
 > • Switch devices on and off from the app and manage their eWeLink timers
 > • Full event history and an optional daily summary
+> • English and Turkish, switchable in the app
 > • No ads, no tracking, no account of ours — your data stays on your phone
 > • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
@@ -50,6 +51,7 @@
 > • Güç ölçen cihazlarda güç, voltaj ve enerji değerleri
 > • Cihazları uygulamadan açıp kapatma ve eWeLink zamanlayıcılarını yönetme
 > • Tüm olayların geçmişi ve isteğe bağlı günlük özet
+> • Türkçe ve İngilizce; uygulama içinden değiştirilebilir
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
 > • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
@@ -106,6 +108,11 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - **Lisans testi:** Ayarlar → Lisans testi → kendi Gmail'in ve testçilerin → "RESPOND_NORMALLY". Bu hesaplar satın almayı gerçek ödeme olmadan dener.
 - Fiyat istenildiğinde buradan değiştirilir, uygulama güncellemesi gerekmez.
 
+## 4e. Mağaza dilleri
+Play Console → **Mağaza varlığı → Ana mağaza girişi**: varsayılan dil **English (United States) – en-US**.
+Sonra **Çeviriler → Kendi çevirilerinizi yönetin → Türkçe – tr-TR** ekleyin ve Türkçe başlık, açıklama, sürüm notu ve `tr/secim/` görüntülerini oraya yükleyin.
+Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İngilizce girişi gösterir. Uygulamanın kendisi de telefonun dilini izler; kullanıcı Ayarlar → Dil'den değiştirebilir.
+
 ## 4d. Sürüm notları ("Bu sürümdeki yenilikler", ≤500 karakter)
 İlk yayında Play bu alanı ister. Sonraki her güncellemede yalnızca yenilikleri yazın.
 
@@ -119,7 +126,11 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri (TR, v2.4.0, gerçek telefon 1080×2400):** `docs/screenshots/play-tr/gece/` ve `docs/screenshots/play-tr/gunduz/` — Cihazlar, cihaz detayı, kurallar, Otomasyon, otomasyon düzenleyici, Geçmiş, Ayarlar (7'şer adet; Play en az 2, en fazla 8 ister). Türkçe mağaza girişine bunlar yüklenir; tek bir temayı seçmek ya da ikisini karıştırmak mümkün. İngilizce giriş için aynı ekranlar telefon dili İngilizceye alınarak çekilmeli. `docs/screenshots/` kökündekiler v2.0'dan kalma emülatör görüntüleridir, kullanmayın.
+- **Ekran görüntüleri (v2.5.0, gerçek telefon 1080×2400):** `docs/screenshots/play/`
+  - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema; 8.'si dil seçimi.
+  - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 7 ekranın tüm koyu/açık halleri (değiştirmek isterseniz).
+  - Not: Geçmiş kayıtları oluştukları andaki dille saklanır; İngilizce görüntülerde eski olaylar Türkçe görünür.
+  - `docs/screenshots/` kökündekiler v2.0 emülatör görüntüleridir, kullanmayın.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:

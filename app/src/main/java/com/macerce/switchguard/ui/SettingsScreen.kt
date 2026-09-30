@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.AppLanguage
+import androidx.compose.material.icons.rounded.Language
 import android.app.Activity
 import android.app.TimePickerDialog
 import android.widget.Toast
@@ -339,6 +341,28 @@ fun SettingsScreen(modifier: Modifier) {
                 }
             }
 
+            // ---------------------------------------------------------------- Genel
+            SectionTitle(stringResource(R.string.section_general))
+            SectionCard {
+                val lang = remember(resumed) { AppLanguage.current(context) }
+                InfoRow(
+                    Icons.Rounded.Language,
+                    stringResource(R.string.language),
+                    languageLabel(lang),
+                    Modifier.clickable {
+                        dialog = {
+                            ChoiceDialog(
+                                stringResource(R.string.language),
+                                stringResource(R.string.language_desc),
+                                AppLanguage.options, lang, { languageLabel(it) },
+                                onPick = { tag -> (context as? Activity)?.let { AppLanguage.set(it, tag) } },
+                                onDismiss = { dialog = null },
+                            )
+                        }
+                    },
+                )
+            }
+
             // ---------------------------------------------------------------- Hakkında
             SectionTitle(stringResource(R.string.section_about))
             SectionCard {
@@ -366,6 +390,14 @@ fun SettingsScreen(modifier: Modifier) {
 
 @Composable
 private fun Divider() = HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+
+/** Dil adları her zaman kendi dilinde yazılır: yanlış dili seçen de geri dönebilsin. */
+@Composable
+private fun languageLabel(tag: String): String = when (tag) {
+    "en" -> "English"
+    "tr" -> "Türkçe"
+    else -> stringResource(R.string.language_system)
+}
 
 @Composable
 private fun graceLabel(sec: Int): String = when {

@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.macerce.switchguard.R
+import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.Store
 import java.util.Calendar
@@ -43,7 +44,8 @@ object SummaryScheduler {
 }
 
 class SummaryReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(receiverContext: Context, intent: Intent) {
+        val context = AppLanguage.wrap(receiverContext)
         val result = goAsync()
         Thread {
             try {

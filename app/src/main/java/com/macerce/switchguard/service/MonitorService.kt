@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.content.res.Configuration
 import android.net.ConnectivityManager
 import android.net.Network
 import android.os.Build
@@ -17,6 +18,7 @@ import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
 import com.macerce.switchguard.R
+import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
@@ -53,6 +55,8 @@ import java.util.Date
  * Zamanlama: telefon uyanıkken [handler] döngüsü, uyurken AlarmManager "tick"i aynı [tick]'i çağırır.
  */
 class MonitorService : Service() {
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLanguage.wrap(newBase))
+
 
     private lateinit var store: Store
     private lateinit var log: EventLog
@@ -556,6 +560,13 @@ class MonitorService : Service() {
                 notifier.sessionLost(getString(R.string.warn_session_expired), "")
             }
         }
+    }
+
+    /** Uygulama dili değişince (Android 13+ sistem bildirir) durum bildirimi yeni dille yeniden yazılsın. */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (!running) return
+        LiveState.connection.value.let { setState(it.state, it.detail) }
     }
 
     private fun setState(state: ConnState, detail: String = "", synced: Boolean = false) {

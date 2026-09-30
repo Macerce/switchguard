@@ -14,6 +14,7 @@ import android.webkit.WebViewClient
 import android.widget.Toast
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
+import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
 
 /**
@@ -21,6 +22,8 @@ import com.macerce.switchguard.data.Store
  * o adrese gitmeden yakalayıp içindeki code + region ile token alırız.
  */
 class LoginActivity : Activity() {
+    override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLanguage.wrap(newBase))
+
 
     private lateinit var store: Store
     private lateinit var client: EwelinkClient
