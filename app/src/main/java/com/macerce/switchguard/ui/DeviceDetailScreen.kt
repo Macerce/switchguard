@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.Cloud
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -98,7 +99,8 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
             if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
 
-            TimersSection(device)
+            // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
+            if (device.cloud == Cloud.EWELINK) TimersSection(device)
 
             SectionTitle(stringResource(R.string.section_monitoring))
             SectionCard {

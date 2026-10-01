@@ -96,7 +96,8 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
     val devices = remember(version) { store.snapshots }
     val alarm = remember(version) { store.pendingAlarm }
     val monitoring = remember(version) { store.monitoringEnabled }
-    val loggedIn = remember(version) { store.isLoggedIn }
+    // eWeLink'e giriş ya da Tuya bağlantısı: ikisinden biri yeter.
+    val loggedIn = remember(version) { store.hasAnyAccount }
     val monitoredIds = remember(version) { store.monitoredIds() }
     val isPro = remember(version) { store.isPro }
     var showPro by remember { mutableStateOf(false) }

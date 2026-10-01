@@ -78,6 +78,10 @@ object DeviceParser {
             if (d.channelPower.isNotEmpty()) {
                 o.put("channelPower", JSONObject().apply { d.channelPower.forEach { (k, v) -> put(k.toString(), v) } })
             }
+            if (d.cloud != Cloud.EWELINK) o.put("cloud", d.cloud.name)
+            if (d.switchCodes.isNotEmpty()) {
+                o.put("switchCodes", JSONObject().apply { d.switchCodes.forEach { (k, v) -> put(k.toString(), v) } })
+            }
             arr.put(o)
         }
         return arr.toString()
@@ -99,6 +103,10 @@ object DeviceParser {
                 current = o.optDoubleOrNull("current"),
                 channelPower = o.optJSONObject("channelPower")?.let { cp ->
                     cp.keys().asSequence().associate { it.toInt() to cp.getDouble(it) }
+                }.orEmpty(),
+                cloud = runCatching { Cloud.valueOf(o.optString("cloud", "EWELINK")) }.getOrDefault(Cloud.EWELINK),
+                switchCodes = o.optJSONObject("switchCodes")?.let { sc ->
+                    sc.keys().asSequence().associate { it.toInt() to sc.getString(it) }
                 }.orEmpty(),
             )
         }

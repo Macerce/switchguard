@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.Cloud
+import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Email
 import com.macerce.switchguard.core.AppLanguage
 import androidx.compose.material.icons.rounded.Language
@@ -159,6 +161,16 @@ fun SettingsScreen(modifier: Modifier) {
                         },
                     )
                 }
+                Divider()
+                InfoRow(
+                    Icons.Rounded.Hub,
+                    stringResource(R.string.tuya_account),
+                    if (s.hasTuya) stringResource(
+                        R.string.tuya_connected_x, regionLabel(s.tuyaRegion),
+                        s.snapshots.count { it.cloud == Cloud.TUYA },
+                    ) else stringResource(R.string.tuya_not_connected),
+                    Modifier.clickable { dialog = { TuyaDialog(store) { dialog = null } } },
+                )
                 Divider()
                 ProRow(s.isPro) { dialog = { ProDialog(onDismiss = { dialog = null }) } }
             }

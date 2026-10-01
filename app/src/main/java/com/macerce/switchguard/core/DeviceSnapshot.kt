@@ -1,5 +1,8 @@
 package com.macerce.switchguard.core
 
+/** Cihazın bağlı olduğu bulut. */
+enum class Cloud { EWELINK, TUYA }
+
 /**
  * Bir cihazın belirli bir andaki durumu.
  * [switches]: kanal numarası → açık mı. Tek kanallı cihazlarda tek anahtar 0'dır.
@@ -17,6 +20,9 @@ data class DeviceSnapshot(
     val current: Double? = null,
     /** Kanal numarası → güç (W); yalnızca kanal başına ölçen cihazlarda (SPM-4Relay, DualR3) dolu. */
     val channelPower: Map<Int, Double> = emptyMap(),
+    val cloud: Cloud = Cloud.EWELINK,
+    /** Tuya: kanal numarası → veri noktası kodu ("switch_1", "switch" ...); komut gönderirken gerekir. */
+    val switchCodes: Map<Int, String> = emptyMap(),
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     val hasEnergy: Boolean get() = power != null

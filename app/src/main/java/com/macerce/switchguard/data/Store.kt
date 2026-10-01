@@ -69,6 +69,45 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     fun logout() = put { remove("at"); remove("rt"); remove("apikey"); remove("email") }
 
+    // --- Tuya (Smart Life) ---
+    var tuyaAccessId: String
+        get() = str("tuyaId")
+        set(v) = put { putString("tuyaId", v.trim()) }
+    var tuyaSecret: String
+        get() = str("tuyaSecret")
+        set(v) = put { putString("tuyaSecret", v.trim()) }
+    /** Veri merkezi: eu, us, cn, in. */
+    var tuyaRegion: String
+        get() = str("tuyaRegion", "eu")
+        set(v) = put { putString("tuyaRegion", v) }
+    var tuyaToken: String
+        get() = str("tuyaToken")
+        set(v) = put { putString("tuyaToken", v) }
+    var tuyaTokenExpiry: Long
+        get() = prefs.getLong("tuyaTokenExp", 0)
+        set(v) = put { putLong("tuyaTokenExp", v) }
+    /** Ürün kimliği → (DP kodu → scale). Ürün tanımı her ürün için bir kez çekilir. */
+    var tuyaScales: Map<String, Map<String, Int>>
+        get() = prefs.getString("tuyaScales", null)?.let { json ->
+            runCatching {
+                val o = org.json.JSONObject(json)
+                o.keys().asSequence().associateWith { pid ->
+                    val m = o.getJSONObject(pid)
+                    m.keys().asSequence().associateWith { m.getInt(it) }
+                }
+            }.getOrNull()
+        } ?: emptyMap()
+        set(v) = put { putString("tuyaScales", org.json.JSONObject(v.mapValues { org.json.JSONObject(it.value) }).toString()) }
+
+    val hasTuya get() = tuyaAccessId.isNotEmpty() && tuyaSecret.isNotEmpty()
+    /** eWeLink'e giriş yapılmış ya da Tuya bağlanmış: izlenecek en az bir hesap var. */
+    val hasAnyAccount get() = isLoggedIn || hasTuya
+
+    fun disconnectTuya() {
+        put { remove("tuyaId"); remove("tuyaSecret"); remove("tuyaToken"); remove("tuyaTokenExp"); remove("tuyaScales") }
+        snapshots = snapshots.filter { it.cloud != com.macerce.switchguard.core.Cloud.TUYA }
+    }
+
     /** Oturum kullanıcı istemeden düştü (ör. aynı hesapla başka cihazda giriş). Giriş yapınca silinir. */
     var sessionLost: Boolean
         get() = prefs.getBoolean("sessionLost", false)

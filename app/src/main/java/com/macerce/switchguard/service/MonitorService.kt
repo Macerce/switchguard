@@ -23,6 +23,13 @@ import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
+import com.macerce.switchguard.api.TuyaAuthException
+import com.macerce.switchguard.api.TuyaClient
+import com.macerce.switchguard.api.TuyaExpiredException
+import com.macerce.switchguard.api.TuyaSocket
+import com.macerce.switchguard.core.Cloud
+import com.macerce.switchguard.core.TuyaEvent
+import com.macerce.switchguard.core.TuyaParser
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.Automation
@@ -54,6 +61,7 @@ import java.util.Date
  *
  * Kaynaklar: WebSocket (anlık), periyodik HTTP senkronu (kaçan olaylar için), WebSocket
  * kullanılamazsa HTTP sorgulama. Tüm mantık tek bir worker thread'de çalışır.
+ * eWeLink ve Tuya birbirinden bağımsız iki kaynaktır; cihaz listeleri [Cloud]'a göre birleştirilir.
  *
  * Zamanlama: telefon uyanıkken [handler] döngüsü, uyurken AlarmManager "tick"i aynı [tick]'i çağırır.
  */
@@ -89,6 +97,20 @@ class MonitorService : Service() {
     private val channelPowerSeenAt = mutableMapOf<String, Long>()
     private val powerStaleWarned = mutableSetOf<String>()
 
+    private lateinit var tuya: TuyaClient
+    private lateinit var tuyaSocket: TuyaSocket
+    private var tuyaIssue = ""
+    private var tuyaReconnectAttempt = 0
+    private var tuyaNextConnectAt = 0L
+    private var lastTuyaSyncAt = 0L
+    /** Bilgiler hatalı ya da deneme süresi bitmiş: kota harcamamak için seyrek denenir. */
+    private var tuyaBlocked = false
+    private var tuyaWarned = false
+
+    /** Kaynakların ayrı ayrı durumu; ekrana ikisinin kötüsü yansır (bkz. [publishState]). */
+    private var ewState: Pair<ConnState, String>? = null
+    private var tuyaState: Pair<ConnState, String>? = null
+
     private val loop = object : Runnable {
         override fun run() {
             tick()
@@ -107,6 +129,8 @@ class MonitorService : Service() {
         worker = HandlerThread("monitor").also { it.start() }
         handler = Handler(worker.looper)
         socket = EwelinkSocket(store, socketListener)
+        tuya = TuyaClient(store)
+        tuyaSocket = TuyaSocket(store, tuyaListener)
         instance = this
     }
 
@@ -140,6 +164,7 @@ class MonitorService : Service() {
                 wsUnsupported = false
                 notifier.clearWarning()
                 reconnectNow()
+                resetTuya()
             }
         }
         startMonitoring()
@@ -171,6 +196,7 @@ class MonitorService : Service() {
             SummaryScheduler.schedule(this)
             sync()
             reconnectNow()
+            tuyaTick(SystemClock.elapsedRealtime())
             handler.post(loop)
         }
         scheduleAlarmTick()
@@ -183,6 +209,7 @@ class MonitorService : Service() {
         handler.removeCallbacksAndMessages(null)
         handler.post {
             socket.close()
+            tuyaSocket.close()
             store.pendingAlarm = emptyList()
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
@@ -203,6 +230,7 @@ class MonitorService : Service() {
         handler.removeCallbacks(loop)
         handler.post {
             socket.close()
+            tuyaSocket.close()
             notifier.stopAlarm()
         }
         worker.quitSafely()
@@ -236,8 +264,9 @@ class MonitorService : Service() {
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
+        tuyaTick(now)
 
-        if (authFailed) return
+        if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
         socket.sendPingIfDue(wall)
         if (socket.isStale(wall)) {
@@ -285,7 +314,13 @@ class MonitorService : Service() {
     private fun registerNetworkCallback() {
         val cb = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                handler.post { if (running && !socket.ready) reconnectNow() }
+                handler.post {
+                    if (running && !socket.ready) reconnectNow()
+                    if (running && store.hasTuya && !tuyaSocket.ready) {
+                        tuyaNextConnectAt = 0
+                        tuyaTick(SystemClock.elapsedRealtime())
+                    }
+                }
             }
         }
         getSystemService(ConnectivityManager::class.java).registerDefaultNetworkCallback(cb)
@@ -330,7 +365,7 @@ class MonitorService : Service() {
     }
 
     private fun reconnectNow() {
-        if (!running || authFailed || wsUnsupported) return
+        if (!running || authFailed || wsUnsupported || !store.isLoggedIn) return
         nextReconnectAt = 0
         try {
             if (store.userApiKey.isEmpty()) {
@@ -368,11 +403,15 @@ class MonitorService : Service() {
     private fun sync() {
         lastSyncAt = SystemClock.elapsedRealtime()
         if (!store.isLoggedIn) {
-            onAuthFailed()
+            // Yalnızca Tuya kullanılıyorsa eWeLink'in girişsiz olması hata değildir.
+            if (store.hasTuya) {
+                ewState = null
+                if (store.snapshots.any { it.cloud == Cloud.EWELINK }) replaceCloud(Cloud.EWELINK, emptyList())
+            } else onAuthFailed()
             return
         }
         try {
-            process(client.getDevices())
+            replaceCloud(Cloud.EWELINK, client.getDevices())
             if (authFailed) {
                 authFailed = false
                 notifier.clearWarning()
@@ -398,7 +437,22 @@ class MonitorService : Service() {
      */
     fun onControlled(deviceId: String, channel: Int, on: Boolean) {
         handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on))) }
-        handler.postDelayed({ if (running) sync() }, CONFIRM_DELAY_MS)
+        val isTuya = store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }
+        handler.postDelayed({
+            if (!running) return@postDelayed
+            // Tuya'da sonuç mesaj servisinden gelir; kota harcamamak için yalnızca o yoksa sorgulanır.
+            if (!isTuya) sync() else if (!tuyaSocket.ready) syncTuya()
+        }, CONFIRM_DELAY_MS)
+    }
+
+    /** Cihazın bağlı olduğu buluta aç/kapa komutu gönderir. */
+    private fun controlSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
+        if (device.cloud == Cloud.TUYA) tuya.setSwitch(device, channel, on) else client.setSwitch(device, channel, on)
+    }
+
+    /** Bir bulutun cihazlarını yenileriyle değiştirip farkları işler; diğer bulutun cihazlarına dokunmaz. */
+    private fun replaceCloud(cloud: Cloud, devices: List<DeviceSnapshot>) {
+        process(store.snapshots.filter { it.cloud != cloud } + devices)
     }
 
     private fun applyUpdate(update: WsEvent.Update) {
@@ -412,6 +466,116 @@ class MonitorService : Service() {
         if (after == before) return
         process(list.map { if (it.id == after.id) after else it })
         setState(ConnState.LIVE, synced = true)
+    }
+
+    // ---------------------------------------------------------------- Tuya
+
+    private val tuyaListener = object : TuyaSocket.Listener {
+        override fun onReady() = handler.post {
+            if (!running) return@post
+            tuyaReconnectAttempt = 0
+            tuyaNextConnectAt = 0
+            tuyaIssue = ""
+            // Bağlantı yokken olanları yakala; biriken eski mesajlar bu okumadan eski sayılıp atlanır.
+            syncTuya()
+        }.let { }
+
+        override fun onEvent(event: TuyaEvent) = handler.post { if (running) applyTuya(event) }.let { }
+
+        override fun onClosed(reason: String, rejected: Boolean) = handler.post {
+            if (!running || !store.hasTuya) return@post
+            Log.w(TAG, "Tuya message service closed: $reason (rejected=$rejected)")
+            tuyaIssue = getString(if (rejected) R.string.tuya_ws_rejected else R.string.detail_reconnecting) + " ($reason)"
+            scheduleTuyaReconnect(rejected)
+            if (!tuyaBlocked) setTuyaState(ConnState.POLLING, tuyaIssue)
+        }.let { }
+    }
+
+    private fun tuyaTick(now: Long) {
+        if (!store.hasTuya) {
+            if (tuyaState != null || tuyaSocket.ready) {
+                tuyaSocket.close()
+                tuyaState = null
+                publishState()
+            }
+            return
+        }
+        if (!tuyaBlocked && !tuyaSocket.ready && now >= tuyaNextConnectAt) {
+            // Bağlanma sürerken tekrar denenmesin; sonuç onReady/onClosed ile gelir.
+            tuyaNextConnectAt = now + TUYA_CONNECT_TIMEOUT_MS
+            tuyaSocket.connect()
+        }
+        val every = when {
+            tuyaBlocked -> TUYA_BLOCKED_MS
+            tuyaSocket.ready -> TUYA_RESYNC_MS
+            else -> TUYA_POLL_MS
+        }
+        if (lastTuyaSyncAt == 0L || now - lastTuyaSyncAt >= every) syncTuya()
+    }
+
+    private fun scheduleTuyaReconnect(rejected: Boolean) {
+        val delays = longArrayOf(5_000, 15_000, 30_000, 60_000, 120_000, 300_000)
+        val delay = if (rejected) TUYA_BLOCKED_MS else delays[tuyaReconnectAttempt.coerceAtMost(delays.size - 1)]
+        tuyaReconnectAttempt++
+        tuyaNextConnectAt = SystemClock.elapsedRealtime() + delay
+        handler.postDelayed({ tick() }, delay + 50)
+    }
+
+    /** Bilgiler değişti ya da kullanıcı yeniden denedi: baştan bağlan. */
+    private fun resetTuya() {
+        tuyaSocket.close()
+        tuyaBlocked = false
+        tuyaWarned = false
+        tuyaReconnectAttempt = 0
+        tuyaNextConnectAt = 0
+        lastTuyaSyncAt = 0
+        tuyaTick(SystemClock.elapsedRealtime())
+    }
+
+    private fun syncTuya() {
+        lastTuyaSyncAt = SystemClock.elapsedRealtime()
+        if (!store.hasTuya) return
+        try {
+            replaceCloud(Cloud.TUYA, tuya.getDevices())
+            tuyaBlocked = false
+            tuyaWarned = false
+            if (tuyaSocket.ready) setTuyaState(ConnState.LIVE, synced = true)
+            else setTuyaState(ConnState.POLLING, tuyaIssue, synced = true)
+        } catch (e: TuyaExpiredException) {
+            onTuyaBlocked(getString(R.string.tuya_expired))
+        } catch (e: TuyaAuthException) {
+            onTuyaBlocked(getString(R.string.tuya_auth_error))
+        } catch (e: IOException) {
+            setTuyaState(ConnState.NO_INTERNET)
+        } catch (e: Exception) {
+            Log.w(TAG, "Tuya sync failed", e)
+            setTuyaState(ConnState.ERROR, e.message.orEmpty())
+        }
+    }
+
+    /** İzleme fiilen durdu: durumu göster, bir kez bildirim ver. */
+    private fun onTuyaBlocked(text: String) {
+        tuyaBlocked = true
+        tuyaSocket.close()
+        setTuyaState(ConnState.ERROR, text)
+        if (!tuyaWarned) {
+            tuyaWarned = true
+            notifier.notifyEvent(text)
+        }
+    }
+
+    private fun applyTuya(event: TuyaEvent) {
+        // Bağlantı kopukken biriken ve son okumadan eski olaylar zaten okunan duruma dahildir.
+        if (event.time != 0L && event.time < tuya.syncServerTime) return
+        val list = store.snapshots
+        val before = list.firstOrNull { it.id == event.deviceId && it.cloud == Cloud.TUYA } ?: return
+        val after = when (event) {
+            is TuyaEvent.Properties -> TuyaParser.apply(before, event.values, tuya.scalesFor(event.deviceId))
+            is TuyaEvent.Online -> before.copy(online = event.online)
+        }
+        if (after == before) return
+        process(list.map { if (it.id == after.id) after else it })
+        setTuyaState(ConnState.LIVE, synced = true)
     }
 
     private fun process(current: List<DeviceSnapshot>) {
@@ -435,6 +599,8 @@ class MonitorService : Service() {
         val byId = store.snapshots.associateBy { it.id }
         val watched = store.automations
             .filter { it.enabled && it.trigger.kind.usesChannelPower }
+            // Tuya prizleri gücü kendiliğinden bildirir; istek yalnızca eWeLink (SPM/DualR3) için.
+            .filter { byId[it.trigger.deviceId]?.cloud == Cloud.EWELINK }
             .filter { byId[it.trigger.deviceId]?.switches?.get(it.trigger.channel) == true }
             .mapNotNull { byId[it.trigger.deviceId] }
             .distinctBy { it.id }
@@ -485,7 +651,7 @@ class MonitorService : Service() {
                 try {
                     // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
                     LiveState.expected.expect(target.id, a.action.channel, on, System.currentTimeMillis())
-                    client.setSwitch(target, a.action.channel, on)
+                    controlSwitch(target, a.action.channel, on)
                     log.add(target.id, target.name, EventKind.AUTOMATION, text, "", args)
                 } catch (e: Exception) {
                     val failedArgs = args.copy(error = e.message.orEmpty())
@@ -573,12 +739,33 @@ class MonitorService : Service() {
         super.onConfigurationChanged(newConfig)
         strings = EventLog.strings(this)
         if (!running) return
-        LiveState.connection.value.let { setState(it.state, it.detail) }
+        publishState()
     }
 
+    /** eWeLink kaynağının durumu. */
     private fun setState(state: ConnState, detail: String = "", synced: Boolean = false) {
+        ewState = state to detail
+        publishState(synced)
+    }
+
+    private fun setTuyaState(state: ConnState, detail: String = "", synced: Boolean = false) {
+        tuyaState = state to detail
+        publishState(synced)
+    }
+
+    /** Kullanılan kaynakların en kötü durumunu gösterir; Tuya'dan geliyorsa açıklamaya "Tuya" eklenir. */
+    private fun publishState(synced: Boolean = false) {
         // Durdurulduktan sonra biten bir istek bildirimi geri getirmesin.
         if (!running) return
+        val ew = ewState.takeIf { store.isLoggedIn || !store.hasTuya }
+        val tu = tuyaState.takeIf { store.hasTuya }
+        val worst = listOfNotNull(ew, tu).maxByOrNull { SEVERITY.indexOf(it.first) }
+        val state = worst?.first ?: ConnState.CONNECTING
+        val detail = when {
+            worst == null -> ""
+            worst === tu && ew != null -> listOf("Tuya", worst.second).filter { it.isNotEmpty() }.joinToString(": ")
+            else -> worst.second
+        }
         LiveState.setConnection(state, detail, synced)
         val count = store.monitoredIds().size
         val text = when (state) {
@@ -612,6 +799,18 @@ class MonitorService : Service() {
         private const val ALARM_TICK_MS = 60_000L
         private const val RESYNC_MS = 5 * 60_000L
         private const val CONFIRM_DELAY_MS = 5_000L
+        /**
+         * Tuya ücretsiz planı ayda ≈26 bin API çağrısı verir; her senkron 2 çağrı.
+         * Mesaj servisi açıkken 15 dk'da bir (≈6 bin/ay), değilse 5 dk'da bir (≈17 bin/ay).
+         */
+        private const val TUYA_RESYNC_MS = 15 * 60_000L
+        private const val TUYA_POLL_MS = 5 * 60_000L
+        private const val TUYA_BLOCKED_MS = 30 * 60_000L
+        private const val TUYA_CONNECT_TIMEOUT_MS = 60_000L
+        private val SEVERITY = listOf(
+            ConnState.LIVE, ConnState.POLLING, ConnState.CONNECTING,
+            ConnState.NO_INTERNET, ConnState.ERROR, ConnState.AUTH_ERROR,
+        )
 
         @Volatile var instance: MonitorService? = null
             private set

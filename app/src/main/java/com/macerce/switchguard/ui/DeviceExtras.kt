@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.Cloud
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.text.format.DateFormat as AndroidDateFormat
@@ -81,6 +82,8 @@ fun EnergySection(device: DeviceSnapshot) {
 
     // Ekran açıkken cihazdan canlı güç iste; POW modelleri aksi halde seyrek gönderir.
     LaunchedEffect(device.id) {
+        // Tuya prizleri gücü kendiliğinden bildirir; istek eWeLink'e özgü.
+        if (device.cloud != Cloud.EWELINK) return@LaunchedEffect
         while (true) {
             Actions.requestLiveEnergy(context, device)
             delay(100_000)

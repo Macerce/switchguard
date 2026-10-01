@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.Cloud
+import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.BuildConfig
 import android.os.Build
 import android.app.NotificationManager
@@ -46,8 +48,14 @@ object Actions {
         val store = Store.get(context)
         if (store.monitoringEnabled) {
             MonitorService.send(context, MonitorService.ACTION_SYNC)
-        } else if (store.isLoggedIn) {
-            Thread { runCatching { store.snapshots = EwelinkClient(store).getDevices() } }.start()
+        } else if (store.hasAnyAccount) {
+            Thread {
+                val ewelink = if (store.isLoggedIn) runCatching { EwelinkClient(store).getDevices() }.getOrNull() else emptyList()
+                val tuya = if (store.hasTuya) runCatching { TuyaClient(store).getDevices() }.getOrNull() else emptyList()
+                val old = store.snapshots
+                // Hata veren bulutun eski listesi korunur.
+                store.snapshots = (ewelink ?: old.filter { it.cloud == Cloud.EWELINK }) + (tuya ?: old.filter { it.cloud == Cloud.TUYA })
+            }.start()
         }
     }
 
@@ -57,7 +65,8 @@ object Actions {
             runCatching {
                 val store = Store.get(context)
                 LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-                EwelinkClient(store).setSwitch(device, channel, on)
+                if (device.cloud == Cloud.TUYA) TuyaClient(store).setSwitch(device, channel, on)
+                else EwelinkClient(store).setSwitch(device, channel, on)
                 val service = MonitorService.instance
                 if (store.monitoringEnabled && service != null) {
                     service.onControlled(device.id, channel, on)
@@ -108,7 +117,44 @@ object Actions {
 
     /** Cihaz verisinin ham hali; destek/hata ayıklama için panoya kopyalanır. */
     suspend fun rawParams(context: Context, deviceId: String): Result<String> = withContext(Dispatchers.IO) {
-        runCatching { EwelinkClient(Store.get(context)).getDeviceParams(deviceId).toString(2) }
+        runCatching {
+            val store = Store.get(context)
+            if (store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }) TuyaClient(store).rawProperties(deviceId).toString(2)
+            else EwelinkClient(store).getDeviceParams(deviceId).toString(2)
+        }
+    }
+
+    /**
+     * Tuya bilgilerini dener; başarılıysa kaydeder ve bulunan cihaz sayısını döndürür.
+     * Başarısızsa önceki bilgiler geri yüklenir (çalışan bir bağlantı yanlış girişle bozulmasın).
+     */
+    suspend fun connectTuya(context: Context, accessId: String, secret: String, region: String): Result<Int> =
+        withContext(Dispatchers.IO) {
+            val store = Store.get(context)
+            val old = Triple(store.tuyaAccessId, store.tuyaSecret, store.tuyaRegion)
+            store.tuyaAccessId = accessId
+            store.tuyaSecret = secret
+            store.tuyaRegion = region
+            store.tuyaToken = ""
+            runCatching {
+                val devices = TuyaClient(store).getDevices()
+                store.snapshots = store.snapshots.filter { it.cloud != Cloud.TUYA } + devices
+                if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
+                devices.size
+            }.onFailure {
+                store.tuyaAccessId = old.first
+                store.tuyaSecret = old.second
+                store.tuyaRegion = old.third
+                store.tuyaToken = ""
+            }
+        }
+
+    fun disconnectTuya(context: Context) {
+        val store = Store.get(context)
+        store.disconnectTuya()
+        if (store.monitoringEnabled) {
+            if (store.hasAnyAccount) MonitorService.send(context, MonitorService.ACTION_RESTART) else stopMonitoring(context)
+        }
     }
 
     private fun utcOffsetMinutes() = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 60_000
