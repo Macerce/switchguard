@@ -17,12 +17,12 @@
 
 **Uygulama adı:** SwitchGuard – Smart Plug Alarm
 
-**Kısa açıklama (EN, ≤80):** Instant alarm when your Sonoff/eWeLink plugs switch or go offline.
+**Kısa açıklama (EN, ≤80):** Instant alarm when your eWeLink or Tuya smart plugs switch or go offline.
 
-**Kısa açıklama (TR, ≤80):** Sonoff/eWeLink prizleriniz kapanınca ya da koptuğunda anında alarm.
+**Kısa açıklama (TR, ≤80):** eWeLink ve Tuya prizleriniz kapanınca ya da koptuğunda anında alarm.
 
 **Tam açıklama (EN):**
-> SwitchGuard watches the smart plugs and switches in your eWeLink account and raises an alarm the moment something changes — a freezer plug switched off, a pump that stopped, a device that lost its connection.
+> SwitchGuard watches the smart plugs and switches in your eWeLink and Tuya / Smart Life accounts and raises an alarm the moment something changes — a freezer plug switched off, a pump that stopped, a device that lost its connection.
 >
 > • Alarm that keeps ringing until you dismiss it, even in silent mode
 > • Live updates within seconds, with automatic backup checks
@@ -36,12 +36,12 @@
 > • No ads, no tracking, no account of ours — your data stays on your phone
 > • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
-> Requires a free eWeLink developer App ID (the in-app guide takes you through it in two minutes). Works with SONOFF-branded devices.
+> Works with eWeLink (SONOFF) devices — needs a free eWeLink developer App ID — and with Tuya / Smart Life devices — needs a free Tuya Cloud project. The in-app guide walks you through either one.
 >
-> SwitchGuard is an independent app and is not affiliated with eWeLink, CoolKit or ITEAD.
+> SwitchGuard is an independent app and is not affiliated with eWeLink, CoolKit, ITEAD or Tuya.
 
 **Tam açıklama (TR):**
-> SwitchGuard, eWeLink hesabınızdaki akıllı priz ve anahtarları izler ve bir şey değiştiği anda alarm çalar: kapanan bir dondurucu prizi, duran bir pompa, bağlantısı kopan bir cihaz.
+> SwitchGuard, eWeLink ve Tuya / Smart Life hesaplarınızdaki akıllı priz ve anahtarları izler ve bir şey değiştiği anda alarm çalar: kapanan bir dondurucu prizi, duran bir pompa, bağlantısı kopan bir cihaz.
 >
 > • Siz kapatana kadar susmayan alarm; telefon sessizdeyken bile
 > • Saniyeler içinde canlı güncelleme, otomatik yedek kontroller
@@ -55,9 +55,9 @@
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
 > • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
-> Ücretsiz bir eWeLink geliştirici App ID'si gerekir (uygulama içi rehber iki dakikada adım adım anlatır). SONOFF markalı cihazlarla çalışır.
+> eWeLink (SONOFF) cihazlarıyla — ücretsiz bir eWeLink geliştirici App ID'si gerekir — ve Tuya / Smart Life cihazlarıyla — ücretsiz bir Tuya Cloud projesi gerekir — çalışır. Uygulama içi rehber ikisini de adım adım anlatır.
 >
-> SwitchGuard bağımsız bir uygulamadır; eWeLink, CoolKit veya ITEAD ile bağlantılı değildir.
+> SwitchGuard bağımsız bir uygulamadır; eWeLink, CoolKit, ITEAD veya Tuya ile bağlantılı değildir.
 
 **Kategori:** Araçlar (Tools) · **İçerik derecelendirmesi:** Herkes
 
@@ -70,6 +70,7 @@
 - Beyan: *"Personal info → Email address"* ve *"App activity → Other actions"* **cihazda işlenir, paylaşılmaz**; aktarım şifreli (HTTPS/WSS); kullanıcı verilerini silebilir (çıkış/kaldırma).
 - Pro satın alma: ödemeyi Google Play yürütür; uygulama yalnızca "Pro alındı mı" bilgisini telefonda saklar, geliştiriciye gönderilmez → *"Financial info → Purchase history"* işaretlenmez (Google'ın kendi işlediği veri beyana girmez).
 - Enerji/güç değerleri cihaz durumudur, kişisel veri sayılmaz; yine yalnızca telefonda tutulur.
+- Tuya: kullanıcının kendi Cloud projesinin Access ID/Secret'ı yalnızca telefonda saklanır ve yalnızca Tuya'ya (openapi/mqe.tuya*.com) gider; beyan eWeLink ile aynıdır.
 
 **Ön plan hizmeti beyanı (Foreground service – specialUse):**
 > The app keeps a live connection to the user's own eWeLink smart plugs/switches and must ring a user-dismissible alarm within seconds when their power or connection state changes (e.g. a freezer or pump switching off). This can't be deferred or done with WorkManager/FCM because the events come from a third-party cloud the app does not control. The service starts only when the user taps "Start monitoring" and shows a persistent status notification.
@@ -119,10 +120,10 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 İlk yayında Play bu alanı ister. Sonraki her güncellemede yalnızca yenilikleri yazın.
 
 **EN:**
-> First release: instant alarms for your SONOFF/eWeLink switches, per-device rules, automations (stayed-on and power-drop alarms), energy readings, device timers, history and daily summary.
+> First release: instant alarms for your eWeLink (SONOFF) and Tuya / Smart Life switches, per-device rules, automations (stayed-on and power-drop alarms), energy readings, device timers, history and daily summary.
 
 **TR:**
-> İlk sürüm: SONOFF/eWeLink anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet.
+> İlk sürüm: eWeLink (SONOFF) ve Tuya / Smart Life anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet.
 
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
@@ -132,6 +133,7 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
   - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema; 8.'si dil seçimi.
   - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 7 ekranın tüm koyu/açık halleri (değiştirmek isterseniz).
   - `docs/screenshots/` kökündekiler v2.0 emülatör görüntüleridir, kullanmayın.
+  - Bu görüntüler Tuya desteğinden (2.6) önce çekildi; yayından önce Tuya prizinin göründüğü ve kurulumdaki "Cihazlarınız nerede?" adımının olduğu görüntülerle yenilenmeli.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:
