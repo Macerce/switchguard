@@ -129,11 +129,11 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri (v2.5.1, gerçek telefon 1080×2400):** `docs/screenshots/play/`
-  - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema; 8.'si dil seçimi.
-  - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 7 ekranın tüm koyu/açık halleri (değiştirmek isterseniz).
+- **Ekran görüntüleri (v2.6, gerçek telefon 1080×2400):** `docs/screenshots/play/`
+  - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema:
+    1. Cihazlar (eWeLink + Tuya birlikte) · 2. Tuya prizinin enerji ekranı · 3. Cihaz kuralları · 4. Otomasyonlar · 5. Otomasyon düzenleyici · 6. Geçmiş · 7. Kurulum: "Cihazlarınız nerede?" (eWeLink / Tuya) · 8. Alarm ayarları
+  - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 8 ekranın tüm koyu/açık halleri.
   - `docs/screenshots/` kökündekiler v2.0 emülatör görüntüleridir, kullanmayın.
-  - Bu görüntüler Tuya desteğinden (2.6) önce çekildi; yayından önce Tuya prizinin göründüğü ve kurulumdaki "Cihazlarınız nerede?" adımının olduğu görüntülerle yenilenmeli.
 
 ## 6. Sürüm güncellemek
 `app/build.gradle.kts` içinde `versionCode`'u 1 artırıp `versionName`'i değiştirin, sonra:
