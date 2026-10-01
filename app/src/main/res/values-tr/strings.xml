@@ -120,6 +120,25 @@
     <string name="onb_tuya_connect_body">Access ID ve Access Secret\'ı girin. SwitchGuard bunları dener ve kaç cihaz bulduğunu gösterir.</string>
     <string name="action_enter_keys">Access ID ve Secret gir</string>
     <string name="action_change">Değiştir</string>
+    <string name="action_edit_layout">Cihazları düzenle</string>
+    <string name="action_done">Bitti</string>
+    <string name="action_rename">Yeniden adlandır</string>
+    <string name="section_priority">Öncelikli</string>
+    <string name="section_other">Diğer</string>
+    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · ⇕ = küçük / büyük kart · etiket = kategori. Buraya dönmek için bir karta uzun basın.</string>
+    <string name="layout_priority">Öncelikli yap</string>
+    <string name="layout_unpriority">Öncelikten çıkar</string>
+    <string name="layout_move_up">Yukarı taşı</string>
+    <string name="layout_move_down">Aşağı taşı</string>
+    <string name="layout_compact">Küçük kart</string>
+    <string name="layout_large">Büyük kart</string>
+    <string name="categories_manage">Kategoriler</string>
+    <string name="categories_empty">Henüz kategori yok. Örneğin "Rögarlar" ya da "Aydınlatma" oluşturun.</string>
+    <string name="category_none">Kategori yok</string>
+    <string name="category_new">Yeni kategori</string>
+    <string name="category_name">Kategori adı</string>
+    <string name="category_no_devices">Bu kategoride henüz cihaz yok; etiket düğmesiyle cihaz atayın.</string>
+    <string name="channels_on_short">%1$d/%2$d açık</string>
     <string name="guide_ewelink">eWeLink kurulum rehberi</string>
     <string name="guide_tuya">Tuya / Smart Life kurulum rehberi</string>
     <string name="guide_desc">Resimli, adım adım anlatım (GitHub)</string>

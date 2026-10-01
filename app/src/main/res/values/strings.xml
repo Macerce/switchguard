@@ -124,6 +124,25 @@
     <string name="onb_tuya_connect_body">Enter the Access ID and Access Secret. SwitchGuard checks them and shows how many devices it found.</string>
     <string name="action_enter_keys">Enter Access ID and Secret</string>
     <string name="action_change">Change</string>
+    <string name="action_edit_layout">Arrange devices</string>
+    <string name="action_done">Done</string>
+    <string name="action_rename">Rename</string>
+    <string name="section_priority">Priority</string>
+    <string name="section_other">Other</string>
+    <string name="layout_hint">Star = keep at the top · arrows = move · ⇕ = small / large card · tag = category. Long-press a card to come back here.</string>
+    <string name="layout_priority">Mark as priority</string>
+    <string name="layout_unpriority">Remove priority</string>
+    <string name="layout_move_up">Move up</string>
+    <string name="layout_move_down">Move down</string>
+    <string name="layout_compact">Small card</string>
+    <string name="layout_large">Large card</string>
+    <string name="categories_manage">Categories</string>
+    <string name="categories_empty">No categories yet. Create one, e.g. "Manholes" or "Lighting".</string>
+    <string name="category_none">No category</string>
+    <string name="category_new">New category</string>
+    <string name="category_name">Category name</string>
+    <string name="category_no_devices">No devices in this category yet — assign them with the tag button.</string>
+    <string name="channels_on_short">%1$d/%2$d on</string>
     <string name="guide_ewelink">eWeLink setup guide</string>
     <string name="guide_tuya">Tuya / Smart Life setup guide</string>
     <string name="guide_desc">Step-by-step with pictures (GitHub)</string>

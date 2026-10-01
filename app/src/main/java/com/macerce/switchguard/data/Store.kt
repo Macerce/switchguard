@@ -163,6 +163,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         } ?: emptyList()
         set(v) = put { putString("snapshots", DeviceParser.snapshotsToJson(v)) }
 
+    /** Cihazlar ekranının düzeni: sıra, öncelikliler, küçük kartlar, kategoriler. */
+    var deviceLayout: com.macerce.switchguard.core.DeviceLayout
+        get() = com.macerce.switchguard.core.DeviceLayout.fromJson(prefs.getString("layout", null))
+        set(v) = put { putString("layout", v.toJson()) }
+
     var rules: Map<String, DeviceRules>
         get() = prefs.getString("rules", null)?.let {
             runCatching { DeviceRules.mapFromJson(it) }.getOrNull()

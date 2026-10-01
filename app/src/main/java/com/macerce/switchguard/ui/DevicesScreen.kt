@@ -1,5 +1,13 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.DeviceSection
+import com.macerce.switchguard.core.DeviceLayout
+import androidx.activity.compose.BackHandler
+import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.ExperimentalFoundationApi
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
@@ -102,6 +110,13 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
     val isPro = remember(version) { store.isPro }
     var showPro by remember { mutableStateOf(false) }
     if (showPro) ProDialog(onDismiss = { showPro = false })
+    val layout = remember(version) { store.deviceLayout }
+    val sections = remember(version) { layout.sections(devices) }
+    var editMode by rememberSaveable { mutableStateOf(false) }
+    var showCategories by remember { mutableStateOf(false) }
+    val saveLayout: (DeviceLayout) -> Unit = { store.deviceLayout = it }
+    if (showCategories) CategoriesDialog(layout, saveLayout) { showCategories = false }
+    BackHandler(enabled = editMode) { editMode = false }
     var refreshing by remember { mutableStateOf(false) }
 
     val doRefresh: () -> Unit = {
@@ -117,8 +132,17 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
         TopAppBar(
             title = { Text(stringResource(R.string.app_name), fontWeight = FontWeight.SemiBold) },
             actions = {
-                IconButton(onClick = doRefresh, enabled = loggedIn) {
-                    Icon(Icons.Rounded.Refresh, stringResource(R.string.action_refresh))
+                if (editMode) {
+                    TextButton(onClick = { editMode = false }) { Text(stringResource(R.string.action_done)) }
+                } else {
+                    if (devices.isNotEmpty()) {
+                        IconButton(onClick = { editMode = true }) {
+                            Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
+                        }
+                    }
+                    IconButton(onClick = doRefresh, enabled = loggedIn) {
+                        Icon(Icons.Rounded.Refresh, stringResource(R.string.action_refresh))
+                    }
                 }
             },
         )
@@ -146,8 +170,44 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 if (loggedIn && !isPro && devices.size > Entitlement.FREE_DEVICES) {
                     item { ProHintCard { showPro = true } }
                 }
-                items(devices, key = { it.id }) { device ->
-                    DeviceCard(device, monitored = device.id in monitoredIds, onClick = { onOpenDevice(device.id) })
+                if (editMode) item(key = "edit-hint") { LayoutEditHint { showCategories = true } }
+                for (section in sections) {
+                    // Düzenleme dışında boş kategori başlığı gösterilmez.
+                    if (section.devices.isEmpty() && !editMode) continue
+                    val headed = section.kind != DeviceSection.Kind.ALL
+                    val collapsed = headed && section.key in layout.collapsed && !editMode
+                    if (headed) {
+                        item(key = "h-" + section.key) {
+                            LayoutSectionHeader(sectionTitle(section), section.devices.size, collapsed) {
+                                saveLayout(layout.toggleCollapsed(section.key))
+                            }
+                        }
+                    }
+                    if (section.devices.isEmpty()) {
+                        item(key = "e-" + section.key) {
+                            Text(
+                                stringResource(R.string.category_no_devices),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                            )
+                        }
+                    }
+                    if (!collapsed) {
+                        itemsIndexed(section.devices, key = { _, d -> d.id }) { i, device ->
+                            DeviceCard(
+                                device,
+                                monitored = device.id in monitoredIds,
+                                compact = device.id in layout.compact,
+                                priority = device.id in layout.priority,
+                                onClick = { if (!editMode) onOpenDevice(device.id) },
+                                onLongClick = { editMode = true },
+                                editBar = if (editMode) {
+                                    { LayoutEditBar(device, layout, devices, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
+                                } else null,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -316,13 +376,84 @@ private fun EmptyDevices() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DeviceCard(device: DeviceSnapshot, monitored: Boolean, onClick: () -> Unit) {
+private fun DeviceCard(
+    device: DeviceSnapshot,
+    monitored: Boolean,
+    compact: Boolean,
+    priority: Boolean,
+    onClick: () -> Unit,
+    onLongClick: () -> Unit,
+    editBar: (@Composable () -> Unit)?,
+) {
     val anyOn = device.switches.values.any { it }
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).clickable(onClick = onClick),
-        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).combinedClickable(onClick = onClick, onLongClick = onLongClick),
+        shape = RoundedCornerShape(if (compact) 18.dp else 24.dp),
     ) {
+        if (compact) {
+            CompactContent(device, anyOn, priority)
+        } else {
+            FullContent(device, anyOn, monitored, priority)
+        }
+        editBar?.invoke()
+    }
+}
+
+/** Küçük kart: tek satırda durum, ad, güç ve (tek kanallıysa) anahtar. */
+@Composable
+private fun CompactContent(device: DeviceSnapshot, anyOn: Boolean, priority: Boolean) {
+    Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+        IconBadge(
+            Icons.Rounded.PowerSettingsNew,
+            tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+            background = if (anyOn && device.online) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+            size = 34,
+        )
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(device.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                if (priority) PriorityStar()
+            }
+            if (device.isMultiChannel && device.online) {
+                Text(
+                    stringResource(R.string.channels_on_short, device.switches.values.count { it }, device.switches.size),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (anyOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            } else {
+                OnlineDot(device.online)
+            }
+        }
+        if (device.hasEnergy && device.online) {
+            Text(
+                formatWatts(device.power ?: 0.0),
+                style = MaterialTheme.typography.labelLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            )
+        }
+        if (!device.isMultiChannel && device.switches.size == 1) {
+            val (channel, on) = device.switches.entries.first()
+            ChannelSwitch(device, rememberSwitchControl(device, channel, on))
+        }
+    }
+}
+
+@Composable
+private fun PriorityStar() = Icon(
+    Icons.Rounded.Star,
+    contentDescription = stringResource(R.string.section_priority),
+    tint = MaterialTheme.colorScheme.primary,
+    modifier = Modifier.padding(start = 4.dp).size(16.dp),
+)
+
+@Composable
+private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boolean, priority: Boolean) {
         Row(Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
             IconBadge(
                 Icons.Rounded.PowerSettingsNew,
@@ -331,7 +462,11 @@ private fun DeviceCard(device: DeviceSnapshot, monitored: Boolean, onClick: () -
             )
             Spacer(Modifier.width(14.dp))
             Column(Modifier.weight(1f)) {
-                Text(device.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(device.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                    if (priority) PriorityStar()
+                }
                 OnlineDot(device.online)
             }
             // Yalnızca enerji ölçen cihazlarda anlık güç.
@@ -389,21 +524,13 @@ private fun DeviceCard(device: DeviceSnapshot, monitored: Boolean, onClick: () -
                 }
             }
         }
-    }
 }
 
 /** Bir kanal satırı: etiket, durum ve aç/kapa anahtarı. İstek sürerken ilerleme gösterir. */
 @Composable
 fun ChannelRow(device: DeviceSnapshot, channel: Int, on: Boolean) {
-    val resources = LocalResources.current
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val pending = remember { mutableStateMapOf<Int, Boolean>() }
-    val shown = pending[channel] ?: on
-
-    // Gerçek durum beklenen değere ulaşınca bekleme durumunu temizle.
-    LaunchedEffect(on) { if (pending[channel] == on) pending.remove(channel) }
-
+    val control = rememberSwitchControl(device, channel, on)
+    val shown = control.shown
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -419,24 +546,39 @@ fun ChannelRow(device: DeviceSnapshot, channel: Int, on: Boolean) {
             color = if (shown) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.width(12.dp))
-        Box(contentAlignment = Alignment.Center) {
-            Switch(
-                checked = shown,
-                enabled = device.online && pending[channel] == null,
-                onCheckedChange = { target ->
-                    pending[channel] = target
-                    scope.launch {
-                        Actions.setSwitch(context, device, channel, target).onFailure {
-                            pending.remove(channel)
-                            Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
-                        }
-                        // Onay gelmezse 15 sn sonra bekleme durumunu bırak.
-                        delay(15_000)
-                        pending.remove(channel)
-                    }
-                },
-            )
-            if (pending[channel] != null) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
+        ChannelSwitch(device, control)
+    }
+}
+
+/** Bir kanalın anahtar durumu: istek sürerken hedef değer gösterilir ve anahtar kilitlenir. */
+class SwitchControl(val shown: Boolean, val busy: Boolean, val toggle: (Boolean) -> Unit)
+
+@Composable
+fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): SwitchControl {
+    val resources = LocalResources.current
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var pending by remember(device.id, channel) { mutableStateOf<Boolean?>(null) }
+    // Gerçek durum beklenen değere ulaşınca bekleme durumunu temizle.
+    LaunchedEffect(on) { if (pending == on) pending = null }
+    return SwitchControl(pending ?: on, pending != null) { target ->
+        pending = target
+        scope.launch {
+            Actions.setSwitch(context, device, channel, target).onFailure {
+                pending = null
+                Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
+            }
+            // Onay gelmezse 15 sn sonra bekleme durumunu bırak.
+            delay(15_000)
+            pending = null
         }
+    }
+}
+
+@Composable
+fun ChannelSwitch(device: DeviceSnapshot, control: SwitchControl) {
+    Box(contentAlignment = Alignment.Center) {
+        Switch(checked = control.shown, enabled = device.online && !control.busy, onCheckedChange = control.toggle)
+        if (control.busy) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
     }
 }
