@@ -95,8 +95,12 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 ## 4b. Yayın kontrol listesi (sırayla)
 - [x] Gizlilik politikası: https://sites.google.com/view/switchguard-privacy (Google Sites, `Actions.PRIVACY_URL`e yazıldı)
 - [x] Play Console hesabı (25 $) — **switchguardapp@gmail.com**, kişisel hesap "SwitchGuardApp", hesap kimliği 4877175449941357065 (2026-10-01). Eski macerce@gmail.com hesabı 2021'de kapatıldı.
-- [ ] Kimlik doğrulama — belgeler yüklendi, Google inceliyor (birkaç gün; bitince e-posta gelir)
-- [ ] İletişim telefonu doğrulama — kimlik onaylanınca açılır: Geliştirici hesabı → İletişim bilgileri → Doğrula (SMS/arama). Bitmeden "Uygulama oluştur" kilitli.
+- [x] Kimlik doğrulama + iletişim telefonu doğrulandı (2026-10-01)
+- [x] Uygulama oluşturuldu: "SwitchGuard – Smart Plug Alarm", com.macerce.switchguard, ücretsiz (Play uygulama kimliği 4972524120270962897)
+- [x] Mağaza girişi en-US + tr-TR (metinler, simge, tanıtım görseli, 8'er ekran görüntüsü)
+- [x] Beyanlar: gizlilik politikası, reklam yok, reklam kimliği yok, resmi kurum değil, finans yok, sağlık yok; veri güvenliği "veri toplanmıyor" (taslak, hedef kitle bitince gönderilecek)
+- [x] Kapalı test (Alpha): 2.7.0 (16) AAB taslak sürüm, sürüm notları EN/TR, 178 ülke
+- [ ] Uygulama erişimi (inceleme hesabı) → Hedef kitle (18+) → İçerik derecelendirmesi (IARC anketi) → Ön plan hizmeti beyanı
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
 - [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz
