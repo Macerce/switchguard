@@ -24,7 +24,7 @@ Deleting your data: sign out in Settings, clear the history, or uninstall the ap
 
 Children: the app is not directed at children.
 
-Contact: macerce@gmail.com
+Contact: switchguardapp@gmail.com
 
 Türkçe
 
@@ -48,4 +48,4 @@ Verilerinizi silme: Ayarlar'dan çıkış yapabilir, geçmişi temizleyebilir ve
 
 Çocuklar: Uygulama çocuklara yönelik değildir.
 
-İletişim: macerce@gmail.com
+İletişim: switchguardapp@gmail.com

@@ -61,6 +61,8 @@
 
 **Kategori:** Araçlar (Tools) · **İçerik derecelendirmesi:** Herkes
 
+**Geliştirici iletişim bilgileri (Play'de herkese açık):** E-posta `switchguardapp@gmail.com` · Web sitesi: https://github.com/Macerce/switchguard · Gizlilik politikası: https://sites.google.com/view/switchguard-privacy
+
 ## 4. Play Console formları için cevaplar
 
 **Veri güvenliği (Data safety):**
@@ -91,7 +93,7 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 
 ## 4b. Yayın kontrol listesi (sırayla)
 - [x] Gizlilik politikası: https://sites.google.com/view/switchguard-privacy (Google Sites, `Actions.PRIVACY_URL`e yazıldı)
-- [ ] Play Console hesabı (25 $) + kimlik doğrulama
+- [ ] Play Console hesabı (25 $) + kimlik doğrulama — **switchguardapp@gmail.com** ile açılacak (macerce@gmail.com'daki eski geliştirici hesabı 2021'de kullanılmadığı için kapatıldı, yeniden açılamaz)
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
 - [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz

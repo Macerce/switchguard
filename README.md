@@ -32,5 +32,8 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 ```
 Release builds need a `keystore.properties` + keystore in the project root (not in the repo).
 
+## Contact
+Questions, bug reports and feedback: **switchguardapp@gmail.com** (or open an issue here).
+
 ## License
 [GPL-3.0](LICENSE). SwitchGuard is an independent project and is not affiliated with eWeLink, CoolKit or ITEAD.

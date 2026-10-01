@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.Email
 import com.macerce.switchguard.core.AppLanguage
 import androidx.compose.material.icons.rounded.Language
 import android.app.Activity
@@ -369,6 +370,15 @@ fun SettingsScreen(modifier: Modifier) {
                 InfoRow(
                     Icons.Rounded.School, stringResource(R.string.setup_guide), stringResource(R.string.setup_guide_desc),
                     Modifier.clickable { store.onboardingDone = false },
+                )
+                Divider()
+                InfoRow(
+                    Icons.Rounded.Email, stringResource(R.string.contact), Actions.CONTACT_EMAIL,
+                    Modifier.clickable {
+                        if (!Actions.emailSupport(context)) {
+                            Toast.makeText(context, Actions.CONTACT_EMAIL, Toast.LENGTH_LONG).show()
+                        }
+                    },
                 )
                 Divider()
                 InfoRow(

@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.BuildConfig
+import android.os.Build
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
@@ -143,6 +145,14 @@ object Actions {
         runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url))) }
     }
 
+    /** E-posta uygulamasını destek adresiyle açar; destek için sürüm ve cihaz bilgisi gövdeye eklenir. */
+    fun emailSupport(context: Context): Boolean {
+        val body = "\n\n—\nSwitchGuard ${BuildConfig.VERSION_NAME} · Android ${Build.VERSION.RELEASE} · ${Build.MANUFACTURER} ${Build.MODEL}"
+        val uri = Uri.parse("mailto:$CONTACT_EMAIL?subject=" + Uri.encode("SwitchGuard") + "&body=" + Uri.encode(body))
+        return runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, uri)) }.isSuccess
+    }
+
+    const val CONTACT_EMAIL = "switchguardapp@gmail.com"
     const val DEV_PORTAL_URL = "https://dev.ewelink.cc"
     const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 }

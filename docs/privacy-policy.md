@@ -24,7 +24,7 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink account a
 
 **Children:** the app is not directed at children.
 
-**Contact:** macerce@gmail.com
+**Contact:** switchguardapp@gmail.com
 
 ## Türkçe
 
@@ -48,4 +48,4 @@ SwitchGuard ("uygulama"), **size ait** eWeLink hesabındaki akıllı cihazları 
 
 **Çocuklar:** Uygulama çocuklara yönelik değildir.
 
-**İletişim:** macerce@gmail.com
+**İletişim:** switchguardapp@gmail.com
