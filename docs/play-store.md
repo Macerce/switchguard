@@ -100,10 +100,11 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - [x] Mağaza girişi en-US + tr-TR (metinler, simge, tanıtım görseli, 8'er ekran görüntüsü)
 - [x] Beyanlar: gizlilik politikası, reklam yok, reklam kimliği yok, resmi kurum değil, finans yok, sağlık yok; veri güvenliği "veri toplanmıyor" (taslak, hedef kitle bitince gönderilecek)
 - [x] Kapalı test (Alpha): 2.7.0 (16) AAB taslak sürüm, sürüm notları EN/TR, 178 ülke
-- [ ] Uygulama erişimi (inceleme hesabı) → Hedef kitle (18+) → İçerik derecelendirmesi (IARC anketi) → Ön plan hizmeti beyanı
+- [x] Oturum açma bilgileri (inceleme eWeLink hesabı), hedef kitle 18+, içerik derecelendirmesi (IARC), veri güvenliği gönderildi
+- [x] Ön plan hizmeti beyanı (Diğer + açıklama + video: https://youtube.com/shorts/4PvqPY_50Ls)
+- [x] Mağaza ayarları: kategori Araçlar, iletişim switchguardapp@gmail.com + GitHub
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
-- [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz
 - [ ] Kapalı test kanalı → `SwitchGuard.aab` → 12+ testçi e-postası → 14 gün
 - [ ] Üretim erişimi başvurusu → üretim sürümü
 
