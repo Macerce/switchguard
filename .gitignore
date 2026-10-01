@@ -7,3 +7,6 @@ local.properties
 keystore.properties
 *.jks
 *.aab
+
+# Tuya Cloud geliştirme kimlik bilgileri (yalnızca yerel test için)
+tuya.properties
