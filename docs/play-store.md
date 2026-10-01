@@ -94,7 +94,9 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 
 ## 4b. Yayın kontrol listesi (sırayla)
 - [x] Gizlilik politikası: https://sites.google.com/view/switchguard-privacy (Google Sites, `Actions.PRIVACY_URL`e yazıldı)
-- [ ] Play Console hesabı (25 $) + kimlik doğrulama — **switchguardapp@gmail.com** ile açılacak (macerce@gmail.com'daki eski geliştirici hesabı 2021'de kullanılmadığı için kapatıldı, yeniden açılamaz)
+- [x] Play Console hesabı (25 $) — **switchguardapp@gmail.com**, kişisel hesap "SwitchGuardApp", hesap kimliği 4877175449941357065 (2026-10-01). Eski macerce@gmail.com hesabı 2021'de kapatıldı.
+- [ ] Kimlik doğrulama — belgeler yüklendi, Google inceliyor (birkaç gün; bitince e-posta gelir)
+- [ ] İletişim telefonu doğrulama — kimlik onaylanınca açılır: Geliştirici hesabı → İletişim bilgileri → Doğrula (SMS/arama). Bitmeden "Uygulama oluştur" kilitli.
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
 - [ ] Ön plan hizmeti videosu: telefonda ekran kaydı — izlemeyi başlat, cihazı kapat, alarm çalsın, kapat (30 sn yeter); YouTube'a "Liste dışı" yükleyip linki forma yaz
