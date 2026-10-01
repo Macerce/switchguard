@@ -124,6 +124,10 @@
     <string name="onb_tuya_connect_body">Enter the Access ID and Access Secret. SwitchGuard checks them and shows how many devices it found.</string>
     <string name="action_enter_keys">Enter Access ID and Secret</string>
     <string name="action_change">Change</string>
+    <string name="guide_ewelink">eWeLink setup guide</string>
+    <string name="guide_tuya">Tuya / Smart Life setup guide</string>
+    <string name="guide_desc">Step-by-step with pictures (GitHub)</string>
+    <string name="onb_open_guide">Open the illustrated guide</string>
     <string name="onb_tuya_privacy">These keys are stored only on this phone and are sent nowhere except Tuya\'s own servers.</string>
     <string name="tuya_not_connected">Not connected · tap to connect</string>
     <string name="tuya_connected_x">Connected · %1$s · %2$d device(s)</string>
@@ -296,7 +300,7 @@
     <string name="energy_month">This month</string>
     <string name="energy_last_7_days">Last 7 days</string>
     <string name="energy_no_data">Consumption history is recorded while monitoring is on. Check back later.</string>
-    <string name="energy_hint">Consumption is calculated by SwitchGuard from power readings taken while monitoring is on, so it may differ slightly from the eWeLink app.</string>
+    <string name="energy_hint">Consumption is calculated by SwitchGuard from power readings taken while monitoring is on, so it may differ slightly from the device maker\'s app (eWeLink, Smart Life).</string>
 
     <!-- Zamanlayıcılar -->
     <string name="section_timers">Timers (on the device)</string>

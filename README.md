@@ -32,6 +32,10 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 ```
 Release builds need a `keystore.properties` + keystore in the project root (not in the repo).
 
+## Setup guides / Kurulum rehberleri
+- eWeLink (SONOFF): [English](docs/guide/ewelink.en.md) · [Türkçe](docs/guide/ewelink.tr.md)
+- Tuya / Smart Life: [English](docs/guide/tuya.en.md) · [Türkçe](docs/guide/tuya.tr.md)
+
 ## Contact
 Questions, bug reports and feedback: **switchguardapp@gmail.com** (or open an issue here).
 

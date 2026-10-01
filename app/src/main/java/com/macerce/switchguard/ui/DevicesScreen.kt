@@ -223,7 +223,8 @@ private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, mon
                     detail.isNotEmpty() -> detail
                     lastSync > 0 -> stringResource(
                         R.string.last_update,
-                        DateUtils.getRelativeTimeSpanString(lastSync, now, DateUtils.SECOND_IN_MILLIS).toString(),
+                        // "now" 30 sn'de bir tazelenir; arada gelen senkron onu geçerse "… sonra" yazmasın.
+                        DateUtils.getRelativeTimeSpanString(lastSync, maxOf(now, lastSync), DateUtils.SECOND_IN_MILLIS).toString(),
                     )
                     else -> stringResource(R.string.device_count, deviceCount)
                 }

@@ -201,5 +201,12 @@ object Actions {
     const val CONTACT_EMAIL = "switchguardapp@gmail.com"
     const val DEV_PORTAL_URL = "https://dev.ewelink.cc"
     const val TUYA_PLATFORM_URL = "https://platform.tuya.com/cloud"
+    private const val GUIDE_BASE = "https://github.com/Macerce/switchguard/blob/master/docs/guide/"
+
+    /** Resimli kurulum rehberi (GitHub); [cloud] "ewelink" ya da "tuya", dil uygulamanın diline göre. */
+    fun guideUrl(context: Context, cloud: String): String {
+        val lang = if (context.resources.configuration.locales[0].language == "tr") "tr" else "en"
+        return "$GUIDE_BASE$cloud.$lang.md"
+    }
     const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 }

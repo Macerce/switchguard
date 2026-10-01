@@ -120,6 +120,10 @@
     <string name="onb_tuya_connect_body">Access ID ve Access Secret\'ı girin. SwitchGuard bunları dener ve kaç cihaz bulduğunu gösterir.</string>
     <string name="action_enter_keys">Access ID ve Secret gir</string>
     <string name="action_change">Değiştir</string>
+    <string name="guide_ewelink">eWeLink kurulum rehberi</string>
+    <string name="guide_tuya">Tuya / Smart Life kurulum rehberi</string>
+    <string name="guide_desc">Resimli, adım adım anlatım (GitHub)</string>
+    <string name="onb_open_guide">Resimli rehberi aç</string>
     <string name="onb_tuya_privacy">Bu bilgiler yalnızca bu telefonda saklanır ve Tuya\'nın kendi sunucuları dışında hiçbir yere gönderilmez.</string>
     <string name="tuya_not_connected">Bağlı değil · bağlamak için dokunun</string>
     <string name="tuya_connected_x">Bağlı · %1$s · %2$d cihaz</string>
@@ -292,7 +296,7 @@
     <string name="energy_month">Bu ay</string>
     <string name="energy_last_7_days">Son 7 gün</string>
     <string name="energy_no_data">Tüketim geçmişi izleme açıkken kaydedilir. Bir süre sonra tekrar bakın.</string>
-    <string name="energy_hint">Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafından hesaplanır; eWeLink uygulamasındaki değerden biraz farklı olabilir.</string>
+    <string name="energy_hint">Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafından hesaplanır; cihazın kendi uygulamasındaki (eWeLink, Smart Life) değerden biraz farklı olabilir.</string>
 
     <!-- Zamanlayıcılar -->
     <string name="section_timers">Zamanlayıcılar (cihazda)</string>

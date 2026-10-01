@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material3.RadioButton
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.icons.rounded.Hub
@@ -234,6 +235,14 @@ private fun TuyaGuideStep() {
         Spacer(Modifier.width(8.dp))
         Text(stringResource(R.string.onb_open_tuya))
     }
+    OutlinedButton(
+        onClick = { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+    ) {
+        Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(R.string.onb_open_guide))
+    }
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_tuya_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
@@ -277,6 +286,14 @@ private fun DeveloperStep() {
         Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
         Spacer(Modifier.width(8.dp))
         Text(stringResource(R.string.onb_open_portal))
+    }
+    OutlinedButton(
+        onClick = { Actions.openUrl(context, Actions.guideUrl(context, "ewelink")) },
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+    ) {
+        Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(R.string.onb_open_guide))
     }
     OutlinedButton(
         onClick = { clipboard.setPrimaryClip(ClipData.newPlainText("Redirect URL", Store.DEFAULT_REDIRECT)) },

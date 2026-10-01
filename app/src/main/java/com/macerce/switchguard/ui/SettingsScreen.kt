@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import com.macerce.switchguard.core.Cloud
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Email
@@ -383,6 +384,16 @@ fun SettingsScreen(modifier: Modifier) {
                     Icons.Rounded.School, stringResource(R.string.setup_guide), stringResource(R.string.setup_guide_desc),
                     Modifier.clickable { store.onboardingDone = false },
                 )
+                Divider()
+                InfoRow(
+                    Icons.AutoMirrored.Rounded.MenuBook, stringResource(R.string.guide_ewelink), stringResource(R.string.guide_desc),
+                    Modifier.clickable { Actions.openUrl(context, Actions.guideUrl(context, "ewelink")) },
+                ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                Divider()
+                InfoRow(
+                    Icons.AutoMirrored.Rounded.MenuBook, stringResource(R.string.guide_tuya), stringResource(R.string.guide_desc),
+                    Modifier.clickable { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
+                ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
                 Divider()
                 InfoRow(
                     Icons.Rounded.Email, stringResource(R.string.contact), Actions.CONTACT_EMAIL,
