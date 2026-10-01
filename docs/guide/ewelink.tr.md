@@ -17,23 +17,45 @@ SwitchGuard cihazlarınıza eWeLink'in resmi API'si üzerinden bağlanır. Bunun
 
 ![eWeLink Developer Center ana sayfa](img/ewelink-01-home.jpg)
 
-## 2. Geliştirici olarak kaydolun
+3. Giriş yapınca üst menüde **Console** belirir; ona basın.
 
-İlk girişte geliştirici rolü sorulur. **Ücretsiz standart rol** yeterlidir; ücretli bir plan seçmeniz gerekmez.
+![Üst menüde Console](img/ewelink-02-console-link.jpg)
 
-## 3. Uygulama oluşturun
+## 2. Uygulama oluşturun
 
-1. Konsolda yeni bir uygulama oluşturun (**Create / Add App**).
-2. Alanları şöyle doldurun:
+1. **App List** sayfasında sağ üstteki **Create** düğmesine basın.
+
+![App List](img/ewelink-03-app-list.jpg)
+
+2. Açılan formu şöyle doldurun:
 
 | Alan | Ne yazılacak |
 |---|---|
-| **App name (Uygulama adı)** | `SwitchGuard` (istediğiniz bir ad) |
-| **Redirect URL** | `https://127.0.0.1` — **birebir aynı** olmalı (sonunda `/` yok) |
+| **App Name** | `SwitchGuard` (istediğiniz bir ad) |
+| **App Profile** | kısa bir açıklama, ör. `SwitchGuard alarm` |
+| **App Type** | **OAuth2.0** |
+| **App Role** | **Standard Role** (ücretsiz) |
+| **Redirect URL** | `https://127.0.0.1` — **birebir aynı** olmalı (sonunda `/` yok, `https`) |
 
-3. Kaydedin. Uygulamanızın **App ID** ve **App Secret** bilgileri görünür.
+![Uygulama formu](img/ewelink-04-app-form.jpg)
 
-> **Redirect URL çok önemli:** SwitchGuard'daki Redirect URL ile geliştirici sitesindeki birebir aynı olmazsa giriş sayfası hata verir. SwitchGuard'daki varsayılan değer `https://127.0.0.1`'dir; kurulum ekranındaki **Redirect URL'yi kopyala** düğmesiyle de kopyalayabilirsiniz.
+3. **OK**'e basın. Uygulama **App List**'te görünür.
+
+> **Redirect URL çok önemli:** SwitchGuard'daki Redirect URL ile buradaki birebir aynı olmazsa giriş sayfası hata verir. SwitchGuard'daki varsayılan değer `https://127.0.0.1`'dir; kurulum ekranındaki **Redirect URL'yi kopyala** düğmesiyle kopyalayabilirsiniz.
+>
+> **Create'e basınca bir şey olmuyorsa:** ücretsiz standart rolde tek uygulama oluşturulabiliyor görünüyor. Listede zaten bir uygulamanız varsa onu kullanın; **Edit** ile Redirect URL'sini `https://127.0.0.1` yapın.
+
+## 3. App ID ve App Secret'ı alın
+
+1. **App List**'te uygulamanızın satırındaki **View**'a basın.
+2. **Authorization Key** bölümünde **APPID**'yi kopyalayın.
+3. **APP SECRET** yanındaki **göz** simgesine basıp görünür yapın ve kopyalayın.
+
+![View App – APPID ve APP SECRET](img/ewelink-05-view-keys.jpg)
+
+> Bu iki bilgi bir şifre gibidir; kimseyle paylaşmayın.
+>
+> **Uygulamanın süresi 1 yıldır.** **Expiration Date** tarihinden önce geliştirici sitesinden yenileyin ya da yeni bir uygulama oluşturup SwitchGuard'daki App ID/Secret'ı güncelleyin (Ayarlar → Hesap → API bilgileri).
 
 ## 4. SwitchGuard'a girin
 
@@ -47,7 +69,7 @@ Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi
 
 **İleri** → **API bilgilerinizi girin**:
 
-1. **App ID:** 3. adımda aldığınız App ID'yi yapıştırın.
+1. **App ID:** 3. adımda kopyaladığınız APPID'yi yapıştırın.
 2. **App Secret:** App Secret'ı yapıştırın.
 3. **Redirect URL:** geliştirici sitesine yazdığınızla birebir aynı olmalı (varsayılan `https://127.0.0.1`).
 

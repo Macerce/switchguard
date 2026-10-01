@@ -17,23 +17,45 @@ SwitchGuard talks to your devices through eWeLink's official API. For that you c
 
 ![eWeLink Developer Center home](img/ewelink-01-home.jpg)
 
-## 2. Register as a developer
+3. After signing in, **Console** appears in the top menu; click it.
 
-On first sign-in you are asked for a developer role. The **free standard role** is enough; no paid plan is needed.
+![Console in the top menu](img/ewelink-02-console-link.jpg)
 
-## 3. Create an app
+## 2. Create an app
 
-1. In the console create a new app (**Create / Add App**).
-2. Fill in:
+1. On the **App List** page click **Create** (top right).
+
+![App List](img/ewelink-03-app-list.jpg)
+
+2. Fill in the form:
 
 | Field | What to enter |
 |---|---|
-| **App name** | `SwitchGuard` (any name) |
-| **Redirect URL** | `https://127.0.0.1` — must match **exactly** (no trailing `/`) |
+| **App Name** | `SwitchGuard` (any name) |
+| **App Profile** | a short description, e.g. `SwitchGuard alarm` |
+| **App Type** | **OAuth2.0** |
+| **App Role** | **Standard Role** (free) |
+| **Redirect URL** | `https://127.0.0.1` — must match **exactly** (no trailing `/`, `https`) |
 
-3. Save. Your app's **App ID** and **App Secret** are shown.
+![App form](img/ewelink-04-app-form.jpg)
 
-> **The Redirect URL matters:** if the one in SwitchGuard and the one on the developer site are not identical, the sign-in page shows an error. SwitchGuard's default is `https://127.0.0.1`; the **Copy Redirect URL** button in setup copies it for you.
+3. Click **OK**. The app appears in the **App List**.
+
+> **The Redirect URL matters:** if the one in SwitchGuard and the one here are not identical, the sign-in page shows an error. SwitchGuard's default is `https://127.0.0.1`; the **Copy Redirect URL** button in setup copies it.
+>
+> **If nothing happens when you click Create:** the free standard role appears to allow a single app. If you already have one in the list, use it and set its Redirect URL to `https://127.0.0.1` with **Edit**.
+
+## 3. Copy the App ID and App Secret
+
+1. In the **App List** click **View** on your app's row.
+2. Under **Authorization Key** copy the **APPID**.
+3. Click the **eye** icon next to **APP SECRET** to reveal it, then copy it.
+
+![View App – APPID and APP SECRET](img/ewelink-05-view-keys.jpg)
+
+> Treat these two like a password; don't share them.
+>
+> **The app is valid for 1 year.** Before its **Expiration Date**, renew it on the developer site or create a new one and update the App ID/Secret in SwitchGuard (Settings → Account → API credentials).
 
 ## 4. Enter them in SwitchGuard
 
@@ -47,7 +69,7 @@ On first sign-in you are asked for a developer role. The **free standard role** 
 
 **Next** → **Enter your API credentials**:
 
-1. **App ID:** paste the App ID from step 3.
+1. **App ID:** paste the APPID from step 3.
 2. **App Secret:** paste the App Secret.
 3. **Redirect URL:** must be identical to the developer site (default `https://127.0.0.1`).
 
