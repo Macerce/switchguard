@@ -36,6 +36,9 @@ Release builds need a `keystore.properties` + keystore in the project root (not 
 - eWeLink (SONOFF): [English](docs/guide/ewelink.en.md) · [Türkçe](docs/guide/ewelink.tr.md)
 - Tuya / Smart Life: [English](docs/guide/tuya.en.md) · [Türkçe](docs/guide/tuya.tr.md)
 
+## Changelog / Sürüm geçmişi
+[English](CHANGELOG.md) · [Türkçe](CHANGELOG.tr.md) · [Releases](https://github.com/Macerce/switchguard/releases)
+
 ## Contact
 Questions, bug reports and feedback: **switchguardapp@gmail.com** (or open an issue here).
 

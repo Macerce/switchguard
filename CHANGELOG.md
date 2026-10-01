@@ -1,0 +1,82 @@
+# Changelog
+
+[Türkçe](CHANGELOG.tr.md)
+
+Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new features.
+
+---
+
+## 2.7.0 — 2026-10-01
+**Arrange your devices**
+- **Arrange devices** mode on the Devices screen (tune icon at the top, or long-press a card).
+- **Priority devices:** starred devices always stay at the top under "Priority".
+- **Ordering:** move devices up/down with arrows.
+- **Small / large cards:** a small card shows name, status, power and the switch on one line.
+- **Categories:** create, rename, reorder and delete categories such as "Manholes" or "Lighting"; assign devices; tap a header to collapse the group.
+
+## 2.6.2 — 2026-10-01
+- **Illustrated setup guides** for eWeLink and Tuya (English/Turkish, on GitHub).
+- Guide links in Settings → About; "Open the illustrated guide" button in the setup wizard.
+- Fix: the status card sometimes said "Updated in … seconds".
+- Energy note is now brand-neutral.
+
+## 2.6.1 — 2026-10-01
+- First-run **"Where are your devices?"** step: eWeLink or Tuya / Smart Life path.
+- Step-by-step Tuya Cloud project guide and connect step.
+- **Power-drop alarm** now also works on single-channel power-metering plugs (Tuya plugs, eWeLink POW).
+- Privacy policy updated to cover Tuya.
+
+## 2.6.0 — 2026-10-01
+**Tuya / Smart Life support**
+- Smart Life and Tuya Smart devices are monitored through the user's own free Tuya Cloud project.
+- Live alarms **under one second** via Tuya's message service (Pulsar).
+- eWeLink and Tuya devices in one list; alarms, rules, automations and history work the same.
+- Warning when the Tuya trial expires or the keys are wrong.
+- Settings → Account → Tuya / Smart Life connect dialog.
+
+## 2.5.2 — 2026-10-01
+- Settings → About → **Contact & feedback** (switchguardapp@gmail.com).
+
+## 2.5.1 — 2026-10-01
+- **History is shown in the selected language**; existing entries are translated automatically.
+- New notifications switch language immediately.
+
+## 2.5.0 — 2026-10-01
+- In-app **language setting**: phone language / English / Türkçe.
+
+## 2.4.0 — 2026-10-01
+- New automation: **"is on but its power drops below"** (SONOFF SPM-4Relay / DUALR3 channels), with start-up grace and duration.
+
+## 2.3.1 — 2026-09-30
+- Fix: with some App IDs the live connection failed and short on/off pulses were missed.
+- Unseen-events badge on the History tab.
+- "Autostart" setting for Xiaomi phones; the monitoring service restarts when the app is opened if needed.
+
+## 2.3.0 — 2026-09-30
+- **SwitchGuard Pro** (one-time Google Play purchase): the free version monitors 1 device, Pro monitors all.
+- Fix: Back from other tabs returns to Devices.
+
+## 2.2.0 — 2026-09-30
+- **Per-device alarm sound.**
+- **"Monitoring stopped — signed out"** warning when the eWeLink session is opened on another phone.
+- Open-source license (GPL-3.0).
+
+## 2.1.0 — 2026-09-29
+- **Energy monitoring:** power, voltage, current; daily/monthly consumption and a 7-day chart.
+- **Automations:** "stays on/off for", power thresholds, switch devices, alarm/notification.
+- eWeLink **device timers** and a **daily summary** notification.
+- Multi-channel devices fold their channels behind a summary row.
+- Fix: state reverting to the old value after switching from the app.
+
+## 2.0.1 — 2026-09-29
+- Fix: unreadable text in dark theme.
+
+## 2.0.0 — 2026-09-29
+**SwitchGuard**
+- New name and Material 3 design; English and Turkish.
+- **Live monitoring** over eWeLink WebSocket with periodic backup checks.
+- Per-device rules (alarm / notification / none), quiet hours, ignore brief disconnections.
+- Switch devices from the app, event history, logo and store graphics.
+
+## 1.0 — 2026-09-29
+- First release ("eWeLink Alarm"): a simple app that monitors eWeLink devices' on/off and online state and rings an alarm.
