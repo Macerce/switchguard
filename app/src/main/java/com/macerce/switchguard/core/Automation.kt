@@ -210,7 +210,7 @@ class AutomationEngine {
             val t = a.trigger
             if (!a.enabled || !t.kind.usesChannelPower) continue
             val d = current[t.deviceId]
-            val power = d?.channelPower?.get(t.channel)
+            val power = d?.channelPowerOf(t.channel)
             if (d?.switches?.get(t.channel) != true) {
                 // Kanal kapalı (ör. döngünün bekleme dönemi): güç doğal olarak düşer, sayılmaz.
                 lowSince.remove(a.id); lowFired.remove(a.id)

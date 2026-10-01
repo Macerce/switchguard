@@ -174,4 +174,36 @@ class AutomationTest {
         val broken = Automation.listToJson(list).replace("STAYED_OFF", "YOK")
         assertEquals(list.take(1), Automation.listFromJson(broken))
     }
+
+    /** Tek kanallı güç ölçerli priz (Tuya cz, eWeLink POW): kanal gücü = cihazın toplam gücü. */
+    private fun plug(on: Boolean, watts: Double) =
+        DeviceSnapshot("p", "priz", true, mapOf(0 to on), power = watts, cloud = Cloud.TUYA, switchCodes = mapOf(0 to "switch_1"))
+
+    @Test
+    fun `tek kanalli prizde guc dususu kanal gucu gibi calisir`() {
+        assertTrue(plug(true, 24.0).hasChannelPower)
+        assertEquals(24.0, plug(true, 24.0).channelPowerOf(0)!!, 1e-9)
+        val a = listOf(
+            Automation("q", "pompa", true, Trigger(TriggerKind.CHANNEL_POWER_LOW, "p", channel = 0, minutes = 1, watts = 10.0, graceMinutes = 1),
+                AutoAction(ActionKind.ALARM)),
+        )
+        val e = AutomationEngine()
+        val pm = { d: DeviceSnapshot -> mapOf(d.id to d) }
+        e.onStates(pm(plug(false, 0.0)), pm(plug(true, 24.0)), a, 0)
+        assertTrue(e.onTick(pm(plug(true, 24.0)), a, 2 * min).isEmpty())
+        e.onStates(pm(plug(true, 24.0)), pm(plug(true, 2.0)), a, 3 * min)
+        assertTrue(e.onTick(pm(plug(true, 2.0)), a, 3 * min + 30_000).isEmpty())
+        assertEquals(a, e.onTick(pm(plug(true, 2.0)), a, 4 * min))
+        // Priz kapalıyken (bekleme dönemi) güç 0 olsa da tetiklenmez.
+        val e2 = AutomationEngine()
+        e2.onStates(pm(plug(true, 24.0)), pm(plug(false, 0.0)), a, 0)
+        assertTrue(e2.onTick(pm(plug(false, 0.0)), a, 10 * min).isEmpty())
+    }
+
+    @Test
+    fun `cok kanalli cihazda toplam guc kanala atanmaz`() {
+        val d = DeviceSnapshot("m", "4ch", true, mapOf(0 to true, 1 to true), power = 50.0)
+        assertEquals(null, d.channelPowerOf(0))
+        assertEquals(false, d.hasChannelPower)
+    }
 }

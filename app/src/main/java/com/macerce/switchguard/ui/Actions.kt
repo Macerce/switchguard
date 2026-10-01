@@ -200,5 +200,6 @@ object Actions {
 
     const val CONTACT_EMAIL = "switchguardapp@gmail.com"
     const val DEV_PORTAL_URL = "https://dev.ewelink.cc"
+    const val TUYA_PLATFORM_URL = "https://platform.tuya.com/cloud"
     const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 }

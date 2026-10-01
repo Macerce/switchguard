@@ -1,5 +1,8 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material3.RadioButton
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.material.icons.rounded.Hub
 import android.Manifest
 import android.os.Build
 import androidx.activity.compose.BackHandler
@@ -65,9 +68,13 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
 
-private const val STEPS = 6
+private enum class Step { WELCOME, PLATFORM, DEVELOPER, CREDENTIALS, LOGIN, TUYA_GUIDE, TUYA_CONNECT, PERMISSIONS, DONE }
 
-/** İlk açılış sihirbazı: tanıtım → geliştirici uygulaması → API bilgileri → giriş → izinler → başlat. */
+/**
+ * İlk açılış sihirbazı: tanıtım → cihazların uygulaması (eWeLink / Tuya) → o bulutun kurulumu → izinler → başlat.
+ * eWeLink: geliştirici uygulaması → API bilgileri → giriş. Tuya: Cloud projesi rehberi → bilgileri girip bağlanma.
+ * Diğer bulut daha sonra Ayarlar'dan eklenebilir.
+ */
 @Composable
 fun OnboardingScreen(onFinished: () -> Unit) {
     val context = LocalContext.current
@@ -76,12 +83,18 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     val resumed = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
 
+    var tuyaPath by rememberSaveable { mutableStateOf(store.hasTuya && !store.isLoggedIn) }
+    val steps = if (tuyaPath) {
+        listOf(Step.WELCOME, Step.PLATFORM, Step.TUYA_GUIDE, Step.TUYA_CONNECT, Step.PERMISSIONS, Step.DONE)
+    } else {
+        listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
+    }
     var step by rememberSaveable { mutableIntStateOf(0) }
     BackHandler(enabled = step > 0) { step-- }
 
     Column(Modifier.fillMaxSize().safeDrawingPadding()) {
         LinearProgressIndicator(
-            progress = { (step + 1f) / STEPS },
+            progress = { (step + 1f) / steps.size },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
         )
         AnimatedContent(
@@ -94,41 +107,45 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             label = "step",
         ) { s ->
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp)) {
-                when (s) {
-                    0 -> WelcomeStep()
-                    1 -> DeveloperStep()
-                    2 -> CredentialsStep(store)
-                    3 -> LoginStep(remember(version) { store.isLoggedIn })
-                    4 -> PermissionsStep(resumed)
-                    else -> DoneStep()
+                when (steps[s.coerceAtMost(steps.size - 1)]) {
+                    Step.WELCOME -> WelcomeStep()
+                    Step.PLATFORM -> PlatformStep(tuyaPath) { tuyaPath = it }
+                    Step.DEVELOPER -> DeveloperStep()
+                    Step.CREDENTIALS -> CredentialsStep(store)
+                    Step.LOGIN -> LoginStep(remember(version) { store.isLoggedIn })
+                    Step.TUYA_GUIDE -> TuyaGuideStep()
+                    Step.TUYA_CONNECT -> TuyaConnectStep(store, version)
+                    Step.PERMISSIONS -> PermissionsStep(resumed)
+                    Step.DONE -> DoneStep()
                 }
             }
         }
-        val canContinue = remember(step, version) {
-            when (step) {
-                2 -> store.hasCredentials
-                3 -> store.isLoggedIn
+        val canContinue = remember(step, version, tuyaPath) {
+            when (steps[step]) {
+                Step.CREDENTIALS -> store.hasCredentials
+                Step.LOGIN -> store.isLoggedIn
+                Step.TUYA_CONNECT -> store.hasTuya
                 else -> true
             }
         }
         Row(Modifier.fillMaxWidth().padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
             if (step > 0) TextButton(onClick = { step-- }) { Text(stringResource(R.string.action_back)) }
             Spacer(Modifier.weight(1f))
-            if (step == 0 && store.isLoggedIn) {
+            if (step == 0 && store.hasAnyAccount) {
                 // Kurulum rehberine sonradan dönenler için.
                 TextButton(onClick = onFinished) { Text(stringResource(R.string.action_skip)) }
             }
             Button(
                 enabled = canContinue,
                 onClick = {
-                    if (step < STEPS - 1) step++
+                    if (step < steps.size - 1) step++
                     else {
                         Actions.startMonitoring(context)
                         onFinished()
                     }
                 },
             ) {
-                Text(stringResource(if (step < STEPS - 1) R.string.action_next else R.string.action_start_monitoring))
+                Text(stringResource(if (step < steps.size - 1) R.string.action_next else R.string.action_start_monitoring))
             }
         }
     }
@@ -174,6 +191,76 @@ private fun NumberedStep(n: Int, text: String) {
         Spacer(Modifier.width(14.dp))
         Text(text, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(top = 3.dp))
     }
+}
+
+@Composable
+private fun PlatformStep(tuya: Boolean, onPick: (Boolean) -> Unit) {
+    StepHeader(Icons.Rounded.Hub, stringResource(R.string.onb_platform_title), stringResource(R.string.onb_platform_body))
+    PlatformOption(!tuya, stringResource(R.string.onb_platform_ewelink), stringResource(R.string.onb_platform_ewelink_desc)) { onPick(false) }
+    Spacer(Modifier.height(12.dp))
+    PlatformOption(tuya, stringResource(R.string.onb_platform_tuya), stringResource(R.string.onb_platform_tuya_desc)) { onPick(true) }
+    Spacer(Modifier.height(12.dp))
+    Text(stringResource(R.string.onb_platform_both), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+@Composable
+private fun PlatformOption(selected: Boolean, title: String, desc: String, onClick: () -> Unit) {
+    SectionCard(horizontalPadding = 0) {
+        Row(
+            Modifier.fillMaxWidth().selectable(selected = selected, onClick = onClick).padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            RadioButton(selected = selected, onClick = null)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text(title, style = MaterialTheme.typography.titleMedium)
+                Text(desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TuyaGuideStep() {
+    val context = LocalContext.current
+    StepHeader(Icons.Rounded.DeveloperMode, stringResource(R.string.onb_tuya_title), stringResource(R.string.onb_tuya_body))
+    NumberedStep(1, stringResource(R.string.onb_tuya_step1))
+    NumberedStep(2, stringResource(R.string.onb_tuya_step2))
+    NumberedStep(3, stringResource(R.string.onb_tuya_step3))
+    NumberedStep(4, stringResource(R.string.onb_tuya_step4))
+    Spacer(Modifier.height(16.dp))
+    Button(onClick = { Actions.openUrl(context, Actions.TUYA_PLATFORM_URL) }, modifier = Modifier.fillMaxWidth()) {
+        Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
+        Spacer(Modifier.width(8.dp))
+        Text(stringResource(R.string.onb_open_tuya))
+    }
+    Spacer(Modifier.height(12.dp))
+    Text(stringResource(R.string.onb_tuya_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+}
+
+@Composable
+private fun TuyaConnectStep(store: Store, version: Int) {
+    var dialog by remember { mutableStateOf(false) }
+    StepHeader(Icons.Rounded.Key, stringResource(R.string.onb_tuya_connect_title), stringResource(R.string.onb_tuya_connect_body))
+    val connected = remember(version) { store.hasTuya }
+    if (connected) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Rounded.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.width(8.dp))
+            Text(
+                stringResource(R.string.tuya_connected_x, regionLabel(store.tuyaRegion), remember(version) {
+                    store.snapshots.count { it.cloud == com.macerce.switchguard.core.Cloud.TUYA }
+                }),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        TextButton(onClick = { dialog = true }) { Text(stringResource(R.string.action_change)) }
+    } else {
+        Button(onClick = { dialog = true }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.action_enter_keys)) }
+    }
+    Spacer(Modifier.height(12.dp))
+    Text(stringResource(R.string.onb_tuya_privacy), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (dialog) TuyaDialog(store) { dialog = false }
 }
 
 @Composable

@@ -298,7 +298,7 @@ private fun AutomationEditor(
                     if (triggerKind.usesChannelPower) {
                         NumberField(lowMinutes, stringResource(R.string.automation_low_minutes)) { lowMinutes = it }
                         NumberField(grace, stringResource(R.string.automation_grace)) { grace = it }
-                        src?.channelPower?.get(triggerChannel)?.let {
+                        src?.channelPowerOf(triggerChannel)?.let {
                             Text(
                                 stringResource(R.string.automation_current_power, formatWatts(it)),
                                 style = MaterialTheme.typography.bodySmall,

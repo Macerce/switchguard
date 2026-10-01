@@ -101,6 +101,26 @@
     <string name="section_about">Hakkında</string>
     <string name="section_general">Genel</string>
     <string name="tuya_account">Tuya / Smart Life</string>
+    <string name="onb_platform_title">Cihazlarınız nerede?</string>
+    <string name="onb_platform_body">Cihazlarınızı bugün hangi uygulamayla kontrol ediyorsanız onu seçin.</string>
+    <string name="onb_platform_ewelink">eWeLink</string>
+    <string name="onb_platform_ewelink_desc">SONOFF ve diğer eWeLink uyumlu cihazlar</string>
+    <string name="onb_platform_tuya">Tuya / Smart Life</string>
+    <string name="onb_platform_tuya_desc">Smart Life ya da Tuya Smart uygulamasıyla kontrol ettiğiniz cihazlar</string>
+    <string name="onb_platform_both">İkisi de mi var? Birini şimdi kurun, diğerini sonra Ayarlar\'dan ekleyin.</string>
+    <string name="onb_tuya_title">Ücretsiz bir Tuya Cloud projesi açın</string>
+    <string name="onb_tuya_body">SwitchGuard cihazlarınızı Tuya\'nın resmi bulut API\'si üzerinden, size ait ücretsiz bir projeyle okur. Yaklaşık beş dakika sürer.</string>
+    <string name="onb_tuya_step1">platform.tuya.com\'da ücretsiz hesap açın, sonra Cloud → Create Cloud Project: Development Method "Smart Home", veri merkezi = Smart Life hesabınızın bölgesi (Avrupa / Türkiye: Central Europe).</string>
+    <string name="onb_tuya_step2">Projede: Devices → Link App Account → Add App Account ve QR kodu Smart Life / Tuya uygulamasıyla okutun.</string>
+    <string name="onb_tuya_step3">Message Service sekmesi: servisi açın (AES-GCM). Messaging Rules → Production Environment → Create: devicePropertyMessage, deviceOnline ve deviceOffline\'ı seçip Release Rule\'a basın, ardından kuralın anahtarını AÇIN. Bu yapılmazsa değişiklikler ancak birkaç dakikada bir gelir.</string>
+    <string name="onb_tuya_step4">Projenin Overview sayfasındaki Access ID ve Access Secret\'ı sonraki adıma kopyalayın.</string>
+    <string name="onb_open_tuya">Tuya platformunu aç</string>
+    <string name="onb_tuya_note">Ücretsiz Tuya Cloud denemesi ara ara uzatılmalıdır (Cloud → IoT Core → Extend trial period); süre dolunca SwitchGuard sizi uyarır. Size yalnızca paylaşılmış cihazlar görünmeyebilir; sahibinden sizi ev üyesi olarak eklemesini isteyin.</string>
+    <string name="onb_tuya_connect_title">Tuya projenizi bağlayın</string>
+    <string name="onb_tuya_connect_body">Access ID ve Access Secret\'ı girin. SwitchGuard bunları dener ve kaç cihaz bulduğunu gösterir.</string>
+    <string name="action_enter_keys">Access ID ve Secret gir</string>
+    <string name="action_change">Değiştir</string>
+    <string name="onb_tuya_privacy">Bu bilgiler yalnızca bu telefonda saklanır ve Tuya\'nın kendi sunucuları dışında hiçbir yere gönderilmez.</string>
     <string name="tuya_not_connected">Bağlı değil · bağlamak için dokunun</string>
     <string name="tuya_connected_x">Bağlı · %1$s · %2$d cihaz</string>
     <string name="tuya_dialog_title">Tuya / Smart Life bağla</string>
@@ -178,7 +198,7 @@
 
     <!-- Kurulum -->
     <string name="onb_welcome_title">SwitchGuard\'a hoş geldiniz</string>
-    <string name="onb_welcome_body">Sonoff / eWeLink uyumlu cihazlarınız açılıp kapandığında veya bağlantısı koptuğunda anında alarm alın.</string>
+    <string name="onb_welcome_body">eWeLink (Sonoff) veya Tuya / Smart Life cihazlarınız açılıp kapandığında ya da bağlantısı koptuğunda anında alarm alın.</string>
     <string name="onb_feature_alarm">Siz kapatana kadar susmayan alarm</string>
     <string name="onb_feature_control">Cihazları uygulamadan açıp kapatma</string>
     <string name="onb_feature_rules">Cihaz başına kurallar ve sessiz saatler</string>
@@ -254,7 +274,7 @@
     <string name="trigger_power_above">güç şunu aşınca:</string>
     <string name="trigger_power_below">güç şunun altına inince:</string>
     <string name="power_data_stale">%1$s: kanal gücü verisi 5 dakikadır alınamıyor. Güç düşmesi alarmı şu an çalışmayabilir.</string>
-    <string name="trigger_channel_power_low">kanal açıkken gücü şunun altına düşerse:</string>
+    <string name="trigger_channel_power_low">açıkken gücü şunun altına düşerse:</string>
     <string name="automation_low_minutes">Bu kadar süre altında kalırsa (dakika, 0 = hemen)</string>
     <string name="automation_grace">Kanal açıldıktan sonra bekle (dakika, kalkış için)</string>
     <string name="automation_low_for">(%1$d dk boyunca, açılıştan %2$d dk sonra)</string>

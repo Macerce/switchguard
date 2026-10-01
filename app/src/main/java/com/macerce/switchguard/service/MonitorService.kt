@@ -456,7 +456,8 @@ class MonitorService : Service() {
     }
 
     private fun applyUpdate(update: WsEvent.Update) {
-        if (update.params?.keys()?.asSequence()?.any { it.startsWith("actPow_") } == true) {
+        // Kanal gücü (SPM/DualR3: actPow_N) ya da tek kanallı güç ölçerde toplam güç geldi.
+        if (update.params?.keys()?.asSequence()?.any { it.startsWith("actPow_") || it == "power" } == true) {
             channelPowerSeenAt[update.deviceId] = System.currentTimeMillis()
             powerStaleWarned.remove(update.deviceId)
         }

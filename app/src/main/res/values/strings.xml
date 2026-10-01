@@ -105,6 +105,26 @@
     <string name="section_about">About</string>
     <string name="section_general">General</string>
     <string name="tuya_account">Tuya / Smart Life</string>
+    <string name="onb_platform_title">Where are your devices?</string>
+    <string name="onb_platform_body">Choose the app you use to control your devices today.</string>
+    <string name="onb_platform_ewelink">eWeLink</string>
+    <string name="onb_platform_ewelink_desc">SONOFF and other eWeLink-compatible devices</string>
+    <string name="onb_platform_tuya">Tuya / Smart Life</string>
+    <string name="onb_platform_tuya_desc">Devices you control in the Smart Life or Tuya Smart app</string>
+    <string name="onb_platform_both">Have both? Set up one now and add the other later in Settings.</string>
+    <string name="onb_tuya_title">Create a free Tuya Cloud project</string>
+    <string name="onb_tuya_body">SwitchGuard reads your devices through Tuya\'s official cloud API with your own free project. It takes about five minutes.</string>
+    <string name="onb_tuya_step1">On platform.tuya.com create a free account, then Cloud → Create Cloud Project: Development method "Smart Home", data center = your Smart Life account region (Europe / Türkiye: Central Europe).</string>
+    <string name="onb_tuya_step2">In the project: Devices → Link App Account → Add App Account, and scan the QR code with the Smart Life / Tuya app.</string>
+    <string name="onb_tuya_step3">Message Service tab: enable it (AES-GCM). Messaging Rules → Production Environment → Create: pick devicePropertyMessage, deviceOnline and deviceOffline, tap Release Rule — then switch the rule ON. Without this, changes arrive only every few minutes.</string>
+    <string name="onb_tuya_step4">Copy the Access ID and Access Secret from the project\'s Overview page into the next step.</string>
+    <string name="onb_open_tuya">Open Tuya platform</string>
+    <string name="onb_tuya_note">The free Tuya Cloud trial must be extended now and then (Cloud → IoT Core → Extend trial period); SwitchGuard warns you when it expires. Devices that were only shared with you may not appear — ask the owner to add you as a home member.</string>
+    <string name="onb_tuya_connect_title">Connect your Tuya project</string>
+    <string name="onb_tuya_connect_body">Enter the Access ID and Access Secret. SwitchGuard checks them and shows how many devices it found.</string>
+    <string name="action_enter_keys">Enter Access ID and Secret</string>
+    <string name="action_change">Change</string>
+    <string name="onb_tuya_privacy">These keys are stored only on this phone and are sent nowhere except Tuya\'s own servers.</string>
     <string name="tuya_not_connected">Not connected · tap to connect</string>
     <string name="tuya_connected_x">Connected · %1$s · %2$d device(s)</string>
     <string name="tuya_dialog_title">Connect Tuya / Smart Life</string>
@@ -182,7 +202,7 @@
 
     <!-- Onboarding -->
     <string name="onb_welcome_title">Welcome to SwitchGuard</string>
-    <string name="onb_welcome_body">Get an alarm the moment your Sonoff / eWeLink-compatible devices switch on or off or lose their connection.</string>
+    <string name="onb_welcome_body">Get an alarm the moment your eWeLink (Sonoff) or Tuya / Smart Life devices switch on or off or lose their connection.</string>
     <string name="onb_feature_alarm">An alarm that keeps ringing until you dismiss it</string>
     <string name="onb_feature_control">Switch devices on and off from the app</string>
     <string name="onb_feature_rules">Per-device rules and quiet hours</string>
@@ -257,7 +277,7 @@
     <string name="trigger_came_online">comes back online</string>
     <string name="trigger_power_above">power goes above</string>
     <string name="power_data_stale">%1$s: no channel power data for 5 minutes. The power-drop alarm may not work right now.</string>
-    <string name="trigger_channel_power_low">channel is on but its power drops below:</string>
+    <string name="trigger_channel_power_low">is on but its power drops below:</string>
     <string name="automation_low_minutes">For at least (minutes, 0 = immediately)</string>
     <string name="automation_grace">Ignore after the channel turns on (minutes, for start-up)</string>
     <string name="automation_low_for">(for %1$d min, from %2$d min after turn-on)</string>

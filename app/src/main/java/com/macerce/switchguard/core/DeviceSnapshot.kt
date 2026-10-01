@@ -26,8 +26,16 @@ data class DeviceSnapshot(
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     val hasEnergy: Boolean get() = power != null
-    /** Kanal başına güç ölçer mi: veri geldiyse ya da bilinen model ise (SPM ve DualR3 veriyi ancak istenince gönderir). */
-    val hasChannelPower: Boolean get() = channelPower.isNotEmpty() || uiid in CHANNEL_METERING_UIIDS
+    /**
+     * Kanalın gücü ölçülebiliyor mu: kanal başına ölçen cihazlar (veri geldiyse ya da SPM/DualR3 gibi
+     * veriyi ancak istenince gönderen bilinen modeller) ve tek kanallı güç ölçerler (POW, Tuya prizler).
+     */
+    val hasChannelPower: Boolean
+        get() = channelPower.isNotEmpty() || uiid in CHANNEL_METERING_UIIDS || (!isMultiChannel && hasEnergy)
+
+    /** Kanalın anlık gücü (W): kanal başına ölçen cihazda o kanalınki, tek kanallı güç ölçerde cihazın toplamı. */
+    fun channelPowerOf(channel: Int): Double? =
+        channelPower[channel] ?: if (!isMultiChannel && channel == 0) power else null
 
     companion object {
         /** DualR3 (126), SPM-4Relay (130). */
