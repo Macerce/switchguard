@@ -2,6 +2,7 @@ package com.macerce.switchguard.ui
 
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import com.macerce.switchguard.core.Cloud
+import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Email
 import com.macerce.switchguard.core.AppLanguage
@@ -173,6 +174,12 @@ fun SettingsScreen(modifier: Modifier) {
                     Modifier.clickable { dialog = { TuyaDialog(store) { dialog = null } } },
                 )
                 Divider()
+                InfoRow(Icons.Rounded.Science, stringResource(R.string.demo_devices), stringResource(R.string.demo_devices_desc)) {
+                    Switch(checked = s.demoMode, onCheckedChange = {
+                        if (it) Actions.enableDemo(context) else Actions.disableDemo(context)
+                    })
+                }
+                Divider()
                 ProRow(s.isPro) { dialog = { ProDialog(onDismiss = { dialog = null }) } }
             }
 
@@ -266,8 +273,8 @@ fun SettingsScreen(modifier: Modifier) {
                 InfoRow(
                     Icons.Rounded.NotificationsActive,
                     stringResource(R.string.test_alarm),
-                    stringResource(if (s.monitoringEnabled) R.string.test_alarm_desc else R.string.test_alarm_needs_monitoring),
-                    Modifier.clickable(enabled = s.monitoringEnabled) { Actions.testAlarm(context) },
+                    stringResource(R.string.test_alarm_desc),
+                    Modifier.clickable { Actions.testAlarm(context) },
                 )
             }
 

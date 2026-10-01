@@ -11,6 +11,7 @@
     <string name="action_back">Back</string>
     <string name="action_next">Next</string>
     <string name="action_skip">Skip</string>
+    <string name="action_skip_for_now">Skip for now</string>
     <string name="action_save">Save</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_clear">Clear</string>
@@ -197,7 +198,6 @@
     <string name="vibrate">Vibrate</string>
     <string name="test_alarm">Test alarm</string>
     <string name="test_alarm_desc">Rings the alarm now so you can check sound and volume</string>
-    <string name="test_alarm_needs_monitoring">Start monitoring first</string>
     <string name="test_alarm_line">Test alarm</string>
     <string name="quiet_hours">Quiet hours</string>
     <string name="quiet_hours_desc">During these hours alarms become silent notifications</string>
@@ -373,4 +373,25 @@
     <string name="pro_limit_body">The free version monitors %1$d device, and \"%2$s\" is using it. Monitor this device instead, or get Pro to monitor all of them.</string>
     <string name="pro_limit_switch">Monitor this one instead</string>
     <string name="pro_limit_detail">Not monitored — the free version monitors %1$d device</string>
+
+    <!-- Demo -->
+    <string name="demo_freezer">Demo · Freezer</string>
+    <string name="demo_pumps">Demo · Pump panel</string>
+    <string name="demo_light">Demo · Garden light</string>
+    <string name="demo_auto_pump">Pump stalled</string>
+    <string name="demo_auto_light">Garden light left on</string>
+    <string name="onb_platform_demo">Try without an account (demo)</string>
+    <string name="onb_platform_demo_desc">Three virtual devices with every feature, no setup. You can add your real account later in Settings.</string>
+    <string name="demo_devices">Demo devices</string>
+    <string name="demo_devices_desc">Virtual devices for trying every feature</string>
+    <string name="section_demo">Demo: simulate an event</string>
+    <string name="demo_hint">These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching from the Control section above counts as you and does not ring the alarm.</string>
+    <string name="demo_toggle">Switch from outside</string>
+    <string name="demo_toggle_channel">Switch channel %d from outside</string>
+    <string name="demo_disconnect">Lose connection</string>
+    <string name="demo_reconnect">Reconnect</string>
+    <string name="demo_power_drop">Drop power on channel %d (pump stalled)</string>
+    <string name="demo_power_drop_single">Drop power (device stalled)</string>
+    <string name="demo_power_restore">Restore power on channel %d</string>
+    <string name="demo_power_restore_single">Restore power</string>
 </resources>

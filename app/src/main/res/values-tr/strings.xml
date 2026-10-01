@@ -9,6 +9,7 @@
     <string name="action_back">Geri</string>
     <string name="action_next">İleri</string>
     <string name="action_skip">Atla</string>
+    <string name="action_skip_for_now">Şimdilik atla</string>
     <string name="action_save">Kaydet</string>
     <string name="action_cancel">İptal</string>
     <string name="action_clear">Temizle</string>
@@ -193,7 +194,6 @@
     <string name="vibrate">Titreşim</string>
     <string name="test_alarm">Test alarmı</string>
     <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
-    <string name="test_alarm_needs_monitoring">Önce izlemeyi başlatın</string>
     <string name="test_alarm_line">Test alarmı</string>
     <string name="quiet_hours">Sessiz saatler</string>
     <string name="quiet_hours_desc">Bu saatlerde alarmlar sessiz bildirime dönüşür</string>
@@ -369,4 +369,25 @@
     <string name="pro_limit_body">Ücretsiz sürüm %1$d cihazı izler ve şu an \"%2$s\" izleniyor. Onun yerine bu cihazı izleyebilir ya da tümünü izlemek için Pro\'ya geçebilirsiniz.</string>
     <string name="pro_limit_switch">Bunu izle</string>
     <string name="pro_limit_detail">İzlenmiyor — ücretsiz sürüm %1$d cihaz izler</string>
+
+    <!-- Demo -->
+    <string name="demo_freezer">Demo · Dondurucu</string>
+    <string name="demo_pumps">Demo · Pompa paneli</string>
+    <string name="demo_light">Demo · Bahçe ışığı</string>
+    <string name="demo_auto_pump">Pompa durdu</string>
+    <string name="demo_auto_light">Bahçe ışığı açık kaldı</string>
+    <string name="onb_platform_demo">Hesap olmadan dene (demo)</string>
+    <string name="onb_platform_demo_desc">Tüm özellikleriyle üç sanal cihaz, kurulum yok. Gerçek hesabınızı sonra Ayarlar\'dan ekleyebilirsiniz.</string>
+    <string name="demo_devices">Demo cihazlar</string>
+    <string name="demo_devices_desc">Tüm özellikleri denemek için sanal cihazlar</string>
+    <string name="section_demo">Demo: olay canlandır</string>
+    <string name="demo_hint">Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki Kontrol bölümünden açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.</string>
+    <string name="demo_toggle">Dışarıdan aç/kapat</string>
+    <string name="demo_toggle_channel">%d. kanalı dışarıdan aç/kapat</string>
+    <string name="demo_disconnect">Bağlantıyı kopar</string>
+    <string name="demo_reconnect">Bağlantıyı geri getir</string>
+    <string name="demo_power_drop">%d. kanalın gücünü düşür (pompa takıldı)</string>
+    <string name="demo_power_drop_single">Gücü düşür (cihaz takıldı)</string>
+    <string name="demo_power_restore">%d. kanalın gücünü normale döndür</string>
+    <string name="demo_power_restore_single">Gücü normale döndür</string>
 </resources>

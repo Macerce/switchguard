@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.data.EventLog
@@ -95,6 +96,8 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                 }
             }
 
+            if (device.cloud == Cloud.DEMO) DemoSection(device)
+
             // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez.
             // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
             if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
@@ -104,7 +107,9 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 
             SectionTitle(stringResource(R.string.section_monitoring))
             SectionCard {
-                val other = monitoredIds.firstOrNull { it != deviceId }
+                // Demo cihazları ücretsiz sürüm sınırına sayılmaz.
+                val demo = Demo.isDemo(deviceId)
+                val other = monitoredIds.firstOrNull { it != deviceId && !Demo.isDemo(it) }.takeUnless { demo }
                 InfoRow(
                     Icons.Rounded.NotificationsActive,
                     stringResource(R.string.monitor_this_device),
@@ -115,7 +120,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                         when {
                             !on -> store.setRules(deviceId, rules.copy(monitored = false))
                             store.isPro || other == null -> {
-                                store.freeDeviceId = deviceId
+                                if (!demo) store.freeDeviceId = deviceId
                                 store.setRules(deviceId, rules.copy(monitored = true))
                             }
                             else -> {

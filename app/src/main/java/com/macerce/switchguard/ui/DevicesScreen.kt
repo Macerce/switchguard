@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
@@ -167,7 +168,7 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 if (loggedIn && devices.isEmpty()) {
                     item { EmptyDevices() }
                 }
-                if (loggedIn && !isPro && devices.size > Entitlement.FREE_DEVICES) {
+                if (loggedIn && !isPro && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
                     item { ProHintCard { showPro = true } }
                 }
                 if (editMode) item(key = "edit-hint") { LayoutEditHint { showCategories = true } }

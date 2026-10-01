@@ -6,6 +6,16 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.8.0 — 2026-10-01
+**Try it without an account (demo)**
+- New **"Try without an account (demo)"** option in setup, and a **Demo devices** switch in Settings → Account.
+- Three virtual devices with every feature: a power-metering freezer plug, a 4-channel pump panel with per-channel power, and a garden light.
+- **Simulate events** on a demo device's page: switch it from outside, lose/restore the connection, drop a channel's power. Rules, alarm, automations, history and energy all work as with real devices.
+- Two sample automations: "Pump stalled" (alarm) and "Garden light left on" (notification).
+- Demo devices don't count toward the free version's one-device limit.
+- **"Skip for now"** in setup lets you look around without connecting an account.
+- **Test alarm** now works even when monitoring is off.
+
 ## 2.7.0 — 2026-10-01
 **Arrange your devices**
 - **Arrange devices** mode on the Devices screen (tune icon at the top, or long-press a card).

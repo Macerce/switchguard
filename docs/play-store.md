@@ -33,6 +33,7 @@
 > • Switch devices on and off from the app and manage their eWeLink timers
 > • Full event history and an optional daily summary
 > • English and Turkish, switchable in the app
+> • Try it first without an account: built-in demo devices simulate every feature
 > • No ads, no tracking, no account of ours — your data stays on your phone
 > • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
@@ -52,6 +53,7 @@
 > • Cihazları uygulamadan açıp kapatma ve eWeLink zamanlayıcılarını yönetme
 > • Tüm olayların geçmişi ve isteğe bağlı günlük özet
 > • Türkçe ve İngilizce; uygulama içinden değiştirilebilir
+> • Hesap olmadan önce deneyin: yerleşik demo cihazlar tüm özellikleri canlandırır
 > • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
 > • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
@@ -127,10 +129,10 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 İlk yayında Play bu alanı ister. Sonraki her güncellemede yalnızca yenilikleri yazın.
 
 **EN:**
-> First release: instant alarms for your eWeLink (SONOFF) and Tuya / Smart Life switches, per-device rules, automations (stayed-on and power-drop alarms), energy readings, device timers, history and daily summary.
+> First release: instant alarms for your eWeLink (SONOFF) and Tuya / Smart Life switches, per-device rules, automations (stayed-on and power-drop alarms), energy readings, device timers, history and daily summary. Try it without an account using the built-in demo devices.
 
 **TR:**
-> İlk sürüm: eWeLink (SONOFF) ve Tuya / Smart Life anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet.
+> İlk sürüm: eWeLink (SONOFF) ve Tuya / Smart Life anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet. Hesap olmadan yerleşik demo cihazlarla deneyebilirsiniz.
 
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`

@@ -84,11 +84,14 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
     val resumed = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
 
-    var tuyaPath by rememberSaveable { mutableStateOf(store.hasTuya && !store.isLoggedIn) }
-    val steps = if (tuyaPath) {
-        listOf(Step.WELCOME, Step.PLATFORM, Step.TUYA_GUIDE, Step.TUYA_CONNECT, Step.PERMISSIONS, Step.DONE)
-    } else {
-        listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
+    var platform by rememberSaveable {
+        mutableStateOf(if (store.hasTuya && !store.isLoggedIn) Platform.TUYA else Platform.EWELINK)
+    }
+    val steps = when (platform) {
+        Platform.TUYA -> listOf(Step.WELCOME, Step.PLATFORM, Step.TUYA_GUIDE, Step.TUYA_CONNECT, Step.PERMISSIONS, Step.DONE)
+        Platform.EWELINK -> listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
+        // Demo: hesap adımları yok; cihazlar başlatınca eklenir.
+        Platform.DEMO -> listOf(Step.WELCOME, Step.PLATFORM, Step.PERMISSIONS, Step.DONE)
     }
     var step by rememberSaveable { mutableIntStateOf(0) }
     BackHandler(enabled = step > 0) { step-- }
@@ -110,7 +113,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp)) {
                 when (steps[s.coerceAtMost(steps.size - 1)]) {
                     Step.WELCOME -> WelcomeStep()
-                    Step.PLATFORM -> PlatformStep(tuyaPath) { tuyaPath = it }
+                    Step.PLATFORM -> PlatformStep(platform) { platform = it }
                     Step.DEVELOPER -> DeveloperStep()
                     Step.CREDENTIALS -> CredentialsStep(store)
                     Step.LOGIN -> LoginStep(remember(version) { store.isLoggedIn })
@@ -121,7 +124,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 }
             }
         }
-        val canContinue = remember(step, version, tuyaPath) {
+        val canContinue = remember(step, version, platform) {
             when (steps[step]) {
                 Step.CREDENTIALS -> store.hasCredentials
                 Step.LOGIN -> store.isLoggedIn
@@ -135,12 +138,16 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             if (step == 0 && store.hasAnyAccount) {
                 // Kurulum rehberine sonradan dönenler için.
                 TextButton(onClick = onFinished) { Text(stringResource(R.string.action_skip)) }
+            } else if (!canContinue && !store.hasAnyAccount) {
+                // Hesabı olmadan uygulamaya göz atmak isteyenler (ör. testçiler); hesap sonra Ayarlar'dan eklenir.
+                TextButton(onClick = onFinished) { Text(stringResource(R.string.action_skip_for_now)) }
             }
             Button(
                 enabled = canContinue,
                 onClick = {
                     if (step < steps.size - 1) step++
                     else {
+                        if (platform == Platform.DEMO) Actions.enableDemo(context)
                         Actions.startMonitoring(context)
                         onFinished()
                     }
@@ -194,12 +201,16 @@ private fun NumberedStep(n: Int, text: String) {
     }
 }
 
+private enum class Platform { EWELINK, TUYA, DEMO }
+
 @Composable
-private fun PlatformStep(tuya: Boolean, onPick: (Boolean) -> Unit) {
+private fun PlatformStep(selected: Platform, onPick: (Platform) -> Unit) {
     StepHeader(Icons.Rounded.Hub, stringResource(R.string.onb_platform_title), stringResource(R.string.onb_platform_body))
-    PlatformOption(!tuya, stringResource(R.string.onb_platform_ewelink), stringResource(R.string.onb_platform_ewelink_desc)) { onPick(false) }
+    PlatformOption(selected == Platform.EWELINK, stringResource(R.string.onb_platform_ewelink), stringResource(R.string.onb_platform_ewelink_desc)) { onPick(Platform.EWELINK) }
     Spacer(Modifier.height(12.dp))
-    PlatformOption(tuya, stringResource(R.string.onb_platform_tuya), stringResource(R.string.onb_platform_tuya_desc)) { onPick(true) }
+    PlatformOption(selected == Platform.TUYA, stringResource(R.string.onb_platform_tuya), stringResource(R.string.onb_platform_tuya_desc)) { onPick(Platform.TUYA) }
+    Spacer(Modifier.height(12.dp))
+    PlatformOption(selected == Platform.DEMO, stringResource(R.string.onb_platform_demo), stringResource(R.string.onb_platform_demo_desc)) { onPick(Platform.DEMO) }
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_platform_both), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }

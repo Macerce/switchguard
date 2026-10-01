@@ -6,6 +6,16 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.8.0 — 1 Ekim 2026
+**Hesap olmadan deneme (demo)**
+- Kurulumda yeni **"Hesap olmadan dene (demo)"** seçeneği; Ayarlar → Hesap'ta **Demo cihazlar** anahtarı.
+- Tüm özellikleriyle üç sanal cihaz: güç ölçen dondurucu prizi, kanal başına güç ölçen 4 kanallı pompa paneli ve bahçe ışığı.
+- Demo cihazın sayfasında **olay canlandırma**: dışarıdan aç/kapat, bağlantıyı kopar/geri getir, kanalın gücünü düşür. Kurallar, alarm, otomasyonlar, geçmiş ve enerji gerçek cihazdaki gibi çalışır.
+- İki örnek otomasyon: "Pompa durdu" (alarm) ve "Bahçe ışığı açık kaldı" (bildirim).
+- Demo cihazlar ücretsiz sürümün tek cihaz sınırına sayılmaz.
+- Kurulumda **"Şimdilik atla"**: hesap bağlamadan uygulamaya göz atılabilir.
+- **Test alarmı** artık izleme kapalıyken de çalışır.
+
 ## 2.7.0 — 1 Ekim 2026
 **Cihazları düzenleme**
 - Cihazlar ekranında **Cihazları düzenle** modu (üstteki ayar simgesi ya da bir karta uzun basarak).

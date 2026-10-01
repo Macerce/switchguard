@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.Cloud
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -100,12 +102,35 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         set(v) = put { putString("tuyaScales", org.json.JSONObject(v.mapValues { org.json.JSONObject(it.value) }).toString()) }
 
     val hasTuya get() = tuyaAccessId.isNotEmpty() && tuyaSecret.isNotEmpty()
-    /** eWeLink'e giriş yapılmış ya da Tuya bağlanmış: izlenecek en az bir hesap var. */
-    val hasAnyAccount get() = isLoggedIn || hasTuya
+    /** eWeLink'e giriş yapılmış, Tuya bağlanmış ya da demo açık: izlenecek en az bir kaynak var. */
+    val hasAnyAccount get() = isLoggedIn || hasTuya || demoMode
+
+    // --- Demo ---
+    /** Hesapsız deneme için sanal cihazlar açık mı (bkz. [Demo]). */
+    var demoMode: Boolean
+        get() = prefs.getBoolean("demo", false)
+        set(v) = put { putBoolean("demo", v) }
+
+    /** Demo cihazlarını ve örnek otomasyonlarını ekler; zaten varsa dokunmaz. */
+    fun enableDemo(names: Demo.Names) {
+        demoMode = true
+        if (snapshots.none { it.cloud == Cloud.DEMO }) snapshots = snapshots + Demo.devices(names)
+        val existing = automations.map { it.id }.toSet()
+        automations = automations + Demo.automations(names).filter { it.id !in existing }
+    }
+
+    /** Demo cihazlarını, kurallarını ve örnek otomasyonlarını kaldırır. */
+    fun disableDemo() {
+        demoMode = false
+        snapshots = snapshots.filter { it.cloud != Cloud.DEMO }
+        rules = rules.filterKeys { !Demo.isDemo(it) }
+        automations = automations.filterNot { Demo.isDemoAutomation(it) }
+        if (freeDeviceId?.let(Demo::isDemo) == true) freeDeviceId = null
+    }
 
     fun disconnectTuya() {
         put { remove("tuyaId"); remove("tuyaSecret"); remove("tuyaToken"); remove("tuyaTokenExp"); remove("tuyaScales") }
-        snapshots = snapshots.filter { it.cloud != com.macerce.switchguard.core.Cloud.TUYA }
+        snapshots = snapshots.filter { it.cloud != Cloud.TUYA }
     }
 
     /** Oturum kullanıcı istemeden düştü (ör. aynı hesapla başka cihazda giriş). Giriş yapınca silinir. */
@@ -176,10 +201,15 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
     fun setRules(deviceId: String, r: DeviceRules) { rules = rules + (deviceId to r) }
-    /** Gerçekten izlenen cihazlar: kuralı açık olanlar, ücretsiz sürümde yalnızca biri (bkz. [Entitlement]). */
+    /**
+     * Gerçekten izlenen cihazlar: kuralı açık olanlar, ücretsiz sürümde yalnızca biri (bkz. [Entitlement]).
+     * Demo cihazları sınıra sayılmaz; denemede her özellik görülebilsin.
+     */
     fun monitoredIds(): Set<String> {
         val all = rules
-        return Entitlement.monitored(snapshots.map { it.id }, { (all[it] ?: DeviceRules()).monitored }, isPro, freeDeviceId)
+        val wants = { id: String -> (all[id] ?: DeviceRules()).monitored }
+        val (demo, real) = snapshots.map { it.id }.partition(Demo::isDemo)
+        return demo.filter(wants).toSet() + Entitlement.monitored(real, wants, isPro, freeDeviceId)
     }
 
     // --- Pro ---

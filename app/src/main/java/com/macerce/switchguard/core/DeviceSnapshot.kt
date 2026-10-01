@@ -1,7 +1,7 @@
 package com.macerce.switchguard.core
 
 /** Cihazın bağlı olduğu bulut. */
-enum class Cloud { EWELINK, TUYA }
+enum class Cloud { EWELINK, TUYA, DEMO }
 
 /**
  * Bir cihazın belirli bir andaki durumu.

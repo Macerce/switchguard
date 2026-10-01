@@ -37,6 +37,7 @@ import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.toArgs
 import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.EventArgs
@@ -107,6 +108,10 @@ class MonitorService : Service() {
     private var tuyaBlocked = false
     private var tuyaWarned = false
 
+    /** Demo: gücü düşürülmüş kanallar (cihaz → kanallar) ve son dalgalanma zamanı. */
+    private val demoStalled = mutableMapOf<String, MutableSet<Int>>()
+    private var lastDemoJitterAt = 0L
+
     /** Kaynakların ayrı ayrı durumu; ekrana ikisinin kötüsü yansır (bkz. [publishState]). */
     private var ewState: Pair<ConnState, String>? = null
     private var tuyaState: Pair<ConnState, String>? = null
@@ -154,6 +159,15 @@ class MonitorService : Service() {
                     addAlarm(getString(R.string.test_alarm_line))
                 }
                 return if (running) START_STICKY else START_NOT_STICKY
+            }
+            ACTION_DEMO -> {
+                val op = intent.getStringExtra(EXTRA_DEMO_OP).orEmpty()
+                val id = intent.getStringExtra(EXTRA_DEVICE).orEmpty()
+                val channel = intent.getIntExtra(EXTRA_CHANNEL, 0)
+                // Simülasyon gerçek akıştan geçsin diye izleme kapalıysa önce açılır.
+                startMonitoring()
+                handler.post { demoSimulate(op, id, channel) }
+                return START_STICKY
             }
             ACTION_SYNC -> {
                 if (running) handler.post { sync() }
@@ -265,6 +279,7 @@ class MonitorService : Service() {
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
         tuyaTick(now)
+        demoTick(wall)
 
         if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
@@ -404,7 +419,7 @@ class MonitorService : Service() {
         lastSyncAt = SystemClock.elapsedRealtime()
         if (!store.isLoggedIn) {
             // Yalnızca Tuya kullanılıyorsa eWeLink'in girişsiz olması hata değildir.
-            if (store.hasTuya) {
+            if (store.hasTuya || store.demoMode) {
                 ewState = null
                 if (store.snapshots.any { it.cloud == Cloud.EWELINK }) replaceCloud(Cloud.EWELINK, emptyList())
             } else onAuthFailed()
@@ -436,6 +451,10 @@ class MonitorService : Service() {
      * geri yazar. Bu yüzden yeni durum hemen uygulanır, bulutla karşılaştırma gecikmeli yapılır.
      */
     fun onControlled(deviceId: String, channel: Int, on: Boolean) {
+        if (Demo.isDemo(deviceId)) {
+            handler.post { demoUpdate(deviceId) { it.copy(switches = it.switches + (channel to on)) } }
+            return
+        }
         handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on))) }
         val isTuya = store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }
         handler.postDelayed({
@@ -447,7 +466,57 @@ class MonitorService : Service() {
 
     /** Cihazın bağlı olduğu buluta aç/kapa komutu gönderir. */
     private fun controlSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
-        if (device.cloud == Cloud.TUYA) tuya.setSwitch(device, channel, on) else client.setSwitch(device, channel, on)
+        when (device.cloud) {
+            Cloud.TUYA -> tuya.setSwitch(device, channel, on)
+            Cloud.EWELINK -> client.setSwitch(device, channel, on)
+            Cloud.DEMO -> handler.post { demoUpdate(device.id) { it.copy(switches = it.switches + (channel to on)) } }
+        }
+    }
+
+    // ---------------------------------------------------------------- Demo
+
+    /** Demo cihazını değiştirir; güç değerleri anahtarlara göre yeniden hesaplanır ve değişiklik gerçek akıştan geçer. */
+    private fun demoUpdate(deviceId: String, change: (DeviceSnapshot) -> DeviceSnapshot) {
+        val list = store.snapshots
+        val before = list.firstOrNull { it.id == deviceId && it.cloud == Cloud.DEMO } ?: return
+        val changed = change(before)
+        // Kapanan kanalın "güç düştü" durumu sıfırlanır; tekrar açılınca normal çalışır.
+        demoStalled[deviceId]?.retainAll { changed.switches[it] == true }
+        val after = Demo.recompute(changed, demoStalled[deviceId].orEmpty())
+        if (after == before) return
+        process(list.map { if (it.id == after.id) after else it })
+        publishState(synced = true)
+    }
+
+    /**
+     * Arayüzdeki simülasyon düğmeleri. Bunlar "dışarıdan" olmuş sayılır (biri cihazı kapattı, elektrik
+     * kesildi...), bu yüzden kurallara göre alarm çalar; uygulamadan yapılan aç/kapa ise alarm çaldırmaz.
+     */
+    private fun demoSimulate(op: String, deviceId: String, channel: Int) {
+        if (!store.demoMode) return
+        when (op) {
+            DEMO_TOGGLE -> demoUpdate(deviceId) { it.copy(switches = it.switches + (channel to (it.switches[channel] != true))) }
+            DEMO_ONLINE -> demoUpdate(deviceId) { it.copy(online = !it.online) }
+            DEMO_POWER -> {
+                val set = demoStalled.getOrPut(deviceId) { mutableSetOf() }
+                if (!set.add(channel)) set.remove(channel)
+                demoUpdate(deviceId) { it }
+                // Kanal gücü otomasyonu süre dolunca tick'te tetiklenir.
+                runAutomations(emptyList())
+            }
+        }
+    }
+
+    /** Ölçülen değerler gerçek cihazdaki gibi dakikada bir hafifçe oynasın (grafikler de dolsun). */
+    private fun demoTick(wall: Long) {
+        if (!store.demoMode || wall - lastDemoJitterAt < DEMO_JITTER_MS) return
+        lastDemoJitterAt = wall
+        val random = kotlin.random.Random(wall)
+        val list = store.snapshots
+        if (list.none { it.cloud == Cloud.DEMO && it.hasEnergy }) return
+        process(list.map {
+            if (it.cloud == Cloud.DEMO && it.online) Demo.recompute(it, demoStalled[it.id].orEmpty(), random) else it
+        })
     }
 
     /** Bir bulutun cihazlarını yenileriyle değiştirip farkları işler; diğer bulutun cihazlarına dokunmaz. */
@@ -758,9 +827,11 @@ class MonitorService : Service() {
     private fun publishState(synced: Boolean = false) {
         // Durdurulduktan sonra biten bir istek bildirimi geri getirmesin.
         if (!running) return
-        val ew = ewState.takeIf { store.isLoggedIn || !store.hasTuya }
+        val ew = ewState.takeIf { store.isLoggedIn || (!store.hasTuya && !store.demoMode) }
         val tu = tuyaState.takeIf { store.hasTuya }
-        val worst = listOfNotNull(ew, tu).maxByOrNull { SEVERITY.indexOf(it.first) }
+        // Demo her zaman "canlı"; gerçek bir kaynak da varsa onun durumu baskın gelir.
+        val demo = (ConnState.LIVE to "").takeIf { store.demoMode }
+        val worst = listOfNotNull(ew, tu, demo).maxByOrNull { SEVERITY.indexOf(it.first) }
         val state = worst?.first ?: ConnState.CONNECTING
         val detail = when {
             worst == null -> ""
@@ -791,6 +862,15 @@ class MonitorService : Service() {
         const val ACTION_SYNC = "sync"
         /** Giriş/ayar değişince: hata durumlarını sıfırla ve yeniden bağlan. */
         const val ACTION_RESTART = "restart"
+        /** Demo simülasyonu: [EXTRA_DEMO_OP] = [DEMO_TOGGLE] / [DEMO_ONLINE] / [DEMO_POWER]. */
+        const val ACTION_DEMO = "demo"
+        const val EXTRA_DEMO_OP = "op"
+        const val EXTRA_DEVICE = "device"
+        const val EXTRA_CHANNEL = "channel"
+        const val DEMO_TOGGLE = "toggle"
+        const val DEMO_ONLINE = "online"
+        const val DEMO_POWER = "power"
+        private const val DEMO_JITTER_MS = 60_000L
 
         private const val TAG = "SwitchGuard"
         private const val LIVE_ENERGY_REFRESH_MS = 90_000L
@@ -820,6 +900,13 @@ class MonitorService : Service() {
             val intent = Intent(context, MonitorService::class.java).setAction(action)
             if (action == ACTION_START || action == ACTION_RESTART) context.startForegroundService(intent)
             else context.startService(intent)
+        }
+
+        fun demo(context: Context, op: String, deviceId: String, channel: Int = 0) {
+            val intent = Intent(context, MonitorService::class.java).setAction(ACTION_DEMO)
+                .putExtra(EXTRA_DEMO_OP, op).putExtra(EXTRA_DEVICE, deviceId).putExtra(EXTRA_CHANNEL, channel)
+            // Servis izlemeyi başlatıp ön plana geçeceği için ön plan servisi olarak başlatılır.
+            context.startForegroundService(intent)
         }
     }
 }

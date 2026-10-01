@@ -12,6 +12,8 @@ import android.os.PowerManager
 import android.provider.Settings
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
+import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DeviceTimers
 import com.macerce.switchguard.core.RepeatTimer
@@ -54,7 +56,8 @@ object Actions {
                 val tuya = if (store.hasTuya) runCatching { TuyaClient(store).getDevices() }.getOrNull() else emptyList()
                 val old = store.snapshots
                 // Hata veren bulutun eski listesi korunur.
-                store.snapshots = (ewelink ?: old.filter { it.cloud == Cloud.EWELINK }) + (tuya ?: old.filter { it.cloud == Cloud.TUYA })
+                store.snapshots = (ewelink ?: old.filter { it.cloud == Cloud.EWELINK }) + (tuya ?: old.filter { it.cloud == Cloud.TUYA }) +
+                    old.filter { it.cloud == Cloud.DEMO }
             }.start()
         }
     }
@@ -65,15 +68,18 @@ object Actions {
             runCatching {
                 val store = Store.get(context)
                 LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-                if (device.cloud == Cloud.TUYA) TuyaClient(store).setSwitch(device, channel, on)
-                else EwelinkClient(store).setSwitch(device, channel, on)
+                when (device.cloud) {
+                    Cloud.TUYA -> TuyaClient(store).setSwitch(device, channel, on)
+                    Cloud.EWELINK -> EwelinkClient(store).setSwitch(device, channel, on)
+                    Cloud.DEMO -> Unit
+                }
                 val service = MonitorService.instance
                 if (store.monitoringEnabled && service != null) {
                     service.onControlled(device.id, channel, on)
                 } else {
                     // İzleme kapalı (ya da servis henüz yok): durumu doğrudan güncelle.
                     store.snapshots = store.snapshots.map {
-                        if (it.id == device.id) it.copy(switches = it.switches + (channel to on)) else it
+                        if (it.id == device.id) Demo.recompute(it.copy(switches = it.switches + (channel to on))) else it
                     }
                 }
             }
@@ -119,8 +125,12 @@ object Actions {
     suspend fun rawParams(context: Context, deviceId: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
             val store = Store.get(context)
-            if (store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }) TuyaClient(store).rawProperties(deviceId).toString(2)
-            else EwelinkClient(store).getDeviceParams(deviceId).toString(2)
+            val device = store.snapshots.firstOrNull { it.id == deviceId }
+            when (device?.cloud) {
+                Cloud.TUYA -> TuyaClient(store).rawProperties(deviceId).toString(2)
+                Cloud.DEMO -> org.json.JSONArray(DeviceParser.snapshotsToJson(listOf(device))).toString(2)
+                else -> EwelinkClient(store).getDeviceParams(deviceId).toString(2)
+            }
         }
     }
 
@@ -156,6 +166,29 @@ object Actions {
             if (store.hasAnyAccount) MonitorService.send(context, MonitorService.ACTION_RESTART) else stopMonitoring(context)
         }
     }
+
+    /** Hesapsız deneme için demo cihazlarını açar. */
+    fun enableDemo(context: Context) {
+        Store.get(context).enableDemo(
+            Demo.Names(
+                freezer = context.getString(R.string.demo_freezer),
+                pumps = context.getString(R.string.demo_pumps),
+                light = context.getString(R.string.demo_light),
+                stalledPump = context.getString(R.string.demo_auto_pump),
+                lightLeftOn = context.getString(R.string.demo_auto_light),
+            )
+        )
+    }
+
+    fun disableDemo(context: Context) {
+        val store = Store.get(context)
+        store.disableDemo()
+        if (store.monitoringEnabled && !store.hasAnyAccount) stopMonitoring(context)
+    }
+
+    /** Demo cihazında "dışarıdan" bir olay canlandırır (bkz. MonitorService.demoSimulate). */
+    fun demoSimulate(context: Context, op: String, deviceId: String, channel: Int = 0) =
+        MonitorService.demo(context, op, deviceId, channel)
 
     private fun utcOffsetMinutes() = TimeZone.getDefault().getOffset(System.currentTimeMillis()) / 60_000
 
