@@ -107,7 +107,8 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - [x] Mağaza ayarları: kategori Araçlar, iletişim switchguardapp@gmail.com + GitHub
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
-- [ ] Kapalı test kanalı → `SwitchGuard.aab` → 12+ testçi e-postası → 14 gün
+- [x] Kapalı test: 2.8.0 (17), "Testers" e-posta listesi (15 kişi), geri bildirim switchguardapp@gmail.com — 3 Ekim 2026'da incelemeye gönderildi
+- [ ] Google onayı → testçiler katılım linkine girsin (https://play.google.com/apps/testing/com.macerce.switchguard) → 12+ kişiyle 14 gün
 - [ ] Üretim erişimi başvurusu → üretim sürümü
 
 ## 4c. Uygulama içi ürün (Pro)
