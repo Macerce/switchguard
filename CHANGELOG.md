@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.8.1 — 2026-10-03
+**Hint for shared Tuya devices**
+- The Tuya connect dialog now explains that devices only shared with you may not appear; the owner must add you as a home member in Smart Life (Me → Home Management → Add Member).
+- If Tuya connects but finds no devices, the dialog stays open and shows the likely causes and the home-member hint.
+- When the device list is empty and Tuya is connected, the same hint appears in the list.
+
 ## 2.8.0 — 2026-10-01
 **Try it without an account (demo)**
 - New **"Try without an account (demo)"** option in setup, and a **Demo devices** switch in Settings → Account.

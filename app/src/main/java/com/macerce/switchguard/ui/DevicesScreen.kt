@@ -79,6 +79,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -166,7 +167,7 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                     }
                 }
                 if (loggedIn && devices.isEmpty()) {
-                    item { EmptyDevices() }
+                    item { EmptyDevices(showTuyaHint = store.hasTuya) }
                 }
                 if (loggedIn && !isPro && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
                     item { ProHintCard { showPro = true } }
@@ -366,7 +367,7 @@ private fun ProHintCard(onUpgrade: () -> Unit) {
 }
 
 @Composable
-private fun EmptyDevices() {
+private fun EmptyDevices(showTuyaHint: Boolean) {
     Column(
         Modifier.fillMaxWidth().padding(40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -374,6 +375,15 @@ private fun EmptyDevices() {
         Icon(Icons.Rounded.CloudOff, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(12.dp))
         Text(stringResource(R.string.no_devices), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (showTuyaHint) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                stringResource(R.string.tuya_shared_hint),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 

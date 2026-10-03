@@ -156,6 +156,8 @@
     <string name="tuya_region_in">Hindistan</string>
     <string name="tuya_checking">Tuya\'ya bağlanılıyor…</string>
     <string name="tuya_connected_ok">Tuya bağlandı: %d cihaz bulundu</string>
+    <string name="tuya_shared_hint">Size paylaşılan bir cihaz görünmüyor mu? Tuya yalnızca evlerinizdeki cihazları listeler. Cihaz sahibinden sizi Smart Life\'ta ev üyesi olarak eklemesini isteyin (Ben → Ev Yönetimi → Üye Ekle).</string>
+    <string name="tuya_connected_none">Tuya bağlandı ama hiç cihaz bulunamadı. Smart Life / Tuya uygulama hesabınızın projeye aynı veri merkezinde bağlı olduğunu kontrol edin.</string>
     <string name="tuya_disconnect">Bağlantıyı kaldır</string>
     <string name="action_connect">Bağlan</string>
     <string name="tuya_auth_error">Tuya, Access ID / Secret bilgisini kabul etmedi ya da veri merkezi yanlış.</string>

@@ -53,6 +53,12 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
         text = {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text(stringResource(R.string.tuya_dialog_desc), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    stringResource(R.string.tuya_shared_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
                 OutlinedTextField(
                     accessId, { accessId = it }, label = { Text("Access ID") }, singleLine = true,
                     modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
@@ -92,10 +98,16 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                     scope.launch {
                         Actions.connectTuya(context, accessId, secret, region)
                             .onSuccess { count ->
-                                android.widget.Toast.makeText(
-                                    context, resources.getString(R.string.tuya_connected_ok, count), android.widget.Toast.LENGTH_LONG,
-                                ).show()
-                                onDismiss()
+                                if (count == 0) {
+                                    // Bağlantı kaydedildi ama liste boş: pencere açık kalsın, kullanıcı nedenini görsün.
+                                    message = resources.getString(R.string.tuya_connected_none) + "\n\n" +
+                                        resources.getString(R.string.tuya_shared_hint)
+                                } else {
+                                    android.widget.Toast.makeText(
+                                        context, resources.getString(R.string.tuya_connected_ok, count), android.widget.Toast.LENGTH_LONG,
+                                    ).show()
+                                    onDismiss()
+                                }
                             }
                             .onFailure { e ->
                                 message = when (e) {

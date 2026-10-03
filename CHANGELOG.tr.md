@@ -6,6 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.8.1 — 3 Ekim 2026
+**Paylaşılan Tuya cihazları için ipucu**
+- Tuya bağlantı penceresinde artık şu not var: size yalnızca paylaşılmış cihazlar görünmeyebilir; cihaz sahibinin sizi Smart Life'ta ev üyesi olarak eklemesi gerekir (Ben → Ev Yönetimi → Üye Ekle).
+- Tuya bağlanıp hiç cihaz bulunamazsa pencere kapanmaz; nedenleri ve ev üyeliği ipucu gösterilir.
+- Cihaz listesi boşken Tuya bağlıysa aynı ipucu listede de görünür.
+
 ## 2.8.0 — 1 Ekim 2026
 **Hesap olmadan deneme (demo)**
 - Kurulumda yeni **"Hesap olmadan dene (demo)"** seçeneği; Ayarlar → Hesap'ta **Demo cihazlar** anahtarı.

@@ -160,6 +160,8 @@
     <string name="tuya_region_in">India</string>
     <string name="tuya_checking">Connecting to Tuya…</string>
     <string name="tuya_connected_ok">Tuya connected: %d device(s) found</string>
+    <string name="tuya_shared_hint">A device shared with you is missing? Tuya only lists the devices in your homes. Ask the owner to add you as a home member in Smart Life (Me → Home Management → Add Member).</string>
+    <string name="tuya_connected_none">Tuya connected, but no devices were found. Check that your Smart Life / Tuya app account is linked to the project in the same data center.</string>
     <string name="tuya_disconnect">Disconnect</string>
     <string name="action_connect">Connect</string>
     <string name="tuya_auth_error">Tuya rejected the Access ID / Secret, or the data center is wrong.</string>
