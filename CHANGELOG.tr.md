@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.8.3 — 4 Ekim 2026
+**Bakım**
+- Google Play'in eski bulduğu bir iç kütüphane güncellendi (androidx.fragment 1.1.0 → 1.9.1, Google Play hizmetleri üzerinden geliyordu). Görünür bir değişiklik yok.
+
 ## 2.8.2 — 3 Ekim 2026
 **Daha fazla telefon markası için arka planda başlatma yardımı**
 - Xiaomi'nin yanı sıra Samsung, Huawei/Honor, Oppo/Realme/OnePlus, Vivo/iQOO, Tecno/Infinix ve Asus telefonlarda da Ayarlar → İzinler'de "Arka planda başlatma" satırı var: markaya özel talimat ve doğru ayar ekranına kısayol.

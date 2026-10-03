@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.8.3 — 2026-10-04
+**Maintenance**
+- Updated an outdated internal library (androidx.fragment 1.1.0 → 1.9.1, pulled in by Google Play services) that Google Play flagged. No visible changes.
+
 ## 2.8.2 — 2026-10-03
 **Background start help for more phone brands**
 - Besides Xiaomi, phones from Samsung, Huawei/Honor, Oppo/Realme/OnePlus, Vivo/iQOO, Tecno/Infinix and Asus now get a "Background start" row in Settings → Permissions, with brand-specific instructions and a shortcut to the right settings screen.
