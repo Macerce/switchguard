@@ -97,8 +97,15 @@
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Sessiz saatler</string>
     <string name="section_permissions">İzinler</string>
-    <string name="perm_autostart">Otomatik başlatma (Xiaomi)</string>
-    <string name="perm_autostart_desc">Telefon yeniden başlayınca ya da güncellemeden sonra izlemenin kendiliğinden açılması için gerekli. Dokunun ve SwitchGuard için izni açın.</string>
+    <string name="perm_autostart">Arka planda başlatma (%1$s)</string>
+    <string name="action_open_settings">Ayarları aç</string>
+    <string name="oem_hint_xiaomi">Telefon yeniden başlayınca ya da güncellemeden sonra izlemenin kendiliğinden açılması için gerekli. Dokunun ve SwitchGuard için Otomatik başlatmayı açın.</string>
+    <string name="oem_hint_samsung">Samsung uygulamayı uyutabilir. Pil bölümünde \"Kısıtlanmamış\"ı seçin ve SwitchGuard\'ı \"Hiç uyutulmayan uygulamalar\" listesine ekleyin (Pil → Arka plan kullanım sınırları).</string>
+    <string name="oem_hint_huawei">Uygulama başlatma bölümünde SwitchGuard\'ı \"Manuel olarak yönet\" yapın; Otomatik başlatma, İkincil başlatma ve Arka planda çalıştırma anahtarlarını açın.</string>
+    <string name="oem_hint_oppo">SwitchGuard için Otomatik başlatmayı açın, ardından uygulamanın Pil ayarlarında arka plan etkinliğine izin verin.</string>
+    <string name="oem_hint_vivo">SwitchGuard\'ın arka planda başlamasına ve yüksek arka plan güç tüketimine izin verin.</string>
+    <string name="oem_hint_transsion">Telefon yeniden başlayınca ya da temizlikten sonra izlemenin sürmesi için Phone Master\'da SwitchGuard için Otomatik başlatmayı açın.</string>
+    <string name="oem_hint_asus">Telefon yeniden başlayınca izlemenin açılması için Otomatik başlatma yöneticisinde SwitchGuard\'a izin verin.</string>
     <string name="section_about">Hakkında</string>
     <string name="section_general">Genel</string>
     <string name="tuya_account">Tuya / Smart Life</string>
@@ -243,7 +250,7 @@
     <string name="onb_login_title">eWeLink\'e giriş yapın</string>
     <string name="onb_login_body">Girişi eWeLink\'in kendi sayfasında yapacaksınız. SwitchGuard şifrenizi hiçbir zaman görmez.</string>
     <string name="onb_perm_title">Alarmlara izin verin</string>
-    <string name="onb_perm_body">İki izin, ekran kapalıyken bile alarmların size ulaşmasını sağlar.</string>
+    <string name="onb_perm_body">Bu izinler, ekran kapalıyken bile alarmların size ulaşmasını sağlar.</string>
     <string name="onb_perm_notif_desc">Alarmları göstermek için gerekli.</string>
     <string name="onb_perm_battery_desc">İzlemenin arka planda sürmesini ve alarmların gecikmemesini sağlar.</string>
     <string name="onb_done_title">Hazırsınız!</string>

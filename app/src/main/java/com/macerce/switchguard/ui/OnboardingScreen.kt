@@ -36,6 +36,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Button
@@ -378,10 +379,28 @@ private fun PermissionsStep(resumed: Boolean) {
         stringResource(R.string.onb_perm_battery_desc),
         granted = battery,
     ) { Actions.requestBatteryExemption(context) }
+    OemBackground.current()?.let { oem ->
+        Spacer(Modifier.height(12.dp))
+        // Üretici listesinin durumu okunamıyor; kart her zaman "aç" düğmesiyle gösterilir.
+        PermissionCard(
+            Icons.Rounded.RestartAlt,
+            stringResource(R.string.perm_autostart, oem.label),
+            stringResource(oem.hint),
+            granted = false,
+            actionLabel = stringResource(R.string.action_open_settings),
+        ) { oem.open(context) }
+    }
 }
 
 @Composable
-private fun PermissionCard(icon: ImageVector, title: String, desc: String, granted: Boolean, onGrant: () -> Unit) {
+private fun PermissionCard(
+    icon: ImageVector,
+    title: String,
+    desc: String,
+    granted: Boolean,
+    actionLabel: String = stringResource(R.string.action_allow),
+    onGrant: () -> Unit,
+) {
     SectionCard(horizontalPadding = 0) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -394,7 +413,7 @@ private fun PermissionCard(icon: ImageVector, title: String, desc: String, grant
             Text(desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (!granted) {
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onGrant) { Text(stringResource(R.string.action_allow)) }
+                Button(onClick = onGrant) { Text(actionLabel) }
             }
         }
     }

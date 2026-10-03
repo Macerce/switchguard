@@ -101,8 +101,15 @@
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Quiet hours</string>
     <string name="section_permissions">Permissions</string>
-    <string name="perm_autostart">Autostart (Xiaomi)</string>
-    <string name="perm_autostart_desc">Needed so monitoring restarts after a reboot or update. Tap and allow SwitchGuard.</string>
+    <string name="perm_autostart">Background start (%1$s)</string>
+    <string name="action_open_settings">Open settings</string>
+    <string name="oem_hint_xiaomi">Needed so monitoring restarts after a reboot or update. Tap and turn on Autostart for SwitchGuard.</string>
+    <string name="oem_hint_samsung">Samsung may put the app to sleep. In Battery, choose \"Unrestricted\" and add SwitchGuard to \"Never sleeping apps\" (Battery → Background usage limits).</string>
+    <string name="oem_hint_huawei">In App launch, set SwitchGuard to \"Manage manually\" and turn on Auto-launch, Secondary launch and Run in background.</string>
+    <string name="oem_hint_oppo">Turn on Auto launch for SwitchGuard, then in its Battery settings allow background activity.</string>
+    <string name="oem_hint_vivo">Allow SwitchGuard to start in the background and allow high background power consumption.</string>
+    <string name="oem_hint_transsion">Turn on Auto-start for SwitchGuard in Phone Master so monitoring survives reboots and cleanups.</string>
+    <string name="oem_hint_asus">Allow SwitchGuard in Auto-start Manager so monitoring restarts after a reboot.</string>
     <string name="section_about">About</string>
     <string name="section_general">General</string>
     <string name="tuya_account">Tuya / Smart Life</string>
@@ -247,7 +254,7 @@
     <string name="onb_login_title">Sign in to eWeLink</string>
     <string name="onb_login_body">You\'ll sign in on eWeLink\'s own page. SwitchGuard never sees your password.</string>
     <string name="onb_perm_title">Allow alarms</string>
-    <string name="onb_perm_body">Two permissions make sure alarms reach you, even when the screen is off.</string>
+    <string name="onb_perm_body">These permissions make sure alarms reach you, even when the screen is off.</string>
     <string name="onb_perm_notif_desc">Required to show alarms.</string>
     <string name="onb_perm_battery_desc">Lets monitoring keep running in the background so alarms aren\'t delayed.</string>
     <string name="onb_done_title">All set!</string>

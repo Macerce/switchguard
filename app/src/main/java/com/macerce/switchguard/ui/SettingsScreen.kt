@@ -351,13 +351,13 @@ fun SettingsScreen(modifier: Modifier) {
                     stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
                     Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
                 )
-                if (Actions.isXiaomi()) {
+                OemBackground.current()?.let { oem ->
                     Divider()
                     InfoRow(
                         Icons.Rounded.RestartAlt,
-                        stringResource(R.string.perm_autostart),
-                        stringResource(R.string.perm_autostart_desc),
-                        Modifier.clickable { Actions.openAutostartSettings(context) },
+                        stringResource(R.string.perm_autostart, oem.label),
+                        stringResource(oem.hint),
+                        Modifier.clickable { oem.open(context) },
                     )
                 }
             }

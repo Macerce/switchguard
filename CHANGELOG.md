@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.8.2 — 2026-10-03
+**Background start help for more phone brands**
+- Besides Xiaomi, phones from Samsung, Huawei/Honor, Oppo/Realme/OnePlus, Vivo/iQOO, Tecno/Infinix and Asus now get a "Background start" row in Settings → Permissions, with brand-specific instructions and a shortcut to the right settings screen.
+- The same card now appears in the setup wizard's permissions step, so monitoring keeps running after reboots and isn't put to sleep by the phone.
+- If a brand's settings screen can't be opened, the app info page opens instead.
+
 ## 2.8.1 — 2026-10-03
 **Hint for shared Tuya devices**
 - The Tuya connect dialog now explains that devices only shared with you may not appear; the owner must add you as a home member in Smart Life (Me → Home Management → Add Member).

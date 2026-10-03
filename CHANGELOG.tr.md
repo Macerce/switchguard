@@ -6,6 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.8.2 — 3 Ekim 2026
+**Daha fazla telefon markası için arka planda başlatma yardımı**
+- Xiaomi'nin yanı sıra Samsung, Huawei/Honor, Oppo/Realme/OnePlus, Vivo/iQOO, Tecno/Infinix ve Asus telefonlarda da Ayarlar → İzinler'de "Arka planda başlatma" satırı var: markaya özel talimat ve doğru ayar ekranına kısayol.
+- Aynı kart kurulum sihirbazının izinler adımında da gösteriliyor; böylece izleme telefon yeniden başlayınca sürer ve telefon uygulamayı uyutmaz.
+- Markanın ayar ekranı açılamazsa uygulama bilgi sayfası açılır.
+
 ## 2.8.1 — 3 Ekim 2026
 **Paylaşılan Tuya cihazları için ipucu**
 - Tuya bağlantı penceresinde artık şu not var: size yalnızca paylaşılmış cihazlar görünmeyebilir; cihaz sahibinin sizi Smart Life'ta ev üyesi olarak eklemesi gerekir (Ben → Ev Yönetimi → Üye Ekle).
