@@ -6,6 +6,12 @@ Bu rehber, **eWeLink** uygulamasıyla kontrol ettiğiniz SONOFF ve diğer eWeLin
 
 SwitchGuard cihazlarınıza eWeLink'in resmi API'si üzerinden bağlanır. Bunun için eWeLink geliştirici sitesinde **size ait ücretsiz bir uygulama** (App ID + App Secret) oluşturacaksınız. Girişinizi eWeLink'in kendi sayfasında yaparsınız; SwitchGuard şifrenizi hiçbir zaman görmez.
 
+## Videolu anlatım (50 sn)
+
+Tüm adımları kısa bir videoda izleyin: [YouTube'da aç](https://youtu.be/jK_KcG2OPao)
+
+[![SwitchGuard – eWeLink hesabını bağlama](https://img.youtube.com/vi/jK_KcG2OPao/hqdefault.jpg)](https://youtu.be/jK_KcG2OPao)
+
 > **İhtiyacınız olanlar:** cihazlarınızın bulunduğu eWeLink hesabı, SwitchGuard. Geliştirici sitesi için bilgisayar daha rahattır ama telefonla da yapılabilir.
 
 ---

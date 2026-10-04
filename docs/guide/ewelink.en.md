@@ -6,6 +6,12 @@ This guide connects the SONOFF and other eWeLink-compatible devices you control 
 
 SwitchGuard talks to your devices through eWeLink's official API. For that you create **your own free app** (App ID + App Secret) on the eWeLink developer site. You sign in on eWeLink's own page; SwitchGuard never sees your password.
 
+## Video walkthrough (50 s)
+
+Watch every step in a short video (on-screen captions in Turkish): [open on YouTube](https://youtu.be/jK_KcG2OPao)
+
+[![SwitchGuard – connecting eWeLink](https://img.youtube.com/vi/jK_KcG2OPao/hqdefault.jpg)](https://youtu.be/jK_KcG2OPao)
+
 > **You need:** the eWeLink account your devices are in, and SwitchGuard. A computer is easier for the developer site, but a phone works too.
 
 ---

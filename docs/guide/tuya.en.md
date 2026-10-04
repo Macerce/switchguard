@@ -6,6 +6,12 @@ This guide connects the devices you control in the **Smart Life** or **Tuya Smar
 
 SwitchGuard reads your devices through Tuya's official cloud API using **your own free Tuya Cloud project**. So first you create a project and link your Smart Life account to it.
 
+## Video walkthrough (1 min)
+
+Watch every step in a short video (on-screen captions in Turkish): [open on YouTube](https://youtu.be/sCdvMs7CSic)
+
+[![SwitchGuard – connecting Tuya / Smart Life](https://img.youtube.com/vi/sCdvMs7CSic/hqdefault.jpg)](https://youtu.be/sCdvMs7CSic)
+
 > **You need:** a computer (the Tuya website is hard to use on a phone), a phone with the Smart Life / Tuya Smart app, and SwitchGuard.
 
 ---
