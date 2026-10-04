@@ -18,6 +18,8 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.AlarmActivity
+import com.macerce.switchguard.ui.FormFactor
 import com.macerce.switchguard.ui.LoginActivity
 import com.macerce.switchguard.ui.MainActivity
 
@@ -136,6 +138,8 @@ class Notifier(private val context: Context, private val store: Store) {
             .addAction(Notification.Action.Builder(null, context.getString(R.string.action_dismiss_alarm), dismiss).build())
             .build()
         nm.notify(ID_ALARM, notification)
+        // Android TV bildirimleri ekranda göstermez: alarm, açık olan her şeyin üstüne tam ekran çıkar.
+        if (FormFactor.isTv(context)) AlarmActivity.show(context)
         startSound(deviceSound?.let(Uri::parse))
     }
 

@@ -16,6 +16,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -34,8 +35,16 @@ private val Light = lightColorScheme(
     errorContainer = Color(0xFFFFDAD6),
     background = Color(0xFFF4FBFA),
     surface = Color(0xFFF4FBFA),
+    // Tüm yüzey tonları tanımlı olmalı: eksik olanlar Material'ın mor varsayılanına düşer (Android 11 ve altı).
+    surfaceContainerLowest = Color(0xFFFFFFFF),
+    surfaceContainerLow = Color(0xFFEFF5F4),
     surfaceContainer = Color(0xFFE9EFEE),
     surfaceContainerHigh = Color(0xFFE3E9E8),
+    surfaceContainerHighest = Color(0xFFDDE4E3),
+    surfaceVariant = Color(0xFFDAE5E4),
+    onSurfaceVariant = Color(0xFF3F4948),
+    outline = Color(0xFF6F7979),
+    outlineVariant = Color(0xFFBEC9C8),
 )
 
 private val Dark = darkColorScheme(
@@ -51,8 +60,15 @@ private val Dark = darkColorScheme(
     errorContainer = Color(0xFF93000A),
     background = Color(0xFF0E1514),
     surface = Color(0xFF0E1514),
+    surfaceContainerLowest = Color(0xFF090F0F),
+    surfaceContainerLow = Color(0xFF161D1D),
     surfaceContainer = Color(0xFF1A2121),
     surfaceContainerHigh = Color(0xFF252B2B),
+    surfaceContainerHighest = Color(0xFF2F3636),
+    surfaceVariant = Color(0xFF3F4948),
+    onSurfaceVariant = Color(0xFFBEC9C8),
+    outline = Color(0xFF889392),
+    outlineVariant = Color(0xFF3F4948),
 )
 
 /** Durum renkleri: temadan bağımsız, anlamı sabit. */
@@ -65,9 +81,12 @@ object StatusColors {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwitchGuardTheme(content: @Composable () -> Unit) {
-    val dark = isSystemInDarkTheme()
     val context = LocalContext.current
+    // TV'de her zaman koyu tema: oturma odası ışığında açık zemin göz yorar; Google TV dili de koyudur.
+    val tv = remember(context) { context.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK) }
+    val dark = tv || isSystemInDarkTheme()
     val scheme = when {
+        tv -> Dark
         Build.VERSION.SDK_INT >= 31 -> if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         dark -> Dark
         else -> Light
@@ -87,7 +106,7 @@ fun SwitchGuardTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = scheme) {
         // TV'de kumandayla gezilir: seçili öğe, Material'ın hafif odak katmanıyla seçilmiyor.
         // Odak katmanını belirginleştir (dokunmatik cihazlarda varsayılanlar kalır).
-        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+        if (tv) {
             CompositionLocalProvider(
                 LocalRippleConfiguration provides RippleConfiguration(
                     rippleAlpha = RippleAlpha(draggedAlpha = 0.16f, focusedAlpha = 0.16f, hoveredAlpha = 0.08f, pressedAlpha = 0.24f),

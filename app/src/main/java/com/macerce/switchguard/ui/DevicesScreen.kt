@@ -1,20 +1,15 @@
 package com.macerce.switchguard.ui
 
-import com.macerce.switchguard.core.DeviceSection
-import com.macerce.switchguard.core.DeviceLayout
-import androidx.activity.compose.BackHandler
-import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material.icons.rounded.Star
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.ExperimentalFoundationApi
 import android.text.format.DateUtils
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +22,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -42,7 +41,9 @@ import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Shield
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
+import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -75,18 +76,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
-import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceLayout
+import com.macerce.switchguard.core.DeviceSection
+import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
@@ -97,6 +102,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
+    val tv = LocalIsTv.current
     val context = LocalContext.current
     val store = remember { Store.get(context) }
     val scope = rememberCoroutineScope()
@@ -135,7 +141,11 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
             title = { Text(stringResource(R.string.app_name), fontWeight = FontWeight.SemiBold) },
             actions = {
                 if (editMode) {
-                    TextButton(onClick = { editMode = false }) { Text(stringResource(R.string.action_done)) }
+                    val doneFocus = remember { FocusRequester() }
+                    LaunchedEffect(Unit) { if (tv) runCatching { doneFocus.requestFocus() } }
+                    TextButton(onClick = { editMode = false }, modifier = Modifier.focusRequester(doneFocus).tvFocusRing()) {
+                        Text(stringResource(R.string.action_done))
+                    }
                 } else {
                     if (devices.isNotEmpty()) {
                         IconButton(onClick = { editMode = true }) {
@@ -148,18 +158,21 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 }
             },
         )
-        PullToRefreshBox(isRefreshing = refreshing, onRefresh = doRefresh, modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
+        val list: @Composable () -> Unit = {
+            // Telefonda tek sütun; tablet/Chromebook/TV'de cihaz kartları ızgara, diğer kartlar tam satır.
+            val full: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) }
+            LazyVerticalGrid(
+                columns = if (isWideScreen()) GridCells.Adaptive(minSize = 340.dp) else GridCells.Fixed(1),
                 contentPadding = PaddingValues(bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
-                item {
+                item(span = full) {
                     androidx.compose.animation.AnimatedVisibility(alarm.isNotEmpty(), enter = expandVertically(), exit = shrinkVertically()) {
                         AlarmBanner(alarm) { Actions.dismissAlarm(context) }
                     }
                 }
-                item {
+                item(span = full) {
                     if (loggedIn) {
                         ConnectionCard(connection.state, connection.detail, connection.lastSync, monitoring, devices.size)
                     } else {
@@ -167,26 +180,26 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                     }
                 }
                 if (loggedIn && devices.isEmpty()) {
-                    item { EmptyDevices(showTuyaHint = store.hasTuya) }
+                    item(span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }
                 }
                 if (loggedIn && !isPro && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
-                    item { ProHintCard { showPro = true } }
+                    item(span = full) { ProHintCard { showPro = true } }
                 }
-                if (editMode) item(key = "edit-hint") { LayoutEditHint { showCategories = true } }
+                if (editMode) item(key = "edit-hint", span = full) { LayoutEditHint { showCategories = true } }
                 for (section in sections) {
                     // Düzenleme dışında boş kategori başlığı gösterilmez.
                     if (section.devices.isEmpty() && !editMode) continue
                     val headed = section.kind != DeviceSection.Kind.ALL
                     val collapsed = headed && section.key in layout.collapsed && !editMode
                     if (headed) {
-                        item(key = "h-" + section.key) {
+                        item(key = "h-" + section.key, span = full) {
                             LayoutSectionHeader(sectionTitle(section), section.devices.size, collapsed) {
                                 saveLayout(layout.toggleCollapsed(section.key))
                             }
                         }
                     }
                     if (section.devices.isEmpty()) {
-                        item(key = "e-" + section.key) {
+                        item(key = "e-" + section.key, span = full) {
                             Text(
                                 stringResource(R.string.category_no_devices),
                                 style = MaterialTheme.typography.bodySmall,
@@ -213,6 +226,9 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 }
             }
         }
+        // TV'de çekip yenileme yok (dokunmatik hareket); göstergesi de çizilmesin.
+        if (tv) Box(Modifier.fillMaxSize()) { list() }
+        else PullToRefreshBox(isRefreshing = refreshing, onRefresh = doRefresh, modifier = Modifier.fillMaxSize()) { list() }
     }
 }
 
@@ -400,7 +416,12 @@ private fun DeviceCard(
 ) {
     val anyOn = device.switches.values.any { it }
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).combinedClickable(onClick = onClick, onLongClick = onLongClick),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).then(
+            // Düzenleme modunda kart tıklanmaz: kumandanın odağı karttaki düzen düğmelerine geçebilsin.
+            if (editBar != null) Modifier
+            else Modifier.tvFocusRing(RoundedCornerShape(if (compact) 18.dp else 24.dp))
+                .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+        ),
         shape = RoundedCornerShape(if (compact) 18.dp else 24.dp),
     ) {
         if (compact) {

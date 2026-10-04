@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Label
@@ -36,6 +37,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +45,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -115,21 +119,42 @@ fun LayoutEditBar(
     HorizontalDivider(color = MaterialTheme.colorScheme.surface)
     Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
         val priority = id in layout.priority
-        IconButton(onClick = { onChange(layout.togglePriority(id)) }) {
+        IconButton(onClick = { onChange(layout.togglePriority(id)) }, modifier = Modifier.tvFocusRing()) {
             Icon(
                 if (priority) Icons.Rounded.Star else Icons.Rounded.StarBorder,
                 contentDescription = stringResource(if (priority) R.string.layout_unpriority else R.string.layout_priority),
                 tint = if (priority) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        IconButton(onClick = { onChange(layout.move(id, -1, devices)) }, enabled = canUp) {
+        // Kart en üste/alta taşınınca o yöndeki ok pasifleşir ve kumandanın odağı kaybolur: karşı oka devret.
+        val upFocus = remember { FocusRequester() }
+        val downFocus = remember { FocusRequester() }
+        var movedUp by remember { mutableStateOf(false) }
+        var movedDown by remember { mutableStateOf(false) }
+        LaunchedEffect(canUp, movedUp) {
+            if (movedUp && !canUp) runCatching { downFocus.requestFocus() }
+            movedUp = false
+        }
+        LaunchedEffect(canDown, movedDown) {
+            if (movedDown && !canDown) runCatching { upFocus.requestFocus() }
+            movedDown = false
+        }
+        IconButton(
+            onClick = { movedUp = true; onChange(layout.move(id, -1, devices)) },
+            enabled = canUp,
+            modifier = Modifier.focusRequester(upFocus).tvFocusRing(),
+        ) {
             Icon(Icons.Rounded.ArrowUpward, stringResource(R.string.layout_move_up))
         }
-        IconButton(onClick = { onChange(layout.move(id, +1, devices)) }, enabled = canDown) {
+        IconButton(
+            onClick = { movedDown = true; onChange(layout.move(id, +1, devices)) },
+            enabled = canDown,
+            modifier = Modifier.focusRequester(downFocus).tvFocusRing(),
+        ) {
             Icon(Icons.Rounded.ArrowDownward, stringResource(R.string.layout_move_down))
         }
         val compact = id in layout.compact
-        IconButton(onClick = { onChange(layout.toggleCompact(id)) }) {
+        IconButton(onClick = { onChange(layout.toggleCompact(id)) }, modifier = Modifier.tvFocusRing()) {
             Icon(
                 if (compact) Icons.Rounded.UnfoldMore else Icons.Rounded.UnfoldLess,
                 contentDescription = stringResource(if (compact) R.string.layout_large else R.string.layout_compact),
@@ -142,7 +167,7 @@ fun LayoutEditBar(
                 onClick = { menu = true },
                 label = { Text(current?.name ?: stringResource(R.string.category_none), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Label, null, Modifier.size(18.dp)) },
-                modifier = Modifier.padding(end = 8.dp),
+                modifier = Modifier.padding(end = 8.dp).tvFocusRing(RoundedCornerShape(8.dp)),
             )
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                 DropdownMenuItem(text = { Text(stringResource(R.string.category_none)) }, onClick = { onChange(layout.assign(id, null)); menu = false })

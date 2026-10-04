@@ -1,19 +1,12 @@
 package com.macerce.switchguard.ui
 
-import androidx.compose.material.icons.automirrored.rounded.MenuBook
-import com.macerce.switchguard.core.Cloud
-import androidx.compose.material.icons.rounded.Science
-import androidx.compose.material.icons.rounded.Hub
-import androidx.compose.material.icons.rounded.Email
-import com.macerce.switchguard.core.AppLanguage
-import androidx.compose.material.icons.rounded.Language
 import android.app.Activity
 import android.app.TimePickerDialog
-import android.widget.Toast
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.text.format.DateFormat as AndroidDateFormat
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -24,30 +17,36 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Logout
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.BatteryAlert
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.PrivacyTip
-import androidx.compose.material.icons.rounded.Schedule
-import androidx.compose.material.icons.rounded.Summarize
-import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.RestartAlt
+import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.School
+import androidx.compose.material.icons.rounded.Science
+import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.Vibration
-import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -71,21 +70,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
+import com.macerce.switchguard.core.AppLanguage
+import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.data.Store
-import com.macerce.switchguard.service.SummaryScheduler
-import kotlinx.coroutines.launch
 import com.macerce.switchguard.service.MonitorService
+import com.macerce.switchguard.service.SummaryScheduler
 import java.util.Calendar
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -262,7 +263,8 @@ fun SettingsScreen(modifier: Modifier) {
                         onValueChange = { volume = it },
                         onValueChangeFinished = { store.alarmVolume = volume },
                         valueRange = 0.05f..1f,
-                        modifier = Modifier.padding(start = 40.dp),
+                        modifier = Modifier.padding(start = 40.dp).tvSliderKeys()
+                            .tvFocusRing(RoundedCornerShape(12.dp), inside = true),
                     )
                 }
                 Divider()

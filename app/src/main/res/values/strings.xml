@@ -403,4 +403,7 @@
     <string name="demo_power_drop_single">Drop power (device stalled)</string>
     <string name="demo_power_restore">Restore power on channel %d</string>
     <string name="demo_power_restore_single">Restore power</string>
+    <string name="alarm_open_app">Open app</string>
+    <string name="perm_overlay">Show alarm over other apps</string>
+    <string name="perm_overlay_desc">Needed on Android TV so the alarm appears on top of whatever is playing. Tap and allow SwitchGuard.</string>
 </resources>

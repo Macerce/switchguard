@@ -399,4 +399,7 @@
     <string name="demo_power_drop_single">Gücü düşür (cihaz takıldı)</string>
     <string name="demo_power_restore">%d. kanalın gücünü normale döndür</string>
     <string name="demo_power_restore_single">Gücü normale döndür</string>
+    <string name="alarm_open_app">Uygulamayı aç</string>
+    <string name="perm_overlay">Alarmı diğer uygulamaların üstünde göster</string>
+    <string name="perm_overlay_desc">Android TV\'de alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Dokunun ve SwitchGuard\'a izin verin.</string>
 </resources>

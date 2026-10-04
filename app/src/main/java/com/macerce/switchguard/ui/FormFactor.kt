@@ -18,14 +18,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -55,31 +63,65 @@ fun Modifier.readableWidth(max: Dp = 840.dp): Modifier =
     fillMaxWidth().wrapContentWidth(Alignment.CenterHorizontally).widthIn(max = max)
 
 /**
- * TV'de kumandayla seçili öğeyi belli eder: dışına yüksek kontrastlı bir çerçeve çizer ve hafifçe büyütür.
- * Çerçeve öğenin dışına çizilir (yerleşim değişmez). Dokunmatik cihazlarda etkisizdir.
+ * TV'de kumandayla seçili öğeyi belli eder (Google TV dili): ince açık kenar, arkasında yumuşak
+ * vurgu rengi parıltısı ve hafif büyüme. Çizim öğenin dışına taşar, yerleşim değişmez.
+ * Dokunmatik cihazlarda etkisizdir.
  * Odaklanabilir öğeden ÖNCE (zincirde dışta) ya da onu saran ebeveyne verilmeli; çocuğun odağı da sayılır.
- * Kart içindeki satırlarda kart kenarı dışarıyı keser: [inside] ile çerçeve içe çizilir ve büyütme yapılmaz.
+ * Kart/menü içindeki öğelerde kenar dışarıyı keser: [inside] ile zemin hafifçe aydınlanır, kenar içe çizilir.
  */
-fun Modifier.tvFocusRing(shape: Shape = CircleShape, inside: Boolean = false): Modifier = composed {
+fun Modifier.tvFocusRing(shape: Shape = CircleShape, inside: Boolean = false, color: Color = Color.Unspecified): Modifier = composed {
     if (!LocalIsTv.current) return@composed this
     var focused by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(if (focused) 1f else 0f, label = "focusRing")
-    val color = MaterialTheme.colorScheme.onBackground
+    val edge = if (color != Color.Unspecified) color else MaterialTheme.colorScheme.onSurface
+    val glow = MaterialTheme.colorScheme.primary
     this
         .onFocusChanged { focused = it.hasFocus }
         .graphicsLayer {
-            val scale = if (inside) 1f else 1f + 0.04f * progress
+            val scale = if (inside) 1f else 1f + 0.05f * progress
             scaleX = scale
             scaleY = scale
         }
         .drawWithContent {
+            if (inside && progress > 0f) {
+                drawOutline(shape.createOutline(size, layoutDirection, this), edge.copy(alpha = 0.10f * progress))
+            }
             drawContent()
-            if (progress > 0f) {
-                val gap = (if (inside) (-3).dp else 4.dp).toPx()
-                val outline = shape.createOutline(Size(size.width + 2 * gap, size.height + 2 * gap), layoutDirection, this)
-                translate(-gap, -gap) {
-                    drawOutline(outline, color.copy(alpha = progress), style = Stroke(width = 3.dp.toPx()))
+            if (progress <= 0f) return@drawWithContent
+            if (inside) {
+                val inset = 2.dp.toPx()
+                val outline = shape.createOutline(Size(size.width - 2 * inset, size.height - 2 * inset), layoutDirection, this)
+                translate(inset, inset) {
+                    drawOutline(outline, edge.copy(alpha = 0.85f * progress), style = Stroke(width = 2.dp.toPx()))
+                }
+            } else {
+                // Dışta yumuşak parıltı, içte ince net kenar.
+                for ((gapDp, widthDp, alpha) in listOf(Triple(6f, 6f, 0.22f), Triple(3f, 2f, 0.95f))) {
+                    val gap = gapDp.dp.toPx()
+                    val outline = shape.createOutline(Size(size.width + 2 * gap, size.height + 2 * gap), layoutDirection, this)
+                    val c = if (alpha < 0.5f) glow else edge
+                    translate(-gap, -gap) {
+                        drawOutline(outline, c.copy(alpha = alpha * progress), style = Stroke(width = widthDp.dp.toPx()))
+                    }
                 }
             }
         }
+}
+
+/**
+ * Kaydırıcıda (Slider) kumanda: Material Slider yukarı/aşağı tuşlarını da değer değiştirmek için kullanır,
+ * odak çubukta sıkışır. TV'de yukarı/aşağı odağı komşu öğeye taşır; sol/sağ değeri değiştirmeye devam eder.
+ */
+fun Modifier.tvSliderKeys(): Modifier = composed {
+    if (!LocalIsTv.current) return@composed this
+    val focusManager = LocalFocusManager.current
+    this.onPreviewKeyEvent { e ->
+        val dir = when (e.key) {
+            Key.DirectionUp -> FocusDirection.Up
+            Key.DirectionDown -> FocusDirection.Down
+            else -> return@onPreviewKeyEvent false
+        }
+        if (e.type == KeyEventType.KeyDown) focusManager.moveFocus(dir)
+        true
+    }
 }

@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Yalnızca Android TV (10+): alarm ekranının açık uygulamanın üstüne çıkabilmesi için; telefonda istenmez. -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- Telefon, tablet, Chromebook ve Android TV: dokunmatik ekran zorunlu değil, TV başlatıcısı isteğe bağlı. -->
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -37,6 +39,14 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.AlarmActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:showWhenLocked="true"
+            android:taskAffinity=""
+            android:turnScreenOn="true" />
         <activity
             android:name=".ui.LoginActivity"
             android:exported="false"

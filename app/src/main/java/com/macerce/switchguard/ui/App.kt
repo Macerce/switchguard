@@ -125,7 +125,7 @@ fun App() {
                     Spacer(Modifier.weight(1f))
                     Tab.entries.forEach { t ->
                         NavigationRailItem(
-                            modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp)),
+                            modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp), inside = true),
                             selected = tab == t,
                             onClick = { tab = t },
                             icon = { tabIcon(t) },
