@@ -93,6 +93,18 @@ Watch every step in a short video (on-screen captions in Turkish): [open on YouT
 
 ---
 
+## Using several devices (phone, tablet, Android TV)
+
+> **Android TV support and "Send to another device" are coming** in an update. The account rule below already applies to phones and tablets.
+
+- **The API keys (App ID and App Secret) must be the SAME on every device, but the eWeLink account must be DIFFERENT on each device.**
+- eWeLink allows a signed-in session on only **one** device per account. Signing in on a second device with the same account signs the first one out (SwitchGuard warns you loudly when that happens).
+- For each extra device, create a separate account **in the eWeLink app** (eWeLink's sign-in page has no sign-up) and share your devices with it in the eWeLink app (**device → Share**).
+- **Transferring the setup (coming soon):** on the phone **Settings → Send to another device**, on the TV/tablet **Transfer from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. API keys, Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code; the eWeLink session is not transferred.
+- **Signing in on a TV:** easiest is **Login by QR code** at the bottom of eWeLink's sign-in page — scan it with the eWeLink app signed in to the account you created for that device. The remote works too; the keyboard in the Google TV app on your phone is easier.
+- **SwitchGuard Pro** is bought once and works on all your devices (phone, tablet, TV) with the same Google account.
+- **Alarm on Android TV (coming soon):** the alarm appears full screen on top of whatever is playing (YouTube, TV…) and is dismissed with the remote's OK button.
+
 ## Troubleshooting
 
 | Symptom | Fix |

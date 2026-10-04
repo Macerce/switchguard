@@ -113,6 +113,16 @@ Your devices now appear on the **Devices** screen, in the same list as eWeLink d
 
 ---
 
+## Using several devices (phone, tablet, Android TV)
+
+> **Android TV support and "Send to another device" are coming** in an update.
+
+- Tuya has no sign-in session: **the same Access ID and Access Secret work on every device**, and all of them see the same devices.
+- Tuya delivers live messages for a project to only **one** device; the others poll every few minutes. If you want instant alarms on every device, create a separate Tuya project per device (a Smart Life account can be linked to at most 2 projects). An always-on TV box is a good choice for the device that gets live messages.
+- **Transferring the setup (coming soon):** on the phone **Settings → Send to another device**, on the TV/tablet **Transfer from another device** — Tuya works right after the transfer.
+- If you also use eWeLink: the API keys are the same on every device, but **the eWeLink account must be different on each device** (details in the [eWeLink guide](ewelink.en.md#using-several-devices-phone-tablet-android-tv)).
+- **SwitchGuard Pro** is bought once and works on all your devices with the same Google account.
+
 ## Troubleshooting
 
 | Symptom | Fix |

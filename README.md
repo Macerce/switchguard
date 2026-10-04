@@ -20,6 +20,9 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - Free for 1 device; a one-time Pro purchase on Google Play monitors all devices
 - No server, no analytics, no ads — everything stays on the phone ([privacy policy](https://sites.google.com/view/switchguard-privacy))
 
+## Several devices / Birden fazla cihaz
+Phone, tablet and (coming soon) Android TV: **the API keys (App ID / Secret) are the same on every device, the eWeLink account must be different on each one** — eWeLink allows one signed-in device per account. Share your devices to a second eWeLink account for each extra device. Pro is bought once and works on all devices with the same Google account. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+
 ## Requirements
 - Android 8.0+ (API 26)
 - A free eWeLink developer app (App ID + App Secret) from [dev.ewelink.cc](https://dev.ewelink.cc) — the in-app guide walks you through it

@@ -113,6 +113,16 @@ Cihazlarınız artık **Cihazlar** ekranında, eWeLink cihazlarıyla aynı liste
 
 ---
 
+## Birden fazla cihazda kullanım (telefon, tablet, Android TV)
+
+> **Android TV desteği ve "Başka cihaza aktar" yakında** bir güncellemeyle gelecek.
+
+- Tuya'da oturum yoktur: **aynı Access ID ve Access Secret tüm cihazlarda çalışır**, hepsi aynı cihazları görür.
+- Tuya'nın anlık mesajları bir projede yalnızca **bir** cihaza gider; diğer cihazlar birkaç dakikada bir yoklayarak günceller. Anlık alarmın her cihazda olmasını istiyorsanız her cihaz için ayrı bir Tuya projesi açın (bir Smart Life hesabı en fazla 2 projeye bağlanabilir). Sürekli açık bir TV kutusu, anlık mesajları alan cihaz için iyi bir seçimdir.
+- **Kurulumu aktarma (yakında):** Telefonda **Ayarlar → Başka cihaza aktar**, TV/tablette **Başka bir cihazdan aktar** — Tuya bağlantısı aktarımdan hemen sonra çalışır.
+- eWeLink de kullanıyorsanız: API anahtarları tüm cihazlarda aynı, **eWeLink hesabı her cihazda farklı** olmalıdır (ayrıntılar [eWeLink rehberinde](ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)).
+- **SwitchGuard Pro** bir kez satın alınır ve aynı Google hesabıyla tüm cihazlarınızda geçerlidir.
+
 ## Sorun giderme
 
 | Belirti | Çözüm |

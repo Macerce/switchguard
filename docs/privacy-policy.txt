@@ -1,12 +1,12 @@
 SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-Last updated / Son güncelleme: 1 October 2026
+Last updated / Son güncelleme: 5 October 2026
 
 English
 
 SwitchGuard ("the app") monitors smart devices in your own eWeLink and/or Tuya (Smart Life) account and alerts you when they change. It is developed by an independent developer and is not affiliated with eWeLink, CoolKit, ITEAD or Tuya.
 
-What the app stores (only on your phone):
+What the app stores (only on your device):
 - The eWeLink developer App ID and App Secret you enter.
 - The access/refresh tokens eWeLink issues after you sign in, your eWeLink user key and email address.
 - If you connect Tuya: the Access ID and Access Secret of your own Tuya Cloud project and the temporary access token Tuya issues.
@@ -18,6 +18,8 @@ Who the app talks to: only the official servers of the platforms you connect —
 Purchases: the optional Pro upgrade is sold through Google Play. Payment is handled entirely by Google; the app only asks Google Play whether Pro was purchased.
 
 Your password is entered on eWeLink's own sign-in page; the app never sees or stores it.
+
+Transfer to your other devices (coming soon): if you use "Send to another device", the app sends your API keys, Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 6-digit code shown on that device. Nothing passes through any server, and the eWeLink session (sign-in) is never transferred.
 
 Backups: app data is excluded from Android cloud backup and device transfer.
 
@@ -31,7 +33,7 @@ Türkçe
 
 SwitchGuard ("uygulama"), size ait eWeLink ve/veya Tuya (Smart Life) hesabındaki akıllı cihazları izler ve değiştiklerinde sizi uyarır. Bağımsız bir geliştirici tarafından geliştirilmiştir; eWeLink, CoolKit, ITEAD veya Tuya ile bağlantısı yoktur.
 
-Uygulamanın sakladıkları (yalnızca telefonunuzda):
+Uygulamanın sakladıkları (yalnızca cihazınızda):
 - Girdiğiniz eWeLink geliştirici App ID ve App Secret bilgileri.
 - Girişten sonra eWeLink'in verdiği erişim/yenileme token'ları, eWeLink kullanıcı anahtarınız ve e-posta adresiniz.
 - Tuya bağlarsanız: size ait Tuya Cloud projesinin Access ID ve Access Secret bilgileri ile Tuya'nın verdiği geçici erişim token'ı.
@@ -43,6 +45,8 @@ Uygulamanın iletişim kurduğu yerler: yalnızca bağladığınız platformlar�
 Satın almalar: İsteğe bağlı Pro yükseltmesi Google Play üzerinden satılır. Ödeme tamamen Google tarafından işlenir; uygulama yalnızca Google Play'e Pro'nun satın alınıp alınmadığını sorar.
 
 Şifreniz eWeLink'in kendi giriş sayfasına girilir; uygulama şifrenizi hiçbir zaman görmez ve saklamaz.
+
+Diğer cihazlarınıza aktarma (yakında): "Başka cihaza aktar" özelliğini kullanırsanız uygulama API anahtarlarınızı, Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 6 haneli kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
 
 Yedekleme: Uygulama verileri Android bulut yedeğine ve cihaz aktarımına dahil edilmez.
 
