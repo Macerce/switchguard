@@ -5,7 +5,13 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Devices
@@ -16,6 +22,8 @@ import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,10 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.EventLog
@@ -80,13 +90,54 @@ fun App() {
         }
     }
 
+    val wide = isWideScreen()
+    val tabIcon: @Composable (Tab) -> Unit = { t ->
+        if (t == Tab.HISTORY && unseen > 0) {
+            BadgedBox(badge = { Badge { Text(if (unseen > 99) "99+" else unseen.toString()) } }) {
+                Icon(t.icon, contentDescription = null)
+            }
+        } else {
+            Icon(t.icon, contentDescription = null)
+        }
+    }
+    val tabContent: @Composable (Modifier) -> Unit = { mod ->
+        when (tab) {
+            Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
+            Tab.AUTOMATIONS -> AutomationsScreen(mod)
+            Tab.HISTORY -> HistoryScreen(mod)
+            Tab.SETTINGS -> SettingsScreen(mod)
+        }
+    }
+
     AnimatedContent(
         targetState = openDeviceId,
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         label = "detail",
     ) { deviceId ->
         if (deviceId != null) {
-            DeviceDetailScreen(deviceId = deviceId, onBack = { openDeviceId = null })
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+                Box(Modifier.readableWidth()) { DeviceDetailScreen(deviceId = deviceId, onBack = { openDeviceId = null }) }
+            }
+        } else if (wide) {
+            // Tablet, Chromebook ve TV: alt menü yerine yan menü, içerik okunabilir genişlikte ortada.
+            Row(Modifier.fillMaxSize()) {
+                NavigationRail(Modifier.fillMaxHeight()) {
+                    Spacer(Modifier.weight(1f))
+                    Tab.entries.forEach { t ->
+                        NavigationRailItem(
+                            modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp)),
+                            selected = tab == t,
+                            onClick = { tab = t },
+                            icon = { tabIcon(t) },
+                            label = { Text(stringResource(t.label)) },
+                        )
+                    }
+                    Spacer(Modifier.weight(1f))
+                }
+                Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
+                    tabContent(Modifier.readableWidth())
+                }
+            }
         } else {
             Scaffold(
                 bottomBar = {
@@ -95,28 +146,14 @@ fun App() {
                             NavigationBarItem(
                                 selected = tab == t,
                                 onClick = { tab = t },
-                                icon = {
-                                    if (t == Tab.HISTORY && unseen > 0) {
-                                        BadgedBox(badge = { Badge { Text(if (unseen > 99) "99+" else unseen.toString()) } }) {
-                                            Icon(t.icon, contentDescription = null)
-                                        }
-                                    } else {
-                                        Icon(t.icon, contentDescription = null)
-                                    }
-                                },
+                                icon = { tabIcon(t) },
                                 label = { Text(stringResource(t.label)) },
                             )
                         }
                     }
                 },
             ) { padding ->
-                val mod = Modifier.padding(bottom = padding.calculateBottomPadding())
-                when (tab) {
-                    Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
-                    Tab.AUTOMATIONS -> AutomationsScreen(mod)
-                    Tab.HISTORY -> HistoryScreen(mod)
-                    Tab.SETTINGS -> SettingsScreen(mod)
-                }
+                tabContent(Modifier.padding(bottom = padding.calculateBottomPadding()))
             }
         }
     }

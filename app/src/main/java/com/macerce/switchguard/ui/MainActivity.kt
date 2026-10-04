@@ -5,9 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.macerce.switchguard.billing.Billing
 import com.macerce.switchguard.core.AppLanguage
@@ -30,7 +34,12 @@ class MainActivity : ComponentActivity() {
                 // Onsuz Compose varsayılan olarak siyah yazar ve koyu temada yazılar kaybolur
                 // (Scaffold kullanmayan kurulum sihirbazı ve detay ekranında olduğu gibi).
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    App()
+                    val tv = remember { FormFactor.isTv(this) }
+                    CompositionLocalProvider(LocalIsTv provides tv) {
+                        // TV ekranları kenarları kesebilir: içerik güvenli alanda kalsın.
+                        val frame = if (tv) Modifier.padding(FormFactor.TV_OVERSCAN_H, FormFactor.TV_OVERSCAN_V) else Modifier
+                        Box(Modifier.fillMaxSize().then(frame)) { App() }
+                    }
                 }
             }
         }

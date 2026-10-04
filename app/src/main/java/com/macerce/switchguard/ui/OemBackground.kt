@@ -85,9 +85,10 @@ enum class OemBackground(
     }
 
     companion object {
-        /** Bu telefonda ek ayar gerekiyorsa markası; stok Android ve Pixel için null. */
-        fun current(): OemBackground? =
-            when (Build.MANUFACTURER.lowercase()) {
+        /** Bu telefonda ek ayar gerekiyorsa markası; stok Android, Pixel ve TV kutuları için null. */
+        fun current(context: Context): OemBackground? =
+            if (FormFactor.isTv(context)) null  // ör. Xiaomi Mi Box'ta MIUI güvenlik merkezi yok
+            else when (Build.MANUFACTURER.lowercase()) {
                 "xiaomi", "redmi", "poco" -> XIAOMI
                 "samsung" -> SAMSUNG
                 "huawei", "honor" -> HUAWEI

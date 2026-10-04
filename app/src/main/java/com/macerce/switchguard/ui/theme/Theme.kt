@@ -1,19 +1,25 @@
 package com.macerce.switchguard.ui.theme
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Build
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalRippleConfiguration
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RippleConfiguration
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
 private val Light = lightColorScheme(
     primary = Color(0xFF006A6A),
@@ -56,6 +62,7 @@ object StatusColors {
     val warning = Color(0xFFEF6C00)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwitchGuardTheme(content: @Composable () -> Unit) {
     val dark = isSystemInDarkTheme()
@@ -77,5 +84,18 @@ fun SwitchGuardTheme(content: @Composable () -> Unit) {
             }
         }
     }
-    MaterialTheme(colorScheme = scheme, content = content)
+    MaterialTheme(colorScheme = scheme) {
+        // TV'de kumandayla gezilir: seçili öğe, Material'ın hafif odak katmanıyla seçilmiyor.
+        // Odak katmanını belirginleştir (dokunmatik cihazlarda varsayılanlar kalır).
+        if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)) {
+            CompositionLocalProvider(
+                LocalRippleConfiguration provides RippleConfiguration(
+                    rippleAlpha = RippleAlpha(draggedAlpha = 0.16f, focusedAlpha = 0.16f, hoveredAlpha = 0.08f, pressedAlpha = 0.24f),
+                ),
+                content = content,
+            )
+        } else {
+            content()
+        }
+    }
 }

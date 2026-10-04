@@ -1,10 +1,8 @@
 package com.macerce.switchguard.ui
 
-import androidx.compose.material.icons.automirrored.rounded.MenuBook
-import androidx.compose.material3.RadioButton
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.icons.rounded.Hub
 import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,14 +23,18 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.DeveloperMode
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -44,6 +46,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -57,8 +60,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import android.content.ClipData
-import android.content.ClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -97,7 +98,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     var step by rememberSaveable { mutableIntStateOf(0) }
     BackHandler(enabled = step > 0) { step-- }
 
-    Column(Modifier.fillMaxSize().safeDrawingPadding()) {
+    Column(Modifier.fillMaxSize().safeDrawingPadding().readableWidth(760.dp)) {
         LinearProgressIndicator(
             progress = { (step + 1f) / steps.size },
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
@@ -134,16 +135,17 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             }
         }
         Row(Modifier.fillMaxWidth().padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (step > 0) TextButton(onClick = { step-- }) { Text(stringResource(R.string.action_back)) }
+            if (step > 0) TextButton(onClick = { step-- }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_back)) }
             Spacer(Modifier.weight(1f))
             if (step == 0 && store.hasAnyAccount) {
                 // Kurulum rehberine sonradan dönenler için.
-                TextButton(onClick = onFinished) { Text(stringResource(R.string.action_skip)) }
+                TextButton(onClick = onFinished, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_skip)) }
             } else if (!canContinue && !store.hasAnyAccount) {
                 // Hesabı olmadan uygulamaya göz atmak isteyenler (ör. testçiler); hesap sonra Ayarlar'dan eklenir.
-                TextButton(onClick = onFinished) { Text(stringResource(R.string.action_skip_for_now)) }
+                TextButton(onClick = onFinished, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_skip_for_now)) }
             }
             Button(
+                modifier = Modifier.tvFocusRing(),
                 enabled = canContinue,
                 onClick = {
                     if (step < steps.size - 1) step++
@@ -218,7 +220,7 @@ private fun PlatformStep(selected: Platform, onPick: (Platform) -> Unit) {
 
 @Composable
 private fun PlatformOption(selected: Boolean, title: String, desc: String, onClick: () -> Unit) {
-    SectionCard(horizontalPadding = 0) {
+    SectionCard(Modifier.tvFocusRing(RoundedCornerShape(20.dp)), horizontalPadding = 0) {
         Row(
             Modifier.fillMaxWidth().selectable(selected = selected, onClick = onClick).padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -242,14 +244,14 @@ private fun TuyaGuideStep() {
     NumberedStep(3, stringResource(R.string.onb_tuya_step3))
     NumberedStep(4, stringResource(R.string.onb_tuya_step4))
     Spacer(Modifier.height(16.dp))
-    Button(onClick = { Actions.openUrl(context, Actions.TUYA_PLATFORM_URL) }, modifier = Modifier.fillMaxWidth()) {
+    Button(onClick = { Actions.openUrl(context, Actions.TUYA_PLATFORM_URL) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
         Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
         Spacer(Modifier.width(8.dp))
         Text(stringResource(R.string.onb_open_tuya))
     }
     OutlinedButton(
         onClick = { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
     ) {
         Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
         Spacer(Modifier.width(8.dp))
@@ -275,9 +277,9 @@ private fun TuyaConnectStep(store: Store, version: Int) {
                 style = MaterialTheme.typography.titleMedium,
             )
         }
-        TextButton(onClick = { dialog = true }) { Text(stringResource(R.string.action_change)) }
+        TextButton(onClick = { dialog = true }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_change)) }
     } else {
-        Button(onClick = { dialog = true }, modifier = Modifier.fillMaxWidth()) { Text(stringResource(R.string.action_enter_keys)) }
+        Button(onClick = { dialog = true }, modifier = Modifier.fillMaxWidth().tvFocusRing()) { Text(stringResource(R.string.action_enter_keys)) }
     }
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_tuya_privacy), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -294,14 +296,14 @@ private fun DeveloperStep() {
     NumberedStep(3, stringResource(R.string.onb_dev_step3, Store.DEFAULT_REDIRECT))
     NumberedStep(4, stringResource(R.string.onb_dev_step4))
     Spacer(Modifier.height(16.dp))
-    Button(onClick = { Actions.openUrl(context, Actions.DEV_PORTAL_URL) }, modifier = Modifier.fillMaxWidth()) {
+    Button(onClick = { Actions.openUrl(context, Actions.DEV_PORTAL_URL) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
         Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
         Spacer(Modifier.width(8.dp))
         Text(stringResource(R.string.onb_open_portal))
     }
     OutlinedButton(
         onClick = { Actions.openUrl(context, Actions.guideUrl(context, "ewelink")) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
     ) {
         Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
         Spacer(Modifier.width(8.dp))
@@ -309,7 +311,7 @@ private fun DeveloperStep() {
     }
     OutlinedButton(
         onClick = { clipboard.setPrimaryClip(ClipData.newPlainText("Redirect URL", Store.DEFAULT_REDIRECT)) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
     ) {
         Icon(Icons.Rounded.ContentCopy, null)
         Spacer(Modifier.width(8.dp))
@@ -345,9 +347,9 @@ private fun LoginStep(loggedIn: Boolean) {
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.logged_in), style = MaterialTheme.typography.titleMedium)
         }
-        TextButton(onClick = { LoginActivity.start(context) }) { Text(stringResource(R.string.action_relogin)) }
+        TextButton(onClick = { LoginActivity.start(context) }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_relogin)) }
     } else {
-        Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
             Text(stringResource(R.string.action_login))
         }
     }
@@ -379,7 +381,7 @@ private fun PermissionsStep(resumed: Boolean) {
         stringResource(R.string.onb_perm_battery_desc),
         granted = battery,
     ) { Actions.requestBatteryExemption(context) }
-    OemBackground.current()?.let { oem ->
+    OemBackground.current(context)?.let { oem ->
         Spacer(Modifier.height(12.dp))
         // Üretici listesinin durumu okunamıyor; kart her zaman "aç" düğmesiyle gösterilir.
         PermissionCard(
@@ -413,7 +415,7 @@ private fun PermissionCard(
             Text(desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (!granted) {
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onGrant) { Text(actionLabel) }
+                Button(onClick = onGrant, modifier = Modifier.tvFocusRing()) { Text(actionLabel) }
             }
         }
     }

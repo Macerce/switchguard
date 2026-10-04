@@ -351,7 +351,7 @@ fun SettingsScreen(modifier: Modifier) {
                     stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
                     Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
                 )
-                OemBackground.current()?.let { oem ->
+                OemBackground.current(context)?.let { oem ->
                     Divider()
                     InfoRow(
                         Icons.Rounded.RestartAlt,

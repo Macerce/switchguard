@@ -106,7 +106,8 @@ fun InfoRow(
     trailing: @Composable (() -> Unit)? = null,
 ) {
     Row(
-        modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
+        Modifier.tvFocusRing(RoundedCornerShape(14.dp), inside = true).then(modifier)
+            .fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
