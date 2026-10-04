@@ -44,7 +44,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 4. **eWeLink has to approve your application.** You can't continue with step 2 until it's approved; after approval your account becomes a developer and you can create an app in the Console.
 
-> **The second eWeLink account you create for extra devices (tablet, TV) does NOT need to be a developer.** The API keys (App ID and App Secret) come from your first, developer account and are the same on every device; the second account is only for signing in on that device (see [Using several devices](#using-several-devices-phone-tablet-android-tv)).
+> **Every eWeLink account you create for extra devices (tablet, TV) must also apply and be approved.** The API keys (App ID and App Secret) are taken from that account's developer site; each device uses its own account's keys (see [Using several devices](#using-several-devices-phone-tablet-android-tv)).
 
 ## 2. Create an app
 
@@ -116,10 +116,10 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 > **Android TV support and "Send to another device" are coming** in an update. The account rule below already applies to phones and tablets.
 
-- **The API keys (App ID and App Secret) must be the SAME on every device, but the eWeLink account must be DIFFERENT on each device.**
+- **Each device needs its own eWeLink account. That account must have the developer feature enabled (approved by eWeLink), and the device gets that account's own API keys (App ID and App Secret).** The API keys entered on a device must belong to the eWeLink account signed in on that device.
 - eWeLink allows a signed-in session on only **one** device per account. Signing in on a second device with the same account signs the first one out (SwitchGuard warns you loudly when that happens).
-- For each extra device, create a separate account **in the eWeLink app** (eWeLink's sign-in page has no sign-up; this account doesn't need a developer application) and share your devices with it in the eWeLink app (**device → Share**).
-- **Transferring the setup (coming soon):** on the phone **Settings → Send to another device**, on the TV/tablet **Transfer from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. API keys, Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code; the eWeLink session is not transferred.
+- For each extra device: 1) create a new account **in the eWeLink app** (eWeLink's sign-in page has no sign-up), 2) share your devices with it in the eWeLink app (**device → Share**), 3) with that account, [apply as a developer](#if-your-account-isnt-a-developer-yet-new-accounts) on dev.ewelink.cc and wait for approval, 4) after approval create an app in that account and enter its App ID and App Secret on that device.
+- **Transferring the setup (coming soon):** on the phone **Settings → Send to another device**, on the TV/tablet **Transfer from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code. eWeLink API keys and the session are not transferred — each device uses its own account's keys.
 - **Signing in on a TV:** easiest is **Login by QR code** at the bottom of eWeLink's sign-in page — scan it with the eWeLink app signed in to the account you created for that device. The remote works too; the keyboard in the Google TV app on your phone is easier.
 - **SwitchGuard Pro** is bought once and works on all your devices (phone, tablet, TV) with the same Google account.
 - **Alarm on Android TV (coming soon):** the alarm appears full screen on top of whatever is playing (YouTube, TV…) and is dismissed with the remote's OK button.
