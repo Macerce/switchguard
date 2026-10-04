@@ -238,7 +238,7 @@
     <string name="onb_dev_title">Ücretsiz geliştirici uygulaması oluşturun</string>
     <string name="onb_dev_body">SwitchGuard, cihazlarınıza eWeLink\'in resmi API\'si üzerinden bağlanır. Bunun için size ait ücretsiz bir App ID gerekir; yaklaşık iki dakika sürer.</string>
     <string name="onb_dev_step1">dev.ewelink.cc adresini açın ve cihazlarınızın bağlı olduğu eWeLink hesabıyla giriş yapın.</string>
-    <string name="onb_dev_step2">Geliştirici olarak kaydolun (ücretsiz standart rol yeterli).</string>
+    <string name="onb_dev_step2">Hesabınız geliştirici değilse (yeni hesaplar): My center → Account Settings → “Not a developer yet? Apply now!” → Individual developers → formu gönderin. eWeLink\'in başvuruyu onaylaması gerekir; onaydan sonra devam edin (ücretsiz standart rol yeterli).</string>
     <string name="onb_dev_step3">Bir uygulama oluşturun ve Redirect URL olarak %s yazın.</string>
     <string name="onb_dev_step4">Size verilen App ID ve App Secret\'ı kopyalayın.</string>
     <string name="onb_open_portal">dev.ewelink.cc\'yi aç</string>

@@ -242,7 +242,7 @@
     <string name="onb_dev_title">Create a free developer app</string>
     <string name="onb_dev_body">SwitchGuard talks to your devices through eWeLink\'s official API. You need your own free App ID for this — it takes about two minutes.</string>
     <string name="onb_dev_step1">Open dev.ewelink.cc and sign in with the eWeLink account your devices are in.</string>
-    <string name="onb_dev_step2">Register as a developer (the free standard role is enough).</string>
+    <string name="onb_dev_step2">If your account isn\'t a developer yet (new accounts): My center → Account Settings → “Not a developer yet? Apply now!” → Individual developers → submit the form. eWeLink has to approve it; continue after approval (the free standard role is enough).</string>
     <string name="onb_dev_step3">Create an app and set its Redirect URL to %s</string>
     <string name="onb_dev_step4">Copy the App ID and App Secret you are given.</string>
     <string name="onb_open_portal">Open dev.ewelink.cc</string>
