@@ -96,11 +96,11 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         Platform.EWELINK -> listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
         // Demo: hesap adımları yok; cihazlar başlatınca eklenir.
         Platform.DEMO -> listOf(Step.WELCOME, Step.PLATFORM, Step.PERMISSIONS, Step.DONE)
-        // Aktarma: anahtarlar telefondan gelir; eWeLink varsa yine de bu cihazda (ayrı hesapla) giriş gerekir.
-        Platform.TRANSFER -> listOfNotNull(
+        // Aktarma: Tuya, kurallar ve ayarlar telefondan gelir; eWeLink bu cihazın kendi hesabıyla kurulur.
+        Platform.TRANSFER -> listOf(
             Step.WELCOME, Step.PLATFORM, Step.RECEIVE,
-            Step.CREDENTIALS.takeIf { store.hasCredentials },
-            Step.LOGIN.takeIf { store.hasCredentials },
+            // eWeLink: bu cihazın kendi hesabı, geliştirici onayı ve o hesabın anahtarları (aktarılmaz).
+            Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN,
             Step.PERMISSIONS, Step.DONE,
         )
     }
@@ -138,9 +138,10 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         }
         val canContinue = remember(step, version, platform) {
             when (steps[step]) {
-                Step.CREDENTIALS -> store.hasCredentials
-                Step.LOGIN -> store.isLoggedIn
-                Step.RECEIVE -> store.hasCredentials || store.hasTuya
+                // Aktarmada eWeLink isteğe bağlı (yalnızca Tuya kullanan atlayabilir).
+                Step.CREDENTIALS -> store.hasCredentials || platform == Platform.TRANSFER
+                Step.LOGIN -> store.isLoggedIn || platform == Platform.TRANSFER
+                Step.RECEIVE -> store.transferReceived
                 Step.TUYA_CONNECT -> store.hasTuya
                 else -> true
             }
@@ -339,6 +340,11 @@ private fun CredentialsStep(store: Store) {
     var appId by remember { mutableStateOf(store.appId) }
     var secret by remember { mutableStateOf(store.appSecret) }
     var redirect by remember { mutableStateOf(store.redirectUrl) }
+    // Anahtarlar bu cihazda giriş yapılacak hesaba ait olmalı: aktarmadan geldiyse uyarı en üstte.
+    if (store.transferSource.isNotEmpty()) {
+        Spacer(Modifier.height(16.dp))
+        SameAccountWarning(store)
+    }
     StepHeader(Icons.Rounded.Key, stringResource(R.string.onb_cred_title), stringResource(R.string.onb_cred_body))
     // Her tuşta kaydet ki "İleri" düğmesi anında etkinleşsin.
     CredentialFields(

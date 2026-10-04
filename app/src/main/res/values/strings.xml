@@ -408,19 +408,19 @@
     <string name="perm_overlay_desc">Needed on Android TV so the alarm appears on top of whatever is playing. Tap and allow SwitchGuard.</string>
     <string name="tv_keyboard_hint">Tip: type or paste from your phone with the Google TV app (remote → keyboard).</string>
     <string name="onb_platform_transfer">Transfer from another device</string>
-    <string name="onb_platform_transfer_desc">Already set up on your phone? Copy keys, rules and settings over your home Wi-Fi — nothing to type.</string>
+    <string name="onb_platform_transfer_desc">Already set up on your phone? Get Tuya keys, rules and settings over your home Wi-Fi. For eWeLink this device needs its own account and that account\'s own API keys.</string>
     <string name="onb_transfer_title">Transfer from your phone</string>
     <string name="onb_transfer_body">Both devices must be on the same Wi-Fi network.</string>
     <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Send to another device, pick this device and enter the code below.</string>
     <string name="transfer_code_label">Code</string>
     <string name="transfer_waiting">Waiting for your phone…</string>
-    <string name="transfer_received">Setup received: keys, rules and settings are here.</string>
+    <string name="transfer_received">Setup received: Tuya keys, rules and settings are here. If you use eWeLink, now enter the API keys of the account you created for this device.</string>
     <string name="transfer_other_account_title">Each device needs its own eWeLink account</string>
-    <string name="transfer_other_account_body">The API keys (App ID and App Secret) must be the SAME on every device, but the eWeLink account must be DIFFERENT on each device. The other device is signed in as %1$s: signing in here with that account signs it out. Create a separate account for this device in the eWeLink app and share your devices with it (device → Share).</string>
+    <string name="transfer_other_account_body">Your other device is signed in as %1$s: don\'t sign in with that account here — eWeLink allows one session per account and it would be signed out. For this device: create a new account in the eWeLink app, share your devices with it (device → Share), apply as a developer with that account on dev.ewelink.cc and wait for eWeLink\'s approval, then enter that account\'s API keys (App ID / App Secret) here. The API keys entered here must belong to the account signed in here.</string>
     <string name="transfer_same_account_title">Same account as your phone</string>
     <string name="transfer_same_account_body">This device is signed in as %1$s, the same account as your phone, so your phone\'s eWeLink session has probably been closed. Sign in here with a separate account that your devices are shared with.</string>
     <string name="transfer_send_row">Send to another device</string>
-    <string name="transfer_send_row_desc">Copy keys, rules and settings to a TV or tablet on the same Wi-Fi</string>
+    <string name="transfer_send_row_desc">Copy Tuya keys, rules and settings to a TV or tablet on the same Wi-Fi</string>
     <string name="transfer_receive_row">Receive from another device</string>
     <string name="transfer_receive_row_desc">Get the setup from your phone over Wi-Fi</string>
     <string name="transfer_send_title">Send to another device</string>
@@ -432,8 +432,8 @@
     <string name="transfer_wrong_code">Wrong code. Check the code on the other device.</string>
     <string name="transfer_failed">Couldn\'t reach the device. Make sure both are on the same Wi-Fi.</string>
     <string name="transfer_sent_ok">Sent to %1$s.</string>
-    <string name="transfer_sent_ewelink_note">Your eWeLink session stays only on this phone. On the other device sign in with a separate eWeLink account that your devices are shared with.</string>
-    <string name="transfer_other_account_body_generic">The API keys (App ID and App Secret) must be the SAME on every device, but the eWeLink account must be DIFFERENT on each device. eWeLink allows a signed-in session on only one device per account: if you sign in here with the same account, the other device (e.g. your phone) is signed out. Create a separate account for this device in the eWeLink app and share your devices with it (device → Share).</string>
+    <string name="transfer_sent_ewelink_note">eWeLink API keys and session were not transferred: on the other device enter the API keys of the account you created for it and sign in.</string>
+    <string name="transfer_other_account_body_generic">Don\'t sign in on this device with the eWeLink account used on your other device (e.g. your phone) — eWeLink allows one session per account and the other device is signed out. For this device: create a new account in the eWeLink app, share your devices with it (device → Share), apply as a developer with that account on dev.ewelink.cc and wait for eWeLink\'s approval, then enter that account\'s API keys (App ID / App Secret) here. The API keys entered here must belong to the account signed in here.</string>
     <string name="transfer_tv_qr_hint">Easiest on a TV: choose “Login by QR code” at the bottom of the sign-in page and scan it with the eWeLink app signed in to the account you created for this device.</string>
-    <string name="transfer_send_warning_body">The API keys (App ID and App Secret) must be the SAME on every device, but the eWeLink account must be DIFFERENT on each device. If the other device (TV/tablet) signs in with this phone\'s eWeLink account, this phone is signed out. Create a separate account for the other device in the eWeLink app and share your devices with it (device → Share).</string>
+    <string name="transfer_send_warning_body">The TV or tablet needs its own eWeLink account: create a new account in the eWeLink app, share your devices with it, apply as a developer with that account and wait for eWeLink\'s approval, then enter that account\'s API keys on the other device. eWeLink keys are not transferred; Tuya keys, rules and settings are. Signing in there with this phone\'s account signs this phone out.</string>
 </resources>

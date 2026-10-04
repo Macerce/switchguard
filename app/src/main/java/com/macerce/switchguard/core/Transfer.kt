@@ -12,12 +12,13 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 /**
- * Başka bir cihaza (TV, tablet) kurulum aktarma: hesap anahtarları, kurallar ve ayarlar.
+ * Başka bir cihaza (TV, tablet) kurulum aktarma: Tuya bilgileri, kurallar ve ayarlar.
  * Veri yalnızca ev ağında gider ve alıcı ekranındaki 6 haneli kodla şifrelenir (PBKDF2 + AES-GCM).
  *
  * Bilerek AKTARILMAYANLAR:
- * - eWeLink oturumu (at/rt/apikey): eWeLink hesap + App ID başına tek oturum tutar; aynı oturum iki cihazda
- *   olamaz. Alıcı kendi (ayrı) eWeLink hesabıyla giriş yapar, cihazlar o hesapla paylaşılır.
+ * - eWeLink API anahtarları (App ID/Secret/Redirect) ve oturumu: anahtarlar, o cihazda giriş yapılan eWeLink
+ *   hesabına ait olmalı. Her cihaz ayrı bir hesap kullanır (eWeLink hesap başına tek oturum tutar); o hesapta
+ *   geliştirici özelliği açılır (eWeLink onayı) ve o hesabın kendi anahtarları girilir.
  * - Pro (her cihaz Google Play'den kendisi sorgular), cihaza özgü durum (izleme, bekleyen alarm, geçmiş),
  *   alarm sesi (zil sesi URI'si alıcıda olmayabilir).
  */
@@ -30,7 +31,6 @@ object Transfer {
 
     /** Aktarılan SharedPreferences anahtarları (izin listesi). */
     private val KEYS = setOf(
-        "appId", "appSecret", "redirectUrl",
         "tuyaId", "tuyaSecret", "tuyaRegion", "tuyaScales",
         "rules", "automations", "layout", "freeDevice",
         "alarmVolume", "vibrate", "quietEnabled", "quietStart", "quietEnd",
@@ -84,6 +84,7 @@ object Transfer {
         editor.apply()
         val source = data.optJSONObject("source")
         val email = source?.optString("email").orEmpty()
+        store.transferReceived = true
         // E-posta her zaman bilinmez (bazı App ID'lerde eWeLink profil sorgusu reddedilir): gönderen eWeLink'e
         // bağlıysa yine de uyarı gösterilsin diye işaretçi saklanır.
         store.transferSource = email.ifEmpty { if (source?.optBoolean("ewelink") == true) UNKNOWN_ACCOUNT else "" }

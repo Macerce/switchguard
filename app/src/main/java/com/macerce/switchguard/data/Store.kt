@@ -66,6 +66,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("email")
         set(v) = put { putString("email", v) }
 
+    /** Bu cihaz başka bir cihazdan kurulum aldı mı (kurulum sihirbazında "İleri" için). */
+    var transferReceived: Boolean
+        get() = prefs.getBoolean("transferReceived", false)
+        set(v) = put { putBoolean("transferReceived", v) }
+
     /** Kurulumu başka cihazdan aktarıldıysa, gönderen cihazın eWeLink hesabı (aynı hesapla giriş uyarısı için). */
     var transferSource: String
         get() = str("transferSource")
