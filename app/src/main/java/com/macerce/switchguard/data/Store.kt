@@ -66,6 +66,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("email")
         set(v) = put { putString("email", v) }
 
+    /** Kurulumu başka cihazdan aktarıldıysa, gönderen cihazın eWeLink hesabı (aynı hesapla giriş uyarısı için). */
+    var transferSource: String
+        get() = str("transferSource")
+        set(v) = put { putString("transferSource", v) }
+
     val hasCredentials get() = appId.isNotEmpty() && appSecret.isNotEmpty()
     val isLoggedIn get() = accessToken.isNotEmpty()
 

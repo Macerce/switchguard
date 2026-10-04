@@ -41,6 +41,7 @@ import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Shield
+import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -72,7 +73,7 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
 
-private enum class Step { WELCOME, PLATFORM, DEVELOPER, CREDENTIALS, LOGIN, TUYA_GUIDE, TUYA_CONNECT, PERMISSIONS, DONE }
+private enum class Step { WELCOME, PLATFORM, RECEIVE, DEVELOPER, CREDENTIALS, LOGIN, TUYA_GUIDE, TUYA_CONNECT, PERMISSIONS, DONE }
 
 /**
  * İlk açılış sihirbazı: tanıtım → cihazların uygulaması (eWeLink / Tuya) → o bulutun kurulumu → izinler → başlat.
@@ -95,6 +96,12 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         Platform.EWELINK -> listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
         // Demo: hesap adımları yok; cihazlar başlatınca eklenir.
         Platform.DEMO -> listOf(Step.WELCOME, Step.PLATFORM, Step.PERMISSIONS, Step.DONE)
+        // Aktarma: anahtarlar telefondan gelir; eWeLink varsa yine de bu cihazda (ayrı hesapla) giriş gerekir.
+        Platform.TRANSFER -> listOfNotNull(
+            Step.WELCOME, Step.PLATFORM, Step.RECEIVE,
+            Step.LOGIN.takeIf { store.hasCredentials },
+            Step.PERMISSIONS, Step.DONE,
+        )
     }
     var step by rememberSaveable { mutableIntStateOf(0) }
     BackHandler(enabled = step > 0) { step-- }
@@ -117,6 +124,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 when (steps[s.coerceAtMost(steps.size - 1)]) {
                     Step.WELCOME -> WelcomeStep()
                     Step.PLATFORM -> PlatformStep(platform) { platform = it }
+                    Step.RECEIVE -> ReceiveStep()
                     Step.DEVELOPER -> DeveloperStep()
                     Step.CREDENTIALS -> CredentialsStep(store)
                     Step.LOGIN -> LoginStep(remember(version) { store.isLoggedIn })
@@ -131,6 +139,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             when (steps[step]) {
                 Step.CREDENTIALS -> store.hasCredentials
                 Step.LOGIN -> store.isLoggedIn
+                Step.RECEIVE -> store.hasCredentials || store.hasTuya
                 Step.TUYA_CONNECT -> store.hasTuya
                 else -> true
             }
@@ -205,7 +214,7 @@ private fun NumberedStep(n: Int, text: String) {
     }
 }
 
-private enum class Platform { EWELINK, TUYA, DEMO }
+private enum class Platform { EWELINK, TUYA, DEMO, TRANSFER }
 
 @Composable
 private fun PlatformStep(selected: Platform, onPick: (Platform) -> Unit) {
@@ -215,6 +224,8 @@ private fun PlatformStep(selected: Platform, onPick: (Platform) -> Unit) {
     PlatformOption(selected == Platform.TUYA, stringResource(R.string.onb_platform_tuya), stringResource(R.string.onb_platform_tuya_desc)) { onPick(Platform.TUYA) }
     Spacer(Modifier.height(12.dp))
     PlatformOption(selected == Platform.DEMO, stringResource(R.string.onb_platform_demo), stringResource(R.string.onb_platform_demo_desc)) { onPick(Platform.DEMO) }
+    Spacer(Modifier.height(12.dp))
+    PlatformOption(selected == Platform.TRANSFER, stringResource(R.string.onb_platform_transfer), stringResource(R.string.onb_platform_transfer_desc)) { onPick(Platform.TRANSFER) }
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_platform_both), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
@@ -340,6 +351,12 @@ private fun CredentialsStep(store: Store) {
 
 @Composable
 private fun LoginStep(loggedIn: Boolean) {
+    // Kurulum telefondan aktarıldıysa: "telefondaki hesapla girmeyin" uyarısı en üstte.
+    val transferStore = Store.get(LocalContext.current)
+    if (transferStore.transferSource.isNotEmpty()) {
+        Spacer(Modifier.height(16.dp))
+        SameAccountWarning(transferStore)
+    }
     val context = LocalContext.current
     StepHeader(Icons.Rounded.Shield, stringResource(R.string.onb_login_title), stringResource(R.string.onb_login_body))
     if (loggedIn) {
@@ -438,4 +455,10 @@ private fun DoneStep() {
         Feature(Icons.Rounded.Tune, stringResource(R.string.onb_done_tip_rules))
         Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_done_tip_test))
     }
+}
+
+@Composable
+private fun ReceiveStep() {
+    StepHeader(Icons.Rounded.SyncAlt, stringResource(R.string.onb_transfer_title), stringResource(R.string.onb_transfer_body))
+    ReceiveTransferPanel(onReceived = {})
 }

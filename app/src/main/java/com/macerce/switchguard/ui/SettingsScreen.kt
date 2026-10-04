@@ -29,6 +29,7 @@ import androidx.compose.material.icons.rounded.BatteryAlert
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Info
@@ -45,6 +46,7 @@ import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
+import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.Vibration
 import androidx.compose.material.icons.rounded.Visibility
@@ -126,6 +128,9 @@ fun SettingsScreen(modifier: Modifier) {
 
             // ---------------------------------------------------------------- Hesap
             SectionTitle(stringResource(R.string.section_account))
+            if (s.transferSource.isNotEmpty() && s.hasCredentials) {
+                Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) { SameAccountWarning(store) }
+            }
             SectionCard {
                 InfoRow(
                     Icons.Rounded.AccountCircle,
@@ -174,6 +179,33 @@ fun SettingsScreen(modifier: Modifier) {
                         s.snapshots.count { it.cloud == Cloud.TUYA },
                     ) else stringResource(R.string.tuya_not_connected),
                     Modifier.clickable { dialog = { TuyaDialog(store) { dialog = null } } },
+                )
+                Divider()
+                InfoRow(
+                    Icons.Rounded.SyncAlt,
+                    stringResource(R.string.transfer_send_row),
+                    stringResource(R.string.transfer_send_row_desc),
+                    Modifier.clickable { dialog = { SendTransferDialog { dialog = null } } },
+                )
+                Divider()
+                InfoRow(
+                    Icons.Rounded.Download,
+                    stringResource(R.string.transfer_receive_row),
+                    stringResource(R.string.transfer_receive_row_desc),
+                    Modifier.clickable {
+                        dialog = {
+                            AlertDialog(
+                                onDismissRequest = { dialog = null },
+                                title = { Text(stringResource(R.string.onb_transfer_title)) },
+                                text = { Column { ReceiveTransferPanel(onReceived = {}) } },
+                                confirmButton = {
+                                    TextButton(onClick = { dialog = null }, modifier = Modifier.tvFocusRing()) {
+                                        Text(stringResource(R.string.action_done))
+                                    }
+                                },
+                            )
+                        }
+                    },
                 )
                 Divider()
                 InfoRow(Icons.Rounded.Science, stringResource(R.string.demo_devices), stringResource(R.string.demo_devices_desc)) {
