@@ -19,7 +19,7 @@ Purchases: the optional Pro upgrade is sold through Google Play. Payment is hand
 
 Your password is entered on eWeLink's own sign-in page; the app never sees or stores it.
 
-Transfer to your other devices (coming soon): if you use "Send to another device", the app sends your API keys, Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 6-digit code shown on that device. Nothing passes through any server, and the eWeLink session (sign-in) is never transferred.
+Transfer to your other devices (coming soon): if you use "Send to another device", the app sends your Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 6-digit code shown on that device. Nothing passes through any server; eWeLink API keys and the eWeLink session (sign-in) are never transferred.
 
 Backups: app data is excluded from Android cloud backup and device transfer.
 
@@ -46,7 +46,7 @@ Satın almalar: İsteğe bağlı Pro yükseltmesi Google Play üzerinden satıl�
 
 Şifreniz eWeLink'in kendi giriş sayfasına girilir; uygulama şifrenizi hiçbir zaman görmez ve saklamaz.
 
-Diğer cihazlarınıza aktarma (yakında): "Başka cihaza aktar" özelliğini kullanırsanız uygulama API anahtarlarınızı, Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 6 haneli kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
+Diğer cihazlarınıza aktarma (yakında): "Başka cihaza aktar" özelliğini kullanırsanız uygulama Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 6 haneli kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink API anahtarları ve eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
 
 Yedekleme: Uygulama verileri Android bulut yedeğine ve cihaz aktarımına dahil edilmez.
 
