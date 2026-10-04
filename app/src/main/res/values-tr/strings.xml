@@ -411,8 +411,8 @@
     <string name="transfer_code_label">Kod</string>
     <string name="transfer_waiting">Telefonunuz bekleniyor…</string>
     <string name="transfer_received">Kurulum alındı: anahtarlar, kurallar ve ayarlar bu cihazda.</string>
-    <string name="transfer_other_account_title">Bu cihazda farklı bir eWeLink hesabı kullanın</string>
-    <string name="transfer_other_account_body">Telefonunuzda %1$s hesabı açık. Bu cihazda o hesapla giriş YAPMAYIN — eWeLink hesap başına tek oturuma izin verir, telefonunuzdaki oturum kapanır. Ayrı bir eWeLink hesabı açın ve cihazlarınızı eWeLink uygulamasından (cihaz → Paylaş) o hesapla paylaşın.</string>
+    <string name="transfer_other_account_title">Her cihaz için ayrı bir eWeLink hesabı gereklidir</string>
+    <string name="transfer_other_account_body">API anahtarları (App ID ve App Secret) tüm cihazlarda AYNI olmalıdır; eWeLink hesabı ise her cihazda FARKLI olmalıdır. Diğer cihazda %1$s hesabı açık: burada o hesapla giriş yaparsanız oradaki oturum kapanır. Bu cihaz için eWeLink uygulamasından ayrı bir hesap açın ve cihazlarınızı (cihaz → Paylaş) o hesapla paylaşın.</string>
     <string name="transfer_same_account_title">Telefonunuzla aynı hesap</string>
     <string name="transfer_same_account_body">Bu cihaz %1$s hesabıyla, yani telefonunuzdakiyle aynı hesapla giriş yaptı; telefonunuzdaki eWeLink oturumu büyük olasılıkla kapandı. Burada, cihazlarınızın paylaşıldığı ayrı bir hesapla giriş yapın.</string>
     <string name="transfer_send_row">Başka cihaza aktar</string>
@@ -429,5 +429,7 @@
     <string name="transfer_failed">Cihaza ulaşılamadı. İkisinin de aynı Wi-Fi\'da olduğundan emin olun.</string>
     <string name="transfer_sent_ok">%1$s cihazına gönderildi.</string>
     <string name="transfer_sent_ewelink_note">eWeLink oturumunuz yalnızca bu telefonda kalır. Diğer cihazda, cihazlarınızın paylaşıldığı ayrı bir eWeLink hesabıyla giriş yapın.</string>
-    <string name="transfer_other_account_body_generic">Bu cihazda, telefonunuzda kullandığınız eWeLink hesabıyla giriş YAPMAYIN — eWeLink hesap başına tek oturuma izin verir, telefonunuzdaki oturum kapanır. Ayrı bir eWeLink hesabı açın ve cihazlarınızı eWeLink uygulamasından (cihaz → Paylaş) o hesapla paylaşın.</string>
+    <string name="transfer_other_account_body_generic">API anahtarları (App ID ve App Secret) tüm cihazlarda AYNI olmalıdır; eWeLink hesabı ise her cihazda FARKLI olmalıdır. eWeLink aynı hesapla yalnızca bir cihazda oturum açılmasına izin verir: aynı hesapla burada giriş yaparsanız diğer cihazdaki (ör. telefonunuzdaki) oturum kapanır. Bu cihaz için eWeLink uygulamasından ayrı bir hesap açın ve cihazlarınızı (cihaz → Paylaş) o hesapla paylaşın.</string>
+    <string name="transfer_tv_qr_hint">TV\'de en kolayı: giriş sayfasının altındaki “Login by QR code” seçeneğini seçin ve QR kodu, bu cihaz için açtığınız hesapla giriş yapılmış eWeLink uygulamasıyla okutun.</string>
+    <string name="transfer_send_warning_body">API anahtarları (App ID ve App Secret) tüm cihazlarda AYNI olmalıdır; eWeLink hesabı ise her cihazda FARKLI olmalıdır. Diğer cihazda (TV/tablet) bu telefondaki eWeLink hesabıyla giriş yapılırsa bu telefondaki oturum kapanır. Diğer cihaz için eWeLink uygulamasından ayrı bir hesap açın ve cihazlarınızı (cihaz → Paylaş) o hesapla paylaşın.</string>
 </resources>

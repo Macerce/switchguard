@@ -112,10 +112,9 @@ fun ReceiveTransferPanel(onReceived: () -> Unit) {
  * (eWeLink hesap başına tek oturum tutar, telefondaki oturum kapanır). Aynı hesapla girildiyse kırmızı uyarı.
  */
 @Composable
-fun SameAccountWarning(store: Store) {
+fun SameAccountWarning(store: Store, sender: Boolean = false) {
     val source = store.transferSource
-    if (source.isEmpty() || !store.hasCredentials) return
-    val known = source != Transfer.UNKNOWN_ACCOUNT
+    val known = source.isNotEmpty() && source != Transfer.UNKNOWN_ACCOUNT
     val same = known && store.isLoggedIn && store.accountEmail.equals(source, ignoreCase = true)
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -136,11 +135,16 @@ fun SameAccountWarning(store: Store) {
                 Text(
                     when {
                         same -> stringResource(R.string.transfer_same_account_body, Transfer.maskEmail(source))
+                        sender -> stringResource(R.string.transfer_send_warning_body)
                         known -> stringResource(R.string.transfer_other_account_body, Transfer.maskEmail(source))
                         else -> stringResource(R.string.transfer_other_account_body_generic)
                     },
                     style = MaterialTheme.typography.bodyMedium,
                 )
+                if (LocalIsTv.current) {
+                    Spacer(Modifier.height(8.dp))
+                    Text(stringResource(R.string.transfer_tv_qr_hint), style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }
@@ -180,6 +184,7 @@ fun SendTransferDialog(onDismiss: () -> Unit) {
                 }
                 val t = target
                 if (t == null) {
+                    SameAccountWarning(store, sender = true)
                     Text(stringResource(R.string.transfer_send_body), style = MaterialTheme.typography.bodyMedium)
                     if (peers.isEmpty()) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -200,8 +205,8 @@ fun SendTransferDialog(onDismiss: () -> Unit) {
                         code, { v -> code = v.filter(Char::isDigit).take(6) },
                         label = { Text(stringResource(R.string.transfer_code_label)) },
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = tvKeyboardOptions(KeyboardOptions(keyboardType = KeyboardType.NumberPassword)),
+                        modifier = Modifier.fillMaxWidth().tvTextField(),
                     )
                     when (val r = result) {
                         TransferSender.Result.WrongCode -> Text(stringResource(R.string.transfer_wrong_code), color = MaterialTheme.colorScheme.error)

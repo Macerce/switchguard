@@ -62,13 +62,13 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                 )
                 TvKeyboardHint()
                 OutlinedTextField(
-                    accessId, { accessId = it }, label = { Text("Access ID") }, singleLine = true,
-                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+                    accessId, { accessId = it }, label = { Text("Access ID") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),
+                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp).tvTextField(),
                 )
                 OutlinedTextField(
-                    secret, { secret = it }, label = { Text("Access Secret") }, singleLine = true,
+                    secret, { secret = it }, label = { Text("Access Secret") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),
                     visualTransformation = PasswordVisualTransformation(),
-                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvTextField(),
                 )
                 Text(stringResource(R.string.tuya_region), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 12.dp))
                 TuyaClient.REGIONS.forEach { r ->

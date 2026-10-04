@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
@@ -43,10 +45,13 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Ekran türüne göre düzen kararları: telefon, geniş ekran (tablet/Chromebook) ve Android TV. */
 object FormFactor {
@@ -146,4 +151,44 @@ fun TvKeyboardHint(modifier: Modifier = Modifier) {
         Spacer(Modifier.width(10.dp))
         Text(stringResource(R.string.tv_keyboard_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
+}
+
+/**
+ * TV'de yazı alanına kumandayla gelindiğinde klavye hemen açılmasın (açılırsa yukarı/aşağı klavyenin
+ * içinde kalır, sonraki alana geçilemez); klavye OK'e basınca açılır. Telefonda varsayılan davranış.
+ */
+@Composable
+fun tvKeyboardOptions(base: KeyboardOptions = KeyboardOptions.Default): KeyboardOptions =
+    if (LocalIsTv.current) base.copy(showKeyboardOnFocus = false) else base
+
+/**
+ * TV'de yazı alanı: kumandayla alana gelinince klavye kendiliğinden açılırsa yukarı/aşağı klavyenin içinde
+ * kalır ve sonraki alana geçilemez. Odaklanınca klavyeyi gizler; OK (orta tuş) klavyeyi açar.
+ */
+fun Modifier.tvTextField(): Modifier = composed {
+    if (!LocalIsTv.current) return@composed this
+    val keyboard = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+    val scope = rememberCoroutineScope()
+    this
+        .onFocusChanged { state ->
+            // Alan odaklanınca kendi açtığı klavyeyi bir an sonra kapat (sıra: önce alan açar, sonra biz gizleriz).
+            if (state.isFocused) scope.launch { delay(120); keyboard?.hide() }
+        }
+        .onPreviewKeyEvent { e ->
+            when (e.key) {
+                // Tek satırlık alan yukarı/aşağıyı imleci başa/sona almak için yutar: TV'de komşu öğeye geç.
+                Key.DirectionUp, Key.DirectionDown -> {
+                    if (e.type == KeyEventType.KeyDown) {
+                        focusManager.moveFocus(if (e.key == Key.DirectionUp) FocusDirection.Up else FocusDirection.Down)
+                    }
+                    true
+                }
+                Key.DirectionCenter, Key.Enter, Key.NumPadEnter -> {
+                    if (e.type == KeyEventType.KeyUp) keyboard?.show()
+                    true
+                }
+                else -> false
+            }
+        }
 }

@@ -42,6 +42,7 @@ class LoginActivity : Activity() {
             return
         }
 
+        val tv = FormFactor.isTv(this)
         val web = WebView(this)
         web.settings.javaScriptEnabled = true
         web.settings.domStorageEnabled = true
@@ -54,8 +55,14 @@ class LoginActivity : Activity() {
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 if (interceptRedirect(Uri.parse(url))) view.stopLoading()
             }
+
+            override fun onPageFinished(view: WebView, url: String) {
+                // TV: kumandada Tab yok; yukarı/aşağı ile alanlar arasında gezilsin, seçili alan belli olsun.
+                if (tv) view.evaluateJavascript(TV_NAV_JS, null)
+            }
         }
         setContentView(web)
+        if (tv) web.requestFocus()
         web.loadUrl(client.buildLoginUrl(state))
     }
 
@@ -97,6 +104,38 @@ class LoginActivity : Activity() {
     }
 
     companion object {
+        /**
+         * TV'de eWeLink giriş sayfası için: yukarı/aşağı tuşları alanlar arasında gezer (kumandada Tab yok),
+         * açık ülke listesinde liste içinde gezer; seçili alan kalın çerçeveyle gösterilir.
+         */
+        private val TV_NAV_JS = """
+(function () {
+  if (window.__sgTv) return; window.__sgTv = true;
+  var st = document.createElement('style');
+  st.textContent = ':focus{outline:4px solid #1e88e5 !important;outline-offset:3px !important;border-radius:8px}';
+  document.head.appendChild(st);
+  function items() {
+    return Array.prototype.filter.call(
+      document.querySelectorAll('input:not([type=hidden]):not([disabled]),button:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])'),
+      function (e) { var r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; });
+  }
+  function listOpen() {
+    return Array.prototype.some.call(document.querySelectorAll('.el-select-dropdown,.el-popper,[role=listbox]'),
+      function (d) { return d.offsetParent !== null && getComputedStyle(d).display !== 'none'; });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    if (listOpen()) return;
+    var l = items(); if (!l.length) return;
+    var i = l.indexOf(document.activeElement);
+    var n = e.key === 'ArrowDown' ? (i < 0 ? 0 : Math.min(i + 1, l.length - 1)) : (i <= 0 ? 0 : i - 1);
+    l[n].focus(); l[n].scrollIntoView({ block: 'center' });
+    e.preventDefault(); e.stopPropagation();
+  }, true);
+  setTimeout(function () { var l = items(); if (l.length) l[0].focus(); }, 400);
+})();
+""".trimIndent()
+
         fun start(context: Context) = context.startActivity(Intent(context, LoginActivity::class.java))
     }
 }

@@ -99,6 +99,7 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         // Aktarma: anahtarlar telefondan gelir; eWeLink varsa yine de bu cihazda (ayrı hesapla) giriş gerekir.
         Platform.TRANSFER -> listOfNotNull(
             Step.WELCOME, Step.PLATFORM, Step.RECEIVE,
+            Step.CREDENTIALS.takeIf { store.hasCredentials },
             Step.LOGIN.takeIf { store.hasCredentials },
             Step.PERMISSIONS, Step.DONE,
         )
@@ -351,12 +352,9 @@ private fun CredentialsStep(store: Store) {
 
 @Composable
 private fun LoginStep(loggedIn: Boolean) {
-    // Kurulum telefondan aktarıldıysa: "telefondaki hesapla girmeyin" uyarısı en üstte.
-    val transferStore = Store.get(LocalContext.current)
-    if (transferStore.transferSource.isNotEmpty()) {
-        Spacer(Modifier.height(16.dp))
-        SameAccountWarning(transferStore)
-    }
+    // Her cihazda ayrı eWeLink hesabı uyarısı en üstte (aktarma olsun olmasın).
+    Spacer(Modifier.height(16.dp))
+    SameAccountWarning(Store.get(LocalContext.current))
     val context = LocalContext.current
     StepHeader(Icons.Rounded.Shield, stringResource(R.string.onb_login_title), stringResource(R.string.onb_login_body))
     if (loggedIn) {

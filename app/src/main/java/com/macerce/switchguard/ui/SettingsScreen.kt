@@ -12,8 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -197,7 +199,14 @@ fun SettingsScreen(modifier: Modifier) {
                             AlertDialog(
                                 onDismissRequest = { dialog = null },
                                 title = { Text(stringResource(R.string.onb_transfer_title)) },
-                                text = { Column { ReceiveTransferPanel(onReceived = {}) } },
+                                text = {
+                                    Column {
+                                        ReceiveTransferPanel(onReceived = {
+                                            // Gelen anahtarlar görünsün/onaylansın; ardından bu cihazın kendi hesabıyla giriş.
+                                            if (store.hasCredentials) dialog = { CredentialsDialog(store) { dialog = null } }
+                                        })
+                                    }
+                                },
                                 confirmButton = {
                                     TextButton(onClick = { dialog = null }, modifier = Modifier.tvFocusRing()) {
                                         Text(stringResource(R.string.action_done))
@@ -558,7 +567,11 @@ fun CredentialsDialog(store: Store, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.api_credentials)) },
-        text = { CredentialFields(appId, { appId = it }, secret, { secret = it }, redirect, { redirect = it }) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                CredentialFields(appId, { appId = it }, secret, { secret = it }, redirect, { redirect = it })
+            }
+        },
         confirmButton = {
             TextButton(modifier = Modifier.tvFocusRing(), onClick = {
                 val changed = appId.trim() != store.appId || secret.trim() != store.appSecret
@@ -585,16 +598,19 @@ fun CredentialFields(
 ) {
     Column {
         TvKeyboardHint()
-        OutlinedTextField(appId, onAppId, label = { Text("App ID") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(appId, onAppId, label = { Text("App ID") }, singleLine = true, keyboardOptions = tvKeyboardOptions(), modifier = Modifier.fillMaxWidth().tvTextField())
         OutlinedTextField(
-            secret, onSecret, label = { Text("App Secret") }, singleLine = true,
+            secret, onSecret, label = { Text("App Secret") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),
             visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvTextField(),
         )
         OutlinedTextField(
-            redirect, onRedirect, label = { Text("Redirect URL") }, singleLine = true,
+            redirect, onRedirect, label = { Text("Redirect URL") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),
             supportingText = { Text(stringResource(R.string.redirect_hint)) },
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvTextField(),
         )
+        // Alanlar önce (kumanda görünür alanlara gider), her cihazda ayrı eWeLink hesabı uyarısı hemen altında.
+        Spacer(Modifier.height(12.dp))
+        SameAccountWarning(Store.get(LocalContext.current))
     }
 }
