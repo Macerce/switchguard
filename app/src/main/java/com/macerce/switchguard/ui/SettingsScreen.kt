@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -568,7 +569,9 @@ fun CredentialsDialog(store: Store, onDismiss: () -> Unit) {
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.api_credentials)) },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            // Sabit azami yükseklik: kaydırma alanı pencerenin ölçümüne bağlı kalırsa odaklı öğeyi görünür tutma
+            // ile pencere ölçümü 1 px'lik yuvarlamayla birbirini tetikler ve içerik sürekli titrer.
+            Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
                 CredentialFields(appId, { appId = it }, secret, { secret = it }, redirect, { redirect = it })
             }
         },

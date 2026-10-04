@@ -3,6 +3,7 @@ package com.macerce.switchguard.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -52,7 +53,8 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
         onDismissRequest = { if (!busy) onDismiss() },
         title = { Text(stringResource(R.string.tuya_dialog_title)) },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            // Sabit azami yükseklik: pencere içi kaydırma + odak görünür tutma döngüsünü (titreme) önler.
+            Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
                 Text(stringResource(R.string.tuya_dialog_desc), style = MaterialTheme.typography.bodyMedium)
                 Text(
                     stringResource(R.string.tuya_shared_hint),

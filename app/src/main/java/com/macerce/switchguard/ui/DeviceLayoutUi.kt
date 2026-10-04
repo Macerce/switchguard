@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -200,7 +201,8 @@ fun CategoriesDialog(layout: DeviceLayout, onChange: (DeviceLayout) -> Unit, onD
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.categories_manage)) },
         text = {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
+            // Sabit azami yükseklik: pencere içi kaydırma + odak görünür tutma döngüsünü (titreme) önler.
+            Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
                 if (layout.categories.isEmpty()) {
                     Text(stringResource(R.string.categories_empty), style = MaterialTheme.typography.bodyMedium)
                 }
