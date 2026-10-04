@@ -36,6 +36,7 @@ import androidx.compose.material.icons.rounded.DeveloperMode
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.RestartAlt
@@ -381,6 +382,15 @@ private fun PermissionsStep(resumed: Boolean) {
         stringResource(R.string.onb_perm_battery_desc),
         granted = battery,
     ) { Actions.requestBatteryExemption(context) }
+    if (AlarmActivity.needsOverlayPermission(context)) {
+        Spacer(Modifier.height(12.dp))
+        PermissionCard(
+            Icons.Rounded.Layers,
+            stringResource(R.string.perm_overlay),
+            stringResource(R.string.perm_overlay_desc),
+            granted = remember(resumed) { AlarmActivity.canShowOverApps(context) },
+        ) { AlarmActivity.openOverlaySettings(context) }
+    }
     OemBackground.current(context)?.let { oem ->
         Spacer(Modifier.height(12.dp))
         // Üretici listesinin durumu okunamıyor; kart her zaman "aç" düğmesiyle gösterilir.

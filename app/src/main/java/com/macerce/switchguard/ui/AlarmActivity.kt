@@ -110,6 +110,15 @@ class AlarmActivity : ComponentActivity() {
 
         /** Bu cihazda alarm ekranı kendiliğinden açılabilir mi (izin gerekiyorsa verilmiş mi). */
         fun canShowOverApps(context: Context): Boolean = Build.VERSION.SDK_INT < 29 || Settings.canDrawOverlays(context)
+
+        /** İzin satırı yalnızca TV'de ve Android 10+'da anlamlı (telefonda bildirim yeterli, eski TV'de izin yok). */
+        fun needsOverlayPermission(context: Context): Boolean = FormFactor.isTv(context) && Build.VERSION.SDK_INT >= 29
+
+        fun openOverlaySettings(context: Context) {
+            val direct = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:${context.packageName}"))
+            runCatching { context.startActivity(direct) }
+                .onFailure { runCatching { context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)) } }
+        }
     }
 }
 

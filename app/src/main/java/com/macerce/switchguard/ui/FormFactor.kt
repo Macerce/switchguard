@@ -3,11 +3,20 @@ package com.macerce.switchguard.ui
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Keyboard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +43,10 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.macerce.switchguard.R
 
 /** Ekran türüne göre düzen kararları: telefon, geniş ekran (tablet/Chromebook) ve Android TV. */
 object FormFactor {
@@ -123,5 +134,16 @@ fun Modifier.tvSliderKeys(): Modifier = composed {
         }
         if (e.type == KeyEventType.KeyDown) focusManager.moveFocus(dir)
         true
+    }
+}
+
+/** TV'de uzun anahtarları kumandayla yazmak zor: telefondaki Google TV uygulamasının klavyesini hatırlat. */
+@Composable
+fun TvKeyboardHint(modifier: Modifier = Modifier) {
+    if (!LocalIsTv.current) return
+    Row(modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+        Icon(Icons.Rounded.Keyboard, null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(10.dp))
+        Text(stringResource(R.string.tv_keyboard_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

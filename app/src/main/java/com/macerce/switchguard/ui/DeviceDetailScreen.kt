@@ -1,6 +1,5 @@
 package com.macerce.switchguard.ui
 
-import com.macerce.switchguard.core.Cloud
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -52,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
@@ -80,7 +80,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
         TopAppBar(
             title = { Text(device?.name ?: "", maxLines = 1, overflow = TextOverflow.Ellipsis) },
             navigationIcon = {
-                IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) }
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) }
             },
         )
         if (device == null) {
@@ -171,7 +171,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                         Modifier.clickable { pickSound(custom) },
                     ) {
                         if (custom != null) {
-                            IconButton(onClick = { store.setRules(deviceId, rules.copy(soundUri = null)) }) {
+                            IconButton(modifier = Modifier.tvFocusRing(), onClick = { store.setRules(deviceId, rules.copy(soundUri = null)) }) {
                                 Icon(Icons.Rounded.Close, stringResource(R.string.device_sound_reset))
                             }
                         }
@@ -204,8 +204,8 @@ private fun FreeSlotDialog(otherName: String, onSwitch: () -> Unit, onUpgrade: (
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.pro_limit_title)) },
         text = { Text(stringResource(R.string.pro_limit_body, Entitlement.FREE_DEVICES, otherName)) },
-        confirmButton = { TextButton(onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) } },
-        dismissButton = { TextButton(onClick = onSwitch) { Text(stringResource(R.string.pro_limit_switch)) } },
+        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) } },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onSwitch) { Text(stringResource(R.string.pro_limit_switch)) } },
     )
 }
 

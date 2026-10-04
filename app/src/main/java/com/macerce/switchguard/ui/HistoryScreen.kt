@@ -1,7 +1,5 @@
 package com.macerce.switchguard.ui
 
-import com.macerce.switchguard.core.EventStrings
-import androidx.compose.ui.platform.LocalConfiguration
 import android.text.format.DateUtils
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -48,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -55,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
@@ -82,7 +82,7 @@ fun HistoryScreen(modifier: Modifier) {
         TopAppBar(
             title = { Text(stringResource(R.string.tab_history), fontWeight = FontWeight.SemiBold) },
             actions = {
-                IconButton(onClick = { confirmClear = true }, enabled = events.isNotEmpty()) {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmClear = true }, enabled = events.isNotEmpty()) {
                     Icon(Icons.Rounded.DeleteSweep, stringResource(R.string.action_clear_history))
                 }
             },
@@ -129,10 +129,10 @@ fun HistoryScreen(modifier: Modifier) {
             title = { Text(stringResource(R.string.clear_history_title)) },
             text = { Text(stringResource(R.string.clear_history_body)) },
             confirmButton = {
-                TextButton(onClick = { log.clear(); confirmClear = false }) { Text(stringResource(R.string.action_clear)) }
+                TextButton(modifier = Modifier.tvFocusRing(), onClick = { log.clear(); confirmClear = false }) { Text(stringResource(R.string.action_clear)) }
             },
             dismissButton = {
-                TextButton(onClick = { confirmClear = false }) { Text(stringResource(R.string.action_cancel)) }
+                TextButton(modifier = Modifier.tvFocusRing(), onClick = { confirmClear = false }) { Text(stringResource(R.string.action_cancel)) }
             },
         )
     }

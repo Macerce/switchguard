@@ -34,6 +34,7 @@ import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
@@ -132,7 +133,7 @@ fun SettingsScreen(modifier: Modifier) {
                     if (s.isLoggedIn) stringResource(R.string.region_x, s.region.uppercase()) else null,
                     Modifier.clickable { LoginActivity.start(context) },
                 ) {
-                    TextButton(onClick = { LoginActivity.start(context) }) {
+                    TextButton(modifier = Modifier.tvFocusRing(), onClick = { LoginActivity.start(context) }) {
                         Text(stringResource(if (s.isLoggedIn) R.string.action_relogin else R.string.action_login))
                     }
                 }
@@ -353,6 +354,16 @@ fun SettingsScreen(modifier: Modifier) {
                     stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
                     Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
                 )
+                if (AlarmActivity.needsOverlayPermission(context)) {
+                    val overlay = remember(resumed) { AlarmActivity.canShowOverApps(context) }
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.Layers,
+                        stringResource(R.string.perm_overlay),
+                        stringResource(if (overlay) R.string.perm_granted else R.string.perm_missing),
+                        Modifier.clickable(enabled = !overlay) { AlarmActivity.openOverlaySettings(context) },
+                    )
+                }
                 OemBackground.current(context)?.let { oem ->
                     Divider()
                     InfoRow(
@@ -491,7 +502,7 @@ private fun <T> ChoiceDialog(
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }
 
@@ -501,8 +512,8 @@ fun ConfirmDialog(title: String, body: String, confirm: String, onConfirm: () ->
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = { Text(body) },
-        confirmButton = { TextButton(onClick = { onConfirm(); onDismiss() }) { Text(confirm) } },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = { onConfirm(); onDismiss() }) { Text(confirm) } },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }
 
@@ -517,7 +528,7 @@ fun CredentialsDialog(store: Store, onDismiss: () -> Unit) {
         title = { Text(stringResource(R.string.api_credentials)) },
         text = { CredentialFields(appId, { appId = it }, secret, { secret = it }, redirect, { redirect = it }) },
         confirmButton = {
-            TextButton(onClick = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
                 val changed = appId.trim() != store.appId || secret.trim() != store.appSecret
                 store.appId = appId
                 store.appSecret = secret
@@ -530,7 +541,7 @@ fun CredentialsDialog(store: Store, onDismiss: () -> Unit) {
                 onDismiss()
             }) { Text(stringResource(R.string.action_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }
 
@@ -541,6 +552,7 @@ fun CredentialFields(
     redirect: String, onRedirect: (String) -> Unit,
 ) {
     Column {
+        TvKeyboardHint()
         OutlinedTextField(appId, onAppId, label = { Text("App ID") }, singleLine = true, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(
             secret, onSecret, label = { Text("App Secret") }, singleLine = true,

@@ -402,4 +402,5 @@
     <string name="alarm_open_app">Uygulamayı aç</string>
     <string name="perm_overlay">Alarmı diğer uygulamaların üstünde göster</string>
     <string name="perm_overlay_desc">Android TV\'de alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Dokunun ve SwitchGuard\'a izin verin.</string>
+    <string name="tv_keyboard_hint">İpucu: Telefonunuzdaki Google TV uygulamasıyla (kumanda → klavye) yazabilir ya da yapıştırabilirsiniz.</string>
 </resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · ⇕ = küçük / büyük kart · etiket = kategori. Buraya dönmek için sağ üstteki düzen simgesini seçin.</string>
+    <string name="tuya_not_connected">Bağlı değil · bağlamak için seçin</string>
+    <string name="perm_missing">İzin yok — düzeltmek için seçin</string>
+    <string name="perm_battery_missing">Kısıtlı — alarmlar gecikebilir. Düzeltmek için seçin.</string>
+    <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını belirlemek için bir cihazı seçin</string>
+    <string name="perm_overlay_desc">Alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Seçin ve SwitchGuard\'a izin verin.</string>
+</resources>

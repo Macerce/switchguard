@@ -1,6 +1,5 @@
 package com.macerce.switchguard.ui
 
-import com.macerce.switchguard.core.Cloud
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.text.format.DateFormat as AndroidDateFormat
@@ -52,17 +51,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.ApiException
+import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DeviceTimers
 import com.macerce.switchguard.core.RepeatTimer
 import com.macerce.switchguard.core.TimerEntry
 import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.service.DailySummary
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 import java.util.UUID
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun formatWatts(w: Double): String =
     if (w >= 1000) String.format(Locale.getDefault(), "%.2f kW", w / 1000)
@@ -250,7 +250,7 @@ fun TimersSection(device: DeviceSnapshot) {
                                 (if (device.isMultiChannel) stringResource(R.string.channel_n, t.channel + 1) + " " else "") +
                                 stringResource(if (t.on) R.string.auto_action_turn_on else R.string.auto_action_turn_off),
                             daysLabel(t.days),
-                            Modifier.clickable(enabled = !busy) { editing = t },
+                            Modifier.tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(enabled = !busy) { editing = t },
                         ) {
                             Switch(checked = t.enabled, enabled = !busy, onCheckedChange = { save(t.id, t.copy(enabled = it)) })
                         }
@@ -262,7 +262,7 @@ fun TimersSection(device: DeviceSnapshot) {
                     Icons.Rounded.Add,
                     stringResource(R.string.timer_add),
                     if (full) stringResource(R.string.timer_full, DeviceTimers.MAX_TIMERS) else stringResource(R.string.timer_add_desc),
-                    Modifier.clickable(enabled = !busy && !full) {
+                    Modifier.tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(enabled = !busy && !full) {
                         editing = RepeatTimer(UUID.randomUUID().toString(), true, 7, 0, DeviceTimers.ALL_DAYS, 0, true)
                     },
                 )
@@ -343,12 +343,12 @@ private fun TimerDialog(
             }
         },
         confirmButton = {
-            TextButton(enabled = t.days.isNotEmpty(), onClick = { onSave(t) }) { Text(stringResource(R.string.action_save)) }
+            TextButton(modifier = Modifier.tvFocusRing(), enabled = t.days.isNotEmpty(), onClick = { onSave(t) }) { Text(stringResource(R.string.action_save)) }
         },
         dismissButton = {
             Row {
-                if (!isNew) TextButton(onClick = onDelete) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error) }
-                TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
+                if (!isNew) TextButton(modifier = Modifier.tvFocusRing(), onClick = onDelete) { Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error) }
+                TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
             }
         },
     )

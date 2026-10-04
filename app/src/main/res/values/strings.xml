@@ -406,4 +406,5 @@
     <string name="alarm_open_app">Open app</string>
     <string name="perm_overlay">Show alarm over other apps</string>
     <string name="perm_overlay_desc">Needed on Android TV so the alarm appears on top of whatever is playing. Tap and allow SwitchGuard.</string>
+    <string name="tv_keyboard_hint">Tip: type or paste from your phone with the Google TV app (remote → keyboard).</string>
 </resources>

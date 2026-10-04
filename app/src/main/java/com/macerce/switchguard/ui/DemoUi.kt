@@ -62,5 +62,5 @@ fun DemoSection(device: DeviceSnapshot) {
 
 @Composable
 private fun DemoButton(text: String, onClick: () -> Unit) {
-    OutlinedButton(onClick = onClick, modifier = Modifier.fillMaxWidth()) { Text(text) }
+    OutlinedButton(onClick = onClick, modifier = Modifier.fillMaxWidth().tvFocusRing()) { Text(text) }
 }

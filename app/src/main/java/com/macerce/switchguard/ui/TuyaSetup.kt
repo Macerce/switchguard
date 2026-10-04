@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -32,8 +33,8 @@ import com.macerce.switchguard.api.TuyaAuthException
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaExpiredException
 import com.macerce.switchguard.data.Store
-import kotlinx.coroutines.launch
 import java.io.IOException
+import kotlinx.coroutines.launch
 
 /** Tuya Cloud projesinin bilgilerini alır, kaydetmeden önce bağlanıp dener. */
 @Composable
@@ -59,6 +60,7 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 8.dp),
                 )
+                TvKeyboardHint()
                 OutlinedTextField(
                     accessId, { accessId = it }, label = { Text("Access ID") }, singleLine = true,
                     modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
@@ -71,7 +73,7 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                 Text(stringResource(R.string.tuya_region), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 12.dp))
                 TuyaClient.REGIONS.forEach { r ->
                     Row(
-                        Modifier.fillMaxWidth().selectable(selected = r == region, onClick = { region = r }).padding(vertical = 2.dp),
+                        Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(12.dp), inside = true).selectable(selected = r == region, onClick = { region = r }).padding(vertical = 2.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         RadioButton(selected = r == region, onClick = null)
@@ -90,7 +92,7 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
             }
         },
         confirmButton = {
-            TextButton(
+            TextButton(modifier = Modifier.tvFocusRing(), 
                 enabled = !busy && accessId.isNotBlank() && secret.isNotBlank(),
                 onClick = {
                     busy = true
@@ -125,11 +127,11 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
         dismissButton = {
             Row {
                 if (store.hasTuya) {
-                    TextButton(enabled = !busy, onClick = { Actions.disconnectTuya(context); onDismiss() }) {
+                    TextButton(modifier = Modifier.tvFocusRing(), enabled = !busy, onClick = { Actions.disconnectTuya(context); onDismiss() }) {
                         Text(stringResource(R.string.tuya_disconnect))
                     }
                 }
-                TextButton(enabled = !busy, onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
+                TextButton(modifier = Modifier.tvFocusRing(), enabled = !busy, onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
             }
         },
     )

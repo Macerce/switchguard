@@ -141,7 +141,7 @@ private fun EmptyAutomations() {
 
 @Composable
 private fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
-    ElevatedCard(Modifier.fillMaxWidth().clickable(onClick = onClick), shape = RoundedCornerShape(20.dp)) {
+    ElevatedCard(Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(onClick = onClick), shape = RoundedCornerShape(20.dp)) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
                 Text(a.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -260,10 +260,10 @@ private fun AutomationEditor(
     Column(modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(if (initial == null) R.string.automation_new else R.string.automation_edit)) },
-            navigationIcon = { IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) } },
+            navigationIcon = { IconButton(modifier = Modifier.tvFocusRing(), onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) } },
             actions = {
                 if (initial != null) {
-                    IconButton(onClick = { confirmDelete = true }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
+                    IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
                 }
             },
         )
@@ -361,7 +361,7 @@ private fun AutomationEditor(
                         )
                     )
                 },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(52.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(52.dp).tvFocusRing(),
             ) { Text(stringResource(R.string.action_save)) }
         }
     }

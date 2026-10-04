@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.AlertDialog
@@ -59,7 +60,7 @@ fun ProDialog(onDismiss: () -> Unit, reason: String? = null) {
             }
         },
         confirmButton = {
-            TextButton(
+            TextButton(modifier = Modifier.tvFocusRing(), 
                 enabled = price != null && state == Billing.State.READY,
                 onClick = {
                     val activity = context as? Activity
@@ -75,7 +76,7 @@ fun ProDialog(onDismiss: () -> Unit, reason: String? = null) {
                 )
             }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_later)) } },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_later)) } },
     )
 }
 
@@ -87,10 +88,10 @@ fun ProRow(isPro: Boolean, onUpgrade: () -> Unit) {
         Icons.Rounded.WorkspacePremium,
         stringResource(R.string.pro_title),
         stringResource(if (isPro) R.string.pro_active else R.string.pro_free_status, Entitlement.FREE_DEVICES),
-        if (isPro) Modifier else Modifier.clickable(onClick = onUpgrade),
+        if (isPro) Modifier else Modifier.tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(onClick = onUpgrade),
     ) {
         if (!isPro) {
-            TextButton(onClick = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
                 // Başka telefonda alınmış satın almayı getirir.
                 Billing.get(context).refresh()
                 Toast.makeText(context, R.string.pro_restoring, Toast.LENGTH_SHORT).show()

@@ -94,7 +94,7 @@ fun LayoutEditHint(onCategories: () -> Unit) {
     ) {
         Column(Modifier.padding(16.dp)) {
             Text(stringResource(R.string.layout_hint), style = MaterialTheme.typography.bodyMedium)
-            TextButton(onClick = onCategories, modifier = Modifier.padding(top = 4.dp)) {
+            TextButton(onClick = onCategories, modifier = Modifier.padding(top = 4.dp).tvFocusRing()) {
                 Icon(Icons.AutoMirrored.Rounded.Label, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.categories_manage))
@@ -207,26 +207,26 @@ fun CategoriesDialog(layout: DeviceLayout, onChange: (DeviceLayout) -> Unit, onD
                 layout.categories.forEachIndexed { i, c ->
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(c.name, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        IconButton(onClick = { renaming = c }) { Icon(Icons.Rounded.Edit, stringResource(R.string.action_rename)) }
-                        IconButton(onClick = { onChange(layout.moveCategory(c.id, -1)) }, enabled = i > 0) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { renaming = c }) { Icon(Icons.Rounded.Edit, stringResource(R.string.action_rename)) }
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { onChange(layout.moveCategory(c.id, -1)) }, enabled = i > 0) {
                             Icon(Icons.Rounded.ArrowUpward, stringResource(R.string.layout_move_up))
                         }
-                        IconButton(onClick = { onChange(layout.moveCategory(c.id, +1)) }, enabled = i < layout.categories.lastIndex) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { onChange(layout.moveCategory(c.id, +1)) }, enabled = i < layout.categories.lastIndex) {
                             Icon(Icons.Rounded.ArrowDownward, stringResource(R.string.layout_move_down))
                         }
-                        IconButton(onClick = { onChange(layout.deleteCategory(c.id)) }) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { onChange(layout.deleteCategory(c.id)) }) {
                             Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete))
                         }
                     }
                 }
-                TextButton(onClick = { adding = true }) {
+                TextButton(modifier = Modifier.tvFocusRing(), onClick = { adding = true }) {
                     Icon(Icons.Rounded.Add, null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.category_new))
                 }
             }
         },
-        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_done)) } },
+        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_done)) } },
     )
     renaming?.let { c ->
         NameDialog(stringResource(R.string.action_rename), c.name, onDismiss = { renaming = null }) { onChange(layout.renameCategory(c.id, it)) }
@@ -248,8 +248,8 @@ private fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, on
             OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.category_name)) }, singleLine = true)
         },
         confirmButton = {
-            TextButton(enabled = name.isNotBlank(), onClick = { onSave(name.trim()); onDismiss() }) { Text(stringResource(R.string.action_save)) }
+            TextButton(modifier = Modifier.tvFocusRing(), enabled = name.isNotBlank(), onClick = { onSave(name.trim()); onDismiss() }) { Text(stringResource(R.string.action_save)) }
         },
-        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }

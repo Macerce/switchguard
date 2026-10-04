@@ -148,11 +148,11 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                     }
                 } else {
                     if (devices.isNotEmpty()) {
-                        IconButton(onClick = { editMode = true }) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { editMode = true }) {
                             Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
                         }
                     }
-                    IconButton(onClick = doRefresh, enabled = loggedIn) {
+                    IconButton(modifier = Modifier.tvFocusRing(), onClick = doRefresh, enabled = loggedIn) {
                         Icon(Icons.Rounded.Refresh, stringResource(R.string.action_refresh))
                     }
                 }
@@ -262,7 +262,7 @@ private fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
             Spacer(Modifier.height(16.dp))
             Button(
                 onClick = onDismiss,
-                modifier = Modifier.fillMaxWidth().height(56.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp).tvFocusRing(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError,
@@ -312,13 +312,13 @@ private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, mon
         HorizontalDivider(color = MaterialTheme.colorScheme.surface)
         Box(Modifier.fillMaxWidth().padding(12.dp)) {
             if (monitoring) {
-                FilledTonalButton(onClick = { Actions.stopMonitoring(context) }, modifier = Modifier.fillMaxWidth()) {
+                FilledTonalButton(onClick = { Actions.stopMonitoring(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
                     Icon(Icons.Rounded.Stop, null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.action_stop_monitoring))
                 }
             } else {
-                Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
                     Icon(Icons.Rounded.PlayArrow, null)
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.action_start_monitoring))
@@ -358,7 +358,7 @@ private fun LoginPromptCard(sessionLost: Boolean) {
                 Text(stringResource(R.string.session_lost_tip), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(12.dp))
-            Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
                 Text(stringResource(if (sessionLost) R.string.action_relogin else R.string.action_login))
             }
         }
@@ -377,7 +377,7 @@ private fun ProHintCard(onUpgrade: () -> Unit) {
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.weight(1f),
             )
-            TextButton(onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) }
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) }
         }
     }
 }

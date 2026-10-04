@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">Star = keep at the top · arrows = move · ⇕ = small / large card · tag = category. Select the layout icon at the top right to come back here.</string>
+    <string name="tuya_not_connected">Not connected · select to connect</string>
+    <string name="perm_missing">Not allowed — select to fix</string>
+    <string name="perm_battery_missing">Restricted — alarms may be delayed. Select to fix.</string>
+    <string name="onb_done_tip_rules">Select a device to choose which events ring an alarm</string>
+    <string name="perm_overlay_desc">Needed so the alarm appears on top of whatever is playing. Select and allow SwitchGuard.</string>
+</resources>
