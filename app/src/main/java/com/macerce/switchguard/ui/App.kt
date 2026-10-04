@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -100,12 +101,16 @@ fun App() {
             Icon(t.icon, contentDescription = null)
         }
     }
-    val tabContent: @Composable (Modifier) -> Unit = { mod ->
-        when (tab) {
-            Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
-            Tab.AUTOMATIONS -> AutomationsScreen(mod)
-            Tab.HISTORY -> HistoryScreen(mod)
-            Tab.SETTINGS -> SettingsScreen(mod)
+    // Taşınabilir içerik: telefon yan çevrilince (ya da tablette pencere boyutu değişince) alt menü ile yan menü
+    // düzenleri arasında geçilir; içerik taşınırken durumunu (açık pencere, yazılan metin, kaydırma) korur.
+    val tabContent = remember {
+        movableContentOf { mod: Modifier ->
+            when (tab) {
+                Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
+                Tab.AUTOMATIONS -> AutomationsScreen(mod)
+                Tab.HISTORY -> HistoryScreen(mod)
+                Tab.SETTINGS -> SettingsScreen(mod)
+            }
         }
     }
 

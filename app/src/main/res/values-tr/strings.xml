@@ -429,4 +429,5 @@
     <string name="transfer_failed">Cihaza ulaşılamadı. İkisinin de aynı Wi-Fi\'da olduğundan emin olun.</string>
     <string name="transfer_sent_ok">%1$s cihazına gönderildi.</string>
     <string name="transfer_sent_ewelink_note">eWeLink oturumunuz yalnızca bu telefonda kalır. Diğer cihazda, cihazlarınızın paylaşıldığı ayrı bir eWeLink hesabıyla giriş yapın.</string>
+    <string name="transfer_other_account_body_generic">Bu cihazda, telefonunuzda kullandığınız eWeLink hesabıyla giriş YAPMAYIN — eWeLink hesap başına tek oturuma izin verir, telefonunuzdaki oturum kapanır. Ayrı bir eWeLink hesabı açın ve cihazlarınızı eWeLink uygulamasından (cihaz → Paylaş) o hesapla paylaşın.</string>
 </resources>

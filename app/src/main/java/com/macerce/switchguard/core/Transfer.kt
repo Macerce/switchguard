@@ -25,6 +25,9 @@ object Transfer {
     const val SERVICE_TYPE = "_switchguard._tcp."
     const val VERSION = 1
 
+    /** Gönderen eWeLink'e bağlı ama hesabın e-postası bilinmiyor. */
+    const val UNKNOWN_ACCOUNT = "*"
+
     /** Aktarılan SharedPreferences anahtarları (izin listesi). */
     private val KEYS = setOf(
         "appId", "appSecret", "redirectUrl",
@@ -57,7 +60,7 @@ object Transfer {
         return JSONObject()
             .put("v", VERSION)
             .put("prefs", prefs)
-            .put("source", JSONObject().put("email", store.accountEmail).put("device", Build.MODEL))
+            .put("source", JSONObject().put("email", store.accountEmail).put("ewelink", store.isLoggedIn).put("device", Build.MODEL))
     }
 
     /** Alınan veriyi uygular. Döner: gönderen cihazın eWeLink e-postası (boş olabilir). */
@@ -79,8 +82,11 @@ object Transfer {
         // Tuya anahtarı değişmiş olabilir: eski erişim belirteci geçersiz.
         editor.remove("tuyaToken").remove("tuyaTokenExp")
         editor.apply()
-        val email = data.optJSONObject("source")?.optString("email").orEmpty()
-        store.transferSource = email
+        val source = data.optJSONObject("source")
+        val email = source?.optString("email").orEmpty()
+        // E-posta her zaman bilinmez (bazı App ID'lerde eWeLink profil sorgusu reddedilir): gönderen eWeLink'e
+        // bağlıysa yine de uyarı gösterilsin diye işaretçi saklanır.
+        store.transferSource = email.ifEmpty { if (source?.optBoolean("ewelink") == true) UNKNOWN_ACCOUNT else "" }
         return email
     }
 

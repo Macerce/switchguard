@@ -85,7 +85,7 @@ fun ReceiveTransferPanel(onReceived: () -> Unit) {
             Spacer(Modifier.width(10.dp))
             Text(stringResource(R.string.transfer_received), style = MaterialTheme.typography.titleMedium)
         }
-        if (source.isNotEmpty()) {
+        if (store.transferSource.isNotEmpty()) {
             Spacer(Modifier.height(12.dp))
             SameAccountWarning(store)
         }
@@ -115,7 +115,8 @@ fun ReceiveTransferPanel(onReceived: () -> Unit) {
 fun SameAccountWarning(store: Store) {
     val source = store.transferSource
     if (source.isEmpty() || !store.hasCredentials) return
-    val same = store.isLoggedIn && store.accountEmail.equals(source, ignoreCase = true)
+    val known = source != Transfer.UNKNOWN_ACCOUNT
+    val same = known && store.isLoggedIn && store.accountEmail.equals(source, ignoreCase = true)
     Card(
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -133,10 +134,11 @@ fun SameAccountWarning(store: Store) {
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    stringResource(
-                        if (same) R.string.transfer_same_account_body else R.string.transfer_other_account_body,
-                        Transfer.maskEmail(source),
-                    ),
+                    when {
+                        same -> stringResource(R.string.transfer_same_account_body, Transfer.maskEmail(source))
+                        known -> stringResource(R.string.transfer_other_account_body, Transfer.maskEmail(source))
+                        else -> stringResource(R.string.transfer_other_account_body_generic)
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }

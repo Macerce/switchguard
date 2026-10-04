@@ -433,4 +433,5 @@
     <string name="transfer_failed">Couldn\'t reach the device. Make sure both are on the same Wi-Fi.</string>
     <string name="transfer_sent_ok">Sent to %1$s.</string>
     <string name="transfer_sent_ewelink_note">Your eWeLink session stays only on this phone. On the other device sign in with a separate eWeLink account that your devices are shared with.</string>
+    <string name="transfer_other_account_body_generic">Don\'t sign in on this device with the eWeLink account used on your phone — eWeLink allows only one session per account and your phone would be signed out. Create a separate eWeLink account and share your devices with it in the eWeLink app (device → Share).</string>
 </resources>
