@@ -2,6 +2,8 @@ package com.macerce.switchguard.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -47,11 +49,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        AlarmActivity.appInFront = true
         // Satın alma/iade başka cihazda ya da Play'de olmuş olabilir: her açılışta tazele.
         Billing.get(this).refresh()
         // İzleme açık görünüyor ama servis yok (güncelleme/yeniden başlatma yayını engellendi, ör. Xiaomi): yeniden başlat.
         if (Store.get(this).monitoringEnabled && MonitorService.instance == null) {
             MonitorService.send(this, MonitorService.ACTION_START)
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        AlarmActivity.appInFront = false
+        val app = applicationContext
+        Handler(Looper.getMainLooper()).postDelayed({ AlarmActivity.ensureShown(app) }, 1500)
     }
 }

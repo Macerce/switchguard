@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -96,7 +98,43 @@ class AlarmActivity : ComponentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        visible = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        visible = false
+        // Home'a basıldı ya da başka uygulama öne geçti ama alarm susturulmadı: ekran geri gelsin.
+        if (!isFinishing) {
+            val app = applicationContext
+            Handler(Looper.getMainLooper()).postDelayed({ ensureShown(app) }, REASSERT_MS)
+        }
+    }
+
     companion object {
+        private const val REASSERT_MS = 1500L
+
+        /** Alarm ekranı şu an görünüyor mu. */
+        @Volatile
+        var visible = false
+            private set
+
+        /** SwitchGuard ana ekranı önde mi (orada alarm şeridi ve "Alarmı kapat" zaten var). */
+        @Volatile
+        var appInFront = false
+
+        /**
+         * TV'de alarm susturulmadıkça ekranın önde olmasını sağlar. Servis periyodik olarak ve
+         * ekrandan/uygulamadan çıkıldığında çağırır; SwitchGuard önündeyse dokunmaz.
+         */
+        fun ensureShown(context: Context) {
+            if (visible || appInFront || !FormFactor.isTv(context)) return
+            if (Store.get(context).pendingAlarm.isEmpty()) return
+            show(context)
+        }
+
         /** Alarm ekranını açar. Android 10+ arka plandan açmak için "diğer uygulamaların üzerinde göster" izni gerekir. */
         fun show(context: Context) {
             if (Build.VERSION.SDK_INT >= 29 && !Settings.canDrawOverlays(context)) return

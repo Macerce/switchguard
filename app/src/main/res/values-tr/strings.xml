@@ -29,8 +29,8 @@
 
     <string name="label_on">AÇIK</string>
     <string name="label_off">KAPALI</string>
-    <string name="label_online">ONLINE</string>
-    <string name="label_offline">OFFLINE</string>
+    <string name="label_online">ÇEVRİMİÇİ</string>
+    <string name="label_offline">ÇEVRİMDIŞI</string>
     <string name="label_channel">%1$s (K%2$d)</string>
     <string name="label_online_title">Çevrimiçi</string>
     <string name="label_offline_title">Çevrimdışı</string>

@@ -18,7 +18,6 @@ import android.os.PowerManager
 import android.os.SystemClock
 import android.util.Log
 import com.macerce.switchguard.R
-import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
@@ -27,31 +26,33 @@ import com.macerce.switchguard.api.TuyaAuthException
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaExpiredException
 import com.macerce.switchguard.api.TuyaSocket
-import com.macerce.switchguard.core.Cloud
-import com.macerce.switchguard.core.TuyaEvent
-import com.macerce.switchguard.core.TuyaParser
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
+import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
-import com.macerce.switchguard.core.toArgs
-import com.macerce.switchguard.core.EventStrings
-import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.EventArgs
+import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.OfflineGrace
 import com.macerce.switchguard.core.RuleEngine
+import com.macerce.switchguard.core.TuyaEvent
+import com.macerce.switchguard.core.TuyaParser
 import com.macerce.switchguard.core.WsEvent
 import com.macerce.switchguard.core.WsMessages
+import com.macerce.switchguard.core.toArgs
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.AlarmActivity
 import java.io.IOException
 import java.text.DateFormat
 import java.util.Calendar
@@ -272,6 +273,8 @@ class MonitorService : Service() {
     // ---------------------------------------------------------------- zamanlama
 
     private fun tick() {
+        // TV: alarm sürüyor ama ekranı kapanmış/arkada kalmışsa yeniden öne getir.
+        if (store.pendingAlarm.isNotEmpty()) AlarmActivity.ensureShown(this)
         if (!running) return
         val now = SystemClock.elapsedRealtime()
         val wall = System.currentTimeMillis()
