@@ -27,6 +27,8 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
     implementation(compose.materialIconsExtended)
+    implementation("org.json:json:20240303")
+    testImplementation("junit:junit:4.13.2")
 }
 
 compose.desktop {

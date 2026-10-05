@@ -1,0 +1,116 @@
+package com.macerce.switchguard.core
+
+import org.json.JSONArray
+import org.json.JSONObject
+
+object DeviceParser {
+
+    /** `GET /v2/device/thing` yanıtını cihaz listesine çevirir; grupları (deviceid'siz) atlar. */
+    fun parseThingList(body: String): List<DeviceSnapshot> {
+        val list = JSONObject(body).getJSONObject("data").optJSONArray("thingList") ?: return emptyList()
+        val result = mutableListOf<DeviceSnapshot>()
+        for (i in 0 until list.length()) {
+            val item = list.getJSONObject(i).optJSONObject("itemData") ?: continue
+            val id = item.optString("deviceid")
+            if (id.isEmpty()) continue
+            val params = item.optJSONObject("params")
+            val uiid = item.optJSONObject("extra")?.optInt("uiid", 0) ?: 0
+            val energy = params?.let { EnergyParser.parse(uiid, it) }
+            result += DeviceSnapshot(
+                id = id,
+                name = item.optString("name", id),
+                online = item.optBoolean("online", false),
+                switches = parseSwitches(params),
+                uiid = uiid,
+                power = energy?.power,
+                voltage = energy?.voltage,
+                current = energy?.current,
+                channelPower = energy?.channelPowers.orEmpty(),
+            )
+        }
+        return result
+    }
+
+    /**
+     * Cihaz listesinden kullanıcının apikey'i: kendi cihazının (paylaşılmamış) sahibi kullanıcının kendisidir.
+     * Bazı App ID'ler `/v2/user/profile`'a erişemediği (407) için WebSocket'in apikey kaynağı budur.
+     */
+    fun ownApiKey(body: String): String? {
+        val list = JSONObject(body).optJSONObject("data")?.optJSONArray("thingList") ?: return null
+        for (i in 0 until list.length()) {
+            val item = list.optJSONObject(i)?.optJSONObject("itemData") ?: continue
+            if (item.has("sharedBy")) continue
+            item.optString("apikey").takeIf { it.isNotEmpty() }?.let { return it }
+        }
+        return null
+    }
+
+    /** Tek cihaz sorgusunun (`POST /v2/device/thing`) ham params nesnesi. */
+    fun parseSingleParams(body: String): JSONObject? =
+        JSONObject(body).optJSONObject("data")?.optJSONArray("thingList")
+            ?.optJSONObject(0)?.optJSONObject("itemData")?.optJSONObject("params")
+
+    fun parseSwitches(params: JSONObject?): Map<Int, Boolean> {
+        if (params == null) return emptyMap()
+        val multi = params.optJSONArray("switches")
+        if (multi != null && multi.length() > 0) {
+            val map = sortedMapOf<Int, Boolean>()
+            for (i in 0 until multi.length()) {
+                val s = multi.getJSONObject(i)
+                map[s.optInt("outlet", i)] = s.optString("switch") == "on"
+            }
+            return map
+        }
+        val single = params.optString("switch", "")
+        return if (single.isEmpty()) emptyMap() else mapOf(0 to (single == "on"))
+    }
+
+    fun snapshotsToJson(devices: List<DeviceSnapshot>): String {
+        val arr = JSONArray()
+        for (d in devices) {
+            val sw = JSONObject()
+            d.switches.forEach { (k, v) -> sw.put(k.toString(), v) }
+            val o = JSONObject().put("id", d.id).put("name", d.name).put("online", d.online).put("switches", sw)
+                .put("uiid", d.uiid)
+            d.power?.let { o.put("power", it) }
+            d.voltage?.let { o.put("voltage", it) }
+            d.current?.let { o.put("current", it) }
+            if (d.channelPower.isNotEmpty()) {
+                o.put("channelPower", JSONObject().apply { d.channelPower.forEach { (k, v) -> put(k.toString(), v) } })
+            }
+            if (d.cloud != Cloud.EWELINK) o.put("cloud", d.cloud.name)
+            if (d.switchCodes.isNotEmpty()) {
+                o.put("switchCodes", JSONObject().apply { d.switchCodes.forEach { (k, v) -> put(k.toString(), v) } })
+            }
+            arr.put(o)
+        }
+        return arr.toString()
+    }
+
+    fun snapshotsFromJson(json: String): List<DeviceSnapshot> {
+        val arr = JSONArray(json)
+        return (0 until arr.length()).map { i ->
+            val o = arr.getJSONObject(i)
+            val sw = o.getJSONObject("switches")
+            DeviceSnapshot(
+                id = o.getString("id"),
+                name = o.getString("name"),
+                online = o.getBoolean("online"),
+                switches = sw.keys().asSequence().associate { it.toInt() to sw.getBoolean(it) }.toSortedMap(),
+                uiid = o.optInt("uiid", 0),
+                power = o.optDoubleOrNull("power"),
+                voltage = o.optDoubleOrNull("voltage"),
+                current = o.optDoubleOrNull("current"),
+                channelPower = o.optJSONObject("channelPower")?.let { cp ->
+                    cp.keys().asSequence().associate { it.toInt() to cp.getDouble(it) }
+                }.orEmpty(),
+                cloud = runCatching { Cloud.valueOf(o.optString("cloud", "EWELINK")) }.getOrDefault(Cloud.EWELINK),
+                switchCodes = o.optJSONObject("switchCodes")?.let { sc ->
+                    sc.keys().asSequence().associate { it.toInt() to sc.getString(it) }
+                }.orEmpty(),
+            )
+        }
+    }
+
+    private fun JSONObject.optDoubleOrNull(key: String): Double? = if (has(key)) optDouble(key) else null
+}
