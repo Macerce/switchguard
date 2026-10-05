@@ -93,7 +93,7 @@ Bağımlılıklar: Compose Desktop (Material 3, ikonlar), OkHttp 4.12, `org.json
 
 - **Kural:** Bilgisayar ayrı bir cihazdır. eWeLink için kendi eWeLink hesabı + dev.ewelink.cc geliştirici onayı + o hesabın kendi App ID / App Secret'ı gerekir (telefonda/TV'de/tablette olduğu gibi). Uygulama bu uyarıyı kurulumda ve Ayarlar'da gösterir.
 - **eWeLink girişi:** Giriş sayfası varsayılan tarayıcıda açılır.
-  - **Deneme A (1. aşamada yapılır):** eWeLink geliştirici konsolu `http://127.0.0.1:<port>/` biçiminde bir dönüş adresini kabul ediyor mu? Ediyorsa uygulama bu portta küçük bir yerel sunucu açar, dönüşteki `code` + `region`'u yakalar ve oturum açar (Windows rehberi bu adresi söyler).
+  - **Deneme A (yedek eWeLink hesabıyla; hesabın geliştirici onayı gelince — 2026-10-06 itibarıyla bekleniyor, bu yüzden 2. aşamanın başında):** eWeLink geliştirici konsolu `http://127.0.0.1:<port>/` biçiminde bir dönüş adresini kabul ediyor mu? Ediyorsa uygulama bu portta küçük bir yerel sunucu açar, dönüşteki `code` + `region`'u yakalar ve oturum açar (Windows rehberi bu adresi söyler).
   - **Yedek yol:** Dönüş adresi telefondaki gibi `https://127.0.0.1` kalır; girişten sonra tarayıcı "bağlanılamıyor" sayfasında kalır; kullanıcı adres çubuğundaki adresi kopyalar; uygulama giriş penceresi açıkken panoyu izler ve `https://127.0.0.1/?code=…` görünce kendiliğinden alır (elle yapıştırma alanı da var).
 - **Tuya:** Aynı Tuya anahtarları kullanılabilir (aktarma ile gelir ya da elle girilir).
   - **Deneme B (1. aşamada yapılır):** Tuya mesaj servisi (Pulsar, `Failover` aboneliği) aynı projeye bağlı iki cihaza da her mesajı veriyor mu? `tools/tuya_pulsar_probe.py` ile iki eşzamanlı tüketici denenir (aynı ve farklı abonelik adıyla).
@@ -151,11 +151,11 @@ Sol menü: **Cihazlar · Otomasyonlar · Geçmiş · Ayarlar**; pencere en az ~9
 - **Birim testleri:** Telefondaki 102 test (15 dosya) kopyalanan `core` ile birlikte masaüstünde de koşar.
 - **Motor testleri (yeni, sahte saat + sahte bulut + sahte `MonitorHost`):** dışarıdan kapatma → ALARM; uygulamadan yapılan değişiklik → alarm yok; sessiz saat → BİLDİRİM; çevrimdışı tolerans içinde geri gelme → kısa kopma kaydı; süreli otomasyon zamanında tetiklenir; uyku boşluğu → yeniden bağlanma + senkron + geçmiş kaydı; WebSocket kalıcı hata → sorgulamaya geçiş; ücretsiz sınır.
 - **Elle (bu bilgisayarda, Windows 11):** exe kurulumu/kaldırma/üstüne kurma; tepsi menüsü; Windows ile başlat (yeniden başlatma); demo ile alarm penceresi ve ses; kilitli ekranda alarm; uyku → dönüş; Tuya prizi ile canlı alarm; telefondan aktarma; açık/koyu tema; TR/EN.
-- **eWeLink canlı testi:** İkinci bir eWeLink hesabı (cihazlar paylaşılmış, geliştirici onaylı) gerektirir. **Kullanıcının ana eWeLink hesabıyla bilgisayarda giriş yapılmaz** — telefondaki oturumu düşürür.
+- **eWeLink canlı testi:** İkinci bir eWeLink hesabı (cihazlar paylaşılmış, geliştirici onaylı) gerektirir — kullanıcının yedek hesabı var, geliştirici onayı bekleniyor. **Kullanıcının ana eWeLink hesabıyla bilgisayarda giriş yapılmaz** — telefondaki oturumu düşürür.
 
 ## 13. Aşamalar
 
-1. **Temel:** Proje iskeleti, kopyalanan `core`/`api` + testleri yeşil, `Store`/`EventLog`/`MetricsLog`/DPAPI, `MonitorEngine` + motor testleri, tepsi, alarm penceresi, sesler, bildirim, tek örnek, Windows ile başlat, uyanık tut, demo modu, basit Cihazlar ekranı, **exe** (kurulup çalışan ilk sürüm). Deneme A ve B bu aşamada yapılır.
+1. **Temel:** Proje iskeleti, kopyalanan `core`/`api` + testleri yeşil, `Store`/`EventLog`/`MetricsLog`/DPAPI, `MonitorEngine` + motor testleri, tepsi, alarm penceresi, sesler, bildirim, tek örnek, Windows ile başlat, uyanık tut, demo modu, basit Cihazlar ekranı, **exe** (kurulup çalışan ilk sürüm). Deneme B bu aşamada yapılır; Deneme A yedek hesabın geliştirici onayını bekler (2. aşamanın başı).
    - Bitti sayılır: exe bu bilgisayara kuruluyor; yeniden başlatmadan sonra tepside açılıyor; demo cihazı simülasyonla kapatılınca alarm penceresi + ses geliyor.
 2. **Hesaplar ve cihazlar:** Tuya bağlantısı + canlı, eWeLink tarayıcı girişi, Cihazlar ızgarası + ayrıntı paneli + kurallar + uzaktan aç/kapa.
 3. **Otomasyonlar, geçmiş, enerji, zamanlayıcılar, düzen.**
