@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- `app/` altında hiçbir dosya değişmez. Her görev sonunda: `git diff --stat master -- app/` boş.
+- `app/` altında hiçbir dosya değişmez. Her görev sonunda: `git diff --stat c545395 -- app/` boş (dalın başladığı nokta; master'a göre bakılırsa tv-tablet'in kendi farkları görünür).
 - Kotlin 2.2.21 (`org.jetbrains.kotlin.jvm`, `org.jetbrains.kotlin.plugin.compose`), `org.jetbrains.compose` 1.9.3, Gradle 8.14.3 (wrapper kökten kopya), `jvmTarget` 17.
 - Derleme JDK'sı Temurin 21 → `C:\Users\macerce\.jdks\temurin-21`. Her Gradle çağrısı: `cd desktop && JAVA_HOME=/c/Users/macerce/.jdks/temurin-21 ./gradlew <görev>`.
 - Kopyalanan dosyalar paket adlarını korur: `com.macerce.switchguard.core`, `.api`, `.data`. Masaüstüne özgü kod: `com.macerce.switchguard.desktop.*`.
