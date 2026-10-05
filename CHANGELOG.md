@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## Unreleased
+**License**
+- The source code license changes from GPL-3.0 to PolyForm Noncommercial 1.0.0: personal and noncommercial use stays free, selling the code or using it commercially is not permitted. Versions up to and including 2.8.3 remain under GPL-3.0. Official builds may still be used by anyone, including businesses.
+
 ## 2.8.3 — 2026-10-04
 **Maintenance**
 - Updated an outdated internal library (androidx.fragment 1.1.0 → 1.9.1, pulled in by Google Play services) that Google Play flagged. No visible changes.
