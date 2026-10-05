@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## Yayımlanmadı
+**Lisans**
+- Kaynak kodun lisansı GPL-3.0'dan PolyForm Noncommercial 1.0.0'a geçiyor: kişisel ve ticari olmayan kullanım serbest kalıyor, kodu satmak veya ticari amaçla kullanmak yasak. 2.8.3 ve önceki sürümler GPL-3.0 altında kalır. Resmi sürümleri işletmeler dahil herkes kullanmaya devam edebilir.
+
 ## 2.8.3 — 4 Ekim 2026
 **Bakım**
 - Google Play'in eski bulduğu bir iç kütüphane güncellendi (androidx.fragment 1.1.0 → 1.9.1, Google Play hizmetleri üzerinden geliyordu). Görünür bir değişiklik yok.

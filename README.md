@@ -50,5 +50,11 @@ Release builds need a `keystore.properties` + keystore in the project root (not 
 ## Contact
 Questions, bug reports and feedback: **switchguardapp@gmail.com** (or open an issue here).
 
-## License
-[GPL-3.0](LICENSE). SwitchGuard is an independent project and is not affiliated with eWeLink, CoolKit or ITEAD.
+## License / Lisans
+Source code: [PolyForm Noncommercial 1.0.0](LICENSE). Personal and other noncommercial use is free; selling the code or using it commercially is not permitted. Versions up to and including 2.8.3 were released under GPL-3.0.
+Official builds (Google Play, [Releases](https://github.com/Macerce/switchguard/releases)) may be used by anyone, including businesses. For commercial licensing contact **switchguardapp@gmail.com**. Modified versions must not use the SwitchGuard name or logo.
+
+Kaynak kod: [PolyForm Noncommercial 1.0.0](LICENSE). Kişisel ve ticari olmayan kullanım serbesttir; kodu satmak veya ticari amaçla kullanmak yasaktır. 2.8.3 ve önceki sürümler GPL-3.0 ile yayımlanmıştı.
+Resmi sürümleri (Google Play, Releases) işletmeler dahil herkes kullanabilir. Ticari lisans için: **switchguardapp@gmail.com**. Değiştirilmiş sürümler SwitchGuard adını ve logosunu kullanamaz.
+
+SwitchGuard is an independent project and is not affiliated with eWeLink, CoolKit or ITEAD.
