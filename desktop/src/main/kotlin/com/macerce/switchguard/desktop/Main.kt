@@ -1,16 +1,20 @@
 package com.macerce.switchguard.desktop
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ApplicationScope
+import androidx.compose.ui.window.LocalWindowExceptionHandlerFactory
 import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.isTraySupported
+import com.macerce.switchguard.desktop.data.SqliteNative
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Autostart
 import com.macerce.switchguard.desktop.platform.NotificationQueue
@@ -19,6 +23,7 @@ import com.macerce.switchguard.desktop.platform.TrayIcons
 import com.macerce.switchguard.desktop.ui.AlarmWindow
 import com.macerce.switchguard.desktop.ui.ExitConfirmDialog
 import com.macerce.switchguard.desktop.ui.MainWindow
+import com.macerce.switchguard.desktop.ui.windowErrorFactory
 import java.nio.file.Path
 import java.nio.file.Paths
 import javax.swing.JOptionPane
@@ -34,6 +39,8 @@ private const val TRAY_FLAG = "--tray"
 fun main(args: Array<String>) {
     val dataDir = dataDir()
     Log.init(dataDir)
+    // javaw'ın konsolu yok: hiçbir iş parçacığının hatası iz bırakmadan kaybolmasın.
+    CrashLog.install()
 
     // Tek örnek kilidi AppGraph'tan ÖNCE alınır: ikinci örnek veritabanlarını açmaz, ikinci bir motor başlatmaz;
     // yalnızca ilk örneğe "göster" der ve çıkar. Kilit alınamıyorsa (dizin/dosya hatası) asla başlanmaz.
@@ -41,7 +48,7 @@ fun main(args: Array<String>) {
     val instance = SingleInstance(dataDir)
     val owner = try {
         instance.acquire(showRelay::request)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         failStartup(dataDir, e)
     }
     if (!owner) {
@@ -52,11 +59,16 @@ fun main(args: Array<String>) {
     // kapanış kancasında bırakılır. Kilit süreç ölünce zaten işletim sistemince bırakılır, kanca port dosyasını siler.
     Runtime.getRuntime().addShutdownHook(Thread(instance::release, "single-instance-release"))
 
+    // sqlite-jdbc'nin DLL'i %TEMP% yerine veri klasörüne çıkarılsın (ilk veritabanı bağlantısından önce); klasör
+    // kurulamazsa sqlite-jdbc'nin varsayılanı (%TEMP%) kalır.
+    runCatching { SqliteNative.useDataDir(dataDir) }
+        .onFailure { Log.w("Main", "could not prepare the native library folder; sqlite-jdbc uses %TEMP%", it) }
+
     // Ayarlar okunamıyorsa (Store IOException atar) ya da veritabanı açılamıyorsa asla başlanmaz: boş ayarla
     // başlamak asıl dosyanın üzerine yazılmasına yol açabilir.
     val graph = try {
         AppGraph(dataDir)
-    } catch (e: Exception) {
+    } catch (e: Throwable) {
         failStartup(dataDir, e)
     }
     // Tepsi yoksa gizli başlamanın geri dönüşü olmaz (bkz. SwitchGuardApp'teki kapatma kuralı): bayrak yok sayılır.
@@ -68,7 +80,17 @@ fun main(args: Array<String>) {
 
     // Çıkışta monitoringEnabled değişmez: bir sonraki açılışta izleme (ve kapatılmamış alarm) geri gelir.
     if (graph.store.monitoringEnabled) graph.engine.start()
-    application { SwitchGuardApp(graph) }
+    try {
+        application { SwitchGuardApp(graph, instance) }
+    } catch (t: Throwable) {
+        // Arayüz bir hatayla durdu (`application` normal çıkışta süreci kendisi bitirir, buraya dönmez). Yarı ölü bir
+        // süreç bırakma: hatayı günlüğe yaz, çıkıştaki gibi kapat, kodla çık. Bir sonraki açılış izlemeyi ve
+        // kapatılmamış alarmı geri getirir.
+        Log.w("Main", "the user interface stopped with an error; exiting", t)
+        instance.markExiting()
+        runCatching { graph.shutdown() }.onFailure { Log.w("Main", "shutdown after the UI error failed", it) }
+        exitProcess(1)
+    }
 }
 
 /**
@@ -105,7 +127,7 @@ private class ShowRelay {
     }
 }
 
-private fun failStartup(dataDir: Path, e: Exception): Nothing {
+private fun failStartup(dataDir: Path, e: Throwable): Nothing {
     Log.w("Main", "startup failed", e)
     val strings = Strings.load("")
     JOptionPane.showMessageDialog(
@@ -120,8 +142,9 @@ private fun failStartup(dataDir: Path, e: Exception): Nothing {
 /** Windows tepsi ipucu 127 karakterle sınırlıdır. */
 private fun trayTooltip(appName: String, status: String): String = "$appName — $status".take(120)
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-private fun ApplicationScope.SwitchGuardApp(graph: AppGraph) {
+private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleInstance) {
     val appState = graph.appState
     val version by graph.store.version.collectAsState()
     val strings = remember(version) { graph.strings() }
@@ -131,6 +154,8 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph) {
     var confirmExit by remember { mutableStateOf(false) }
 
     fun exit() {
+        // İlk iş: bu andan sonra açılan yeni örnek "göster" ile kapanan bu örneğe güvenmesin, kilidi bekleyip sahip olsun.
+        instance.markExiting()
         graph.shutdown()
         exitApplication()
     }
@@ -177,10 +202,18 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph) {
         }
     }
 
-    // Tepsi yoksa pencereyi gizlemenin geri dönüşü olmaz: kapatma çıkış sayılır.
-    MainWindow(graph, onCloseRequest = { if (isTraySupported) graph.hideMainWindow() else requestExit() })
-    AlarmWindow(graph)
-    if (confirmExit) {
-        ExitConfirmDialog(graph, onConfirm = { confirmExit = false; exit() }, onCancel = { confirmExit = false })
+    // Pencerelerdeki hatalar (Compose varsayılanı: hata penceresi + pencereyi kapat + yeniden fırlat) günlüğe yazılır,
+    // asla yeniden fırlatılmaz; ana pencere ve alarm penceresi ayrıca kendilerini yeniden kurar (bkz. WindowErrors).
+    val windowErrors = remember { windowErrorFactory("app") {} }
+    val dialogErrors = remember { windowErrorFactory("exit-confirm") { confirmExit = false } }
+    CompositionLocalProvider(LocalWindowExceptionHandlerFactory provides windowErrors) {
+        // Tepsi yoksa pencereyi gizlemenin geri dönüşü olmaz: kapatma çıkış sayılır.
+        MainWindow(graph, onCloseRequest = { if (isTraySupported) graph.hideMainWindow() else requestExit() })
+        AlarmWindow(graph)
+        if (confirmExit) {
+            CompositionLocalProvider(LocalWindowExceptionHandlerFactory provides dialogErrors) {
+                ExitConfirmDialog(graph, onConfirm = { confirmExit = false; exit() }, onCancel = { confirmExit = false })
+            }
+        }
     }
 }

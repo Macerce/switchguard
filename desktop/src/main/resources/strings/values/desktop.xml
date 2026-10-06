@@ -16,6 +16,10 @@
     <!-- Alarm window -->
     <string name="alarm_dismiss">Dismiss</string>
 
+    <!-- Window errors -->
+    <string name="window_error">This window ran into an error and was reset. Monitoring and alarms keep working.\n\nDetails are in the log: %1$s</string>
+    <string name="window_error_retry">Show the devices again</string>
+
     <!-- Events -->
     <string name="desktop_slept">The computer was asleep for %1$d min — short events during that time may have been missed.</string>
 

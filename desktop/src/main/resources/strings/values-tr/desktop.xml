@@ -16,6 +16,10 @@
     <!-- Alarm penceresi -->
     <string name="alarm_dismiss">Kapat</string>
 
+    <!-- Pencere hataları -->
+    <string name="window_error">Bu pencerede bir hata oluştu ve pencere sıfırlandı. İzleme ve alarmlar çalışmaya devam ediyor.\n\nAyrıntılar günlükte: %1$s</string>
+    <string name="window_error_retry">Cihazları yeniden göster</string>
+
     <!-- Olaylar -->
     <string name="desktop_slept">Bilgisayar %1$d dk uykudaydı — bu sürede kısa olaylar kaçmış olabilir.</string>
 
