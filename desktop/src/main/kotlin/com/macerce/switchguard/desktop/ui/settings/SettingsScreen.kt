@@ -13,13 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.desktop.AppGraph
-import com.macerce.switchguard.desktop.Log
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Autostart
+import com.macerce.switchguard.desktop.platform.Links
 import com.macerce.switchguard.desktop.syncAutostart
-import java.awt.Desktop
-import java.nio.file.Files
-import kotlin.concurrent.thread
 import kotlin.math.roundToInt
 
 /** Sorgulama aralığı seçenekleri (sn). */
@@ -142,7 +139,7 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
             // --- Hakkında ---
             SectionTitle(strings["section_about"])
             SettingRow(strings.format("version_x", appVersion()))
-            SettingRow(strings["desktop_open_logs"], onClick = { openFolder(graph.dataDir.resolve("logs")) })
+            SettingRow(strings["desktop_open_logs"], onClick = { Links.openFolder(graph.dataDir.resolve("logs")) })
         }
     }
 }
@@ -161,16 +158,4 @@ private class Snapshot(graph: AppGraph) {
     val quiet = store.quietHours
     val language = store.language
     val theme = store.theme
-}
-
-/** Klasörü Dosya Gezgini'nde açar (arayüzü bekletmesin diye ayrı iş parçacığında). */
-private fun openFolder(dir: java.nio.file.Path) {
-    thread(name = "open-folder", isDaemon = true) {
-        try {
-            Files.createDirectories(dir)
-            Desktop.getDesktop().open(dir.toFile())
-        } catch (e: Exception) {
-            Log.w("Settings", "could not open $dir: $e")
-        }
-    }
 }

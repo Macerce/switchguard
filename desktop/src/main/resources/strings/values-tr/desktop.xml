@@ -58,4 +58,36 @@
     <string name="sound_builtin_alarm_beep">Bip</string>
     <string name="sound_builtin_alarm_pulse">Nabız</string>
     <string name="sound_builtin_notify_chime">Çan</string>
+
+    <!-- Kurulum anlatımları -->
+    <string name="desktop_how_to_setup">Nasıl kurulur?</string>
+    <string name="desktop_help_windows">Windows\'a kurulum</string>
+    <string name="desktop_help_tuya">Tuya / Smart Life kurulumu</string>
+    <string name="desktop_help_ewelink">eWeLink kurulumu</string>
+    <string name="desktop_open_tuya_platform">platform.tuya.com\'u aç</string>
+    <string name="desktop_open_ewelink_dev">dev.ewelink.cc\'yi aç</string>
+    <string name="desktop_copy_redirect">Redirect URL\'yi kopyala</string>
+    <string name="desktop_open_guide">Resimli rehberi aç</string>
+    <string name="desktop_watch_video">Videoyu izle</string>
+    <string name="desktop_copied">Kopyalandı.</string>
+    <string name="desktop_link_copied">Tarayıcı açılamadı; adres panoya kopyalandı.</string>
+    <string name="desktop_tuya_step_1">Bilgisayarda platform.tuya.com adresinde ücretsiz bir geliştirici hesabı açın (Bireysel yeterli).</string>
+    <string name="desktop_tuya_step_2">Cloud → Development → Create Cloud Project ile proje oluşturun. Veri merkezi: Türkiye ve Avrupa için Orta Avrupa. Sonraki sayfada hiçbir şeyi değiştirmeden Authorize\'a basın.</string>
+    <string name="desktop_tuya_step_3">Projede Devices → Link App Account → Add App Account → Tuya App Account Authorization. Ekrandaki QR kodu telefonunuzdaki Smart Life uygulamasıyla okutun (Ben → sağ üstteki tarama simgesi) ve onaylayın.</string>
+    <string name="desktop_tuya_step_4">Message Service sekmesinde servisi açın, ardından Messaging Rules → Production Environment → Create Messaging Rules. Kaydettikten sonra kuralın kendi anahtarını açın (en çok unutulan adım).</string>
+    <string name="desktop_tuya_step_5">Overview sekmesinden Access ID ve Access Secret\'ı kopyalayın (Secret\'ı görmek için göz simgesine basın).</string>
+    <string name="desktop_tuya_step_6">Buraya yapıştırın, veri merkezini seçin ve Bağlan\'a basın. Telefondaki SwitchGuard\'da kullandığınız anahtarlar burada da çalışır.</string>
+    <string name="desktop_ewelink_step_1">Bu bilgisayar için eWeLink uygulamasından ayrı bir eWeLink hesabı açın ve cihazlarınızı bu hesapla paylaşın. Telefonunuzdaki hesabı kullanırsanız telefonun oturumu kapanır.</string>
+    <string name="desktop_ewelink_step_2">dev.ewelink.cc\'ye bu hesapla girin → Console. Hesap henüz geliştirici değilse Apply now → Individual developers ile başvurun ve eWeLink\'in onayını bekleyin.</string>
+    <string name="desktop_ewelink_step_3">Onay gelince App List → Create ile bir uygulama oluşturun. Redirect URL birebir https://127.0.0.1 olmalı (sonunda / yok).</string>
+    <string name="desktop_ewelink_step_4">App List\'te uygulamanızın View düğmesine basın; APPID ve APP SECRET\'ı (göz simgesi) kopyalayın.</string>
+    <string name="desktop_ewelink_step_5">Burada API bilgileri\'ne yapıştırın, bölgeyi seçin ve kaydedin.</string>
+    <string name="desktop_ewelink_step_6">Giriş yap\'a basın ve tarayıcıda giriş yapın. Ardından gelen \"bağlanılamıyor\" sayfası normaldir: adres çubuğundaki adresi kopyalayın, SwitchGuard kendiliğinden alır.</string>
+    <string name="desktop_windows_step_1">Kurulum dosyasına (SwitchGuard-…-Kurulum.exe) çift tıklayın. Yönetici izni istemez, birkaç saniyede kurulur.</string>
+    <string name="desktop_windows_step_2">Windows \"Bilgisayarınız Windows tarafından korundu\" (SmartScreen) derse Ek bilgi → Yine de çalıştır\'a basın. Uygulama henüz imzalı olmadığı için bu uyarı çıkar.</string>
+    <string name="desktop_windows_step_3">SwitchGuard kullanıcı klasörünüze (AppData › Local › SwitchGuard) kurulur, masaüstüne ve Başlat menüsüne kısayol ekler.</string>
+    <string name="desktop_windows_step_4">Windows\'ta oturum açınca kendiliğinden tepside (saatin yanında) başlar. Pencereyi kapatmak uygulamayı kapatmaz; tamamen çıkmak için tepsi simgesi → Çıkış.</string>
+    <string name="desktop_windows_step_5">Hesaplarınızı Ayarlar → Hesap bölümünden ekleyin (Tuya ve eWeLink anlatımları aşağıda).</string>
+    <string name="desktop_windows_step_6">Başka bir bilgisayara geçerken: eskisinde Ayarlar → Yedekleme → Dosyaya yedekle; yenisine kurup Dosyadan geri yükle; ardından eWeLink\'e yeniden giriş yapın.</string>
+    <string name="desktop_windows_step_7">Kaldırmak için: Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.</string>
 </resources>

@@ -58,4 +58,36 @@
     <string name="sound_builtin_alarm_beep">Beep</string>
     <string name="sound_builtin_alarm_pulse">Pulse</string>
     <string name="sound_builtin_notify_chime">Chime</string>
+
+    <!-- Kurulum anlatımları -->
+    <string name="desktop_how_to_setup">How to set up?</string>
+    <string name="desktop_help_windows">Installing on Windows</string>
+    <string name="desktop_help_tuya">Setting up Tuya / Smart Life</string>
+    <string name="desktop_help_ewelink">Setting up eWeLink</string>
+    <string name="desktop_open_tuya_platform">Open platform.tuya.com</string>
+    <string name="desktop_open_ewelink_dev">Open dev.ewelink.cc</string>
+    <string name="desktop_copy_redirect">Copy the Redirect URL</string>
+    <string name="desktop_open_guide">Open the illustrated guide</string>
+    <string name="desktop_watch_video">Watch the video</string>
+    <string name="desktop_copied">Copied.</string>
+    <string name="desktop_link_copied">The browser could not be opened; the address was copied to the clipboard.</string>
+    <string name="desktop_tuya_step_1">On a computer, open platform.tuya.com and create a free developer account (Individual is enough).</string>
+    <string name="desktop_tuya_step_2">Cloud → Development → Create Cloud Project. Data center: Central Europe for Turkey and Europe. On the next page press Authorize without changing anything.</string>
+    <string name="desktop_tuya_step_3">In the project: Devices → Link App Account → Add App Account → Tuya App Account Authorization. Scan the QR code with the Smart Life app on your phone (Me → scan icon at the top right) and confirm.</string>
+    <string name="desktop_tuya_step_4">Message Service tab: turn the service on, then Messaging Rules → Production Environment → Create Messaging Rules. After saving, turn the rule\'s own switch on (the most often forgotten step).</string>
+    <string name="desktop_tuya_step_5">Overview tab: copy the Access ID and the Access Secret (press the eye icon to reveal the secret).</string>
+    <string name="desktop_tuya_step_6">Paste them here, choose the data center and press Connect. The keys you use in SwitchGuard on your phone work here too.</string>
+    <string name="desktop_ewelink_step_1">Create a separate eWeLink account for this computer (in the eWeLink app) and share your devices with it. If this computer used your phone\'s account, the phone would be signed out.</string>
+    <string name="desktop_ewelink_step_2">Sign in to dev.ewelink.cc with that account → Console. If it is not a developer yet: Apply now → Individual developers, then wait for eWeLink\'s approval.</string>
+    <string name="desktop_ewelink_step_3">Once approved: App List → Create. Redirect URL must be exactly https://127.0.0.1 (no slash at the end).</string>
+    <string name="desktop_ewelink_step_4">In App List press View on your app and copy the APPID and the APP SECRET (eye icon).</string>
+    <string name="desktop_ewelink_step_5">Here, paste them into API credentials, choose the region and save.</string>
+    <string name="desktop_ewelink_step_6">Press Sign in and sign in in the browser. The \"can\'t connect\" page that follows is expected: copy the address from the address bar and SwitchGuard picks it up by itself.</string>
+    <string name="desktop_windows_step_1">Double-click the setup file (SwitchGuard-…-Kurulum.exe). It does not ask for administrator rights and installs in a few seconds.</string>
+    <string name="desktop_windows_step_2">If Windows says \"Windows protected your PC\" (SmartScreen), press More info → Run anyway. The app is not signed yet; that is why it warns.</string>
+    <string name="desktop_windows_step_3">SwitchGuard is installed in your user folder (AppData › Local › SwitchGuard) and adds shortcuts to the desktop and the Start menu.</string>
+    <string name="desktop_windows_step_4">It starts by itself in the tray (next to the clock) when you sign in to Windows. Closing the window does not stop it; to quit, use the tray icon → Exit.</string>
+    <string name="desktop_windows_step_5">Add your accounts in Settings → Account (the Tuya and eWeLink steps are below).</string>
+    <string name="desktop_windows_step_6">Moving to another computer: on the old one, Settings → Backup → Back up to a file; install on the new one, Restore from a file, then sign in to eWeLink again.</string>
+    <string name="desktop_windows_step_7">To uninstall: Windows Settings → Apps → Installed apps → SwitchGuard → Uninstall.</string>
 </resources>
