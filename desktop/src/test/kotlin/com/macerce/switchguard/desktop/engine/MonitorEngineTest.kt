@@ -486,6 +486,26 @@ class MonitorEngineTest {
     }
 
     @Test
+    fun automationSavedFromTheScreenRunsAndCanBeDeleted() {
+        startWith(pump(on = true), rules = emptyMap())
+        val a = Automation(
+            id = "ui-1", name = "Pompa kapandı", enabled = true,
+            trigger = Trigger(TriggerKind.TURNED_OFF, id, channel = 0),
+            action = AutoAction(ActionKind.ALARM),
+        )
+
+        engine.saveAutomation(a)
+        scheduler.advance(0)
+        assertEquals(listOf(a), store.automations)
+        cloudUpdate(switches = mapOf(0 to false))
+        assertEquals(1, host.alarms.size)
+
+        engine.deleteAutomation("ui-1")
+        scheduler.advance(0)
+        assertTrue(store.automations.isEmpty())
+    }
+
+    @Test
     fun turningDemoOffWithoutAccountsStopsMonitoring() {
         startDemo()
 

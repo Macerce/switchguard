@@ -163,6 +163,16 @@ class MonitorEngine(
         scheduler.post { store.setRules(deviceId, change(store.rulesFor(deviceId))) }
     }
 
+    /** Otomasyonlar ekranından ekleme/değiştirme: motor iş parçacığında yazılır (`spec.md` §4). */
+    fun saveAutomation(a: Automation) {
+        scheduler.post { store.saveAutomation(a) }
+    }
+
+    /** Otomasyonlar ekranından silme: motor iş parçacığında. */
+    fun deleteAutomation(id: String) {
+        scheduler.post { store.deleteAutomation(id) }
+    }
+
     /**
      * Demo cihazlarını açar/kapatır (telefondaki `Actions.enableDemo` / `disableDemo`), motor iş parçacığında: anlık
      * görüntülerin okuma-yazmasıyla yarışmaz. Kapatınca izlenecek hesap kalmadıysa izleme de durur.
