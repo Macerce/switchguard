@@ -15,10 +15,12 @@ import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.io.IOException
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.Files
 import java.nio.file.Path
@@ -158,6 +160,57 @@ class StoreTest {
         assertEquals("{not json", String(Files.readAllBytes(tmp.root.toPath().resolve(backups[0])), UTF_8))
         s.appId = "yeni"
         assertEquals("yeni", store().appId)
+    }
+
+    @Test
+    fun fileWithUtf8BomIsRead() {
+        val bom = byteArrayOf(0xEF.toByte(), 0xBB.toByte(), 0xBF.toByte())
+        Files.write(file(), bom + "{\"appId\":\"bomlu\"}".toByteArray(UTF_8))
+        assertEquals("bomlu", store().appId)
+        assertEquals(listOf("settings.json"), dirNames())
+    }
+
+    @Test
+    fun nonObjectTopLevelIsQuarantinedLikeAnyParseFailure() {
+        Files.write(file(), "[1, 2]".toByteArray(UTF_8))
+        val s = store()
+        assertEquals("", s.appId)
+        assertEquals(1, dirNames().count { it.startsWith("settings.json.corrupt-") })
+    }
+
+    @Test
+    fun readFailureDoesNotQuarantineOrOverwrite() {
+        // Dizin olan settings.json okunamaz (IOException) ama ayrıştırma hatası değildir.
+        Files.createDirectory(file())
+        assertThrows(IOException::class.java) { store() }
+        assertTrue(Files.isDirectory(file()))
+        assertEquals(listOf("settings.json"), dirNames())
+    }
+
+    @Test
+    fun transientReadFailureIsRetried() {
+        Files.createDirectory(file())
+        val fixer = thread {
+            Thread.sleep(100)
+            Files.delete(file())
+            Files.write(file(), "{\"appId\":\"geldi\"}".toByteArray(UTF_8))
+        }
+        val s = store()
+        fixer.join()
+        assertEquals("geldi", s.appId)
+        assertEquals(listOf("settings.json"), dirNames())
+    }
+
+    @Test
+    fun failedQuarantineMoveThrowsAndKeepsTheOriginal() {
+        Files.write(file(), "{not json".toByteArray(UTF_8))
+        // Yedek adı sabitlenip o ada dolu bir dizin kondu: taşıma DirectoryNotEmptyException ile başarısız olur.
+        val blocker = tmp.root.toPath().resolve("settings.json.corrupt-1234")
+        Files.createDirectory(blocker)
+        Files.write(blocker.resolve("x"), byteArrayOf(1))
+        assertThrows(IOException::class.java) { Store(file(), EncCodec) { 1234L } }
+        assertEquals("{not json", raw())
+        assertEquals(listOf("settings.json", "settings.json.corrupt-1234"), dirNames().sorted())
     }
 
     @Test

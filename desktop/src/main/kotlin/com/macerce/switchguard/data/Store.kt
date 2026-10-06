@@ -12,6 +12,7 @@ import com.macerce.switchguard.core.QuietHours
 import com.macerce.switchguard.desktop.data.SecretCodec
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.nio.ByteBuffer
@@ -19,6 +20,7 @@ import java.nio.channels.FileChannel
 import java.nio.charset.StandardCharsets.UTF_8
 import java.nio.file.AtomicMoveNotSupportedException
 import java.nio.file.Files
+import java.nio.file.NoSuchFileException
 import java.nio.file.Path
 import java.nio.file.StandardCopyOption.ATOMIC_MOVE
 import java.nio.file.StandardCopyOption.REPLACE_EXISTING
@@ -34,7 +36,14 @@ import java.nio.file.StandardOpenOption
  *
  * Gizli alanlar ([SECRET_KEYS]) diske yalnızca [secrets] ile kodlanmış olarak yazılır.
  */
-class Store(private val file: Path, private val secrets: SecretCodec) {
+class Store internal constructor(
+    private val file: Path,
+    private val secrets: SecretCodec,
+    /** Bozuk dosyanın yedek adındaki zaman damgası; testler sabitleyebilsin diye ayrı verilir. */
+    private val clock: () -> Long,
+) {
+    constructor(file: Path, secrets: SecretCodec) : this(file, secrets, System::currentTimeMillis)
+
     private val lock = Any()
     private val root: JSONObject = load()
 
@@ -43,25 +52,56 @@ class Store(private val file: Path, private val secrets: SecretCodec) {
 
     // --- Depolama ---
 
+    /**
+     * Dosyayı okur. Yalnızca gerçek bir ayrıştırma hatası (JSON değil, üst düzey nesne değil) dosyayı kenara
+     * alıp boş başlatır. Okuma hatası (kilitli ya da geçici okunamayan dosya) iyi bir dosyayı yok etmesin diye
+     * birkaç kez denenir, sonra IOException olarak dışarı atılır; hiçbir durumda boş başlanıp asıl dosyanın
+     * üzerine yazılmaz.
+     */
     private fun load(): JSONObject {
-        if (!Files.exists(file)) return JSONObject()
+        val bytes = try {
+            readWithRetry()
+        } catch (_: NoSuchFileException) {
+            return JSONObject() // ilk açılış
+        }
         return try {
-            JSONObject(String(Files.readAllBytes(file), UTF_8).removePrefix("﻿"))
-        } catch (e: Exception) {
-            // Ayrıştırılamıyor: dosyayı incelenebilsin diye kenara al, boş başla.
+            JSONObject(String(bytes, UTF_8).let { if (it.startsWith(BOM)) it.substring(1) else it })
+        } catch (e: JSONException) {
             quarantine(e)
             JSONObject()
         }
     }
 
-    private fun quarantine(cause: Exception) {
-        val backup = file.resolveSibling("${file.fileName}.corrupt-${System.currentTimeMillis()}")
+    private fun readWithRetry(): ByteArray {
+        var attempt = 1
+        while (true) {
+            try {
+                return Files.readAllBytes(file)
+            } catch (e: NoSuchFileException) {
+                throw e
+            } catch (e: IOException) {
+                if (attempt >= READ_ATTEMPTS) throw e
+                System.err.println("Store: reading $file failed ($e), retrying")
+                try {
+                    Thread.sleep(READ_RETRY_DELAY_MS)
+                } catch (_: InterruptedException) {
+                    Thread.currentThread().interrupt()
+                    throw e
+                }
+                attempt++
+            }
+        }
+    }
+
+    /** Ayrıştırılamayan dosyayı incelenebilsin diye kenara alır. Taşınamazsa fırlatır: asıl dosya korunur. */
+    private fun quarantine(cause: JSONException) {
+        val backup = file.resolveSibling("${file.fileName}.corrupt-${clock()}")
         try {
             Files.move(file, backup, REPLACE_EXISTING)
-            System.err.println("Store: $file is unreadable ($cause); moved to $backup, starting empty")
         } catch (e: IOException) {
-            System.err.println("Store: $file is unreadable ($cause) and could not be moved aside ($e); starting empty")
+            throw IOException("$file is not valid JSON ($cause) and could not be moved to $backup; leaving it untouched", e)
         }
+        System.err.println("Store: $file is not valid JSON ($cause); moved to $backup, starting empty")
     }
 
     /** [lock] altında çağrılır. Yazılamazsa bellekteki durum geçerli kalır; sonraki yazma her şeyi yeniden yazar. */
@@ -354,6 +394,11 @@ class Store(private val file: Path, private val secrets: SecretCodec) {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
+
+        /** Not Defteri gibi araçların eklediği UTF-8 işareti. */
+        private val BOM = Char(0xFEFF)
+        private const val READ_ATTEMPTS = 3
+        private const val READ_RETRY_DELAY_MS = 200L
 
         /** Diske yalnızca [SecretCodec] ile kodlanarak yazılan alanlar. */
         val SECRET_KEYS: Set<String> = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken")
