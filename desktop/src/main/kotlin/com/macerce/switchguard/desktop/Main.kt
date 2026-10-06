@@ -1,6 +1,7 @@
 package com.macerce.switchguard.desktop
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,7 @@ import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.isTraySupported
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.platform.NotificationQueue
 import com.macerce.switchguard.desktop.platform.TrayIcons
 import com.macerce.switchguard.desktop.ui.AlarmWindow
 import com.macerce.switchguard.desktop.ui.ExitConfirmDialog
@@ -91,6 +93,23 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph) {
                 Item(strings["tray_exit"], onClick = ::requestExit)
             },
         )
+    }
+
+    // Tek bildirim pompası, Tray'den sonra başlar (Tray'in toplayıcısı hazır olsun). Bildirimler önce kuyruğa girer
+    // çünkü TrayState.sendNotification tamponsuz bir kanala yazar: alıcı o an beklemiyorsa bildirim düşer.
+    LaunchedEffect(Unit) {
+        if (isTraySupported) {
+            graph.notifications.pump(NotificationQueue.INITIAL_DELAY_MS, NotificationQueue.SPACING_MS) {
+                Log.i("Notifications", "to tray: ${it.message}")
+                graph.tray.sendNotification(it)
+                true
+            }
+        } else {
+            graph.notifications.pump(0, 0) {
+                Log.w("Notifications", "no system tray, notification dropped: ${it.title}: ${it.message}")
+                false
+            }
+        }
     }
 
     // Tepsi yoksa pencereyi gizlemenin geri dönüşü olmaz: kapatma çıkış sayılır.

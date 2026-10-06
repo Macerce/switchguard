@@ -11,8 +11,10 @@ import com.macerce.switchguard.desktop.engine.MonitorEngine
 import com.macerce.switchguard.desktop.engine.Sources
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.DesktopHost
+import com.macerce.switchguard.desktop.platform.NotificationQueue
 import com.macerce.switchguard.desktop.platform.SoundPlayer
 import java.io.IOException
+import java.nio.file.FileAlreadyExistsException
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -39,11 +41,14 @@ class AppGraph(val dataDir: Path) {
     val appState = AppState()
     val tray = TrayState()
 
+    /** Tepsi bildirimleri için sınırsız kuyruk; arayüzdeki tek pompa bunları [tray]'e aralıklı iletir. */
+    val notifications = NotificationQueue()
+
     private val stringsLock = Any()
     private var loadedLanguage = store.language
     private var current = Strings.load(loadedLanguage)
 
-    val host = DesktopHost(store, sounds, appState, tray, ::strings)
+    val host = DesktopHost(store, sounds, appState, notifications, ::strings)
     val engine = MonitorEngine(store, eventLog, metrics, ::strings, host, Sources.real(store))
 
     init {
@@ -60,32 +65,40 @@ class AppGraph(val dataDir: Path) {
         current
     }
 
-    /** Ana pencere kapatıldı: gizlenir, izleme sürer; ilk seferde (kurulum başına bir kez) tepsi ipucu gösterilir. */
+    /**
+     * Ana pencere kapatıldı: gizlenir, izleme sürer; ilk seferde (kurulum başına bir kez) tepsi ipucu bildirimi
+     * sıraya alınır. İpucu yalnızca tepsiye teslim edilince gösterilmiş sayılır ([markTrayHintShown]); teslim
+     * edilemeden kaybolursa (ör. uygulama kapanırsa) bir sonraki kapatmada yeniden denenir.
+     */
     fun hideMainWindow() {
         appState.windowVisible.value = false
-        if (!claimTrayHint()) return
+        if (!trayHintDue()) return
         val s = strings()
-        tray.sendNotification(Notification(s["app_name"], s["tray_minimized_hint"], Notification.Type.Info))
+        notifications.enqueue(
+            Notification(s["app_name"], s["tray_minimized_hint"], Notification.Type.Info),
+            onDelivered = ::markTrayHintShown,
+        )
     }
 
-    private var trayHintClaimed = false
+    private var trayHintQueued = false
 
-    /**
-     * İpucu gösterilecekse true: bu çalışmada ilk istek ve işaret dosyası yok. İşaret dosyası yazılamazsa bile
-     * aynı çalışmada ikinci kez gösterilmez.
-     */
+    /** İpucu sıraya alınmalıysa true: bu çalışmada henüz sıraya alınmadı ve işaret dosyası yok. */
     @Synchronized
-    internal fun claimTrayHint(): Boolean {
-        if (trayHintClaimed) return false
-        trayHintClaimed = true
+    internal fun trayHintDue(): Boolean {
+        if (trayHintQueued || Files.exists(dataDir.resolve(TRAY_HINT_MARKER))) return false
+        trayHintQueued = true
+        return true
+    }
+
+    internal fun markTrayHintShown() {
         val marker = dataDir.resolve(TRAY_HINT_MARKER)
-        if (Files.exists(marker)) return false
         try {
             Files.createFile(marker)
+        } catch (_: FileAlreadyExistsException) {
+            // zaten işaretli
         } catch (e: IOException) {
             Log.w(TAG, "could not write $marker", e)
         }
-        return true
     }
 
     /**

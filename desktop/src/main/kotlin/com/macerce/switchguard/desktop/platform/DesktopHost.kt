@@ -1,7 +1,6 @@
 package com.macerce.switchguard.desktop.platform
 
 import androidx.compose.ui.window.Notification
-import androidx.compose.ui.window.TrayState
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppState
@@ -11,13 +10,14 @@ import com.macerce.switchguard.desktop.i18n.Strings
 /**
  * [MonitorHost]'un masaüstü uygulaması: alarm penceresi ([AppState.alarmLines]) + ses, Windows bildirimi (tepsi) ve
  * durum. Yöntemler motor iş parçacığından çağrılır; dokunulan her şey iş parçacığı güvenlidir
- * ([AppState]'in akışları, [TrayState.sendNotification] bir kanala yazar, [SoundPlayer] kendi kilidini kullanır).
+ * ([AppState]'in akışları, [NotificationQueue] sınırsız bir kanala yazar, [SoundPlayer] kendi kilidini kullanır).
+ * Bildirim metni hemen sıraya alınır (tepsiye aralıklı iletilir), ses ise hemen çalar.
  */
 class DesktopHost(
     private val store: Store,
     private val sounds: SoundPlayer,
     private val state: AppState,
-    private val tray: TrayState,
+    private val notifications: NotificationQueue,
     /** Her çağrıda o anki dil (bkz. AppGraph.strings). */
     private val strings: () -> Strings,
 ) : MonitorHost {
@@ -53,13 +53,13 @@ class DesktopHost(
     }
 
     override fun notify(text: String, sound: String?) {
-        tray.sendNotification(Notification(strings()["app_name"], text, Notification.Type.Info))
+        notifications.enqueue(Notification(strings()["app_name"], text, Notification.Type.Info))
         sounds.once(sound, store.alarmVolume)
     }
 
     override fun sessionLost(text: String, detail: String) {
         state.setWarning(listOf(text, detail).filter { it.isNotEmpty() }.joinToString("\n"))
-        tray.sendNotification(Notification(strings()["app_name"], text, Notification.Type.Warning))
+        notifications.enqueue(Notification(strings()["app_name"], text, Notification.Type.Warning))
     }
 
     override fun clearWarning() {
