@@ -1,8 +1,8 @@
 # SYNC.md
 
-Telefon uygulamasıyla masaüstü uygulamasının `core/` modülü senkronizasyon dosyası.
+Telefon uygulamasıyla masaüstü uygulamasının `core/` ve `api/` modüllerinin senkronizasyon dosyası.
 
-Kaynak: `tv-tablet` deposu `132e7fe` commit'i (master merge ile aynı içerik `c545395`)
+Kaynak: `tv-tablet` dalı `132e7fe` commit'i (master merge ile aynı içerik `c545395`)
 
 ## Kopyalanan Dosyalar (core/)
 
@@ -25,6 +25,15 @@ Kaynak: `tv-tablet` deposu `132e7fe` commit'i (master merge ile aynı içerik `c
 | Signer.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | Tuya.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | WsMessages.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
+
+## Kopyalanan Dosyalar (api/)
+
+| dosya | kaynak yolu | uyarlama |
+|-------|-------------|----------|
+| EwelinkClient.kt | app/src/main/java/com/macerce/switchguard/api/ | `buildLoginUrl`: `android.net.Uri` → OkHttp `HttpUrl` (`OAUTH_PAGE.toHttpUrl().newBuilder().addQueryParameter(...)`; aynı 8 parametre, aynı sıra); `import android.net.Uri` yerine `import okhttp3.HttpUrl.Companion.toHttpUrl` |
+| EwelinkSocket.kt | app/src/main/java/com/macerce/switchguard/api/ | yok |
+| TuyaClient.kt | app/src/main/java/com/macerce/switchguard/api/ | yok |
+| TuyaSocket.kt | app/src/main/java/com/macerce/switchguard/api/ | `android.util.Log` → `com.macerce.switchguard.desktop.Log` (yalnızca import; `Log.w(TAG, msg, e)` çağrısı aynı) |
 
 ## Test Dosyaları (core/)
 
@@ -50,10 +59,10 @@ Kaynak: `tv-tablet` deposu `132e7fe` commit'i (master merge ile aynı içerik `c
 
 | dosya | sebep |
 |-------|-------|
-| AppLanguage.kt | Masaüstü i18n sistemi yazılacak (sonraki aşama) |
-| Transfer.kt | 4. aşamada WebSocket haberleşme için uyarlanacak |
-| TransferNet.kt | 4. aşamada WebSocket haberleşme için uyarlanacak |
+| AppLanguage.kt | Yerine `desktop/i18n/Strings` yazılacak (1. aşamanın 5. görevi) |
+| Transfer.kt | Kurulum aktarımı özelliği (telefondan masaüstüne); 4. aşamada uyarlanacak (`desktop/docs/spec.md` §3.1): `Build.MODEL` → bilgisayar adı, `android.util.Base64` → `java.util.Base64` |
+| TransferNet.kt | Kurulum aktarımı özelliği; 4. aşamada uyarlanacak (`desktop/docs/spec.md` §3.1): Android NSD → JmDNS |
 
 ## Senkronizasyon Kuralı
 
-Telefon uygulamasında `core/` veya `api/` klasörlerinde yapılan herhangi bir değişiklik, aynı değişikliğin masaüstü versiyonuna taşınması gerekir. Bu dosya her senkronizasyonda güncellenecektir.
+Telefon uygulamasında `core/` veya `api/` klasörlerinde yapılan herhangi bir değişiklik, aynı değişikliğin masaüstü versiyonuna taşınması gerekir. Masaüstünde yapılan her uyarlama bu dosyadaki "uyarlama" sütununa yazılır (uyarlama yoksa "yok"); her senkronizasyonda yukarıdaki "Kaynak" commit satırı da güncellenir.
