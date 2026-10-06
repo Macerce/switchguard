@@ -55,8 +55,8 @@ fun main(args: Array<String>) {
         Log.i("Main", "another instance is already running, exiting")
         exitProcess(0)
     }
-    // `application` çıkışta süreci kendisi sonlandırır (kod bir sonraki satıra dönmez); kilit ve port dosyası bu yüzden
-    // kapanış kancasında bırakılır. Kilit süreç ölünce zaten işletim sistemince bırakılır, kanca port dosyasını siler.
+    // Süreç her zaman `exitProcess` ile biter; kilit ve port dosyası bu yüzden kapanış kancasında bırakılır. Kilit süreç
+    // ölünce zaten işletim sistemince bırakılır, kanca port dosyasını siler.
     Runtime.getRuntime().addShutdownHook(Thread(instance::release, "single-instance-release"))
 
     // sqlite-jdbc'nin DLL'i %TEMP% yerine veri klasörüne çıkarılsın (ilk veritabanı bağlantısından önce); klasör
@@ -80,17 +80,14 @@ fun main(args: Array<String>) {
 
     // Çıkışta monitoringEnabled değişmez: bir sonraki açılışta izleme (ve kapatılmamış alarm) geri gelir.
     if (graph.store.monitoringEnabled) graph.engine.start()
-    try {
-        application { SwitchGuardApp(graph, instance) }
-    } catch (t: Throwable) {
-        // Arayüz bir hatayla durdu (`application` normal çıkışta süreci kendisi bitirir, buraya dönmez). Yarı ölü bir
-        // süreç bırakma: hatayı günlüğe yaz, çıkıştaki gibi kapat, kodla çık. Bir sonraki açılış izlemeyi ve
-        // kapatılmamış alarmı geri getirir.
-        Log.w("Main", "the user interface stopped with an error; exiting", t)
-        instance.markExiting()
-        runCatching { graph.shutdown() }.onFailure { Log.w("Main", "shutdown after the UI error failed", it) }
-        exitProcess(1)
-    }
+    // Pencere dışındaki bir arayüz hatası (tepsi, uygulama düzeyi) arayüzü durdurur: arayüz aynı süreçte yeniden kurulur,
+    // motor bu sırada çalışmaya devam eder (bkz. runUi). Normal çıkışta (exit()) motor zaten kapatılmıştır.
+    if (runUi(UiRestarts()) { application(exitProcessOnExit = false) { SwitchGuardApp(graph, instance) } }) exitProcess(0)
+    // Arayüz kısa sürede tekrar tekrar çöktü: yarı ölü bir süreç bırakma; çıkıştaki gibi kapat, kodla çık. Bir sonraki
+    // açılış izlemeyi ve kapatılmamış alarmı geri getirir.
+    instance.markExiting()
+    runCatching { graph.shutdown() }.onFailure { Log.w("Main", "shutdown after the UI errors failed", it) }
+    exitProcess(1)
 }
 
 /**
