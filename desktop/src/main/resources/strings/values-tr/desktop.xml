@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Yalnızca masaüstü metinleri. Telefon metinleri strings.xml'de (app/'ten kopya). -->
 <resources>
+    <!-- Açılış -->
+    <string name="startup_failed">SwitchGuard, %1$s içindeki verilerini açamadı; hiçbir şeyi değiştirmeden kapanıyor.\n\n%2$s</string>
+
     <!-- Tepsi -->
     <string name="tray_open">SwitchGuard\'ı aç</string>
     <string name="tray_start">İzlemeyi başlat</string>
