@@ -5,6 +5,7 @@ import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.Cloud
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.EventType
@@ -315,6 +316,118 @@ class MonitorEngineTest {
         assertEquals(false, host.keepAwake.last())
     }
 
+    // ---------------------------------------------------------------- 1. aşamanın kabul yolu: hesapsız demo
+
+    @Test
+    fun demoToggleRaisesExactlyOneAlarm() {
+        startDemo()
+
+        engine.demo(MonitorEngine.DEMO_TOGGLE, Demo.FREEZER, 0)
+        scheduler.advance(0)
+
+        assertEquals(1, host.alarms.size)
+        assertTrue(host.alarms[0].lines.last().contains("Freezer"))
+        val events = log.recent(Demo.FREEZER)
+        assertEquals(listOf(EventType.TURNED_OFF.name to "ALARM"), events.map { it.kind to it.action })
+        scheduler.advance(5 * 60_000L) // sonraki tick'ler (demo dalgalanması dahil) ikinci alarm getirmez
+        assertEquals(1, host.alarms.size)
+    }
+
+    @Test
+    fun demoDisconnectRaisesOfflineAlarm() {
+        startDemo()
+
+        engine.demo(MonitorEngine.DEMO_ONLINE, Demo.FREEZER, 0)
+        scheduler.advance(0)
+
+        assertEquals(1, host.alarms.size)
+        assertEquals(listOf(EventType.WENT_OFFLINE.name to "ALARM"), log.recent(Demo.FREEZER).map { it.kind to it.action })
+    }
+
+    @Test
+    fun demoPowerDropRaisesTheDemoAutomationAlarmAfterItsDuration() {
+        startDemo()
+
+        engine.demo(MonitorEngine.DEMO_POWER, Demo.PUMPS, 0)
+        scheduler.advance(0)
+        assertTrue(host.alarms.isEmpty())
+        scheduler.advance(59_000)
+        assertTrue(host.alarms.isEmpty()) // otomasyon 1 dk sürmesini bekler
+        scheduler.advance(2_000)
+
+        assertEquals(1, host.alarms.size)
+        val events = log.recent(Demo.PUMPS)
+        assertEquals(listOf(EventKind.AUTOMATION to "ALARM"), events.map { it.kind to it.action })
+    }
+
+    // ---------------------------------------------------------------- geçmiş yazılamazsa (disk dolu, dosya kilitli...)
+
+    @Test
+    fun eventLogFailureStillRaisesAlarm() {
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        log.close() // bundan sonra her log.add SQLException atar
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertEquals(1, host.alarms.size)
+        assertTrue(host.alarms[0].lines.last().contains("Pump"))
+    }
+
+    @Test
+    fun eventLogFailureDoesNotSkipTheRestOfTheBatch() {
+        val fan = "$id-fan"
+        ewelink.deviceList = listOf(pump(on = true), DeviceSnapshot(fan, "Fan", online = true, switches = mapOf(0 to true)))
+        store.setRules(id, DeviceRules(actions = mapOf(EventType.TURNED_OFF to AlertAction.ALARM)))
+        store.setRules(fan, DeviceRules(actions = mapOf(EventType.TURNED_OFF to AlertAction.ALARM)))
+        engine.start()
+        scheduler.advance(0)
+        log.close()
+
+        // Tek senkronda iki cihaz birden kapanmış: ilkinin kaydı yazılamasa da ikincisi alarm vermeli.
+        ewelink.deviceList = ewelink.deviceList.map { it.copy(switches = mapOf(0 to false)) }
+        engine.syncNow()
+        scheduler.advance(0)
+
+        assertEquals(2, host.alarms.size)
+        val lines = host.alarms.last().lines
+        assertTrue(lines.toString(), lines.any { it.contains("Pump") } && lines.any { it.contains("Fan") })
+    }
+
+    @Test
+    fun eventLogFailureDoesNotStopTheSleepResync() {
+        startWith(pump(), rules = emptyMap())
+        scheduler.advance(15_000)
+        val connects = ewelinkLive.connects
+        val syncs = ewelink.getDevicesCalls
+        log.close()
+
+        clock.wallMs += 10 * 60_000L // uyku: "uyudu" kaydı yazılamaz
+        scheduler.advance(15_000)
+
+        assertEquals(connects + 1, ewelinkLive.connects)
+        assertEquals(syncs + 1, ewelink.getDevicesCalls)
+    }
+
+    @Test
+    fun eventLogFailureStillRaisesAutomationAndTestAlarms() {
+        store.automations = listOf(
+            Automation(
+                id = "auto-$id", name = "Pump left on", enabled = true,
+                trigger = Trigger(TriggerKind.STAYED_ON, id, channel = 0, minutes = 10),
+                action = AutoAction(ActionKind.ALARM),
+            )
+        )
+        startWith(pump(on = true), rules = emptyMap())
+        log.close()
+
+        engine.testAlarm()
+        scheduler.advance(0)
+        assertEquals(1, host.alarms.size)
+        scheduler.advance(10 * 60_000L + 100)
+
+        assertEquals(2, host.alarms.size)
+    }
+
     // ---------------------------------------------------------------- yardımcılar
 
     private fun pump(on: Boolean = true, online: Boolean = true) =
@@ -326,6 +439,16 @@ class MonitorEngineTest {
         store.setRules(id, DeviceRules(actions = rules))
         engine.start()
         scheduler.advance(0)
+    }
+
+    /** Kullanıcının ilk denemesi: hesap yok, demo cihazları açılır, izleme başlar (Cihazlar ekranındaki yol). */
+    private fun startDemo() {
+        store.logout()
+        store.enableDemo(strings.demoNames())
+        engine.start()
+        scheduler.advance(0)
+        assertTrue(host.alarms.isEmpty())
+        assertEquals(ConnState.LIVE, host.statuses.last().first)
     }
 
     /** Buluttaki değişiklik: sahte bulutun listesi de güncellenir (sonraki senkron geri almasın), WebSocket ile gelir. */

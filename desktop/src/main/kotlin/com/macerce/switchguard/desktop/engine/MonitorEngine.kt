@@ -50,7 +50,8 @@ import java.util.Date
  * Telefondan farklar: Android'e bağlı kısımlar (ön plan servisi, AlarmManager tick'i, ağ geri çağrısı, günlük
  * özet) yok; bildirim/alarm ekranı/uyanık tutma [host] üzerinden. Masaüstüne özgü: Tuya anlık bağlantısı
  * yalnızca `store.tuyaLive` açıkken kurulur; bilgisayar uyuyup uyandığında (duvar saati iki tick arasında
- * [SLEEP_GAP_MS]'den fazla ilerlediyse) bağlantılar baştan kurulur ve iki bulut hemen senkronlanır.
+ * [SLEEP_GAP_MS]'den fazla ilerlediyse) bağlantılar baştan kurulur ve iki bulut hemen senkronlanır. Olay geçmişine
+ * yazma hatası ölümcül değildir: alarm/bildirim önce verilir, geçmiş sonra ve yalnızca [record] ile yazılır.
  */
 class MonitorEngine(
     private val store: Store,
@@ -132,8 +133,8 @@ class MonitorEngine(
     /** `ACTION_TEST`: izleme kapalıyken de çalışır, izlemeyi başlatmaz. */
     fun testAlarm() {
         scheduler.post {
-            log.add("", strings()["app_name"], EventKind.TEST, eventStrings.test, AlertAction.ALARM.name, EventArgs.Test)
             addAlarm(strings()["test_alarm_line"])
+            record("", strings()["app_name"], EventKind.TEST, eventStrings.test, AlertAction.ALARM.name, EventArgs.Test)
         }
     }
 
@@ -219,7 +220,7 @@ class MonitorEngine(
                 // Kapatılmamış alarm varsa (ör. bilgisayar yeniden başladı) geri getir.
                 store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { host.showAlarm(it, null) }
                 setState(ConnState.CONNECTING)
-                runCatching { metrics.prune(clock.wall()) }
+                runCatching { metrics.prune(clock.wall()) }.onFailure { Log.w(TAG, "metrics prune failed; continuing", it) }
                 lastTickWall = 0
                 sync()
                 reconnectNow()
@@ -326,7 +327,7 @@ class MonitorEngine(
     private fun resyncAfterSleep(gap: Long) {
         if (gap >= SLEEP_LOG_MS) {
             val s = strings()
-            log.add("", s["app_name"], EventKind.SYSTEM, s.format("desktop_slept", gap / 60_000), "")
+            record("", s["app_name"], EventKind.SYSTEM, s.format("desktop_slept", gap / 60_000), "")
         }
         Log.i(TAG, "wall clock jumped ${gap / 1000}s between ticks (sleep?): reconnecting and syncing")
         reconnectNow()
@@ -645,7 +646,7 @@ class MonitorEngine(
         val previous = store.snapshots.associateBy { it.id }
         store.snapshots = current
         val wall = clock.wall()
-        runCatching { metrics.record(previous, current, wall) }
+        runCatching { metrics.record(previous, current, wall) }.onFailure { Log.w(TAG, "metrics write failed; continuing", it) }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
         runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
@@ -686,8 +687,8 @@ class MonitorEngine(
             if (wall - seen >= POWER_STALE_MS && powerStaleWarned.add(d.id)) {
                 val text = EventArgs.PowerStale.render(d.name, eventStrings)
                 Log.w(TAG, "no channel power from ${d.id} for ${(wall - seen) / 1000}s")
-                log.add(d.id, d.name, EventKind.AUTOMATION, text, AlertAction.NOTIFY.name, EventArgs.PowerStale)
                 host.notify(text, null)
+                record(d.id, d.name, EventKind.AUTOMATION, text, AlertAction.NOTIFY.name, EventArgs.PowerStale)
             }
         }
     }
@@ -706,7 +707,7 @@ class MonitorEngine(
                 val target = store.snapshots.firstOrNull { it.id == a.action.deviceId }
                 if (target == null) {
                     val args = EventArgs.AutoMissing(a.name)
-                    log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, eventStrings), "", args)
+                    record(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, eventStrings), "", args)
                     return
                 }
                 val args = EventArgs.AutoSwitch(a.name, a.action.channel, target.isMultiChannel, on)
@@ -715,12 +716,12 @@ class MonitorEngine(
                     // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
                     LiveState.expected.expect(target.id, a.action.channel, on, clock.wall())
                     controlSwitch(target, a.action.channel, on)
-                    log.add(target.id, target.name, EventKind.AUTOMATION, text, "", args)
+                    record(target.id, target.name, EventKind.AUTOMATION, text, "", args)
                 } catch (e: Exception) {
                     val failedArgs = args.copy(error = e.message.orEmpty())
                     val failed = failedArgs.render(target.name, eventStrings)
-                    log.add(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
                     host.notify(failed, null)
+                    record(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
                 }
             }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
@@ -732,13 +733,14 @@ class MonitorEngine(
                 val allowed = store.isPro || a.trigger.deviceId in store.monitoredIds()
                 val effective = if (!allowed) AlertAction.IGNORE
                     else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
-                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = store.rulesFor(a.trigger.deviceId).soundUri
+                // Masaüstü: önce uyarı, sonra geçmiş (bkz. [record]).
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound)
                     AlertAction.NOTIFY -> host.notify(text, sound)
                     AlertAction.IGNORE -> Unit
                 }
+                record(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
             }
         }
     }
@@ -746,7 +748,7 @@ class MonitorEngine(
     private fun handle(change: Change) {
         val wall = clock.wall()
         if (LiveState.expected.consume(change, wall)) {
-            log.add(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
+            record(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
             return
         }
         val action = store.rulesFor(change.deviceId).actionFor(change.eventType)
@@ -758,7 +760,7 @@ class MonitorEngine(
                 return
             }
             if (change.to && grace.cameBack(change.deviceId)) {
-                log.add(change.deviceId, change.name, EventKind.SHORT_DROP, eventStrings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
+                record(change.deviceId, change.name, EventKind.SHORT_DROP, eventStrings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
                 return
             }
         }
@@ -768,13 +770,26 @@ class MonitorEngine(
     private fun dispatch(change: Change, action: AlertAction) {
         val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
         val text = change.describe(labels)
-        log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
         val sound = store.rulesFor(change.deviceId).soundUri
+        // Masaüstü: önce uyarı, sonra geçmiş (bkz. [record]).
         when (effective) {
             AlertAction.ALARM -> addAlarm(text, sound)
             AlertAction.NOTIFY -> host.notify(text, sound)
             AlertAction.IGNORE -> Unit
         }
+        record(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
+    }
+
+    /**
+     * Masaüstü: olayı geçmişe yazar; yazılamazsa (disk dolu, dosya başka programda kilitli, bozuk veritabanı)
+     * yalnızca günlüğe not düşülür. Telefonda `SQLiteDatabase.insert` hatayı yutar (-1 döner); burada JDBC fırlatır.
+     * Geçmiş hatası alarmı/bildirimi, aynı partideki diğer değişiklikleri, otomasyonları ya da uyku sonrası
+     * senkronu asla engellememeli: anlık görüntüler [process]'te önceden kaydedildiği için kaçan değişiklik bir daha
+     * fark edilmez. Bu yüzden motor geçmişe yalnızca bu yöntemle yazar ve uyarıyı her zaman önce verir.
+     */
+    private fun record(deviceId: String, deviceName: String, kind: String, text: String, action: String, args: EventArgs? = null) {
+        runCatching { log.add(deviceId, deviceName, kind, text, action, args) }
+            .onFailure { Log.w(TAG, "event history write failed ($kind, device '$deviceId'); continuing", it) }
     }
 
     /** [sound]: olayın cihazına özel ses (yoksa genel ses). */
