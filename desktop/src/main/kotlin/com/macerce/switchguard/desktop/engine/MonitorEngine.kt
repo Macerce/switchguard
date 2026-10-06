@@ -155,11 +155,12 @@ class MonitorEngine(
     }
 
     /**
-     * Masaüstü: kartta "İzle" / "Kurallar" değişikliği. Motor iş parçacığında yazılır (`spec.md` §4: arayüz yalnızca
-     * motora gönderir), olay işlerken okunan kurallarla yarışmaz.
+     * Masaüstü: kartta "İzle" / "Kurallar" değişikliği. Motor iş parçacığında, **o anki** kurala uygulanır (`spec.md` §4:
+     * arayüz yalnızca motora gönderir). Bütün kural değil değişikliğin kendisi gönderilir: motor meşgulken art arda
+     * yapılan değişiklikler (ör. "İzleniyor"u kapatıp hemen kural penceresinde bir olay seçmek) birbirini ezmez.
      */
-    fun setRules(deviceId: String, rules: DeviceRules) {
-        scheduler.post { store.setRules(deviceId, rules) }
+    fun updateRules(deviceId: String, change: (DeviceRules) -> DeviceRules) {
+        scheduler.post { store.setRules(deviceId, change(store.rulesFor(deviceId))) }
     }
 
     /**

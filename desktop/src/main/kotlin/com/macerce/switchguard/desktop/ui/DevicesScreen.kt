@@ -190,7 +190,7 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                                 device = device,
                                 strings = strings,
                                 monitored = (rules[id] ?: DeviceRules()).monitored,
-                                onMonitored = { engine.setRules(id, store.rulesFor(id).copy(monitored = it)) },
+                                onMonitored = { on -> engine.updateRules(id) { it.copy(monitored = on) } },
                                 onRules = { rulesFor = id },
                                 onSwitch = { channel, on ->
                                     // Sonuç motor iş parçacığında gelir ve hiç gelmeyebilir (izleme durursa): beklenmez.
@@ -214,7 +214,7 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
     }
     rulesFor?.let { id ->
         val name = remember(id, version) { store.snapshots.firstOrNull { it.id == id }?.name ?: id }
-        RulesDialog(name, remember(id) { store.rulesFor(id) }, strings, onChange = { engine.setRules(id, it) }, onDismiss = { rulesFor = null })
+        RulesDialog(name, remember(id) { store.rulesFor(id) }, strings, onChange = { change -> engine.updateRules(id, change) }, onDismiss = { rulesFor = null })
     }
 }
 

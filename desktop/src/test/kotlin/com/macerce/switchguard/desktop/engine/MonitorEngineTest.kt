@@ -451,7 +451,7 @@ class MonitorEngineTest {
     @Test
     fun ignoredEventDoesNotAlarm() {
         startWith(pump(on = true), rules = emptyMap())
-        engine.setRules(id, DeviceRules().with(EventType.TURNED_OFF, AlertAction.IGNORE))
+        engine.updateRules(id) { it.with(EventType.TURNED_OFF, AlertAction.IGNORE) }
         scheduler.advance(0)
 
         cloudUpdate(switches = mapOf(0 to false))
@@ -463,12 +463,26 @@ class MonitorEngineTest {
     @Test
     fun unmonitoredDeviceDoesNotAlarm() {
         startWith(pump(on = true), rules = emptyMap())
-        engine.setRules(id, DeviceRules(monitored = false))
+        engine.updateRules(id) { it.copy(monitored = false) }
         scheduler.advance(0)
 
         cloudUpdate(switches = mapOf(0 to false))
 
         assertTrue(host.alarms.isEmpty())
+    }
+
+    @Test
+    fun queuedRuleChangesDoNotUndoEachOther() {
+        startWith(pump(on = true), rules = emptyMap())
+
+        // Motor meşgulken (kuyruk işlenmeden) iki değişiklik: önce "İzleniyor" kapatıldı, sonra kural penceresinde
+        // bir olay değiştirildi. Pencere açıldığında ilk değişiklik henüz uygulanmamıştı.
+        engine.updateRules(id) { it.copy(monitored = false) }
+        engine.updateRules(id) { it.with(EventType.TURNED_OFF, AlertAction.IGNORE) }
+        scheduler.advance(0)
+
+        assertEquals(false, store.rulesFor(id).monitored)
+        assertEquals(AlertAction.IGNORE, store.rulesFor(id).actionFor(EventType.TURNED_OFF))
     }
 
     @Test

@@ -41,16 +41,17 @@ private val ACTIONS = listOf(
 )
 
 /**
- * Bir cihazın kuralları: izlensin mi ve olay başına ALARM / BİLDİRİM / YOK. Her seçim hemen [onChange]'e gider
- * (çağıran motora gönderir: `MonitorEngine.setRules`); pencere seçimi hemen gösterir.
+ * Bir cihazın kuralları: izlensin mi ve olay başına ALARM / BİLDİRİM / YOK. Her seçim hemen [onChange]'e **değişiklik
+ * olarak** gider (çağıran motora gönderir: `MonitorEngine.updateRules`; motor onu o anki kurala uygular, pencere açıldıktan
+ * sonra başka yerden yapılan değişiklik ezilmez); pencere seçimi hemen gösterir.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RulesDialog(deviceName: String, initial: DeviceRules, strings: Strings, onChange: (DeviceRules) -> Unit, onDismiss: () -> Unit) {
+fun RulesDialog(deviceName: String, initial: DeviceRules, strings: Strings, onChange: ((DeviceRules) -> DeviceRules) -> Unit, onDismiss: () -> Unit) {
     var rules by remember { mutableStateOf(initial) }
-    fun set(r: DeviceRules) {
-        rules = r
-        onChange(r)
+    fun set(change: (DeviceRules) -> DeviceRules) {
+        rules = change(rules)
+        onChange(change)
     }
 
     AlertDialog(
@@ -58,8 +59,8 @@ fun RulesDialog(deviceName: String, initial: DeviceRules, strings: Strings, onCh
         title = { Text(strings.format("desktop_rules_title_x", deviceName)) },
         text = {
             Column(Modifier.widthIn(min = 460.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SwitchRow(strings["monitor_this_device"], strings["monitor_this_device_desc"], rules.monitored) {
-                    set(rules.copy(monitored = it))
+                SwitchRow(strings["monitor_this_device"], strings["monitor_this_device_desc"], rules.monitored) { on ->
+                    set { r -> r.copy(monitored = on) }
                 }
                 for ((type, label) in EVENTS) {
                     Text(strings[label], style = MaterialTheme.typography.bodyLarge)
@@ -67,7 +68,7 @@ fun RulesDialog(deviceName: String, initial: DeviceRules, strings: Strings, onCh
                         ACTIONS.forEachIndexed { i, (action, actionLabel) ->
                             SegmentedButton(
                                 selected = rules.actionFor(type) == action,
-                                onClick = { set(rules.with(type, action)) },
+                                onClick = { set { r -> r.with(type, action) } },
                                 shape = SegmentedButtonDefaults.itemShape(i, ACTIONS.size),
                                 enabled = rules.monitored,
                                 modifier = Modifier.testTag("rule-${type.name}-${action.name}"),
