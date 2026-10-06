@@ -499,4 +499,46 @@ class StoreTest {
         val log = String(Files.readAllBytes(logDir.resolve("logs").resolve("switchguard.log")), UTF_8)
         assertEquals(log, 1, Regex("could not decode secret 'at'").findAll(log).count())
     }
+
+    // ---------------------------------------------------------------- yedek: dışa/içe aktarma
+
+    @Test
+    fun exportSettingsDecodesSecretsAndSkipsOtherKeys() {
+        val s = store()
+        s.tuyaSecret = "gizli"
+        s.appId = "app"
+        s.accessToken = "token"
+
+        val out = s.exportSettings(setOf("tuyaSecret", "appId", "missing"))
+
+        assertEquals("gizli", out.getString("tuyaSecret"))
+        assertEquals("app", out.getString("appId"))
+        assertFalse(out.has("at"))
+        assertFalse(out.has("missing"))
+    }
+
+    @Test
+    fun replaceSettingsRemovesKeysMissingFromTheBackup() {
+        val s = store()
+        s.quietHours = s.quietHours.copy(enabled = true)
+        s.snapshots = listOf(com.macerce.switchguard.core.DeviceSnapshot("d", "D", online = true, switches = emptyMap()))
+        val backup = org.json.JSONObject().put("appId", "yeni").put("monitoring", true)
+
+        s.replaceSettings(backup, keys = setOf("appId", "monitoring", "quietEnabled"), clear = setOf("snapshots"))
+
+        assertEquals("yeni", s.appId)
+        assertEquals(true, s.monitoringEnabled)
+        assertEquals(false, s.quietHours.enabled) // yedekte yok: silindi, varsayılana döndü
+        assertTrue(s.snapshots.isEmpty())
+    }
+
+    @Test
+    fun replaceSettingsReEncodesSecrets() {
+        val s = store()
+
+        s.replaceSettings(org.json.JSONObject().put("tuyaSecret", "düz"), keys = setOf("tuyaSecret"), clear = emptySet())
+
+        assertEquals("düz", s.tuyaSecret)
+        assertTrue(raw(), raw().contains("enc:düz"))
+    }
 }

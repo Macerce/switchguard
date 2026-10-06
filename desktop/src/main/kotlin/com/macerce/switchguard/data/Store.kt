@@ -171,6 +171,34 @@ class Store internal constructor(
         edit { if (plain.isEmpty()) remove(key) else put(key, secrets.encode(plain)) }
     }
 
+    // --- Yedek (masaüstü) ---
+
+    /**
+     * [keys] içindeki ayarların taşınabilir kopyası (yedek dosyası için): değerler saklandığı türle; gizli alanlar
+     * çözülmüş düz metin (yedek dosyasının kendisi şifrelidir, DPAPI başka bilgisayarda açılmaz). Olmayan anahtar yazılmaz.
+     */
+    fun exportSettings(keys: Set<String>): JSONObject = synchronized(lock) {
+        val out = JSONObject()
+        for (k in keys) {
+            if (!root.has(k)) continue
+            if (k in SECRET_KEYS) secret(k).takeIf { it.isNotEmpty() }?.let { out.put(k, it) } else out.put(k, root.get(k))
+        }
+        out
+    }
+
+    /**
+     * Geri yükleme: [keys] ∪ [clear] anahtarları silinir, sonra [values] içindeki [keys] anahtarları yazılır (gizliler
+     * bu bilgisayarın [secrets]'ı ile yeniden kodlanır). Tek kilit, tek dosya yazımı: yarım kalmış bir karışım olmaz.
+     */
+    fun replaceSettings(values: JSONObject, keys: Set<String>, clear: Set<String>): Unit = edit {
+        (keys + clear).forEach { remove(it) }
+        for (k in keys) {
+            if (!values.has(k) || values.isNull(k)) continue
+            val v = values.get(k)
+            if (k in SECRET_KEYS) v.toString().takeIf { it.isNotEmpty() }?.let { put(k, secrets.encode(it)) } else put(k, v)
+        }
+    }
+
     // --- Hesap ---
     var appId: String
         get() = str("appId")
