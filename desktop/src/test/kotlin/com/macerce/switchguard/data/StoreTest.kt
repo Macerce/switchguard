@@ -10,6 +10,7 @@ import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.QuietHours
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
+import com.macerce.switchguard.desktop.Log
 import com.macerce.switchguard.desktop.data.SecretCodec
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
@@ -393,6 +394,35 @@ class StoreTest {
         s.setRules("a", s.rulesFor("a").copy(monitored = true))
         s.setRules("b", s.rulesFor("b").copy(monitored = true))
         assertEquals(setOf("a", "b"), s.monitoredIds())
+    }
+
+    @Test
+    fun writeFailureGoesToTheAppLog() {
+        val logDir = tmp.newFolder("app").toPath()
+        Log.init(logDir)
+        val s = store()
+        // Geçici dosyanın yerinde dolu bir dizin: yazma IOException ile başarısız olur.
+        val blocker = tmp.root.toPath().resolve("settings.json.tmp")
+        Files.createDirectory(blocker)
+        Files.write(blocker.resolve("x"), byteArrayOf(1))
+
+        s.appId = "yazılamadı"
+
+        assertEquals("yazılamadı", s.appId) // bellekteki durum geçerli kalır
+        val log = String(Files.readAllBytes(logDir.resolve("logs").resolve("switchguard.log")), UTF_8)
+        assertTrue(log, log.contains("W/Store: could not write"))
+    }
+
+    @Test
+    fun quarantineGoesToTheAppLog() {
+        val logDir = tmp.newFolder("app").toPath()
+        Log.init(logDir)
+        Files.write(file(), "{not json".toByteArray(UTF_8))
+
+        store()
+
+        val log = String(Files.readAllBytes(logDir.resolve("logs").resolve("switchguard.log")), UTF_8)
+        assertTrue(log, log.contains("W/Store: ") && log.contains("is not valid JSON"))
     }
 
     @Test

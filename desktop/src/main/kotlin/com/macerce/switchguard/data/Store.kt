@@ -9,6 +9,7 @@ import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.QuietHours
+import com.macerce.switchguard.desktop.Log
 import com.macerce.switchguard.desktop.data.SecretCodec
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -81,7 +82,7 @@ class Store internal constructor(
                 throw e
             } catch (e: IOException) {
                 if (attempt >= READ_ATTEMPTS) throw e
-                System.err.println("Store: reading $file failed ($e), retrying")
+                Log.w(TAG, "reading $file failed ($e), retrying")
                 try {
                     Thread.sleep(READ_RETRY_DELAY_MS)
                 } catch (_: InterruptedException) {
@@ -101,7 +102,7 @@ class Store internal constructor(
         } catch (e: IOException) {
             throw IOException("$file is not valid JSON ($cause) and could not be moved to $backup; leaving it untouched", e)
         }
-        System.err.println("Store: $file is not valid JSON ($cause); moved to $backup, starting empty")
+        Log.w(TAG, "$file is not valid JSON ($cause); moved to $backup, starting empty")
     }
 
     /** [lock] altında çağrılır. Yazılamazsa bellekteki durum geçerli kalır; sonraki yazma her şeyi yeniden yazar. */
@@ -120,7 +121,7 @@ class Store internal constructor(
                 Files.move(tmp, file, REPLACE_EXISTING)
             }
         } catch (e: IOException) {
-            System.err.println("Store: could not write $file: $e")
+            Log.w(TAG, "could not write $file: $e")
             runCatching { Files.deleteIfExists(tmp) }
         }
     }
@@ -394,6 +395,7 @@ class Store internal constructor(
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
+        private const val TAG = "Store"
 
         /** Not Defteri gibi araçların eklediği UTF-8 işareti. */
         private val BOM = Char(0xFEFF)
