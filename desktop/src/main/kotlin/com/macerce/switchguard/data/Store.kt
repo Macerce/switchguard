@@ -46,6 +46,9 @@ class Store internal constructor(
     constructor(file: Path, secrets: SecretCodec) : this(file, secrets, System::currentTimeMillis)
 
     private val lock = Any()
+
+    /** Anahtar → çözülemeyen saklı gizli değer ([secret]); değer değişince (yeni giriş) yeniden denenir. */
+    private val undecodable = java.util.concurrent.ConcurrentHashMap<String, String>()
     private val root: JSONObject = load()
 
     private val _version = MutableStateFlow(0)
@@ -139,10 +142,28 @@ class Store internal constructor(
     private fun int(key: String, def: Int) = synchronized(lock) { root.optInt(key, def) }
     private fun long(key: String, def: Long) = synchronized(lock) { root.optLong(key, def) }
 
+    /**
+     * Gizli alanı açar. DPAPI bazen bir anlık çözemeyebilir (ör. oturum açılışında profil henüz hazır değil): "çıkış
+     * yapılmış" sayılmadan önce kısa bir bekleyişten sonra bir kez daha denenir; yine olmazsa boş döner ve günlüğe
+     * yalnızca anahtar adı yazılır. Kalıcı olarak çözülemeyen değer (ör. başka bilgisayardan kopyalanmış) hatırlanır:
+     * her okumada yeniden beklenmez, günlüğe bir kez yazılır.
+     */
     private fun secret(key: String): String {
         check(key in SECRET_KEYS) { "$key is not a secret key" }
         val stored = str(key)
-        return if (stored.isEmpty()) "" else secrets.decode(stored) ?: ""
+        if (stored.isEmpty()) return ""
+        secrets.decode(stored)?.let { return it }
+        if (undecodable[key] == stored) return ""
+
+        try {
+            Thread.sleep(SECRET_RETRY_DELAY_MS)
+        } catch (_: InterruptedException) {
+            Thread.currentThread().interrupt()
+        }
+        secrets.decode(stored)?.let { return it }
+        undecodable[key] = stored
+        Log.w(TAG, "could not decode secret '$key'")
+        return ""
     }
 
     private fun setSecret(key: String, plain: String) {
@@ -401,6 +422,7 @@ class Store internal constructor(
         private val BOM = Char(0xFEFF)
         private const val READ_ATTEMPTS = 3
         private const val READ_RETRY_DELAY_MS = 200L
+        private const val SECRET_RETRY_DELAY_MS = 50L
 
         /** Diske yalnızca [SecretCodec] ile kodlanarak yazılan alanlar. */
         val SECRET_KEYS: Set<String> = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken")

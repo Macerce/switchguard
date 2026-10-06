@@ -453,4 +453,50 @@ class StoreTest {
         // geçici dosya geride kalmaz
         assertEquals(listOf("settings.json"), dirNames())
     }
+
+    // ---------------------------------------------------------------- DPAPI geçici hatası (M6)
+
+    /** İlk [failures] çözme denemesinde null döner (DPAPI'nin geçici hatası), sonra çözer. */
+    private class FlakyCodec(var failures: Int) : SecretCodec {
+        override fun encode(plain: String) = "enc:$plain"
+        override fun decode(stored: String): String? {
+            if (failures > 0) {
+                failures--
+                return null
+            }
+            return stored.removePrefix("enc:")
+        }
+    }
+
+    @Test
+    fun secretThatFailsToDecodeOnceIsRetried() {
+        store().accessToken = "tok"
+
+        assertEquals("tok", store(FlakyCodec(failures = 1)).accessToken)
+    }
+
+    @Test
+    fun secretThatNeverDecodesIsEmptyAndLoggedWithoutItsValue() {
+        val logDir = tmp.newFolder("app").toPath()
+        Log.init(logDir)
+        store().accessToken = "gizli-token"
+
+        assertEquals("", store(NullCodec).accessToken)
+        val log = String(Files.readAllBytes(logDir.resolve("logs").resolve("switchguard.log")), UTF_8)
+        assertTrue(log, log.contains("W/Store: could not decode secret 'at'"))
+        assertFalse(log, log.contains("gizli-token"))
+    }
+
+    @Test
+    fun undecodableSecretIsRetriedAndLoggedOnlyOnce() {
+        val logDir = tmp.newFolder("app").toPath()
+        Log.init(logDir)
+        store().accessToken = "x"
+        val s = store(NullCodec)
+
+        repeat(5) { assertEquals("", s.accessToken) } // her tick'te okunur: her seferinde beklemesin, yazmasın
+
+        val log = String(Files.readAllBytes(logDir.resolve("logs").resolve("switchguard.log")), UTF_8)
+        assertEquals(log, 1, Regex("could not decode secret 'at'").findAll(log).count())
+    }
 }
