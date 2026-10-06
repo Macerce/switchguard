@@ -36,6 +36,8 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.53.4.0")
     // MP3 → PCM çözümü yalnızca ses yüklerken (sound/SoundImport); LGPL, ayrı jar olarak paketlenir.
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4") { exclude(group = "junit") }
+    // Cihaz kartlarını basılı tutup sürükleyerek sıralama (Apache-2.0).
+    implementation("sh.calvin.reorderable:reorderable:3.1.0")
     testImplementation("junit:junit:4.13.2")
     @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
     testImplementation(compose.desktop.uiTestJUnit4)

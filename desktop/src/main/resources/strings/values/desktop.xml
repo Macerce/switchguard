@@ -146,4 +146,7 @@
     <string name="desktop_restore_too_big">The file is too large to be a SwitchGuard backup.</string>
     <string name="desktop_restore_failed_x">Restore failed; nothing was changed (%1$s).</string>
     <string name="desktop_ok">OK</string>
+
+    <!-- Cihazlar -->
+    <string name="desktop_drag_hint">Hold a card to move it</string>
 </resources>

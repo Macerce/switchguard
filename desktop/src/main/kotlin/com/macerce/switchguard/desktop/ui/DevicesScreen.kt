@@ -47,6 +47,12 @@ import com.macerce.switchguard.desktop.engine.MonitorEngine
 import com.macerce.switchguard.desktop.i18n.Strings
 import kotlinx.coroutines.launch
 import java.util.Locale
+import androidx.compose.runtime.LaunchedEffect
+import sh.calvin.reorderable.rememberReorderableLazyGridState
+import sh.calvin.reorderable.ReorderableItem
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.animation.core.animateFloatAsState
 
 /**
  * Cihazlar ekranı (ilk aşama): üstte durum metni, izlemeyi başlat/durdur, test alarmı ve demo aç/kapa; altında
@@ -59,6 +65,11 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
     val engine = graph.engine
     val version by store.version.collectAsState()
     val devices = remember(version) { store.snapshots }
+    // Gösterilen sıra: kullanıcının düzeni (DeviceLayout.order); sürüklerken DragOrder'ın yerel sırası.
+    val sortedIds = remember(version) { store.deviceLayout.sorted(store.snapshots).map { it.id } }
+    val byId = remember(version) { store.snapshots.associateBy { it.id } }
+    val order = remember { DragOrder() }
+    LaunchedEffect(sortedIds) { order.show(sortedIds) }
     val monitoring = remember(version) { store.monitoringEnabled }
     val demoOn = remember(version) { store.demoMode }
     val canMonitor = remember(version) { store.hasAnyAccount }
@@ -130,30 +141,62 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                     )
                 }
             } else {
+                val shown = order.displayed(sortedIds)
+                val gridState = rememberLazyGridState()
+                val reorder = rememberReorderableLazyGridState(gridState) { from, to ->
+                    order.move(from.key as String, to.key as String)
+                }
+                if (shown.size > 1) {
+                    Text(
+                        strings["desktop_drag_hint"],
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(horizontal = 24.dp),
+                    )
+                }
                 LazyVerticalGrid(
+                    state = gridState,
                     columns = GridCells.Adaptive(minSize = 340.dp),
                     contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 24.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    items(devices, key = { it.id }) { device ->
-                        DeviceCard(
-                            device = device,
-                            strings = strings,
-                            onSwitch = { channel, on ->
-                                // Sonuç motor iş parçacığında gelir ve hiç gelmeyebilir (izleme durursa): beklenmez.
-                                engine.control(device.id, channel, on) { error ->
-                                    if (error != null) {
-                                        scope.launch {
-                                            snackbar.showSnackbar(
-                                                strings.format("control_failed", error.message ?: error.javaClass.simpleName),
-                                            )
+                    items(shown, key = { it }) { id ->
+                        val device = byId[id] ?: return@items
+                        ReorderableItem(reorder, key = id) { isDragging ->
+                            // Kalkan kart: hafif büyür ve gölgelenir; yalnızca çizim katmanı değişir (her karede bileşim kurulmaz).
+                            val lift by animateFloatAsState(if (isDragging) 1f else 0f)
+                            DeviceCard(
+                                modifier = Modifier
+                                    .graphicsLayer {
+                                        val scale = 1f + 0.03f * lift
+                                        scaleX = scale
+                                        scaleY = scale
+                                        shadowElevation = 16.dp.toPx() * lift
+                                        shape = RoundedCornerShape(16.dp)
+                                    }
+                                    .longPressDraggableHandle(
+                                        onDragStarted = { order.begin(shown) },
+                                        // Yeni sıra bırakınca bir kez kaydedilir.
+                                        onDragStopped = { order.end()?.let { ids -> store.deviceLayout = store.deviceLayout.copy(order = ids) } },
+                                    ),
+                                device = device,
+                                strings = strings,
+                                onSwitch = { channel, on ->
+                                    // Sonuç motor iş parçacığında gelir ve hiç gelmeyebilir (izleme durursa): beklenmez.
+                                    engine.control(device.id, channel, on) { error ->
+                                        if (error != null) {
+                                            scope.launch {
+                                                snackbar.showSnackbar(
+                                                    strings.format("control_failed", error.message ?: error.javaClass.simpleName),
+                                                )
+                                            }
                                         }
                                     }
-                                }
-                            },
-                            onDemo = { op, channel -> engine.demo(op, device.id, channel) },
-                        )
+                                },
+                                onDemo = { op, channel -> engine.demo(op, device.id, channel) },
+                            )
+                        }
                     }
                 }
             }
@@ -168,9 +211,10 @@ private fun DeviceCard(
     strings: Strings,
     onSwitch: (channel: Int, on: Boolean) -> Unit,
     onDemo: (op: String, channel: Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
-        Modifier.fillMaxWidth(),
+        modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
     ) {

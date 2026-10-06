@@ -146,4 +146,7 @@
     <string name="desktop_restore_too_big">Dosya bir SwitchGuard yedeği olamayacak kadar büyük.</string>
     <string name="desktop_restore_failed_x">Geri yükleme başarısız oldu; hiçbir şey değişmedi (%1$s).</string>
     <string name="desktop_ok">Tamam</string>
+
+    <!-- Cihazlar -->
+    <string name="desktop_drag_hint">Kartı taşımak için basılı tutun</string>
 </resources>
