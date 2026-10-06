@@ -133,7 +133,7 @@
     <string name="desktop_backup_working">Lütfen bekleyin…</string>
     <string name="desktop_backup_saved_x">Yedek kaydedildi: %1$s</string>
     <string name="desktop_backup_failed_x">Yedek kaydedilemedi (%1$s).</string>
-    <string name="desktop_restore_summary">%1$s tarihinde SwitchGuard %2$s ile alındı\nTuya: %3$s · eWeLink anahtarları: %4$s\n%5$d cihaz kuralı · %6$d otomasyon · %7$d ses</string>
+    <string name="desktop_restore_summary">%1$s tarihinde SwitchGuard %2$s ile alındı\nTuya: %3$s · eWeLink anahtarları: %4$s\n%5$d cihaz kuralı · %6$d uyarı · %7$d ses</string>
     <string name="desktop_yes">var</string>
     <string name="desktop_no">yok</string>
     <string name="desktop_restore_warning">Bu bilgisayardaki tüm ayarlar yedektekiyle değiştirilecek.</string>
@@ -153,7 +153,7 @@
     <string name="desktop_windows_step_8">Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.</string>
 
     <!-- Otomasyonlar -->
-    <string name="desktop_automation_hint">Otomasyonlar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
+    <string name="desktop_automation_hint">Uyarılar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
 
     <!-- Cihaz seçenekleri ve kart boyutu -->
     <string name="desktop_options">Seçenekler…</string>
@@ -168,4 +168,12 @@
     <string name="desktop_card_large">Büyük</string>
     <string name="desktop_card_medium">Orta</string>
     <string name="desktop_card_small">Küçük</string>
+
+    <!-- Uyarılar (otomasyonlar ekranı) -->
+    <string name="desktop_alerts_tab">Uyarılar</string>
+    <string name="desktop_alerts_empty">Henüz uyarı yok</string>
+    <string name="desktop_alert_new">Yeni uyarı</string>
+    <string name="desktop_alert_edit">Uyarıyı düzenle</string>
+    <string name="desktop_alert_delete_title">Bu uyarı silinsin mi?</string>
+    <string name="desktop_alerts_need_monitoring">İzleme kapalı — başlatana kadar uyarılar çalışmaz.</string>
 </resources>

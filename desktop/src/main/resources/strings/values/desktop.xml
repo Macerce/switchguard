@@ -133,7 +133,7 @@
     <string name="desktop_backup_working">Please wait…</string>
     <string name="desktop_backup_saved_x">Backup saved: %1$s</string>
     <string name="desktop_backup_failed_x">The backup could not be saved (%1$s).</string>
-    <string name="desktop_restore_summary">Created %1$s with SwitchGuard %2$s\nTuya: %3$s · eWeLink keys: %4$s\n%5$d device rules · %6$d automations · %7$d sounds</string>
+    <string name="desktop_restore_summary">Created %1$s with SwitchGuard %2$s\nTuya: %3$s · eWeLink keys: %4$s\n%5$d device rules · %6$d alerts · %7$d sounds</string>
     <string name="desktop_yes">yes</string>
     <string name="desktop_no">no</string>
     <string name="desktop_restore_warning">All settings on this computer will be replaced with the backup.</string>
@@ -153,7 +153,7 @@
     <string name="desktop_windows_step_8">Installing a new version: first uninstall the old one (step 7), then run the new setup file. Your settings, accounts and sounds are kept.</string>
 
     <!-- Otomasyonlar -->
-    <string name="desktop_automation_hint">Automations run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
+    <string name="desktop_automation_hint">Alerts run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
 
     <!-- Cihaz seçenekleri ve kart boyutu -->
     <string name="desktop_options">Options…</string>
@@ -168,4 +168,12 @@
     <string name="desktop_card_large">Large</string>
     <string name="desktop_card_medium">Medium</string>
     <string name="desktop_card_small">Small</string>
+
+    <!-- Uyarılar (otomasyonlar ekranı) -->
+    <string name="desktop_alerts_tab">Alerts</string>
+    <string name="desktop_alerts_empty">No alerts yet</string>
+    <string name="desktop_alert_new">New alert</string>
+    <string name="desktop_alert_edit">Edit alert</string>
+    <string name="desktop_alert_delete_title">Delete this alert?</string>
+    <string name="desktop_alerts_need_monitoring">Monitoring is off — alerts do not run until you start it.</string>
 </resources>

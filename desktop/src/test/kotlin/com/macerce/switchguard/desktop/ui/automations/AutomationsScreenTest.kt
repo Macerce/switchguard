@@ -42,7 +42,7 @@ class AutomationsScreenTest {
     fun emptyListShowsExamples() {
         show()
 
-        compose.onNodeWithText("No automations yet").assertExists()
+        compose.onNodeWithText("No alerts yet").assertExists()
     }
 
     @Test
@@ -51,6 +51,8 @@ class AutomationsScreenTest {
 
         compose.onNodeWithTag("add-automation").performClick()
         compose.onNodeWithText("Name").performTextInput("Pump turned off")
+        compose.onNodeWithTag("pick-event").performScrollTo().performClick()
+        compose.onNodeWithText("Turns Off").performClick() // olay listesi: her kelime büyük harfle
         compose.onNodeWithTag("pick-action").performScrollTo().performClick()
         compose.onNodeWithText("Ring alarm").performClick()
         compose.onNodeWithText("Save").performScrollTo().performClick()
@@ -59,7 +61,7 @@ class AutomationsScreenTest {
         val a = graph.store.automations.single()
         assertEquals("Pump turned off", a.name)
         assertEquals(ActionKind.ALARM, a.action.kind)
-        assertEquals(TriggerKind.TURNED_ON, a.trigger.kind)
+        assertEquals(TriggerKind.TURNED_OFF, a.trigger.kind)
         assertEquals(true, a.enabled)
     }
 
@@ -82,7 +84,7 @@ class AutomationsScreenTest {
 
         compose.onNodeWithText(a.name).performClick()
         compose.onNodeWithText("Delete").performClick()
-        compose.onNodeWithText("Delete automation?").assertExists()
+        compose.onNodeWithText("Delete this alert?").assertExists()
         compose.onNodeWithTag("confirm-delete").performClick()
 
         compose.waitUntil(5_000) { graph.store.automations.isEmpty() }

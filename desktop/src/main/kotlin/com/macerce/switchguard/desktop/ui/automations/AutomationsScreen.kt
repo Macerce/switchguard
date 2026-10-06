@@ -61,7 +61,7 @@ import java.util.UUID
 private const val NEW = "new"
 
 /**
- * Otomasyonlar (telefondaki AutomationsScreen'in masaüstü karşılığı): liste, aç/kapa, düzenleyici. Ekleme, değiştirme
+ * Uyarılar (telefondaki "Otomasyon" ekranının masaüstü karşılığı; kullanıcı burada "uyarı" der): liste, aç/kapa, düzenleyici. Ekleme, değiştirme
  * ve silme motor üzerinden yapılır (`MonitorEngine.saveAutomation` / `deleteAutomation`); değerlendirme zaten motorda.
  */
 @Composable
@@ -98,14 +98,14 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
             contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 96.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item { Text(strings["tab_automations"], style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold) }
+            item { Text(strings["desktop_alerts_tab"], style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold) }
             if (!monitoring && automations.isNotEmpty()) {
-                item { Text(strings["automations_need_monitoring"], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error) }
+                item { Text(strings["desktop_alerts_need_monitoring"], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error) }
             }
             if (automations.isEmpty()) {
                 item {
                     Column(Modifier.padding(vertical = 24.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        Text(strings["automations_empty"], style = MaterialTheme.typography.bodyLarge)
+                        Text(strings["desktop_alerts_empty"], style = MaterialTheme.typography.bodyLarge)
                         Text(strings["automations_examples"], style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 }
@@ -211,7 +211,7 @@ private fun AutomationEditor(
         Row(Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = strings["action_back"]) }
             Text(
-                strings[if (initial == null) "automation_new" else "automation_edit"],
+                strings[if (initial == null) "desktop_alert_new" else "desktop_alert_edit"],
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f),
             )
@@ -231,7 +231,7 @@ private fun AutomationEditor(
             Picker(strings["automation_device"], devices, src, { it.name }, "pick-trigger-device") {
                 form = f.copy(triggerDevice = it.id, triggerChannel = 0)
             }
-            Picker(strings["automation_event"], AutomationForm.kindsFor(src), f.triggerKind, { strings[it.titleKey()] }, "pick-event") {
+            Picker(strings["automation_event"], AutomationForm.kindsFor(src), f.triggerKind, { titleCase(strings[it.titleKey()], strings.language) }, "pick-event") {
                 form = f.copy(triggerKind = it)
             }
             if (f.triggerKind.usesChannel && src != null && src.isMultiChannel) {
@@ -278,7 +278,7 @@ private fun AutomationEditor(
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            text = { Text(strings["automation_delete_title"]) },
+            text = { Text(strings["desktop_alert_delete_title"]) },
             confirmButton = {
                 Button(onClick = {
                     confirmDelete = false

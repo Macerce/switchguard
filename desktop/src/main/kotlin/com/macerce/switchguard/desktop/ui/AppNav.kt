@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
@@ -24,7 +24,7 @@ import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.ui.automations.AutomationsScreen
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 
-/** Sol menü (Cihazlar · Otomasyonlar · Ayarlar) ve seçili ekran. Seçim [com.macerce.switchguard.desktop.AppState.tab]'da: pencere yeniden kurulsa da korunur. */
+/** Sol menü (Cihazlar · Uyarılar · Ayarlar) ve seçili ekran. Seçim [com.macerce.switchguard.desktop.AppState.tab]'da: pencere yeniden kurulsa da korunur. */
 @Composable
 fun AppNav(graph: AppGraph, strings: Strings) {
     val tab by graph.appState.tab.collectAsState()
@@ -39,8 +39,8 @@ fun AppNav(graph: AppGraph, strings: Strings) {
             NavigationRailItem(
                 selected = tab == Tab.AUTOMATIONS,
                 onClick = { graph.appState.tab.value = Tab.AUTOMATIONS },
-                icon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
-                label = { Text(strings["tab_automations"]) },
+                icon = { Icon(Icons.Filled.Notifications, contentDescription = null) },
+                label = { Text(strings["desktop_alerts_tab"]) },
             )
             NavigationRailItem(
                 selected = tab == Tab.SETTINGS,
