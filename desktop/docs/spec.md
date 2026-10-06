@@ -96,8 +96,8 @@ Bağımlılıklar: Compose Desktop (Material 3, ikonlar), OkHttp 4.12, `org.json
   - **Deneme A (yedek eWeLink hesabıyla; hesabın geliştirici onayı gelince — 2026-10-06 itibarıyla bekleniyor, bu yüzden 2. aşamanın başında):** eWeLink geliştirici konsolu `http://127.0.0.1:<port>/` biçiminde bir dönüş adresini kabul ediyor mu? Ediyorsa uygulama bu portta küçük bir yerel sunucu açar, dönüşteki `code` + `region`'u yakalar ve oturum açar (Windows rehberi bu adresi söyler).
   - **Yedek yol:** Dönüş adresi telefondaki gibi `https://127.0.0.1` kalır; girişten sonra tarayıcı "bağlanılamıyor" sayfasında kalır; kullanıcı adres çubuğundaki adresi kopyalar; uygulama giriş penceresi açıkken panoyu izler ve `https://127.0.0.1/?code=…` görünce kendiliğinden alır (elle yapıştırma alanı da var).
 - **Tuya:** Aynı Tuya anahtarları kullanılabilir (aktarma ile gelir ya da elle girilir).
-  - **Deneme B (1. aşamada yapılır):** Tuya mesaj servisi (Pulsar, `Failover` aboneliği) aynı projeye bağlı iki cihaza da her mesajı veriyor mu? `tools/tuya_pulsar_probe.py` ile iki eşzamanlı tüketici denenir (aynı ve farklı abonelik adıyla).
-  - Vermiyorsa: Ayarlar'a "Tuya canlı bildirimleri bu cihazda" anahtarı eklenir; masaüstünde **varsayılan kapalı** (telefonun canlı bağlantısını çalmasın); kapalıyken 5 dk'da bir sorgulanır.
+  - **Deneme B (yapıldı, 2026-10-06; ayrıntı `spikes.md`):** Tuya mesaj servisi ayrı bir abonelik adını (`{accessId}-sub-desktop`) kabul etmiyor (HTTP 500 "Subscription does not exist"); yalnızca önceden var olan `{accessId}-sub` kullanılabiliyor. Konu 11 bölümlü ve `Failover` olduğundan aynı abonelikteki iki cihazın her mesajı birlikte alması beklenmez (bölüm başına tek etkin tüketici; Pulsar tasarımı, denemede gözlenmedi). Aynı abonelikte mesaj paylaşımı 10 dk'da hiç mesaj gelmediği için ölçülemedi (sonuçsuz), tasarımı değiştirmez.
+  - **Karar:** Ayarlar'a "Tuya canlı bildirimleri bu cihazda" anahtarı eklenir; masaüstünde **varsayılan kapalı** (`tuyaLive = false`; telefonun canlı bağlantısını çalmasın); kapalıyken 5 dk'da bir sorgulanır. Açılırsa telefonun canlı mesajlarının bir kısmını alabileceği uyarısı gösterilir. Bağlantı 30 sn'de bir ping atar (boştaki bağlantı 5 dk'da düşer); `TuyaSocket` bunu zaten yapıyor.
 - **Aktarma:** Telefondaki "Başka cihaza aktar / Başka cihazdan al" protokolü aynen (6 haneli kod, PBKDF2 + AES-GCM, izin listesi; eWeLink anahtarları ve oturumu aktarılmaz). Cihaz bulma JmDNS ile `_switchguard._tcp`; telefon bilgisayarı, bilgisayar telefonu bulur. Windows Güvenlik Duvarı ilk seferde izin sorabilir (kurulum sırasında kural eklemiyoruz; kullanıcı "İzin ver" der).
 - **Demo:** Telefondaki demo cihazları ve simülasyon aynen (hesapsız deneme ve testler için).
 
@@ -117,7 +117,7 @@ Sol menü: **Cihazlar · Otomasyonlar · Geçmiş · Ayarlar**; pencere en az ~9
 - **Cihazlar:** Izgara (kart: ad, çevrim içi durumu, kanallar ve aç/kapa, güç); kartın yanında **ayrıntı paneli**: kurallar (izle, olay başına ALARM/BİLDİRİM/YOK sesi), enerji grafikleri, eWeLink zamanlayıcıları, cihaz verisini kopyala, demo simülasyonu. Düzen düzenleme (sıra, öncelikli, küçük kart, kategori) fareyle sürükle-bırak.
 - **Otomasyonlar:** Liste + düzenleyici (telefondaki tetik/eylem türlerinin hepsi).
 - **Geçmiş:** Olay listesi, filtreler, görülmemiş rozeti.
-- **Ayarlar:** Hesaplar (eWeLink, Tuya, demo) · İzleme (sorgulama aralığı, çevrimdışı tolerans, uyanık tut, Windows ile başlat, Tuya canlı — yalnızca Deneme B gerektirirse) · Alarm (ses, ses düzeyi, sessiz saatler, test alarmı) · Günlük özet · Dil (Sistem / Türkçe / English) · Tema · Aktar / Al · Hakkında (sürüm, rehberler, videolar, iletişim, lisans, Pro durumu).
+- **Ayarlar:** Hesaplar (eWeLink, Tuya, demo) · İzleme (sorgulama aralığı, çevrimdışı tolerans, uyanık tut, Windows ile başlat, Tuya canlı bildirimleri bu cihazda — varsayılan kapalı, Deneme B sonucu) · Alarm (ses, ses düzeyi, sessiz saatler, test alarmı) · Günlük özet · Dil (Sistem / Türkçe / English) · Tema · Aktar / Al · Hakkında (sürüm, rehberler, videolar, iletişim, lisans, Pro durumu).
 - **Telefona özgü olup alınmayanlar:** pil optimizasyonu, üretici arka plan ayarları, bildirim/üstte gösterme izinleri, titreşim, Play satın alma ekranı.
 - Telefondaki Compose bileşenleri (kartlar, grafik, düzen düzenleyici vb.) gerektiğinde kopyalanıp fare/klavye kullanımına uyarlanır.
 
@@ -169,7 +169,7 @@ Sol menü: **Cihazlar · Otomasyonlar · Geçmiş · Ayarlar**; pencere en az ~9
 | Risk | Önlem |
 |---|---|
 | eWeLink yerel dönüş adresini kabul etmez | Pano izleyen yedek giriş yolu (§6) |
-| Tuya canlı mesajları tek cihaza gider | Deneme B; "bu cihazda canlı" anahtarı, masaüstünde varsayılan kapalı |
+| Tuya canlı mesajları tek cihaza gider | Deneme B doğruladı: ayrı abonelik yok (HTTP 500); "bu cihazda canlı" anahtarı, masaüstünde varsayılan kapalı, 5 dk sorgulama |
 | Bilgisayar uyur / kapak kapanır | Uyanık tut + uyku algılama + geçmiş kaydı; kullanıcıya açıkça söylenir |
 | Kilit ekranında alarm görünmez | Ses çalar; kilit açılınca pencere görünür (Windows sınırı) |
 | İmzasız exe uyarısı | İlk sürümde kabul; herkese açılışta imza değerlendirilir |
