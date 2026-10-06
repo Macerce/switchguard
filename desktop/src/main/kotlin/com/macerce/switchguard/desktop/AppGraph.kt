@@ -37,7 +37,9 @@ class AppGraph(val dataDir: Path) {
         throw e
     }
 
-    val sounds = SoundPlayer()
+    /** Yüklenmiş seslerin klasörü (`user:` kimlikleri). */
+    val soundsDir: Path = dataDir.resolve("sounds")
+    val sounds = SoundPlayer(soundsDir)
     val appState = AppState()
     val tray = TrayState()
 

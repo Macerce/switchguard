@@ -178,4 +178,14 @@ class DesktopHostTest {
         assertTrue(sound.isLooping())
         assertEquals(2, sound.loops.size)
     }
+
+    @Test
+    fun notifyUsesTheNotificationSound() {
+        store.notifySoundUri = "builtin:alarm_beep"
+
+        host.notify("t", null)
+        host.notify("t", "builtin:alarm_pulse") // cihaza özel ses önceliklidir
+
+        assertEquals(listOf("builtin:alarm_beep", "builtin:alarm_pulse"), sound.onces)
+    }
 }

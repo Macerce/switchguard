@@ -187,4 +187,24 @@ class SoundsTest {
         assertEquals(0f, SoundPlayer.gainDb(3f, -80f, 6f), 1e-4f)
         assertEquals(0f, SoundPlayer.gainDb(Float.NaN, -80f, 6f), 1e-4f)
     }
+
+    @Test
+    fun userIdResolvesInsideUserDir() {
+        val userDir = tmp.newFolder("sounds").toPath()
+        val wav = userDir.resolve("0123456789ab-zil.wav")
+        javax.sound.sampled.AudioSystem.write(
+            javax.sound.sampled.AudioInputStream(
+                java.io.ByteArrayInputStream(ByteArray(8_000 * 2)),
+                javax.sound.sampled.AudioFormat(8_000f, 16, 1, true, false),
+                8_000,
+            ),
+            javax.sound.sampled.AudioFileFormat.Type.WAVE,
+            wav.toFile(),
+        )
+
+        assertEquals(SoundSource.File(wav), Sounds.resolve("user:0123456789ab-zil.wav", Sounds.DEFAULT_ALARM, userDir))
+        assertEquals(siren, Sounds.resolve("user:../0123456789ab-zil.wav", Sounds.DEFAULT_ALARM, userDir))
+        assertEquals(siren, Sounds.resolve("user:sounds\\0123456789ab-zil.wav", Sounds.DEFAULT_ALARM, tmp.root.toPath()))
+        assertEquals(siren, Sounds.resolve("user:0123456789ab-zil.wav", Sounds.DEFAULT_ALARM, null))
+    }
 }

@@ -34,6 +34,8 @@ dependencies {
     implementation("net.java.dev.jna:jna-platform:5.19.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.xerial:sqlite-jdbc:3.53.4.0")
+    // MP3 → PCM çözümü yalnızca ses yüklerken (sound/SoundImport); LGPL, ayrı jar olarak paketlenir.
+    implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4") { exclude(group = "junit") }
     testImplementation("junit:junit:4.13.2")
 }
 

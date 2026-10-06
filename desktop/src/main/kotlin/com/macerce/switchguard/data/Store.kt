@@ -324,6 +324,10 @@ class Store internal constructor(
     var alarmSoundUri: String?
         get() = strOrNull("alarmSound")
         set(v) = edit { if (v == null) remove("alarmSound") else put("alarmSound", v) }
+    /** Masaüstü: bildirim sesi (telefonda yok); null ise yerleşik varsayılan. */
+    var notifySoundUri: String?
+        get() = strOrNull("notifySound")
+        set(v) = edit { if (v == null) remove("notifySound") else put("notifySound", v) }
     var alarmVolume: Float
         get() = synchronized(lock) { root.optDouble("alarmVolume", 1.0).toFloat() }
         // Float'ı en kısa ondalık gösterimiyle yaz (0.05f → 0.05, 0.05000000074505806 değil).

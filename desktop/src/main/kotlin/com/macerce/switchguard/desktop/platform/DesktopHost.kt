@@ -101,7 +101,8 @@ class DesktopHost(
 
     override fun notify(text: String, sound: String?) {
         notifications.enqueue(Notification(strings()["app_name"], text, Notification.Type.Info))
-        sounds.once(sound, store.alarmVolume)
+        // Cihaza özel ses yoksa masaüstünün bildirim sesi (o da yoksa yerleşik varsayılan).
+        sounds.once(sound ?: store.notifySoundUri, store.alarmVolume)
     }
 
     override fun sessionLost(text: String, detail: String) {

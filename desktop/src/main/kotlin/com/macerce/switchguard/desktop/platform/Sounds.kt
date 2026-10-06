@@ -1,6 +1,8 @@
 package com.macerce.switchguard.desktop.platform
 
 import com.macerce.switchguard.desktop.Log
+import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.sound.SoundImport
 import java.awt.Toolkit
 import java.io.BufferedInputStream
 import java.io.FileNotFoundException
@@ -33,6 +35,7 @@ sealed interface SoundSource {
 
 object Sounds {
     const val BUILTIN_PREFIX = "builtin:"
+    const val USER_PREFIX = "user:"
     const val DEFAULT_ALARM = "builtin:alarm_siren"
     const val DEFAULT_NOTIFY = "builtin:notify_chime"
 
@@ -44,12 +47,23 @@ object Sounds {
     val BUILTIN: List<String> = listOf("alarm_siren", "alarm_beep", "alarm_pulse", "notify_chime")
 
     /**
+     * Ses seçicide gösterilen ad: yerleşikler için dil tablosundaki `sound_builtin_<ad>`, yüklenenler (`user:`) için
+     * dosya adının özet önekinden sonraki kısmı, mutlak yol için dosya adı.
+     */
+    fun displayName(id: String, strings: Strings): String = when {
+        id.startsWith(BUILTIN_PREFIX) -> strings["sound_builtin_${id.removePrefix(BUILTIN_PREFIX)}"]
+        id.startsWith(USER_PREFIX) -> SoundImport.userLabel(id)
+        else -> runCatching { Paths.get(id).fileName?.toString() }.getOrNull() ?: id
+    }
+
+    /**
      * Ayarlardaki ses kimliğini çalınabilir bir kaynağa çevirir; **hiçbir zaman sessizlik döndürmez**.
-     * Boş/null, bilinmeyen `builtin:` adı, olmayan/okunamayan/ses olmayan dosya ve telefondan gelebilecek
+     * `user:<dosya>` [userDir] (`%APPDATA%\SwitchGuard\sounds`) içindeki yüklenmiş sestir; ad yol ayırıcı ya da `..`
+     * içeremez. Boş/null, bilinmeyen `builtin:` adı, olmayan/okunamayan/ses olmayan dosya ve telefondan gelebilecek
      * `content://...` gibi dosya yolu olmayan kimlikler [default] değerine düşer (boş/null dışındakilerde
      * Log.w yazılır). Saf fonksiyondur: ses cihazı gerekmez.
      */
-    fun resolve(id: String?, default: String): SoundSource {
+    fun resolve(id: String?, default: String, userDir: Path? = null): SoundSource {
         val fallback = builtinOrNull(default) ?: SoundSource.Builtin(LAST_RESORT)
         val wanted = id?.trim().orEmpty()
         if (wanted.isEmpty()) return fallback
@@ -58,6 +72,19 @@ object Sounds {
         if (wanted.startsWith(BUILTIN_PREFIX)) {
             builtinOrNull(wanted)?.let { return it }
             reason = "unknown built-in sound"
+        } else if (wanted.startsWith(USER_PREFIX)) {
+            val name = wanted.removePrefix(USER_PREFIX)
+            val unsafe = name.isEmpty() || name.contains('/') || name.contains('\\') || name.contains("..")
+            reason = when {
+                userDir == null -> "no folder for loaded sounds"
+                unsafe -> "not a plain file name"
+                else -> {
+                    val path = userDir.resolve(name)
+                    val rejected = rejectionOf(path)
+                    if (rejected == null) return SoundSource.File(path)
+                    rejected
+                }
+            }
         } else {
             val path = try {
                 Paths.get(wanted)
@@ -143,7 +170,10 @@ interface AlarmSound {
  * yaratmaz; varsayılana düşülür. Hiçbir çağrı çağırana istisna fırlatmaz; hata Log.w'ye yazılır. Varsayılan
  * da çalınamazsa (ses cihazı yok) son çare olarak sistem bip'i denenir.
  */
-class SoundPlayer : AlarmSound {
+class SoundPlayer(
+    /** Yüklenmiş seslerin klasörü (`user:` kimlikleri); null ise yalnızca yerleşik sesler ve mutlak yollar. */
+    private val userDir: Path? = null,
+) : AlarmSound {
     private val lock = Any()
     private var loopClip: Playing? = null
     private var onceClip: Playing? = null
@@ -222,10 +252,10 @@ class SoundPlayer : AlarmSound {
 
     /** İstenen sesi, olmazsa varsayılanı, o da olmazsa sistem bip'ini dener. Çalan sesi ya da null döndürür. */
     private fun play(id: String?, default: String, volume: Float, loop: Boolean): Playing? {
-        val wanted = Sounds.resolve(id, default)
+        val wanted = Sounds.resolve(id, default, userDir)
         attempt("play $wanted") { start(wanted, volume, loop) }?.let { return it }
 
-        val fallback = Sounds.resolve(null, default)
+        val fallback = Sounds.resolve(null, default, userDir)
         if (fallback != wanted) {
             attempt("play default $fallback") { start(fallback, volume, loop) }?.let { return it }
         }
