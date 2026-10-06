@@ -151,6 +151,7 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
     val monitoring = remember(version) { graph.store.monitoringEnabled }
     val canMonitor = remember(version) { graph.store.hasAnyAccount }
     val status by appState.status.collectAsState()
+    val alarmLines by appState.alarmLines.collectAsState()
     var confirmExit by remember { mutableStateOf(false) }
 
     fun exit() {
@@ -172,15 +173,20 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
             tooltip = trayTooltip(strings["app_name"], status.second),
             onAction = appState::showMainWindow,
             menu = {
-                Item(strings["tray_open"], onClick = appState::showMainWindow)
-                Item(
-                    strings[if (monitoring) "tray_stop" else "tray_start"],
-                    enabled = monitoring || canMonitor,
-                    onClick = { if (graph.store.monitoringEnabled) graph.engine.stop() else graph.engine.start() },
-                )
-                Item(strings["test_alarm"], onClick = graph.engine::testAlarm)
-                Separator()
-                Item(strings["tray_exit"], onClick = ::requestExit)
+                for (action in trayActions(alarmPending = alarmLines.isNotEmpty())) when (action) {
+                    TrayAction.DISMISS_ALARM -> Item(strings["tray_dismiss_alarm"], onClick = graph.engine::dismissAlarm)
+                    TrayAction.OPEN -> Item(strings["tray_open"], onClick = appState::showMainWindow)
+                    TrayAction.MONITORING -> Item(
+                        strings[if (monitoring) "tray_stop" else "tray_start"],
+                        enabled = monitoring || canMonitor,
+                        onClick = { if (graph.store.monitoringEnabled) graph.engine.stop() else graph.engine.start() },
+                    )
+                    TrayAction.TEST_ALARM -> Item(strings["test_alarm"], onClick = graph.engine::testAlarm)
+                    TrayAction.EXIT -> {
+                        Separator()
+                        Item(strings["tray_exit"], onClick = ::requestExit)
+                    }
+                }
             },
         )
     }

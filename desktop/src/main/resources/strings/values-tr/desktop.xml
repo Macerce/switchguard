@@ -8,6 +8,7 @@
     <string name="tray_open">SwitchGuard\'ı aç</string>
     <string name="tray_start">İzlemeyi başlat</string>
     <string name="tray_stop">İzlemeyi durdur</string>
+    <string name="tray_dismiss_alarm">Alarmı kapat</string>
     <string name="tray_exit">Çıkış</string>
     <string name="tray_exit_confirm">İzleme açık. Çıkarsanız SwitchGuard yeniden açılana kadar bu bilgisayarda alarm çalmaz.</string>
     <string name="tray_exit_confirm_yes">Yine de çık</string>

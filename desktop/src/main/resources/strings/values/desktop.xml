@@ -8,6 +8,7 @@
     <string name="tray_open">Open SwitchGuard</string>
     <string name="tray_start">Start monitoring</string>
     <string name="tray_stop">Stop monitoring</string>
+    <string name="tray_dismiss_alarm">Dismiss alarm</string>
     <string name="tray_exit">Exit</string>
     <string name="tray_exit_confirm">Monitoring is on. If you exit, alarms will not ring on this computer until SwitchGuard is opened again.</string>
     <string name="tray_exit_confirm_yes">Exit anyway</string>
