@@ -90,4 +90,16 @@
     <string name="desktop_windows_step_5">Hesaplarınızı Ayarlar → Hesap bölümünden ekleyin (Tuya ve eWeLink anlatımları aşağıda).</string>
     <string name="desktop_windows_step_6">Başka bir bilgisayara geçerken: eskisinde Ayarlar → Yedekleme → Dosyaya yedekle; yenisine kurup Dosyadan geri yükle; ardından eWeLink\'e yeniden giriş yapın.</string>
     <string name="desktop_windows_step_7">Kaldırmak için: Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.</string>
+
+    <!-- Hesaplar -->
+    <string name="desktop_tuya_not_connected">Bağlı değil</string>
+    <string name="desktop_connect">Bağlan</string>
+    <string name="desktop_remove">Kaldır</string>
+    <string name="desktop_turn_on">Aç</string>
+    <string name="desktop_no_internet">İnternet bağlantısı yok.</string>
+    <string name="desktop_error_x">Bir sorun oluştu (%1$s).</string>
+    <string name="desktop_tuya_disconnect_confirm">Tuya bağlantısı kaldırılsın mı? Tuya cihazları bu bilgisayarda artık izlenmez.</string>
+    <string name="desktop_tuya_live">Tuya canlı bildirimleri bu bilgisayarda</string>
+    <string name="desktop_tuya_live_desc">Kapalı: Tuya cihazları 5 dakikada bir sorgulanır</string>
+    <string name="desktop_tuya_live_warning">Telefonunuz bu durumda canlı Tuya mesajlarının bir kısmını veya tamamını alamayabilir. Yine de açılsın mı?</string>
 </resources>

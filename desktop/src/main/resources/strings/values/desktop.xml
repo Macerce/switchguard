@@ -90,4 +90,16 @@
     <string name="desktop_windows_step_5">Add your accounts in Settings → Account (the Tuya and eWeLink steps are below).</string>
     <string name="desktop_windows_step_6">Moving to another computer: on the old one, Settings → Backup → Back up to a file; install on the new one, Restore from a file, then sign in to eWeLink again.</string>
     <string name="desktop_windows_step_7">To uninstall: Windows Settings → Apps → Installed apps → SwitchGuard → Uninstall.</string>
+
+    <!-- Hesaplar -->
+    <string name="desktop_tuya_not_connected">Not connected</string>
+    <string name="desktop_connect">Connect</string>
+    <string name="desktop_remove">Remove</string>
+    <string name="desktop_turn_on">Turn on</string>
+    <string name="desktop_no_internet">No internet connection.</string>
+    <string name="desktop_error_x">Something went wrong (%1$s).</string>
+    <string name="desktop_tuya_disconnect_confirm">Remove the Tuya connection? Tuya devices will no longer be monitored on this computer.</string>
+    <string name="desktop_tuya_live">Tuya live updates on this computer</string>
+    <string name="desktop_tuya_live_desc">Off: Tuya devices are checked every 5 minutes</string>
+    <string name="desktop_tuya_live_warning">Your phone may then miss some or all of its live Tuya messages. Turn it on anyway?</string>
 </resources>

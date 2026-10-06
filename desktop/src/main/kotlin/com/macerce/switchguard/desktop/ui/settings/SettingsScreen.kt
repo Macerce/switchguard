@@ -51,15 +51,7 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 32.dp)) {
         Column(Modifier.widthIn(max = 900.dp)) {
             // --- Hesaplar ---
-            SectionTitle(strings["section_account"])
-            SwitchRow(strings["demo_devices"], strings["demo_devices_desc"], s.demo) { on ->
-                if (on) {
-                    store.enableDemo(strings.demoNames())
-                } else {
-                    store.disableDemo()
-                    if (store.monitoringEnabled && !store.hasAnyAccount) graph.engine.stop()
-                }
-            }
+            AccountsSection(graph, strings, version)
             SectionDivider()
 
             // --- İzleme ---
@@ -147,7 +139,6 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
 /** Ekranın okuduğu ayarlar; `store.version` her değiştiğinde bir kez okunur. */
 private class Snapshot(graph: AppGraph) {
     private val store = graph.store
-    val demo = store.demoMode
     val poll = store.pollIntervalSec
     val grace = store.offlineGraceSec
     val awake = store.alwaysAwake
