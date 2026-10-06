@@ -487,7 +487,8 @@ class MonitorEngineTest {
 
     @Test
     fun automationSavedFromTheScreenRunsAndCanBeDeleted() {
-        startWith(pump(on = true), rules = emptyMap())
+        // Cihaz kuralı sessiz: gelen alarm yalnızca otomasyondan olabilir.
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.IGNORE))
         val a = Automation(
             id = "ui-1", name = "Pompa kapandı", enabled = true,
             trigger = Trigger(TriggerKind.TURNED_OFF, id, channel = 0),
