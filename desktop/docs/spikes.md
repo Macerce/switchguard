@@ -12,7 +12,7 @@ Tuya mesaj servisi (Pulsar WebSocket, `subscriptionType=Failover`) aynı bulut p
 
 ### Yöntem
 
-- Araç: `desktop/tools/pulsar_consumers.py` (`tools/tuya_pulsar_probe.py` bağlantı ve çözme mantığı; `--label`, `--sub`, `--seconds`, isteğe bağlı `--ping`). Yalnızca dinler ve mesajları onaylar (ack); cihaza komut göndermez, Tuya yazma API'si çağırmaz. Her mesajda etiket, maskeli cihaz kimliği, veri noktası kodları ve zamanı yazar; sonunda toplam yazar.
+- Araç: `desktop/tools/pulsar_consumers.py` (`tools/tuya_pulsar_probe.py` bağlantı ve çözme mantığı; `--label`, `--sub`, `--seconds`, isteğe bağlı `--ping`). Yalnızca dinler ve mesajları onaylar (ack); cihaza komut göndermez, Tuya yazma API'si çağırmaz. Her mesajda etiket, maskeli cihaz kimliği, veri noktası kodları ve zamanı yazar; sonunda toplam yazar. El sıkışma reddinde durum satırını ve HTML'den ayıklanmış hata metnini (kırpmadan, maskeli) yazar; 3 reddten sonra yeniden denemeyi bırakır.
 - Bağlantı: `wss://mqe.tuyaeu.com:8285/ws/v2/consumer/persistent/{accessId}/out/event/{abonelik}?ackTimeoutMillis=3000&subscriptionType=Failover`.
 - Telefon, denemeler sürerken aynı projede ve `{accessId}-sub` aboneliğinde üçüncü tüketiciydi (eWeLink etkilenmez).
 - Tuya tarafında tek cihaz: Bilicra akıllı priz (çevrimiçi ve yükteyken `cur_power` / `cur_current` / `cur_voltage` bildirir). Prize dokunulmadı.
@@ -20,31 +20,44 @@ Tuya mesaj servisi (Pulsar WebSocket, `subscriptionType=Failover`) aynı bulut p
 
 ### Ham sonuç
 
+Kayıtlar (çalışma alanında, depoda değil): çalıştırma 1 ve 2 günlükleri (`run1_A/B.log`, `run2_A/B.log`) ve aşağıdaki tekrar (`repro_B.log`). Çalıştırma 1 ve 2'de aracın daha önceki sürümleri kullanıldı (çalıştırma 1: ping ve çerçeve türü yazımı yok; ikisinde de reddi yalnızca 300 karakterlik ham HTML olarak yazıyordu); reddin tam metni ancak tekrarda alındı.
+
 | Çalıştırma | Saat | Tüketici | Abonelik | Bağlantı | Mesaj sayısı | Not |
 |---|---|---|---|---|---|---|
-| 1 | 09:23:21–09:28:21 | A | `nj3***jj-sub` | kabul (HTTP 101) | **0** | ping yok; bağlantı tam 300,0 sn sonra düştü (boş çerçeve) |
-| 1 | 09:23:21–09:28:21 | B | `nj3***jj-sub` | kabul (HTTP 101) | **0** | ping yok; bağlantı tam 300,0 sn sonra düştü (boş çerçeve) |
-| 2 | 09:29:42–09:34:44 | A | `nj3***jj-sub` | kabul (HTTP 101) | **0** | 30 sn'de bir WebSocket ping; 300 sn kopmadan sürdü |
-| 2 | 09:29:42 | B | `nj3***jj-sub-desktop` | **reddedildi, HTTP 500** | — | 5 sn arayla 2 deneme, ikisi de aynı hata; sonra elle durduruldu |
+| 1 | 09:23:21–09:28:21 | A | `nj3***jj-sub` | kabul (HTTP 101) | **0** | ping yok; bkz. "300 sn olayı" |
+| 1 | 09:23:21–09:28:21 | B | `nj3***jj-sub` | kabul (HTTP 101) | **0** | ping yok; bkz. "300 sn olayı" |
+| 2 | 09:29:42–09:34:44 | A | `nj3***jj-sub` | kabul (HTTP 101) | **0** | 30 sn'de bir WebSocket ping; kopma yazılmadı |
+| 2 | 09:29:42–09:29:54 | B | `nj3***jj-sub-desktop` | **reddedildi, HTTP 500** | — | 3 deneme (09:29:42.9, 09:29:48.4, 09:29:53.9; 5 sn arayla), üçü de HTTP 500; sonra elle durduruldu |
+| Tekrar | 09:42:02–09:42:13 | B | `nj3***jj-sub-desktop` | **reddedildi, HTTP 500** | — | 3 deneme, üçü de HTTP 500; araç 3. reddden sonra durdu |
 
-Reddedilen bağlantının tam hata gövdesi (maskeli):
+**Reddin tam metni.** Tekrar, yalnızca dinleyen araçla tek seferde yapıldı:
 
 ```
-HTTP 500 Failed to create producer/consumer: ...PulsarClientException:
-Failed to subscribe persistent://nj3***jj/out/event with 11 partitions
-{"errorMsg":"Subscription does not exist", ...}
+python desktop/tools/pulsar_consumers.py --label B --seconds 30 --sub '{CID}-sub-desktop'
 ```
 
-Ek bağlantı denemeleri (tek seferlik, yalnızca bağlanma): `nj3***jj-sub-desktop` yine HTTP 500 (aynı "Subscription does not exist"; bir tanı denemesinde bağlantı 5 sn'de zaman aşımına uğradı, tekrarında 500); düz `desktop` adı da aynı 500 ile reddedildi.
+Araç durum satırını `Handshake status 500 Server Error` olarak yazdı. HTML'den ayıklanmış hata metni (accessId aracın kendi maskelemesiyle `nj3***jj`; 1. denemenin çıktısı, birebir; metin HTML'de başlıkta, gövde başlığında ve `MESSAGE:` satırında üç kez tekrar eder, burada bir kez ve ardından URI/SERVLET satırı verilir):
+
+```
+Error 500 Failed to create producer/consumer: java.util.concurrent.ExecutionException: org.apache.pulsar.client.api.PulsarClientException: Failed to subscribe persistent://nj3***jj/out/event with 11 partitions {"errorMsg":"Subscription does not exist","reqId":4044833348924281227, "remote":"172.21.10.55/172.21.10.55:6650", "local":"/172.21.10.13:32440"}
+...
+URI: /ws/v2/consumer/persistent/nj3***jj/out/event/nj3***jj-sub-desktop STATUS: 500 MESSAGE: (yukarıdaki metin) SERVLET: org.apache.pulsar.websocket.WebSocketConsumerServlet-39c85c1a Powered by Jetty:// 9.4.54.v20240208
+```
+
+2. ve 3. denemede aynı metin geldi; yalnızca `reqId` ve yerel bağlantı noktası değişti. Çalıştırma 1–2'de satırlar kırpıldığından (`...Failed to subscribe persistent://nj3***jj/out/even`) bu metin onlarda görünmez; `-sub-desktop` için aynı HTTP 500 durumu üç kayıtlı denemede de alındı.
+
+Tek seferlik, kaydı tutulmayan ek tanılar (ayrı satır içi betikle, yalnızca bağlanma): `-sub-desktop` için bir denemede 5 sn el sıkışma zaman aşımı, tekrarında HTTP 500; düz `desktop` adı HTTP 500 (aynı "Subscription does not exist"); `{accessId}-desktop` bir kez zaman aşımına uğradı, tekrar denenmedi. Bunlar belge dayanağı değildir, yalnızca bilgi içindir.
 
 Çalıştırma 1 ve 2'de A/B hiçbir mesaj almadı (toplam 0). Aynı abonelikte "iki tüketiciye de aynı mesajlar geliyor mu" sorusu bu yüzden ölçülemedi.
 
+**300 sn olayı (gözlem).** Çalıştırma 1'de A ve B'nin ikisinde de, bağlantıdan tam 300,0 sn sonra (09:28:21.98) `ws.recv()` boş dize döndürdü ve `json.loads` `JSONDecodeError: Expecting value: line 1 column 1 (char 0)` verdi; betik soketi kendisi kapatıp 5 sn bekledi, sonra bitti. Çalıştırma 1'de araç, gelen çerçevenin türünü (kapatma çerçevesi mi, boş veri çerçevesi mi) yazmıyordu; bu nedenle ayırt edilemiyor. Çalıştırma 2'de A (30 sn'de bir ping) 300 sn'lik işareti ~1,5 sn geçene kadar açık kaldı ve kopma yazılmadı.
+
 ### Sonuç
 
-1. **Ayrı abonelik adı çalışmıyor (kesin).** Tuya mesaj servisi `{accessId}-sub` dışında yeni bir abonelik oluşturmaya izin vermiyor: "Subscription does not exist" (HTTP 500). Masaüstünün kendi aboneliğiyle akışın ayrı bir kopyasını alması mümkün değil.
+1. **Ayrı abonelik adı çalışmıyor (kesin; gözlem).** `{accessId}-sub-desktop` altı denemede (çalıştırma 2'de 3, tekrarda 3) HTTP 500 aldı; tekrarın tam metni yukarıda: `Failed to subscribe persistent://nj3***jj/out/event with 11 partitions {"errorMsg":"Subscription does not exist"...}`. Masaüstünün kendi aboneliğiyle akışın ayrı bir kopyasını alması bu projede mümkün değil. (Mekanizma yorumu: büyük olasılıkla mesaj servisi yalnızca önceden oluşturulmuş `{accessId}-sub` aboneliğine izin veriyor, yeni abonelik açmıyor; sunucu yapılandırması doğrulanmadı.)
 2. **Aynı abonelikte iki tüketici: sonuçsuz (ölçülemedi).** İki tüketici aynı abonelikte sorunsuz bağlanıyor (Failover bunu kabul ediyor), ancak 10 dakika boyunca hiç mesaj gelmedi. Bunun nedeni ölçümden ayırt edilemiyor: priz o sırada rapor yollamıyor olabilir ya da ilgili bölümün etkin tüketicisi telefon olabilir. Tasarım açısından bunun ölçülmesi gerekmiyor; aşağıdaki gerekçeye bakın.
-3. **Beklenen davranış (belge/tasarım bilgisi, bu denemede gözlenmedi):** konu 11 bölümlü (partition); `Failover` aboneliğinde her bölümün aynı anda tek etkin tüketicisi vardır, mesaj o tüketiciye gider, diğerleri beklemede kalır. Yani aynı abonelikte iki cihaz her mesajı birlikte almaz; masaüstü bağlanırsa bazı bölümlerin (dolayısıyla bazı cihazların) canlı mesajlarını telefondan alabilir.
-4. **Yan bulgu: boşta bağlantı 5 dk'da kapanıyor.** Ping göndermeyen iki bağlantı da tam 300,0 sn'de düştü (istemciye boş çerçeve geldi; büyük olasılıkla sunucunun boşta zaman aşımı); 30 sn'de bir ping atan bağlantı 300 sn boyunca açık kaldı. Telefonun `TuyaSocket` (OkHttp `pingInterval(30 sn)`) bunu zaten yapıyor; masaüstü aynı sınıfı değişmeden kullandığı için ek iş yok.
+3. **Beklenen davranış (Pulsar tasarım bilgisi; denemede gözlenmedi):** hata metni konunun 11 bölümlü olduğunu gösteriyor (`with 11 partitions`); `Failover` aboneliğinde her bölümün aynı anda tek etkin tüketicisi vardır, mesaj o tüketiciye gider, diğerleri beklemede kalır. Yani aynı abonelikte iki cihazın her mesajı birlikte alması beklenmez; masaüstü bağlanırsa bazı bölümlerin (dolayısıyla bazı cihazların) canlı mesajlarını telefondan alabilir.
+4. **Yan bulgu (yorum, doğrulanmadı): boşta bağlantı ≈300 sn'de düşebilir.** Ping göndermeyen iki bağlantıda da 300,0 sn'de boş çerçeve geldi (yukarıdaki gözlem); bu, sunucunun boşta zaman aşımıyla uyumlu (Pulsar WebSocket servisinin varsayılan boşta zaman aşımı 300 sn olarak bilinir, burada doğrulanmadı). 30 sn'de bir ping atan bağlantı 300 sn'i yalnızca ~1,5 sn aştı; bu zayıf bir kanıt. Telefonun `TuyaSocket` (OkHttp `pingInterval(30 sn)`) zaten 30 sn'de bir ping atıyor; masaüstü aynı sınıfı değişmeden kullandığı için ek iş öngörülmüyor.
 5. `Connection-Id` başlığı denemede tüketici başına farklıydı (`probe-A`, `probe-B`); telefon `switchguard` yolluyor. Aynı `Connection-Id` ile iki bağlantının birbirini düşürüp düşürmediği denenmedi.
 
 ### Tasarıma etkisi

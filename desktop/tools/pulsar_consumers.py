@@ -9,7 +9,7 @@ Aynı anda iki süreç başlatarak "aynı abonelik" / "farklı abonelik" davran�
 Çıktıdaki accessId, secret ve cihaz kimlikleri maskelidir.
 Anahtarlar: repo kökündeki tuya.properties (gitignore'da), ya da --props.
 Gereken paketler: websocket-client, cryptography."""
-import argparse, base64, hashlib, json, sys, time
+import argparse, base64, hashlib, html, json, re, sys, time
 from pathlib import Path
 
 import websocket
@@ -18,6 +18,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 HOSTS = {"eu": "wss://mqe.tuyaeu.com:8285/"}
 RECONNECT_WAIT = 5
+MAX_REJECTIONS = 3  # el sıkışma (handshake) reddi bu kadar olunca yeniden denemeyi bırakır
 
 
 def mask_id(s: str) -> str:
@@ -64,12 +65,12 @@ def main() -> int:
         out = d.update(raw) + d.finalize()
         return out[: -out[-1]].decode()
 
-    total = connects = connect_failures = disconnects = 0
+    total = connects = connect_failures = disconnects = rejections = 0
     last_ping = time.time()
     end = time.time() + args.seconds
     say(f"start sub={sub} topic={args.topic} conn-id={conn_id} seconds={args.seconds}")
     ws = None
-    while time.time() < end:
+    while time.time() < end and rejections < MAX_REJECTIONS:
         if ws is None:
             try:
                 ws = websocket.create_connection(
@@ -78,8 +79,15 @@ def main() -> int:
                 say("connected (HTTP 101)")
             except websocket.WebSocketBadStatusException as e:
                 connect_failures += 1
-                say(f"connect REJECTED http_status={e.status_code} body={str(getattr(e, 'resp_body', ''))[:300]!r}")
-                time.sleep(RECONNECT_WAIT)
+                rejections += 1
+                body = getattr(e, "resp_body", b"") or b""
+                if isinstance(body, bytes):
+                    body = body.decode("utf-8", "replace")
+                text = re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", " ", body))).strip()  # HTML'i ayıkla
+                say(f"connect REJECTED http_status={e.status_code} ({rejections}/{MAX_REJECTIONS}) "
+                    f"status_line={str(e).split(' -+-+- ')[0]!r} error_text={text}")
+                if rejections < MAX_REJECTIONS:
+                    time.sleep(RECONNECT_WAIT)
                 continue
             except Exception as e:
                 connect_failures += 1
