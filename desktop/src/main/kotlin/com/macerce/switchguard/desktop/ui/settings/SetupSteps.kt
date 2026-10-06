@@ -73,7 +73,7 @@ fun SetupSteps(title: String, steps: List<String>, actions: List<SetupAction>, i
 object Setup {
     fun tuyaSteps(strings: Strings) = (1..6).map { strings["desktop_tuya_step_$it"] }
     fun ewelinkSteps(strings: Strings) = (1..6).map { strings["desktop_ewelink_step_$it"] }
-    fun windowsSteps(strings: Strings) = (1..7).map { strings["desktop_windows_step_$it"] }
+    fun windowsSteps(strings: Strings) = (1..8).map { strings["desktop_windows_step_$it"] }
 
     private fun link(strings: Strings, label: String, url: String) =
         SetupAction(strings[label]) { if (Links.open(url)) null else strings["desktop_link_copied"] }

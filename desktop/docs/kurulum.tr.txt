@@ -21,8 +21,11 @@ kapanır, açılır ya da bağlantısı koparsa bilgisayarda tam ekran alarm ça
    Pencereyi kapatmak uygulamayı kapatmaz; tamamen çıkmak için:
    tepsi simgesi → Çıkış.
 
-5) Daha yeni bir sürümü kurmak için yeni kurulum dosyasını çalıştırmanız
-   yeterli; eski sürüm kendiliğinden kaldırılır, ayarlarınız kalır.
+5) YENİ SÜRÜM KURARKEN: önce eski sürümü kaldırın (Windows Ayarlar →
+   Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır), sonra yeni
+   kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz
+   silinmez (AppData › Roaming › SwitchGuard'da kalır). Eskisini kaldırmadan
+   kurarsanız iki sürüm yan yana kalır; birini kaldırmak ötekini bozar.
 
 
 2. HESAPLARI BAĞLAMA

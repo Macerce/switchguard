@@ -153,4 +153,5 @@
     <!-- Kurallar -->
     <string name="desktop_rules">Rules…</string>
     <string name="desktop_rules_title_x">Rules · %1$s</string>
+    <string name="desktop_windows_step_8">Installing a new version: first uninstall the old one (step 7), then run the new setup file. Your settings, accounts and sounds are kept.</string>
 </resources>

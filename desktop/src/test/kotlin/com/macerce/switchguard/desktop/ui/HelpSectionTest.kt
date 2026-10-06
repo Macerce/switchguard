@@ -42,5 +42,6 @@ class HelpSectionTest {
 
         compose.onNodeWithText("Ek bilgi → Yine de çalıştır", substring = true).performScrollTo()
         compose.onNodeWithText("Yüklü uygulamalar → SwitchGuard → Kaldır", substring = true).performScrollTo()
+        compose.onNodeWithText("önce eski sürümü kaldırın", substring = true).performScrollTo()
     }
 }
