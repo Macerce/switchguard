@@ -154,4 +154,7 @@
     <string name="desktop_rules">Rules…</string>
     <string name="desktop_rules_title_x">Rules · %1$s</string>
     <string name="desktop_windows_step_8">Installing a new version: first uninstall the old one (step 7), then run the new setup file. Your settings, accounts and sounds are kept.</string>
+
+    <!-- Otomasyonlar -->
+    <string name="desktop_automation_hint">Automations run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
 </resources>

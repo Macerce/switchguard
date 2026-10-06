@@ -23,7 +23,7 @@ class AppState {
     val status: StateFlow<Pair<ConnState, String>> = _status.asStateFlow()
 
     /** Ana penceredeki sekme (sol menü). */
-    enum class Tab { DEVICES, SETTINGS }
+    enum class Tab { DEVICES, AUTOMATIONS, SETTINGS }
 
     /** Seçili sekme; pencere yeniden kurulsa da (hata sonrası) korunur. */
     val tab = MutableStateFlow(Tab.DEVICES)

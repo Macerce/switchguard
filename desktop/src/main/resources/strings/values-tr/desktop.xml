@@ -154,4 +154,7 @@
     <string name="desktop_rules">Kurallar…</string>
     <string name="desktop_rules_title_x">Kurallar · %1$s</string>
     <string name="desktop_windows_step_8">Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.</string>
+
+    <!-- Otomasyonlar -->
+    <string name="desktop_automation_hint">Otomasyonlar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
 </resources>

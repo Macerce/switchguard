@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
@@ -20,9 +21,10 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.AppState.Tab
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.ui.automations.AutomationsScreen
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 
-/** Sol menü (Cihazlar · Ayarlar) ve seçili ekran. Seçim [com.macerce.switchguard.desktop.AppState.tab]'da: pencere yeniden kurulsa da korunur. */
+/** Sol menü (Cihazlar · Otomasyonlar · Ayarlar) ve seçili ekran. Seçim [com.macerce.switchguard.desktop.AppState.tab]'da: pencere yeniden kurulsa da korunur. */
 @Composable
 fun AppNav(graph: AppGraph, strings: Strings) {
     val tab by graph.appState.tab.collectAsState()
@@ -35,6 +37,12 @@ fun AppNav(graph: AppGraph, strings: Strings) {
                 label = { Text(strings["tab_devices"]) },
             )
             NavigationRailItem(
+                selected = tab == Tab.AUTOMATIONS,
+                onClick = { graph.appState.tab.value = Tab.AUTOMATIONS },
+                icon = { Icon(Icons.Filled.Refresh, contentDescription = null) },
+                label = { Text(strings["tab_automations"]) },
+            )
+            NavigationRailItem(
                 selected = tab == Tab.SETTINGS,
                 onClick = { graph.appState.tab.value = Tab.SETTINGS },
                 icon = { Icon(Icons.Filled.Settings, contentDescription = null) },
@@ -44,6 +52,7 @@ fun AppNav(graph: AppGraph, strings: Strings) {
         VerticalDivider()
         when (tab) {
             Tab.DEVICES -> DevicesScreen(graph, strings, Modifier.weight(1f))
+            Tab.AUTOMATIONS -> AutomationsScreen(graph, strings, Modifier.weight(1f))
             Tab.SETTINGS -> SettingsScreen(graph, strings)
         }
     }
