@@ -15,6 +15,7 @@ import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
@@ -151,6 +152,29 @@ class MonitorEngine(
         // Simülasyon gerçek akıştan geçsin diye izleme kapalıysa önce açılır.
         startMonitoring()
         scheduler.post { demoSimulate(op, deviceId, channel) }
+    }
+
+    /**
+     * Masaüstü: kartta "İzle" / "Kurallar" değişikliği. Motor iş parçacığında yazılır (`spec.md` §4: arayüz yalnızca
+     * motora gönderir), olay işlerken okunan kurallarla yarışmaz.
+     */
+    fun setRules(deviceId: String, rules: DeviceRules) {
+        scheduler.post { store.setRules(deviceId, rules) }
+    }
+
+    /**
+     * Demo cihazlarını açar/kapatır (telefondaki `Actions.enableDemo` / `disableDemo`), motor iş parçacığında: anlık
+     * görüntülerin okuma-yazmasıyla yarışmaz. Kapatınca izlenecek hesap kalmadıysa izleme de durur.
+     */
+    fun setDemo(on: Boolean, names: Demo.Names) {
+        scheduler.post {
+            if (on) {
+                store.enableDemo(names)
+            } else {
+                store.disableDemo()
+                if (store.monitoringEnabled && !store.hasAnyAccount) stopMonitoring()
+            }
+        }
     }
 
     /** `ACTION_SYNC`. */

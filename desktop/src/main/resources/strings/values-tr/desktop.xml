@@ -149,4 +149,8 @@
 
     <!-- Cihazlar -->
     <string name="desktop_drag_hint">Kartı taşımak için basılı tutun</string>
+
+    <!-- Kurallar -->
+    <string name="desktop_rules">Kurallar…</string>
+    <string name="desktop_rules_title_x">Kurallar · %1$s</string>
 </resources>

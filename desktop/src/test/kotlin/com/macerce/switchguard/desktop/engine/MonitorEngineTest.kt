@@ -446,6 +446,53 @@ class MonitorEngineTest {
         assertEquals(connects, ewelinkLive.connects)
     }
 
+    // ---------------------------------------------------------------- kartta kurallar (motor üzerinden)
+
+    @Test
+    fun ignoredEventDoesNotAlarm() {
+        startWith(pump(on = true), rules = emptyMap())
+        engine.setRules(id, DeviceRules().with(EventType.TURNED_OFF, AlertAction.IGNORE))
+        scheduler.advance(0)
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertTrue(host.alarms.isEmpty())
+        assertEquals(listOf(EventType.TURNED_OFF.name to "IGNORE"), log.recent(id).map { it.kind to it.action })
+    }
+
+    @Test
+    fun unmonitoredDeviceDoesNotAlarm() {
+        startWith(pump(on = true), rules = emptyMap())
+        engine.setRules(id, DeviceRules(monitored = false))
+        scheduler.advance(0)
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertTrue(host.alarms.isEmpty())
+    }
+
+    @Test
+    fun turningDemoOffWithoutAccountsStopsMonitoring() {
+        startDemo()
+
+        engine.setDemo(false, strings.demoNames())
+        scheduler.advance(0)
+
+        assertEquals(false, store.demoMode)
+        assertEquals(false, store.monitoringEnabled)
+    }
+
+    @Test
+    fun turningDemoOnAddsTheDemoDevices() {
+        store.logout()
+
+        engine.setDemo(true, strings.demoNames())
+        scheduler.advance(0)
+
+        assertEquals(true, store.demoMode)
+        assertTrue(store.snapshots.isNotEmpty())
+    }
+
     // ---------------------------------------------------------------- "Kapat"
 
     @Test

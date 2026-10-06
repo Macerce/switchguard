@@ -64,12 +64,7 @@ fun AccountsSection(graph: AppGraph, strings: Strings, version: Int) {
 
     // --- Demo ---
     SwitchRow(strings["demo_devices"], strings["demo_devices_desc"], demo) { on ->
-        if (on) {
-            store.enableDemo(strings.demoNames())
-        } else {
-            store.disableDemo()
-            if (store.monitoringEnabled && !store.hasAnyAccount) graph.engine.stop()
-        }
+        graph.engine.setDemo(on, strings.demoNames()) // motor üzerinden; hesap kalmadıysa izleme de durur
     }
 
     when (dialog) {

@@ -149,4 +149,8 @@
 
     <!-- Cihazlar -->
     <string name="desktop_drag_hint">Hold a card to move it</string>
+
+    <!-- Kurallar -->
+    <string name="desktop_rules">Rules…</string>
+    <string name="desktop_rules_title_x">Rules · %1$s</string>
 </resources>

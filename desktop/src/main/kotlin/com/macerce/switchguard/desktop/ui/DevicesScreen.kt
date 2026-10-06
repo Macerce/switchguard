@@ -53,6 +53,18 @@ import sh.calvin.reorderable.ReorderableItem
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import com.macerce.switchguard.core.DeviceRules
+import androidx.compose.ui.platform.testTag
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.Icons
 
 /**
  * Cihazlar ekranı (ilk aşama): üstte durum metni, izlemeyi başlat/durdur, test alarmı ve demo aç/kapa; altında
@@ -70,6 +82,8 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
     val byId = remember(version) { store.snapshots.associateBy { it.id } }
     val order = remember { DragOrder() }
     LaunchedEffect(sortedIds) { order.show(sortedIds) }
+    val rules = remember(version) { store.rules }
+    var rulesFor by remember { mutableStateOf<String?>(null) }
     val monitoring = remember(version) { store.monitoringEnabled }
     val demoOn = remember(version) { store.demoMode }
     val canMonitor = remember(version) { store.hasAnyAccount }
@@ -100,15 +114,8 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                 OutlinedButton(onClick = { engine.testAlarm() }) { Text(strings["test_alarm"]) }
                 Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(strings["demo_devices"], style = MaterialTheme.typography.bodyLarge)
-                    Switch(checked = demoOn, onCheckedChange = { on ->
-                        if (on) {
-                            store.enableDemo(strings.demoNames())
-                        } else {
-                            store.disableDemo()
-                            // Telefondaki Actions.disableDemo ile aynı: izlenecek başka kaynak kalmadıysa izleme de durur.
-                            if (store.monitoringEnabled && !store.hasAnyAccount) engine.stop()
-                        }
-                    })
+                    // Motor üzerinden (anlık görüntülerle yarışmasın); hesap kalmadıysa izleme de durur.
+                    Switch(checked = demoOn, onCheckedChange = { engine.setDemo(it, strings.demoNames()) }, modifier = Modifier.testTag("demo-switch"))
                 }
             }
 
@@ -182,6 +189,9 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                                     ),
                                 device = device,
                                 strings = strings,
+                                monitored = (rules[id] ?: DeviceRules()).monitored,
+                                onMonitored = { engine.setRules(id, store.rulesFor(id).copy(monitored = it)) },
+                                onRules = { rulesFor = id },
                                 onSwitch = { channel, on ->
                                     // Sonuç motor iş parçacığında gelir ve hiç gelmeyebilir (izleme durursa): beklenmez.
                                     engine.control(device.id, channel, on) { error ->
@@ -202,6 +212,10 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
             }
         }
     }
+    rulesFor?.let { id ->
+        val name = remember(id, version) { store.snapshots.firstOrNull { it.id == id }?.name ?: id }
+        RulesDialog(name, remember(id) { store.rulesFor(id) }, strings, onChange = { engine.setRules(id, it) }, onDismiss = { rulesFor = null })
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -209,6 +223,9 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
 private fun DeviceCard(
     device: DeviceSnapshot,
     strings: Strings,
+    monitored: Boolean,
+    onMonitored: (Boolean) -> Unit,
+    onRules: () -> Unit,
     onSwitch: (channel: Int, on: Boolean) -> Unit,
     onDemo: (op: String, channel: Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -234,7 +251,24 @@ private fun DeviceCard(
                     color = Color.White,
                     modifier = Modifier.clip(RoundedCornerShape(50)).background(color).padding(horizontal = 10.dp, vertical = 3.dp),
                 )
+                Box {
+                    var menu by remember { mutableStateOf(false) }
+                    IconButton(onClick = { menu = true }) { Icon(Icons.Filled.MoreVert, contentDescription = strings["desktop_rules"]) }
+                    DropdownMenu(menu, { menu = false }) {
+                        DropdownMenuItem(text = { Text(strings["desktop_rules"]) }, onClick = {
+                            menu = false
+                            onRules()
+                        })
+                    }
+                }
             }
+            // İzleniyor mu: kapalıysa olaylar alarm/bildirim vermez (kurallar penceresindeki "Bu cihazı izle" ile aynı).
+            FilterChip(
+                selected = monitored,
+                onClick = { onMonitored(!monitored) },
+                label = { Text(strings["monitored"]) },
+                leadingIcon = if (monitored) ({ Icon(Icons.Filled.Check, contentDescription = null) }) else null,
+            )
 
             if (device.hasEnergy) {
                 Text(
