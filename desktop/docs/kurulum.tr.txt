@@ -1,0 +1,65 @@
+﻿SwitchGuard (Windows) — Kurulum Talimatları
+===========================================
+
+SwitchGuard, eWeLink (SONOFF) ve Tuya / Smart Life prizlerinizi izler; bir cihaz
+kapanır, açılır ya da bağlantısı koparsa bilgisayarda tam ekran alarm çalar.
+
+
+1. KURULUM
+----------
+1) Kurulum dosyasına (SwitchGuard-…-Kurulum.exe) çift tıklayın.
+   Yönetici izni istemez, birkaç saniyede kurulur.
+
+2) Windows "Bilgisayarınız Windows tarafından korundu" (SmartScreen) derse:
+   "Ek bilgi" → "Yine de çalıştır". Uygulama henüz imzalı olmadığı için bu
+   uyarı çıkar.
+
+3) SwitchGuard kullanıcı klasörünüze (AppData › Local › SwitchGuard) kurulur,
+   masaüstüne ve Başlat menüsüne kısayol ekler.
+
+4) Windows'ta oturum açınca kendiliğinden tepside (saatin yanında) başlar.
+   Pencereyi kapatmak uygulamayı kapatmaz; tamamen çıkmak için:
+   tepsi simgesi → Çıkış.
+
+5) Daha yeni bir sürümü kurmak için yeni kurulum dosyasını çalıştırmanız
+   yeterli; eski sürüm kendiliğinden kaldırılır, ayarlarınız kalır.
+
+
+2. HESAPLARI BAĞLAMA
+--------------------
+Uygulamada: Ayarlar → Hesap. Her pencerede "Nasıl kurulur?" bölümü adım adım
+anlatır.
+
+Tuya / Smart Life:
+  - Telefondaki SwitchGuard'da kullandığınız Access ID ve Access Secret burada
+    da çalışır.
+  - Resimli rehber: https://github.com/Macerce/switchguard/blob/master/docs/guide/tuya.tr.md
+  - Video (1 dk):   https://youtu.be/sCdvMs7CSic
+
+eWeLink:
+  - Bu bilgisayar ayrı bir cihazdır: kendi eWeLink hesabı, o hesapta
+    dev.ewelink.cc geliştirici onayı ve o hesabın App ID / App Secret bilgisi
+    gerekir. Telefonunuzdaki hesabı kullanırsanız telefonun oturumu kapanır.
+  - Redirect URL birebir: https://127.0.0.1
+  - Girişten sonra tarayıcı "bağlanılamıyor" sayfasında kalır; bu normaldir.
+    Adres çubuğundaki adresi kopyalayın, SwitchGuard kendiliğinden alır.
+  - Resimli rehber: https://github.com/Macerce/switchguard/blob/master/docs/guide/ewelink.tr.md
+  - Video (50 sn):  https://youtu.be/jK_KcG2OPao
+
+
+3. YEDEK VE BAŞKA BİLGİSAYARA GEÇİŞ
+-----------------------------------
+- Ayarlar → Yedekleme → "Dosyaya yedekle…": tüm ayarlar, hesap anahtarları,
+  kurallar ve yüklediğiniz sesler tek bir şifreli dosyaya (.sgbackup) yazılır.
+- Şifre en az 8 karakter. Şifreyi unutursanız yedek açılamaz.
+- Format sonrası ya da yeni bilgisayarda: SwitchGuard'ı kurun →
+  Ayarlar → Yedekleme → "Dosyadan geri yükle…" → şifre → Geri yükle.
+- Geri yüklemeden sonra eWeLink'e Ayarlar'dan bir kez yeniden giriş yapın
+  (güvenlik için oturum yedeğe girmez).
+
+
+4. KALDIRMA
+-----------
+Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.
+Ayarlarınız ve geçmişiniz AppData › Roaming › SwitchGuard klasöründe kalır;
+istemiyorsanız o klasörü de silebilirsiniz.
