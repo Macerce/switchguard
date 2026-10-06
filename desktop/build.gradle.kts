@@ -26,7 +26,8 @@ kotlin {
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
-    implementation(compose.materialIconsExtended)
+    // Yalnizca Icons.Filled.Warning kullaniliyor (core icinde); materialIconsExtended ~38 MB tuttugu icin cikarildi.
+    implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.json:json:20240303")
     implementation("net.java.dev.jna:jna:5.19.1")
@@ -47,7 +48,12 @@ compose.desktop {
             vendor = "Macerce"
             description = "SwitchGuard"
 
+            // suggestRuntimeModules: java.instrument, java.sql, jdk.unsupported
+            // + jdk.crypto.ec (OkHttp TLS), jdk.localedata (Turkce yerel ayar), jdk.accessibility (AWT erisilebilirlik)
+            modules("java.instrument", "java.sql", "jdk.unsupported", "jdk.crypto.ec", "jdk.localedata", "jdk.accessibility")
+
             windows {
+                iconFile.set(project.file("packaging/SwitchGuard.ico"))
                 perUserInstall = true
                 menu = true
                 menuGroup = "SwitchGuard"
