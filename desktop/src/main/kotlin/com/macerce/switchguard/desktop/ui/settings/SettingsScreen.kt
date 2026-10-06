@@ -128,6 +128,11 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
             )
             SectionDivider()
 
+            // --- Yedekleme ---
+            SectionTitle(strings["desktop_section_backup"])
+            BackupSection(graph, strings)
+            SectionDivider()
+
             // --- Hakkında ---
             SectionTitle(strings["section_about"])
             SettingRow(strings.format("version_x", appVersion()))

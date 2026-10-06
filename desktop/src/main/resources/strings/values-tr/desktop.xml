@@ -119,4 +119,31 @@
     <string name="desktop_ewelink_login_failed">eWeLink girişi kabul etmedi (%1$s).</string>
     <string name="desktop_ewelink_remove">Hesabı kaldır</string>
     <string name="desktop_ewelink_remove_confirm">Oturum kapatılıp App ID ve App Secret bu bilgisayardan silinsin mi? eWeLink cihazları burada artık izlenmez.</string>
+
+    <!-- Yedekleme -->
+    <string name="desktop_backup_create">Dosyaya yedekle…</string>
+    <string name="desktop_backup_create_desc">Tüm ayarlar, hesap anahtarları ve sesler tek bir şifreli dosyada</string>
+    <string name="desktop_backup_restore">Dosyadan geri yükle…</string>
+    <string name="desktop_backup_restore_desc">Bu bilgisayarın ayarlarını yedektekiyle değiştirir</string>
+    <string name="desktop_backup_password">Şifre</string>
+    <string name="desktop_backup_password_again">Şifre (tekrar)</string>
+    <string name="desktop_backup_password_rules">En az 8 karakter. Şifre olmadan yedek açılamaz ve şifre kurtarılamaz.</string>
+    <string name="desktop_backup_password_mismatch">Şifreler aynı değil.</string>
+    <string name="desktop_backup_password_short">En az 8 karakter kullanın.</string>
+    <string name="desktop_backup_working">Lütfen bekleyin…</string>
+    <string name="desktop_backup_saved_x">Yedek kaydedildi: %1$s</string>
+    <string name="desktop_backup_failed_x">Yedek kaydedilemedi (%1$s).</string>
+    <string name="desktop_restore_summary">%1$s tarihinde SwitchGuard %2$s ile alındı\nTuya: %3$s · eWeLink anahtarları: %4$s\n%5$d cihaz kuralı · %6$d otomasyon · %7$d ses</string>
+    <string name="desktop_yes">var</string>
+    <string name="desktop_no">yok</string>
+    <string name="desktop_restore_warning">Bu bilgisayardaki tüm ayarlar yedektekiyle değiştirilecek.</string>
+    <string name="desktop_restore_confirm">Geri yükle</string>
+    <string name="desktop_restore_done">Ayarlar geri yüklendi.</string>
+    <string name="desktop_restore_done_login">Ayarlar geri yüklendi. eWeLink\'e Ayarlar\'dan yeniden giriş yapın.</string>
+    <string name="desktop_restore_wrong_password">Şifre yanlış ya da dosya bozuk.</string>
+    <string name="desktop_restore_not_backup">Bu bir SwitchGuard yedeği değil.</string>
+    <string name="desktop_restore_too_new">Bu yedek daha yeni bir SwitchGuard ile alınmış; önce uygulamayı güncelleyin.</string>
+    <string name="desktop_restore_too_big">Dosya bir SwitchGuard yedeği olamayacak kadar büyük.</string>
+    <string name="desktop_restore_failed_x">Geri yükleme başarısız oldu; hiçbir şey değişmedi (%1$s).</string>
+    <string name="desktop_ok">Tamam</string>
 </resources>

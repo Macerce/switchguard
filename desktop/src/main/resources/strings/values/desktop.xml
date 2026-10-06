@@ -119,4 +119,31 @@
     <string name="desktop_ewelink_login_failed">eWeLink did not accept the sign-in (%1$s).</string>
     <string name="desktop_ewelink_remove">Remove account</string>
     <string name="desktop_ewelink_remove_confirm">Sign out and delete the App ID and App Secret from this computer? eWeLink devices will no longer be monitored here.</string>
+
+    <!-- Yedekleme -->
+    <string name="desktop_backup_create">Back up to a file…</string>
+    <string name="desktop_backup_create_desc">All settings, account keys and sounds in one password-protected file</string>
+    <string name="desktop_backup_restore">Restore from a file…</string>
+    <string name="desktop_backup_restore_desc">Replaces this computer\'s settings with the backup</string>
+    <string name="desktop_backup_password">Password</string>
+    <string name="desktop_backup_password_again">Password again</string>
+    <string name="desktop_backup_password_rules">At least 8 characters. The backup cannot be opened without it, and it cannot be recovered.</string>
+    <string name="desktop_backup_password_mismatch">The passwords do not match.</string>
+    <string name="desktop_backup_password_short">Use at least 8 characters.</string>
+    <string name="desktop_backup_working">Please wait…</string>
+    <string name="desktop_backup_saved_x">Backup saved: %1$s</string>
+    <string name="desktop_backup_failed_x">The backup could not be saved (%1$s).</string>
+    <string name="desktop_restore_summary">Created %1$s with SwitchGuard %2$s\nTuya: %3$s · eWeLink keys: %4$s\n%5$d device rules · %6$d automations · %7$d sounds</string>
+    <string name="desktop_yes">yes</string>
+    <string name="desktop_no">no</string>
+    <string name="desktop_restore_warning">All settings on this computer will be replaced with the backup.</string>
+    <string name="desktop_restore_confirm">Restore</string>
+    <string name="desktop_restore_done">Settings restored.</string>
+    <string name="desktop_restore_done_login">Settings restored. Sign in to eWeLink again in Settings.</string>
+    <string name="desktop_restore_wrong_password">Wrong password or damaged file.</string>
+    <string name="desktop_restore_not_backup">This is not a SwitchGuard backup.</string>
+    <string name="desktop_restore_too_new">This backup was made by a newer SwitchGuard; update the app first.</string>
+    <string name="desktop_restore_too_big">The file is too large to be a SwitchGuard backup.</string>
+    <string name="desktop_restore_failed_x">Restore failed; nothing was changed (%1$s).</string>
+    <string name="desktop_ok">OK</string>
 </resources>
