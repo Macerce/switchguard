@@ -45,4 +45,17 @@
     <string name="desktop_open_logs">Open the log folder</string>
     <string name="desktop_section_backup">Backup</string>
     <string name="desktop_section_help">Help and setup</string>
+
+    <!-- Sesler -->
+    <string name="desktop_notify_sound">Notification sound</string>
+    <string name="desktop_sound_load">Load from file…</string>
+    <string name="desktop_sound_play">Play</string>
+    <string name="desktop_sound_trimmed">The sound is longer than 60 seconds; its first 60 seconds are used.</string>
+    <string name="desktop_sound_too_big">The file is larger than 20 MB.</string>
+    <string name="desktop_sound_not_audio">This file could not be read as a sound (WAV or MP3).</string>
+    <string name="desktop_sound_io">The sound could not be saved (%1$s).</string>
+    <string name="sound_builtin_alarm_siren">Siren</string>
+    <string name="sound_builtin_alarm_beep">Beep</string>
+    <string name="sound_builtin_alarm_pulse">Pulse</string>
+    <string name="sound_builtin_notify_chime">Chime</string>
 </resources>

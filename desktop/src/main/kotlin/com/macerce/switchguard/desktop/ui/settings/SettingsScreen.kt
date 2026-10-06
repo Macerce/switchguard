@@ -91,6 +91,7 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
 
             // --- Alarm ---
             SectionTitle(strings["section_alarm"])
+            SoundRows(graph, strings, s.alarmSound, s.notifySound)
             SliderRow(
                 value = s.volume,
                 range = 0.05f..1f,
@@ -155,6 +156,8 @@ private class Snapshot(graph: AppGraph) {
     val awake = store.alwaysAwake
     val autostart = store.autostart
     val volume = store.alarmVolume
+    val alarmSound = store.alarmSoundUri
+    val notifySound = store.notifySoundUri
     val quiet = store.quietHours
     val language = store.language
     val theme = store.theme

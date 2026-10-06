@@ -45,4 +45,17 @@
     <string name="desktop_open_logs">Günlük klasörünü aç</string>
     <string name="desktop_section_backup">Yedekleme</string>
     <string name="desktop_section_help">Yardım ve kurulum</string>
+
+    <!-- Sesler -->
+    <string name="desktop_notify_sound">Bildirim sesi</string>
+    <string name="desktop_sound_load">Dosyadan yükle…</string>
+    <string name="desktop_sound_play">Dinle</string>
+    <string name="desktop_sound_trimmed">Ses 60 saniyeden uzun; ilk 60 saniyesi kullanılıyor.</string>
+    <string name="desktop_sound_too_big">Dosya 20 MB\'tan büyük.</string>
+    <string name="desktop_sound_not_audio">Bu dosya ses olarak okunamadı (WAV ya da MP3).</string>
+    <string name="desktop_sound_io">Ses kaydedilemedi (%1$s).</string>
+    <string name="sound_builtin_alarm_siren">Siren</string>
+    <string name="sound_builtin_alarm_beep">Bip</string>
+    <string name="sound_builtin_alarm_pulse">Nabız</string>
+    <string name="sound_builtin_notify_chime">Çan</string>
 </resources>
