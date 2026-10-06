@@ -30,7 +30,7 @@ enum class CardStyle {
         fun gridMinWidth(size: String): Dp = when (parse(size)) {
             LARGE -> 340.dp
             MEDIUM -> 260.dp
-            SMALL -> 200.dp
+            SMALL -> 230.dp
         }
     }
 }
