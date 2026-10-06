@@ -19,7 +19,7 @@ import com.macerce.switchguard.desktop.accounts.TuyaConnect
 import com.macerce.switchguard.desktop.i18n.Strings
 
 /**
- * Ayarlar → Hesap: Tuya / Smart Life (bağla, değiştir, kaldır, canlı bildirimler), eWeLink (Görev 9) ve demo
+ * Ayarlar → Hesap: eWeLink ([EwelinkRows]), Tuya / Smart Life (bağla, değiştir, kaldır, canlı bildirimler) ve demo
  * cihazları. Okunan değerler `store.version` her değiştiğinde yeniden okunur (çağıranın `remember(version)`'ı).
  */
 @Composable
@@ -33,6 +33,9 @@ fun AccountsSection(graph: AppGraph, strings: Strings, version: Int) {
     var dialog by remember { mutableStateOf<String?>(null) } // "tuya", "tuya-remove", "tuya-live"
 
     SectionTitle(strings["section_account"])
+
+    // --- eWeLink ---
+    EwelinkRows(graph, strings, version)
 
     // --- Tuya ---
     SettingRow(

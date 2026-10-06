@@ -102,4 +102,21 @@
     <string name="desktop_tuya_live">Tuya live updates on this computer</string>
     <string name="desktop_tuya_live_desc">Off: Tuya devices are checked every 5 minutes</string>
     <string name="desktop_tuya_live_warning">Your phone may then miss some or all of its live Tuya messages. Turn it on anyway?</string>
+
+    <!-- eWeLink -->
+    <string name="desktop_ewelink_pc_notice">This computer is a separate device: it needs its own eWeLink account, developer access approved on dev.ewelink.cc, and that account\'s App ID and App Secret.</string>
+    <string name="desktop_ewelink_keys_missing">No API credentials yet</string>
+    <string name="desktop_ewelink_logged_in_x">Signed in · %1$s · region %2$s</string>
+    <string name="desktop_ewelink_not_logged_in_x">Not signed in · App ID %1$s</string>
+    <string name="desktop_ewelink_secret_kept">Leave empty to keep the saved secret</string>
+    <string name="desktop_ewelink_login_title">Sign in with eWeLink</string>
+    <string name="desktop_ewelink_login_steps">1. Sign in on the page that opened in your browser.\n2. The browser then shows a \"can\'t connect\" page; that is expected.\n3. Copy the address from the address bar. SwitchGuard picks it up by itself.</string>
+    <string name="desktop_ewelink_paste_hint">Or paste the address here</string>
+    <string name="desktop_ewelink_open_again">Open the sign-in page again</string>
+    <string name="desktop_ewelink_waiting">Waiting for the address…</string>
+    <string name="desktop_ewelink_signing_in">Signing in…</string>
+    <string name="desktop_ewelink_wrong_address">This address does not belong to this sign-in. Open the sign-in page again.</string>
+    <string name="desktop_ewelink_login_failed">eWeLink did not accept the sign-in (%1$s).</string>
+    <string name="desktop_ewelink_remove">Remove account</string>
+    <string name="desktop_ewelink_remove_confirm">Sign out and delete the App ID and App Secret from this computer? eWeLink devices will no longer be monitored here.</string>
 </resources>

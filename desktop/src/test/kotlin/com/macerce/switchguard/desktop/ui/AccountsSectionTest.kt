@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 import org.junit.After
@@ -78,5 +79,47 @@ class AccountsSectionTest {
 
         compose.onNodeWithText("Connect").performScrollTo()
         compose.onNodeWithText("Tuya live updates on this computer").assertDoesNotExist()
+    }
+
+    @Test
+    fun apiCredentialsAreSaved() {
+        compose.setContent { SettingsScreen(graph, graph.strings()) }
+
+        compose.onNodeWithText("API credentials").performScrollTo().performClick()
+        compose.onNodeWithText("App ID").performTextInput("my-app")
+        compose.onNodeWithText("App Secret").performTextInput("my-secret")
+        compose.onNodeWithText("Save").performClick()
+        compose.waitForIdle()
+
+        assertEquals("my-app", graph.store.appId)
+        assertEquals("my-secret", graph.store.appSecret)
+        assertEquals("https://127.0.0.1", graph.store.redirectUrl)
+    }
+
+    @Test
+    fun removingTheEwelinkAccountAfterConfirmDeletesKeysAndSession() {
+        graph.store.appId = "app"
+        graph.store.appSecret = "secret"
+        graph.store.accessToken = "token"
+        compose.setContent { SettingsScreen(graph, graph.strings()) }
+
+        compose.onNodeWithText("Remove account").performScrollTo().performClick()
+        compose.onNodeWithText("Remove").performClick()
+        compose.waitForIdle()
+
+        assertEquals("", graph.store.appId)
+        assertEquals("", graph.store.accessToken)
+    }
+
+    @Test
+    fun signedInAccountShowsTheMaskedEmail() {
+        graph.store.appId = "app"
+        graph.store.appSecret = "secret"
+        graph.store.accessToken = "token"
+        graph.store.accountEmail = "macerce@gmail.com"
+        graph.store.region = "eu"
+        compose.setContent { SettingsScreen(graph, graph.strings()) }
+
+        compose.onNodeWithText("Signed in · ma***@gmail.com · region eu").performScrollTo()
     }
 }
