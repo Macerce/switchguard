@@ -123,6 +123,19 @@ object Sounds {
         Sounds::class.java.getResourceAsStream("/sounds/$name.wav")?.let { BufferedInputStream(it) }
 }
 
+/** [DesktopHost]'un kullandığı ses kancası; [SoundPlayer] uygular, testlerde sahtesi verilir. */
+interface AlarmSound {
+    /** Alarm döngüsünü başlatır; gerçekten çalan bir klip varsa true (yalnızca sistem bip'i ya da hiçbir şey: false). */
+    fun loop(id: String?, volume: Float): Boolean
+
+    /** [loop]'un başlattığı klip hâlâ gerçekten çalıyor mu (ses cihazı kaybolunca false olur). */
+    fun isLooping(): Boolean
+
+    fun once(id: String?, volume: Float, maxMs: Long = 6_000)
+
+    fun stop()
+}
+
 /**
  * Alarm döngüsü ve tek seferlik bildirim sesi. İzleme iş parçacığından ve arayüzden çağrılabilir.
  *
@@ -130,7 +143,7 @@ object Sounds {
  * yaratmaz; varsayılana düşülür. Hiçbir çağrı çağırana istisna fırlatmaz; hata Log.w'ye yazılır. Varsayılan
  * da çalınamazsa (ses cihazı yok) son çare olarak sistem bip'i denenir.
  */
-class SoundPlayer {
+class SoundPlayer : AlarmSound {
     private val lock = Any()
     private var loopClip: Playing? = null
     private var onceClip: Playing? = null
@@ -144,19 +157,36 @@ class SoundPlayer {
     /**
      * [id]'yi ([Sounds.DEFAULT_ALARM] varsayılanıyla) kesintisiz döngüde çalar; o an çalan her sesi
      * (döngü ve tek seferlik) durdurup yerine geçer. [stop] çağrılana dek sürer. [volume] 0..1.
+     * Bir klip gerçekten döngüye girdiyse true; hiçbiri açılamadıysa (ses cihazı yok) son çare bip'i dener ve
+     * false döner: çağıran ([DesktopHost]) sonraki tick'te yeniden dener.
      */
-    fun loop(id: String?, volume: Float) {
+    override fun loop(id: String?, volume: Float): Boolean {
         synchronized(lock) {
             stopLocked()
             loopClip = play(id, Sounds.DEFAULT_ALARM, volume, loop = true)
+            return loopClip != null
         }
+    }
+
+    /**
+     * Alarm döngüsü gerçekten çalıyor mu: klip açık ve etkin, ve çalma konumu (açılıştan beri çalınan kare sayısı)
+     * son denetimden bu yana ilerlemiş. Ses cihazı kaybolunca (USB/Bluetooth kulaklık çıkarıldı, monitör
+     * hoparlörü uykuya geçti, Windows ses hizmeti yeniden başladı) JDK klibi hata vermez, "çalıyor" görünmeye devam
+     * eder ama konumu durur (JDK'nın kendi `drain` denetimi de bu belirtiye bakar). Döngü yoksa false.
+     */
+    override fun isLooping(): Boolean = synchronized(lock) {
+        val playing = loopClip ?: return false
+        attempt("check alarm clip") {
+            val clip = playing.clip
+            clip.isOpen && clip.isActive && playing.progress.advanced(clip.longFramePosition, System.nanoTime())
+        } ?: false
     }
 
     /**
      * [id]'yi ([Sounds.DEFAULT_NOTIFY] varsayılanıyla) bir kez çalar; kayıt [maxMs]'ten uzunsa o noktada keser
      * (en az 1 ms). Önceki tek seferlik sesin yerine geçer; çalmakta olan alarm döngüsüne dokunmaz.
      */
-    fun once(id: String?, volume: Float, maxMs: Long = 6_000) {
+    override fun once(id: String?, volume: Float, maxMs: Long) {
         synchronized(lock) {
             closeOnceLocked()
             val playing = play(id, Sounds.DEFAULT_NOTIFY, volume, loop = false) ?: return
@@ -173,7 +203,7 @@ class SoundPlayer {
     }
 
     /** Hem döngüyü hem tek seferlik sesi durdurur; hiçbir şey çalmıyorsa zararsızdır. */
-    fun stop() {
+    override fun stop() {
         synchronized(lock) { stopLocked() }
     }
 
@@ -272,22 +302,45 @@ class SoundPlayer {
 
     private class Playing(val clip: Clip) {
         val released = AtomicBoolean(false)
+        /** Yalnızca alarm döngüsünde kullanılır ([isLooping]). */
+        val progress = LoopProgress(STALL_CHECK_NS)
     }
 
-    /** Çalma hatalarını çağırana sızdırmaz: günlüğe yazar, null döner. */
+    /**
+     * Çalma hatalarını çağırana sızdırmaz (her [Throwable]: ses sürücüsünün fırlattığı beklenmedik hatalar da
+     * alarmı çağıranla birlikte düşürmesin): günlüğe yazar, null döner. Kesilen iş parçacığının kesme işareti korunur.
+     */
     private inline fun <T> attempt(what: String, block: () -> T): T? = try {
         block()
-    } catch (e: Exception) {
-        Log.w(TAG, "$what failed", e)
+    } catch (t: Throwable) {
+        if (t is InterruptedException) Thread.currentThread().interrupt()
+        Log.w(TAG, "$what failed", t)
         null
-    } catch (e: LinkageError) {
-        Log.w(TAG, "$what failed", e)
-        null
+    }
+
+    /**
+     * Döngünün çalma konumu ilerliyor mu. İlk ölçüm ve bir öncekinden [minIntervalNs]'ten kısa süre sonraki
+     * ölçümler "ilerliyor" sayılır (yeni başlamış ya da art arda sorulmuş klip boşuna yeniden başlatılmasın);
+     * daha sonraki bir ölçümde konum aynıysa klip durmuştur.
+     */
+    internal class LoopProgress(private val minIntervalNs: Long) {
+        private var lastPosition = -1L
+        private var lastAt = 0L
+
+        fun advanced(position: Long, now: Long): Boolean {
+            if (lastPosition >= 0 && now - lastAt < minIntervalNs) return true
+            val moved = lastPosition < 0 || position != lastPosition
+            lastPosition = position
+            lastAt = now
+            return moved
+        }
     }
 
     internal companion object {
         private const val TAG = "SoundPlayer"
         private const val CLOSE_DELAY_MS = 100L
+        /** [isLooping]: konumun ilerlediğine karar vermek için iki ölçüm arasındaki en kısa süre (1 sn). */
+        private const val STALL_CHECK_NS = 1_000_000_000L
 
         /**
          * `MASTER_GAIN = 20·log10(volume)` dB; denetimin [minDb]/[maxDb] aralığına kırpılır (volume 0 → alt sınır).

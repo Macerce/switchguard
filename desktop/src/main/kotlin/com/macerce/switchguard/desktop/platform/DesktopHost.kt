@@ -12,41 +12,62 @@ import com.macerce.switchguard.desktop.i18n.Strings
  * durum. Yöntemler motor iş parçacığından çağrılır; dokunulan her şey iş parçacığı güvenlidir
  * ([AppState]'in akışları, [NotificationQueue] sınırsız bir kanala yazar, [SoundPlayer] kendi kilidini kullanır).
  * Bildirim metni hemen sıraya alınır (tepsiye aralıklı iletilir), ses ise hemen çalar.
+ *
+ * Alarm sesi telefondaki `Notifier.startSound` gibi kendini toparlar: başlatılamazsa (o an ses cihazı yok) ya da
+ * sonradan durursa (cihaz kayboldu) [ensureAlarmVisible] (alarm sürdükçe her tick) yeniden başlatır. Alarm ayrıca
+ * ekranı uyandırır ([display]): kapalı ekranda tam ekran alarm görünmez, monitör hoparlörü de uykuda kalır.
  */
 class DesktopHost(
     private val store: Store,
-    private val sounds: SoundPlayer,
+    private val sounds: AlarmSound,
     private val state: AppState,
     private val notifications: NotificationQueue,
     /** Her çağrıda o anki dil (bkz. AppGraph.strings). */
     private val strings: () -> Strings,
+    private val display: DisplayWaker = DisplayWake,
 ) : MonitorHost {
 
-    /** Çalmakta olan alarm sesi; aynı ses yeni bir alarm satırıyla baştan başlatılıp tıkırdamasın diye. */
+    /** Alarm sesi ve ses düzeyi. */
     private data class Ringing(val sound: String?, val volume: Float)
 
+    /** Alarm sürdükçe çalması gereken ses; alarm kapatılınca null. */
+    private var wanted: Ringing? = null
+
+    /** Gerçekten çalmaya başlamış ses (yalnızca `loop` başarılıysa); aynı ses yeni satırla baştan başlayıp tıkırdamasın. */
     private var ringing: Ringing? = null
 
     @Synchronized
     override fun showAlarm(lines: List<String>, sound: String?) {
         state.setAlarmLines(lines)
-        val wanted = Ringing(sound ?: store.alarmSoundUri, store.alarmVolume)
-        if (ringing != wanted) {
-            ringing = wanted
-            sounds.loop(wanted.sound, wanted.volume)
-        }
+        ring(Ringing(sound ?: store.alarmSoundUri, store.alarmVolume))
+        display.wake()
         state.raiseAlarmWindow()
     }
 
     @Synchronized
     override fun ensureAlarmVisible() {
-        // Pencere hiç yoksa (satırlar boş) ama kapatılmamış alarm duruyorsa yeniden kur; yoksa yalnızca öne getir.
+        // Pencere hiç yoksa (satırlar boş) ama kapatılmamış alarm duruyorsa yeniden kur; yoksa öne getir.
         val pending = store.pendingAlarm
-        if (state.alarmLines.value.isEmpty() && pending.isNotEmpty()) showAlarm(pending, null) else state.raiseAlarmWindow()
+        if (state.alarmLines.value.isEmpty() && pending.isNotEmpty()) {
+            showAlarm(pending, null)
+            return
+        }
+        // Ses bekçisi: hiç başlayamadıysa ya da sonradan durduysa (ses cihazı değişti) yeniden başlat.
+        ring(wanted ?: Ringing(store.alarmSoundUri, store.alarmVolume))
+        display.keepOn()
+        state.raiseAlarmWindow()
+    }
+
+    /** [w] çalmıyorsa başlatır; [ringing] yalnızca başarıda kaydedilir, başarısızsa sonraki tick yeniden dener. */
+    private fun ring(w: Ringing) {
+        wanted = w
+        if (ringing == w && sounds.isLooping()) return
+        ringing = if (sounds.loop(w.sound, w.volume)) w else null
     }
 
     @Synchronized
     override fun stopAlarm() {
+        wanted = null
         ringing = null
         sounds.stop()
         state.clearAlarm()

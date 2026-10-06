@@ -1,6 +1,7 @@
 package com.macerce.switchguard.desktop.platform
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Rule
@@ -152,6 +153,26 @@ class SoundsTest {
         val player = SoundPlayer()
         player.stop()
         player.stop()
+    }
+
+    @Test
+    fun nothingPlayingIsNotLooping() {
+        val player = SoundPlayer()
+        assertFalse(player.isLooping())
+        player.stop()
+        assertFalse(player.isLooping())
+    }
+
+    @Test
+    fun loopProgressDetectsAStalledClip() {
+        val second = 1_000_000_000L
+        val progress = SoundPlayer.LoopProgress(minIntervalNs = second)
+
+        assertTrue("ilk ölçüm: yeni başladı", progress.advanced(position = 0, now = 0))
+        assertTrue("aralık dolmadan karar verilmez", progress.advanced(position = 0, now = second / 2))
+        assertTrue(progress.advanced(position = 44_100, now = second))
+        assertFalse("konum durdu: cihaz kayboldu", progress.advanced(position = 44_100, now = 3 * second))
+        assertTrue(progress.advanced(position = 50_000, now = 5 * second))
     }
 
     @Test
