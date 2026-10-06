@@ -6,6 +6,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.sound.sampled.AudioFormat
@@ -63,6 +65,56 @@ class SoundsTest {
     fun phoneSoundIdsFallBackToDefault() {
         assertEquals(siren, Sounds.resolve("content://settings/system/alarm_alert", Sounds.DEFAULT_ALARM))
         assertEquals(chime, Sounds.resolve("content://media/internal/audio/media/42", Sounds.DEFAULT_NOTIFY))
+    }
+
+    /** 16 bit mono 44.1 kHz WAV; başlık [declaredDataBytes] veri bildirir, dosyada [data] kadar bayt vardır. */
+    private fun wavBytes(declaredDataBytes: Int, data: ByteArray): ByteArray {
+        val b = ByteBuffer.allocate(44 + data.size).order(ByteOrder.LITTLE_ENDIAN)
+        b.put("RIFF".toByteArray()).putInt(36 + declaredDataBytes).put("WAVE".toByteArray())
+        b.put("fmt ".toByteArray()).putInt(16).putShort(1).putShort(1).putInt(44_100).putInt(88_200)
+        b.putShort(2).putShort(16)
+        b.put("data".toByteArray()).putInt(declaredDataBytes).put(data)
+        return b.array()
+    }
+
+    @Test
+    fun emptyWavFallsBackToDefault() {
+        val empty = tmp.root.toPath().resolve("bos.wav")
+        Files.write(empty, wavBytes(0, ByteArray(0))) // 44 bayt: yalnızca başlık, 0 kare
+        assertEquals(44L, Files.size(empty))
+        assertEquals(siren, Sounds.resolve(empty.toString(), Sounds.DEFAULT_ALARM))
+        assertEquals(chime, Sounds.resolve(empty.toString(), Sounds.DEFAULT_NOTIFY))
+    }
+
+    @Test
+    fun truncatedWavFallsBackToDefault() {
+        // başlık 1 sn (88 200 bayt) bildiriyor ama dosyada yalnızca 10 kare var
+        val cut = tmp.root.toPath().resolve("kesik.wav")
+        Files.write(cut, wavBytes(88_200, ByteArray(20)))
+        assertEquals(siren, Sounds.resolve(cut.toString(), Sounds.DEFAULT_ALARM))
+    }
+
+    @Test
+    fun truncatedButLongEnoughWavIsStillUsed() {
+        // başlık 1 sn bildiriyor, dosyada 0,5 sn var: oynatılabilir, reddedilmez
+        val half = tmp.root.toPath().resolve("yarim.wav")
+        Files.write(half, wavBytes(88_200, ByteArray(44_100)))
+        assertEquals(SoundSource.File(half), Sounds.resolve(half.toString(), Sounds.DEFAULT_ALARM))
+    }
+
+    @Test
+    fun tooShortRuleIsFiftyMilliseconds() {
+        assertTrue(Sounds.isTooShort(0, 44_100f))
+        assertTrue(Sounds.isTooShort(10, 44_100f))
+        assertTrue(Sounds.isTooShort(2_204, 44_100f)) // 49,98 ms
+        assertTrue(!Sounds.isTooShort(2_205, 44_100f)) // tam 50 ms
+        assertTrue(!Sounds.isTooShort(26_460, 44_100f)) // 0,6 sn'lik bildirim sesi
+        assertTrue(Sounds.isTooShort(2_399, 48_000f))
+        assertTrue(!Sounds.isTooShort(2_400, 48_000f))
+        // bilinmeyen (-1) uzunluk ya da örnekleme hızı: yine de 0 kare bozuk sayılır, 1+ kare değil
+        assertTrue(Sounds.isTooShort(0, -1f))
+        assertTrue(Sounds.isTooShort(-1, 44_100f))
+        assertTrue(!Sounds.isTooShort(1, -1f))
     }
 
     @Test

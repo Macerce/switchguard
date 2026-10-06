@@ -4,6 +4,7 @@ import com.macerce.switchguard.desktop.Log
 import java.awt.Toolkit
 import java.io.BufferedInputStream
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.InvalidPathException
@@ -13,6 +14,7 @@ import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.ScheduledThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import javax.sound.sampled.AudioFileFormat
 import javax.sound.sampled.AudioInputStream
 import javax.sound.sampled.AudioSystem
 import javax.sound.sampled.Clip
@@ -36,6 +38,7 @@ object Sounds {
 
     private const val TAG = "Sounds"
     private const val LAST_RESORT = "alarm_siren"
+    private const val MIN_SOUND_MS = 50
 
     /** Yerleşik ses adları (`builtin:` öneki olmadan); dosyaları `desktop/tools/gen_sounds.py` üretir. */
     val BUILTIN: List<String> = listOf("alarm_siren", "alarm_beep", "alarm_pulse", "notify_chime")
@@ -85,14 +88,34 @@ object Sounds {
         when {
             !Files.isRegularFile(path) -> "not an existing file"
             !Files.isReadable(path) -> "not readable"
-            else -> {
-                AudioSystem.getAudioFileFormat(path.toFile())
-                null
-            }
+            else -> tooShortReason(path, AudioSystem.getAudioFileFormat(path.toFile()))
         }
     } catch (e: Exception) {
         // UnsupportedAudioFileException (ses değil), IOException, SecurityException...
         "not a playable audio file (${e.javaClass.simpleName})"
+    }
+
+    /**
+     * Başlığı geçerli ama içi boş ya da (kesilmiş dosya) neredeyse boş bir WAV, [AudioSystem.getAudioFileFormat]'ı
+     * geçer, `Clip.open` ve `Clip.loop` hata vermez, ama hiçbir şey çalmaz: sessiz alarm. Bu yüzden 50 ms'den kısa
+     * (ya da bilinmeyen/negatif uzunluklu) sesler bozuk sayılır. Örnekleme hızı bilinmiyorsa en az 1 kare aranır.
+     */
+    internal fun isTooShort(frameLength: Long, sampleRate: Float): Boolean {
+        val minFrames = if (sampleRate > 0f) maxOf(1L, (sampleRate.toDouble() * MIN_SOUND_MS / 1000).toLong()) else 1L
+        return frameLength < minFrames
+    }
+
+    /**
+     * Başlıktaki kare sayısına güvenilmez (kesik dosyada başlık yalan söyler): kare sayısı, dosyaya gerçekten
+     * sığabilecek kareyle sınırlanıp [isTooShort] ile sınanır. Uzunluk bilinmiyorsa burada karar verilmez; çalma
+     * anındaki (`Clip.open` sonrası) denetim yakalar.
+     */
+    private fun tooShortReason(path: Path, format: AudioFileFormat): String? {
+        var frames = format.frameLength.toLong()
+        if (frames == AudioSystem.NOT_SPECIFIED.toLong()) return null
+        val frameSize = format.format.frameSize
+        if (frameSize > 0) frames = minOf(frames, Files.size(path) / frameSize)
+        return if (isTooShort(frames, format.format.sampleRate)) "too short or empty ($frames frames)" else null
     }
 
     /** Yerleşik sesin ham akışı (mark/reset destekli, [AudioSystem.getAudioInputStream] için); yoksa null. */
@@ -186,6 +209,11 @@ class SoundPlayer {
             val clip = playing.clip
             try {
                 clip.open(audio) // tüm veriyi belleğe alır; akış/dosya hemen kapanabilir
+                // Başlık yalan söyleyebilir (boş/kesik WAV): açılır, loop() hata vermez ama klip hiç çalmaz.
+                // Gerçek uzunluk ancak open'dan sonra bellidir; bozuksa fırlat, mevcut düşüş yolu çalışsın.
+                if (Sounds.isTooShort(clip.frameLength.toLong(), clip.format.sampleRate)) {
+                    throw IOException("sound is empty or too short (${clip.frameLength} frames)")
+                }
                 applyGain(clip, volume)
                 if (loop) {
                     clip.loop(Clip.LOOP_CONTINUOUSLY)
