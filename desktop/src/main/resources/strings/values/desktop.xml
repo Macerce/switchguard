@@ -31,8 +31,18 @@
     <string name="monitoring_start">Start monitoring</string>
     <string name="monitoring_stop">Stop monitoring</string>
 
+
     <!-- Settings -->
-    <string name="settings_autostart">Start with Windows</string>
-    <string name="settings_keep_awake">Keep the computer awake while monitoring</string>
-    <string name="settings_tuya_live">Live Tuya notifications on this computer</string>
+    <string name="desktop_keep_awake">Keep the computer awake</string>
+    <string name="desktop_keep_awake_desc">While monitoring, the computer does not go to sleep</string>
+    <string name="desktop_autostart">Start with Windows</string>
+    <string name="desktop_autostart_desc">Opens in the tray when you sign in to Windows</string>
+    <string name="desktop_language_system">System language</string>
+    <string name="desktop_theme">Theme</string>
+    <string name="desktop_theme_system">System</string>
+    <string name="desktop_theme_light">Light</string>
+    <string name="desktop_theme_dark">Dark</string>
+    <string name="desktop_open_logs">Open the log folder</string>
+    <string name="desktop_section_backup">Backup</string>
+    <string name="desktop_section_help">Help and setup</string>
 </resources>

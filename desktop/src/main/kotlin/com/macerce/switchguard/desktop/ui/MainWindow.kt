@@ -91,7 +91,7 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
                                 generation++
                             }
                         } else {
-                            DevicesScreen(graph, strings)
+                            AppNav(graph, strings)
                         }
                     }
                 }

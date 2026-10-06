@@ -37,6 +37,8 @@ dependencies {
     // MP3 → PCM çözümü yalnızca ses yüklerken (sound/SoundImport); LGPL, ayrı jar olarak paketlenir.
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4") { exclude(group = "junit") }
     testImplementation("junit:junit:4.13.2")
+    @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+    testImplementation(compose.desktop.uiTestJUnit4)
 }
 
 compose.desktop {

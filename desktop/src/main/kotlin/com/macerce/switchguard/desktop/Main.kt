@@ -94,7 +94,7 @@ fun main(args: Array<String>) {
  * Windows ile başlatma ayarını kayıt defteriyle eşitler: açıksa değer yoksa yazılır, yanlış yolu varsa
  * (yeniden kurulum) düzeltilir; kapalıysa silinir. Kurulu uygulama değilsek (`./gradlew run`) hiç dokunulmaz.
  */
-private fun syncAutostart(autostart: Autostart, enabled: Boolean) {
+internal fun syncAutostart(autostart: Autostart, enabled: Boolean) {
     if (!autostart.available) return
     autostart.setEnabled(enabled)
 }

@@ -22,6 +22,12 @@ class AppState {
     /** Kaynakların en kötü durumu ve ekranda gösterilecek metin (tepsi simgesi, ipucu ve Cihazlar başlığı). */
     val status: StateFlow<Pair<ConnState, String>> = _status.asStateFlow()
 
+    /** Ana penceredeki sekme (sol menü). */
+    enum class Tab { DEVICES, SETTINGS }
+
+    /** Seçili sekme; pencere yeniden kurulsa da (hata sonrası) korunur. */
+    val tab = MutableStateFlow(Tab.DEVICES)
+
     /** Ana pencere görünür mü; kapatma düğmesi gizler, tepsi "Aç" yeniden gösterir. */
     val windowVisible = MutableStateFlow(true)
 
