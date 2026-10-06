@@ -13,6 +13,7 @@ import java.nio.file.Files
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import kotlin.concurrent.thread
 
 class SingleInstanceTest {
     @get:Rule val tmp = TemporaryFolder()
@@ -20,6 +21,16 @@ class SingleInstanceTest {
     private val opened = mutableListOf<SingleInstance>()
 
     private fun instance(): SingleInstance = SingleInstance(tmp.root.toPath()).also { opened += it }
+
+    /** Sahibin dinleyicisine [command] gönderir, yanıt satırını döner (yanıt yoksa ""). */
+    private fun ask(command: String): String {
+        val port = Files.readString(tmp.root.toPath().resolve("instance.port")).trim().toInt()
+        Socket(InetAddress.getByAddress(byteArrayOf(127, 0, 0, 1)), port).use { socket ->
+            socket.soTimeout = 2000
+            socket.getOutputStream().apply { write("$command\n".toByteArray()); flush() }
+            return socket.getInputStream().bufferedReader().readLine()?.trim().orEmpty()
+        }
+    }
 
     @After
     fun releaseAll() {
@@ -88,6 +99,65 @@ class SingleInstanceTest {
 
         a.release()
         assertFalse(Files.exists(portFile))
+    }
+
+    @Test
+    fun ownerAnswersOkToShow() {
+        val a = instance()
+        assertTrue(a.acquire {})
+
+        assertEquals("ok", ask("show"))
+    }
+
+    @Test
+    fun exitingOwnerDoesNotClaimTheShowRequest() {
+        val shown = AtomicInteger()
+        val a = instance()
+        assertTrue(a.acquire { shown.incrementAndGet() })
+        a.markExiting()
+
+        assertEquals("bye", ask("show"))
+        assertEquals(0, shown.get())
+    }
+
+    @Test
+    fun secondInstanceTakesOverFromAnExitingOwner() {
+        val shownByOld = AtomicInteger()
+        val a = instance()
+        assertTrue(a.acquire { shownByOld.incrementAndGet() })
+        a.markExiting()
+        // Sahip kapanırken (motor kapanışı en çok ~2 sn) kilidi bırakır.
+        val exiting = thread { Thread.sleep(700); a.release() }
+
+        val b = instance()
+        val started = System.nanoTime()
+        assertTrue("the second instance must become the owner once the exiting one is gone", b.acquire {})
+        exiting.join()
+
+        assertTrue((System.nanoTime() - started) / 1_000_000 >= 500)
+        assertEquals(0, shownByOld.get())
+        // Yeni sahip gerçekten sahip: bir sonraki açılış ona "göster" der.
+        val shownByNew = CountDownLatch(1)
+        b.release()
+        val c = instance()
+        assertTrue(c.acquire { shownByNew.countDown() })
+        assertFalse(instance().acquire {})
+        assertTrue(shownByNew.await(2, TimeUnit.SECONDS))
+    }
+
+    @Test
+    fun exitingOwnerThatNeverLeavesMakesTheSecondInstanceGiveUp() {
+        val a = instance()
+        assertTrue(a.acquire {})
+        a.markExiting()
+
+        val b = SingleInstance(tmp.root.toPath(), handoverMs = 800).also { opened += it }
+        val started = System.nanoTime()
+        assertFalse(b.acquire {})
+
+        assertTrue((System.nanoTime() - started) / 1_000_000 >= 700)
+        val c = SingleInstance(tmp.root.toPath(), handoverMs = 300).also { opened += it }
+        assertFalse("the owner keeps its lock", c.acquire {})
     }
 
     @Test
