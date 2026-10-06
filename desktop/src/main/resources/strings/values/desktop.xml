@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Desktop-only strings. Phone strings live in strings.xml (copied from app/). -->
+<resources>
+    <!-- Tray -->
+    <string name="tray_open">Open SwitchGuard</string>
+    <string name="tray_start">Start monitoring</string>
+    <string name="tray_stop">Stop monitoring</string>
+    <string name="tray_exit">Exit</string>
+    <string name="tray_exit_confirm">Monitoring is on. If you exit, alarms will not ring on this computer until SwitchGuard is opened again.</string>
+    <string name="tray_exit_confirm_yes">Exit anyway</string>
+    <string name="tray_minimized_hint">SwitchGuard keeps monitoring in the background. Open it from the tray icon.</string>
+
+    <!-- Alarm window -->
+    <string name="alarm_dismiss">Dismiss</string>
+
+    <!-- Events -->
+    <string name="desktop_slept">The computer was asleep for %1$d min — short events during that time may have been missed.</string>
+
+    <!-- Devices -->
+    <string name="devices_empty">No devices yet. Turn on demo devices to try SwitchGuard.</string>
+
+    <!-- Monitoring -->
+    <string name="monitoring_start">Start monitoring</string>
+    <string name="monitoring_stop">Stop monitoring</string>
+
+    <!-- Settings -->
+    <string name="settings_autostart">Start with Windows</string>
+    <string name="settings_keep_awake">Keep the computer awake while monitoring</string>
+    <string name="settings_tuya_live">Live Tuya notifications on this computer</string>
+</resources>

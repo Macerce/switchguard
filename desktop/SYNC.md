@@ -55,11 +55,20 @@ Kaynak: `tv-tablet` dalı `132e7fe` commit'i (master merge ile aynı içerik `c5
 | TuyaTest.kt | app/src/test/java/com/macerce/switchguard/core/ | yok |
 | WsMessagesTest.kt | app/src/test/java/com/macerce/switchguard/core/ | yok |
 
+## Kopyalanan Dosyalar (metinler)
+
+| dosya | kaynak yolu | uyarlama |
+|-------|-------------|----------|
+| desktop/src/main/resources/strings/values/strings.xml | app/src/main/res/values/strings.xml | yok (bayt bayt aynı) |
+| desktop/src/main/resources/strings/values-tr/strings.xml | app/src/main/res/values-tr/strings.xml | yok (bayt bayt aynı) |
+
+`values/desktop.xml` ve `values-tr/desktop.xml` yalnızca masaüstüne özgüdür (telefonda karşılığı yok, senkronize edilmez); anahtarları telefon `strings.xml` anahtarlarıyla çakışmamalıdır (`StringsTest.desktopKeysNeverShadowPhoneKeys`). `Strings.eventStrings()` telefondaki `EventLog.strings(context)` ile, `Strings.demoNames()` `Actions.enableDemo` ile aynı anahtarları kullanır; telefonda bunlar değişirse masaüstü karşılıkları da güncellenir.
+
 ## Kopyalanmayan Dosyalar
 
 | dosya | sebep |
 |-------|-------|
-| AppLanguage.kt | Yerine `desktop/i18n/Strings` yazılacak (1. aşamanın 5. görevi) |
+| AppLanguage.kt | Yerine `desktop/i18n/Strings` yazıldı (1. aşamanın 5. görevi) |
 | Transfer.kt | Kurulum aktarımı özelliği (telefondan masaüstüne); 4. aşamada uyarlanacak (`desktop/docs/spec.md` §3.1): `Build.MODEL` → bilgisayar adı, `android.util.Base64` → `java.util.Base64` |
 | TransferNet.kt | Kurulum aktarımı özelliği; 4. aşamada uyarlanacak (`desktop/docs/spec.md` §3.1): Android NSD → JmDNS |
 

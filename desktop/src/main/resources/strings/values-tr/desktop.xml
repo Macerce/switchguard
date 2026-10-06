@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Yalnızca masaüstü metinleri. Telefon metinleri strings.xml'de (app/'ten kopya). -->
+<resources>
+    <!-- Tepsi -->
+    <string name="tray_open">SwitchGuard\'ı aç</string>
+    <string name="tray_start">İzlemeyi başlat</string>
+    <string name="tray_stop">İzlemeyi durdur</string>
+    <string name="tray_exit">Çıkış</string>
+    <string name="tray_exit_confirm">İzleme açık. Çıkarsanız SwitchGuard yeniden açılana kadar bu bilgisayarda alarm çalmaz.</string>
+    <string name="tray_exit_confirm_yes">Yine de çık</string>
+    <string name="tray_minimized_hint">SwitchGuard arka planda izlemeye devam ediyor. Tepsideki simgeden açabilirsiniz.</string>
+
+    <!-- Alarm penceresi -->
+    <string name="alarm_dismiss">Kapat</string>
+
+    <!-- Olaylar -->
+    <string name="desktop_slept">Bilgisayar %1$d dk uykudaydı — bu sürede kısa olaylar kaçmış olabilir.</string>
+
+    <!-- Cihazlar -->
+    <string name="devices_empty">Henüz cihaz yok. SwitchGuard\'ı denemek için demo cihazları açın.</string>
+
+    <!-- İzleme -->
+    <string name="monitoring_start">İzlemeyi başlat</string>
+    <string name="monitoring_stop">İzlemeyi durdur</string>
+
+    <!-- Ayarlar -->
+    <string name="settings_autostart">Windows açılınca başlat</string>
+    <string name="settings_keep_awake">İzlerken bilgisayarı uyanık tut</string>
+    <string name="settings_tuya_live">Tuya canlı bildirimleri bu bilgisayarda</string>
+</resources>
