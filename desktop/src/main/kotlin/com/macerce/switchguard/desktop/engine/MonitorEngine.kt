@@ -106,6 +106,7 @@ class MonitorEngine(
 
     /** Masaüstü: bir önceki tick'in duvar saati (uyku algılama, bkz. [sleptFor]); 0 = bu çalışmada henüz tick yok. */
     private var lastTickWall = 0L
+    private var lastTickAwake = 0L
 
     /**
      * Masaüstü: döngünün kuşağı. Telefonda servis durunca `onDestroy` döngüyü kaldırır; burada motor yaşamaya devam
@@ -316,15 +317,20 @@ class MonitorEngine(
     }
 
     /**
-     * Masaüstü: duvar saati iki tick arasında [SLEEP_GAP_MS]'den fazla ilerlediyse bilgisayar uyumuştur; uyku süresi
-     * (ms) döner, uyumadıysa 0. Küçük ya da geriye atlamalar (NTP düzeltmesi, saati geri alma) yok sayılır.
+     * Masaüstü: iki tick arasında bilgisayarın uyuduğu süre (ms); uyumadıysa 0. Uyku = duvar saati boşluğu − uyanık
+     * geçen süre ([Clock.awake]); [SLEEP_GAP_MS]'den uzunsa sayılır. Böylece uzun süren bir bulut çağrısı (motor
+     * tıkalı, bilgisayar uyanık) uyku sayılmaz; uyku bir çağrının ortasında olsa da ölçülür. Küçük ya da geriye
+     * atlamalar (NTP düzeltmesi, saati geri alma) yok sayılır.
      */
     private fun sleptFor(wall: Long): Long {
         val last = lastTickWall
+        val lastAwake = lastTickAwake
+        val awake = clock.awake()
         lastTickWall = wall
+        lastTickAwake = awake
         if (last == 0L) return 0
-        val gap = wall - last
-        return if (gap > SLEEP_GAP_MS) gap else 0
+        val slept = (wall - last) - (awake - lastAwake)
+        return if (slept > SLEEP_GAP_MS) slept else 0
     }
 
     /**

@@ -429,6 +429,23 @@ class MonitorEngineTest {
         assertEquals(2, host.alarms.size)
     }
 
+    @Test
+    fun blockedCloudCallIsNotReportedAsSleep() {
+        startWith(pump(), rules = emptyMap())
+        scheduler.advance(15_000)
+        val connects = ewelinkLive.connects
+        // Senkron 90 sn tıkanır (DNS/ağ): bilgisayar uyumadı, duvar saati de uyanık süre de birlikte ilerler.
+        ewelink.onGetDevices = { clock.advance(90_000) }
+        engine.syncNow()
+        scheduler.advance(0)
+        ewelink.onGetDevices = null
+
+        scheduler.advance(15_000)
+
+        assertTrue(log.recent().none { it.kind == EventKind.SYSTEM })
+        assertEquals(connects, ewelinkLive.connects)
+    }
+
     // ---------------------------------------------------------------- "Kapat"
 
     @Test

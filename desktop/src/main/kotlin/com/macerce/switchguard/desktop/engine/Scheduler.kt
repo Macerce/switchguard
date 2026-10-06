@@ -1,5 +1,8 @@
 package com.macerce.switchguard.desktop.engine
 
+import com.sun.jna.Native
+import com.sun.jna.ptr.LongByReference
+import com.sun.jna.win32.StdCallLibrary
 import com.macerce.switchguard.desktop.Log
 import java.util.concurrent.RejectedExecutionException
 import java.util.concurrent.ScheduledThreadPoolExecutor
@@ -13,6 +16,9 @@ interface Clock {
 
     /** Monoton geçen süre (ms; telefondaki `SystemClock.elapsedRealtime()`): senkron ve yeniden bağlanma aralıkları. */
     fun elapsed(): Long
+
+    /** Bilgisayarın uyanık geçirdiği süre (ms): uykuda ve hazırda beklemede ilerlemez (uyku algılama). */
+    fun awake(): Long
 }
 
 object SystemClock : Clock {
@@ -20,6 +26,28 @@ object SystemClock : Clock {
 
     /** HotSpot'ta (Windows QPC, Linux CLOCK_MONOTONIC) açılıştan beri sayan pozitif değer. */
     override fun elapsed() = System.nanoTime() / 1_000_000
+
+    /**
+     * Windows: `QueryUnbiasedInterruptTime` (100 ns birim; uyku ve hazırda bekleme süresini saymaz). `nanoTime`
+     * (QPC) uykuda da saydığından bu iş için kullanılamaz. Ölçülemezse (Windows dışı, çağrı hatası) 0 döner: uyku
+     * algılama o zaman yalnızca duvar saati boşluğuna bakar (eski kural).
+     */
+    override fun awake(): Long = if (!IS_WINDOWS) 0 else try {
+        val out = LongByReference()
+        if (UnbiasedTime.INSTANCE.QueryUnbiasedInterruptTime(out)) out.value / 10_000 else 0
+    } catch (_: Throwable) {
+        0
+    }
+
+    private val IS_WINDOWS = System.getProperty("os.name").startsWith("Windows")
+
+    private interface UnbiasedTime : StdCallLibrary {
+        fun QueryUnbiasedInterruptTime(unbiasedTime: LongByReference): Boolean
+
+        companion object {
+            val INSTANCE: UnbiasedTime = Native.load("kernel32", UnbiasedTime::class.java)
+        }
+    }
 }
 
 /**

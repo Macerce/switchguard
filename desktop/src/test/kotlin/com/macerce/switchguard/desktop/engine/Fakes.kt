@@ -11,6 +11,9 @@ class FakeClock(var wallMs: Long, var elapsedMs: Long = 10_000_000L) : Clock {
     override fun wall() = wallMs
     override fun elapsed() = elapsedMs
 
+    /** Uyanık geçen süre: testlerde uyku yalnızca [wallMs]'i atlattığı için [elapsedMs] ile aynı. */
+    override fun awake() = elapsedMs
+
     /** İki saati birlikte ilerletir (normal geçen zaman). */
     fun advance(ms: Long) {
         if (ms <= 0) return
@@ -66,8 +69,12 @@ class FakeEwelink(var deviceList: List<DeviceSnapshot> = emptyList()) : EwelinkA
     val switched = mutableListOf<Triple<String, Int, Boolean>>()
     val liveEnergyRequests = mutableListOf<String>()
 
+    /** Her [getDevices] çağrısında çalışır (ör. tıkanan bir bulut çağrısını saati ilerleterek taklit etmek). */
+    var onGetDevices: (() -> Unit)? = null
+
     override fun getDevices(): List<DeviceSnapshot> {
         getDevicesCalls++
+        onGetDevices?.invoke()
         return deviceList
     }
 

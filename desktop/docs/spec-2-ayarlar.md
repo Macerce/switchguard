@@ -215,8 +215,9 @@ sihirbazı, eWeLink kendiliğinden dönüş adresi (Deneme A: onay gelince).
 - **Yavaş kapatma (I6):** "Kapat" (alarm penceresi ve tepsi) sesi ve pencereyi **arayüz tarafında hemen** kapatır
   (`DesktopHost.silenceNow`), `pendingAlarm` temizliği motora gönderilir. Bulut çağrısı tıkalıyken bile siren
   düğmeye basınca susar. Motor temizliği yaptığında arada yeni alarm geldiyse pencere yeniden açılır.
-- **Yanlış uyku kaydı (I6):** iki tick arası boşluktan bir önceki tick'in kendi çalışma süresi (monoton saat)
-  düşülür; uzun süren bir bulut çağrısı "bilgisayar uyudu" sayılmaz.
+- **Yanlış uyku kaydı (I6):** uyku = iki tick arası duvar saati boşluğu − bilgisayarın uyanık geçirdiği süre
+  (`QueryUnbiasedInterruptTime`; `nanoTime`/QPC uykuda da saydığı için kullanılamaz). Uzun süren bir bulut çağrısı
+  "bilgisayar uyudu" sayılmaz; uyku bir çağrının ortasında olsa da ölçülür.
 - **DPAPI geçici hatası (M6):** çözülemeyen gizli alan "çıkış yapılmış" sayılmadan önce bir kez yeniden denenir ve
   günlüğe yazılır.
 
