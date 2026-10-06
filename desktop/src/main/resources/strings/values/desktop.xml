@@ -150,11 +150,22 @@
     <!-- Cihazlar -->
     <string name="desktop_drag_hint">Hold a card to move it</string>
 
-    <!-- Kurallar -->
-    <string name="desktop_rules">Rules…</string>
-    <string name="desktop_rules_title_x">Rules · %1$s</string>
     <string name="desktop_windows_step_8">Installing a new version: first uninstall the old one (step 7), then run the new setup file. Your settings, accounts and sounds are kept.</string>
 
     <!-- Otomasyonlar -->
     <string name="desktop_automation_hint">Automations run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
+
+    <!-- Cihaz seçenekleri ve kart boyutu -->
+    <string name="desktop_options">Options…</string>
+    <string name="desktop_options_title_x">Options · %1$s</string>
+    <string name="desktop_section_rules">Monitoring and rules</string>
+    <string name="desktop_section_view">View</string>
+    <string name="desktop_section_simulation">Simulation (demo)</string>
+    <string name="desktop_compact_card">Small card</string>
+    <string name="desktop_compact_card_desc">Only the name, status and switch on one line</string>
+    <string name="desktop_not_monitored">Not monitored</string>
+    <string name="desktop_card_size">Card size</string>
+    <string name="desktop_card_large">Large</string>
+    <string name="desktop_card_medium">Medium</string>
+    <string name="desktop_card_small">Small</string>
 </resources>

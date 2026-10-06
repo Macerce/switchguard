@@ -150,11 +150,22 @@
     <!-- Cihazlar -->
     <string name="desktop_drag_hint">Kartı taşımak için basılı tutun</string>
 
-    <!-- Kurallar -->
-    <string name="desktop_rules">Kurallar…</string>
-    <string name="desktop_rules_title_x">Kurallar · %1$s</string>
     <string name="desktop_windows_step_8">Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.</string>
 
     <!-- Otomasyonlar -->
     <string name="desktop_automation_hint">Otomasyonlar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
+
+    <!-- Cihaz seçenekleri ve kart boyutu -->
+    <string name="desktop_options">Seçenekler…</string>
+    <string name="desktop_options_title_x">Seçenekler · %1$s</string>
+    <string name="desktop_section_rules">İzleme ve kurallar</string>
+    <string name="desktop_section_view">Görünüm</string>
+    <string name="desktop_section_simulation">Simülasyon (demo)</string>
+    <string name="desktop_compact_card">Küçük kart</string>
+    <string name="desktop_compact_card_desc">Tek satırda yalnızca ad, durum ve anahtar</string>
+    <string name="desktop_not_monitored">İzlenmiyor</string>
+    <string name="desktop_card_size">Kart boyutu</string>
+    <string name="desktop_card_large">Büyük</string>
+    <string name="desktop_card_medium">Orta</string>
+    <string name="desktop_card_small">Küçük</string>
 </resources>

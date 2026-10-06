@@ -41,6 +41,8 @@ object BackupContent {
         // izleme ve genel
         "monitoring", "pollIntervalSec", "offlineGraceSec", "alwaysAwake",
         "autostart", "language", "theme", "demo", "onboardingDone", "summaryEnabled", "summaryMinute",
+        // görünüm (masaüstü)
+        "cardSize",
     )
 
     val CLEARED: Set<String> = setOf(
