@@ -35,6 +35,14 @@ Kaynak: `tv-tablet` dalı `132e7fe` commit'i (master merge ile aynı içerik `c5
 | TuyaClient.kt | app/src/main/java/com/macerce/switchguard/api/ | yok |
 | TuyaSocket.kt | app/src/main/java/com/macerce/switchguard/api/ | `android.util.Log` → `com.macerce.switchguard.desktop.Log` (yalnızca import; `Log.w(TAG, msg, e)` çağrısı aynı) |
 
+## Kopyalanan Dosyalar (data/)
+
+| dosya | kaynak yolu | uyarlama |
+|-------|-------------|----------|
+| EventLog.kt | app/src/main/java/com/macerce/switchguard/data/ | uyarlandı: `SQLiteOpenHelper(Context)` → `EventLog(file: Path)` + tek JDBC bağlantısı (`org.xerial:sqlite-jdbc`), tüm yöntemler `@Synchronized`, `PRAGMA journal_mode=WAL`; sorgular hazır ifade + bağlı parametre; aynı `events` tablosu ve `idx_events_ts` (şema sürümü 2, `PRAGMA user_version`; `CREATE ... IF NOT EXISTS`); `onUpgrade`/eski kayıt taşıması yok; `EventLog.strings(context)` yok (yerine `Strings.eventStrings()`); `get(context)` tekili yok (çağıran tek örnek kurar); `EventKind.SYSTEM` eklendi; `close()` eklendi (`AutoCloseable`). Genel API, `MAX_ROWS` ve SQL aynı |
+| MetricsLog.kt | app/src/main/java/com/macerce/switchguard/data/ | uyarlandı: `SQLiteOpenHelper(Context)` → `MetricsLog(file: Path)` + tek JDBC bağlantısı, tüm yöntemler `@Synchronized` (telefonda yalnızca `record`), `PRAGMA journal_mode=WAL`; sorgular hazır ifade + bağlı parametre (`prune` kesim zamanı metin yerine `Long` bağlanır); aynı `power`/`state` tabloları ve indeksleri (şema sürümü 1, `PRAGMA user_version`); `onUpgrade` yok; `get(context)` tekili yok; `close()` eklendi. Genel API, `POWER_EVERY_MS`, `KEEP_DAYS`, `record` mantığı aynı |
+| LiveState.kt | app/src/main/java/com/macerce/switchguard/data/ | yok |
+
 ## Test Dosyaları (core/)
 
 | dosya | kaynak yolu | uyarlama |
