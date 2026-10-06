@@ -5,6 +5,7 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.desktop.Log
 import java.io.InputStream
+import java.util.IllegalFormatException
 import java.util.Locale
 import java.util.concurrent.ConcurrentHashMap
 import javax.xml.parsers.DocumentBuilderFactory
@@ -15,7 +16,7 @@ import org.w3c.dom.Element
  * dosyaları classpath'ten okunur ve dil başına birleştirilir. Anahtar seçili dilde yoksa İngilizce,
  * orada da yoksa anahtarın kendisi döner.
  */
-class Strings private constructor(
+class Strings internal constructor(
     /** "tr" ya da "en". */
     val language: String,
     private val table: Map<String, String>,
@@ -26,7 +27,23 @@ class Strings private constructor(
     operator fun get(key: String): String =
         table[key] ?: english[key] ?: key.also { if (warned.add(key)) Log.w(TAG, "missing string '$key' ($language)") }
 
-    fun format(key: String, vararg args: Any): String = String.format(Locale.forLanguageTag(language), get(key), *args)
+    /**
+     * Şablonu biçimler; asla fırlatmaz: alarm/olay metni bir çeviri hatası yüzünden düşmesin. Seçili dildeki şablon
+     * argümanlara uymazsa İngilizce şablon denenir; o da uymazsa şablon olduğu gibi, argümanlar köşeli parantezde döner.
+     */
+    fun format(key: String, vararg args: Any): String {
+        val template = get(key)
+        tryFormat(language, template, args)?.let { return it }
+        english[key]?.takeIf { it != template }?.let { en -> tryFormat("en", en, args)?.let { return it } }
+        return "$template [${args.joinToString(", ")}]"
+    }
+
+    private fun tryFormat(lang: String, template: String, args: Array<out Any>): String? = try {
+        String.format(Locale.forLanguageTag(lang), template, *args)
+    } catch (e: IllegalFormatException) {
+        Log.w(TAG, "bad format for '$template' ($lang): $e")
+        null
+    }
 
     /** Telefondaki `EventLog.strings(context)` ile aynı anahtarlar. */
     fun eventStrings() = EventStrings(

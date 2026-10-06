@@ -135,6 +135,51 @@ class StringsTest {
         }
     }
 
+    // ---------------------------------------------------------------- bozuk metin şablonu (alarm metni asla düşmesin)
+
+    @Test
+    fun brokenTranslationFallsBackToTheEnglishTemplate() {
+        // TR şablonu sayı bekliyor, çağıran metin veriyor: String.format fırlatır.
+        val s = Strings("tr", mapOf("k" to "%1\$d dk uyudu"), mapOf("k" to "asleep for %1\$s"))
+
+        assertEquals("asleep for beş", s.format("k", "beş"))
+    }
+
+    @Test
+    fun brokenTemplateEverywhereNeverThrowsAndKeepsTheArguments() {
+        val s = Strings("en", mapOf("k" to "Pump %1\$d off"), mapOf("k" to "Pump %1\$d off"))
+
+        assertEquals("Pump %1\$d off [Kuyu]", s.format("k", "Kuyu"))
+    }
+
+    @Test
+    fun missingArgumentFallsBackInsteadOfThrowing() {
+        val s = Strings("tr", mapOf("k" to "%1\$s ve %2\$s"), mapOf("k" to "%1\$s"))
+
+        assertEquals("Pompa", s.format("k", "Pompa"))
+    }
+
+    @Test
+    fun englishAndTurkishTakeTheSameFormatArguments() {
+        for (file in listOf("strings.xml", "desktop.xml")) {
+            val english = Strings.parse(resource("/strings/values/$file"))
+            val turkish = Strings.parse(resource("/strings/values-tr/$file"))
+            for ((key, tr) in turkish) {
+                val en = english[key] ?: continue
+                assertEquals("$file $key: EN '$en' / TR '$tr'", specifiers(en), specifiers(tr))
+            }
+        }
+    }
+
+    /** Biçim belirteçleri: "konum:dönüşüm" kümesi (`%%` ve `%n` hariç; konumsuzlar sırayla numaralanır). */
+    private fun specifiers(text: String): Set<String> {
+        var next = 0
+        return Regex("""%(?:(\d+)\$)?[-#+ 0,(<]*\d*(?:\.\d+)?([a-zA-Z%])""").findAll(text)
+            .filter { it.groupValues[2] != "%" && it.groupValues[2] != "n" }
+            .map { m -> "${m.groupValues[1].ifEmpty { (++next).toString() }}:${m.groupValues[2].lowercase()}" }
+            .toSet()
+    }
+
     private fun resource(path: String) =
         checkNotNull(StringsTest::class.java.getResourceAsStream(path)) { "missing resource $path" }
 
