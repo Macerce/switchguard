@@ -13,7 +13,8 @@ akıcı biçimde yer değiştirsin ve cihaz başına kural ayarlanabilsin.
 bilgisayarda da çözülebilsin; format sonrası ya da başka PC'ye); ses dosyası da yedeğe girsin, geri yüklemede tüm
 ayarlar gelsin; alarm sesi yükle/değiştir (WAV ve MP3); eWeLink hesabı ekle/kaldır (yedek hesap, geliştirici onayı
 bekleniyor); Tuya hesabı ekle/kaldır; cihaz kartları uzun basınca yer değiştirsin, akıcılık çok önemli; kartta basit
-kural ayarı. "Söylediklerin mantıklı, yap bakalım, gerekirse düzenleriz."
+kural ayarı; kurulum talimatları ("nasıl kurulur" anlatımları). "Söylediklerin mantıklı, yap bakalım, gerekirse
+düzenleriz."
 
 **Başarı ölçütleri**
 - Tuya Access ID/Secret/veri merkezi girilince bulunan cihaz sayısı gösterilir; cihazlar Cihazlar ekranında görünür
@@ -27,16 +28,18 @@ kural ayarı. "Söylediklerin mantıklı, yap bakalım, gerekirse düzenleriz."
   özetler, onaylanınca tüm ayarları yedektekiyle değiştirir; başka bilgisayarda da aynı şifreyle açılır.
 - Kart basılı tutulunca kalkar, sürüklenir, öbür kartlar animasyonla kayar, bırakınca sıra kaydedilir; takılma yok.
 - Kartta "İzle" anahtarı ve "Kurallar" penceresi (olay başına ALARM / BİLDİRİM / YOK).
+- Tuya ve eWeLink pencerelerinde adım adım "Nasıl kurulur?" anlatımı; Ayarlar'da "Yardım ve kurulum"; masaüstünde
+  exe'nin yanında kurulum talimatları dosyası.
 
 ## 2. Kapsam
 
 **Dahil:** Sol menü (Cihazlar · Ayarlar) · Ayarlar sayfası (aşağıdaki bölümler) · Tuya ve eWeLink hesap akışları ·
 ses yükleme (WAV/MP3) · şifreli yedek/geri yükleme · Cihazlar ızgarasında sürükle-bırak sıralama · kartta İzle +
-Kurallar · 2. aşama giriş kapısı maddeleri (§9) · sürüm 0.2.0, kurulum, masaüstüne exe.
+Kurallar · kurulum talimatları (§7a) · 2. aşama giriş kapısı maddeleri (§9) · sürüm 0.2.0, kurulum, masaüstüne exe.
 
 **Dahil değil (sonraki işler):** Otomasyonlar ve Geçmiş ekranları, cihaz ayrıntı paneli (enerji grafikleri,
 zamanlayıcılar, cihaza özel ses seçimi), kategoriler / öncelikli / küçük kart, günlük özet, Wi-Fi aktarma, kurulum
-sihirbazı, rehber/video bağlantıları, eWeLink kendiliğinden dönüş adresi (Deneme A: onay gelince).
+sihirbazı, eWeLink kendiliğinden dönüş adresi (Deneme A: onay gelince).
 
 ## 3. Arayüz yapısı
 
@@ -51,6 +54,7 @@ sihirbazı, rehber/video bağlantıları, eWeLink kendiliğinden dönüş adresi
 | Alarm | Alarm sesi · Bildirim sesi · Ses düzeyi · Sessiz saatler (aç/kapa, başlangıç, bitiş) · Test alarmı |
 | Genel | Dil (Sistem / Türkçe / English) · Tema (Sistem / Açık / Koyu) |
 | Yedekleme | Dosyaya yedekle… · Dosyadan geri yükle… |
+| Yardım ve kurulum | Windows'a kurulum · Tuya kurulumu · eWeLink kurulumu (her biri uygulama içi adım adım anlatım + resimli rehber ve video bağlantısı) |
 | Hakkında | Sürüm · Günlük klasörünü aç |
 
 - Metinler: telefonda karşılığı olan satırlar telefonun anahtarlarını kullanır (`section_*`, `poll_interval`,
@@ -161,6 +165,32 @@ sihirbazı, rehber/video bağlantıları, eWeLink kendiliğinden dönüş adresi
   çevrimdışı oldu, çevrimiçi oldu) ALARM / BİLDİRİM / YOK. Yazma motor üzerinden (`spec.md` §4: arayüz yalnızca
   motora gönderir); mevcut demo aç/kapa yarışı (M5) da bu yola alınır.
 
+## 7a. Kurulum talimatları
+
+- **Kaynak:** depodaki resimli rehberler `docs/guide/{tuya,ewelink}.{tr,en}.md` (telefonun bağlandığı
+  `https://github.com/Macerce/switchguard/blob/master/docs/guide/<bulut>.<dil>.md`) ve videolar (Tuya
+  `https://youtu.be/sCdvMs7CSic`, eWeLink `https://youtu.be/jK_KcG2OPao`). Uygulama içi metinler bu rehberlerin
+  kısaltılmış adımlarıdır; internet olmadan okunur (`desktop.xml`, EN + TR).
+- **Tuya penceresi → "Nasıl kurulur?" (açılır bölüm):** 1) platform.tuya.com'da ücretsiz hesap · 2) Cloud →
+  Development → Create Cloud Project (veri merkezi: Türkiye/Avrupa için Orta Avrupa) → Authorize · 3) Devices → Link
+  App Account → Smart Life'ta QR kodu okut · 4) Message Service'i aç, kural oluştur, **kuralın anahtarını aç** ·
+  5) Overview'dan Access ID ve Access Secret'ı kopyala · 6) buraya yapıştır, veri merkezini seç, Bağlan. Düğmeler:
+  "platform.tuya.com'u aç", "Resimli rehberi aç", "Videoyu izle". Telefondakiyle aynı anahtarlar kullanılabilir notu.
+- **eWeLink penceresi → "Nasıl kurulur?":** 1) Bu bilgisayar için ayrı bir eWeLink hesabı (eWeLink uygulamasından
+  açılır, cihazlar o hesapla paylaşılır) · 2) dev.ewelink.cc'de o hesapla giriş → Console → bireysel geliştirici
+  başvurusu → **eWeLink'in onayını bekle** · 3) App List → Create, Redirect URL `https://127.0.0.1` (birebir) · 4)
+  View → APPID ve APP SECRET'ı kopyala · 5) "API bilgileri"ne yapıştır · 6) "Giriş yap" → tarayıcıda giriş →
+  "bağlanılamıyor" sayfası normaldir → adres çubuğundaki adresi kopyala, SwitchGuard kendiliğinden alır. Düğmeler:
+  "dev.ewelink.cc'yi aç", "Redirect URL'yi kopyala", "Resimli rehberi aç", "Videoyu izle".
+- **Ayarlar → Yardım ve kurulum → Windows'a kurulum:** kurulum exe'sini çalıştırma; imzasız olduğu için SmartScreen'de
+  "Ek bilgi → Yine de çalıştır"; yönetici izni istemez, `%LOCALAPPDATA%\SwitchGuard`'a kurulur; masaüstü ve Başlat
+  kısayolu; Windows ile başlar ve tepside durur (kapatınca tepside çalışmaya devam eder, tamamen çıkmak için tepsi →
+  Çıkış); başka bilgisayara geçiş: eski bilgisayarda yedek al → yenisinde kur → Dosyadan geri yükle → eWeLink'e
+  yeniden giriş; kaldırma: Windows Ayarlar → Uygulamalar → SwitchGuard → Kaldır.
+- **Masaüstündeki talimat dosyası:** `SwitchGuard Kurulum Talimatları.txt` (Türkçe, UTF-8 BOM'lu, Not Defteri'nde
+  doğru açılır), aynı Windows kurulumu metni + Tuya/eWeLink rehber bağlantıları; kaynağı `desktop/docs/kurulum.tr.txt`.
+- Bağlantılar varsayılan tarayıcıda açılır (`Desktop.browse`); açılamazsa adres panoya kopyalanır ve söylenir.
+
 ## 8. Mimari birimler (yeni / değişen)
 
 | Birim | Görev |
@@ -177,6 +207,8 @@ sihirbazı, rehber/video bağlantıları, eWeLink kendiliğinden dönüş adresi
 | `data/Store.kt` | `notifySoundUri`; izin listesi dışa/içe aktarma (`exportSettings`, `replaceSettings`) |
 | `ui/DevicesScreen.kt` | Reorderable ızgara, İzle, Kurallar |
 | `engine/MonitorEngine.kt` | `setRules`, `setMonitored` (motor üzerinden), §9 düzeltmeleri |
+| `ui/settings/HelpSection.kt`, `ui/settings/SetupSteps.kt` | Yardım ve kurulum bölümü, açılır adım listeleri, bağlantı düğmeleri |
+| `platform/Links.kt` | Tarayıcıda aç / olmazsa panoya kopyala; rehber ve video adresleri (dil seçimine göre) |
 
 ## 9. 2. aşama giriş kapısı (gerçek hesaplar gelmeden önce zorunlu)
 
