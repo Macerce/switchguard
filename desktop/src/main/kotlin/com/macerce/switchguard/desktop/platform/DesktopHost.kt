@@ -4,6 +4,7 @@ import androidx.compose.ui.window.Notification
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppState
+import com.macerce.switchguard.desktop.Log
 import com.macerce.switchguard.desktop.engine.MonitorHost
 import com.macerce.switchguard.desktop.i18n.Strings
 
@@ -60,9 +61,13 @@ class DesktopHost(
 
     /** [w] çalmıyorsa başlatır; [ringing] yalnızca başarıda kaydedilir, başarısızsa sonraki tick yeniden dener. */
     private fun ring(w: Ringing) {
+        val previous = wanted
         wanted = w
         if (ringing == w && sounds.isLooping()) return
+        // Aynı alarm sürerken ses çalmıyorsa (önceki deneme başarısız ya da klip durdu): bekçi devrede.
+        if (previous == w) Log.w(TAG, "alarm sound is not playing; restarting it")
         ringing = if (sounds.loop(w.sound, w.volume)) w else null
+        if (ringing == null) Log.w(TAG, "alarm sound could not start; retrying on the next tick")
     }
 
     @Synchronized
@@ -94,5 +99,9 @@ class DesktopHost(
     /** Motor iş parçacığından çağrılır; Windows uyku engelini iş parçacığı başına tuttuğu için burada iş parçacığı değiştirilmez. */
     override fun keepAwake(on: Boolean) {
         KeepAwake.set(on)
+    }
+
+    private companion object {
+        const val TAG = "DesktopHost"
     }
 }
