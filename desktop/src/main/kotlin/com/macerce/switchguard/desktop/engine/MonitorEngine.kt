@@ -103,7 +103,7 @@ class MonitorEngine(
     private var ewState: Pair<ConnState, String>? = null
     private var tuyaState: Pair<ConnState, String>? = null
 
-    /** Masaüstü: bir önceki tick'in duvar saati (uyku algılama, bkz. [detectSleep]); 0 = bu çalışmada henüz tick yok. */
+    /** Masaüstü: bir önceki tick'in duvar saati (uyku algılama, bkz. [sleptFor]); 0 = bu çalışmada henüz tick yok. */
     private var lastTickWall = 0L
 
     /**
@@ -280,10 +280,14 @@ class MonitorEngine(
         if (!running) return
         val now = clock.elapsed()
         val wall = clock.wall()
-        detectSleep(wall)
+        val slept = sleptFor(wall)
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
+        // Uykuda süresi dolan bekletmeler ve süreli otomasyonlar yukarıda, uyumadan önceki son bilinen durumla
+        // değerlendirildi (telefondaki sıra); taze durum ancak şimdi okunur. Önce okunsaydı uyku boyunca çevrimdışı
+        // kalıp uyanınca dönmüş cihaz "kısa kopma" sayılır, alarm hiç çalmazdı.
+        if (slept > 0) resyncAfterSleep(slept)
         tuyaTick(now)
         demoTick(wall)
 
@@ -304,16 +308,22 @@ class MonitorEngine(
     }
 
     /**
-     * Masaüstü: duvar saati iki tick arasında [SLEEP_GAP_MS]'den fazla ilerlediyse bilgisayar uyumuştur; bağlantılar
-     * kopmuş, olaylar kaçmış olabilir. Bağlantılar baştan kurulur, iki bulut hemen senkronlanır; [SLEEP_LOG_MS] ve
-     * üstü uykular geçmişe yazılır. Küçük ya da geriye atlamalar (NTP düzeltmesi, saati geri alma) yok sayılır.
+     * Masaüstü: duvar saati iki tick arasında [SLEEP_GAP_MS]'den fazla ilerlediyse bilgisayar uyumuştur; uyku süresi
+     * (ms) döner, uyumadıysa 0. Küçük ya da geriye atlamalar (NTP düzeltmesi, saati geri alma) yok sayılır.
      */
-    private fun detectSleep(wall: Long) {
+    private fun sleptFor(wall: Long): Long {
         val last = lastTickWall
         lastTickWall = wall
-        if (last == 0L) return
+        if (last == 0L) return 0
         val gap = wall - last
-        if (gap <= SLEEP_GAP_MS) return
+        return if (gap > SLEEP_GAP_MS) gap else 0
+    }
+
+    /**
+     * Masaüstü: uykudan sonra bağlantılar kopmuş, olaylar kaçmış olabilir. Bağlantılar baştan kurulur, iki bulut
+     * hemen senkronlanır; [SLEEP_LOG_MS] ve üstü uykular geçmişe yazılır.
+     */
+    private fun resyncAfterSleep(gap: Long) {
         if (gap >= SLEEP_LOG_MS) {
             val s = strings()
             log.add("", s["app_name"], EventKind.SYSTEM, s.format("desktop_slept", gap / 60_000), "")

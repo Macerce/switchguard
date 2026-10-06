@@ -196,6 +196,43 @@ class MonitorEngineTest {
     }
 
     @Test
+    fun offlineHeldAcrossSleepStillAlarms() {
+        store.offlineGraceSec = 60
+        startWith(
+            pump(),
+            rules = mapOf(EventType.WENT_OFFLINE to AlertAction.ALARM, EventType.CAME_ONLINE to AlertAction.NOTIFY),
+        )
+        cloudUpdate(online = false) // bekletiliyor
+        assertTrue(host.alarms.isEmpty())
+
+        clock.wallMs += 10 * 60_000L // uyku boyunca bekleme süresi doldu
+        ewelink.deviceList = ewelink.deviceList.map { if (it.id == id) it.copy(online = true) else it } // uyanınca bulutta yine çevrimiçi
+        scheduler.advance(15_000) // uyanınca ilk tick
+
+        assertEquals(1, host.alarms.size)
+        val events = log.recent(id)
+        assertEquals(1, events.count { it.kind == EventType.WENT_OFFLINE.name && it.action == "ALARM" })
+        assertTrue(events.none { it.kind == EventKind.SHORT_DROP })
+    }
+
+    @Test
+    fun durationAutomationDueDuringSleepFires() {
+        store.automations = listOf(
+            Automation(
+                id = "auto-$id", name = "Pump left on", enabled = true,
+                trigger = Trigger(TriggerKind.STAYED_ON, id, channel = 0, minutes = 10),
+                action = AutoAction(ActionKind.ALARM),
+            )
+        )
+        startWith(pump(on = true), rules = emptyMap())
+
+        clock.wallMs += 15 * 60_000L // uyku; kanal bulutta hâlâ açık
+        scheduler.advance(15_000) // uyanınca ilk tick
+
+        assertEquals(1, host.alarms.size)
+    }
+
+    @Test
     fun pendingAlarmRestoredOnStart() {
         store.pendingAlarm = listOf("12:00  x")
 
