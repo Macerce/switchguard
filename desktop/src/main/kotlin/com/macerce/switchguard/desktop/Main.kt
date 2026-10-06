@@ -12,7 +12,9 @@ import androidx.compose.ui.window.Tray
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.isTraySupported
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.platform.Autostart
 import com.macerce.switchguard.desktop.platform.NotificationQueue
+import com.macerce.switchguard.desktop.platform.SingleInstance
 import com.macerce.switchguard.desktop.platform.TrayIcons
 import com.macerce.switchguard.desktop.ui.AlarmWindow
 import com.macerce.switchguard.desktop.ui.ExitConfirmDialog
@@ -26,8 +28,30 @@ import kotlin.system.exitProcess
 private fun dataDir(): Path =
     Paths.get(System.getenv("APPDATA") ?: Paths.get(System.getProperty("user.home"), "AppData", "Roaming").toString(), "SwitchGuard")
 
-fun main() {
+/** Oturum açılışında Run değerinin eklediği bayrak: pencere gizli, yalnızca tepsi simgesiyle başlar. */
+private const val TRAY_FLAG = "--tray"
+
+fun main(args: Array<String>) {
     val dataDir = dataDir()
+    Log.init(dataDir)
+
+    // Tek örnek kilidi AppGraph'tan ÖNCE alınır: ikinci örnek veritabanlarını açmaz, ikinci bir motor başlatmaz;
+    // yalnızca ilk örneğe "göster" der ve çıkar. Kilit alınamıyorsa (dizin/dosya hatası) asla başlanmaz.
+    val showRelay = ShowRelay()
+    val instance = SingleInstance(dataDir)
+    val owner = try {
+        instance.acquire(showRelay::request)
+    } catch (e: Exception) {
+        failStartup(dataDir, e)
+    }
+    if (!owner) {
+        Log.i("Main", "another instance is already running, exiting")
+        exitProcess(0)
+    }
+    // `application` çıkışta süreci kendisi sonlandırır (kod bir sonraki satıra dönmez); kilit ve port dosyası bu yüzden
+    // kapanış kancasında bırakılır. Kilit süreç ölünce zaten işletim sistemince bırakılır, kanca port dosyasını siler.
+    Runtime.getRuntime().addShutdownHook(Thread(instance::release, "single-instance-release"))
+
     // Ayarlar okunamıyorsa (Store IOException atar) ya da veritabanı açılamıyorsa asla başlanmaz: boş ayarla
     // başlamak asıl dosyanın üzerine yazılmasına yol açabilir.
     val graph = try {
@@ -35,9 +59,50 @@ fun main() {
     } catch (e: Exception) {
         failStartup(dataDir, e)
     }
+    // Tepsi yoksa gizli başlamanın geri dönüşü olmaz (bkz. SwitchGuardApp'teki kapatma kuralı): bayrak yok sayılır.
+    if (TRAY_FLAG in args && isTraySupported) graph.appState.windowVisible.value = false
+    // Gizli başlangıçtan sonra bağlanır: hazırlık sırasında gelen "göster" isteği pencereyi yine açar.
+    showRelay.bind(graph.appState::showMainWindow)
+
+    syncAutostart(Autostart(), graph.store.autostart)
+
     // Çıkışta monitoringEnabled değişmez: bir sonraki açılışta izleme (ve kapatılmamış alarm) geri gelir.
     if (graph.store.monitoringEnabled) graph.engine.start()
     application { SwitchGuardApp(graph) }
+}
+
+/**
+ * Windows ile başlatma ayarını kayıt defteriyle eşitler: açıksa değer yoksa yazılır, yanlış yolu varsa
+ * (yeniden kurulum) düzeltilir; kapalıysa silinir. Kurulu uygulama değilsek (`./gradlew run`) hiç dokunulmaz.
+ */
+private fun syncAutostart(autostart: Autostart, enabled: Boolean) {
+    if (!autostart.available) return
+    autostart.setEnabled(enabled)
+}
+
+/**
+ * İkinci örneğin "göster" isteği, [AppGraph] daha kurulurken gelebilir: hazır olana kadar bekletilir, [bind] ile
+ * hedef verilince uygulanır. İstek dinleyici iş parçacığından gelir; [AppState.showMainWindow] yalnızca
+ * [kotlinx.coroutines.flow.StateFlow]'lara yazar, iş parçacığı geçişi gerekmez.
+ */
+private class ShowRelay {
+    private var target: (() -> Unit)? = null
+    private var pending = false
+
+    @Synchronized
+    fun request() {
+        val t = target
+        if (t == null) pending = true else t()
+    }
+
+    @Synchronized
+    fun bind(t: () -> Unit) {
+        target = t
+        if (pending) {
+            pending = false
+            t()
+        }
+    }
 }
 
 private fun failStartup(dataDir: Path, e: Exception): Nothing {

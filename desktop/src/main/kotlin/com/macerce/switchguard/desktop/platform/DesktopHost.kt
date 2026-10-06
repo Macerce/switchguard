@@ -70,7 +70,8 @@ class DesktopHost(
         this.state.setStatus(state, text)
     }
 
+    /** Motor iş parçacığından çağrılır; Windows uyku engelini iş parçacığı başına tuttuğu için burada iş parçacığı değiştirilmez. */
     override fun keepAwake(on: Boolean) {
-        // Görev 10'a kadar boş: SetThreadExecutionState orada bağlanır.
+        KeepAwake.set(on)
     }
 }
