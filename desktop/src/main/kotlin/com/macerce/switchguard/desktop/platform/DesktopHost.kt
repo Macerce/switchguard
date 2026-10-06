@@ -34,11 +34,15 @@ class DesktopHost(
     /** Alarm sürdükçe çalması gereken ses; alarm kapatılınca null. */
     private var wanted: Ringing? = null
 
+    /** Kullanıcının kapattığı ama motorun henüz temizlemediği satırlar ([silenceNow]); yoksa null. */
+    private var silenced: List<String>? = null
+
     /** Gerçekten çalmaya başlamış ses (yalnızca `loop` başarılıysa); aynı ses yeni satırla baştan başlayıp tıkırdamasın. */
     private var ringing: Ringing? = null
 
     @Synchronized
     override fun showAlarm(lines: List<String>, sound: String?) {
+        silenced = null
         state.setAlarmLines(lines)
         ring(Ringing(sound ?: store.alarmSoundUri, store.alarmVolume))
         display.wake()
@@ -49,6 +53,8 @@ class DesktopHost(
     override fun ensureAlarmVisible() {
         // Pencere hiç yoksa (satırlar boş) ama kapatılmamış alarm duruyorsa yeniden kur; yoksa öne getir.
         val pending = store.pendingAlarm
+        // Kullanıcı az önce kapattı, motor temizliği yolda: geri getirme.
+        if (pending == silenced) return
         if (state.alarmLines.value.isEmpty() && pending.isNotEmpty()) {
             showAlarm(pending, null)
             return
@@ -70,8 +76,23 @@ class DesktopHost(
         if (ringing == null) Log.w(TAG, "alarm sound could not start; retrying on the next tick")
     }
 
+    /**
+     * Arayüzden "Kapat": [lines] (ekranda görünen satırlar) için ses ve pencere **hemen** kapanır; kalıcı temizliği
+     * motor ([MonitorEngine.dismissAlarm]) sonra yapar. O arada gelen tick, aynı satırları yeniden açmasın diye
+     * [silenced] tutulur; yeni bir satır ([showAlarm]) bu işareti kaldırır.
+     */
+    @Synchronized
+    fun silenceNow(lines: List<String>) {
+        silenced = lines
+        wanted = null
+        ringing = null
+        sounds.stop()
+        state.clearAlarm()
+    }
+
     @Synchronized
     override fun stopAlarm() {
+        silenced = null
         wanted = null
         ringing = null
         sounds.stop()

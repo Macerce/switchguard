@@ -122,11 +122,18 @@ class MonitorEngine(
     /** `ACTION_STOP`: izlemeyi kapatır (`monitoringEnabled` = false); alarm susar, bilgisayar uyuyabilir. */
     fun stop() = stopMonitoring()
 
-    /** `ACTION_DISMISS`. */
-    fun dismissAlarm() {
+    /**
+     * `ACTION_DISMISS`. Masaüstü: yalnızca kullanıcının gördüğü [lines] kapatılır (ses ve pencere arayüz tarafında
+     * zaten kapandı, bkz. `AppGraph.dismissAlarm`). Tıklamayla bu iş arasında gelen yeni satır kaybolmaz: kalırsa
+     * alarm onunla yeniden gösterilir.
+     */
+    fun dismissAlarm(lines: List<String>) {
         scheduler.post {
-            store.pendingAlarm = emptyList()
-            host.stopAlarm()
+            val pending = store.pendingAlarm
+            val rest = if (pending.take(lines.size) == lines) pending.drop(lines.size)
+                else pending.toMutableList().apply { lines.forEach { remove(it) } }
+            store.pendingAlarm = rest
+            if (rest.isEmpty()) host.stopAlarm() else host.showAlarm(rest, null)
         }
     }
 

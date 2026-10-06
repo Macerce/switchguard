@@ -102,6 +102,17 @@ class AppGraph(val dataDir: Path) {
     }
 
     /**
+     * Kullanıcı alarmı kapattı (alarm penceresi ya da tepsi): ekrandaki satırlar için siren ve pencere arayüz
+     * tarafında **hemen** kapanır, kalıcı temizlik motora gönderilir. Motor o an bir bulut çağrısında tıkalı olsa da
+     * siren düğmeye basınca susar; arada gelen yeni alarm satırı korunur.
+     */
+    fun dismissAlarm() {
+        val lines = appState.alarmLines.value
+        host.silenceNow(lines)
+        engine.dismissAlarm(lines)
+    }
+
+    /**
      * Uygulamadan çıkış: motor kapanır (`monitoringEnabled` değişmez, bir sonraki açılışta izleme ve alarm geri
      * gelir), ses susar, günlük veritabanları kapanır. Motor kapandıktan sonra çağrılır; veritabanları yalnızca
      * burada kapatılır (kapandıktan sonraki çağrılar fırlatır).

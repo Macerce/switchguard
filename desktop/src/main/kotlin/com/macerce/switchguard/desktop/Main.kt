@@ -171,7 +171,7 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
             onAction = appState::showMainWindow,
             menu = {
                 for (action in trayActions(alarmPending = alarmLines.isNotEmpty())) when (action) {
-                    TrayAction.DISMISS_ALARM -> Item(strings["tray_dismiss_alarm"], onClick = graph.engine::dismissAlarm)
+                    TrayAction.DISMISS_ALARM -> Item(strings["tray_dismiss_alarm"], onClick = graph::dismissAlarm)
                     TrayAction.OPEN -> Item(strings["tray_open"], onClick = appState::showMainWindow)
                     TrayAction.MONITORING -> Item(
                         strings[if (monitoring) "tray_stop" else "tray_start"],

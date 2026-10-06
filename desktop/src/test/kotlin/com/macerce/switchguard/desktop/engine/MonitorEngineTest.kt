@@ -24,6 +24,7 @@ import com.macerce.switchguard.desktop.data.PlainCodec
 import com.macerce.switchguard.desktop.i18n.Strings
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
@@ -426,6 +427,40 @@ class MonitorEngineTest {
         scheduler.advance(10 * 60_000L + 100)
 
         assertEquals(2, host.alarms.size)
+    }
+
+    // ---------------------------------------------------------------- "Kapat"
+
+    @Test
+    fun dismissKeepsALineThatArrivedAfterTheClick() {
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM, EventType.TURNED_ON to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+        val seen = store.pendingAlarm
+        assertEquals(1, seen.size)
+
+        // Kullanıcı "Kapat"a basarken motorun kuyruğunda yeni bir olay bekliyor: önce o işlenir, sonra kapatma.
+        val update = WsEvent.Update(id, null, mapOf(0 to true))
+        ewelink.deviceList = ewelink.deviceList.map { WsMessages.apply(it, update) }
+        ewelinkLive.listener.onEvent(update)
+        engine.dismissAlarm(seen)
+        scheduler.advance(0)
+
+        assertEquals(1, store.pendingAlarm.size)
+        assertNotEquals(seen.single(), store.pendingAlarm.single())
+        assertEquals(store.pendingAlarm, host.alarms.last().lines)
+    }
+
+    @Test
+    fun dismissOfAllLinesStopsTheAlarm() {
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+        val stopsBefore = host.stopAlarmCalls
+
+        engine.dismissAlarm(store.pendingAlarm)
+        scheduler.advance(0)
+
+        assertTrue(store.pendingAlarm.isEmpty())
+        assertEquals(stopsBefore + 1, host.stopAlarmCalls)
     }
 
     // ---------------------------------------------------------------- yardımcılar

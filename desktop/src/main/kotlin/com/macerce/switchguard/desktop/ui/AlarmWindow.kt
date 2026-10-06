@@ -126,7 +126,7 @@ private fun AlarmWindowContent(
                 }
                 Spacer(Modifier.height(32.dp))
                 Button(
-                    onClick = { graph.engine.dismissAlarm() },
+                    onClick = graph::dismissAlarm,
                     modifier = Modifier.widthIn(min = 360.dp).height(88.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = AlarmRed),
                 ) {

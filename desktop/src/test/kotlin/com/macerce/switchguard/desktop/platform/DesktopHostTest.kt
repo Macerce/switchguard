@@ -143,4 +143,39 @@ class DesktopHostTest {
         alarm("12:00  a", "12:01  b")
         assertEquals(2, display.wakes)
     }
+
+    // ---------------------------------------------------------------- "Kapat": arayüz tarafında anında susturma
+
+    @Test
+    fun silenceNowStopsSoundAndWindowAtOnce() {
+        alarm("12:00  a")
+
+        host.silenceNow(listOf("12:00  a"))
+
+        assertEquals(1, sound.stops)
+        assertTrue(state.alarmLines.value.isEmpty())
+    }
+
+    @Test
+    fun tickAfterSilenceDoesNotBringTheDismissedAlarmBack() {
+        alarm("12:00  a")
+        host.silenceNow(listOf("12:00  a")) // motor temizliği henüz yapmadı: pendingAlarm hâlâ dolu
+
+        host.ensureAlarmVisible()
+
+        assertEquals(1, sound.loops.size)
+        assertTrue(state.alarmLines.value.isEmpty())
+    }
+
+    @Test
+    fun newAlarmAfterSilenceRingsAgain() {
+        alarm("12:00  a")
+        host.silenceNow(listOf("12:00  a"))
+
+        alarm("12:00  a", "12:01  b")
+
+        assertEquals(listOf("12:00  a", "12:01  b"), state.alarmLines.value)
+        assertTrue(sound.isLooping())
+        assertEquals(2, sound.loops.size)
+    }
 }
