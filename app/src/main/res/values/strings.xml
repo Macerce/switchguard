@@ -237,6 +237,8 @@
     <string name="perm_battery">Background activity</string>
     <string name="perm_battery_ok">Unrestricted</string>
     <string name="perm_battery_missing">Restricted — alarms may be delayed. Tap to fix.</string>
+    <string name="perm_full_screen">Full-screen alarm</string>
+    <string name="perm_full_screen_missing">Not allowed — the alarm won\'t fill the lock screen. Tap to fix.</string>
     <string name="setup_guide">Setup guide</string>
     <string name="setup_guide_desc">Show the first-run setup again</string>
     <string name="privacy_policy">Privacy policy</string>

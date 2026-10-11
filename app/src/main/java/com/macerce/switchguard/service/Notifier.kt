@@ -159,6 +159,8 @@ class Notifier(private val context: Context, private val store: Store) {
             .setAutoCancel(false)
             .setContentIntent(openApp())
             .setDeleteIntent(dismiss) // Kaydırarak kapatmak da "Kapat" sayılır.
+            // Ekran kapalı/kilitliyken tam ekran alarm ekranı açılır; telefon kullanılıyorsa üstte bildirim olarak görünür.
+            .setFullScreenIntent(alarmScreen(), true)
             .addAction(Notification.Action.Builder(null, context.getString(R.string.action_dismiss_alarm), dismiss).build())
             .build()
         nm.notify(ID_ALARM, notification)
@@ -259,6 +261,12 @@ class Notifier(private val context: Context, private val store: Store) {
     private fun vibrator(): Vibrator =
         if (Build.VERSION.SDK_INT >= 31) context.getSystemService(VibratorManager::class.java).defaultVibrator
         else @Suppress("DEPRECATION") context.getSystemService(Vibrator::class.java)
+
+    private fun alarmScreen() = PendingIntent.getActivity(
+        context, 3,
+        Intent(context, AlarmActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+    )
 
     private fun openApp() = PendingIntent.getActivity(
         context, 0,

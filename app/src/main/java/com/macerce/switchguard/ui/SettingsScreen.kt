@@ -35,6 +35,7 @@ import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.Campaign
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Key
@@ -419,6 +420,16 @@ fun SettingsScreen(modifier: Modifier) {
                     stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
                     Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
                 )
+                val fullScreen = remember(resumed) { Actions.fullScreenAllowed(context) }
+                if (fullScreen != null) {
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.Fullscreen,
+                        stringResource(R.string.perm_full_screen),
+                        stringResource(if (fullScreen) R.string.perm_granted else R.string.perm_full_screen_missing),
+                        Modifier.clickable(enabled = !fullScreen) { Actions.openFullScreenSettings(context) },
+                    )
+                }
                 if (AlarmActivity.needsOverlayPermission(context)) {
                     val overlay = remember(resumed) { AlarmActivity.canShowOverApps(context) }
                     Divider()

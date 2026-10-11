@@ -205,6 +205,20 @@ object Actions {
             .onFailure { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
     }
 
+    /**
+     * Tam ekran alarm izni (Android 14+ telefonlarda kullanıcı verir). null: sorulmaz
+     * (eski Android'de izin otomatik, TV'de alarm ekranı başka yolla açılır).
+     */
+    fun fullScreenAllowed(context: Context): Boolean? {
+        if (Build.VERSION.SDK_INT < 34 || FormFactor.isTv(context)) return null
+        return context.getSystemService(NotificationManager::class.java).canUseFullScreenIntent()
+    }
+
+    fun openFullScreenSettings(context: Context) {
+        val direct = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:${context.packageName}"))
+        runCatching { context.startActivity(direct) }.onFailure { openNotificationSettings(context) }
+    }
+
     fun openNotificationSettings(context: Context) {
         context.startActivity(
             Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)

@@ -233,6 +233,8 @@
     <string name="perm_battery">Arka plan çalışması</string>
     <string name="perm_battery_ok">Kısıtlama yok</string>
     <string name="perm_battery_missing">Kısıtlı — alarmlar gecikebilir. Düzeltmek için dokunun.</string>
+    <string name="perm_full_screen">Tam ekran alarm</string>
+    <string name="perm_full_screen_missing">İzin yok — alarm kilit ekranında tam ekran açılmaz. Düzeltmek için dokunun.</string>
     <string name="setup_guide">Kurulum rehberi</string>
     <string name="setup_guide_desc">İlk kurulum adımlarını tekrar göster</string>
     <string name="privacy_policy">Gizlilik politikası</string>

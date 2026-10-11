@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!-- Telefon kilitliyken/ekran kapalıyken alarm, tam ekran alarm ekranıyla açılır (Android 14+ kullanıcı izni). -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <!-- Yalnızca Android TV (10+): alarm ekranının açık uygulamanın üstüne çıkabilmesi için; telefonda istenmez. -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
