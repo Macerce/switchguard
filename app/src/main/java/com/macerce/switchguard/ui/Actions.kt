@@ -215,6 +215,7 @@ object Actions {
     }
 
     fun openFullScreenSettings(context: Context) {
+        if (Build.VERSION.SDK_INT < 34) return openNotificationSettings(context)
         val direct = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT, Uri.parse("package:${context.packageName}"))
         runCatching { context.startActivity(direct) }.onFailure { openNotificationSettings(context) }
     }
