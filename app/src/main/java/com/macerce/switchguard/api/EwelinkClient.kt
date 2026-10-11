@@ -4,6 +4,7 @@ import android.net.Uri
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Signer
+import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.data.Store
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -112,12 +113,16 @@ class EwelinkClient(private val store: Store) {
         return "wss://$domain:${json.optInt("port", 443)}/api/ws"
     }
 
-    private fun <T> withTokenRetry(call: () -> T): T = try {
-        call()
-    } catch (e: ApiException) {
-        if (e.code !in TOKEN_ERRORS) throw e
-        refresh()
-        call()
+    private fun <T> withTokenRetry(call: () -> T): T {
+        val used = store.accessToken
+        return try {
+            call()
+        } catch (e: ApiException) {
+            if (e.code !in TOKEN_ERRORS) throw e
+            // Servis ve ekran aynı anda hata alabilir: yalnızca biri yeniler (bkz. TokenRefresh).
+            tokens.refreshIfStale(used, { store.accessToken }) { refresh() }
+            call()
+        }
     }
 
     private fun refresh() {
@@ -125,6 +130,8 @@ class EwelinkClient(private val store: Store) {
         try {
             saveTokens(postSigned("/v2/user/refresh", JSONObject().put("rt", store.refreshToken)))
         } catch (e: ApiException) {
+            // Sunucunun geçici hatası oturumu bitirmez; sonraki senkron yeniden dener.
+            if (TokenRefresh.isTransient(e.code)) throw e
             // eWeLink her hesap + App ID için tek oturum tutar: başka cihazda giriş, bu refresh token'ı da iptal eder.
             store.logout()
             store.sessionLost = true
@@ -176,6 +183,8 @@ class EwelinkClient(private val store: Store) {
     companion object {
         const val OAUTH_PAGE = "https://c2ccdn.coolkit.cc/oauth/index.html"
         private val TOKEN_ERRORS = setOf(401, 402)
+        /** Uygulama genelinde tek: farklı EwelinkClient örnekleri de aynı kilidi kullanır. */
+        private val tokens = TokenRefresh()
         private val JSON = "application/json".toMediaType()
         private val random = SecureRandom()
 
