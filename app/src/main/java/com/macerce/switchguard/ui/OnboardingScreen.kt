@@ -36,6 +36,7 @@ import androidx.compose.material.icons.rounded.DeveloperMode
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -403,6 +404,15 @@ private fun PermissionsStep(resumed: Boolean) {
         stringResource(R.string.onb_perm_battery_desc),
         granted = battery,
     ) { Actions.requestBatteryExemption(context) }
+    remember(resumed) { Actions.fullScreenAllowed(context) }?.let { allowed ->
+        Spacer(Modifier.height(12.dp))
+        PermissionCard(
+            Icons.Rounded.Fullscreen,
+            stringResource(R.string.perm_full_screen),
+            stringResource(R.string.ready_full_screen_desc),
+            granted = allowed,
+        ) { Actions.openFullScreenSettings(context) }
+    }
     if (AlarmActivity.needsOverlayPermission(context)) {
         Spacer(Modifier.height(12.dp))
         PermissionCard(

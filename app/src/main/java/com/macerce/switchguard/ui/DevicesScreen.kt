@@ -86,13 +86,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
+import com.macerce.switchguard.core.Readiness
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.Store
@@ -108,10 +112,16 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
     val scope = rememberCoroutineScope()
     val version by store.version.collectAsStateWithLifecycle()
     val connection by LiveState.connection.collectAsStateWithLifecycle()
+    // İzin ve ses ayarları uygulamaya dönünce yeniden okunsun.
+    val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    val resumed = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
 
     val devices = remember(version) { store.snapshots }
     val alarm = remember(version) { store.pendingAlarm }
     val monitoring = remember(version) { store.monitoringEnabled }
+    val readiness = remember(version, resumed) {
+        if (monitoring) Readiness.issues(readinessInput(context, store)) else emptyList()
+    }
     // eWeLink'e giriş ya da Tuya bağlantısı: ikisinden biri yeter.
     val loggedIn = remember(version) { store.hasAnyAccount }
     val monitoredIds = remember(version) { store.monitoredIds() }
@@ -178,6 +188,9 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                     } else {
                         LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
                     }
+                }
+                if (loggedIn && readiness.isNotEmpty()) {
+                    item(span = full) { ReadinessCard(readiness) }
                 }
                 if (loggedIn && devices.isEmpty()) {
                     item(span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }

@@ -184,6 +184,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var vibrate: Boolean
         get() = prefs.getBoolean("vibrate", true)
         set(v) = put { putBoolean("vibrate", v) }
+    /** Üretici "otomatik başlatma" ayarı okunamaz: kullanıcı yaptığını "Yaptım" ile onaylar. */
+    var autostartConfirmed: Boolean
+        get() = prefs.getBoolean("autostartOk", false)
+        set(v) = put { putBoolean("autostartOk", v) }
     /** Alarm çalarken telefonun alarm ses seviyesini geçici olarak en yükseğe çıkar. */
     var alarmBoost: Boolean
         get() = prefs.getBoolean("alarmBoost", true)
