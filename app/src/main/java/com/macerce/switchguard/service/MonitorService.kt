@@ -713,8 +713,11 @@ class MonitorService : Service() {
                 val args = EventArgs.MonitorBlind(signal.since)
                 val text = args.render(getString(R.string.app_name), strings)
                 log.add("", getString(R.string.app_name), EventKind.MONITOR_BLIND, text, AlertAction.NOTIFY.name, args)
-                val lines = listOf(text, connection.detail, getString(R.string.blind_hint)).filter { it.isNotEmpty() }
-                notifier.monitorBlind(lines.joinToString("\n"))
+                // Oturum düşmesinin kendi kalıcı uyarısı zaten var; ikinci bildirim gürültü olur.
+                if (connection.state != ConnState.AUTH_ERROR) {
+                    val lines = listOf(text, connection.detail, getString(R.string.blind_hint)).filter { it.isNotEmpty() }
+                    notifier.monitorBlind(lines.joinToString("\n"))
+                }
             }
             is BlindWatch.Signal.Recovered -> {
                 val args = EventArgs.MonitorRestored(signal.from, signal.to)
