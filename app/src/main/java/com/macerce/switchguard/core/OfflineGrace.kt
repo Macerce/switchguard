@@ -1,9 +1,14 @@
 package com.macerce.switchguard.core
 
+import org.json.JSONArray
+import org.json.JSONObject
+
 /**
  * Kısa kopmaları yutmak için "offline" olaylarını bir süre bekletir.
  * Cihaz süre dolmadan geri gelirse ne offline ne de online olayı üretilir.
  * Zaman dışarıdan verilir; böylece saf ve test edilebilir kalır.
+ * Bekleyenler [toJson] ile diske yazılır: servis bu arada yeniden başlarsa (telefon servisi kapattı,
+ * uygulama güncellendi) cihazın kopuk durumu zaten kayıtlı olduğundan fark görülmez ve alarm hiç çalmazdı.
  */
 class OfflineGrace {
     private data class Held(val change: Change.Connection, val dueAt: Long)
@@ -25,4 +30,22 @@ class OfflineGrace {
     }
 
     fun nextDueAt(): Long? = held.values.minOfOrNull { it.dueAt }
+
+    fun toJson(): String = JSONArray().apply {
+        held.values.forEach { h ->
+            put(JSONObject().put("id", h.change.deviceId).put("name", h.change.name).put("due", h.dueAt))
+        }
+    }.toString()
+
+    companion object {
+        /** Bozuk ya da boş kayıt: bekleyen yok. */
+        fun fromJson(json: String?): OfflineGrace = OfflineGrace().apply {
+            val arr = runCatching { JSONArray(json ?: return@apply) }.getOrNull() ?: return@apply
+            for (i in 0 until arr.length()) {
+                val o = arr.optJSONObject(i) ?: continue
+                val id = o.optString("id").ifEmpty { continue }
+                held[id] = Held(Change.Connection(id, o.optString("name"), from = true, to = false), o.optLong("due"))
+            }
+        }
+    }
 }

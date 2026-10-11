@@ -51,6 +51,7 @@ import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.MetricsLog
+import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.AlarmActivity
 import java.io.IOException
@@ -81,9 +82,11 @@ class MonitorService : Service() {
     private lateinit var strings: EventStrings
     private val labels: ChangeLabels get() = strings.labels
     private lateinit var metrics: MetricsLog
+    private lateinit var runtime: RuntimeState
     private val automations = AutomationEngine()
 
-    private val grace = OfflineGrace()
+    /** Başlarken diskteki kayıttan yüklenir (bkz. [restoreRuntime]). */
+    private var grace = OfflineGrace()
     private var running = false
     private var wakeLock: PowerManager.WakeLock? = null
     private var authFailed = false
@@ -129,6 +132,7 @@ class MonitorService : Service() {
         store = Store.get(this)
         log = EventLog.get(this)
         metrics = MetricsLog.get(this)
+        runtime = RuntimeState.get(this)
         client = EwelinkClient(store)
         notifier = Notifier(this, store)
         strings = EventLog.strings(this)
@@ -204,6 +208,8 @@ class MonitorService : Service() {
         registerNetworkCallback()
         handler.post {
             applyWakeMode()
+            // İlk senkrondan önce: bekleyen kopmalar ve otomasyon süreleri kaldığı yerden devam etsin.
+            restoreRuntime()
             // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir.
             store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) }
             setState(ConnState.CONNECTING)
@@ -226,6 +232,7 @@ class MonitorService : Service() {
             socket.close()
             tuyaSocket.close()
             store.pendingAlarm = emptyList()
+            runtime.clearEngine()
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
             notifier.clearWarning()
@@ -283,6 +290,7 @@ class MonitorService : Service() {
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
         tuyaTick(now)
         demoTick(wall)
+        persistRuntime()
 
         if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
@@ -659,6 +667,20 @@ class MonitorService : Service() {
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
         runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
+        persistRuntime()
+    }
+
+    private fun restoreRuntime() {
+        grace = OfflineGrace.fromJson(runtime.grace)
+        automations.restore(runtime.automationState, store.automations)
+        // Süresi bu arada dolmuş beklemeler ilk tick'te işlenir; o tick senkrondan sonra çalışır,
+        // böylece bu arada geri gelen cihaz "kısa kopma" sayılır.
+    }
+
+    /** Servis beklenmedik şekilde kapanırsa kaldığı yerden devam edebilsin. */
+    private fun persistRuntime() {
+        runtime.grace = grace.toJson()
+        runtime.automationState = automations.saveState()
     }
 
     // ---------------------------------------------------------------- otomasyon

@@ -95,9 +95,10 @@ data class Automation(
 }
 
 /**
- * Otomasyonları değerlendirir. Durumu bellekte tutar (servis ömrü boyunca):
- * kanalların ne zamandan beri o durumda olduğu, güç eşiklerinin kurulu olup olmadığı,
- * bekleyen gecikmeli eylemler. Tüm metotlar tek thread'den çağrılmalı.
+ * Otomasyonları değerlendirir. Durumu bellekte tutar: kanalların ne zamandan beri o durumda olduğu,
+ * güç eşiklerinin kurulu olup olmadığı, bekleyen gecikmeli eylemler. Servis yeniden başladığında
+ * süreler baştan başlamasın ve gecikmeli eylemler kaybolmasın diye durum [saveState] ile diske yazılır,
+ * [restore] ile geri yüklenir. Tüm metotlar tek thread'den çağrılmalı.
  */
 class AutomationEngine {
 
@@ -265,6 +266,41 @@ class AutomationEngine {
 
     private fun key(deviceId: String, channel: Int) = "$deviceId/$channel"
     private fun durationKey(a: Automation) = "${key(a.trigger.deviceId, a.trigger.channel)}#${a.id}"
+
+    /** Kalıcı durum (zamanlar duvar saatiyle, telefon yeniden başlasa da geçerli). */
+    fun saveState(): String = JSONObject()
+        .put("since", JSONObject(since.toMap()))
+        .put("durFired", JSONArray(durationFired.toList()))
+        .put("armed", JSONObject(powerArmed.toMap()))
+        .put("last", JSONObject(lastFiredAt.toMap()))
+        .put("lowSince", JSONObject(lowSince.toMap()))
+        .put("lowFired", JSONArray(lowFired.toList()))
+        .put("pending", JSONArray().apply { pending.forEach { put(JSONObject().put("id", it.automation.id).put("due", it.dueAt)) } })
+        .toString()
+
+    /**
+     * [saveState] çıktısını geri yükler. Bekleyen eylemler [automations]'daki güncel tanımla eşleştirilir;
+     * bu arada silinen otomasyonunki atılır. Bozuk kayıt yok sayılır.
+     */
+    fun restore(json: String?, automations: List<Automation>) {
+        val o = runCatching { JSONObject(json ?: return) }.getOrNull() ?: return
+        fun longs(name: String) = o.optJSONObject(name)?.let { m -> m.keys().asSequence().associateWith { m.getLong(it) } }.orEmpty()
+        fun strings(name: String) = o.optJSONArray(name)?.let { a -> (0 until a.length()).map { a.getString(it) } }.orEmpty()
+        runCatching {
+            since.putAll(longs("since"))
+            durationFired += strings("durFired")
+            o.optJSONObject("armed")?.let { m -> m.keys().forEach { powerArmed[it] = m.getBoolean(it) } }
+            lastFiredAt.putAll(longs("last"))
+            lowSince.putAll(longs("lowSince"))
+            lowFired += strings("lowFired")
+            val byId = automations.associateBy { it.id }
+            val arr = o.optJSONArray("pending") ?: JSONArray()
+            for (i in 0 until arr.length()) {
+                val p = arr.getJSONObject(i)
+                byId[p.getString("id")]?.let { pending += Pending(it, p.getLong("due")) }
+            }
+        }
+    }
 
     companion object {
         const val MIN_INTERVAL_MS = 10_000L

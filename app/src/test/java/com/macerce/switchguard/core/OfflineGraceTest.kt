@@ -38,4 +38,28 @@ class OfflineGraceTest {
         g.hold(off, now = 5_000, graceMs = 10_000)
         assertEquals(15_000L, g.nextDueAt())
     }
+
+    @Test
+    fun `bekleyen kopma kaydedilip geri yuklenince suresi dolunca verilir`() {
+        val g = OfflineGrace()
+        g.hold(off, now = 1_000, graceMs = 60_000)
+        val restored = OfflineGrace.fromJson(g.toJson())
+        assertEquals(61_000L, restored.nextDueAt())
+        assertTrue(restored.due(now = 30_000).isEmpty())
+        assertEquals(listOf(off), restored.due(now = 61_000))
+    }
+
+    @Test
+    fun `geri yuklenen bekleme cihaz donerse iptal olur`() {
+        val g = OfflineGrace()
+        g.hold(off, now = 0, graceMs = 60_000)
+        assertTrue(OfflineGrace.fromJson(g.toJson()).cameBack("a"))
+    }
+
+    @Test
+    fun `bozuk ya da bos kayit bos bekleme listesi verir`() {
+        assertEquals(null, OfflineGrace.fromJson("bozuk").nextDueAt())
+        assertEquals(null, OfflineGrace.fromJson(null).nextDueAt())
+        assertEquals(null, OfflineGrace.fromJson(OfflineGrace().toJson()).nextDueAt())
+    }
 }
