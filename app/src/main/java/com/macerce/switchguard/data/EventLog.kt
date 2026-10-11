@@ -24,6 +24,7 @@ object EventKind {
     const val TEST = "TEST"
     const val AUTOMATION = "AUTOMATION" // Otomasyonun yaptığı işlem
     const val MONITOR_GAP = "MONITOR_GAP" // İzlemenin çalışmadığı aralık
+    const val MONITOR_BLIND = "MONITOR_BLIND" // İzleme kör kaldı / yeniden çalışıyor
 }
 
 data class LoggedEvent(
@@ -142,6 +143,8 @@ class EventLog private constructor(context: Context) :
             monitorGap = { from, to ->
                 context.getString(R.string.event_monitor_gap, timeRange(context, from, to), DurationText.format(to - from, durations(context)))
             },
+            monitorBlind = { context.getString(R.string.event_monitor_blind, DateUtils.formatDateTime(context, it, DateUtils.FORMAT_SHOW_TIME)) },
+            monitorRestored = { from, to -> context.getString(R.string.event_monitor_restored, DurationText.format(to - from, durations(context))) },
         )
 
         /** [context]'in dilindeki süre kalıpları ("2 dk 10 sn" gibi). */

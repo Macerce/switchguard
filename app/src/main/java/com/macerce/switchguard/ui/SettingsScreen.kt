@@ -53,6 +53,7 @@ import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.Vibration
 import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.WifiOff
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -249,6 +250,23 @@ fun SettingsScreen(modifier: Modifier) {
                                 stringResource(R.string.offline_grace_desc),
                                 graceOptions, s.offlineGraceSec, { graceLabel(it) },
                                 onPick = { store.offlineGraceSec = it }, onDismiss = { dialog = null },
+                            )
+                        }
+                    },
+                )
+                Divider()
+                val blindOptions = listOf(0, 5, 10, 15, 30, 60)
+                InfoRow(
+                    Icons.Rounded.WifiOff,
+                    stringResource(R.string.blind_alert),
+                    blindLabel(s.blindAlertMin),
+                    Modifier.clickable {
+                        dialog = {
+                            ChoiceDialog(
+                                stringResource(R.string.blind_alert),
+                                stringResource(R.string.blind_alert_desc),
+                                blindOptions, s.blindAlertMin, { blindLabel(it) },
+                                onPick = { store.blindAlertMin = it }, onDismiss = { dialog = null },
                             )
                         }
                     },
@@ -493,6 +511,10 @@ private fun languageLabel(tag: String): String = when (tag) {
     "tr" -> "Türkçe"
     else -> stringResource(R.string.language_system)
 }
+
+@Composable
+private fun blindLabel(min: Int): String =
+    if (min == 0) stringResource(R.string.blind_alert_off) else stringResource(R.string.dur_minutes, min)
 
 @Composable
 private fun graceLabel(sec: Int): String = when {

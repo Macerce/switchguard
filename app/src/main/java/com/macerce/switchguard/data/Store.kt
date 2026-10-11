@@ -164,6 +164,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var pollIntervalSec: Int
         get() = prefs.getInt("pollIntervalSec", 30)
         set(v) = put { putInt("pollIntervalSec", v.coerceAtLeast(MIN_POLL)) }
+    /** İzleme bu kadar dakika kör kalırsa (internet/bulut yok) uyar; 0 = kapalı. */
+    var blindAlertMin: Int
+        get() = prefs.getInt("blindAlertMin", 10)
+        set(v) = put { putInt("blindAlertMin", v.coerceAtLeast(0)) }
     /** Offline olayını bu kadar bekletip kısa kopmaları yok say (0 = hemen). */
     var offlineGraceSec: Int
         get() = prefs.getInt("offlineGraceSec", 0)

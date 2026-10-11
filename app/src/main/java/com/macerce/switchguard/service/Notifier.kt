@@ -102,6 +102,22 @@ class Notifier(private val context: Context, private val store: Store) {
 
     fun clearWarning() = nm.cancel(ID_WARN)
 
+    /** İzleme kör kaldı: düzelene ya da kullanıcı kaldırana kadar durur. */
+    fun monitorBlind(text: String) = nm.notify(
+        ID_BLIND,
+        Notification.Builder(context, CH_HEALTH)
+            .setSmallIcon(R.drawable.ic_stat_alarm)
+            .setColor(0xFFD32F2F.toInt())
+            .setContentTitle(context.getString(R.string.notif_blind_title))
+            .setContentText(text)
+            .setStyle(Notification.BigTextStyle().bigText(text))
+            .setCategory(Notification.CATEGORY_ERROR)
+            .setContentIntent(openApp())
+            .build()
+    )
+
+    fun clearBlind() = nm.cancel(ID_BLIND)
+
     fun notifySummary(title: String, lines: List<String>) = nm.notify(
         ID_SUMMARY,
         Notification.Builder(context, CH_EVENTS)
@@ -219,11 +235,13 @@ class Notifier(private val context: Context, private val store: Store) {
         const val CH_EVENTS_CUSTOM = "events_custom"
         const val CH_STATUS = "status"
         const val CH_SESSION = "session"
+        const val CH_HEALTH = "health"
         const val GROUP_EVENTS = "events"
         const val ID_STATUS = 1
         const val ID_ALARM = 2
         const val ID_WARN = 3
         const val ID_SUMMARY = 4
+        const val ID_BLIND = 5
         private const val ONE_SHOT_MS = 6_000L
 
         fun createChannels(context: Context) {
@@ -251,6 +269,11 @@ class Notifier(private val context: Context, private val store: Store) {
             nm.createNotificationChannel(
                 NotificationChannel(CH_SESSION, context.getString(R.string.channel_session), NotificationManager.IMPORTANCE_HIGH).apply {
                     description = context.getString(R.string.channel_session_desc)
+                }
+            )
+            nm.createNotificationChannel(
+                NotificationChannel(CH_HEALTH, context.getString(R.string.channel_health), NotificationManager.IMPORTANCE_HIGH).apply {
+                    description = context.getString(R.string.channel_health_desc)
                 }
             )
         }

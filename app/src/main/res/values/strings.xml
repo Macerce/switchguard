@@ -199,6 +199,15 @@
     <string name="dur_hour_min">%1$d h %2$d min</string>
     <string name="dur_day_hour">%1$d d %2$d h</string>
     <string name="event_monitor_gap">Monitoring was interrupted: %1$s (%2$s). Changes during this time may have been missed.</string>
+    <string name="event_monitor_blind">Monitoring isn\'t working (since %1$s): device states can\'t be read.</string>
+    <string name="event_monitor_restored">Monitoring is working again (it was down for %1$s).</string>
+    <string name="notif_blind_title">SwitchGuard can\'t monitor</string>
+    <string name="blind_hint">Check the internet connection and Settings › Permissions (battery).</string>
+    <string name="channel_health">Monitoring problems</string>
+    <string name="channel_health_desc">Warns when SwitchGuard can\'t watch your devices</string>
+    <string name="blind_alert">Warn if monitoring stops</string>
+    <string name="blind_alert_desc">No internet or no cloud connection for this long: you get a warning</string>
+    <string name="blind_alert_off">Off</string>
     <string name="poll_interval">Backup check interval</string>
     <string name="poll_interval_desc">Used only when instant updates aren\'t available.</string>
     <string name="poll_interval_value">Every %d s</string>

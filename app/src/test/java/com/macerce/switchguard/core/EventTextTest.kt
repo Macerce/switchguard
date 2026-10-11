@@ -14,6 +14,8 @@ class EventTextTest {
         automationFailed = { t, e -> "$t — failed: $e" },
         powerStale = { "$it: no channel power data for 5 minutes." },
         monitorGap = { from, to -> "Monitoring was down $from–$to" },
+        monitorBlind = { "Monitoring not working since $it" },
+        monitorRestored = { from, to -> "Monitoring working again after ${to - from}" },
     )
     private val tr = EventStrings(
         ChangeLabels("AÇIK", "KAPALI", "ONLINE", "OFFLINE") { n, c -> "$n (K$c)" },
@@ -24,6 +26,8 @@ class EventTextTest {
         automationFailed = { t, e -> "$t — başarısız: $e" },
         powerStale = { "$it: kanal gücü verisi 5 dakikadır alınamıyor." },
         monitorGap = { from, to -> "İzleme durdu: $from–$to" },
+        monitorBlind = { "İzleme çalışmıyor: $it" },
+        monitorRestored = { from, to -> "İzleme yeniden çalışıyor: ${to - from}" },
     )
     private val both = listOf(en, tr)
     private val rogar = "Rögar Su Seviye Bildirimi"
@@ -40,7 +44,7 @@ class EventTextTest {
             EventArgs.ShortDrop, EventArgs.Test, EventArgs.PowerStale,
             EventArgs.AutoMissing("x"), EventArgs.AutoSwitch("a", 1, true, false, "boom"),
             EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
-            EventArgs.MonitorGap(1_000, 61_000),
+            EventArgs.MonitorGap(1_000, 61_000), EventArgs.MonitorBlind(5_000), EventArgs.MonitorRestored(5_000, 9_000),
         )
         all.forEach { assertEquals(it, EventArgs.parse(it.toJson())) }
         assertNull(EventArgs.parse(null)); assertNull(EventArgs.parse("{bad"))
@@ -93,5 +97,10 @@ class EventTextTest {
         val a = EventArgs.MonitorGap(1_000, 61_000)
         assertEquals("İzleme durdu: 1000–61000", a.render("SwitchGuard", tr))
         assertEquals("Monitoring was down 1000–61000", a.render("SwitchGuard", en))
+    }
+
+    @Test fun blindAndRestoredRender() {
+        assertEquals("İzleme çalışmıyor: 5000", EventArgs.MonitorBlind(5_000).render("SwitchGuard", tr))
+        assertEquals("Monitoring working again after 4000", EventArgs.MonitorRestored(5_000, 9_000).render("SwitchGuard", en))
     }
 }

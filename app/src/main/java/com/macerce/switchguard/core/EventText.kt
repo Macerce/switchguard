@@ -13,6 +13,10 @@ class EventStrings(
     val powerStale: (name: String) -> String,
     /** İzlemenin durduğu aralık (ms, duvar saati). */
     val monitorGap: (from: Long, to: Long) -> String,
+    /** İzleme [since]'den beri çalışmıyor. */
+    val monitorBlind: (since: Long) -> String,
+    /** İzleme yeniden çalışıyor; [from]–[to] arası kördü. */
+    val monitorRestored: (from: Long, to: Long) -> String,
 )
 
 /**
@@ -35,6 +39,9 @@ sealed class EventArgs {
     data class AutoAlert(val automation: String, val source: String?) : EventArgs()
     /** İzleme [from]–[to] arasında çalışmadı (servis kapatıldı, telefon kapalıydı). */
     data class MonitorGap(val from: Long, val to: Long) : EventArgs()
+    /** İzleme [since]'den beri kör (internet/bulut/oturum sorunu). */
+    data class MonitorBlind(val since: Long) : EventArgs()
+    data class MonitorRestored(val from: Long, val to: Long) : EventArgs()
 
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
@@ -51,6 +58,8 @@ sealed class EventArgs {
         }
         is AutoAlert -> s.automationFired(automation).let { if (source != null) "$it ($source)" else it }
         is MonitorGap -> s.monitorGap(from, to)
+        is MonitorBlind -> s.monitorBlind(since)
+        is MonitorRestored -> s.monitorRestored(from, to)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -67,6 +76,8 @@ sealed class EventArgs {
             }
             is AutoAlert -> { put("t", "auto_alert"); put("auto", a.automation); a.source?.let { put("src", it) } }
             is MonitorGap -> { put("t", "gap"); put("from", a.from); put("to", a.to) }
+            is MonitorBlind -> { put("t", "blind"); put("since", a.since) }
+            is MonitorRestored -> { put("t", "restored"); put("from", a.from); put("to", a.to) }
         }
     }.toString()
 
@@ -88,6 +99,8 @@ sealed class EventArgs {
                     )
                     "auto_alert" -> AutoAlert(o.getString("auto"), if (o.has("src")) o.getString("src") else null)
                     "gap" -> MonitorGap(o.getLong("from"), o.getLong("to"))
+                    "blind" -> MonitorBlind(o.getLong("since"))
+                    "restored" -> MonitorRestored(o.getLong("from"), o.getLong("to"))
                     else -> null
                 }
             }.getOrNull()

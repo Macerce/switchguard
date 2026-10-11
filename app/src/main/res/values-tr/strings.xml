@@ -195,6 +195,15 @@
     <string name="dur_hour_min">%1$d sa %2$d dk</string>
     <string name="dur_day_hour">%1$d g %2$d sa</string>
     <string name="event_monitor_gap">İzleme kesintiye uğradı: %1$s (%2$s). Bu sürede olan değişiklikler kaçırılmış olabilir.</string>
+    <string name="event_monitor_blind">İzleme çalışmıyor (başlangıç %1$s): cihazların durumu alınamıyor.</string>
+    <string name="event_monitor_restored">İzleme yeniden çalışıyor (%1$s boyunca çalışmadı).</string>
+    <string name="notif_blind_title">SwitchGuard izleyemiyor</string>
+    <string name="blind_hint">İnternet bağlantısını ve Ayarlar › İzinler (pil) bölümünü kontrol edin.</string>
+    <string name="channel_health">İzleme sorunları</string>
+    <string name="channel_health_desc">SwitchGuard cihazlarınızı izleyemediğinde uyarır</string>
+    <string name="blind_alert">İzleme durursa uyar</string>
+    <string name="blind_alert_desc">Bu kadar süre internet ya da bulut bağlantısı olmazsa uyarı verir</string>
+    <string name="blind_alert_off">Kapalı</string>
     <string name="poll_interval">Yedek kontrol aralığı</string>
     <string name="poll_interval_desc">Yalnızca anlık bildirim kullanılamadığında kullanılır.</string>
     <string name="poll_interval_value">%d sn\'de bir</string>

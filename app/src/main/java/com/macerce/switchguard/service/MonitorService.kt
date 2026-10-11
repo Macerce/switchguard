@@ -31,6 +31,7 @@ import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationEngine
+import com.macerce.switchguard.core.BlindWatch
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
 import com.macerce.switchguard.core.ChangeLabels
@@ -85,6 +86,8 @@ class MonitorService : Service() {
     private lateinit var metrics: MetricsLog
     private lateinit var runtime: RuntimeState
     private val automations = AutomationEngine()
+
+    private val blindWatch = BlindWatch()
 
     /** Başlarken diskteki kayıttan yüklenir (bkz. [restoreRuntime]). */
     private var grace = OfflineGrace()
@@ -237,6 +240,7 @@ class MonitorService : Service() {
             tuyaSocket.close()
             store.pendingAlarm = emptyList()
             runtime.clearEngine()
+            notifier.clearBlind()
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
             notifier.clearWarning()
@@ -296,6 +300,7 @@ class MonitorService : Service() {
         demoTick(wall)
         persistRuntime()
         heartbeat(wall)
+        checkBlind(wall)
 
         if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
@@ -699,6 +704,29 @@ class MonitorService : Service() {
         heartbeat(wall, force = true)
     }
 
+    /** İzleme uzun süre kör kalınca (internet/bulut/oturum) bir kez uyarır, düzelince bildirir. */
+    private fun checkBlind(wall: Long) {
+        val connection = LiveState.connection.value
+        val blind = connection.state in BLIND_STATES
+        when (val signal = blindWatch.update(blind, wall, store.blindAlertMin * 60_000L)) {
+            is BlindWatch.Signal.Blind -> {
+                val args = EventArgs.MonitorBlind(signal.since)
+                val text = args.render(getString(R.string.app_name), strings)
+                log.add("", getString(R.string.app_name), EventKind.MONITOR_BLIND, text, AlertAction.NOTIFY.name, args)
+                val lines = listOf(text, connection.detail, getString(R.string.blind_hint)).filter { it.isNotEmpty() }
+                notifier.monitorBlind(lines.joinToString("\n"))
+            }
+            is BlindWatch.Signal.Recovered -> {
+                val args = EventArgs.MonitorRestored(signal.from, signal.to)
+                val text = args.render(getString(R.string.app_name), strings)
+                log.add("", getString(R.string.app_name), EventKind.MONITOR_BLIND, text, AlertAction.NOTIFY.name, args)
+                notifier.clearBlind()
+                notifier.notifyEvent(text)
+            }
+            null -> Unit
+        }
+    }
+
     private var lastHeartbeatAt = 0L
 
     /** "Canlıyım" işareti; diske dakikada en çok bir kez yazılır. */
@@ -937,6 +965,8 @@ class MonitorService : Service() {
         private const val LOOP_MS = 15_000L
         private const val ALARM_TICK_MS = 60_000L
         private const val HEARTBEAT_MS = 60_000L
+        /** Cihazların durumunun alınamadığı durumlar. */
+        private val BLIND_STATES = setOf(ConnState.CONNECTING, ConnState.NO_INTERNET, ConnState.ERROR, ConnState.AUTH_ERROR)
         private const val RESYNC_MS = 5 * 60_000L
         private const val CONFIRM_DELAY_MS = 5_000L
         /**
