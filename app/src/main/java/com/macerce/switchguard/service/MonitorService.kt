@@ -215,8 +215,9 @@ class MonitorService : Service() {
             // İlk senkrondan önce: bekleyen kopmalar ve otomasyon süreleri kaldığı yerden devam etsin.
             restoreRuntime()
             reportGap(System.currentTimeMillis())
-            // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir.
-            store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) }
+            // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir; yoksa önceki çalışmada
+            // yükseltilip geri alınamamış alarm sesini eski seviyesine döndür.
+            store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) } ?: notifier.restoreAlarmVolume()
             setState(ConnState.CONNECTING)
             runCatching { metrics.prune() }
             SummaryScheduler.schedule(this)

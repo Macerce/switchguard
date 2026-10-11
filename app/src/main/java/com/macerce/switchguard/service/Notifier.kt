@@ -7,6 +7,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.RingtoneManager
 import android.net.Uri
@@ -17,6 +19,8 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import com.macerce.switchguard.R
+import com.macerce.switchguard.core.AlarmVolume
+import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.AlarmActivity
 import com.macerce.switchguard.ui.FormFactor
@@ -32,7 +36,11 @@ import com.macerce.switchguard.ui.MainActivity
 class Notifier(private val context: Context, private val store: Store) {
 
     private val nm = context.getSystemService(NotificationManager::class.java)
+    private val audio = context.getSystemService(AudioManager::class.java)
+    private val runtime = RuntimeState.get(context)
     private var player: MediaPlayer? = null
+    /** Alarm çalarken müzik/video duraklasın diye alınan ses odağı. */
+    private var focus: AudioFocusRequest? = null
     /** Şu an çalan alarm sesinin kaynağı (cihaza özel ya da genel). */
     private var playing: Uri? = null
     private val main = Handler(Looper.getMainLooper())
@@ -163,6 +171,38 @@ class Notifier(private val context: Context, private val store: Store) {
         nm.cancel(ID_ALARM)
         releasePlayer()
         vibrator().cancel()
+        focus?.let { audio.abandonAudioFocusRequest(it) }
+        focus = null
+        restoreAlarmVolume()
+    }
+
+    /**
+     * Alarm sesi telefonun "alarm" ses seviyesiyle çalar; seviye kısıksa alarm duyulmaz.
+     * Açıksa alarm süresince en yükseğe çıkarılır, eski değer diske yazılır (servis bu arada kapanırsa
+     * da sonradan geri alınabilsin).
+     */
+    private fun boostAlarmVolume() {
+        val stream = AudioManager.STREAM_ALARM
+        val target = AlarmVolume.target(audio.getStreamVolume(stream), audio.getStreamMaxVolume(stream), store.alarmBoost) ?: return
+        if (runtime.savedAlarmVolume < 0) runtime.savedAlarmVolume = audio.getStreamVolume(stream)
+        runCatching { audio.setStreamVolume(stream, target, 0) }
+    }
+
+    /** Yükseltilmiş alarm sesini eski seviyesine döndürür (yükseltilmediyse bir şey yapmaz). */
+    fun restoreAlarmVolume() {
+        val saved = runtime.savedAlarmVolume
+        if (saved < 0) return
+        runCatching { audio.setStreamVolume(AudioManager.STREAM_ALARM, saved, 0) }
+        runtime.savedAlarmVolume = -1
+    }
+
+    private fun requestFocus() {
+        if (focus != null) return
+        focus = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+            .setAudioAttributes(alarmAttributes)
+            .setOnAudioFocusChangeListener { } // Alarm odağı kaybetse de susmaz; yalnızca kapat düğmesiyle durur.
+            .build()
+            .also { audio.requestAudioFocus(it) }
     }
 
     private fun releasePlayer() {
@@ -172,6 +212,8 @@ class Notifier(private val context: Context, private val store: Store) {
     }
 
     private fun startSound(deviceSound: Uri?) {
+        boostAlarmVolume()
+        requestFocus()
         val wanted = deviceSound ?: globalSound()
         if (player == null || playing != wanted) {
             releasePlayer()
@@ -199,12 +241,7 @@ class Notifier(private val context: Context, private val store: Store) {
 
     private fun createPlayer(uri: Uri): MediaPlayer? = runCatching {
         MediaPlayer().apply {
-            setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_ALARM)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .build()
-            )
+            setAudioAttributes(alarmAttributes)
             setDataSource(context, uri)
             isLooping = true
             setVolume(store.alarmVolume, store.alarmVolume)
@@ -243,6 +280,10 @@ class Notifier(private val context: Context, private val store: Store) {
         const val ID_SUMMARY = 4
         const val ID_BLIND = 5
         private const val ONE_SHOT_MS = 6_000L
+        private val alarmAttributes: AudioAttributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .build()
 
         fun createChannels(context: Context) {
             val nm = context.getSystemService(NotificationManager::class.java)

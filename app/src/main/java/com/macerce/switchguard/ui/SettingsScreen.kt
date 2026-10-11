@@ -32,6 +32,7 @@ import androidx.compose.material.icons.rounded.BatteryAlert
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Campaign
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Hub
@@ -331,6 +332,10 @@ fun SettingsScreen(modifier: Modifier) {
                 Divider()
                 InfoRow(Icons.Rounded.Vibration, stringResource(R.string.vibrate)) {
                     Switch(checked = s.vibrate, onCheckedChange = { store.vibrate = it })
+                }
+                Divider()
+                InfoRow(Icons.Rounded.Campaign, stringResource(R.string.alarm_boost), stringResource(R.string.alarm_boost_desc)) {
+                    Switch(checked = s.alarmBoost, onCheckedChange = { store.alarmBoost = it })
                 }
                 Divider()
                 InfoRow(

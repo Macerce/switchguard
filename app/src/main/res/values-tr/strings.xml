@@ -218,6 +218,8 @@
     <string name="channel_events_custom_desc">Kendi sesi seçilmiş cihazların bildirimleri. Sesi uygulama çalar.</string>
     <string name="alarm_volume">Alarm ses seviyesi · %%%d</string>
     <string name="vibrate">Titreşim</string>
+    <string name="alarm_boost">Alarm tam seste çalsın</string>
+    <string name="alarm_boost_desc">Alarm çalarken telefonun alarm sesini en yükseğe çıkarır ve müziği duraklatır; alarmı kapatınca eski haline döner</string>
     <string name="test_alarm">Test alarmı</string>
     <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
     <string name="test_alarm_line">Test alarmı</string>

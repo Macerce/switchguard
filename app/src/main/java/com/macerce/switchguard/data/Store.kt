@@ -184,6 +184,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var vibrate: Boolean
         get() = prefs.getBoolean("vibrate", true)
         set(v) = put { putBoolean("vibrate", v) }
+    /** Alarm çalarken telefonun alarm ses seviyesini geçici olarak en yükseğe çıkar. */
+    var alarmBoost: Boolean
+        get() = prefs.getBoolean("alarmBoost", true)
+        set(v) = put { putBoolean("alarmBoost", v) }
     var quietHours: QuietHours
         get() = QuietHours(
             prefs.getBoolean("quietEnabled", false),

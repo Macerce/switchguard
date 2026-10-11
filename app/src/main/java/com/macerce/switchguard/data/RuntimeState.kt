@@ -34,6 +34,11 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getBoolean("cleanStop", true)
         set(v) = put { putBoolean("cleanStop", v) }
 
+    /** Alarm için yükseltilmeden önceki alarm ses seviyesi; -1 = yükseltilmedi. */
+    var savedAlarmVolume: Int
+        get() = prefs.getInt("savedAlarmVolume", -1)
+        set(v) = put { putInt("savedAlarmVolume", v) }
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = put { remove("grace"); remove("automation") }
 

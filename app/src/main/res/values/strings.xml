@@ -222,6 +222,8 @@
     <string name="channel_events_custom_desc">Notifications for devices that have their own sound. The sound is played by the app.</string>
     <string name="alarm_volume">Alarm volume · %d%%</string>
     <string name="vibrate">Vibrate</string>
+    <string name="alarm_boost">Ring at full volume</string>
+    <string name="alarm_boost_desc">Raises the phone\'s alarm volume to maximum while the alarm rings and pauses music; restored when you dismiss it</string>
     <string name="test_alarm">Test alarm</string>
     <string name="test_alarm_desc">Rings the alarm now so you can check sound and volume</string>
     <string name="test_alarm_line">Test alarm</string>
