@@ -49,6 +49,7 @@ import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Science
+import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.SyncAlt
@@ -335,6 +336,23 @@ fun SettingsScreen(modifier: Modifier) {
                     Switch(checked = s.vibrate, onCheckedChange = { store.vibrate = it })
                 }
                 Divider()
+                val reminderOptions = listOf(0, 10, 30, 60)
+                InfoRow(
+                    Icons.Rounded.Snooze,
+                    stringResource(R.string.reminder),
+                    reminderLabel(s.reminderMin),
+                    Modifier.clickable {
+                        dialog = {
+                            ChoiceDialog(
+                                stringResource(R.string.reminder),
+                                stringResource(R.string.reminder_desc),
+                                reminderOptions, s.reminderMin, { reminderLabel(it) },
+                                onPick = { store.reminderMin = it }, onDismiss = { dialog = null },
+                            )
+                        }
+                    },
+                )
+                Divider()
                 InfoRow(Icons.Rounded.Campaign, stringResource(R.string.alarm_boost), stringResource(R.string.alarm_boost_desc)) {
                     Switch(checked = s.alarmBoost, onCheckedChange = { store.alarmBoost = it })
                 }
@@ -527,6 +545,10 @@ private fun languageLabel(tag: String): String = when (tag) {
     "tr" -> "Türkçe"
     else -> stringResource(R.string.language_system)
 }
+
+@Composable
+private fun reminderLabel(min: Int): String =
+    if (min == 0) stringResource(R.string.blind_alert_off) else stringResource(R.string.reminder_every, min)
 
 @Composable
 private fun blindLabel(min: Int): String =

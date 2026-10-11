@@ -26,6 +26,7 @@ object EventKind {
     const val MONITOR_GAP = "MONITOR_GAP" // İzlemenin çalışmadığı aralık
     const val MONITOR_BLIND = "MONITOR_BLIND" // İzleme kör kaldı / yeniden çalışıyor
     const val DISMISSED = "DISMISSED" // Alarm kapatıldı (tepki süresiyle)
+    const val REMINDER = "REMINDER" // Alarm kapatıldı ama durum sürüyor
 }
 
 data class LoggedEvent(
@@ -146,6 +147,7 @@ class EventLog private constructor(context: Context) :
             },
             monitorBlind = { context.getString(R.string.event_monitor_blind, DateUtils.formatDateTime(context, it, DateUtils.FORMAT_SHOW_TIME)) },
             monitorRestored = { from, to -> context.getString(R.string.event_monitor_restored, DurationText.format(to - from, durations(context))) },
+            reminder = { label, state, ms -> context.getString(R.string.event_reminder, label, state, DurationText.format(ms, durations(context))) },
             alarmDismissed = { n, ms ->
                 context.resources.getQuantityString(R.plurals.event_alarm_dismissed, n, n, DurationText.format(ms, durations(context)))
             },

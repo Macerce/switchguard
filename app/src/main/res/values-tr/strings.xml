@@ -189,6 +189,7 @@
     <string name="event_monitor_gap">İzleme kesintiye uğradı: %1$s (%2$s). Bu sürede olan değişiklikler kaçırılmış olabilir.</string>
     <string name="event_monitor_blind">İzleme çalışmıyor (başlangıç %1$s): cihazların durumu alınamıyor.</string>
     <string name="event_monitor_restored">İzleme yeniden çalışıyor (%1$s boyunca çalışmadı).</string>
+    <string name="event_reminder">Hatırlatma: %1$s hâlâ %2$s (alarmdan bu yana %3$s)</string>
     <string name="notif_blind_title">SwitchGuard izleyemiyor</string>
     <string name="notif_monitor_title">İzleme durumu</string>
     <string name="monitoring_stopped_title">İzleme durdu</string>
@@ -215,6 +216,9 @@
     <string name="vibrate">Titreşim</string>
     <string name="alarm_boost">Alarm tam seste çalsın</string>
     <string name="alarm_boost_desc">Alarm çalarken telefonun alarm sesini en yükseğe çıkarır ve müziği duraklatır; alarmı kapatınca eski haline döner</string>
+    <string name="reminder">Düzelmezse yeniden çal</string>
+    <string name="reminder_desc">Alarmı kapattıktan sonra cihaz kapalı ya da kopuk kaldıkça bu aralıkla yeniden çalar</string>
+    <string name="reminder_every">%d dakikada bir</string>
     <string name="test_alarm">Test alarmı</string>
     <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
     <string name="test_alarm_line">Test alarmı</string>

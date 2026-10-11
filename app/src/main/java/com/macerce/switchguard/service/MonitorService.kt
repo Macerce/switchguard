@@ -27,6 +27,7 @@ import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaExpiredException
 import com.macerce.switchguard.api.TuyaSocket
 import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.AlarmReminders
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.Automation
@@ -88,6 +89,8 @@ class MonitorService : Service() {
     private var automations = AutomationEngine()
 
     private val blindWatch = BlindWatch()
+    /** Kapatılan ama sürmekte olan alarmların hatırlatmaları (bkz. [checkReminders]). */
+    private var reminders = AlarmReminders()
 
     /** Başlarken diskteki kayıttan yüklenir (bkz. [restoreRuntime]). */
     private var grace = OfflineGrace()
@@ -159,7 +162,11 @@ class MonitorService : Service() {
             ACTION_DISMISS -> {
                 handler.post {
                     val lines = store.pendingAlarm
-                    if (lines.isNotEmpty()) logDismissal(lines.size)
+                    if (lines.isNotEmpty()) {
+                        logDismissal(lines.size)
+                        reminders.onDismiss(System.currentTimeMillis(), store.reminderMin * 60_000L)
+                        persistRuntime()
+                    }
                     store.pendingAlarm = emptyList()
                     notifier.stopAlarm()
                 }
@@ -258,6 +265,7 @@ class MonitorService : Service() {
             runtime.clearEngine()
             grace = OfflineGrace()
             automations = AutomationEngine()
+            reminders = AlarmReminders()
             notifier.clearBlind()
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
@@ -317,6 +325,7 @@ class MonitorService : Service() {
         runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
         tuyaTick(now)
         demoTick(wall)
+        checkReminders(wall)
         persistRuntime()
         heartbeat(wall)
         checkBlind(wall)
@@ -698,6 +707,7 @@ class MonitorService : Service() {
     private fun restoreRuntime() {
         grace = OfflineGrace.fromJson(runtime.grace)
         automations.restore(runtime.automationState, store.automations)
+        reminders = AlarmReminders.fromJson(runtime.reminders)
         // Önceki süreçten kalan "izleyemiyor" uyarısı: yeni süreç o kesintiyi bilmez, düzelince kaldıramazdı.
         notifier.clearBlind()
         if (store.monitoringEnabled) reportGap(System.currentTimeMillis())
@@ -756,6 +766,7 @@ class MonitorService : Service() {
     private fun persistRuntime() {
         runtime.grace = grace.toJson()
         runtime.automationState = automations.saveState()
+        runtime.reminders = reminders.toJson()
     }
 
     // ---------------------------------------------------------------- otomasyon
@@ -880,10 +891,34 @@ class MonitorService : Service() {
         log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
         val sound = rules.soundUri
         when (effective) {
-            AlertAction.ALARM -> addAlarm(text, sound)
+            AlertAction.ALARM -> {
+                addAlarm(text, sound)
+                reminders.onAlarm(change, System.currentTimeMillis())
+            }
             AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
             AlertAction.IGNORE -> Unit
         }
+    }
+
+    /**
+     * Alarmı kapatılmış ama düzelmemiş durumlar için hatırlatma (Ayarlar → Alarm). Sessiz saatlerde kritik
+     * olmayan cihazın hatırlatması bildirime düşer; o durumda sayaç hemen yeniden kurulur.
+     */
+    private fun checkReminders(wall: Long) {
+        val interval = store.reminderMin * 60_000L
+        val due = reminders.due(store.snapshots.associateBy { it.id }, wall, interval, alarmActive = store.pendingAlarm.isNotEmpty())
+        if (due.isEmpty()) return
+        val quiet = store.quietHours.contains(minuteOfDay())
+        for (r in due) {
+            val args = EventArgs.Reminder.of(r)
+            val text = args.render(r.change.name, strings)
+            val rules = store.rulesFor(r.change.deviceId)
+            val effective = RuleEngine.effective(AlertAction.ALARM, quiet, rules.critical)
+            log.add(r.change.deviceId, r.change.name, EventKind.REMINDER, text, effective.name, args)
+            if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri) else notifier.notifyEvent(text, rules.soundUri)
+        }
+        // Hiç alarm çalmadıysa (hepsi bildirime düştü) kapatılacak bir şey yok: hatırlatmalar yeniden kurulur.
+        if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall, interval)
     }
 
     /** [sound]: olayın cihazına özel ses (yoksa genel ses). */

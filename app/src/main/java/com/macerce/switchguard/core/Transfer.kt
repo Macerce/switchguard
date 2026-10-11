@@ -35,6 +35,7 @@ object Transfer {
         "rules", "automations", "layout", "freeDevice",
         "alarmVolume", "vibrate", "quietEnabled", "quietStart", "quietEnd",
         "offlineGraceSec", "pollIntervalSec", "summaryEnabled", "summaryMinute",
+        "blindAlertMin", "alarmBoost", "reminderMin",
     )
 
     private const val PBKDF2_ITER = 100_000

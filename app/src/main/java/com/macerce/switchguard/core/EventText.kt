@@ -19,6 +19,8 @@ class EventStrings(
     val monitorRestored: (from: Long, to: Long) -> String,
     /** Alarm kapatıldı: kaç olay vardı, ilk olaydan kapatılana kadar geçen süre. */
     val alarmDismissed: (count: Int, responseMs: Long) -> String,
+    /** Hatırlatma: [label] hâlâ [state]; ilk alarmdan bu yana [durationMs]. */
+    val reminder: (label: String, state: String, durationMs: Long) -> String,
 )
 
 /**
@@ -46,6 +48,15 @@ sealed class EventArgs {
     data class MonitorRestored(val from: Long, val to: Long) : EventArgs()
     /** Alarm kapatıldı; [responseMs] = ilk olaydan kapatılana kadar geçen süre (tepki süresi). */
     data class AlarmDismissed(val count: Int, val responseMs: Long) : EventArgs()
+    /** Alarm kapatıldı ama durum sürüyor: [connection] ise bağlantı, değilse [channel] kanalı hâlâ [to]. */
+    data class Reminder(val channel: Int, val multi: Boolean, val connection: Boolean, val to: Boolean, val durationMs: Long) : EventArgs() {
+        companion object {
+            fun of(r: AlarmReminders.Reminder) = when (val c = r.change) {
+                is Change.Switch -> Reminder(c.channel, c.multiChannel, connection = false, to = c.to, durationMs = r.durationMs)
+                is Change.Connection -> Reminder(0, multi = false, connection = true, to = c.to, durationMs = r.durationMs)
+            }
+        }
+    }
 
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
@@ -65,6 +76,14 @@ sealed class EventArgs {
         is MonitorBlind -> s.monitorBlind(since)
         is MonitorRestored -> s.monitorRestored(from, to)
         is AlarmDismissed -> s.alarmDismissed(count, responseMs)
+        is Reminder -> {
+            val label = if (!connection && multi) s.labels.channel(deviceName, channel + 1) else deviceName
+            val state = when {
+                connection -> if (to) s.labels.online else s.labels.offline
+                else -> if (to) s.labels.on else s.labels.off
+            }
+            s.reminder(label, state, durationMs)
+        }
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -84,6 +103,10 @@ sealed class EventArgs {
             is MonitorBlind -> { put("t", "blind"); put("since", a.since) }
             is MonitorRestored -> { put("t", "restored"); put("from", a.from); put("to", a.to) }
             is AlarmDismissed -> { put("t", "dismissed"); put("n", a.count); put("ms", a.responseMs) }
+            is Reminder -> {
+                put("t", "reminder"); put("ch", a.channel); put("multi", a.multi); put("conn", a.connection)
+                put("to", a.to); put("ms", a.durationMs)
+            }
         }
     }.toString()
 
@@ -108,6 +131,7 @@ sealed class EventArgs {
                     "blind" -> MonitorBlind(o.getLong("since"))
                     "restored" -> MonitorRestored(o.getLong("from"), o.getLong("to"))
                     "dismissed" -> AlarmDismissed(o.getInt("n"), o.getLong("ms"))
+                    "reminder" -> Reminder(o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("conn"), o.getBoolean("to"), o.getLong("ms"))
                     else -> null
                 }
             }.getOrNull()

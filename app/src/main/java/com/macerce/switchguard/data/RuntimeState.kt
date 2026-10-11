@@ -24,6 +24,11 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getString("automation", null)
         set(v) = put { putString("automation", v) }
 
+    /** Hatırlatma bekleyen alarmlar ([com.macerce.switchguard.core.AlarmReminders.toJson]). */
+    var reminders: String?
+        get() = prefs.getString("reminders", null)
+        set(v) = put { putString("reminders", v) }
+
     /** Servisin son "canlıyım" işareti (duvar saati, ms); kesinti tespiti için. */
     var lastAliveAt: Long
         get() = prefs.getLong("aliveAt", 0)
@@ -50,7 +55,7 @@ class RuntimeState private constructor(context: Context) {
         set(v) = put { putLong("stoppedWarnedAt", v) }
 
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
-    fun clearEngine() = put { remove("grace"); remove("automation") }
+    fun clearEngine() = put { remove("grace"); remove("automation"); remove("reminders") }
 
     companion object {
         @Volatile private var instance: RuntimeState? = null

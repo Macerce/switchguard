@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.NetworkCheck
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.SyncProblem
 import androidx.compose.material.icons.rounded.TouchApp
 import androidx.compose.material.icons.rounded.WifiOff
@@ -164,6 +165,7 @@ private fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventKind.MONITOR_GAP -> Icons.Rounded.SyncProblem
     EventKind.MONITOR_BLIND -> Icons.Rounded.WifiOff
     EventKind.DISMISSED -> Icons.Rounded.AlarmOff
+    EventKind.REMINDER -> Icons.Rounded.Snooze
     else -> Icons.Rounded.Alarm
 }
 

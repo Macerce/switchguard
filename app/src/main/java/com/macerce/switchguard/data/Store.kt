@@ -184,6 +184,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var vibrate: Boolean
         get() = prefs.getBoolean("vibrate", true)
         set(v) = put { putBoolean("vibrate", v) }
+    /** Alarm kapatıldı ama durum sürüyorsa bu kadar dakika sonra yeniden çal; 0 = kapalı. */
+    var reminderMin: Int
+        get() = prefs.getInt("reminderMin", 0)
+        set(v) = put { putInt("reminderMin", v.coerceAtLeast(0)) }
     /** Üretici "otomatik başlatma" ayarı okunamaz: kullanıcı yaptığını "Yaptım" ile onaylar. */
     var autostartConfirmed: Boolean
         get() = prefs.getBoolean("autostartOk", false)
