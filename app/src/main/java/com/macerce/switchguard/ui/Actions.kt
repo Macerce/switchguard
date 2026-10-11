@@ -195,7 +195,11 @@ object Actions {
     fun notificationsEnabled(context: Context) =
         context.getSystemService(NotificationManager::class.java).areNotificationsEnabled()
 
-    fun batteryExempt(context: Context) =
+    /**
+     * Pil optimizasyonundan muaf mı. Android TV hep prize takılıdır (uyku kısıtlaması işlemez) ve bu ayarın
+     * ekranı yoktur: orada her zaman muaf sayılır, düzeltilemeyecek bir uyarı gösterilmez.
+     */
+    fun batteryExempt(context: Context) = FormFactor.isTv(context) ||
         context.getSystemService(PowerManager::class.java).isIgnoringBatteryOptimizations(context.packageName)
 
     @android.annotation.SuppressLint("BatteryLife") // Uygulamanın temel işlevi sürekli izleme.

@@ -7,4 +7,5 @@
     <string name="perm_battery_missing">Kısıtlı — alarmlar gecikebilir. Düzeltmek için seçin.</string>
     <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını belirlemek için bir cihazı seçin</string>
     <string name="perm_overlay_desc">Alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Seçin ve SwitchGuard\'a izin verin.</string>
+    <string name="ready_body">SwitchGuard\'ın her zaman çalabilmesi için bu TV ayarlarını düzeltin.</string>
 </resources>

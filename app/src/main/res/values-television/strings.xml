@@ -7,4 +7,5 @@
     <string name="perm_battery_missing">Restricted — alarms may be delayed. Select to fix.</string>
     <string name="onb_done_tip_rules">Select a device to choose which events ring an alarm</string>
     <string name="perm_overlay_desc">Needed so the alarm appears on top of whatever is playing. Select and allow SwitchGuard.</string>
+    <string name="ready_body">Fix these TV settings so SwitchGuard can always ring.</string>
 </resources>
