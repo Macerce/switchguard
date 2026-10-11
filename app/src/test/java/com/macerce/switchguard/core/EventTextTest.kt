@@ -16,6 +16,7 @@ class EventTextTest {
         monitorGap = { from, to -> "Monitoring was down $from–$to" },
         monitorBlind = { "Monitoring not working since $it" },
         monitorRestored = { from, to -> "Monitoring working again after ${to - from}" },
+        alarmDismissed = { n, ms -> "Alarm dismissed: $n events, $ms ms" },
     )
     private val tr = EventStrings(
         ChangeLabels("AÇIK", "KAPALI", "ONLINE", "OFFLINE") { n, c -> "$n (K$c)" },
@@ -28,6 +29,7 @@ class EventTextTest {
         monitorGap = { from, to -> "İzleme durdu: $from–$to" },
         monitorBlind = { "İzleme çalışmıyor: $it" },
         monitorRestored = { from, to -> "İzleme yeniden çalışıyor: ${to - from}" },
+        alarmDismissed = { n, ms -> "Alarm kapatıldı: $n olay, $ms ms" },
     )
     private val both = listOf(en, tr)
     private val rogar = "Rögar Su Seviye Bildirimi"
@@ -45,6 +47,7 @@ class EventTextTest {
             EventArgs.AutoMissing("x"), EventArgs.AutoSwitch("a", 1, true, false, "boom"),
             EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
             EventArgs.MonitorGap(1_000, 61_000), EventArgs.MonitorBlind(5_000), EventArgs.MonitorRestored(5_000, 9_000),
+            EventArgs.AlarmDismissed(3, 130_000),
         )
         all.forEach { assertEquals(it, EventArgs.parse(it.toJson())) }
         assertNull(EventArgs.parse(null)); assertNull(EventArgs.parse("{bad"))
@@ -102,5 +105,10 @@ class EventTextTest {
     @Test fun blindAndRestoredRender() {
         assertEquals("İzleme çalışmıyor: 5000", EventArgs.MonitorBlind(5_000).render("SwitchGuard", tr))
         assertEquals("Monitoring working again after 4000", EventArgs.MonitorRestored(5_000, 9_000).render("SwitchGuard", en))
+    }
+
+    @Test fun alarmDismissedRendersCountAndResponseTime() {
+        assertEquals("Alarm kapatıldı: 3 olay, 130000 ms", EventArgs.AlarmDismissed(3, 130_000).render("SwitchGuard", tr))
+        assertEquals("Alarm dismissed: 1 events, 9000 ms", EventArgs.AlarmDismissed(1, 9_000).render("SwitchGuard", en))
     }
 }

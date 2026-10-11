@@ -455,4 +455,8 @@
     <string name="transfer_other_account_body_generic">Don\'t sign in on this device with the eWeLink account used on your other device (e.g. your phone) — eWeLink allows one session per account and the other device is signed out. For this device: create a new account in the eWeLink app, share your devices with it (device → Share), apply as a developer with that account on dev.ewelink.cc and wait for eWeLink\'s approval, then enter that account\'s API keys (App ID / App Secret) here. The API keys entered here must belong to the account signed in here.</string>
     <string name="transfer_tv_qr_hint">Easiest on a TV: choose “Login by QR code” at the bottom of the sign-in page and scan it with the eWeLink app signed in to the account you created for this device.</string>
     <string name="transfer_send_warning_body">The TV or tablet needs its own eWeLink account: create a new account in the eWeLink app, share your devices with it, apply as a developer with that account and wait for eWeLink\'s approval, then enter that account\'s API keys on the other device. eWeLink keys are not transferred; Tuya keys, rules and settings are. Signing in there with this phone\'s account signs this phone out.</string>
+    <plurals name="event_alarm_dismissed">
+        <item quantity="one">Alarm dismissed · %1$d event · response time %2$s</item>
+        <item quantity="other">Alarm dismissed · %1$d events · response time %2$s</item>
+    </plurals>
 </resources>

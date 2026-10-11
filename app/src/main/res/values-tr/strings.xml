@@ -451,4 +451,8 @@
     <string name="transfer_other_account_body_generic">Bu cihazda, diğer cihazınızda (ör. telefonunuzda) kullandığınız eWeLink hesabıyla giriş YAPMAYIN — eWeLink hesap başına tek oturuma izin verir, diğer cihazdaki oturum kapanır. Bu cihaz için: eWeLink uygulamasından yeni bir hesap açın, cihazlarınızı (cihaz → Paylaş) o hesapla paylaşın, o hesapla dev.ewelink.cc\'de geliştirici başvurusu yapıp eWeLink onayını bekleyin ve o hesabın API anahtarlarını (App ID / App Secret) buraya girin. Buraya girilen API anahtarları, burada giriş yapılan hesaba ait olmalıdır.</string>
     <string name="transfer_tv_qr_hint">TV\'de en kolayı: giriş sayfasının altındaki “Login by QR code” seçeneğini seçin ve QR kodu, bu cihaz için açtığınız hesapla giriş yapılmış eWeLink uygulamasıyla okutun.</string>
     <string name="transfer_send_warning_body">TV ya da tablet için ayrı bir eWeLink hesabı gerekir: eWeLink uygulamasından yeni hesap açın, cihazlarınızı o hesapla paylaşın, o hesapla geliştirici başvurusu yapıp eWeLink onayını bekleyin ve o hesabın API anahtarlarını diğer cihaza girin. eWeLink anahtarları aktarılmaz; Tuya bilgileri, kurallar ve ayarlar aktarılır. Bu telefondaki hesapla diğer cihazda giriş yapılırsa bu telefondaki oturum kapanır.</string>
+    <plurals name="event_alarm_dismissed">
+        <item quantity="one">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
+        <item quantity="other">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
+    </plurals>
 </resources>

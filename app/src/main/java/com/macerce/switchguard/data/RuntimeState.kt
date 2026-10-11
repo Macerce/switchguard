@@ -39,6 +39,11 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getInt("savedAlarmVolume", -1)
         set(v) = put { putInt("savedAlarmVolume", v) }
 
+    /** Çalan alarmın ilk olayının zamanı (tepki süresi için); 0 = alarm yok. */
+    var alarmStartedAt: Long
+        get() = prefs.getLong("alarmStartedAt", 0)
+        set(v) = put { putLong("alarmStartedAt", v) }
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = put { remove("grace"); remove("automation") }
 

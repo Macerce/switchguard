@@ -17,6 +17,8 @@ class EventStrings(
     val monitorBlind: (since: Long) -> String,
     /** İzleme yeniden çalışıyor; [from]–[to] arası kördü. */
     val monitorRestored: (from: Long, to: Long) -> String,
+    /** Alarm kapatıldı: kaç olay vardı, ilk olaydan kapatılana kadar geçen süre. */
+    val alarmDismissed: (count: Int, responseMs: Long) -> String,
 )
 
 /**
@@ -42,6 +44,8 @@ sealed class EventArgs {
     /** İzleme [since]'den beri kör (internet/bulut/oturum sorunu). */
     data class MonitorBlind(val since: Long) : EventArgs()
     data class MonitorRestored(val from: Long, val to: Long) : EventArgs()
+    /** Alarm kapatıldı; [responseMs] = ilk olaydan kapatılana kadar geçen süre (tepki süresi). */
+    data class AlarmDismissed(val count: Int, val responseMs: Long) : EventArgs()
 
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
@@ -60,6 +64,7 @@ sealed class EventArgs {
         is MonitorGap -> s.monitorGap(from, to)
         is MonitorBlind -> s.monitorBlind(since)
         is MonitorRestored -> s.monitorRestored(from, to)
+        is AlarmDismissed -> s.alarmDismissed(count, responseMs)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -78,6 +83,7 @@ sealed class EventArgs {
             is MonitorGap -> { put("t", "gap"); put("from", a.from); put("to", a.to) }
             is MonitorBlind -> { put("t", "blind"); put("since", a.since) }
             is MonitorRestored -> { put("t", "restored"); put("from", a.from); put("to", a.to) }
+            is AlarmDismissed -> { put("t", "dismissed"); put("n", a.count); put("ms", a.responseMs) }
         }
     }.toString()
 
@@ -101,6 +107,7 @@ sealed class EventArgs {
                     "gap" -> MonitorGap(o.getLong("from"), o.getLong("to"))
                     "blind" -> MonitorBlind(o.getLong("since"))
                     "restored" -> MonitorRestored(o.getLong("from"), o.getLong("to"))
+                    "dismissed" -> AlarmDismissed(o.getInt("n"), o.getLong("ms"))
                     else -> null
                 }
             }.getOrNull()

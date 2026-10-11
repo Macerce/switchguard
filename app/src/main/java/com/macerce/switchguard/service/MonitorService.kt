@@ -156,6 +156,8 @@ class MonitorService : Service() {
             }
             ACTION_DISMISS -> {
                 handler.post {
+                    val lines = store.pendingAlarm
+                    if (lines.isNotEmpty()) logDismissal(lines.size)
                     store.pendingAlarm = emptyList()
                     notifier.stopAlarm()
                 }
@@ -240,6 +242,7 @@ class MonitorService : Service() {
             socket.close()
             tuyaSocket.close()
             store.pendingAlarm = emptyList()
+            runtime.alarmStartedAt = 0
             runtime.clearEngine()
             notifier.clearBlind()
             notifier.stopAlarm()
@@ -876,9 +879,19 @@ class MonitorService : Service() {
 
     /** [sound]: olayın cihazına özel ses (yoksa genel ses). */
     private fun addAlarm(text: String, sound: String? = null) {
+        if (store.pendingAlarm.isEmpty()) runtime.alarmStartedAt = System.currentTimeMillis()
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         notifier.showAlarm(store.pendingAlarm, sound)
+    }
+
+    /** Alarmın kapatılması geçmişe yazılır: kaç olay vardı ve ne kadar sürede kapatıldı (tepki süresi). */
+    private fun logDismissal(count: Int) {
+        val now = System.currentTimeMillis()
+        val started = runtime.alarmStartedAt.takeIf { it in 1..now } ?: now
+        val args = EventArgs.AlarmDismissed(count, now - started)
+        log.add("", getString(R.string.app_name), EventKind.DISMISSED, args.render(getString(R.string.app_name), strings), "", args)
+        runtime.alarmStartedAt = 0
     }
 
     private fun onAuthFailed() {

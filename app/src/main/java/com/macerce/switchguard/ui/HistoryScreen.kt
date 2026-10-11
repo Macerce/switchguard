@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Alarm
+import androidx.compose.material.icons.rounded.AlarmOff
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudQueue
@@ -162,6 +163,7 @@ private fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventKind.AUTOMATION -> Icons.Rounded.AutoMode
     EventKind.MONITOR_GAP -> Icons.Rounded.SyncProblem
     EventKind.MONITOR_BLIND -> Icons.Rounded.WifiOff
+    EventKind.DISMISSED -> Icons.Rounded.AlarmOff
     else -> Icons.Rounded.Alarm
 }
 
