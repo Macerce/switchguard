@@ -245,8 +245,8 @@
     <string name="ready_channel_desc">“Alarmlar” bildirim kategorisi yüksek önemde değil; alarm üstte ya da tam ekran açılmaz.</string>
     <string name="ready_dnd">Rahatsız Etmeyin: tamamen sessiz</string>
     <string name="ready_dnd_desc">Bu modda alarm sesleri de susar.</string>
-    <string name="ready_volume">Alarm sesi kapalı</string>
-    <string name="ready_volume_desc">Telefonun alarm ses seviyesi sıfır; SwitchGuard sessiz çalar. Düzelt, “Alarm tam seste çalsın” ayarını açar.</string>
+    <string name="ready_volume">Alarm sesi çok kısık</string>
+    <string name="ready_volume_desc">Telefonun alarm ses seviyesi sıfır ya da sıfıra yakın; SwitchGuard\'ı duymayabilirsiniz. Düzelt, “Alarm tam seste çalsın” ayarını açar.</string>
     <string name="ready_battery">Arka plan kısıtlı</string>
     <string name="ready_battery_desc">Telefon izlemeyi uyutabilir; alarmlar gecikebilir ya da kaçabilir.</string>
     <string name="ready_full_screen">Tam ekran alarm izni yok</string>
@@ -290,6 +290,7 @@
     <string name="onb_perm_body">Bu izinler, ekran kapalıyken bile alarmların size ulaşmasını sağlar.</string>
     <string name="onb_perm_notif_desc">Alarmları göstermek için gerekli.</string>
     <string name="onb_perm_battery_desc">İzlemenin arka planda sürmesini ve alarmların gecikmemesini sağlar.</string>
+    <string name="onb_perm_full_screen_desc">Telefon kilitliyken alarmın büyük ekranıyla açılmasını sağlar.</string>
     <string name="onb_done_title">Hazırsınız!</string>
     <string name="onb_done_body">İzlemeyi şimdi başlatın. Her şeyi daha sonra ayrıntılı olarak ayarlayabilirsiniz.</string>
     <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını seçmek için bir cihaza dokunun</string>

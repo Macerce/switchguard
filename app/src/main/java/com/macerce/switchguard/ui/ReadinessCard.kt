@@ -58,6 +58,7 @@ fun readinessInput(context: Context, store: Store): ReadinessInput {
         alarmChannelHigh = channel == null || channel.importance >= NotificationManager.IMPORTANCE_HIGH,
         dndTotalSilence = nm.currentInterruptionFilter == NotificationManager.INTERRUPTION_FILTER_NONE,
         alarmVolume = audio.getStreamVolume(AudioManager.STREAM_ALARM),
+        alarmVolumeMax = audio.getStreamMaxVolume(AudioManager.STREAM_ALARM),
         alarmBoost = store.alarmBoost,
         batteryExempt = Actions.batteryExempt(context),
         fullScreenAllowed = Actions.fullScreenAllowed(context),
@@ -109,7 +110,7 @@ private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
             Triple(Icons.Rounded.NotificationsPaused, stringResource(R.string.ready_channel), stringResource(R.string.ready_channel_desc))
         ReadinessIssue.DND_TOTAL_SILENCE ->
             Triple(Icons.Rounded.DoNotDisturbOn, stringResource(R.string.ready_dnd), stringResource(R.string.ready_dnd_desc))
-        ReadinessIssue.ALARM_VOLUME_MUTED ->
+        ReadinessIssue.ALARM_VOLUME_LOW ->
             Triple(Icons.AutoMirrored.Rounded.VolumeOff, stringResource(R.string.ready_volume), stringResource(R.string.ready_volume_desc))
         ReadinessIssue.BATTERY_RESTRICTED ->
             Triple(Icons.Rounded.BatteryAlert, stringResource(R.string.ready_battery), stringResource(R.string.ready_battery_desc))
@@ -158,7 +159,7 @@ private fun fix(issue: ReadinessIssue, context: Context, store: Store) {
         }.onFailure { Actions.openNotificationSettings(context) }
         ReadinessIssue.DND_TOTAL_SILENCE -> runCatching { context.startActivity(Intent("android.settings.ZEN_MODE_SETTINGS")) }
             .onFailure { runCatching { context.startActivity(Intent(Settings.ACTION_SOUND_SETTINGS)) } }
-        ReadinessIssue.ALARM_VOLUME_MUTED -> store.alarmBoost = true
+        ReadinessIssue.ALARM_VOLUME_LOW -> store.alarmBoost = true
         ReadinessIssue.BATTERY_RESTRICTED -> Actions.requestBatteryExemption(context)
         ReadinessIssue.FULL_SCREEN_DENIED -> Actions.openFullScreenSettings(context)
         ReadinessIssue.OVERLAY_DENIED -> AlarmActivity.openOverlaySettings(context)

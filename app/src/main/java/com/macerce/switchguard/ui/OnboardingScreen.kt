@@ -409,7 +409,7 @@ private fun PermissionsStep(resumed: Boolean) {
         PermissionCard(
             Icons.Rounded.Fullscreen,
             stringResource(R.string.perm_full_screen),
-            stringResource(R.string.ready_full_screen_desc),
+            stringResource(R.string.onb_perm_full_screen_desc),
             granted = allowed,
         ) { Actions.openFullScreenSettings(context) }
     }

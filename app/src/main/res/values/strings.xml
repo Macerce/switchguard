@@ -249,8 +249,8 @@
     <string name="ready_channel_desc">The “Alarms” notification category isn\'t set to high priority, so the alarm won\'t pop up or fill the screen.</string>
     <string name="ready_dnd">Do Not Disturb: total silence</string>
     <string name="ready_dnd_desc">In this mode even alarm sounds are muted.</string>
-    <string name="ready_volume">Alarm volume is off</string>
-    <string name="ready_volume_desc">The phone\'s alarm volume is zero, so SwitchGuard would ring silently. Fix turns on “Ring at full volume”.</string>
+    <string name="ready_volume">Alarm volume is very low</string>
+    <string name="ready_volume_desc">The phone\'s alarm volume is at or near zero, so you may not hear SwitchGuard. Fix turns on “Ring at full volume”.</string>
     <string name="ready_battery">Background activity is restricted</string>
     <string name="ready_battery_desc">The phone may put monitoring to sleep; alarms can be late or missed.</string>
     <string name="ready_full_screen">Full-screen alarm is not allowed</string>
@@ -294,6 +294,7 @@
     <string name="onb_perm_body">These permissions make sure alarms reach you, even when the screen is off.</string>
     <string name="onb_perm_notif_desc">Required to show alarms.</string>
     <string name="onb_perm_battery_desc">Lets monitoring keep running in the background so alarms aren\'t delayed.</string>
+    <string name="onb_perm_full_screen_desc">Lets the alarm open its large screen while the phone is locked.</string>
     <string name="onb_done_title">All set!</string>
     <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
     <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>

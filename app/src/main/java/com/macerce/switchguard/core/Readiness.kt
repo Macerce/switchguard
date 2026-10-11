@@ -5,7 +5,7 @@ enum class ReadinessIssue {
     NOTIFICATIONS_OFF,
     ALARM_CHANNEL_MUTED,
     DND_TOTAL_SILENCE,
-    ALARM_VOLUME_MUTED,
+    ALARM_VOLUME_LOW,
     BATTERY_RESTRICTED,
     FULL_SCREEN_DENIED,
     OVERLAY_DENIED,
@@ -19,8 +19,9 @@ data class ReadinessInput(
     val alarmChannelHigh: Boolean,
     /** Rahatsız Etmeyin "tamamen sessiz": alarm sesleri de susar. */
     val dndTotalSilence: Boolean,
-    /** Telefonun alarm ses seviyesi. */
+    /** Telefonun alarm ses seviyesi ve en yüksek değeri. */
     val alarmVolume: Int,
+    val alarmVolumeMax: Int,
     /** Alarm çalarken ses en yükseğe çıkarılıyor mu (bkz. [AlarmVolume]). */
     val alarmBoost: Boolean,
     val batteryExempt: Boolean,
@@ -36,7 +37,8 @@ object Readiness {
         if (!i.notificationsEnabled) add(ReadinessIssue.NOTIFICATIONS_OFF)
         else if (!i.alarmChannelHigh) add(ReadinessIssue.ALARM_CHANNEL_MUTED)
         if (i.dndTotalSilence) add(ReadinessIssue.DND_TOTAL_SILENCE)
-        if (i.alarmVolume <= 0 && !i.alarmBoost) add(ReadinessIssue.ALARM_VOLUME_MUTED)
+        // Yeni Android'lerde alarm sesi 0 olamaz ama en düşük seviye de neredeyse duyulmaz: %20'nin altı kısık sayılır.
+        if (!i.alarmBoost && (i.alarmVolume <= 0 || i.alarmVolume * 5 < i.alarmVolumeMax)) add(ReadinessIssue.ALARM_VOLUME_LOW)
         if (!i.batteryExempt) add(ReadinessIssue.BATTERY_RESTRICTED)
         if (i.fullScreenAllowed == false) add(ReadinessIssue.FULL_SCREEN_DENIED)
         if (i.overlayAllowed == false) add(ReadinessIssue.OVERLAY_DENIED)
