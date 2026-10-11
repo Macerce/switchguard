@@ -24,6 +24,16 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getString("automation", null)
         set(v) = put { putString("automation", v) }
 
+    /** Servisin son "canlıyım" işareti (duvar saati, ms); kesinti tespiti için. */
+    var lastAliveAt: Long
+        get() = prefs.getLong("aliveAt", 0)
+        set(v) = put { putLong("aliveAt", v) }
+
+    /** İzleme kullanıcı tarafından kapatıldı (beklenmedik kapanma değil). */
+    var cleanStop: Boolean
+        get() = prefs.getBoolean("cleanStop", true)
+        set(v) = put { putBoolean("cleanStop", v) }
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = put { remove("grace"); remove("automation") }
 

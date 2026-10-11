@@ -3,6 +3,7 @@ package com.macerce.switchguard.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.macerce.switchguard.data.Store
 
 /** Telefon açıldığında (veya uygulama güncellendiğinde) izleme açıksa servisi yeniden başlatır. */
@@ -19,9 +20,20 @@ class BootReceiver : BroadcastReceiver() {
     }
 }
 
-/** AlarmManager "tick"i: servis çalışıyorsa bir tur heartbeat/senkron yaptırır. */
+/**
+ * AlarmManager "tick"i: servis çalışıyorsa bir tur heartbeat/senkron yaptırır. Bekçi görevi de görür:
+ * izleme açık ama servis yoksa (telefon kapatmış) yeniden başlatır; aksi halde ancak uygulama açılınca
+ * ya da telefon yeniden başlayınca geri gelirdi.
+ */
 class TickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        MonitorService.instance?.onAlarmTick()
+        val service = MonitorService.instance
+        if (service != null) {
+            service.onAlarmTick()
+        } else if (Store.get(context).monitoringEnabled) {
+            // Android 12+ arka plandan ön plan servisi başlatmayı pil optimizasyonu muafiyetiyle izin verir.
+            runCatching { MonitorService.send(context, MonitorService.ACTION_START) }
+                .onFailure { Log.w("SwitchGuard", "watchdog restart failed", it) }
+        }
     }
 }

@@ -39,6 +39,7 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
+import com.macerce.switchguard.core.MonitorGap
 import com.macerce.switchguard.core.OfflineGrace
 import com.macerce.switchguard.core.RuleEngine
 import com.macerce.switchguard.core.TuyaEvent
@@ -210,6 +211,7 @@ class MonitorService : Service() {
             applyWakeMode()
             // İlk senkrondan önce: bekleyen kopmalar ve otomasyon süreleri kaldığı yerden devam etsin.
             restoreRuntime()
+            reportGap(System.currentTimeMillis())
             // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir.
             store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) }
             setState(ConnState.CONNECTING)
@@ -224,6 +226,8 @@ class MonitorService : Service() {
     }
 
     private fun stopMonitoring() {
+        // Kullanıcının kendi kapatması: sonraki açılışta "kesinti" sayılmasın.
+        runtime.cleanStop = true
         store.monitoringEnabled = false
         running = false
         LiveState.setConnection(ConnState.STOPPED)
@@ -291,6 +295,7 @@ class MonitorService : Service() {
         tuyaTick(now)
         demoTick(wall)
         persistRuntime()
+        heartbeat(wall)
 
         if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
@@ -668,6 +673,7 @@ class MonitorService : Service() {
         changes.forEach(::handle)
         runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
         persistRuntime()
+        heartbeat(wall)
     }
 
     private fun restoreRuntime() {
@@ -675,6 +681,31 @@ class MonitorService : Service() {
         automations.restore(runtime.automationState, store.automations)
         // Süresi bu arada dolmuş beklemeler ilk tick'te işlenir; o tick senkrondan sonra çalışır,
         // böylece bu arada geri gelen cihaz "kısa kopma" sayılır.
+    }
+
+    /**
+     * Önceki çalışma beklenmedik şekilde bittiyse (telefon servisi kapattı, telefon kapalıydı) aradaki
+     * süreyi geçmişe yazar ve bildirir: o sürede olan değişiklikler kaçırılmış olabilir.
+     */
+    private fun reportGap(wall: Long) {
+        MonitorGap.detect(runtime.lastAliveAt, runtime.cleanStop, wall)?.let { (from, to) ->
+            val args = EventArgs.MonitorGap(from, to)
+            val text = args.render(getString(R.string.app_name), strings)
+            Log.w(TAG, "monitoring gap ${(to - from) / 1000}s")
+            log.add("", getString(R.string.app_name), EventKind.MONITOR_GAP, text, AlertAction.NOTIFY.name, args)
+            notifier.notifyEvent(text)
+        }
+        runtime.cleanStop = false
+        heartbeat(wall, force = true)
+    }
+
+    private var lastHeartbeatAt = 0L
+
+    /** "Canlıyım" işareti; diske dakikada en çok bir kez yazılır. */
+    private fun heartbeat(wall: Long, force: Boolean = false) {
+        if (!force && wall - lastHeartbeatAt < HEARTBEAT_MS) return
+        lastHeartbeatAt = wall
+        runtime.lastAliveAt = wall
     }
 
     /** Servis beklenmedik şekilde kapanırsa kaldığı yerden devam edebilsin. */
@@ -905,6 +936,7 @@ class MonitorService : Service() {
         private const val POWER_STALE_MS = 5 * 60_000L
         private const val LOOP_MS = 15_000L
         private const val ALARM_TICK_MS = 60_000L
+        private const val HEARTBEAT_MS = 60_000L
         private const val RESYNC_MS = 5 * 60_000L
         private const val CONFIRM_DELAY_MS = 5_000L
         /**

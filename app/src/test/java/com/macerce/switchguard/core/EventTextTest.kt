@@ -13,6 +13,7 @@ class EventTextTest {
         deviceMissing = "This device is no longer in your account.",
         automationFailed = { t, e -> "$t — failed: $e" },
         powerStale = { "$it: no channel power data for 5 minutes." },
+        monitorGap = { from, to -> "Monitoring was down $from–$to" },
     )
     private val tr = EventStrings(
         ChangeLabels("AÇIK", "KAPALI", "ONLINE", "OFFLINE") { n, c -> "$n (K$c)" },
@@ -22,6 +23,7 @@ class EventTextTest {
         deviceMissing = "Bu cihaz artık hesabınızda değil.",
         automationFailed = { t, e -> "$t — başarısız: $e" },
         powerStale = { "$it: kanal gücü verisi 5 dakikadır alınamıyor." },
+        monitorGap = { from, to -> "İzleme durdu: $from–$to" },
     )
     private val both = listOf(en, tr)
     private val rogar = "Rögar Su Seviye Bildirimi"
@@ -38,6 +40,7 @@ class EventTextTest {
             EventArgs.ShortDrop, EventArgs.Test, EventArgs.PowerStale,
             EventArgs.AutoMissing("x"), EventArgs.AutoSwitch("a", 1, true, false, "boom"),
             EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
+            EventArgs.MonitorGap(1_000, 61_000),
         )
         all.forEach { assertEquals(it, EventArgs.parse(it.toJson())) }
         assertNull(EventArgs.parse(null)); assertNull(EventArgs.parse("{bad"))
@@ -84,5 +87,11 @@ class EventTextTest {
 
     @Test fun unknownTextStaysUnparsed() {
         assertNull(EventArgs.fromLegacy("TURNED_ON", rogar, "something else", both))
+    }
+
+    @Test fun monitorGapRendersInEachLanguage() {
+        val a = EventArgs.MonitorGap(1_000, 61_000)
+        assertEquals("İzleme durdu: 1000–61000", a.render("SwitchGuard", tr))
+        assertEquals("Monitoring was down 1000–61000", a.render("SwitchGuard", en))
     }
 }

@@ -193,6 +193,12 @@
     <string name="grace_off">Off (alert immediately)</string>
     <string name="seconds_n">%d seconds</string>
     <string name="minutes_n">%d minute(s)</string>
+    <string name="dur_seconds">%d s</string>
+    <string name="dur_min_sec">%1$d min %2$d s</string>
+    <string name="dur_minutes">%d min</string>
+    <string name="dur_hour_min">%1$d h %2$d min</string>
+    <string name="dur_day_hour">%1$d d %2$d h</string>
+    <string name="event_monitor_gap">Monitoring was interrupted: %1$s (%2$s). Changes during this time may have been missed.</string>
     <string name="poll_interval">Backup check interval</string>
     <string name="poll_interval_desc">Used only when instant updates aren\'t available.</string>
     <string name="poll_interval_value">Every %d s</string>

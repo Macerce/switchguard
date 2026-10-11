@@ -11,6 +11,8 @@ class EventStrings(
     val deviceMissing: String,
     val automationFailed: (text: String, error: String) -> String,
     val powerStale: (name: String) -> String,
+    /** İzlemenin durduğu aralık (ms, duvar saati). */
+    val monitorGap: (from: Long, to: Long) -> String,
 )
 
 /**
@@ -31,6 +33,8 @@ sealed class EventArgs {
         val error: String? = null,
     ) : EventArgs()
     data class AutoAlert(val automation: String, val source: String?) : EventArgs()
+    /** İzleme [from]–[to] arasında çalışmadı (servis kapatıldı, telefon kapalıydı). */
+    data class MonitorGap(val from: Long, val to: Long) : EventArgs()
 
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
@@ -46,6 +50,7 @@ sealed class EventArgs {
             if (error != null) s.automationFailed(text, error) else text
         }
         is AutoAlert -> s.automationFired(automation).let { if (source != null) "$it ($source)" else it }
+        is MonitorGap -> s.monitorGap(from, to)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -61,6 +66,7 @@ sealed class EventArgs {
                 a.error?.let { put("err", it) }
             }
             is AutoAlert -> { put("t", "auto_alert"); put("auto", a.automation); a.source?.let { put("src", it) } }
+            is MonitorGap -> { put("t", "gap"); put("from", a.from); put("to", a.to) }
         }
     }.toString()
 
@@ -81,6 +87,7 @@ sealed class EventArgs {
                         if (o.has("err")) o.getString("err") else null,
                     )
                     "auto_alert" -> AutoAlert(o.getString("auto"), if (o.has("src")) o.getString("src") else null)
+                    "gap" -> MonitorGap(o.getLong("from"), o.getLong("to"))
                     else -> null
                 }
             }.getOrNull()

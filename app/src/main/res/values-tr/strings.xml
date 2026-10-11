@@ -189,6 +189,12 @@
     <string name="grace_off">Kapalı (hemen uyar)</string>
     <string name="seconds_n">%d saniye</string>
     <string name="minutes_n">%d dakika</string>
+    <string name="dur_seconds">%d sn</string>
+    <string name="dur_min_sec">%1$d dk %2$d sn</string>
+    <string name="dur_minutes">%d dk</string>
+    <string name="dur_hour_min">%1$d sa %2$d dk</string>
+    <string name="dur_day_hour">%1$d g %2$d sa</string>
+    <string name="event_monitor_gap">İzleme kesintiye uğradı: %1$s (%2$s). Bu sürede olan değişiklikler kaçırılmış olabilir.</string>
     <string name="poll_interval">Yedek kontrol aralığı</string>
     <string name="poll_interval_desc">Yalnızca anlık bildirim kullanılamadığında kullanılır.</string>
     <string name="poll_interval_value">%d sn\'de bir</string>

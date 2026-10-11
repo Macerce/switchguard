@@ -5,12 +5,16 @@ import android.content.Context
 import android.content.res.Configuration
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.text.format.DateUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.ChangeLabels
+import com.macerce.switchguard.core.DurationStrings
+import com.macerce.switchguard.core.DurationText
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Calendar
 import java.util.Locale
 
 /** Olay türleri: EventType adları + uygulamaya özgü türler. */
@@ -19,6 +23,7 @@ object EventKind {
     const val SHORT_DROP = "SHORT_DROP" // Bekleme süresinde geri gelen kısa kopma
     const val TEST = "TEST"
     const val AUTOMATION = "AUTOMATION" // Otomasyonun yaptığı işlem
+    const val MONITOR_GAP = "MONITOR_GAP" // İzlemenin çalışmadığı aralık
 }
 
 data class LoggedEvent(
@@ -134,7 +139,26 @@ class EventLog private constructor(context: Context) :
             deviceMissing = context.getString(R.string.device_missing),
             automationFailed = { t, e -> context.getString(R.string.automation_failed, t, e) },
             powerStale = { context.getString(R.string.power_data_stale, it) },
+            monitorGap = { from, to ->
+                context.getString(R.string.event_monitor_gap, timeRange(context, from, to), DurationText.format(to - from, durations(context)))
+            },
         )
+
+        /** [context]'in dilindeki süre kalıpları ("2 dk 10 sn" gibi). */
+        fun durations(context: Context) = DurationStrings(
+            seconds = { context.getString(R.string.dur_seconds, it) },
+            minSec = { m, s -> context.getString(R.string.dur_min_sec, m, s) },
+            minutes = { context.getString(R.string.dur_minutes, it) },
+            hourMin = { h, m -> context.getString(R.string.dur_hour_min, h, m) },
+            dayHour = { d, h -> context.getString(R.string.dur_day_hour, d, h) },
+        )
+
+        /** "14:02 – 14:37"; farklı günlerdeyse tarihle birlikte. */
+        private fun timeRange(context: Context, from: Long, to: Long): String {
+            fun day(t: Long) = Calendar.getInstance().run { timeInMillis = t; get(Calendar.YEAR) * 1000 + get(Calendar.DAY_OF_YEAR) }
+            val date = if (day(from) == day(to)) 0 else DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH
+            return DateUtils.formatDateRange(context, from, to, DateUtils.FORMAT_SHOW_TIME or date)
+        }
 
         private fun localized(context: Context, tag: String): Context =
             context.createConfigurationContext(Configuration(context.resources.configuration).apply { setLocale(Locale.forLanguageTag(tag)) })
