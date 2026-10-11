@@ -108,7 +108,7 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                                         resources.getString(R.string.tuya_shared_hint)
                                 } else {
                                     android.widget.Toast.makeText(
-                                        context, resources.getString(R.string.tuya_connected_ok, count), android.widget.Toast.LENGTH_LONG,
+                                        context, resources.getQuantityString(R.plurals.tuya_connected_ok, count, count), android.widget.Toast.LENGTH_LONG,
                                     ).show()
                                     onDismiss()
                                 }

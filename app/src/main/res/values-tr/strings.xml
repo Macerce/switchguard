@@ -43,17 +43,13 @@
     <string name="state_auth_error">Oturum sona erdi — yeniden giriş yapın</string>
     <string name="state_error">eWeLink hatası</string>
     <string name="state_stopped">İzleme kapalı</string>
-    <string name="status_live">Canlı · %d cihaz izleniyor</string>
-    <string name="status_polling">%1$d cihaz izleniyor · %2$d sn\'de bir</string>
     <string name="detail_ws_unsupported">Bu App ID ile anlık bildirim kullanılamıyor; periyodik kontrol yapılıyor (aralıktan kısa değişiklikler kaçabilir)</string>
     <string name="detail_reconnecting">Anlık bağlantı yeniden kuruluyor…</string>
     <string name="detail_api_error">Hata kodu %d</string>
     <string name="monitoring_off_hint">Alarm almak için izlemeyi başlatın</string>
     <string name="last_update">Güncellendi: %s</string>
-    <string name="device_count">%d cihaz</string>
 
     <!-- Cihazlar -->
-    <string name="alarm_banner_title">Alarm · %d değişiklik</string>
     <string name="alarm_banner_more">+%d daha</string>
     <string name="login_needed_title">Giriş gerekli</string>
     <string name="login_needed_body">Cihazlarınızı görmek için eWeLink hesabınızla giriş yapın.</string>
@@ -153,7 +149,6 @@
     <string name="onb_open_guide">Resimli rehberi aç</string>
     <string name="onb_tuya_privacy">Bu bilgiler yalnızca bu telefonda saklanır ve Tuya\'nın kendi sunucuları dışında hiçbir yere gönderilmez.</string>
     <string name="tuya_not_connected">Bağlı değil · bağlamak için dokunun</string>
-    <string name="tuya_connected_x">Bağlı · %1$s · %2$d cihaz</string>
     <string name="tuya_dialog_title">Tuya / Smart Life bağla</string>
     <string name="tuya_dialog_desc">Tuya Cloud projenizin Access ID ve Access Secret bilgilerini girin (platform.tuya.com → Cloud → projeniz → Overview). Smart Life / Tuya uygulama hesabınız projeye bağlı olmalı.</string>
     <string name="tuya_region">Veri merkezi</string>
@@ -162,7 +157,6 @@
     <string name="tuya_region_cn">Çin</string>
     <string name="tuya_region_in">Hindistan</string>
     <string name="tuya_checking">Tuya\'ya bağlanılıyor…</string>
-    <string name="tuya_connected_ok">Tuya bağlandı: %d cihaz bulundu</string>
     <string name="tuya_shared_hint">Size paylaşılan bir cihaz görünmüyor mu? Tuya yalnızca evlerinizdeki cihazları listeler. Cihaz sahibinden sizi Smart Life\'ta ev üyesi olarak eklemesini isteyin (Ben → Ev Yönetimi → Üye Ekle).</string>
     <string name="tuya_connected_none">Tuya bağlandı ama hiç cihaz bulunamadı. Smart Life / Tuya uygulama hesabınızın projeye aynı veri merkezinde bağlı olduğunu kontrol edin.</string>
     <string name="tuya_disconnect">Bağlantıyı kaldır</string>
@@ -187,8 +181,6 @@
     <string name="offline_grace">Kısa kopmaları yok say</string>
     <string name="offline_grace_desc">Bir cihazın bağlantısı koptuğunda uyarmadan önce bu kadar bekle. Süre içinde geri gelirse uyarı verilmez.</string>
     <string name="grace_off">Kapalı (hemen uyar)</string>
-    <string name="seconds_n">%d saniye</string>
-    <string name="minutes_n">%d dakika</string>
     <string name="dur_seconds">%d sn</string>
     <string name="dur_min_sec">%1$d dk %2$d sn</string>
     <string name="dur_minutes">%d dk</string>
@@ -476,5 +468,37 @@
     <plurals name="event_alarm_dismissed">
         <item quantity="one">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
         <item quantity="other">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
+    </plurals>
+    <plurals name="status_live">
+        <item quantity="one">Canlı · %d cihaz izleniyor</item>
+        <item quantity="other">Canlı · %d cihaz izleniyor</item>
+    </plurals>
+    <plurals name="status_polling">
+        <item quantity="one">%1$d cihaz izleniyor · %2$d sn\'de bir</item>
+        <item quantity="other">%1$d cihaz izleniyor · %2$d sn\'de bir</item>
+    </plurals>
+    <plurals name="device_count">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
+    <plurals name="alarm_banner_title">
+        <item quantity="one">Alarm · %d değişiklik</item>
+        <item quantity="other">Alarm · %d değişiklik</item>
+    </plurals>
+    <plurals name="tuya_connected_x">
+        <item quantity="one">Bağlı · %1$s · %2$d cihaz</item>
+        <item quantity="other">Bağlı · %1$s · %2$d cihaz</item>
+    </plurals>
+    <plurals name="tuya_connected_ok">
+        <item quantity="one">Tuya bağlandı: %d cihaz bulundu</item>
+        <item quantity="other">Tuya bağlandı: %d cihaz bulundu</item>
+    </plurals>
+    <plurals name="seconds_n">
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
+    </plurals>
+    <plurals name="minutes_n">
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
     </plurals>
 </resources>

@@ -953,8 +953,8 @@ class MonitorService : Service() {
         LiveState.setConnection(state, detail, synced)
         val count = store.monitoredIds().size
         val text = when (state) {
-            ConnState.LIVE -> getString(R.string.status_live, count)
-            ConnState.POLLING -> getString(R.string.status_polling, count, store.pollIntervalSec)
+            ConnState.LIVE -> resources.getQuantityString(R.plurals.status_live, count, count)
+            ConnState.POLLING -> resources.getQuantityString(R.plurals.status_polling, count, count, store.pollIntervalSec)
             ConnState.CONNECTING -> getString(R.string.state_connecting)
             ConnState.NO_INTERNET -> getString(R.string.state_no_internet)
             ConnState.AUTH_ERROR -> getString(R.string.state_auth_error)

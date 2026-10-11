@@ -79,6 +79,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -180,10 +181,9 @@ fun SettingsScreen(modifier: Modifier) {
                 InfoRow(
                     Icons.Rounded.Hub,
                     stringResource(R.string.tuya_account),
-                    if (s.hasTuya) stringResource(
-                        R.string.tuya_connected_x, regionLabel(s.tuyaRegion),
-                        s.snapshots.count { it.cloud == Cloud.TUYA },
-                    ) else stringResource(R.string.tuya_not_connected),
+                    if (s.hasTuya) s.snapshots.count { it.cloud == Cloud.TUYA }.let { n ->
+                        pluralStringResource(R.plurals.tuya_connected_x, n, regionLabel(s.tuyaRegion), n)
+                    } else stringResource(R.string.tuya_not_connected),
                     Modifier.clickable { dialog = { TuyaDialog(store) { dialog = null } } },
                 )
                 Divider()
@@ -535,8 +535,8 @@ private fun blindLabel(min: Int): String =
 @Composable
 private fun graceLabel(sec: Int): String = when {
     sec == 0 -> stringResource(R.string.grace_off)
-    sec < 60 -> stringResource(R.string.seconds_n, sec)
-    else -> stringResource(R.string.minutes_n, sec / 60)
+    sec < 60 -> pluralStringResource(R.plurals.seconds_n, sec, sec)
+    else -> pluralStringResource(R.plurals.minutes_n, sec / 60, sec / 60)
 }
 
 fun formatMinute(context: android.content.Context, minute: Int): String {

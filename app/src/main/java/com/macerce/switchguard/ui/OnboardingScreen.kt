@@ -64,6 +64,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -286,9 +287,9 @@ private fun TuyaConnectStep(store: Store, version: Int) {
             Icon(Icons.Rounded.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(8.dp))
             Text(
-                stringResource(R.string.tuya_connected_x, regionLabel(store.tuyaRegion), remember(version) {
-                    store.snapshots.count { it.cloud == com.macerce.switchguard.core.Cloud.TUYA }
-                }),
+                remember(version) { store.snapshots.count { it.cloud == com.macerce.switchguard.core.Cloud.TUYA } }.let { n ->
+                    pluralStringResource(R.plurals.tuya_connected_x, n, regionLabel(store.tuyaRegion), n)
+                },
                 style = MaterialTheme.typography.titleMedium,
             )
         }

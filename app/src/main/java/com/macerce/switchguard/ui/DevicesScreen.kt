@@ -81,6 +81,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -260,7 +261,7 @@ private fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
                 Icon(Icons.Rounded.Alarm, null, modifier = Modifier.size(28.dp))
                 Spacer(Modifier.width(12.dp))
                 Text(
-                    stringResource(R.string.alarm_banner_title, lines.size),
+                    pluralStringResource(R.plurals.alarm_banner_title, lines.size, lines.size),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
@@ -317,7 +318,7 @@ private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, mon
                         // "now" 30 sn'de bir tazelenir; arada gelen senkron onu geçerse "… sonra" yazmasın.
                         DateUtils.getRelativeTimeSpanString(lastSync, maxOf(now, lastSync), DateUtils.SECOND_IN_MILLIS).toString(),
                     )
-                    else -> stringResource(R.string.device_count, deviceCount)
+                    else -> pluralStringResource(R.plurals.device_count, deviceCount, deviceCount)
                 }
                 Text(sub, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }

@@ -49,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -165,7 +166,7 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): String {
     val src = devices.firstOrNull { it.id == t.deviceId }
     val srcName = src?.let { channelLabel(it, t.channel, t.kind.usesChannel) } ?: stringResource(R.string.device_missing)
     val trigger = when (t.kind) {
-        TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> stringResource(t.kind.title()) + " " + stringResource(R.string.minutes_n, t.minutes)
+        TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> stringResource(t.kind.title()) + " " + pluralStringResource(R.plurals.minutes_n, t.minutes, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts)
         TriggerKind.CHANNEL_POWER_LOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts) + " " +
             stringResource(R.string.automation_low_for, t.minutes, t.graceMinutes)

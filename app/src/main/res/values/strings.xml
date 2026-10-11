@@ -47,17 +47,13 @@
     <string name="state_auth_error">Session expired — sign in again</string>
     <string name="state_error">eWeLink error</string>
     <string name="state_stopped">Monitoring is off</string>
-    <string name="status_live">Live · watching %d device(s)</string>
-    <string name="status_polling">Watching %1$d device(s) · every %2$d s</string>
     <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks (changes shorter than the interval may be missed)</string>
     <string name="detail_reconnecting">Reconnecting for instant updates…</string>
     <string name="detail_api_error">Error code %d</string>
     <string name="monitoring_off_hint">Start monitoring to get alarms</string>
     <string name="last_update">Updated %s</string>
-    <string name="device_count">%d device(s)</string>
 
     <!-- Devices screen -->
-    <string name="alarm_banner_title">Alarm · %d change(s)</string>
     <string name="alarm_banner_more">+%d more</string>
     <string name="login_needed_title">Sign-in required</string>
     <string name="login_needed_body">Sign in with your eWeLink account to see your devices.</string>
@@ -157,7 +153,6 @@
     <string name="onb_open_guide">Open the illustrated guide</string>
     <string name="onb_tuya_privacy">These keys are stored only on this phone and are sent nowhere except Tuya\'s own servers.</string>
     <string name="tuya_not_connected">Not connected · tap to connect</string>
-    <string name="tuya_connected_x">Connected · %1$s · %2$d device(s)</string>
     <string name="tuya_dialog_title">Connect Tuya / Smart Life</string>
     <string name="tuya_dialog_desc">Enter the Access ID and Access Secret of your Tuya Cloud project (platform.tuya.com → Cloud → your project → Overview). Your Smart Life / Tuya app account must be linked to the project.</string>
     <string name="tuya_region">Data center</string>
@@ -166,7 +161,6 @@
     <string name="tuya_region_cn">China</string>
     <string name="tuya_region_in">India</string>
     <string name="tuya_checking">Connecting to Tuya…</string>
-    <string name="tuya_connected_ok">Tuya connected: %d device(s) found</string>
     <string name="tuya_shared_hint">A device shared with you is missing? Tuya only lists the devices in your homes. Ask the owner to add you as a home member in Smart Life (Me → Home Management → Add Member).</string>
     <string name="tuya_connected_none">Tuya connected, but no devices were found. Check that your Smart Life / Tuya app account is linked to the project in the same data center.</string>
     <string name="tuya_disconnect">Disconnect</string>
@@ -191,8 +185,6 @@
     <string name="offline_grace">Ignore brief disconnections</string>
     <string name="offline_grace_desc">Wait this long before alerting that a device went offline. If it comes back in time, no alert is raised.</string>
     <string name="grace_off">Off (alert immediately)</string>
-    <string name="seconds_n">%d seconds</string>
-    <string name="minutes_n">%d minute(s)</string>
     <string name="dur_seconds">%d s</string>
     <string name="dur_min_sec">%1$d min %2$d s</string>
     <string name="dur_minutes">%d min</string>
@@ -480,5 +472,37 @@
     <plurals name="event_alarm_dismissed">
         <item quantity="one">Alarm dismissed · %1$d event · response time %2$s</item>
         <item quantity="other">Alarm dismissed · %1$d events · response time %2$s</item>
+    </plurals>
+    <plurals name="status_live">
+        <item quantity="one">Live · watching %d device</item>
+        <item quantity="other">Live · watching %d devices</item>
+    </plurals>
+    <plurals name="status_polling">
+        <item quantity="one">Watching %1$d device · every %2$d s</item>
+        <item quantity="other">Watching %1$d devices · every %2$d s</item>
+    </plurals>
+    <plurals name="device_count">
+        <item quantity="one">%d device</item>
+        <item quantity="other">%d devices</item>
+    </plurals>
+    <plurals name="alarm_banner_title">
+        <item quantity="one">Alarm · %d change</item>
+        <item quantity="other">Alarm · %d changes</item>
+    </plurals>
+    <plurals name="tuya_connected_x">
+        <item quantity="one">Connected · %1$s · %2$d device</item>
+        <item quantity="other">Connected · %1$s · %2$d devices</item>
+    </plurals>
+    <plurals name="tuya_connected_ok">
+        <item quantity="one">Tuya connected: %d device found</item>
+        <item quantity="other">Tuya connected: %d devices found</item>
+    </plurals>
+    <plurals name="seconds_n">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="minutes_n">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
     </plurals>
 </resources>
