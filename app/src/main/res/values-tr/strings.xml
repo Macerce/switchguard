@@ -197,6 +197,8 @@
     <string name="device_sound">Bu cihazın sesi</string>
     <string name="device_sound_default">Genel alarm sesiyle aynı</string>
     <string name="device_sound_reset">Genel sesi kullan</string>
+    <string name="device_critical">Kritik cihaz</string>
+    <string name="device_critical_desc">Alarmları sessiz saatlerde de çalar</string>
     <string name="channel_events_custom">Olaylar (cihaz sesleri)</string>
     <string name="channel_events_custom_desc">Kendi sesi seçilmiş cihazların bildirimleri. Sesi uygulama çalar.</string>
     <string name="alarm_volume">Alarm ses seviyesi · %%%d</string>
@@ -205,7 +207,7 @@
     <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
     <string name="test_alarm_line">Test alarmı</string>
     <string name="quiet_hours">Sessiz saatler</string>
-    <string name="quiet_hours_desc">Bu saatlerde alarmlar sessiz bildirime dönüşür</string>
+    <string name="quiet_hours_desc">Bu saatlerde alarmlar bildirime dönüşür (kritik cihazlar yine çalar)</string>
     <string name="quiet_start">Başlangıç</string>
     <string name="quiet_end">Bitiş</string>
     <string name="perm_notifications">Bildirimler</string>

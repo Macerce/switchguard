@@ -19,6 +19,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.MusicNote
+import androidx.compose.material.icons.rounded.NotificationImportant
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -175,6 +176,14 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                                 Icon(Icons.Rounded.Close, stringResource(R.string.device_sound_reset))
                             }
                         }
+                    }
+                    HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                    InfoRow(
+                        Icons.Rounded.NotificationImportant,
+                        stringResource(R.string.device_critical),
+                        stringResource(R.string.device_critical_desc),
+                    ) {
+                        Switch(checked = rules.critical, onCheckedChange = { store.setRules(deviceId, rules.copy(critical = it)) })
                     }
                 }
             }

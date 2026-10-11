@@ -201,6 +201,8 @@
     <string name="device_sound">Sound for this device</string>
     <string name="device_sound_default">Same as general alarm sound</string>
     <string name="device_sound_reset">Use general sound</string>
+    <string name="device_critical">Critical device</string>
+    <string name="device_critical_desc">Its alarms ring even during quiet hours</string>
     <string name="channel_events_custom">Events (device sounds)</string>
     <string name="channel_events_custom_desc">Notifications for devices that have their own sound. The sound is played by the app.</string>
     <string name="alarm_volume">Alarm volume · %d%%</string>
@@ -209,7 +211,7 @@
     <string name="test_alarm_desc">Rings the alarm now so you can check sound and volume</string>
     <string name="test_alarm_line">Test alarm</string>
     <string name="quiet_hours">Quiet hours</string>
-    <string name="quiet_hours_desc">During these hours alarms become silent notifications</string>
+    <string name="quiet_hours_desc">During these hours alarms become notifications (critical devices still ring)</string>
     <string name="quiet_start">Starts</string>
     <string name="quiet_end">Ends</string>
     <string name="perm_notifications">Notifications</string>

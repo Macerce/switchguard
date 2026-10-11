@@ -740,10 +740,11 @@ class MonitorService : Service() {
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
                 val allowed = store.isPro || a.trigger.deviceId in store.monitoredIds()
+                val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
+                    else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()), critical = rules.critical)
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
-                val sound = store.rulesFor(a.trigger.deviceId).soundUri
+                val sound = rules.soundUri
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound)
                     AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
@@ -776,10 +777,11 @@ class MonitorService : Service() {
     }
 
     private fun dispatch(change: Change, action: AlertAction) {
-        val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()))
+        val rules = store.rulesFor(change.deviceId)
+        val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()), critical = rules.critical)
         val text = change.describe(labels)
         log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
-        val sound = store.rulesFor(change.deviceId).soundUri
+        val sound = rules.soundUri
         when (effective) {
             AlertAction.ALARM -> addAlarm(text, sound)
             AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
