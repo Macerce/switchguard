@@ -6,7 +6,26 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## Unreleased
+## 2.9.0 — 2026-10-11
+**Alarms that never fail silently**
+- Critical devices: a new switch on the device page makes its alarms ring even during quiet hours (for example a flood sensor at night).
+- If monitoring was interrupted (the phone stopped SwitchGuard, or the phone was off), the gap is recorded in History and you get a notification, because changes during that time may have been missed. A watchdog now restarts monitoring when the phone kills it.
+- If SwitchGuard can't see your devices for too long (no internet, cloud errors, signed out), you get a warning after 10 minutes — adjustable in Settings → Monitoring — and a note when monitoring works again.
+- Pending "went offline" alarms and automation timers (stayed on for N minutes, delayed actions) now survive a restart of the monitor or an app update instead of being lost.
+- Fixed a rare sign-out from eWeLink with a misleading "signed in on another device" message: the app and the monitor no longer refresh the session at the same time, and temporary eWeLink server errors no longer sign you out.
+
+**A real alarm screen**
+- With the phone locked or the screen off, an alarm now opens a full-screen alarm page with a large Dismiss button (Android 14 and later ask for permission once).
+- The alarm rings at full volume and pauses music and videos; your alarm volume goes back to what it was when you dismiss it (Settings → Alarm → Ring at full volume).
+- History shows when an alarm was dismissed and how long it took (response time).
+- A new card on the home screen warns about phone settings that can stop alarms from reaching you — notifications off, alarm notifications turned down, Do Not Disturb set to total silence, alarm volume at zero, battery restrictions, missing full-screen or autostart permission — each with a one-tap fix. It only appears when something is wrong.
+
+**Tablets and Android TV**
+- Tablets and Chromebooks: side navigation rail, devices in a grid and a comfortable reading width.
+- Android TV: SwitchGuard appears in the TV launcher, works with the remote everywhere and uses a dark theme. An alarm appears on top of whatever is playing and keeps coming back until it is dismissed.
+- Move your setup from your phone to a TV or tablet over Wi-Fi with a 6-digit code (Settings → Send to another device). eWeLink sign-ins aren't copied: each device needs its own eWeLink account.
+- eWeLink sign-in works with the TV remote.
+
 **License**
 - The source code license changes from GPL-3.0 to PolyForm Noncommercial 1.0.0: personal and noncommercial use stays free, selling the code or using it commercially is not permitted. Versions up to and including 2.8.3 remain under GPL-3.0. Official builds may still be used by anyone, including businesses.
 

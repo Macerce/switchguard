@@ -6,7 +6,26 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## Yayımlanmadı
+## 2.9.0 — 11 Ekim 2026
+**Sessizce susmayan alarm**
+- Kritik cihaz: cihaz sayfasındaki yeni anahtar, o cihazın alarmlarını sessiz saatlerde de çaldırır (ör. gece çalışan bir taşma sensörü).
+- İzleme kesintiye uğradıysa (telefon SwitchGuard'ı durdurdu ya da telefon kapalıydı) aradaki süre Geçmiş'e yazılır ve bildirim gelir; çünkü o sürede olan değişiklikler kaçırılmış olabilir. Telefon izlemeyi kapatırsa bir bekçi onu yeniden başlatır.
+- SwitchGuard cihazlarınızı uzun süre göremezse (internet yok, bulut hatası, oturum düştü) 10 dakika sonra uyarı verir (Ayarlar → İzleme'den değiştirilebilir); izleme düzelince de haber verir.
+- Bekleyen "koptu" alarmları ve otomasyon süreleri ("N dakikadır açık", gecikmeli eylemler) artık izleme yeniden başlasa ya da uygulama güncellense de kaybolmuyor.
+- eWeLink'ten nadiren, yanıltıcı bir "başka cihazda giriş yapıldı" mesajıyla çıkış yapılması düzeltildi: uygulama ile izleme oturumu artık aynı anda yenilemiyor ve eWeLink sunucusunun geçici hataları çıkış yaptırmıyor.
+
+**Gerçek bir alarm ekranı**
+- Telefon kilitliyken ya da ekran kapalıyken alarm, büyük "Alarmı kapat" düğmeli tam ekran bir alarm sayfasıyla açılır (Android 14 ve sonrasında bir kez izin istenir).
+- Alarm tam seste çalar ve müziği/videoyu duraklatır; alarmı kapatınca alarm ses seviyeniz eski haline döner (Ayarlar → Alarm → Alarm tam seste çalsın).
+- Geçmiş, alarmın ne zaman ve ne kadar sürede kapatıldığını (tepki süresi) gösterir.
+- Ana ekrandaki yeni kart, alarmın size ulaşmasını engelleyebilecek telefon ayarlarını gösterir: bildirimler kapalı, alarm bildirimleri kısılmış, Rahatsız Etmeyin tamamen sessiz, alarm sesi sıfır, pil kısıtlaması, tam ekran ya da otomatik başlatma izni eksik. Her birinin tek dokunuşla düzeltmesi var. Kart yalnızca bir sorun varken görünür.
+
+**Tablet ve Android TV**
+- Tablet ve Chromebook: yan gezinme çubuğu, ızgara halinde cihazlar ve rahat okunan genişlik.
+- Android TV: SwitchGuard TV başlatıcısında görünür, her yerde kumandayla kullanılır ve koyu tema kullanır. Alarm, o an açık olan her şeyin üstüne çıkar ve kapatılana kadar geri gelir.
+- Kurulumunuzu telefondan TV'ye ya da tablete Wi-Fi üzerinden 6 haneli kodla aktarın (Ayarlar → Başka cihaza aktar). eWeLink girişleri kopyalanmaz: her cihazın kendi eWeLink hesabı olmalıdır.
+- eWeLink girişi TV kumandasıyla yapılabilir; çevrimiçi/çevrimdışı etiketleri Türkçe.
+
 **Lisans**
 - Kaynak kodun lisansı GPL-3.0'dan PolyForm Noncommercial 1.0.0'a geçiyor: kişisel ve ticari olmayan kullanım serbest kalıyor, kodu satmak veya ticari amaçla kullanmak yasak. 2.8.3 ve önceki sürümler GPL-3.0 altında kalır. Resmi sürümleri işletmeler dahil herkes kullanmaya devam edebilir.
 
