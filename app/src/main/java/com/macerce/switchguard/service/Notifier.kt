@@ -69,6 +69,8 @@ class Notifier(private val context: Context, private val store: Store) {
     fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null) {
         val custom = deviceSound?.let(Uri::parse)
         if (custom != null) playOnce(custom)
+        // Özeti olan grup "seyrek" sayılmaz; Android 16 onu (ve yanındaki alarmı) kendi grubuna toplamaz.
+        nm.notify(ID_EVENTS_SUMMARY, groupSummary(CH_EVENTS, GROUP_EVENTS, context.getString(R.string.channel_events)))
         nm.notify(
             (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
             Notification.Builder(context, if (custom != null) CH_EVENTS_CUSTOM else CH_EVENTS)
@@ -161,6 +163,7 @@ class Notifier(private val context: Context, private val store: Store) {
             .setContentText(lines.last())
             .setStyle(Notification.BigTextStyle().bigText(lines.reversed().joinToString("\n")))
             .setCategory(Notification.CATEGORY_ALARM)
+            .setGroup(GROUP_ALARM)
             .setOngoing(true)
             .setAutoCancel(false)
             .setContentIntent(openApp())
@@ -169,6 +172,9 @@ class Notifier(private val context: Context, private val store: Store) {
             .setFullScreenIntent(alarmScreen(), true)
             .addAction(Notification.Action.Builder(null, context.getString(R.string.action_dismiss_alarm), dismiss).build())
             .build()
+        // Alarm kendi (özetli) grubunda: Android 16 grupsuz bildirimleri kendiliğinden gruplar ve gruba taşınan
+        // bildirimi sessiz sayar; o zaman kilit ekranında tam ekran alarm açılmaz. Özet önce gönderilir.
+        nm.notify(ID_ALARM_SUMMARY, groupSummary(CH_ALARM, GROUP_ALARM, context.getString(R.string.channel_alarm)))
         nm.notify(ID_ALARM, notification)
         // Android TV bildirimleri ekranda göstermez: alarm, açık olan her şeyin üstüne tam ekran çıkar.
         if (FormFactor.isTv(context)) AlarmActivity.show(context)
@@ -177,6 +183,7 @@ class Notifier(private val context: Context, private val store: Store) {
 
     fun stopAlarm() {
         nm.cancel(ID_ALARM)
+        nm.cancel(ID_ALARM_SUMMARY)
         releasePlayer()
         vibrator().cancel()
         focus?.let { audio.abandonAudioFocusRequest(it) }
@@ -268,6 +275,18 @@ class Notifier(private val context: Context, private val store: Store) {
         if (Build.VERSION.SDK_INT >= 31) context.getSystemService(VibratorManager::class.java).defaultVibrator
         else @Suppress("DEPRECATION") context.getSystemService(Vibrator::class.java)
 
+    /** Grubun sessiz özeti: sesi/titreşimi ve tam ekranı yalnızca gruptaki bildirim verir. */
+    private fun groupSummary(channel: String, group: String, title: String): Notification =
+        Notification.Builder(context, channel)
+            .setSmallIcon(if (group == GROUP_ALARM) R.drawable.ic_stat_alarm else R.drawable.ic_stat_guard)
+            .setContentTitle(title)
+            .setGroup(group)
+            .setGroupSummary(true)
+            .setGroupAlertBehavior(Notification.GROUP_ALERT_CHILDREN)
+            .setContentIntent(openApp())
+            .setAutoCancel(true)
+            .build()
+
     private fun alarmScreen() = PendingIntent.getActivity(
         context, 3,
         Intent(context, AlarmActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
@@ -288,12 +307,15 @@ class Notifier(private val context: Context, private val store: Store) {
         const val CH_SESSION = "session"
         const val CH_HEALTH = "health"
         const val GROUP_EVENTS = "events"
+        const val GROUP_ALARM = "alarm"
         const val ID_STATUS = 1
         const val ID_ALARM = 2
         const val ID_WARN = 3
         const val ID_SUMMARY = 4
         const val ID_BLIND = 5
         const val ID_STOPPED = 6
+        const val ID_ALARM_SUMMARY = 7
+        const val ID_EVENTS_SUMMARY = 8
         private const val ONE_SHOT_MS = 6_000L
         private const val STOPPED_REPEAT_MS = 30 * 60_000L
         private val alarmAttributes: AudioAttributes = AudioAttributes.Builder()
