@@ -12,8 +12,8 @@ class OfflineGraceTest {
     @Test
     fun `sure dolmadan geri gelirse hic olay yok`() {
         val g = OfflineGrace()
-        g.hold(off, now = 0)
-        assertTrue(g.cameBack("a"))
+        g.hold(off, now = 0, graceMs = 60_000)
+        assertTrue(g.cameBack("a", now = 30_000))
         assertTrue(g.due(now = 999_999).isEmpty())
     }
 
@@ -28,7 +28,7 @@ class OfflineGraceTest {
 
     @Test
     fun `beklemede olmayan cihaz icin cameBack false`() {
-        assertFalse(OfflineGrace().cameBack("x"))
+        assertFalse(OfflineGrace().cameBack("x", now = 0))
     }
 
     @Test
@@ -53,7 +53,7 @@ class OfflineGraceTest {
     fun `geri yuklenen bekleme cihaz donerse iptal olur`() {
         val g = OfflineGrace()
         g.hold(off, now = 0, graceMs = 60_000)
-        assertTrue(OfflineGrace.fromJson(g.toJson()).cameBack("a"))
+        assertTrue(OfflineGrace.fromJson(g.toJson()).cameBack("a", now = 30_000))
     }
 
     @Test
@@ -61,5 +61,22 @@ class OfflineGraceTest {
         assertEquals(null, OfflineGrace.fromJson("bozuk").nextDueAt())
         assertEquals(null, OfflineGrace.fromJson(null).nextDueAt())
         assertEquals(null, OfflineGrace.fromJson(OfflineGrace().toJson()).nextDueAt())
+    }
+
+    @Test
+    fun `bekleme suresi dolduktan sonra donus kisa kopma sayilmaz`() {
+        val g = OfflineGrace()
+        g.hold(off, now = 0, graceMs = 60_000)
+        assertFalse(g.cameBack("a", now = 61_000))
+        // Süresi dolan kopma hâlâ verilmeyi bekler (önce kopma alarmı, sonra dönüş).
+        assertEquals(listOf(off), g.due(now = 61_000))
+    }
+
+    @Test
+    fun `sure icinde donus kisa kopma sayilir`() {
+        val g = OfflineGrace()
+        g.hold(off, now = 0, graceMs = 60_000)
+        assertTrue(g.cameBack("a", now = 59_000))
+        assertTrue(g.due(now = 120_000).isEmpty())
     }
 }

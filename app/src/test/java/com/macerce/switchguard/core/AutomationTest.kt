@@ -262,4 +262,22 @@ class AutomationTest {
         r.onStates(map(dev(false)), map(dev(true)), a, 0)
         assertEquals(a, r.onTick(map(dev(true)), a, 10 * min))
     }
+
+    @Test
+    fun `devre disi birakilan otomasyonun bekleyen eylemi calismaz`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        e.onStates(map(dev(true)), map(dev(false)), a, 0)
+        val disabled = a.map { it.copy(enabled = false) }
+        assertTrue(e.onTick(map(dev(false)), disabled, 5 * min).isEmpty())
+    }
+
+    @Test
+    fun `bekleyen eylem otomasyonun guncel tanimiyla calisir`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        e.onStates(map(dev(true)), map(dev(false)), a, 0)
+        val edited = a.map { it.copy(name = "yeni ad") }
+        assertEquals(edited, e.onTick(map(dev(false)), edited, 5 * min))
+    }
 }

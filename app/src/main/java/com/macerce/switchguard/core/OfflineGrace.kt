@@ -19,8 +19,16 @@ class OfflineGrace {
         held[change.deviceId] = Held(change, now + graceMs)
     }
 
-    /** Cihaz beklemedeyken geri geldiyse true döner ve beklemeyi iptal eder. */
-    fun cameBack(deviceId: String): Boolean = held.remove(deviceId) != null
+    /**
+     * Cihaz bekleme süresi dolmadan geri geldiyse true döner ve beklemeyi iptal eder ("kısa kopma").
+     * Süre dolmuşsa (ör. servis bu arada kapalıydı, tick gecikti) false: kopma [due] ile yine verilir.
+     */
+    fun cameBack(deviceId: String, now: Long): Boolean {
+        val h = held[deviceId] ?: return false
+        if (h.dueAt <= now) return false
+        held.remove(deviceId)
+        return true
+    }
 
     /** Süresi dolan offline olaylarını döndürür ve listeden çıkarır. */
     fun due(now: Long): List<Change.Connection> {

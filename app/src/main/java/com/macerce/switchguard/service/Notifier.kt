@@ -127,6 +127,11 @@ class Notifier(private val context: Context, private val store: Store) {
 
     fun clearBlind() = nm.cancel(ID_BLIND)
 
+    fun clearMonitoringStopped() {
+        nm.cancel(ID_STOPPED)
+        runtime.stoppedWarnedAt = 0
+    }
+
     fun notifySummary(title: String, lines: List<String>) = nm.notify(
         ID_SUMMARY,
         Notification.Builder(context, CH_EVENTS)
@@ -288,11 +293,46 @@ class Notifier(private val context: Context, private val store: Store) {
         const val ID_WARN = 3
         const val ID_SUMMARY = 4
         const val ID_BLIND = 5
+        const val ID_STOPPED = 6
         private const val ONE_SHOT_MS = 6_000L
+        private const val STOPPED_REPEAT_MS = 30 * 60_000L
         private val alarmAttributes: AudioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_ALARM)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
+
+        /**
+         * Bekçi, telefonun kapattığı izlemeyi yeniden başlatamadı (ör. Android 12+ pil kısıtlaması):
+         * dokununca uygulama açılır ve izleme oradan yeniden başlar.
+         */
+        fun monitoringStopped(context: Context) {
+            val nm = context.getSystemService(NotificationManager::class.java)
+            val runtime = RuntimeState.get(context)
+            val now = System.currentTimeMillis()
+            // Bekçi dakikada bir dener: uyarı zaten görünüyorsa ya da yakın zamanda gösterildiyse tekrar çalmasın.
+            if (nm.activeNotifications.any { it.id == ID_STOPPED } || now - runtime.stoppedWarnedAt < STOPPED_REPEAT_MS) return
+            runtime.stoppedWarnedAt = now
+            createChannels(context)
+            val open = PendingIntent.getActivity(
+                context, 4,
+                Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            val text = context.getString(R.string.monitoring_stopped_body)
+            nm.notify(
+                ID_STOPPED,
+                Notification.Builder(context, CH_HEALTH)
+                    .setSmallIcon(R.drawable.ic_stat_alarm)
+                    .setColor(0xFFD32F2F.toInt())
+                    .setContentTitle(context.getString(R.string.monitoring_stopped_title))
+                    .setContentText(text)
+                    .setStyle(Notification.BigTextStyle().bigText(text))
+                    .setCategory(Notification.CATEGORY_ERROR)
+                    .setContentIntent(open)
+                    .setAutoCancel(true)
+                    .build()
+            )
+        }
 
         fun createChannels(context: Context) {
             val nm = context.getSystemService(NotificationManager::class.java)

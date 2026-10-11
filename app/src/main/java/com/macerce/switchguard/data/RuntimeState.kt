@@ -44,6 +44,11 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getLong("alarmStartedAt", 0)
         set(v) = put { putLong("alarmStartedAt", v) }
 
+    /** "İzleme durdu" uyarısının son gösterildiği an; bekçi her dakika denerken uyarı tekrar tekrar çalmasın. */
+    var stoppedWarnedAt: Long
+        get() = prefs.getLong("stoppedWarnedAt", 0)
+        set(v) = put { putLong("stoppedWarnedAt", v) }
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = put { remove("grace"); remove("automation") }
 

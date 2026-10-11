@@ -203,6 +203,8 @@
     <string name="event_monitor_restored">Monitoring is working again (it was down for %1$s).</string>
     <string name="notif_blind_title">SwitchGuard can\'t monitor</string>
     <string name="notif_monitor_title">Monitoring status</string>
+    <string name="monitoring_stopped_title">Monitoring stopped</string>
+    <string name="monitoring_stopped_body">The phone stopped SwitchGuard in the background and it couldn\'t restart. Tap to resume; to prevent this, allow unrestricted background activity.</string>
     <string name="blind_hint">Check the internet connection and Settings › Permissions (battery).</string>
     <string name="channel_health">Monitoring problems</string>
     <string name="channel_health_desc">Warns when SwitchGuard can\'t watch your devices</string>

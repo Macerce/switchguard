@@ -73,6 +73,10 @@ class AlarmActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= 27) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
+        } else {
+            // Android 8.0: manifest özellikleri ve yukarıdaki çağrılar yok; eski pencere bayrakları gerekir.
+            @Suppress("DEPRECATION")
+            window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val store = Store.get(this)

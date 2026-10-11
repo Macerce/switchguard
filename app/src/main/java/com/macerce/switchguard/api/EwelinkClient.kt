@@ -114,11 +114,13 @@ class EwelinkClient(private val store: Store) {
     }
 
     private fun <T> withTokenRetry(call: () -> T): T {
-        val used = store.accessToken
+        sentToken.remove()
         return try {
             call()
         } catch (e: ApiException) {
             if (e.code !in TOKEN_ERRORS) throw e
+            // İsteğin gerçekten gönderdiği token: başka bir istek bu arada yenilediyse tekrar yenilenmez.
+            val used = sentToken.get() ?: store.accessToken
             // Servis ve ekran aynı anda hata alabilir: yalnızca biri yeniler (bkz. TokenRefresh).
             tokens.refreshIfStale(used, { store.accessToken }) { refresh() }
             call()
@@ -157,8 +159,10 @@ class EwelinkClient(private val store: Store) {
     }
 
     private fun authed(method: String, path: String, body: String?): String {
-        if (store.accessToken.isEmpty()) throw AuthException(401, "not logged in")
-        val text = send(method, path, body, "Bearer " + store.accessToken)
+        val token = store.accessToken
+        if (token.isEmpty()) throw AuthException(401, "not logged in")
+        sentToken.set(token)
+        val text = send(method, path, body, "Bearer $token")
         checkResponse(text)
         return text
     }
@@ -185,6 +189,8 @@ class EwelinkClient(private val store: Store) {
         private val TOKEN_ERRORS = setOf(401, 402)
         /** Uygulama genelinde tek: farklı EwelinkClient örnekleri de aynı kilidi kullanır. */
         private val tokens = TokenRefresh()
+        /** Bu thread'in son isteğinde kullanılan access token (bkz. withTokenRetry). */
+        private val sentToken = ThreadLocal<String>()
         private val JSON = "application/json".toMediaType()
         private val random = SecureRandom()
 

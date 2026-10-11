@@ -28,12 +28,19 @@ class BootReceiver : BroadcastReceiver() {
 class TickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val service = MonitorService.instance
-        if (service != null) {
+        if (service != null && service.isMonitoring) {
             service.onAlarmTick()
-        } else if (Store.get(context).monitoringEnabled) {
-            // Android 12+ arka plandan ön plan servisi başlatmayı pil optimizasyonu muafiyetiyle izin verir.
-            runCatching { MonitorService.send(context, MonitorService.ACTION_START) }
-                .onFailure { Log.w("SwitchGuard", "watchdog restart failed", it) }
+            return
         }
+        if (!Store.get(context).monitoringEnabled) return
+        // Bekçi bir sonraki denemeyi kendisi kurar: servis başlamazsa da denetim sürsün.
+        MonitorService.scheduleTick(context)
+        // Android 12+ arka plandan ön plan servisi başlatmaya yalnızca pil optimizasyonu muafiyetiyle izin verir.
+        // Başlatılamazsa kullanıcı uyarılır: sessizce izlenmiyor olmaktan iyidir.
+        runCatching { MonitorService.send(context, MonitorService.ACTION_START) }
+            .onFailure {
+                Log.w("SwitchGuard", "watchdog restart failed", it)
+                Notifier.monitoringStopped(context)
+            }
     }
 }

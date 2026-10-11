@@ -167,7 +167,9 @@ class AutomationEngine {
         val out = (durationHits(current, automations, now) + channelPowerHits(current, automations, now)).toMutableList()
         val due = pending.filter { it.dueAt <= now }
         pending.removeAll(due)
-        out += due.map { it.automation }
+        // Bekleme sırasında kapatılan ya da silinen otomasyonun eylemi yapılmaz; düzenlendiyse güncel hali kullanılır.
+        val current = automations.associateBy { it.id }
+        out += due.mapNotNull { p -> current[p.automation.id]?.takeIf { it.enabled } }
         return out
     }
 

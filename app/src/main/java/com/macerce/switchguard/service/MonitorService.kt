@@ -85,7 +85,7 @@ class MonitorService : Service() {
     private val labels: ChangeLabels get() = strings.labels
     private lateinit var metrics: MetricsLog
     private lateinit var runtime: RuntimeState
-    private val automations = AutomationEngine()
+    private var automations = AutomationEngine()
 
     private val blindWatch = BlindWatch()
 
@@ -146,6 +146,8 @@ class MonitorService : Service() {
         tuya = TuyaClient(store)
         tuyaSocket = TuyaSocket(store, tuyaListener)
         instance = this
+        // İşçi thread'inin ilk işi: sonraki hiçbir senkron/kayıt, diskteki bekleyen işlerin üstüne yazamasın.
+        handler.post { restoreRuntime() }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -161,8 +163,17 @@ class MonitorService : Service() {
                     store.pendingAlarm = emptyList()
                     notifier.stopAlarm()
                 }
-                if (!running) stopSelf()
-                return START_NOT_STICKY
+                // Süreç ölmüş ve servis yalnızca bu kapatma için yeniden doğmuş olabilir: izleme açıksa kapanmak
+                // yerine devam etsin (bildirim düğmesinden gelen başlatmaya Android izin verir).
+                if (!running) {
+                    if (store.monitoringEnabled) {
+                        runCatching { startMonitoring() }.onFailure {
+                            Log.w(TAG, "could not resume monitoring after dismiss", it)
+                            stopSelf()
+                        }
+                    } else stopSelf()
+                }
+                return if (running) START_STICKY else START_NOT_STICKY
             }
             ACTION_TEST -> {
                 handler.post {
@@ -211,12 +222,13 @@ class MonitorService : Service() {
             return
         }
         running = true
+        notifier.clearMonitoringStopped()
         registerNetworkCallback()
         handler.post {
             applyWakeMode()
-            // İlk senkrondan önce: bekleyen kopmalar ve otomasyon süreleri kaldığı yerden devam etsin.
-            restoreRuntime()
-            reportGap(System.currentTimeMillis())
+            // Bu çalışma başladı: bundan sonra beklenmedik bir kapanma "kesinti" sayılır.
+            runtime.cleanStop = false
+            heartbeat(System.currentTimeMillis(), force = true)
             // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir; yoksa önceki çalışmada
             // yükseltilip geri alınamamış alarm sesini eski seviyesine döndür.
             store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) } ?: notifier.restoreAlarmVolume()
@@ -244,6 +256,8 @@ class MonitorService : Service() {
             store.pendingAlarm = emptyList()
             runtime.alarmStartedAt = 0
             runtime.clearEngine()
+            grace = OfflineGrace()
+            automations = AutomationEngine()
             notifier.clearBlind()
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
@@ -258,7 +272,8 @@ class MonitorService : Service() {
         instance = null
         running = false
         networkCallback?.let { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) }
-        cancelAlarmTick()
+        // İzleme hâlâ açıksa bekçi tick'i kalır: servisi yeniden başlatacak olan odur.
+        if (!store.monitoringEnabled) cancelAlarmTick()
         // Kuyruğu boşaltma: stopMonitoring'in temizlik işleri henüz çalışmamış olabilir.
         // quitSafely zamanı gelmiş işleri çalıştırır, ileri tarihli (tick vb.) olanları atar.
         handler.removeCallbacks(loop)
@@ -322,6 +337,9 @@ class MonitorService : Service() {
         grace.nextDueAt()?.let { due -> handler.postDelayed({ tick() }, (due - wall).coerceAtLeast(0) + 50) }
     }
 
+    /** İzleme fiilen çalışıyor mu (örnek var ama durdurulmuş olabilir). */
+    val isMonitoring: Boolean get() = running
+
     /** AlarmManager tick'i: telefon uyurken de heartbeat ve senkron devam etsin. */
     fun onAlarmTick() {
         if (!running) return
@@ -335,21 +353,9 @@ class MonitorService : Service() {
         scheduleAlarmTick()
     }
 
-    private fun tickPendingIntent() = PendingIntent.getBroadcast(
-        this, 0, Intent(this, TickReceiver::class.java),
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    private fun scheduleAlarmTick() = scheduleTick(this)
 
-    private fun scheduleAlarmTick() {
-        // Kesin olmayan "allow while idle" alarmı özel izin gerektirmez; sistem Doze'da da çalıştırır.
-        getSystemService(AlarmManager::class.java).setAndAllowWhileIdle(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + ALARM_TICK_MS,
-            tickPendingIntent()
-        )
-    }
-
-    private fun cancelAlarmTick() = getSystemService(AlarmManager::class.java).cancel(tickPendingIntent())
+    private fun cancelAlarmTick() = getSystemService(AlarmManager::class.java).cancel(tickPendingIntent(this))
 
     private fun registerNetworkCallback() {
         val cb = object : ConnectivityManager.NetworkCallback() {
@@ -674,9 +680,12 @@ class MonitorService : Service() {
     }
 
     private fun process(current: List<DeviceSnapshot>) {
+        val wall = System.currentTimeMillis()
+        // Bekleme süresi dolmuş kopmalar önce verilir: cihaz bu arada geri geldiyse (servis kapalıydı,
+        // tick gecikti) sıra "koptu → geldi" olur, uzun kopma "kısa kopma" sayılıp yutulmaz.
+        grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         val previous = store.snapshots.associateBy { it.id }
         store.snapshots = current
-        val wall = System.currentTimeMillis()
         runCatching { metrics.record(previous, current, wall) }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
@@ -685,11 +694,13 @@ class MonitorService : Service() {
         heartbeat(wall)
     }
 
+    /** Önceki süreçten kalan bekleyen işleri yükler; servis oluşurken işçi thread'inin ilk işi olarak çalışır. */
     private fun restoreRuntime() {
         grace = OfflineGrace.fromJson(runtime.grace)
         automations.restore(runtime.automationState, store.automations)
-        // Süresi bu arada dolmuş beklemeler ilk tick'te işlenir; o tick senkrondan sonra çalışır,
-        // böylece bu arada geri gelen cihaz "kısa kopma" sayılır.
+        // Önceki süreçten kalan "izleyemiyor" uyarısı: yeni süreç o kesintiyi bilmez, düzelince kaldıramazdı.
+        notifier.clearBlind()
+        if (store.monitoringEnabled) reportGap(System.currentTimeMillis())
     }
 
     /**
@@ -704,8 +715,6 @@ class MonitorService : Service() {
             log.add("", getString(R.string.app_name), EventKind.MONITOR_GAP, text, AlertAction.NOTIFY.name, args)
             notifier.notifyEvent(text, title = getString(R.string.notif_monitor_title))
         }
-        runtime.cleanStop = false
-        heartbeat(wall, force = true)
     }
 
     /** İzleme uzun süre kör kalınca (internet/bulut/oturum) bir kez uyarır, düzelince bildirir. */
@@ -856,7 +865,7 @@ class MonitorService : Service() {
                 handler.postDelayed({ tick() }, store.offlineGraceSec * 1000L + 50)
                 return
             }
-            if (change.to && grace.cameBack(change.deviceId)) {
+            if (change.to && grace.cameBack(change.deviceId, wall)) {
                 log.add(change.deviceId, change.name, EventKind.SHORT_DROP, strings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
                 return
             }
@@ -1001,6 +1010,23 @@ class MonitorService : Service() {
 
         @Volatile var instance: MonitorService? = null
             private set
+
+        private fun tickPendingIntent(context: Context) = PendingIntent.getBroadcast(
+            context, 0, Intent(context, TickReceiver::class.java),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        /**
+         * Bir sonraki tick'i (ve bekçi denetimini) kurar. Kesin olmayan "allow while idle" alarmı özel izin
+         * gerektirmez; sistem Doze'da da çalıştırır.
+         */
+        fun scheduleTick(context: Context) {
+            context.getSystemService(AlarmManager::class.java).setAndAllowWhileIdle(
+                AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + ALARM_TICK_MS,
+                tickPendingIntent(context)
+            )
+        }
 
         fun send(context: Context, action: String) {
             val intent = Intent(context, MonitorService::class.java).setAction(action)
