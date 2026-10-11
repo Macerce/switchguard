@@ -702,7 +702,7 @@ class MonitorService : Service() {
             val text = args.render(getString(R.string.app_name), strings)
             Log.w(TAG, "monitoring gap ${(to - from) / 1000}s")
             log.add("", getString(R.string.app_name), EventKind.MONITOR_GAP, text, AlertAction.NOTIFY.name, args)
-            notifier.notifyEvent(text)
+            notifier.notifyEvent(text, title = getString(R.string.notif_monitor_title))
         }
         runtime.cleanStop = false
         heartbeat(wall, force = true)
@@ -728,7 +728,7 @@ class MonitorService : Service() {
                 val text = args.render(getString(R.string.app_name), strings)
                 log.add("", getString(R.string.app_name), EventKind.MONITOR_BLIND, text, AlertAction.NOTIFY.name, args)
                 notifier.clearBlind()
-                notifier.notifyEvent(text)
+                notifier.notifyEvent(text, title = getString(R.string.notif_monitor_title))
             }
             null -> Unit
         }

@@ -198,6 +198,7 @@
     <string name="event_monitor_blind">İzleme çalışmıyor (başlangıç %1$s): cihazların durumu alınamıyor.</string>
     <string name="event_monitor_restored">İzleme yeniden çalışıyor (%1$s boyunca çalışmadı).</string>
     <string name="notif_blind_title">SwitchGuard izleyemiyor</string>
+    <string name="notif_monitor_title">İzleme durumu</string>
     <string name="blind_hint">İnternet bağlantısını ve Ayarlar › İzinler (pil) bölümünü kontrol edin.</string>
     <string name="channel_health">İzleme sorunları</string>
     <string name="channel_health_desc">SwitchGuard cihazlarınızı izleyemediğinde uyarır</string>

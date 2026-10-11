@@ -66,15 +66,16 @@ class Notifier(private val context: Context, private val store: Store) {
      * Cihaza özel ses varsa bildirim sessiz kanala gider ve ses bir kez elle çalınır:
      * Android'de kanal sesi sonradan değiştirilemediği için cihaz başına ses ancak böyle olur.
      */
-    fun notifyEvent(text: String, deviceSound: String? = null) {
+    fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null) {
         val custom = deviceSound?.let(Uri::parse)
         if (custom != null) playOnce(custom)
         nm.notify(
             (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
             Notification.Builder(context, if (custom != null) CH_EVENTS_CUSTOM else CH_EVENTS)
                 .setSmallIcon(R.drawable.ic_stat_guard)
-                .setContentTitle(context.getString(R.string.notif_event_title))
+                .setContentTitle(title ?: context.getString(R.string.notif_event_title))
                 .setContentText(text)
+                .setStyle(Notification.BigTextStyle().bigText(text))
                 .setGroup(GROUP_EVENTS)
                 .setContentIntent(openApp())
                 .setAutoCancel(true)
