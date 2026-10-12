@@ -15,7 +15,8 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 class BackupException(val kind: Kind, cause: Throwable? = null) : Exception(kind.name, cause) {
-    enum class Kind { NOT_BACKUP, TOO_NEW, WRONG_PASSWORD_OR_DAMAGED, TOO_BIG, IO }
+    /** [OTHER_PLATFORM]: zarf aynı ama içerik başka bir SwitchGuard sürümünün (ör. Windows) biçiminde. */
+    enum class Kind { NOT_BACKUP, TOO_NEW, WRONG_PASSWORD_OR_DAMAGED, TOO_BIG, IO, OTHER_PLATFORM }
 }
 
 /**

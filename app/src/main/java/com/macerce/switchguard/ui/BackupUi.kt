@@ -144,6 +144,7 @@ fun BackupSection() {
                             when ((e as? BackupException)?.kind) {
                                 BackupException.Kind.WRONG_PASSWORD_OR_DAMAGED -> R.string.backup_wrong_password
                                 BackupException.Kind.TOO_NEW -> R.string.backup_too_new
+                                BackupException.Kind.OTHER_PLATFORM -> R.string.backup_other_platform
                                 BackupException.Kind.NOT_BACKUP, BackupException.Kind.TOO_BIG -> R.string.backup_not_backup
                                 else -> R.string.backup_failed
                             }

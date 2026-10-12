@@ -58,8 +58,9 @@
     <string name="backup_wrong_password">Wrong password or damaged file</string>
     <string name="backup_not_backup">This isn\'t a SwitchGuard backup file</string>
     <string name="backup_too_new">This backup was made by a newer SwitchGuard; update the app first</string>
+    <string name="backup_other_platform">This backup was made by SwitchGuard for Windows and can\'t be restored on a phone</string>
     <string name="backup_restore_title">Restore this backup?</string>
-    <string name="backup_restore_body">Backup from %1$s (version %2$s):\n%3$s\n\nYour current settings are replaced. You may need to sign in to eWeLink again.</string>
+    <string name="backup_restore_body">Backup from %1$s (version %2$s):\n%3$s\n\nYour settings are replaced by the ones in the backup; an account connection that isn\'t in the backup stays as it is. You may need to sign in to eWeLink again.</string>
     <string name="backup_item_ewelink">eWeLink API keys</string>
     <string name="backup_item_tuya">Tuya connection</string>
     <string name="backup_item_settings">Alarm, monitoring and quiet-hours settings</string>

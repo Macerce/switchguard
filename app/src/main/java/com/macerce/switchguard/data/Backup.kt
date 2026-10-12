@@ -17,6 +17,13 @@ import java.time.Instant
 object Backup {
     val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake")
 
+    /** İçerik biçiminin etiketi; Windows sürümünün yedeği aynı zarfı kullanır ama içeriği farklıdır. */
+    const val APP = "android"
+
+    private val EWELINK_KEYS = setOf("appId", "appSecret", "redirectUrl", "region")
+    private val TUYA_KEYS = setOf("tuyaId", "tuyaSecret", "tuyaRegion", "tuyaScales")
+    private val SESSION_KEYS = setOf("at", "rt", "apikey", "email")
+
     /** Dosya bundan büyükse yedek değildir (gerçek yedekler birkaç KB). */
     const val MAX_BYTES = 2 * 1024 * 1024
 
@@ -32,7 +39,7 @@ object Backup {
     fun create(store: Store, appVersion: String, password: CharArray): ByteArray {
         val created = Instant.now()
         val content = JSONObject()
-            .put("app", "android")
+            .put("app", APP)
             .put("appVersion", appVersion)
             .put("created", created.toString())
             .put("settings", TypedPrefs.encode(store.plainPrefs(), KEYS))
@@ -45,7 +52,9 @@ object Backup {
         val plain = BackupCrypto.open(bytes, password)
         val content = runCatching { JSONObject(String(plain, Charsets.UTF_8)) }
             .getOrElse { throw BackupException(BackupException.Kind.NOT_BACKUP, it) }
+        if (content.optString("app") != APP) throw BackupException(BackupException.Kind.OTHER_PLATFORM)
         val settings = TypedPrefs.decode(content.optJSONObject("settings") ?: JSONObject(), KEYS)
+        if (settings.isEmpty()) throw BackupException(BackupException.Kind.NOT_BACKUP)
         val summary = Summary(
             created = content.optString("created"),
             appVersion = content.optString("appVersion"),
@@ -57,16 +66,33 @@ object Backup {
         return summary to settings
     }
 
+    /** Geri yüklemede silinecek ve yazılacak ayarlar, eWeLink oturumunun korunup korunmayacağı. */
+    data class RestorePlan(val remove: Set<String>, val put: Map<String, Any>, val keepSession: Boolean)
+
     /**
-     * Ayarları uygular. Yedekteki eWeLink App ID'si şu anki oturumunkinden farklıysa oturum kapatılır
-     * (eski token o uygulamaya aittir); aynıysa oturum korunur. Tuya erişim belirteci her zaman yenilenir.
+     * Yedekteki ayarlar mevcutların yerine geçer (yedekte olmayan ayar temizlenir). Yedekte olmayan hesap
+     * bağlantısı (eWeLink ya da Tuya) olduğu gibi kalır. eWeLink oturumu yalnızca App ID ve bölge aynıysa
+     * korunur: token o uygulamaya ve o bölgenin sunucusuna aittir.
      */
+    fun plan(backup: Map<String, Any>, loggedIn: Boolean, currentAppId: String, currentRegion: String): RestorePlan {
+        val hasEwelink = (backup["appId"] as? String).orEmpty().isNotEmpty()
+        val hasTuya = (backup["tuyaId"] as? String).orEmpty().isNotEmpty()
+        val keep = (if (hasEwelink) emptySet() else EWELINK_KEYS) + (if (hasTuya) emptySet() else TUYA_KEYS)
+        val remove = (KEYS - keep) + (if (hasTuya) setOf("tuyaToken", "tuyaTokenExp") else emptySet())
+        val sameAccount = backup["appId"] == currentAppId && ((backup["region"] as? String) ?: currentRegion) == currentRegion
+        return RestorePlan(
+            remove = remove,
+            put = backup.filterKeys { it !in keep },
+            keepSession = loggedIn && (!hasEwelink || sameAccount),
+        )
+    }
+
     fun apply(store: Store, settings: Map<String, Any>) {
-        val keepSession = store.isLoggedIn && settings["appId"] == store.appId
+        val plan = plan(settings, store.isLoggedIn, store.appId, store.region)
         val editor = store.prefs.edit()
-        settings.forEach { (k, v) -> editor.putTyped(k, v) }
-        editor.remove("tuyaToken").remove("tuyaTokenExp")
-        if (!keepSession) editor.remove("at").remove("rt").remove("apikey").remove("email")
+        plan.remove.forEach { editor.remove(it) }
+        plan.put.forEach { (k, v) -> editor.putTyped(k, v) }
+        if (!plan.keepSession) SESSION_KEYS.forEach { editor.remove(it) }
         editor.putBoolean("onboardingDone", true)
         editor.apply()
         store.sealSecrets()
