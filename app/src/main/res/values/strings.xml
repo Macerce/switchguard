@@ -69,6 +69,7 @@ Your current settings are replaced. You may need to sign in to eWeLink again.</s
     <string name="action_restore">Restore</string>
     <string name="backup_file_word">backup</string>
     <string name="widget_description">Shows whether monitoring is running and any ringing alarm</string>
+    <string name="widget_sample">Live · watching 3 devices</string>
     <string name="crash_report">Send a problem report</string>
     <string name="crash_report_desc_none">Something wrong? Prepares an email with diagnostic details. Nothing is shared unless you send it.</string>
     <string name="crash_report_subject">SwitchGuard %s problem report</string>
