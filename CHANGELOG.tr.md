@@ -16,7 +16,7 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 **Bir bakışta**
 - Ana ekran widget'ı: izlemenin çalışıp çalışmadığını gösterir; alarm çalarken kırmızı, sorun varken turuncu olur.
-- Hızlı Ayarlar kutucuğu: izlemeyi bildirim panelinden açıp kapatın.
+- Hızlı Ayarlar kutucuğu: izlemeyi bildirim panelinden açıp kapatın (telefon kilitliyse önce kilidi açmanız istenir).
 
 **Kalite ve gizlilik**
 - Uygulama anahtarları ve giriş token'ları artık telefonun güvenli donanımında tutulan bir anahtarla (Android Keystore) şifreleniyor. Mevcut değerler kendiliğinden şifrelenir.

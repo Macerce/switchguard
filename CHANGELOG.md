@@ -16,7 +16,7 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 **At a glance**
 - Home-screen widget: shows whether monitoring is running; turns red while an alarm rings and amber when there is a problem.
-- Quick Settings tile: turn monitoring on or off from the notification shade.
+- Quick Settings tile: turn monitoring on or off from the notification shade (on a locked phone it asks to unlock first).
 
 **Quality and privacy**
 - App secrets and sign-in tokens are now encrypted with a key kept in the phone's secure hardware (Android Keystore). Existing values are encrypted automatically.
