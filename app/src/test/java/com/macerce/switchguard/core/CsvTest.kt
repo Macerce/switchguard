@@ -14,8 +14,8 @@ class CsvTest {
     @Test
     fun `dosya BOM ile baslar, satirlar CRLF ile ayrilir`() {
         val text = Csv.write(listOf(listOf("Tarih", "Cihaz"), listOf("12.10.2026", "Rögar; K1")), ';')
-        assertTrue(text.startsWith("﻿"))
-        assertEquals("﻿Tarih;Cihaz\r\n12.10.2026;\"Rögar; K1\"\r\n", text)
+        assertTrue(text.startsWith("\uFEFF"))
+        assertEquals("\uFEFFTarih;Cihaz\r\n12.10.2026;\"Rögar; K1\"\r\n", text)
     }
 
     @Test

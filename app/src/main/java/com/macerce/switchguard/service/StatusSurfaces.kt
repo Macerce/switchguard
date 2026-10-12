@@ -1,5 +1,6 @@
 package com.macerce.switchguard.service
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
@@ -138,7 +139,9 @@ class MonitorTile : TileService() {
         tile.updateTile()
     }
 
+    // Intent'li sürüm yalnızca Android 14 öncesinde çağrılır (14+ PendingIntent'li sürümü kullanır).
     @Suppress("DEPRECATION")
+    @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun openAppAndCollapse() {
         if (Build.VERSION.SDK_INT >= 34) startActivityAndCollapse(StatusSurfaces.openApp(this))
         else startActivityAndCollapse(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))

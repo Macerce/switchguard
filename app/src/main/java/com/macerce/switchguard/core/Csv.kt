@@ -13,7 +13,7 @@ object Csv {
         else value
 
     fun write(rows: List<List<String>>, separator: Char): String = buildString {
-        append('﻿')
+        append('\uFEFF')
         rows.forEach { row ->
             append(row.joinToString(separator.toString()) { field(it, separator) })
             append("\r\n")
