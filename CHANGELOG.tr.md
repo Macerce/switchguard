@@ -6,6 +6,25 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.10.0 — 12 Ekim 2026
+**Takip eden alarm**
+- Düzelmezse yeniden çal: alarmı kapattıktan sonra cihaz kapalı ya da kopuk kalırsa alarm 10, 30 veya 60 dakikada bir yeniden çalar (Ayarlar → Alarm). Cihaz normale dönünce hatırlatma kendiliğinden biter.
+
+**Yedek ve geçmiş**
+- Şifreli yedek: kuralları, otomasyonları, ayarları ve Tuya ile eWeLink anahtarlarınızı şifreli bir dosyaya kaydedin, yeni telefonda geri yükleyin (Ayarlar → Yedekleme). Giriş oturumları dosyaya hiçbir zaman yazılmaz. Geri yüklemeden önce dosyanın içeriğinin özeti gösterilir.
+- Geçmişi Excel ya da Google E-Tablolar'da doğrudan açılan bir CSV dosyası olarak dışa aktarın: son 24 saat, 7 gün, 30 gün ya da tümü; tüm cihazlar ya da seçili cihaz (Geçmiş → Dışa aktar).
+
+**Bir bakışta**
+- Ana ekran widget'ı: izlemenin çalışıp çalışmadığını gösterir; alarm çalarken kırmızı, sorun varken turuncu olur.
+- Hızlı Ayarlar kutucuğu: izlemeyi bildirim panelinden açıp kapatın.
+
+**Kalite ve gizlilik**
+- Uygulama anahtarları ve giriş token'ları artık telefonun güvenli donanımında tutulan bir anahtarla (Android Keystore) şifreleniyor. Mevcut değerler kendiliğinden şifrelenir.
+- Uygulama çökerse ayrıntılar telefonda saklanır. "Hata raporu gönder" (Ayarlar → Hakkında) bunları ve tanılama bilgilerini içeren bir e-posta hazırlar; siz göndermeden hiçbir şey paylaşılmaz.
+- İngilizce metinlerde tekil/çoğul doğru kullanılıyor ("1 device", "2 devices").
+- Çok cihazla daha hızlı: ayarlar her canlı güncellemede yeniden okunmuyor.
+- Otomatik denetimler (birim testleri, lint, derleme) ve şifreleme, alarm bildirimi ile ses yükseltme için cihaz üstü testler.
+
 ## 2.9.0 — 11 Ekim 2026
 **Sessizce susmayan alarm**
 - Kritik cihaz: cihaz sayfasındaki yeni anahtar, o cihazın alarmlarını sessiz saatlerde de çaldırır (ör. gece çalışan bir taşma sensörü).

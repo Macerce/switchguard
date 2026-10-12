@@ -6,6 +6,25 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.10.0 — 2026-10-12
+**Alarms that follow up**
+- Ring again if not resolved: after you dismiss an alarm, it rings again every 10, 30 or 60 minutes while the device stays off or offline (Settings → Alarm). Reminders stop by themselves when the device is back to normal.
+
+**Backup and history**
+- Encrypted backup: save rules, automations, settings and your Tuya and eWeLink keys to a password-protected file, and restore it on a new phone (Settings → Backup). Sign-in sessions are never stored in the file. Before restoring you see a summary of what is inside.
+- Export history as a CSV file that opens directly in Excel or Google Sheets — last 24 hours, 7 days, 30 days or everything, for all devices or the selected one (History → Export).
+
+**At a glance**
+- Home-screen widget: shows whether monitoring is running; turns red while an alarm rings and amber when there is a problem.
+- Quick Settings tile: turn monitoring on or off from the notification shade.
+
+**Quality and privacy**
+- App secrets and sign-in tokens are now encrypted with a key kept in the phone's secure hardware (Android Keystore). Existing values are encrypted automatically.
+- If the app ever crashes, the details are saved on the phone. "Send a problem report" (Settings → About) prepares an email with them and with diagnostic details; nothing is shared unless you send it.
+- English texts use proper singular and plural forms ("1 device", "2 devices").
+- Faster with many devices: settings are no longer re-read on every live update.
+- Automated checks (unit tests, lint and build) and on-device tests for encryption, the alarm notification and the volume boost.
+
 ## 2.9.0 — 2026-10-11
 **Alarms that never fail silently**
 - Critical devices: a new switch on the device page makes its alarms ring even during quiet hours (for example a flood sensor at night).
