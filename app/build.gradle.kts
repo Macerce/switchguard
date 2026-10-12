@@ -25,6 +25,8 @@ android {
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
+        // Cihaz üstü testler (Keystore, bildirimler, ses): ./gradlew connectedDebugAndroidTest
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -86,4 +88,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     // android.jar içindeki org.json JVM testlerinde boş stub; gerçeğini ekliyoruz.
     testImplementation("org.json:json:20240303")
+
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test:core:1.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
 }
