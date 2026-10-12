@@ -290,6 +290,8 @@
     <string name="perm_battery_missing">Restricted — alarms may be delayed. Tap to fix.</string>
     <string name="perm_full_screen">Full-screen alarm</string>
     <string name="perm_full_screen_missing">Not allowed — the alarm won\'t fill the lock screen. Tap to fix.</string>
+    <string name="perm_lock_popup">Lock screen alarm (Xiaomi)</string>
+    <string name="perm_lock_popup_missing">Off — the alarm won\'t open over the lock screen. Tap to fix.</string>
     <string name="ready_title">Alarms may not reach you</string>
     <string name="ready_body">Fix these phone settings so SwitchGuard can always ring.</string>
     <string name="ready_fix">Fix</string>
@@ -306,6 +308,8 @@
     <string name="ready_battery_desc">The phone may put monitoring to sleep; alarms can be late or missed.</string>
     <string name="ready_full_screen">Full-screen alarm is not allowed</string>
     <string name="ready_full_screen_desc">With the phone locked, the alarm can\'t open its large screen.</string>
+    <string name="ready_lock_popup">Xiaomi blocks the alarm screen</string>
+    <string name="ready_lock_popup_desc">With the phone locked, the alarm screen can\'t open. Tap Fix, open Other permissions and turn on “Show on Lock screen” and “Open new windows while running in the background”.</string>
     <string name="setup_guide">Setup guide</string>
     <string name="setup_guide_desc">Show the first-run setup again</string>
     <string name="privacy_policy">Privacy policy</string>
@@ -346,6 +350,7 @@
     <string name="onb_perm_notif_desc">Required to show alarms.</string>
     <string name="onb_perm_battery_desc">Lets monitoring keep running in the background so alarms aren\'t delayed.</string>
     <string name="onb_perm_full_screen_desc">Lets the alarm open its large screen while the phone is locked.</string>
+    <string name="onb_perm_lock_popup_desc">On Xiaomi phones, lets the alarm open over the lock screen.</string>
     <string name="onb_done_title">All set!</string>
     <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
     <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>

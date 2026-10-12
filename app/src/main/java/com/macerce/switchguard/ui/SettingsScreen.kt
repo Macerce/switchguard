@@ -50,6 +50,7 @@ import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.RestartAlt
+import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Science
@@ -453,6 +454,16 @@ fun SettingsScreen(modifier: Modifier) {
                         Modifier.clickable(enabled = !fullScreen) { Actions.openFullScreenSettings(context) },
                     )
                 }
+                val lockPopup = remember(resumed) { XiaomiPermissions.lockScreenPopup(context) }
+                if (lockPopup != null) {
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.ScreenLockPortrait,
+                        stringResource(R.string.perm_lock_popup),
+                        stringResource(if (lockPopup) R.string.perm_granted else R.string.perm_lock_popup_missing),
+                        Modifier.clickable(enabled = !lockPopup) { XiaomiPermissions.openOtherPermissions(context) },
+                    )
+                }
                 if (AlarmActivity.needsOverlayPermission(context)) {
                     val overlay = remember(resumed) { AlarmActivity.canShowOverApps(context) }
                     Divider()
@@ -464,11 +475,12 @@ fun SettingsScreen(modifier: Modifier) {
                     )
                 }
                 OemBackground.current(context)?.let { oem ->
+                    val autostart = remember(resumed) { XiaomiPermissions.autostart(context) }
                     Divider()
                     InfoRow(
                         Icons.Rounded.RestartAlt,
                         stringResource(R.string.perm_autostart, oem.label),
-                        stringResource(oem.hint),
+                        stringResource(if (autostart == true) R.string.perm_granted else oem.hint),
                         Modifier.clickable { oem.open(context) },
                     )
                 }

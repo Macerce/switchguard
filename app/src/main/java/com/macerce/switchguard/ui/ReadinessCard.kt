@@ -23,6 +23,7 @@ import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.NotificationsPaused
 import androidx.compose.material.icons.rounded.RestartAlt
+import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -63,7 +64,9 @@ fun readinessInput(context: Context, store: Store): ReadinessInput {
         batteryExempt = Actions.batteryExempt(context),
         fullScreenAllowed = Actions.fullScreenAllowed(context),
         overlayAllowed = if (AlarmActivity.needsOverlayPermission(context)) AlarmActivity.canShowOverApps(context) else null,
-        autostartConfirmed = OemBackground.current(context)?.let { store.autostartConfirmed },
+        lockScreenPopupAllowed = XiaomiPermissions.lockScreenPopup(context),
+        // Xiaomi'de gerçek durum okunur; okunamayan markalarda kullanıcının onayı geçerlidir.
+        autostartConfirmed = OemBackground.current(context)?.let { XiaomiPermissions.autostart(context) ?: store.autostartConfirmed },
     )
 }
 
@@ -116,6 +119,8 @@ private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
             Triple(Icons.Rounded.BatteryAlert, stringResource(R.string.ready_battery), stringResource(R.string.ready_battery_desc))
         ReadinessIssue.FULL_SCREEN_DENIED ->
             Triple(Icons.Rounded.Fullscreen, stringResource(R.string.ready_full_screen), stringResource(R.string.ready_full_screen_desc))
+        ReadinessIssue.LOCK_SCREEN_POPUP_DENIED ->
+            Triple(Icons.Rounded.ScreenLockPortrait, stringResource(R.string.ready_lock_popup), stringResource(R.string.ready_lock_popup_desc))
         ReadinessIssue.OVERLAY_DENIED ->
             Triple(Icons.Rounded.Layers, stringResource(R.string.perm_overlay), stringResource(R.string.perm_overlay_desc))
         ReadinessIssue.AUTOSTART_UNCONFIRMED ->
@@ -136,8 +141,8 @@ private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
                         contentColor = MaterialTheme.colorScheme.onError,
                     ),
                 ) { Text(stringResource(if (issue == ReadinessIssue.AUTOSTART_UNCONFIRMED) R.string.action_open_settings else R.string.ready_fix)) }
-                // Üretici ayarının durumu okunamadığından kullanıcı yaptığını onaylar.
-                if (issue == ReadinessIssue.AUTOSTART_UNCONFIRMED) {
+                // Üretici ayarının durumu okunamıyorsa kullanıcı yaptığını onaylar (Xiaomi'de okunur, onay gerekmez).
+                if (issue == ReadinessIssue.AUTOSTART_UNCONFIRMED && XiaomiPermissions.autostart(context) == null) {
                     TextButton(onClick = { store.autostartConfirmed = true }, modifier = Modifier.tvFocusRing()) {
                         Text(stringResource(R.string.ready_done), color = MaterialTheme.colorScheme.onErrorContainer)
                     }
@@ -162,6 +167,7 @@ private fun fix(issue: ReadinessIssue, context: Context, store: Store) {
         ReadinessIssue.ALARM_VOLUME_LOW -> store.alarmBoost = true
         ReadinessIssue.BATTERY_RESTRICTED -> Actions.requestBatteryExemption(context)
         ReadinessIssue.FULL_SCREEN_DENIED -> Actions.openFullScreenSettings(context)
+        ReadinessIssue.LOCK_SCREEN_POPUP_DENIED -> XiaomiPermissions.openOtherPermissions(context)
         ReadinessIssue.OVERLAY_DENIED -> AlarmActivity.openOverlaySettings(context)
         ReadinessIssue.AUTOSTART_UNCONFIRMED -> OemBackground.current(context)?.open(context)
     }

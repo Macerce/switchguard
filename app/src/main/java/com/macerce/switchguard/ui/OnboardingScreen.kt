@@ -41,6 +41,7 @@ import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.RestartAlt
+import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.SyncAlt
 import androidx.compose.material.icons.rounded.Tune
@@ -414,6 +415,15 @@ private fun PermissionsStep(resumed: Boolean) {
             granted = allowed,
         ) { Actions.openFullScreenSettings(context) }
     }
+    remember(resumed) { XiaomiPermissions.lockScreenPopup(context) }?.let { allowed ->
+        Spacer(Modifier.height(12.dp))
+        PermissionCard(
+            Icons.Rounded.ScreenLockPortrait,
+            stringResource(R.string.perm_lock_popup),
+            stringResource(R.string.onb_perm_lock_popup_desc),
+            granted = allowed,
+        ) { XiaomiPermissions.openOtherPermissions(context) }
+    }
     if (AlarmActivity.needsOverlayPermission(context)) {
         Spacer(Modifier.height(12.dp))
         PermissionCard(
@@ -425,12 +435,12 @@ private fun PermissionsStep(resumed: Boolean) {
     }
     OemBackground.current(context)?.let { oem ->
         Spacer(Modifier.height(12.dp))
-        // Üretici listesinin durumu okunamıyor; kart her zaman "aç" düğmesiyle gösterilir.
+        // Xiaomi'de durum okunur; diğer markalarda okunamaz, kart her zaman "aç" düğmesiyle gösterilir.
         PermissionCard(
             Icons.Rounded.RestartAlt,
             stringResource(R.string.perm_autostart, oem.label),
             stringResource(oem.hint),
-            granted = false,
+            granted = remember(resumed) { XiaomiPermissions.autostart(context) } == true,
             actionLabel = stringResource(R.string.action_open_settings),
         ) { oem.open(context) }
     }

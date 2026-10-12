@@ -8,6 +8,7 @@ enum class ReadinessIssue {
     ALARM_VOLUME_LOW,
     BATTERY_RESTRICTED,
     FULL_SCREEN_DENIED,
+    LOCK_SCREEN_POPUP_DENIED,
     OVERLAY_DENIED,
     AUTOSTART_UNCONFIRMED,
 }
@@ -27,7 +28,12 @@ data class ReadinessInput(
     val batteryExempt: Boolean,
     val fullScreenAllowed: Boolean?,
     val overlayAllowed: Boolean?,
-    /** Üretici "otomatik başlatma" ayarı okunamaz; kullanıcı yaptığını onaylar. */
+    /**
+     * Xiaomi'nin "Kilit ekranında göster" ve "Arka planda çalışırken pencere aç" izinleri. HyperOS'ta tam ekran
+     * bildirim izni de bunlara bağlı: kapalıysa alarm ekranı kilitliyken açılmaz.
+     */
+    val lockScreenPopupAllowed: Boolean?,
+    /** Üretici "otomatik başlatma" ayarı: Xiaomi'de okunur, diğer markalarda kullanıcı yaptığını onaylar. */
     val autostartConfirmed: Boolean?,
 )
 
@@ -41,6 +47,7 @@ object Readiness {
         if (!i.alarmBoost && (i.alarmVolume <= 0 || i.alarmVolume * 5 < i.alarmVolumeMax)) add(ReadinessIssue.ALARM_VOLUME_LOW)
         if (!i.batteryExempt) add(ReadinessIssue.BATTERY_RESTRICTED)
         if (i.fullScreenAllowed == false) add(ReadinessIssue.FULL_SCREEN_DENIED)
+        if (i.lockScreenPopupAllowed == false) add(ReadinessIssue.LOCK_SCREEN_POPUP_DENIED)
         if (i.overlayAllowed == false) add(ReadinessIssue.OVERLAY_DENIED)
         if (i.autostartConfirmed == false) add(ReadinessIssue.AUTOSTART_UNCONFIRMED)
     }

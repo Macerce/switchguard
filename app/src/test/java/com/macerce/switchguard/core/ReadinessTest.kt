@@ -15,6 +15,7 @@ class ReadinessTest {
         batteryExempt = true,
         fullScreenAllowed = true,
         overlayAllowed = null,
+        lockScreenPopupAllowed = null,
         autostartConfirmed = null,
     )
 
@@ -40,19 +41,32 @@ class ReadinessTest {
 
     @Test
     fun `uygulanmayan izinler sorun sayilmaz`() =
-        assertTrue(Readiness.issues(ok.copy(fullScreenAllowed = null, overlayAllowed = null, autostartConfirmed = null)).isEmpty())
+        assertTrue(
+            Readiness.issues(
+                ok.copy(fullScreenAllowed = null, overlayAllowed = null, lockScreenPopupAllowed = null, autostartConfirmed = null)
+            ).isEmpty()
+        )
+
+    @Test
+    fun `Xiaomi kilit ekrani penceresi kapaliysa tam ekran izni tek basina yetmez`() {
+        // HyperOS: tam ekran bildirim izni açık olsa da "kilit ekranında göster / arka planda pencere aç" kapalıysa
+        // alarm ekranı açılmaz.
+        assertEquals(listOf(ReadinessIssue.LOCK_SCREEN_POPUP_DENIED), Readiness.issues(ok.copy(lockScreenPopupAllowed = false)))
+        assertTrue(Readiness.issues(ok.copy(lockScreenPopupAllowed = true)).isEmpty())
+    }
 
     @Test
     fun `sorunlar onem sirasiyla`() {
         val all = ReadinessInput(
             notificationsEnabled = true, alarmChannelHigh = false, dndTotalSilence = true, alarmVolume = 0, alarmVolumeMax = 7, alarmBoost = false,
-            batteryExempt = false, fullScreenAllowed = false, overlayAllowed = false, autostartConfirmed = false,
+            batteryExempt = false, fullScreenAllowed = false, overlayAllowed = false, lockScreenPopupAllowed = false,
+            autostartConfirmed = false,
         )
         assertEquals(
             listOf(
                 ReadinessIssue.ALARM_CHANNEL_MUTED, ReadinessIssue.DND_TOTAL_SILENCE, ReadinessIssue.ALARM_VOLUME_LOW,
-                ReadinessIssue.BATTERY_RESTRICTED, ReadinessIssue.FULL_SCREEN_DENIED, ReadinessIssue.OVERLAY_DENIED,
-                ReadinessIssue.AUTOSTART_UNCONFIRMED,
+                ReadinessIssue.BATTERY_RESTRICTED, ReadinessIssue.FULL_SCREEN_DENIED, ReadinessIssue.LOCK_SCREEN_POPUP_DENIED,
+                ReadinessIssue.OVERLAY_DENIED, ReadinessIssue.AUTOSTART_UNCONFIRMED,
             ),
             Readiness.issues(all),
         )
