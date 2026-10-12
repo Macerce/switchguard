@@ -32,6 +32,10 @@ import androidx.compose.material.icons.rounded.BatteryAlert
 import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.BugReport
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.rounded.DeleteOutline
+import com.macerce.switchguard.data.CrashLog
 import androidx.compose.material.icons.rounded.Campaign
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Email
@@ -72,6 +76,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -512,6 +517,25 @@ fun SettingsScreen(modifier: Modifier) {
                     Icons.AutoMirrored.Rounded.MenuBook, stringResource(R.string.guide_tuya), stringResource(R.string.guide_desc),
                     Modifier.clickable { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
                 ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+                Divider()
+                var crashes by remember(resumed) { mutableIntStateOf(CrashLog.count(context)) }
+                InfoRow(
+                    Icons.Rounded.BugReport,
+                    stringResource(R.string.crash_report),
+                    if (crashes > 0) pluralStringResource(R.plurals.crash_report_desc_some, crashes, crashes)
+                    else stringResource(R.string.crash_report_desc_none),
+                    Modifier.clickable {
+                        if (!Actions.sendProblemReport(context)) {
+                            Toast.makeText(context, resources.getString(R.string.crash_report_no_mail), Toast.LENGTH_LONG).show()
+                        }
+                    },
+                ) {
+                    if (crashes > 0) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { CrashLog.clear(context); crashes = 0 }) {
+                            Icon(Icons.Rounded.DeleteOutline, stringResource(R.string.crash_report_clear), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
                 Divider()
                 InfoRow(
                     Icons.Rounded.Email, stringResource(R.string.contact), Actions.CONTACT_EMAIL,

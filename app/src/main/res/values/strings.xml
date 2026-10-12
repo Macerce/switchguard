@@ -69,6 +69,11 @@ Your current settings are replaced. You may need to sign in to eWeLink again.</s
     <string name="action_restore">Restore</string>
     <string name="backup_file_word">backup</string>
     <string name="widget_description">Shows whether monitoring is running and any ringing alarm</string>
+    <string name="crash_report">Send a problem report</string>
+    <string name="crash_report_desc_none">Something wrong? Prepares an email with diagnostic details. Nothing is shared unless you send it.</string>
+    <string name="crash_report_subject">SwitchGuard %s problem report</string>
+    <string name="crash_report_clear">Delete saved crash reports</string>
+    <string name="crash_report_no_mail">No email app found</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>
@@ -564,5 +569,9 @@ Your current settings are replaced. You may need to sign in to eWeLink again.</s
     <plurals name="backup_item_automations">
         <item quantity="one">%d automation</item>
         <item quantity="other">%d automations</item>
+    </plurals>
+    <plurals name="crash_report_desc_some">
+        <item quantity="one">%d saved crash report will be attached. Nothing is shared unless you send it.</item>
+        <item quantity="other">%d saved crash reports will be attached. Nothing is shared unless you send it.</item>
     </plurals>
 </resources>

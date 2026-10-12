@@ -1,5 +1,8 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.data.CrashLog
+import com.macerce.switchguard.core.Readiness
+import com.macerce.switchguard.core.CrashReport
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.BuildConfig
@@ -239,6 +242,33 @@ object Actions {
         val body = "\n\n—\nSwitchGuard ${BuildConfig.VERSION_NAME} · Android ${Build.VERSION.RELEASE} · ${Build.MANUFACTURER} ${Build.MODEL}"
         val uri = Uri.parse("mailto:$CONTACT_EMAIL?subject=" + Uri.encode("SwitchGuard") + "&body=" + Uri.encode(body))
         return runCatching { context.startActivity(Intent(Intent.ACTION_SENDTO, uri)) }.isSuccess
+    }
+
+    /**
+     * Hata raporu e-postası: sürüm/cihaz, tanılama satırları ve kayıtlı çökmeler. Kullanıcı e-postayı görüp
+     * kendisi gönderir; hiçbir şey kendiliğinden paylaşılmaz. Gizli bilgi (anahtar, token, cihaz adı) girmez.
+     */
+    fun sendProblemReport(context: Context): Boolean {
+        val store = Store.get(context)
+        val connection = LiveState.connection.value
+        val issues = runCatching { Readiness.issues(readinessInput(context, store)) }.getOrDefault(emptyList())
+        val diagnostics = listOf(
+            "monitoring=${store.monitoringEnabled} state=${connection.state} detail=${connection.detail}",
+            "accounts: ewelink=${store.isLoggedIn} tuya=${store.hasTuya} demo=${store.demoMode} pro=${store.isPro}",
+            "devices=${store.snapshots.size} monitored=${store.monitoredIds().size} automations=${store.automations.size}",
+            "readiness=${issues.joinToString(",").ifEmpty { "ok" }}",
+            "settings: grace=${store.offlineGraceSec}s poll=${store.pollIntervalSec}s blind=${store.blindAlertMin}min " +
+                "reminder=${store.reminderMin}min boost=${store.alarmBoost} awake=${store.alwaysAwake}",
+        )
+        val body = CrashReport.body(CrashLog.meta(), diagnostics, CrashLog.reports(context), maxChars = 60_000)
+        val send = Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_EMAIL, arrayOf(CONTACT_EMAIL))
+            .putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.crash_report_subject, BuildConfig.VERSION_NAME))
+            .putExtra(Intent.EXTRA_TEXT, body)
+        // Yalnızca e-posta uygulamaları listelensin.
+        send.selector = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
+        return runCatching { context.startActivity(send) }.isSuccess
     }
 
     const val CONTACT_EMAIL = "switchguardapp@gmail.com"

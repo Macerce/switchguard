@@ -67,6 +67,11 @@ Mevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir
     <string name="action_restore">Geri yükle</string>
     <string name="backup_file_word">yedek</string>
     <string name="widget_description">İzlemenin çalışıp çalışmadığını ve çalan alarmı gösterir</string>
+    <string name="crash_report">Hata raporu gönder</string>
+    <string name="crash_report_desc_none">Bir sorun mu var? Tanılama bilgileriyle bir e-posta hazırlar. Siz göndermeden hiçbir şey paylaşılmaz.</string>
+    <string name="crash_report_subject">SwitchGuard %s hata raporu</string>
+    <string name="crash_report_clear">Kayıtlı hataları sil</string>
+    <string name="crash_report_no_mail">E-posta uygulaması bulunamadı</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>
@@ -560,5 +565,9 @@ Mevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir
     <plurals name="backup_item_automations">
         <item quantity="one">%d otomasyon</item>
         <item quantity="other">%d otomasyon</item>
+    </plurals>
+    <plurals name="crash_report_desc_some">
+        <item quantity="one">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
+        <item quantity="other">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
     </plurals>
 </resources>
