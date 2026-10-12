@@ -10,6 +10,7 @@ import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
+import com.macerce.switchguard.core.ParseCache
 import com.macerce.switchguard.core.QuietHours
 import com.macerce.switchguard.core.SecretValues
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +50,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     private fun str(key: String, def: String = "") = prefs.getString(key, def)!!
     private fun put(block: SharedPreferences.Editor.() -> Unit) = prefs.edit().apply(block).apply()
+
+    /** JSON ayarların çözülmüş halleri: her okumada (her canlı olayda defalarca) yeniden çözülmesin. */
+    private val parsed = ParseCache()
 
     /** Gizli değerler Android Keystore anahtarıyla şifreli saklanır (bkz. [SecretValues]). */
     private val secrets = SecretValues(SecretBox::encrypt, SecretBox::decrypt)
@@ -126,7 +130,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         set(v) = put { putLong("tuyaTokenExp", v) }
     /** Ürün kimliği → (DP kodu → scale). Ürün tanımı her ürün için bir kez çekilir. */
     var tuyaScales: Map<String, Map<String, Int>>
-        get() = prefs.getString("tuyaScales", null)?.let { json ->
+        get() = parsed.get("tuyaScales", prefs.getString("tuyaScales", null)) { raw -> raw?.let { json ->
             runCatching {
                 val o = org.json.JSONObject(json)
                 o.keys().asSequence().associateWith { pid ->
@@ -134,7 +138,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
                     m.keys().asSequence().associateWith { m.getInt(it) }
                 }
             }.getOrNull()
-        } ?: emptyMap()
+        } ?: emptyMap() }
         set(v) = put { putString("tuyaScales", org.json.JSONObject(v.mapValues { org.json.JSONObject(it.value) }).toString()) }
 
     val hasTuya get() = tuyaAccessId.isNotEmpty() && tuyaSecret.isNotEmpty()
@@ -235,20 +239,20 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     // --- Cihazlar ---
     /** Son bilinen cihaz durumları; boşsa henüz temel alınmış durum yok demektir. */
     var snapshots: List<DeviceSnapshot>
-        get() = prefs.getString("snapshots", null)?.let {
-            runCatching { DeviceParser.snapshotsFromJson(it) }.getOrNull()
-        } ?: emptyList()
+        get() = parsed.get("snapshots", prefs.getString("snapshots", null)) { raw ->
+            raw?.let { runCatching { DeviceParser.snapshotsFromJson(it) }.getOrNull() } ?: emptyList()
+        }
         set(v) = put { putString("snapshots", DeviceParser.snapshotsToJson(v)) }
 
     /** Cihazlar ekranının düzeni: sıra, öncelikliler, küçük kartlar, kategoriler. */
     var deviceLayout: com.macerce.switchguard.core.DeviceLayout
-        get() = com.macerce.switchguard.core.DeviceLayout.fromJson(prefs.getString("layout", null))
+        get() = parsed.get("layout", prefs.getString("layout", null)) { com.macerce.switchguard.core.DeviceLayout.fromJson(it) }
         set(v) = put { putString("layout", v.toJson()) }
 
     var rules: Map<String, DeviceRules>
-        get() = prefs.getString("rules", null)?.let {
-            runCatching { DeviceRules.mapFromJson(it) }.getOrNull()
-        } ?: emptyMap()
+        get() = parsed.get("rules", prefs.getString("rules", null)) { raw ->
+            raw?.let { runCatching { DeviceRules.mapFromJson(it) }.getOrNull() } ?: emptyMap()
+        }
         set(v) = put { putString("rules", DeviceRules.mapToJson(v)) }
 
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
@@ -281,9 +285,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     // --- Otomasyon ---
     var automations: List<Automation>
-        get() = prefs.getString("automations", null)?.let {
-            runCatching { Automation.listFromJson(it) }.getOrNull()
-        } ?: emptyList()
+        get() = parsed.get("automations", prefs.getString("automations", null)) { raw ->
+            raw?.let { runCatching { Automation.listFromJson(it) }.getOrNull() } ?: emptyList()
+        }
         set(v) = put { putString("automations", Automation.listToJson(v)) }
 
     fun saveAutomation(a: Automation) {
