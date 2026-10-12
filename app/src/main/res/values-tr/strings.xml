@@ -57,6 +57,7 @@
     <string name="backup_not_backup">Bu bir SwitchGuard yedek dosyası değil</string>
     <string name="backup_too_new">Bu yedek daha yeni bir SwitchGuard sürümüyle alınmış; önce uygulamayı güncelleyin</string>
     <string name="backup_other_platform">Bu yedek SwitchGuard\'ın Windows sürümüyle alınmış; telefonda geri yüklenemez</string>
+    <string name="backup_retry">Ekran yeniden yüklendiği için yedek kaydedilmedi. Lütfen tekrar deneyin.</string>
     <string name="backup_restore_title">Bu yedek geri yüklensin mi?</string>
     <string name="backup_restore_body">%1$s tarihli yedek (sürüm %2$s):\n%3$s\n\nAyarlarınız yedektekilerle değiştirilir; yedekte olmayan hesap bağlantısı olduğu gibi kalır. eWeLink\'e yeniden giriş yapmanız gerekebilir.</string>
     <string name="backup_item_ewelink">eWeLink API anahtarları</string>
@@ -67,6 +68,8 @@
     <string name="backup_file_word">yedek</string>
     <string name="widget_description">İzlemenin çalışıp çalışmadığını ve çalan alarmı gösterir</string>
     <string name="widget_sample">Canlı · 3 cihaz izleniyor</string>
+    <string name="state_service_stopped">İzleme çalışmıyor — açmak için dokunun</string>
+    <string name="secrets_unreadable">Kayıtlı anahtarlar bu telefonda okunamıyor (ör. uygulama verisi başka telefondan kopyalandı). eWeLink ve Tuya bilgilerini Ayarlar\'dan yeniden girin.</string>
     <string name="crash_report">Hata raporu gönder</string>
     <string name="crash_report_desc_none">Bir sorun mu var? Tanılama bilgileriyle bir e-posta hazırlar. Siz göndermeden hiçbir şey paylaşılmaz.</string>
     <string name="crash_report_subject">SwitchGuard %s hata raporu</string>

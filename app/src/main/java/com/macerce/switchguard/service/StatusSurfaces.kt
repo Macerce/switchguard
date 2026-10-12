@@ -31,7 +31,8 @@ object StatusSurfaces {
         val store = Store.get(context)
         val alarms = store.pendingAlarm.size
         val connection = LiveState.connection.value
-        val kind = StatusSummary.kind(store.monitoringEnabled, alarms, connection.state)
+        val serviceAlive = MonitorService.instance?.isMonitoring == true
+        val kind = StatusSummary.kind(store.monitoringEnabled, alarms, connection.state, serviceAlive)
         val count = store.monitoredIds().size
         val res = context.resources
         val text = when (kind) {
@@ -41,9 +42,10 @@ object StatusSurfaces {
             StatusKind.POLLING -> res.getQuantityString(R.plurals.status_polling, count, count, store.pollIntervalSec)
             StatusKind.CONNECTING -> context.getString(R.string.state_connecting)
             StatusKind.PROBLEM -> context.getString(
-                when (connection.state) {
-                    ConnState.NO_INTERNET -> R.string.state_no_internet
-                    ConnState.AUTH_ERROR -> R.string.state_auth_error
+                when {
+                    !serviceAlive -> R.string.state_service_stopped
+                    connection.state == ConnState.NO_INTERNET -> R.string.state_no_internet
+                    connection.state == ConnState.AUTH_ERROR -> R.string.state_auth_error
                     else -> R.string.state_error
                 }
             )
@@ -51,13 +53,18 @@ object StatusSurfaces {
         return kind to text
     }
 
-    /** Durum metni değiştiyse widget'ı ve kutucuğu tazeler (aynıysa hiçbir şey yapmaz). */
+    /**
+     * Durum metni değiştiyse widget'ı ve kutucuğu tazeler (aynıysa hiçbir şey yapmaz). Alarm yolundan çağrılır:
+     * sistem tarafındaki bir hata alarmı ve izleme thread'ini asla düşürmemeli.
+     */
     fun refresh(context: Context, force: Boolean = false) {
-        val now = current(context)
-        if (!force && now == lastShown) return
-        lastShown = now
-        StatusWidget.update(context, now)
-        runCatching { TileService.requestListeningState(context, ComponentName(context, MonitorTile::class.java)) }
+        runCatching {
+            val now = current(context)
+            if (!force && now == lastShown) return
+            lastShown = now
+            StatusWidget.update(context, now)
+            TileService.requestListeningState(context, ComponentName(context, MonitorTile::class.java))
+        }
     }
 
     fun openApp(context: Context): PendingIntent = PendingIntent.getActivity(
@@ -115,6 +122,11 @@ class MonitorTile : TileService() {
     override fun onTileAdded() = render()
 
     override fun onClick() {
+        // Kilitli telefonu eline alan biri izlemeyi kapatamasın: önce kilit açılır.
+        if (isLocked) unlockAndRun { toggle() } else toggle()
+    }
+
+    private fun toggle() {
         val store = Store.get(this)
         when {
             store.pendingAlarm.isNotEmpty() -> openAppAndCollapse()

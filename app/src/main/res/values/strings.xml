@@ -59,6 +59,7 @@
     <string name="backup_not_backup">This isn\'t a SwitchGuard backup file</string>
     <string name="backup_too_new">This backup was made by a newer SwitchGuard; update the app first</string>
     <string name="backup_other_platform">This backup was made by SwitchGuard for Windows and can\'t be restored on a phone</string>
+    <string name="backup_retry">The backup wasn\'t saved because the screen was reloaded. Please try again.</string>
     <string name="backup_restore_title">Restore this backup?</string>
     <string name="backup_restore_body">Backup from %1$s (version %2$s):\n%3$s\n\nYour settings are replaced by the ones in the backup; an account connection that isn\'t in the backup stays as it is. You may need to sign in to eWeLink again.</string>
     <string name="backup_item_ewelink">eWeLink API keys</string>
@@ -69,6 +70,8 @@
     <string name="backup_file_word">backup</string>
     <string name="widget_description">Shows whether monitoring is running and any ringing alarm</string>
     <string name="widget_sample">Live · watching 3 devices</string>
+    <string name="state_service_stopped">Monitoring isn\'t running — tap to open</string>
+    <string name="secrets_unreadable">Saved keys can\'t be read on this phone (for example, the app data was copied from another phone). Enter your eWeLink and Tuya details again in Settings.</string>
     <string name="crash_report">Send a problem report</string>
     <string name="crash_report_desc_none">Something wrong? Prepares an email with diagnostic details. Nothing is shared unless you send it.</string>
     <string name="crash_report_subject">SwitchGuard %s problem report</string>

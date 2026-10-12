@@ -42,5 +42,6 @@ class TickReceiver : BroadcastReceiver() {
                 Log.w("SwitchGuard", "watchdog restart failed", it)
                 Notifier.monitoringStopped(context)
             }
+        StatusSurfaces.refresh(context)
     }
 }

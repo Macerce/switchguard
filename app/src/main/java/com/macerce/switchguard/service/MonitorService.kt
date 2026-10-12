@@ -296,6 +296,8 @@ class MonitorService : Service() {
         wakeLock?.release()
         wakeLock = null
         if (LiveState.connection.value.state != ConnState.STOPPED) LiveState.setConnection(ConnState.STOPPED)
+        // İzleme kullanıcı kapatmadan bittiyse widget "canlı" görünmeye devam etmesin.
+        StatusSurfaces.refresh(this)
         super.onDestroy()
     }
 
@@ -328,6 +330,7 @@ class MonitorService : Service() {
         tuyaTick(now)
         demoTick(wall)
         checkReminders(wall)
+        checkSecrets()
         persistRuntime()
         heartbeat(wall)
         checkBlind(wall)
@@ -727,6 +730,16 @@ class MonitorService : Service() {
             log.add("", getString(R.string.app_name), EventKind.MONITOR_GAP, text, AlertAction.NOTIFY.name, args)
             notifier.notifyEvent(text, title = getString(R.string.notif_monitor_title))
         }
+    }
+
+    private var secretsWarned = false
+
+    /** Kayıtlı anahtarlar bu cihazda çözülemedi (ör. veriler başka telefondan kopyalandı): bir kez söylenir. */
+    private fun checkSecrets() {
+        if (secretsWarned || !store.secretsUnreadable) return
+        secretsWarned = true
+        Log.w(TAG, "stored secrets can't be decrypted")
+        notifier.notifyEvent(getString(R.string.secrets_unreadable), title = getString(R.string.notif_monitor_title))
     }
 
     /** İzleme uzun süre kör kalınca (internet/bulut/oturum) bir kez uyarır, düzelince bildirir. */

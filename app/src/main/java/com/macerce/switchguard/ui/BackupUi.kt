@@ -77,7 +77,14 @@ fun BackupSection() {
     val saver = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/octet-stream")) { uri ->
         val password = createPassword
         createPassword = null
-        if (uri == null || password == null) return@rememberLauncherForActivityResult
+        if (uri == null) return@rememberLauncherForActivityResult
+        if (password == null) {
+            // Ekran yeniden kurulduğu için şifre kayboldu (bellekte tutulur, diske yazılmaz): seçici boş bir dosya
+            // oluşturmuş olabilir; silinir ve kullanıcıya söylenir, "yedek aldım" sanmasın.
+            runCatching { android.provider.DocumentsContract.deleteDocument(context.contentResolver, uri) }
+            toast(R.string.backup_retry)
+            return@rememberLauncherForActivityResult
+        }
         busy = true
         scope.launch {
             val ok = runCatching {

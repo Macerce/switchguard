@@ -31,29 +31,52 @@ class SecretValues(
     private val decrypt: (String) -> String?,
 ) {
     private val cache = HashMap<String, String>()
+    /** Çözülemeyen şifreli metinler: süreç boyunca bir daha denenmez. */
+    private val failed = HashSet<String>()
+    /** Şifreleme hiç çalışmadı (Keystore yok ya da bozuk): süreç boyunca bir daha denenmez, değerler düz kalır. */
+    private var encryptionBroken = false
+
+    /** Kayıtlı bir gizli değer çözülemedi (ör. anahtar silinmiş, veri başka cihazdan kopyalanmış). */
+    @get:Synchronized
+    val unreadable: Boolean get() = failed.isNotEmpty()
+
+    private fun tryEncrypt(plain: String): String? {
+        if (encryptionBroken) return null
+        return encrypt(plain).also { if (it == null) encryptionBroken = true }
+    }
 
     /** Saklanacak metin; şifreleme yapılamazsa (Keystore yok) değer düz kalır. */
     @Synchronized
     fun write(plain: String): String {
         if (plain.isEmpty()) return ""
-        val sealed = encrypt(plain) ?: return plain
+        val sealed = tryEncrypt(plain) ?: return plain
         cache[sealed] = plain
         return sealed
     }
 
-    /** [raw] saklanan metin. Düzse [rewrite] ile şifreli hali yazdırılır. */
+    /**
+     * [raw] saklanan metin. Düzse şifreli hali [rewrite] ile yazdırılır; ama yalnızca geri çözülebildiği
+     * doğrulanınca (yoksa tek kopya kaybolurdu).
+     */
     @Synchronized
     fun read(raw: String, rewrite: (String) -> Unit): String {
         if (raw.isEmpty()) return ""
         if (!SecretFormat.isSealed(raw)) {
-            encrypt(raw)?.let { sealed ->
-                cache[sealed] = raw
-                rewrite(sealed)
+            tryEncrypt(raw)?.let { sealed ->
+                if (decrypt(sealed) == raw) {
+                    cache[sealed] = raw
+                    rewrite(sealed)
+                }
             }
             return raw
         }
         cache[raw]?.let { return it }
-        val plain = decrypt(raw) ?: return ""
+        if (raw in failed) return ""
+        val plain = decrypt(raw)
+        if (plain == null) {
+            failed += raw
+            return ""
+        }
         cache[raw] = plain
         return plain
     }

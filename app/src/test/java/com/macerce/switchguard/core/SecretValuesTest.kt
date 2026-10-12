@@ -68,4 +68,33 @@ class SecretValuesTest {
         assertEquals("x", failing.read("x") { rewritten = true })
         assertFalse(rewritten)
     }
+
+    @Test
+    fun `sifreli hali cozulemiyorsa duz deger yerine yazilmaz`() {
+        val noDecrypt = SecretValues(encrypt, decrypt = { null })
+        var rewritten = false
+        assertEquals("tek-kopya", noDecrypt.read("tek-kopya") { rewritten = true })
+        assertFalse(rewritten)
+    }
+
+    @Test
+    fun `cozulemeyen deger bir kez denenir ve okunamaz isaretlenir`() {
+        var tries = 0
+        val broken = SecretValues(encrypt, decrypt = { tries++; null })
+        val sealed = SecretFormat.seal(byteArrayOf(1), byteArrayOf(2))
+        assertEquals("", broken.read(sealed) {})
+        assertEquals("", broken.read(sealed) {})
+        assertEquals(1, tries)
+        assertTrue(broken.unreadable)
+        assertFalse(values.unreadable)
+    }
+
+    @Test
+    fun `sifreleme hic calismiyorsa tekrar denenmez`() {
+        var tries = 0
+        val noKeystore = SecretValues(encrypt = { tries++; null }, decrypt = { null })
+        repeat(3) { assertEquals("x", noKeystore.read("x") {}) }
+        assertEquals("y", noKeystore.write("y"))
+        assertEquals(1, tries)
+    }
 }

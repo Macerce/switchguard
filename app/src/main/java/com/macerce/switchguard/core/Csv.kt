@@ -7,10 +7,17 @@ package com.macerce.switchguard.core
 object Csv {
     fun separatorFor(decimalSeparator: Char): Char = if (decimalSeparator == ',') ';' else ','
 
-    /** Ayırıcı, tırnak ya da satır sonu içeren alan tırnaklanır; içteki tırnak iki kez yazılır. */
-    fun field(value: String, separator: Char): String =
-        if (value.any { it == separator || it == '"' || it == '\n' || it == '\r' }) "\"" + value.replace("\"", "\"\"") + "\""
-        else value
+    /**
+     * Ayırıcı, tırnak ya da satır sonu içeren alan tırnaklanır; içteki tırnak iki kez yazılır. Formül gibi
+     * başlayan alan (=, +, -, @) başına kesme işareti alır: cihaz adı Excel'de formül olarak çalışmasın.
+     */
+    fun field(value: String, separator: Char): String {
+        val safe = if (value.isNotEmpty() && value[0] in FORMULA_START) "'$value" else value
+        return if (safe.any { it == separator || it == '"' || it == '\n' || it == '\r' }) "\"" + safe.replace("\"", "\"\"") + "\""
+        else safe
+    }
+
+    private val FORMULA_START = setOf('=', '+', '-', '@', '\t', '\r')
 
     fun write(rows: List<List<String>>, separator: Char): String = buildString {
         append('\uFEFF')

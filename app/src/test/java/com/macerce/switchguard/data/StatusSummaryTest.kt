@@ -26,4 +26,10 @@ class StatusSummaryTest {
         assertEquals(StatusKind.PROBLEM, StatusSummary.kind(true, 0, ConnState.AUTH_ERROR))
         assertEquals(StatusKind.PROBLEM, StatusSummary.kind(true, 0, ConnState.ERROR))
     }
+
+    @Test fun `izleme acik ama servis yoksa sorun`() =
+        assertEquals(StatusKind.PROBLEM, StatusSummary.kind(monitoring = true, alarms = 0, state = ConnState.LIVE, serviceAlive = false))
+
+    @Test fun `kullanici kapattiysa servis olmamasi sorun degil`() =
+        assertEquals(StatusKind.STOPPED, StatusSummary.kind(monitoring = false, alarms = 0, state = ConnState.STOPPED, serviceAlive = false))
 }

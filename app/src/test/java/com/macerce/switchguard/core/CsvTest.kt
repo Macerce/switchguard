@@ -33,4 +33,11 @@ class CsvTest {
         assertEquals(now - 30 * day, HistoryRange.MONTH.since(now))
         assertNull(HistoryRange.ALL.since(now))
     }
+
+    @Test fun `formul gibi baslayan hucre metin olarak yazilir`() {
+        assertEquals("'=HYPERLINK(1)", Csv.field("=HYPERLINK(1)", ';'))
+        assertEquals("'+90 555", Csv.field("+90 555", ';'))
+        assertEquals("'@x", Csv.field("@x", ';'))
+        assertEquals("Rögar", Csv.field("Rögar", ';'))
+    }
 }

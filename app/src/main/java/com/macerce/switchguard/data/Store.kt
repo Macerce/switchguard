@@ -56,8 +56,17 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     /** Gizli değerler Android Keystore anahtarıyla şifreli saklanır (bkz. [SecretValues]). */
     private val secrets = SecretValues(SecretBox::encrypt, SecretBox::decrypt)
-    private fun secret(key: String): String = secrets.read(str(key)) { sealed -> prefs.edit().putString(key, sealed).apply() }
-    private fun putSecret(key: String, value: String) = put { if (value.isEmpty()) remove(key) else putString(key, secrets.write(value)) }
+    // Okuma, eski düz değerin şifreli haliyle değiştirilmesi ve yazma aynı kilitte: başka thread'in bu arada
+    // yazdığı yeni token, eski değerin şifreli haliyle ezilmesin.
+    private fun secret(key: String): String = synchronized(secrets) {
+        secrets.read(str(key)) { sealed -> prefs.edit().putString(key, sealed).apply() }
+    }
+    private fun putSecret(key: String, value: String) = synchronized(secrets) {
+        put { if (value.isEmpty()) remove(key) else putString(key, secrets.write(value)) }
+    }
+
+    /** Kayıtlı bir gizli değer (App Secret, token, Tuya Secret) bu cihazda çözülemedi: yeniden girilmeli. */
+    val secretsUnreadable get() = secrets.unreadable
 
     /**
      * Tüm ayarlar, gizliler çözülmüş olarak (yedek ve cihazlar arası aktarım için): şifreli hal bu cihazın
@@ -141,7 +150,8 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         } ?: emptyMap() }
         set(v) = put { putString("tuyaScales", org.json.JSONObject(v.mapValues { org.json.JSONObject(it.value) }).toString()) }
 
-    val hasTuya get() = tuyaAccessId.isNotEmpty() && tuyaSecret.isNotEmpty()
+    /** Şifre çözmeden bakılır: anahtar okunamazsa Tuya "bağlı değil" görünmez, kimlik hatası verir. */
+    val hasTuya get() = tuyaAccessId.isNotEmpty() && str("tuyaSecret").isNotEmpty()
     /** eWeLink'e giriş yapılmış, Tuya bağlanmış ya da demo açık: izlenecek en az bir kaynak var. */
     val hasAnyAccount get() = isLoggedIn || hasTuya || demoMode
 

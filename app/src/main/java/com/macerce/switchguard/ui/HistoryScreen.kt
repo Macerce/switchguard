@@ -88,7 +88,7 @@ fun HistoryScreen(modifier: Modifier) {
     var filter by rememberSaveable { mutableStateOf<String?>(null) }
     var confirmClear by remember { mutableStateOf(false) }
     var chooseRange by remember { mutableStateOf(false) }
-    var exportRange by remember { mutableStateOf(HistoryRange.ALL) }
+    var exportRange by rememberSaveable { mutableStateOf(HistoryRange.ALL) }
     val scope = rememberCoroutineScope()
     val resources = LocalResources.current
     // Kullanıcı kaydedeceği yeri seçer (Dosyalar, Drive...); yazma işi arka planda.
