@@ -57,12 +57,10 @@
     <string name="backup_not_backup">Bu bir SwitchGuard yedek dosyası değil</string>
     <string name="backup_too_new">Bu yedek daha yeni bir SwitchGuard sürümüyle alınmış; önce uygulamayı güncelleyin</string>
     <string name="backup_restore_title">Bu yedek geri yüklensin mi?</string>
-    <string name="backup_restore_body">%1$s tarihli yedek (sürüm %2$s):
-%3$s
-
-Mevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir.</string>
+    <string name="backup_restore_body">%1$s tarihli yedek (sürüm %2$s):\n%3$s\n\nMevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir.</string>
     <string name="backup_item_ewelink">eWeLink API anahtarları</string>
     <string name="backup_item_tuya">Tuya bağlantısı</string>
+    <string name="backup_item_settings">Alarm, izleme ve sessiz saat ayarları</string>
     <string name="backup_restored">Yedek geri yüklendi</string>
     <string name="action_restore">Geri yükle</string>
     <string name="backup_file_word">yedek</string>

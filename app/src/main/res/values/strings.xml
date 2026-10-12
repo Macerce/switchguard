@@ -59,12 +59,10 @@
     <string name="backup_not_backup">This isn\'t a SwitchGuard backup file</string>
     <string name="backup_too_new">This backup was made by a newer SwitchGuard; update the app first</string>
     <string name="backup_restore_title">Restore this backup?</string>
-    <string name="backup_restore_body">Backup from %1$s (version %2$s):
-%3$s
-
-Your current settings are replaced. You may need to sign in to eWeLink again.</string>
+    <string name="backup_restore_body">Backup from %1$s (version %2$s):\n%3$s\n\nYour current settings are replaced. You may need to sign in to eWeLink again.</string>
     <string name="backup_item_ewelink">eWeLink API keys</string>
     <string name="backup_item_tuya">Tuya connection</string>
+    <string name="backup_item_settings">Alarm, monitoring and quiet-hours settings</string>
     <string name="backup_restored">Backup restored</string>
     <string name="action_restore">Restore</string>
     <string name="backup_file_word">backup</string>

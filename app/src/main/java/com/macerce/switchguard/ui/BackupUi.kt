@@ -278,8 +278,9 @@ private fun summaryText(context: Context, s: Backup.Summary): String {
     val items = buildList {
         if (s.ewelinkKeys) add(context.getString(R.string.backup_item_ewelink))
         if (s.tuya) add(context.getString(R.string.backup_item_tuya))
-        add(res.getQuantityString(R.plurals.backup_item_rules, s.rules, s.rules))
-        add(res.getQuantityString(R.plurals.backup_item_automations, s.automations, s.automations))
+        if (s.rules > 0) add(res.getQuantityString(R.plurals.backup_item_rules, s.rules, s.rules))
+        if (s.automations > 0) add(res.getQuantityString(R.plurals.backup_item_automations, s.automations, s.automations))
+        add(context.getString(R.string.backup_item_settings))
     }
     return context.getString(R.string.backup_restore_body, created, s.appVersion, items.joinToString("\n") { "• $it" })
 }
