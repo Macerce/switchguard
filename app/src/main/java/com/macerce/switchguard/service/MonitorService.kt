@@ -169,6 +169,7 @@ class MonitorService : Service() {
                     }
                     store.pendingAlarm = emptyList()
                     notifier.stopAlarm()
+                    StatusSurfaces.refresh(this)
                 }
                 // Süreç ölmüş ve servis yalnızca bu kapatma için yeniden doğmuş olabilir: izleme açıksa kapanmak
                 // yerine devam etsin (bildirim düğmesinden gelen başlatmaya Android izin verir).
@@ -270,6 +271,7 @@ class MonitorService : Service() {
             notifier.stopAlarm()
             // Kaydırılamayan oturum uyarısı izleme kapatılınca asılı kalmasın.
             notifier.clearWarning()
+            StatusSurfaces.refresh(this)
         }
         cancelAlarmTick()
         stopForeground(STOP_FOREGROUND_REMOVE)
@@ -927,6 +929,7 @@ class MonitorService : Service() {
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         notifier.showAlarm(store.pendingAlarm, sound)
+        StatusSurfaces.refresh(this)
     }
 
     /** Alarmın kapatılması geçmişe yazılır: kaç olay vardı ve ne kadar sürede kapatıldı (tepki süresi). */
@@ -997,6 +1000,7 @@ class MonitorService : Service() {
             ConnState.STOPPED -> getString(R.string.state_stopped)
         }
         notifier.updateStatus(getString(R.string.app_name), text)
+        StatusSurfaces.refresh(this)
     }
 
     private fun minuteOfDay(): Int = Calendar.getInstance().run { get(Calendar.HOUR_OF_DAY) * 60 + get(Calendar.MINUTE) }

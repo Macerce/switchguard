@@ -68,6 +68,7 @@ Your current settings are replaced. You may need to sign in to eWeLink again.</s
     <string name="backup_restored">Backup restored</string>
     <string name="action_restore">Restore</string>
     <string name="backup_file_word">backup</string>
+    <string name="widget_description">Shows whether monitoring is running and any ringing alarm</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>

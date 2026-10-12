@@ -65,6 +65,25 @@
         </service>
 
         <receiver android:name=".service.TickReceiver" android:exported="false" />
+        <!-- Ana ekran widget'ı: izleme durumu ve çalan alarm. -->
+        <receiver android:name=".service.StatusWidget" android:exported="true" android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_status_info" />
+        </receiver>
+        <!-- Hızlı Ayarlar kutucuğu: izlemeyi aç/kapat. Etkin kutucuk: servis durum değişince tazeler. -->
+        <service
+            android:name=".service.MonitorTile"
+            android:exported="true"
+            android:icon="@drawable/ic_stat_guard"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="true" />
+        </service>
         <receiver android:name=".service.SummaryReceiver" android:exported="false" />
         <receiver android:name=".service.BootReceiver" android:exported="true">
             <intent-filter>

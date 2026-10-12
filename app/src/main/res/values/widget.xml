@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ana ekran widget'ının renkleri (koyu tema: values-night/widget.xml). -->
+<resources>
+    <color name="widget_bg">#FFE3F1F0</color>
+    <color name="widget_text">#FF0E1B1B</color>
+    <color name="widget_text_secondary">#FF3F4948</color>
+    <color name="widget_icon">#FF006A6A</color>
+    <color name="widget_alarm">#FFB3261E</color>
+    <color name="widget_problem">#FF8A5300</color>
+</resources>

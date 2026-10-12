@@ -66,6 +66,7 @@ Mevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir
     <string name="backup_restored">Yedek geri yüklendi</string>
     <string name="action_restore">Geri yükle</string>
     <string name="backup_file_word">yedek</string>
+    <string name="widget_description">İzlemenin çalışıp çalışmadığını ve çalan alarmı gösterir</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>
