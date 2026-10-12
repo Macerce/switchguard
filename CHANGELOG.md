@@ -6,6 +6,23 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.10.1 — 2026-10-13
+**Xiaomi phones**
+- Xiaomi (MIUI / HyperOS) keeps the alarm screen off the lock screen while "Show on Lock screen" and "Open new windows while running in the background" are off, even when full-screen alarms are allowed. The app now reads both and shows them on the "Alarm may not reach you" card, in Settings and during setup; "Fix" opens Xiaomi's "Other permissions" page directly.
+- Autostart is now detected on Xiaomi; you no longer confirm it with "I did it".
+
+**Alarm volume**
+- While an alarm rings, the phone's volume keys now adjust the alarm (while a SwitchGuard screen is open); before, they changed the media volume.
+- With "Ring at full volume" on, if you turn the volume down while an alarm rings, the alarm volume returns to its previous level when you dismiss it. Before, it stayed low if it had already been at maximum, so the phone's clock alarm rang quietly too.
+
+**TV**
+- On the home screen the remote now reaches the on/off switch and the "4 channels" row inside a card; before, focus skipped them and OK always opened the device. The device page now opens from the card's title.
+- Focus stays on a switch after you press it (it used to jump to the side menu).
+- Coming back from a device page returns focus to the same card.
+
+**Phones and tablets**
+- Coming back from a device page no longer jumps to the top of the list; the scroll position and open channel groups are kept.
+
 ## 2.10.0 — 2026-10-12
 **Alarms that follow up**
 - Ring again if not resolved: after you dismiss an alarm, it rings again every 10, 30 or 60 minutes while the device stays in the state that caused it — still off, still on or offline (Settings → Alarm). Reminders stop by themselves when the device is back to normal, is no longer monitored or that event no longer alarms.

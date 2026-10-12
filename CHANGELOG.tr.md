@@ -6,6 +6,23 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.10.1 — 13 Ekim 2026
+**Xiaomi telefonlar**
+- Xiaomi (MIUI / HyperOS), tam ekran izni açık olsa bile "Kilit ekranında görüntüle" ve "Arka planda çalışırken yeni pencereler açın" izinleri kapalıyken alarm ekranının kilit ekranında açılmasını engelliyor. Uygulama artık bu iki izni okuyor, "Alarm size ulaşmayabilir" kartında, Ayarlar'da ve ilk kurulumda gösteriyor; "Düzelt" düğmesi doğrudan Xiaomi'nin "Diğer izinler" sayfasını açıyor.
+- Otomatik başlatmanın açık olup olmadığı Xiaomi'de artık okunuyor; "Yaptım" diye onaylamanız gerekmiyor.
+
+**Alarm sesi**
+- Alarm çalarken telefonun ses tuşları artık alarmın sesini ayarlıyor (SwitchGuard ekranı açıkken); önceden medya sesini değiştiriyordu.
+- "Alarm tam seste çalsın" açıkken, alarm çalarken sesi kısarsanız alarmı kapatınca alarm sesi eski seviyesine dönüyor. Önceden ses zaten en yüksekteyse kısık kalıyor, telefonun saat alarmı da kısık çalıyordu.
+
+**TV**
+- Ana ekranda kumandayla kartın içindeki aç/kapa anahtarına ve "4 kanal" satırına gidilebiliyor; önceden odak bunları atlıyor, Tamam tuşu her zaman cihazın sayfasını açıyordu. Cihaz sayfası artık kartın başlığından açılıyor.
+- Anahtara basınca odak yerinde kalıyor (önceden yan menüye atlıyordu).
+- Cihaz sayfasından dönünce odak aynı karta dönüyor.
+
+**Telefon ve tablet**
+- Cihaz sayfasından dönünce liste en başa atlamıyor; kaydırma konumu ve açık kanal grupları korunuyor.
+
 ## 2.10.0 — 12 Ekim 2026
 **Takip eden alarm**
 - Düzelmezse yeniden çal: alarmı kapattıktan sonra cihaz alarmı çaldıran durumda kalırsa (hâlâ kapalı, hâlâ açık ya da kopuk) alarm 10, 30 veya 60 dakikada bir yeniden çalar (Ayarlar → Alarm). Cihaz normale dönünce, izlenmeyince ya da o olay artık alarm vermeyince hatırlatma kendiliğinden biter.
