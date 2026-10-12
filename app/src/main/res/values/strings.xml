@@ -40,6 +40,34 @@
     <string name="export_col_device">Device</string>
     <string name="export_col_event">Event</string>
     <string name="export_col_action">Action</string>
+    <string name="section_backup">Backup</string>
+    <string name="backup_create">Back up to a file</string>
+    <string name="backup_create_desc">Rules, automations, settings and the Tuya and eWeLink keys go into a password-protected file</string>
+    <string name="backup_restore">Restore from a file</string>
+    <string name="backup_restore_desc">Moving to a new phone? Pick the backup file and enter its password</string>
+    <string name="backup_password_title_create">Backup password</string>
+    <string name="backup_password_hint_create">The backup can\'t be opened without this password, so write it down. At least 6 characters.</string>
+    <string name="backup_password_title_open">Password of the backup</string>
+    <string name="backup_password">Password</string>
+    <string name="backup_password_repeat">Repeat password</string>
+    <string name="backup_password_short">At least 6 characters</string>
+    <string name="backup_password_mismatch">The passwords don\'t match</string>
+    <string name="backup_working">Working…</string>
+    <string name="backup_saved">Backup saved</string>
+    <string name="backup_failed">Couldn\'t complete the backup operation</string>
+    <string name="backup_wrong_password">Wrong password or damaged file</string>
+    <string name="backup_not_backup">This isn\'t a SwitchGuard backup file</string>
+    <string name="backup_too_new">This backup was made by a newer SwitchGuard; update the app first</string>
+    <string name="backup_restore_title">Restore this backup?</string>
+    <string name="backup_restore_body">Backup from %1$s (version %2$s):
+%3$s
+
+Your current settings are replaced. You may need to sign in to eWeLink again.</string>
+    <string name="backup_item_ewelink">eWeLink API keys</string>
+    <string name="backup_item_tuya">Tuya connection</string>
+    <string name="backup_restored">Backup restored</string>
+    <string name="action_restore">Restore</string>
+    <string name="backup_file_word">backup</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>
@@ -527,5 +555,13 @@
     <plurals name="export_done">
         <item quantity="one">%d entry exported</item>
         <item quantity="other">%d entries exported</item>
+    </plurals>
+    <plurals name="backup_item_rules">
+        <item quantity="one">%d device\'s rules</item>
+        <item quantity="other">%d devices\' rules</item>
+    </plurals>
+    <plurals name="backup_item_automations">
+        <item quantity="one">%d automation</item>
+        <item quantity="other">%d automations</item>
     </plurals>
 </resources>

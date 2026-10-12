@@ -491,6 +491,10 @@ fun SettingsScreen(modifier: Modifier) {
                 )
             }
 
+            // ---------------------------------------------------------------- Yedekleme
+            // TV'de dosya seçme/kaydetme ekranı (DocumentsUI) yok; kurulum oraya telefondan aktarılır.
+            if (!LocalIsTv.current) BackupSection()
+
             // ---------------------------------------------------------------- Hakkında
             SectionTitle(stringResource(R.string.section_about))
             SectionCard {

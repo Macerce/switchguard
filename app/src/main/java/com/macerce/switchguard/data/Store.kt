@@ -18,6 +18,16 @@ import kotlinx.coroutines.flow.StateFlow
  * Uygulamanın tüm kalıcı ayar ve durumu (tek örnek). Uygulamaya özel alanda saklanır.
  * Arayüz, [version] değiştikçe yeniden çizilir.
  */
+/** [com.macerce.switchguard.core.TypedPrefs.decode] çıktısındaki bir değeri türüne göre yazar. */
+fun SharedPreferences.Editor.putTyped(key: String, value: Any): SharedPreferences.Editor = when (value) {
+    is String -> putString(key, value)
+    is Boolean -> putBoolean(key, value)
+    is Int -> putInt(key, value)
+    is Long -> putLong(key, value)
+    is Float -> putFloat(key, value)
+    else -> this
+}
+
 class Store private constructor(context: Context) : SharedPreferences.OnSharedPreferenceChangeListener {
     val prefs: SharedPreferences =
         context.applicationContext.getSharedPreferences("switchguard", Context.MODE_PRIVATE)

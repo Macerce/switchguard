@@ -3,6 +3,7 @@ package com.macerce.switchguard.core
 import android.os.Build
 import android.util.Base64
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.data.putTyped
 import org.json.JSONObject
 import java.security.SecureRandom
 import javax.crypto.Cipher
@@ -30,7 +31,7 @@ object Transfer {
     const val UNKNOWN_ACCOUNT = "*"
 
     /** Aktarılan SharedPreferences anahtarları (izin listesi). */
-    private val KEYS = setOf(
+    val KEYS = setOf(
         "tuyaId", "tuyaSecret", "tuyaRegion", "tuyaScales",
         "rules", "automations", "layout", "freeDevice",
         "alarmVolume", "vibrate", "quietEnabled", "quietStart", "quietEnd",
@@ -45,19 +46,7 @@ object Transfer {
 
     /** Gönderilecek düz veri. [source] alıcıda "bu hesapla giriş yapmayın" uyarısı için. */
     fun export(store: Store): JSONObject {
-        val prefs = JSONObject()
-        store.prefs.all.forEach { (k, v) ->
-            if (k !in KEYS || v == null) return@forEach
-            val typed = when (v) {
-                is String -> JSONObject().put("t", "s").put("v", v)
-                is Boolean -> JSONObject().put("t", "b").put("v", v)
-                is Int -> JSONObject().put("t", "i").put("v", v)
-                is Long -> JSONObject().put("t", "l").put("v", v)
-                is Float -> JSONObject().put("t", "f").put("v", v.toDouble())
-                else -> null
-            }
-            if (typed != null) prefs.put(k, typed)
-        }
+        val prefs = TypedPrefs.encode(store.prefs.all, KEYS)
         return JSONObject()
             .put("v", VERSION)
             .put("prefs", prefs)
@@ -67,19 +56,8 @@ object Transfer {
     /** Alınan veriyi uygular. Döner: gönderen cihazın eWeLink e-postası (boş olabilir). */
     fun import(store: Store, data: JSONObject): String {
         require(data.optInt("v") == VERSION) { "version" }
-        val prefs = data.getJSONObject("prefs")
         val editor = store.prefs.edit()
-        prefs.keys().forEach { k ->
-            if (k !in KEYS) return@forEach
-            val o = prefs.getJSONObject(k)
-            when (o.getString("t")) {
-                "s" -> editor.putString(k, o.getString("v"))
-                "b" -> editor.putBoolean(k, o.getBoolean("v"))
-                "i" -> editor.putInt(k, o.getInt("v"))
-                "l" -> editor.putLong(k, o.getLong("v"))
-                "f" -> editor.putFloat(k, o.getDouble("v").toFloat())
-            }
-        }
+        TypedPrefs.decode(data.getJSONObject("prefs"), KEYS).forEach { (k, v) -> editor.putTyped(k, v) }
         // Tuya anahtarı değişmiş olabilir: eski erişim belirteci geçersiz.
         editor.remove("tuyaToken").remove("tuyaTokenExp")
         editor.apply()

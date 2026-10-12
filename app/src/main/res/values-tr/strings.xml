@@ -38,6 +38,34 @@
     <string name="export_col_device">Cihaz</string>
     <string name="export_col_event">Olay</string>
     <string name="export_col_action">İşlem</string>
+    <string name="section_backup">Yedekleme</string>
+    <string name="backup_create">Şifreli yedek al</string>
+    <string name="backup_create_desc">Kurallar, otomasyonlar, ayarlar ile Tuya ve eWeLink anahtarları şifreli bir dosyaya kaydedilir</string>
+    <string name="backup_restore">Yedekten geri yükle</string>
+    <string name="backup_restore_desc">Yeni telefona mı geçtiniz? Yedek dosyasını seçin ve şifresini girin</string>
+    <string name="backup_password_title_create">Yedek şifresi</string>
+    <string name="backup_password_hint_create">Bu şifre olmadan yedek açılamaz; bir yere not edin. En az 6 karakter.</string>
+    <string name="backup_password_title_open">Yedeğin şifresi</string>
+    <string name="backup_password">Şifre</string>
+    <string name="backup_password_repeat">Şifre (tekrar)</string>
+    <string name="backup_password_short">En az 6 karakter</string>
+    <string name="backup_password_mismatch">Şifreler aynı değil</string>
+    <string name="backup_working">Hazırlanıyor…</string>
+    <string name="backup_saved">Yedek kaydedildi</string>
+    <string name="backup_failed">Yedekleme işlemi tamamlanamadı</string>
+    <string name="backup_wrong_password">Şifre yanlış ya da dosya bozuk</string>
+    <string name="backup_not_backup">Bu bir SwitchGuard yedek dosyası değil</string>
+    <string name="backup_too_new">Bu yedek daha yeni bir SwitchGuard sürümüyle alınmış; önce uygulamayı güncelleyin</string>
+    <string name="backup_restore_title">Bu yedek geri yüklensin mi?</string>
+    <string name="backup_restore_body">%1$s tarihli yedek (sürüm %2$s):
+%3$s
+
+Mevcut ayarların yerine geçer. eWeLink\'e yeniden giriş yapmanız gerekebilir.</string>
+    <string name="backup_item_ewelink">eWeLink API anahtarları</string>
+    <string name="backup_item_tuya">Tuya bağlantısı</string>
+    <string name="backup_restored">Yedek geri yüklendi</string>
+    <string name="action_restore">Geri yükle</string>
+    <string name="backup_file_word">yedek</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>
@@ -523,5 +551,13 @@
     <plurals name="export_done">
         <item quantity="one">%d kayıt dışa aktarıldı</item>
         <item quantity="other">%d kayıt dışa aktarıldı</item>
+    </plurals>
+    <plurals name="backup_item_rules">
+        <item quantity="one">%d cihazın kuralları</item>
+        <item quantity="other">%d cihazın kuralları</item>
+    </plurals>
+    <plurals name="backup_item_automations">
+        <item quantity="one">%d otomasyon</item>
+        <item quantity="other">%d otomasyon</item>
     </plurals>
 </resources>
