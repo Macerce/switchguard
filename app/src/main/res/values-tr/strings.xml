@@ -305,7 +305,7 @@
     <string name="ready_full_screen">Tam ekran alarm izni yok</string>
     <string name="ready_full_screen_desc">Telefon kilitliyken alarm büyük ekranıyla açılamaz.</string>
     <string name="ready_lock_popup">Xiaomi alarm ekranını engelliyor</string>
-    <string name="ready_lock_popup_desc">Telefon kilitliyken alarm ekranı açılamaz. Düzelt\'e dokunun, Diğer izinler\'i açın ve “Kilit ekranında göster” ile “Arka planda çalışırken yeni pencereler aç” izinlerini açın.</string>
+    <string name="ready_lock_popup_desc">Telefon kilitliyken alarm ekranı açılamaz. Düzelt\'e dokunun, Diğer izinler\'i açın ve “Kilit ekranında görüntüle” ile “Arka planda çalışırken yeni pencereler açın” izinlerini açın.</string>
     <string name="setup_guide">Kurulum rehberi</string>
     <string name="setup_guide_desc">İlk kurulum adımlarını tekrar göster</string>
     <string name="privacy_policy">Gizlilik politikası</string>

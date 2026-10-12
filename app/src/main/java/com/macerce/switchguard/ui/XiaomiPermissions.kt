@@ -21,8 +21,8 @@ object XiaomiPermissions {
     fun autostart(context: Context): Boolean? = check(context, OP_AUTO_START)
 
     /**
-     * Alarm ekranı telefon kilitliyken açılabilir mi: "Kilit ekranında göster" ve "Arka planda çalışırken pencere
-     * aç" birlikte gerekir. HyperOS'ta tam ekran bildirim izni de ikincisine bağlıdır.
+     * Alarm ekranı telefon kilitliyken açılabilir mi: "Kilit ekranında görüntüle" ve "Arka planda çalışırken yeni
+     * pencereler açın" birlikte gerekir. HyperOS'ta tam ekran bildirim izni de ikincisine bağlıdır.
      */
     fun lockScreenPopup(context: Context): Boolean? {
         val showWhenLocked = check(context, OP_SHOW_WHEN_LOCKED) ?: return null

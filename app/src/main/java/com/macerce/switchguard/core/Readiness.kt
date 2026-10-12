@@ -29,8 +29,8 @@ data class ReadinessInput(
     val fullScreenAllowed: Boolean?,
     val overlayAllowed: Boolean?,
     /**
-     * Xiaomi'nin "Kilit ekranında göster" ve "Arka planda çalışırken pencere aç" izinleri. HyperOS'ta tam ekran
-     * bildirim izni de bunlara bağlı: kapalıysa alarm ekranı kilitliyken açılmaz.
+     * Xiaomi'nin "Kilit ekranında görüntüle" ve "Arka planda çalışırken yeni pencereler açın" izinleri. HyperOS'ta
+     * tam ekran bildirim izni de bunlara bağlı: kapalıysa alarm ekranı kilitliyken açılmaz.
      */
     val lockScreenPopupAllowed: Boolean?,
     /** Üretici "otomatik başlatma" ayarı: Xiaomi'de okunur, diğer markalarda kullanıcı yaptığını onaylar. */
