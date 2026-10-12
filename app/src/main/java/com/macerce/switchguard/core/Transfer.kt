@@ -46,7 +46,7 @@ object Transfer {
 
     /** Gönderilecek düz veri. [source] alıcıda "bu hesapla giriş yapmayın" uyarısı için. */
     fun export(store: Store): JSONObject {
-        val prefs = TypedPrefs.encode(store.prefs.all, KEYS)
+        val prefs = TypedPrefs.encode(store.plainPrefs(), KEYS)
         return JSONObject()
             .put("v", VERSION)
             .put("prefs", prefs)
@@ -61,6 +61,7 @@ object Transfer {
         // Tuya anahtarı değişmiş olabilir: eski erişim belirteci geçersiz.
         editor.remove("tuyaToken").remove("tuyaTokenExp")
         editor.apply()
+        store.sealSecrets()
         val source = data.optJSONObject("source")
         val email = source?.optString("email").orEmpty()
         store.transferReceived = true

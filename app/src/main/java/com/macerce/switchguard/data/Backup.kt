@@ -35,7 +35,7 @@ object Backup {
             .put("app", "android")
             .put("appVersion", appVersion)
             .put("created", created.toString())
-            .put("settings", TypedPrefs.encode(store.prefs.all, KEYS))
+            .put("settings", TypedPrefs.encode(store.plainPrefs(), KEYS))
         return BackupCrypto.seal(content.toString().toByteArray(Charsets.UTF_8), password, created)
     }
 
@@ -69,5 +69,6 @@ object Backup {
         if (!keepSession) editor.remove("at").remove("rt").remove("apikey").remove("email")
         editor.putBoolean("onboardingDone", true)
         editor.apply()
+        store.sealSecrets()
     }
 }
