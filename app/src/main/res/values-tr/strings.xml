@@ -265,7 +265,7 @@
     <string name="alarm_boost">Alarm tam seste çalsın</string>
     <string name="alarm_boost_desc">Alarm çalarken telefonun alarm sesini en yükseğe çıkarır ve müziği duraklatır; alarmı kapatınca eski haline döner</string>
     <string name="reminder">Düzelmezse yeniden çal</string>
-    <string name="reminder_desc">Alarmı kapattıktan sonra cihaz kapalı ya da kopuk kaldıkça bu aralıkla yeniden çalar</string>
+    <string name="reminder_desc">Alarmı kapattıktan sonra cihaz alarmı çaldıran durumda kaldıkça (hâlâ kapalı, hâlâ açık ya da kopuk) bu aralıkla yeniden çalar. Cihaz normale dönünce durur.</string>
     <string name="reminder_every">%d dakikada bir</string>
     <string name="test_alarm">Test alarmı</string>
     <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>

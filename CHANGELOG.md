@@ -8,7 +8,7 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ## 2.10.0 — 2026-10-12
 **Alarms that follow up**
-- Ring again if not resolved: after you dismiss an alarm, it rings again every 10, 30 or 60 minutes while the device stays off or offline (Settings → Alarm). Reminders stop by themselves when the device is back to normal.
+- Ring again if not resolved: after you dismiss an alarm, it rings again every 10, 30 or 60 minutes while the device stays in the state that caused it — still off, still on or offline (Settings → Alarm). Reminders stop by themselves when the device is back to normal, is no longer monitored or that event no longer alarms.
 
 **Backup and history**
 - Encrypted backup: save rules, automations, settings and your Tuya and eWeLink keys to a password-protected file, and restore it on a new phone (Settings → Backup). Sign-in sessions are never stored in the file. Before restoring you see a summary of what is inside.

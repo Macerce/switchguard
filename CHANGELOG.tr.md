@@ -8,7 +8,7 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ## 2.10.0 — 12 Ekim 2026
 **Takip eden alarm**
-- Düzelmezse yeniden çal: alarmı kapattıktan sonra cihaz kapalı ya da kopuk kalırsa alarm 10, 30 veya 60 dakikada bir yeniden çalar (Ayarlar → Alarm). Cihaz normale dönünce hatırlatma kendiliğinden biter.
+- Düzelmezse yeniden çal: alarmı kapattıktan sonra cihaz alarmı çaldıran durumda kalırsa (hâlâ kapalı, hâlâ açık ya da kopuk) alarm 10, 30 veya 60 dakikada bir yeniden çalar (Ayarlar → Alarm). Cihaz normale dönünce, izlenmeyince ya da o olay artık alarm vermeyince hatırlatma kendiliğinden biter.
 
 **Yedek ve geçmiş**
 - Şifreli yedek: kuralları, otomasyonları, ayarları ve Tuya ile eWeLink anahtarlarınızı şifreli bir dosyaya kaydedin, yeni telefonda geri yükleyin (Ayarlar → Yedekleme). Giriş oturumları dosyaya hiçbir zaman yazılmaz. Geri yüklemeden önce dosyanın içeriğinin özeti gösterilir.

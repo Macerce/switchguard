@@ -19,7 +19,7 @@ class AlarmRemindersTest {
     fun `alarm kapatildiktan sonra durum surerse araliklarla hatirlatir`() {
         val r = AlarmReminders()
         r.onAlarm(off, now = 0)
-        r.onDismiss(now = 1 * min, intervalMs = every)
+        r.onDismiss(now = 1 * min)
         assertTrue(r.due(state(rogar(false)), now = 20 * min, intervalMs = every, alarmActive = false).isEmpty())
         val first = r.due(state(rogar(false)), now = 31 * min, intervalMs = every, alarmActive = false)
         assertEquals(1, first.size)
@@ -27,7 +27,7 @@ class AlarmRemindersTest {
         assertEquals(31 * min, first[0].durationMs)
         // Hatırlatma çalarken (kapatılmadan) yenisi gelmez; kapatılınca sayaç yeniden başlar.
         assertTrue(r.due(state(rogar(false)), now = 70 * min, intervalMs = every, alarmActive = true).isEmpty())
-        r.onDismiss(now = 72 * min, intervalMs = every)
+        r.onDismiss(now = 72 * min)
         assertTrue(r.due(state(rogar(false)), now = 100 * min, intervalMs = every, alarmActive = false).isEmpty())
         assertEquals(1, r.due(state(rogar(false)), now = 102 * min, intervalMs = every, alarmActive = false).size)
     }
@@ -36,7 +36,7 @@ class AlarmRemindersTest {
     fun `durum duzelince hatirlatma biter`() {
         val r = AlarmReminders()
         r.onAlarm(off, now = 0)
-        r.onDismiss(now = 1 * min, intervalMs = every)
+        r.onDismiss(now = 1 * min)
         assertTrue(r.due(state(rogar(true)), now = 31 * min, intervalMs = every, alarmActive = false).isEmpty())
         // Sonra yeniden kapansa da eski alarmın hatırlatması dönmez (yeni değişiklik kendi alarmını çalar).
         assertTrue(r.due(state(rogar(false)), now = 90 * min, intervalMs = every, alarmActive = false).isEmpty())
@@ -46,9 +46,9 @@ class AlarmRemindersTest {
     fun `kopma suruyorsa hatirlatir, cihaz donunce biter`() {
         val r = AlarmReminders()
         r.onAlarm(drop, now = 0)
-        r.onDismiss(now = 0, intervalMs = every)
+        r.onDismiss(now = 0)
         assertEquals(1, r.due(state(pompa(false)), now = 30 * min, intervalMs = every, alarmActive = false).size)
-        r.onDismiss(now = 31 * min, intervalMs = every)
+        r.onDismiss(now = 31 * min)
         assertTrue(r.due(state(pompa(true)), now = 70 * min, intervalMs = every, alarmActive = false).isEmpty())
     }
 
@@ -63,15 +63,17 @@ class AlarmRemindersTest {
     fun `hatirlatma kapaliysa hic uretmez`() {
         val r = AlarmReminders()
         r.onAlarm(off, now = 0)
-        r.onDismiss(now = 1 * min, intervalMs = 0)
+        r.onDismiss(now = 1 * min)
         assertTrue(r.due(state(rogar(false)), now = 600 * min, intervalMs = 0, alarmActive = false).isEmpty())
+        // Kapatılınca bekleyenler silinir; yeniden açılınca eski olaylar birden çalmaz.
+        assertTrue(r.due(state(rogar(false)), now = 700 * min, intervalMs = every, alarmActive = false).isEmpty())
     }
 
     @Test
     fun `listeden kalkan cihazin hatirlatmasi biter`() {
         val r = AlarmReminders()
         r.onAlarm(off, now = 0)
-        r.onDismiss(now = 0, intervalMs = every)
+        r.onDismiss(now = 0)
         assertTrue(r.due(emptyMap(), now = 31 * min, intervalMs = every, alarmActive = false).isEmpty())
         assertTrue(r.due(state(rogar(false)), now = 62 * min, intervalMs = every, alarmActive = false).isEmpty())
     }
@@ -81,9 +83,48 @@ class AlarmRemindersTest {
         val r = AlarmReminders()
         r.onAlarm(off, now = 0)
         r.onAlarm(drop, now = 2 * min)
-        r.onDismiss(now = 3 * min, intervalMs = every)
+        r.onDismiss(now = 3 * min)
         val back = AlarmReminders.fromJson(r.toJson())
         assertEquals(2, back.due(state(rogar(false), pompa(false)), now = 33 * min, intervalMs = every, alarmActive = false).size)
         assertTrue(AlarmReminders.fromJson("bozuk").due(state(rogar(false)), now = 99 * min, intervalMs = every, alarmActive = false).isEmpty())
+    }
+
+    @Test
+    fun `cihaz eski durumuna donunce hatirlatma biter, donus hatirlatilmaz`() {
+        val r = AlarmReminders()
+        r.onAlarm(off, now = 0)
+        // Personel kanalı yeniden açtı: varsayılan kurallarda bu da alarm, ama sorun değil düzelme.
+        r.onAlarm(Change.Switch("r", "Rögar", 0, multiChannel = true, from = false, to = true), now = 5 * min)
+        r.onDismiss(now = 6 * min)
+        assertTrue(r.due(state(rogar(true)), now = 60 * min, intervalMs = every, alarmActive = false).isEmpty())
+    }
+
+    @Test
+    fun `yeni alarmin kapatilmasi eski hatirlatmanin sayacini bastan baslatmaz`() {
+        val r = AlarmReminders()
+        r.onAlarm(off, now = 0)
+        r.onDismiss(now = 1 * min)
+        r.onAlarm(drop, now = 20 * min)
+        r.onDismiss(now = 21 * min)
+        val due = r.due(state(rogar(false), pompa(false)), now = 31 * min, intervalMs = every, alarmActive = false)
+        assertEquals(listOf(off), due.map { it.change })
+    }
+
+    @Test
+    fun `aralik degisince bekleyen hatirlatma yeni araliga uyar`() {
+        val r = AlarmReminders()
+        r.onAlarm(off, now = 0)
+        r.onDismiss(now = 0)
+        assertEquals(1, r.due(state(rogar(false)), now = 10 * min, intervalMs = 10 * min, alarmActive = false).size)
+    }
+
+    @Test
+    fun `artik alarm verilmeyen durum hatirlatilmaz`() {
+        val r = AlarmReminders()
+        r.onAlarm(off, now = 0)
+        r.onDismiss(now = 0)
+        // Kullanıcı cihazı izlemeden çıkardı ya da olayı "Yok" yaptı.
+        assertTrue(r.due(state(rogar(false)), now = 31 * min, intervalMs = every, alarmActive = false, stillAlarmed = { false }).isEmpty())
+        assertTrue(r.due(state(rogar(false)), now = 62 * min, intervalMs = every, alarmActive = false).isEmpty())
     }
 }

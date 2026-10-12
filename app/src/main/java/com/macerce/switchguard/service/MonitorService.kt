@@ -164,7 +164,7 @@ class MonitorService : Service() {
                     val lines = store.pendingAlarm
                     if (lines.isNotEmpty()) {
                         logDismissal(lines.size)
-                        reminders.onDismiss(System.currentTimeMillis(), store.reminderMin * 60_000L)
+                        reminders.onDismiss(System.currentTimeMillis())
                         persistRuntime()
                     }
                     store.pendingAlarm = emptyList()
@@ -895,7 +895,8 @@ class MonitorService : Service() {
         when (effective) {
             AlertAction.ALARM -> {
                 addAlarm(text, sound)
-                reminders.onAlarm(change, System.currentTimeMillis())
+                // Hatırlatma kapalıyken kayıt tutulmaz: sonradan açılınca eski olaylar birden çalmasın.
+                if (store.reminderMin > 0) reminders.onAlarm(change, System.currentTimeMillis())
             }
             AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
             AlertAction.IGNORE -> Unit
@@ -908,7 +909,12 @@ class MonitorService : Service() {
      */
     private fun checkReminders(wall: Long) {
         val interval = store.reminderMin * 60_000L
-        val due = reminders.due(store.snapshots.associateBy { it.id }, wall, interval, alarmActive = store.pendingAlarm.isNotEmpty())
+        val monitored = store.monitoredIds()
+        // Cihaz izlenmiyorsa ya da o olayın kuralı artık alarm değilse hatırlatma düşer.
+        val due = reminders.due(
+            store.snapshots.associateBy { it.id }, wall, interval, alarmActive = store.pendingAlarm.isNotEmpty(),
+            stillAlarmed = { c -> c.deviceId in monitored && store.rulesFor(c.deviceId).actionFor(c.eventType) == AlertAction.ALARM },
+        )
         if (due.isEmpty()) return
         val quiet = store.quietHours.contains(minuteOfDay())
         for (r in due) {
@@ -920,7 +926,7 @@ class MonitorService : Service() {
             if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri) else notifier.notifyEvent(text, rules.soundUri)
         }
         // Hiç alarm çalmadıysa (hepsi bildirime düştü) kapatılacak bir şey yok: hatırlatmalar yeniden kurulur.
-        if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall, interval)
+        if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall)
     }
 
     /** [sound]: olayın cihazına özel ses (yoksa genel ses). */
