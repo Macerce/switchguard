@@ -2,6 +2,7 @@ package com.macerce.switchguard.ui
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -79,6 +80,8 @@ class AlarmActivity : ComponentActivity() {
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
         }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        // Ses tuşları alarmın sesini ayarlasın (yoksa medya sesi değişir, alarm aynı şiddette sürer).
+        volumeControlStream = AudioManager.STREAM_ALARM
         val store = Store.get(this)
         setContent {
             SwitchGuardTheme {

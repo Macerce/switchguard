@@ -1,6 +1,7 @@
 package com.macerce.switchguard.ui
 
 import android.content.Context
+import android.media.AudioManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.billing.Billing
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
@@ -30,7 +34,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         // Kanallar ilk açılışta oluşsun ki kullanıcı ayarlardan görebilsin.
         Notifier.createChannels(this)
+        val store = Store.get(this)
         setContent {
+            // Alarm çalarken ses tuşları alarmın sesini ayarlasın (yoksa medya sesi değişir, alarm aynı şiddette sürer).
+            val version by store.version.collectAsStateWithLifecycle()
+            LaunchedEffect(version) {
+                volumeControlStream =
+                    if (store.pendingAlarm.isNotEmpty()) AudioManager.STREAM_ALARM else AudioManager.USE_DEFAULT_STREAM_TYPE
+            }
             SwitchGuardTheme {
                 // Surface, renk verilmemiş tüm yazılara temanın onBackground rengini verir.
                 // Onsuz Compose varsayılan olarak siyah yazar ve koyu temada yazılar kaybolur

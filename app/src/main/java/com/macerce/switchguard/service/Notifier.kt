@@ -193,17 +193,19 @@ class Notifier(private val context: Context, private val store: Store) {
 
     /**
      * Alarm sesi telefonun "alarm" ses seviyesiyle çalar; seviye kısıksa alarm duyulmaz.
-     * Açıksa alarm süresince en yükseğe çıkarılır, eski değer diske yazılır (servis bu arada kapanırsa
-     * da sonradan geri alınabilsin).
+     * Açıksa alarm süresince en yükseğe çıkarılır. Eski değer (zaten en yüksekte olsa da) diske yazılır: kullanıcı
+     * alarm çalarken sesi kısarsa kapatınca geri döner; servis bu arada kapanırsa da sonradan geri alınabilir.
      */
     private fun boostAlarmVolume() {
         val stream = AudioManager.STREAM_ALARM
-        val target = AlarmVolume.target(audio.getStreamVolume(stream), audio.getStreamMaxVolume(stream), store.alarmBoost) ?: return
-        if (runtime.savedAlarmVolume < 0) runtime.savedAlarmVolume = audio.getStreamVolume(stream)
-        runCatching { audio.setStreamVolume(stream, target, 0) }
+        val start = AlarmVolume.start(
+            audio.getStreamVolume(stream), audio.getStreamMaxVolume(stream), store.alarmBoost, saved = runtime.savedAlarmVolume >= 0,
+        )
+        start.remember?.let { runtime.savedAlarmVolume = it }
+        start.set?.let { runCatching { audio.setStreamVolume(stream, it, 0) } }
     }
 
-    /** Yükseltilmiş alarm sesini eski seviyesine döndürür (yükseltilmediyse bir şey yapmaz). */
+    /** Alarm sesini alarmdan önceki seviyesine döndürür (saklanmadıysa, ör. yükseltme kapalıysa bir şey yapmaz). */
     fun restoreAlarmVolume() {
         val saved = runtime.savedAlarmVolume
         if (saved < 0) return
