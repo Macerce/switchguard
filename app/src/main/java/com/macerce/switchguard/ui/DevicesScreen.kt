@@ -10,6 +10,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -106,7 +107,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
+fun DevicesScreen(
+    modifier: Modifier,
+    onOpenDevice: (String) -> Unit,
+    restoreFocusTo: String? = null,
+    onFocusRestored: () -> Unit = {},
+) {
     val tv = LocalIsTv.current
     val context = LocalContext.current
     val store = remember { Store.get(context) }
@@ -169,6 +175,21 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                 }
             },
         )
+        // Detaydan dönünce kumandanın odağı açılan kartın başlığına verilir. Kart geçiş animasyonu bitmeden
+        // yerleşmemiş olabilir: kısa bir süre denenir; kart yoksa (cihaz kaldırıldı) vazgeçilir.
+        val restoreFocus = remember { FocusRequester() }
+        LaunchedEffect(restoreFocusTo) {
+            if (restoreFocusTo == null) return@LaunchedEffect
+            if (tv) {
+                for (attempt in 1..20) {
+                    // Bağlanmamış istekçi hata fırlatır; yeni Compose sürümleri başarıyı Boolean olarak döndürür.
+                    val result = runCatching { restoreFocus.requestFocus() }.getOrNull()
+                    if (result != null && result != false) break
+                    delay(50)
+                }
+            }
+            onFocusRestored()
+        }
         val list: @Composable () -> Unit = {
             // Telefonda tek sütun; tablet/Chromebook/TV'de cihaz kartları ızgara, diğer kartlar tam satır.
             val full: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) }
@@ -231,6 +252,7 @@ fun DevicesScreen(modifier: Modifier, onOpenDevice: (String) -> Unit) {
                                 priority = device.id in layout.priority,
                                 onClick = { if (!editMode) onOpenDevice(device.id) },
                                 onLongClick = { editMode = true },
+                                focusRequester = if (device.id == restoreFocusTo) restoreFocus else null,
                                 editBar = if (editMode) {
                                     { LayoutEditBar(device, layout, devices, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
                                 } else null,
@@ -427,21 +449,34 @@ private fun DeviceCard(
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     editBar: (@Composable () -> Unit)?,
+    focusRequester: FocusRequester? = null,
 ) {
     val anyOn = device.switches.values.any { it }
+    val tv = LocalIsTv.current
+    val shape = RoundedCornerShape(if (compact) 18.dp else 24.dp)
     ElevatedCard(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).then(
-            // Düzenleme modunda kart tıklanmaz: kumandanın odağı karttaki düzen düğmelerine geçebilsin.
-            if (editBar != null) Modifier
-            else Modifier.tvFocusRing(RoundedCornerShape(if (compact) 18.dp else 24.dp))
-                .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            when {
+                // Düzenleme modunda kart tıklanmaz: kumandanın odağı karttaki düzen düğmelerine geçebilsin.
+                editBar != null -> Modifier
+                // Kumandada kart tek parça odaklanırsa içindeki anahtar ve kanal satırı hiç seçilemez (odak
+                // kartın içine inmez). TV'de kart bir odak grubudur: başlık detayı açar, anahtar ve kanal satırı
+                // ayrı ayrı seçilir; içlerinden biri seçiliyken kartın çerçevesi yanar.
+                tv -> Modifier.tvFocusRing(shape).focusGroup()
+                else -> Modifier.combinedClickable(onClick = onClick, onLongClick = onLongClick)
+            }
         ),
-        shape = RoundedCornerShape(if (compact) 18.dp else 24.dp),
+        shape = shape,
     ) {
+        val header = if (tv && editBar == null) {
+            Modifier.then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
+                .tvFocusRing(RoundedCornerShape(16.dp), inside = true)
+                .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+        } else Modifier
         if (compact) {
-            CompactContent(device, anyOn, priority)
+            CompactContent(device, anyOn, priority, header)
         } else {
-            FullContent(device, anyOn, monitored, priority)
+            FullContent(device, anyOn, monitored, priority, header)
         }
         editBar?.invoke()
     }
@@ -449,39 +484,41 @@ private fun DeviceCard(
 
 /** Küçük kart: tek satırda durum, ad, güç ve (tek kanallıysa) anahtar. */
 @Composable
-private fun CompactContent(device: DeviceSnapshot, anyOn: Boolean, priority: Boolean) {
+private fun CompactContent(device: DeviceSnapshot, anyOn: Boolean, priority: Boolean, header: Modifier) {
     Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-        IconBadge(
-            Icons.Rounded.PowerSettingsNew,
-            tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-            background = if (anyOn && device.online) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
-            size = 34,
-        )
-        Spacer(Modifier.width(12.dp))
-        Column(Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(device.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
-                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
-                if (priority) PriorityStar()
-            }
-            if (device.isMultiChannel && device.online) {
-                Text(
-                    stringResource(R.string.channels_on_short, device.switches.values.count { it }, device.switches.size),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if (anyOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            } else {
-                OnlineDot(device.online)
-            }
-        }
-        if (device.hasEnergy && device.online) {
-            Text(
-                formatWatts(device.power ?: 0.0),
-                style = MaterialTheme.typography.labelLarge,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 8.dp),
+        Row(Modifier.weight(1f).clip(RoundedCornerShape(16.dp)).then(header), verticalAlignment = Alignment.CenterVertically) {
+            IconBadge(
+                Icons.Rounded.PowerSettingsNew,
+                tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                background = if (anyOn && device.online) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
+                size = 34,
             )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(device.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
+                    if (priority) PriorityStar()
+                }
+                if (device.isMultiChannel && device.online) {
+                    Text(
+                        stringResource(R.string.channels_on_short, device.switches.values.count { it }, device.switches.size),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (anyOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    OnlineDot(device.online)
+                }
+            }
+            if (device.hasEnergy && device.online) {
+                Text(
+                    formatWatts(device.power ?: 0.0),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                )
+            }
         }
         if (!device.isMultiChannel && device.switches.size == 1) {
             val (channel, on) = device.switches.entries.first()
@@ -499,8 +536,11 @@ private fun PriorityStar() = Icon(
 )
 
 @Composable
-private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boolean, priority: Boolean) {
-        Row(Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp), verticalAlignment = Alignment.CenterVertically) {
+private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boolean, priority: Boolean, header: Modifier) {
+        Row(
+            Modifier.clip(RoundedCornerShape(24.dp)).then(header).padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             IconBadge(
                 Icons.Rounded.PowerSettingsNew,
                 tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
@@ -531,7 +571,7 @@ private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boole
                 tint = if (monitored) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
             )
         }
-        Column(Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
+        Column(Modifier.padding(start = 8.dp, top = 4.dp, end = 8.dp, bottom = 8.dp)) {
             if (device.isMultiChannel) {
                 // Çok kanallı cihazlarda kanallar varsayılan olarak katlı; özet satırı açıp kapatır.
                 var expanded by rememberSaveable(device.id) { mutableStateOf(false) }
@@ -541,6 +581,7 @@ private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boole
                     Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(16.dp))
+                        .tvFocusRing(RoundedCornerShape(16.dp), inside = true)
                         .clickable { expanded = !expanded }
                         .padding(horizontal = 8.dp, vertical = 12.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -624,7 +665,13 @@ fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): Sw
 @Composable
 fun ChannelSwitch(device: DeviceSnapshot, control: SwitchControl) {
     Box(contentAlignment = Alignment.Center) {
-        Switch(checked = control.shown, enabled = device.online && !control.busy, onCheckedChange = control.toggle)
+        // İstek sürerken anahtar devre dışı bırakılmaz (kumandada odak düşer, menüye atlardı); basış yok sayılır.
+        Switch(
+            checked = control.shown,
+            enabled = device.online,
+            onCheckedChange = { if (!control.busy) control.toggle(it) },
+            modifier = Modifier.tvFocusRing(RoundedCornerShape(50)),
+        )
         if (control.busy) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
     }
 }

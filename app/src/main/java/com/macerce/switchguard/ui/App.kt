@@ -34,6 +34,7 @@ import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.saveable.rememberSaveableStateHolder
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -70,11 +71,19 @@ fun App() {
 
     var tab by rememberSaveable { mutableStateOf(Tab.DEVICES) }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
+    // Detaydan dönünce kumandanın odağı açılan karta geri verilir (yoksa yan menüye düşer).
+    var returnFocusTo by remember { mutableStateOf<String?>(null) }
+    val closeDevice = {
+        returnFocusTo = openDeviceId
+        openDeviceId = null
+    }
+    // Liste detay açıkken ekrandan kalkar; kaydırma konumu ve açık kanal grupları dönüşte korunur.
+    val listState = rememberSaveableStateHolder()
 
     // Geri: önce cihaz detayını kapat, sonra diğer sekmelerden Cihazlar'a dön; yalnızca Cihazlar'dan çık.
     // Sıra önemli: sonra kaydedilen BackHandler önce çalışır.
     BackHandler(enabled = tab != Tab.DEVICES) { tab = Tab.DEVICES }
-    BackHandler(enabled = openDeviceId != null) { openDeviceId = null }
+    BackHandler(enabled = openDeviceId != null) { closeDevice() }
 
     // Geçmiş rozeti: son bakıştan beri alarm/bildirim üretmiş olay sayısı. Geçmiş açıkken yeni olaylar da görülmüş sayılır.
     val log = remember { EventLog.get(context) }
@@ -106,7 +115,12 @@ fun App() {
     val tabContent = remember {
         movableContentOf { mod: Modifier ->
             when (tab) {
-                Tab.DEVICES -> DevicesScreen(mod, onOpenDevice = { openDeviceId = it })
+                Tab.DEVICES -> DevicesScreen(
+                    mod,
+                    onOpenDevice = { openDeviceId = it },
+                    restoreFocusTo = returnFocusTo,
+                    onFocusRestored = { returnFocusTo = null },
+                )
                 Tab.AUTOMATIONS -> AutomationsScreen(mod)
                 Tab.HISTORY -> HistoryScreen(mod)
                 Tab.SETTINGS -> SettingsScreen(mod)
@@ -121,44 +135,46 @@ fun App() {
     ) { deviceId ->
         if (deviceId != null) {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
-                Box(Modifier.readableWidth()) { DeviceDetailScreen(deviceId = deviceId, onBack = { openDeviceId = null }) }
+                Box(Modifier.readableWidth()) { DeviceDetailScreen(deviceId = deviceId, onBack = closeDevice) }
             }
-        } else if (wide) {
-            // Tablet, Chromebook ve TV: alt menü yerine yan menü, içerik okunabilir genişlikte ortada.
-            Row(Modifier.fillMaxSize()) {
-                NavigationRail(Modifier.fillMaxHeight()) {
-                    Spacer(Modifier.weight(1f))
-                    Tab.entries.forEach { t ->
-                        NavigationRailItem(
-                            modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp), inside = true),
-                            selected = tab == t,
-                            onClick = { tab = t },
-                            icon = { tabIcon(t) },
-                            label = { Text(stringResource(t.label)) },
-                        )
-                    }
-                    Spacer(Modifier.weight(1f))
-                }
-                Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
-                    tabContent(Modifier.readableWidth())
-                }
-            }
-        } else {
-            Scaffold(
-                bottomBar = {
-                    NavigationBar {
+        } else listState.SaveableStateProvider("tabs") {
+            if (wide) {
+                // Tablet, Chromebook ve TV: alt menü yerine yan menü, içerik okunabilir genişlikte ortada.
+                Row(Modifier.fillMaxSize()) {
+                    NavigationRail(Modifier.fillMaxHeight()) {
+                        Spacer(Modifier.weight(1f))
                         Tab.entries.forEach { t ->
-                            NavigationBarItem(
+                            NavigationRailItem(
+                                modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp), inside = true),
                                 selected = tab == t,
                                 onClick = { tab = t },
                                 icon = { tabIcon(t) },
                                 label = { Text(stringResource(t.label)) },
                             )
                         }
+                        Spacer(Modifier.weight(1f))
                     }
-                },
-            ) { padding ->
-                tabContent(Modifier.padding(bottom = padding.calculateBottomPadding()))
+                    Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
+                        tabContent(Modifier.readableWidth())
+                    }
+                }
+            } else {
+                Scaffold(
+                    bottomBar = {
+                        NavigationBar {
+                            Tab.entries.forEach { t ->
+                                NavigationBarItem(
+                                    selected = tab == t,
+                                    onClick = { tab = t },
+                                    icon = { tabIcon(t) },
+                                    label = { Text(stringResource(t.label)) },
+                                )
+                            }
+                        }
+                    },
+                ) { padding ->
+                    tabContent(Modifier.padding(bottom = padding.calculateBottomPadding()))
+                }
             }
         }
     }
