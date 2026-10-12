@@ -25,6 +25,21 @@
     <string name="action_dismiss_alarm">DISMISS ALARM</string>
     <string name="action_clear_history">Clear history</string>
 
+    <string name="action_export">Export</string>
+    <string name="export_title">Export history</string>
+    <string name="export_desc_all">Saves a CSV file you can open in Excel or Google Sheets, with every device\'s events.</string>
+    <string name="export_desc_device">Saves a CSV file you can open in Excel or Google Sheets, with the selected device\'s events.</string>
+    <string name="export_range_day">Last 24 hours</string>
+    <string name="export_range_week">Last 7 days</string>
+    <string name="export_range_month">Last 30 days</string>
+    <string name="export_range_all">Everything</string>
+    <string name="export_failed">Couldn\'t export the history</string>
+    <string name="export_file_word">history</string>
+    <string name="export_col_date">Date</string>
+    <string name="export_col_time">Time</string>
+    <string name="export_col_device">Device</string>
+    <string name="export_col_event">Event</string>
+    <string name="export_col_action">Action</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>
@@ -508,5 +523,9 @@
     <plurals name="minutes_n">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="export_done">
+        <item quantity="one">%d entry exported</item>
+        <item quantity="other">%d entries exported</item>
     </plurals>
 </resources>

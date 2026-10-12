@@ -109,6 +109,26 @@ class EventLog private constructor(context: Context) :
         }
     }
 
+    /** Dışa aktarma: [deviceId] (null = hepsi) ve [since] (null = en baştan) için tüm kayıtlar, yeniden eskiye. */
+    fun export(deviceId: String?, since: Long?): List<LoggedEvent> {
+        val clauses = listOfNotNull(deviceId?.let { "device_id = ?" }, since?.let { "ts >= ?" })
+        val args = listOfNotNull(deviceId, since?.toString()).toTypedArray()
+        readableDatabase.query(
+            "events", null, clauses.joinToString(" AND ").ifEmpty { null }, args.takeIf { it.isNotEmpty() },
+            null, null, "ts DESC", MAX_ROWS.toString(),
+        ).use { c ->
+            val out = ArrayList<LoggedEvent>(c.count)
+            while (c.moveToNext()) {
+                out += LoggedEvent(
+                    id = c.getLong(0), time = c.getLong(1), deviceId = c.getString(2),
+                    deviceName = c.getString(3), kind = c.getString(4), text = c.getString(5),
+                    action = c.getString(6), args = c.getString(7),
+                )
+            }
+            return out
+        }
+    }
+
     /** En son kaydın kimliği; kayıt yoksa 0. */
     fun latestId(): Long =
         readableDatabase.rawQuery("SELECT COALESCE(MAX(_id), 0) FROM events", null).use { c -> if (c.moveToFirst()) c.getLong(0) else 0 }

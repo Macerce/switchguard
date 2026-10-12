@@ -23,6 +23,21 @@
     <string name="action_dismiss_alarm">ALARMI KAPAT</string>
     <string name="action_clear_history">Geçmişi temizle</string>
 
+    <string name="action_export">Dışa aktar</string>
+    <string name="export_title">Geçmişi dışa aktar</string>
+    <string name="export_desc_all">Excel ya da Google E-Tablolar\'da açılabilen bir CSV dosyası kaydeder; tüm cihazların olaylarını içerir.</string>
+    <string name="export_desc_device">Excel ya da Google E-Tablolar\'da açılabilen bir CSV dosyası kaydeder; yalnızca seçili cihazın olaylarını içerir.</string>
+    <string name="export_range_day">Son 24 saat</string>
+    <string name="export_range_week">Son 7 gün</string>
+    <string name="export_range_month">Son 30 gün</string>
+    <string name="export_range_all">Tümü</string>
+    <string name="export_failed">Geçmiş dışa aktarılamadı</string>
+    <string name="export_file_word">gecmis</string>
+    <string name="export_col_date">Tarih</string>
+    <string name="export_col_time">Saat</string>
+    <string name="export_col_device">Cihaz</string>
+    <string name="export_col_event">Olay</string>
+    <string name="export_col_action">İşlem</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>
@@ -504,5 +519,9 @@
     <plurals name="minutes_n">
         <item quantity="one">%d dakika</item>
         <item quantity="other">%d dakika</item>
+    </plurals>
+    <plurals name="export_done">
+        <item quantity="one">%d kayıt dışa aktarıldı</item>
+        <item quantity="other">%d kayıt dışa aktarıldı</item>
     </plurals>
 </resources>

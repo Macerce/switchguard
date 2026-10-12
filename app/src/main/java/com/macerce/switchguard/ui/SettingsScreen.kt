@@ -576,7 +576,7 @@ fun pickTime(context: android.content.Context, minute: Int, onPick: (Int) -> Uni
 }
 
 @Composable
-private fun <T> ChoiceDialog(
+fun <T> ChoiceDialog(
     title: String,
     description: String,
     options: List<T>,

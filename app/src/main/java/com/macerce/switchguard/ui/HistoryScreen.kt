@@ -60,6 +60,14 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.EventType
+import com.macerce.switchguard.core.HistoryRange
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.rounded.FileDownload
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalResources
+import kotlinx.coroutines.launch
 import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.LoggedEvent
@@ -79,6 +87,22 @@ fun HistoryScreen(modifier: Modifier) {
 
     var filter by rememberSaveable { mutableStateOf<String?>(null) }
     var confirmClear by remember { mutableStateOf(false) }
+    var chooseRange by remember { mutableStateOf(false) }
+    var exportRange by remember { mutableStateOf(HistoryRange.ALL) }
+    val scope = rememberCoroutineScope()
+    val resources = LocalResources.current
+    // Kullanıcı kaydedeceği yeri seçer (Dosyalar, Drive...); yazma işi arka planda.
+    val exporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+        if (uri == null) return@rememberLauncherForActivityResult
+        val device = filter
+        scope.launch {
+            val message = runCatching { HistoryExport.write(context, uri, device, exportRange) }.fold(
+                onSuccess = { n -> resources.getQuantityString(R.plurals.export_done, n, n) },
+                onFailure = { resources.getString(R.string.export_failed) },
+            )
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        }
+    }
     val devices = remember(version) { store.snapshots }
     val events = remember(logVersion, filter) { log.recent(filter) }
 
@@ -86,6 +110,12 @@ fun HistoryScreen(modifier: Modifier) {
         TopAppBar(
             title = { Text(stringResource(R.string.tab_history), fontWeight = FontWeight.SemiBold) },
             actions = {
+                // TV'de dosya kaydetme ekranı (DocumentsUI) yok.
+                if (!LocalIsTv.current) {
+                    IconButton(onClick = { chooseRange = true }, enabled = events.isNotEmpty()) {
+                        Icon(Icons.Rounded.FileDownload, stringResource(R.string.action_export))
+                    }
+                }
                 IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmClear = true }, enabled = events.isNotEmpty()) {
                     Icon(Icons.Rounded.DeleteSweep, stringResource(R.string.action_clear_history))
                 }
@@ -125,6 +155,20 @@ fun HistoryScreen(modifier: Modifier) {
                 }
             }
         }
+    }
+
+    if (chooseRange) {
+        ChoiceDialog(
+            stringResource(R.string.export_title),
+            stringResource(if (filter == null) R.string.export_desc_all else R.string.export_desc_device),
+            HistoryRange.entries, exportRange, { rangeLabel(it) },
+            onPick = { range ->
+                exportRange = range
+                runCatching { exporter.launch(HistoryExport.fileName(context)) }
+                    .onFailure { Toast.makeText(context, resources.getString(R.string.export_failed), Toast.LENGTH_LONG).show() }
+            },
+            onDismiss = { chooseRange = false },
+        )
     }
 
     if (confirmClear) {
@@ -168,6 +212,16 @@ private fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventKind.REMINDER -> Icons.Rounded.Snooze
     else -> Icons.Rounded.Alarm
 }
+
+@Composable
+private fun rangeLabel(r: HistoryRange): String = stringResource(
+    when (r) {
+        HistoryRange.DAY -> R.string.export_range_day
+        HistoryRange.WEEK -> R.string.export_range_week
+        HistoryRange.MONTH -> R.string.export_range_month
+        HistoryRange.ALL -> R.string.export_range_all
+    }
+)
 
 /** Seçili dildeki olay kalıpları; dil değişince yeniden oluşturulur. */
 @Composable
