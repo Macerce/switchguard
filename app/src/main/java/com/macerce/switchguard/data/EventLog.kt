@@ -27,6 +27,7 @@ object EventKind {
     const val MONITOR_BLIND = "MONITOR_BLIND" // İzleme kör kaldı / yeniden çalışıyor
     const val DISMISSED = "DISMISSED" // Alarm kapatıldı (tepki süresiyle)
     const val REMINDER = "REMINDER" // Alarm kapatıldı ama durum sürüyor
+    const val ESCALATION = "ESCALATION" // Alarm kapatılmadı, ikinci kişiye haber verildi
 }
 
 data class LoggedEvent(
@@ -168,6 +169,10 @@ class EventLog private constructor(context: Context) :
             monitorBlind = { context.getString(R.string.event_monitor_blind, DateUtils.formatDateTime(context, it, DateUtils.FORMAT_SHOW_TIME)) },
             monitorRestored = { from, to -> context.getString(R.string.event_monitor_restored, DurationText.format(to - from, durations(context))) },
             reminder = { label, state, ms -> context.getString(R.string.event_reminder, label, state, DurationText.format(ms, durations(context))) },
+            escalation = { n, min, err ->
+                if (err == null) context.resources.getQuantityString(R.plurals.event_escalated, n, n, min)
+                else context.getString(R.string.event_escalation_failed, min, err)
+            },
             alarmDismissed = { n, ms ->
                 context.resources.getQuantityString(R.plurals.event_alarm_dismissed, n, n, DurationText.format(ms, durations(context)))
             },

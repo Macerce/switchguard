@@ -21,6 +21,8 @@ class EventStrings(
     val alarmDismissed: (count: Int, responseMs: Long) -> String,
     /** Hatırlatma: [label] hâlâ [state]; ilk alarmdan bu yana [durationMs]. */
     val reminder: (label: String, state: String, durationMs: Long) -> String,
+    /** Alarm [minutes] dakikadır kapatılmadı: [recipients] kişiye haber verildi ya da ([error]) verilemedi. */
+    val escalation: (recipients: Int, minutes: Int, error: String?) -> String,
 )
 
 /**
@@ -58,6 +60,9 @@ sealed class EventArgs {
         }
     }
 
+    /** İkinci kişiye haber verme (Telegram). [error] doluysa gönderilemedi. */
+    data class Escalation(val recipients: Int, val minutes: Int, val error: String? = null) : EventArgs()
+
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
         is Switch -> Change.Switch("", deviceName, channel, multi, from, to).describe(s.labels)
@@ -84,6 +89,7 @@ sealed class EventArgs {
             }
             s.reminder(label, state, durationMs)
         }
+        is Escalation -> s.escalation(recipients, minutes, error)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -107,6 +113,7 @@ sealed class EventArgs {
                 put("t", "reminder"); put("ch", a.channel); put("multi", a.multi); put("conn", a.connection)
                 put("to", a.to); put("ms", a.durationMs)
             }
+            is Escalation -> { put("t", "escalation"); put("n", a.recipients); put("min", a.minutes); a.error?.let { put("err", it) } }
         }
     }.toString()
 
@@ -132,6 +139,7 @@ sealed class EventArgs {
                     "restored" -> MonitorRestored(o.getLong("from"), o.getLong("to"))
                     "dismissed" -> AlarmDismissed(o.getInt("n"), o.getLong("ms"))
                     "reminder" -> Reminder(o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("conn"), o.getBoolean("to"), o.getLong("ms"))
+                    "escalation" -> Escalation(o.getInt("n"), o.getInt("min"), if (o.has("err")) o.getString("err") else null)
                     else -> null
                 }
             }.getOrNull()

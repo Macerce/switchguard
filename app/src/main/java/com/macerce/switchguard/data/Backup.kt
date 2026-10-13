@@ -15,7 +15,8 @@ import java.time.Instant
  * olduğundan eWeLink geliştirici anahtarları da girer. Oturum token'ları, bekleyen alarm ve geçmiş hiçbir zaman girmez.
  */
 object Backup {
-    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake")
+    /** Telegram ile haber verme de girer: aynı kişinin yeni telefonu aynı kişilere haber versin. */
+    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin")
 
     /** İçerik biçiminin etiketi; Windows sürümünün yedeği aynı zarfı kullanır ama içeriği farklıdır. */
     const val APP = "android"

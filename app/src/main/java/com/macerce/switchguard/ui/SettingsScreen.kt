@@ -26,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.BatteryAlert
@@ -99,6 +100,7 @@ import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.Cloud
+import com.macerce.switchguard.core.PhoneEntry
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.MonitorService
 import com.macerce.switchguard.service.SummaryScheduler
@@ -359,6 +361,13 @@ fun SettingsScreen(modifier: Modifier) {
                             )
                         }
                     },
+                )
+                Divider()
+                InfoRow(
+                    Icons.AutoMirrored.Rounded.Send,
+                    stringResource(R.string.tg_title),
+                    escalationSummary(s),
+                    Modifier.clickable { dialog = { TelegramDialog(store) { dialog = null } } },
                 )
                 Divider()
                 InfoRow(Icons.Rounded.Campaign, stringResource(R.string.alarm_boost), stringResource(R.string.alarm_boost_desc)) {
@@ -766,6 +775,15 @@ fun CredentialFields(
 ) {
     Column {
         TvKeyboardHint()
+        PhoneEntryButton(
+            stringResource(R.string.api_credentials),
+            listOf(PhoneEntry.Field("appId", "App ID", value = appId), PhoneEntry.Field("appSecret", "App Secret", secret = true)),
+            onReceived = { v ->
+                v["appId"]?.takeIf { it.isNotEmpty() }?.let(onAppId)
+                v["appSecret"]?.takeIf { it.isNotEmpty() }?.let(onSecret)
+            },
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
         OutlinedTextField(appId, onAppId, label = { Text("App ID") }, singleLine = true, keyboardOptions = tvKeyboardOptions(), modifier = Modifier.fillMaxWidth().tvTextField())
         OutlinedTextField(
             secret, onSecret, label = { Text("App Secret") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),

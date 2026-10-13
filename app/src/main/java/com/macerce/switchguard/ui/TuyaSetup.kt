@@ -33,6 +33,7 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.api.TuyaAuthException
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaExpiredException
+import com.macerce.switchguard.core.PhoneEntry
 import com.macerce.switchguard.data.Store
 import java.io.IOException
 import kotlinx.coroutines.launch
@@ -63,6 +64,15 @@ fun TuyaDialog(store: Store, onDismiss: () -> Unit) {
                     modifier = Modifier.padding(top = 8.dp),
                 )
                 TvKeyboardHint()
+                PhoneEntryButton(
+                    stringResource(R.string.tuya_dialog_title),
+                    listOf(PhoneEntry.Field("accessId", "Access ID", value = accessId), PhoneEntry.Field("secret", "Access Secret", secret = true)),
+                    onReceived = { v ->
+                        v["accessId"]?.takeIf { it.isNotEmpty() }?.let { accessId = it }
+                        v["secret"]?.takeIf { it.isNotEmpty() }?.let { secret = it }
+                    },
+                    modifier = Modifier.padding(top = 12.dp),
+                )
                 OutlinedTextField(
                     accessId, { accessId = it }, label = { Text("Access ID") }, singleLine = true, keyboardOptions = tvKeyboardOptions(),
                     modifier = Modifier.fillMaxWidth().padding(top = 12.dp).tvTextField(),

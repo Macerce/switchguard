@@ -54,6 +54,16 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getBoolean("silentAlarm", false)
         set(v) = put { putBoolean("silentAlarm", v) }
 
+    /** Çalan alarmdaki ilk gerçek (test olmayan) olayın zamanı; ikinci kişiye haber verme buna göre. 0 = yok. */
+    var realAlarmAt: Long
+        get() = prefs.getLong("realAlarmAt", 0)
+        set(v) = put { putLong("realAlarmAt", v) }
+
+    /** Haber verilen alarmın [realAlarmAt] değeri: aynı alarm için ikinci kez gönderilmez. */
+    var escalatedFor: Long
+        get() = prefs.getLong("escalatedFor", 0)
+        set(v) = put { putLong("escalatedFor", v) }
+
     /** "İzleme durdu" uyarısının son gösterildiği an; bekçi her dakika denerken uyarı tekrar tekrar çalmasın. */
     var stoppedWarnedAt: Long
         get() = prefs.getLong("stoppedWarnedAt", 0)

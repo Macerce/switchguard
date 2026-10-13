@@ -18,6 +18,7 @@ class EventTextTest {
         monitorRestored = { from, to -> "Monitoring working again after ${to - from}" },
         alarmDismissed = { n, ms -> "Alarm dismissed: $n events, $ms ms" },
         reminder = { label, state, ms -> "Reminder: $label is still $state ($ms ms)" },
+        escalation = { n, min, err -> if (err == null) "Not dismissed for $min min: told $n" else "Not dismissed for $min min, couldn't tell: $err" },
     )
     private val tr = EventStrings(
         ChangeLabels("AÇIK", "KAPALI", "ONLINE", "OFFLINE") { n, c -> "$n (K$c)" },
@@ -32,6 +33,7 @@ class EventTextTest {
         monitorRestored = { from, to -> "İzleme yeniden çalışıyor: ${to - from}" },
         alarmDismissed = { n, ms -> "Alarm kapatıldı: $n olay, $ms ms" },
         reminder = { label, state, ms -> "Hatırlatma: $label hâlâ $state ($ms ms)" },
+        escalation = { n, min, err -> if (err == null) "$min dk kapatılmadı: $n kişi" else "$min dk kapatılmadı, haber verilemedi: $err" },
     )
     private val both = listOf(en, tr)
     private val rogar = "Rögar Su Seviye Bildirimi"

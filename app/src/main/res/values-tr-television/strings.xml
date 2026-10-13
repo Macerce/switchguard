@@ -8,4 +8,7 @@
     <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını belirlemek için bir cihazı seçin</string>
     <string name="perm_overlay_desc">Alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Seçin ve SwitchGuard\'a izin verin.</string>
     <string name="ready_body">SwitchGuard\'ın her zaman çalabilmesi için bu TV ayarlarını düzeltin.</string>
+    <string name="alarm_boost_desc">Alarm çalarken bu cihazın alarm sesini en yükseğe çıkarır ve oynatılanı duraklatır; alarmı kapatınca eski haline döner</string>
+    <string name="test_alarm_sound_desc">Gerçek alarm gibi çalar</string>
+    <string name="test_alarm_silent_desc">Ses yok: kimseyi rahatsız etmeden alarm ekranını görürsünüz</string>
 </resources>

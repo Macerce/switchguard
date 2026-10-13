@@ -22,6 +22,8 @@ import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
+import com.macerce.switchguard.api.TelegramClient
+import com.macerce.switchguard.api.TelegramException
 import com.macerce.switchguard.api.TuyaAuthException
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaExpiredException
@@ -39,6 +41,8 @@ import com.macerce.switchguard.core.ChangeLabels
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.DurationText
+import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.MonitorGap
@@ -169,6 +173,7 @@ class MonitorService : Service() {
                     }
                     store.pendingAlarm = emptyList()
                     runtime.silentAlarm = false
+                    endEscalation()
                     notifier.stopAlarm()
                     StatusSurfaces.refresh(this)
                 }
@@ -190,7 +195,7 @@ class MonitorService : Service() {
                 val delay = intent.getLongExtra(EXTRA_DELAY_MS, 0).coerceIn(0, MAX_TEST_DELAY_MS)
                 handler.postDelayed({
                     log.add("", getString(R.string.app_name), EventKind.TEST, strings.test, AlertAction.ALARM.name, EventArgs.Test)
-                    addAlarm(getString(if (silent) R.string.test_alarm_line_silent else R.string.test_alarm_line), silent = silent)
+                    addAlarm(getString(if (silent) R.string.test_alarm_line_silent else R.string.test_alarm_line), silent = silent, test = true)
                 }, delay)
                 return if (running) START_STICKY else START_NOT_STICKY
             }
@@ -269,6 +274,7 @@ class MonitorService : Service() {
             store.pendingAlarm = emptyList()
             runtime.alarmStartedAt = 0
             runtime.silentAlarm = false
+            endEscalation()
             runtime.clearEngine()
             grace = OfflineGrace()
             automations = AutomationEngine()
@@ -336,6 +342,7 @@ class MonitorService : Service() {
         tuyaTick(now)
         demoTick(wall)
         checkReminders(wall)
+        checkEscalation(wall)
         checkSecrets()
         persistRuntime()
         heartbeat(wall)
@@ -952,16 +959,120 @@ class MonitorService : Service() {
      * [sound]: olayın cihazına özel ses (yoksa genel ses). [silent]: sessiz test alarmı. Alarm ancak yalnızca sessiz
      * testlerden oluşuyorsa sessiz kalır: gerçek bir olay gelince ses başlar, çalan alarma eklenen sessiz test onu susturmaz.
      */
-    private fun addAlarm(text: String, sound: String? = null, silent: Boolean = false) {
+    private fun addAlarm(text: String, sound: String? = null, silent: Boolean = false, test: Boolean = false) {
+        val now = System.currentTimeMillis()
         if (store.pendingAlarm.isEmpty()) {
-            runtime.alarmStartedAt = System.currentTimeMillis()
+            runtime.alarmStartedAt = now
             runtime.silentAlarm = silent
         } else if (!silent) runtime.silentAlarm = false
+        // İkinci kişiye haber verme ilk gerçek olaydan sayılır; test alarmı kimseye mesaj göndermez.
+        if (!test && runtime.realAlarmAt == 0L) {
+            runtime.realAlarmAt = now
+            if (store.escalationReady) handler.postDelayed({ tick() }, store.escalateMin * 60_000L + 50)
+        }
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         notifier.showAlarm(store.pendingAlarm, sound, silent = runtime.silentAlarm)
         StatusSurfaces.refresh(this)
     }
+
+    /** Gönderilemeyen haber vermenin geçmişe yazıldığı alarm: her denemede tekrar yazılmasın. */
+    private var escalationFailureLoggedFor = 0L
+    /** Kalıcı hata (anahtar geçersiz, bot engellenmiş, sohbet yok) alınan alarm: yeniden denenmez. */
+    private var escalationGaveUpFor = 0L
+    private var escalationRetryAt = 0L
+    /** Gönderim sürüyor: bir sonraki tick aynı mesajı ikinci kez göndermesin. */
+    private var escalationInFlight = false
+
+    /**
+     * Alarm [Store.escalateMin] dakika kapatılmazsa seçilen kişilere Telegram mesajı gider (alarm başına bir kez).
+     * Gönderilemezse (internet yok) dakikada bir yeniden denenir; ilk başarısızlık geçmişe yazılır.
+     * Ağ işi [telegram] iş parçacığında: yavaş bağlantı izlemeyi (cihaz olaylarını) bekletmesin.
+     */
+    private fun checkEscalation(wall: Long) {
+        if (escalationInFlight || store.pendingAlarm.isEmpty() || !store.escalationReady) return
+        val at = runtime.realAlarmAt
+        if (!Escalation.due(at, runtime.escalatedFor, wall, store.escalateMin * 60_000L)) return
+        if (at == escalationGaveUpFor || wall < escalationRetryAt) return
+        val minutes = ((wall - at) / 60_000L).toInt().coerceAtLeast(store.escalateMin)
+        val text = Escalation.message(
+            header = getString(R.string.tg_alarm_header, minutes),
+            lines = store.pendingAlarm,
+            footer = getString(R.string.tg_footer, deviceName()),
+        )
+        val token = store.telegramToken
+        val recipients = store.telegramRecipients
+        escalationInFlight = true
+        telegram.execute {
+            var sent = 0
+            var error: Exception? = null
+            var permanent = true
+            for (r in recipients) {
+                try {
+                    TelegramClient.send(token, r.id, text)
+                    sent++
+                } catch (e: Exception) {
+                    Log.w(TAG, "telegram send failed", e)
+                    error = e
+                    if (!(e is TelegramException && e.code in PERMANENT_TELEGRAM_ERRORS)) permanent = false
+                }
+            }
+            handler.post { onEscalationSent(at, minutes, sent, error, permanent, wall) }
+        }
+    }
+
+    private fun onEscalationSent(at: Long, minutes: Int, sent: Int, error: Exception?, permanent: Boolean, wall: Long) {
+        escalationInFlight = false
+        val name = getString(R.string.app_name)
+        if (sent > 0) {
+            val args = EventArgs.Escalation(sent, minutes)
+            log.add("", name, EventKind.ESCALATION, args.render(name, strings), "", args)
+            // Gönderim sürerken alarm kapatıldıysa "kapatıldı" mesajı hemen ardından gider.
+            if (runtime.realAlarmAt == at) runtime.escalatedFor = at else sendDismissed(at)
+            return
+        }
+        if (permanent) escalationGaveUpFor = at else escalationRetryAt = wall + ESCALATION_RETRY_MS
+        if (escalationFailureLoggedFor != at) {
+            escalationFailureLoggedFor = at
+            val args = EventArgs.Escalation(0, minutes, error?.let(::telegramError))
+            log.add("", name, EventKind.ESCALATION, args.render(name, strings), "", args)
+        }
+    }
+
+    /** Alarm bitti: haber verildiyse kişilere kapatıldığı da bildirilir. */
+    private fun endEscalation() {
+        val at = runtime.realAlarmAt
+        if (at != 0L && runtime.escalatedFor == at) sendDismissed(at)
+        runtime.realAlarmAt = 0
+        runtime.escalatedFor = 0
+    }
+
+    /** "Alarm kapatıldı" mesajı; yanıt beklenmez, gönderilemezse önemsizdir. */
+    private fun sendDismissed(at: Long) {
+        if (!store.escalationReady) return
+        val now = System.currentTimeMillis()
+        val text = getString(
+            R.string.tg_dismissed,
+            DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(now)),
+            DurationText.format(now - at, EventLog.durations(this)),
+        )
+        val token = store.telegramToken
+        val recipients = store.telegramRecipients
+        telegram.execute { recipients.forEach { r -> runCatching { TelegramClient.send(token, r.id, text) } } }
+    }
+
+    private fun telegramError(e: Exception): String = when {
+        e is TelegramException && e.code == 401 -> getString(R.string.tg_err_token)
+        e is TelegramException && e.code == 403 -> getString(R.string.tg_err_blocked)
+        e is TelegramException && e.code == 400 -> getString(R.string.tg_err_chat)
+        e is TelegramException -> e.message.orEmpty()
+        else -> getString(R.string.state_no_internet)
+    }
+
+    /** Telefonun kullanıcıya görünen adı ("Xiaomi 11T"); yoksa model. */
+    private fun deviceName(): String =
+        runCatching { android.provider.Settings.Global.getString(contentResolver, "device_name") }.getOrNull()
+            ?.takeIf { it.isNotBlank() } ?: Build.MODEL
 
     /** Alarmın kapatılması geçmişe yazılır: kaç olay vardı ve ne kadar sürede kapatıldı (tepki süresi). */
     private fun logDismissal(count: Int) {
@@ -1069,6 +1180,9 @@ class MonitorService : Service() {
         /** Cihazların durumunun alınamadığı durumlar. */
         private val BLIND_STATES = setOf(ConnState.CONNECTING, ConnState.NO_INTERNET, ConnState.ERROR, ConnState.AUTH_ERROR)
         private const val RESYNC_MS = 5 * 60_000L
+        private const val ESCALATION_RETRY_MS = 60_000L
+        /** Yeniden denemenin işe yaramayacağı Telegram hataları: 400 sohbet yok, 401 anahtar geçersiz, 403 bot engellendi. */
+        private val PERMANENT_TELEGRAM_ERRORS = setOf(400, 401, 403)
         private const val CONFIRM_DELAY_MS = 5_000L
         /**
          * Tuya ücretsiz planı ayda ≈26 bin API çağrısı verir; her senkron 2 çağrı.
@@ -1085,6 +1199,12 @@ class MonitorService : Service() {
 
         @Volatile var instance: MonitorService? = null
             private set
+
+        /**
+         * Telegram gönderimleri (bkz. checkEscalation). Süreç boyunca tek ve hiç kapatılmaz: servis durdurulurken
+         * kuyruğa giren "alarm kapatıldı" mesajı da gidebilsin.
+         */
+        private val telegram = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "telegram").apply { isDaemon = true } }
 
         private fun tickPendingIntent(context: Context) = PendingIntent.getBroadcast(
             context, 0, Intent(context, TickReceiver::class.java),

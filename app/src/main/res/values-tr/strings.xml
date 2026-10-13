@@ -594,4 +594,66 @@
         <item quantity="one">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
         <item quantity="other">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
     </plurals>
+
+    <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
+    <string name="tg_alarm_header">🚨 SwitchGuard alarmı %d dakikadır kapatılmadı</string>
+    <string name="tg_footer">Gönderen: %s</string>
+    <string name="tg_dismissed">✅ SwitchGuard alarmı kapatıldı: %1$s (başladıktan %2$s sonra)</string>
+    <string name="tg_err_token">Bot anahtarı geçersiz</string>
+    <string name="tg_err_blocked">Kişi botu engellemiş ya da sohbeti silmiş</string>
+    <string name="tg_err_chat">Sohbet bulunamadı: kişi bota Başlat\'a dokunmamış</string>
+    <string name="event_escalation_failed">Alarm %1$d dakikadır kapatılmadı ama Telegram ile haber verilemedi: %2$s</string>
+    <string name="tg_title">İkinci kişiye haber ver</string>
+    <string name="tg_desc">Alarm belirli bir süre içinde kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider; alarm kapatılınca da haber verilir. Gece telefon başka odada kalsa bile evdeki biri ya da komşunuz haberdar olur. Mesajları sizin oluşturduğunuz Telegram botu gönderir, arada başka bir sunucu yoktur.</string>
+    <string name="tg_step_bot">1. Telegram botu</string>
+    <string name="tg_step_bot_desc">Telegram\'da @BotFather\'ı açın, /newbot yazın ve botunuza bir ad verin. BotFather\'ın verdiği anahtarı (token) aşağıya yapıştırın.</string>
+    <string name="tg_open_botfather">BotFather\'ı aç</string>
+    <string name="tg_token">Bot anahtarı (token)</string>
+    <string name="tg_verify">Anahtarı dene</string>
+    <string name="tg_bot_ok">Bot hazır: @%s</string>
+    <string name="tg_step_people">2. Haber verilecek kişiler</string>
+    <string name="tg_step_people_wait">Önce bot anahtarını deneyin.</string>
+    <string name="tg_step_people_desc">Haber verilecek kişi Telegram\'da %s bağlantısını açıp Başlat\'a dokunsun (botu bir aile grubuna da ekleyebilirsiniz). Sonra Kişileri bul\'a dokunun.</string>
+    <string name="tg_share">Bağlantıyı paylaş</string>
+    <string name="tg_share_text">Bu botu açıp Başlat\'a dokunur musun? SwitchGuard alarmım kapatılmazsa sana Telegram\'dan haber gelecek. %s</string>
+    <string name="tg_find">Kişileri bul</string>
+    <string name="tg_none_found">Kimse bulunamadı. Kişi bota Başlat\'a dokunduktan sonra tekrar deneyin (Telegram yalnızca son 24 saati gösterir).</string>
+    <string name="tg_group">grup</string>
+    <string name="tg_step_when">3. Ne zaman</string>
+    <string name="tg_when_desc">Alarm %d dakika içinde kapatılmazsa haber verilir.</string>
+    <string name="tg_test">Deneme mesajı gönder</string>
+    <string name="tg_test_message">👋 SwitchGuard deneme mesajı: alarm %d dakika içinde kapatılmazsa size buradan haber verilecek.</string>
+    <string name="tg_test_sent">Deneme mesajı gönderildi</string>
+    <string name="tg_turn_off">Kapat</string>
+    <string name="phone_entry_button">Telefondan gir</string>
+    <string name="phone_entry_title">Telefondan girin</string>
+    <string name="phone_entry_step1">1. Telefonunuzun kamerasıyla bu kodu okutun.</string>
+    <string name="phone_entry_step2">2. Açılan sayfada alanları doldurun (yapıştırabilirsiniz) ve TV\'ye gönder\'e dokunun.</string>
+    <string name="phone_entry_step3">Telefon bu TV ile aynı Wi-Fi ağında olmalı. Bilgiler şifreli gider ve ev ağından çıkmaz.</string>
+    <string name="phone_entry_waiting">Telefondan bekleniyor…</string>
+    <string name="phone_entry_manual">Kamera yoksa telefonda şu adresi açın: %s</string>
+    <string name="phone_entry_no_network">Bu cihaz ağa bağlı değil. Wi-Fi\'a bağlanıp tekrar deneyin.</string>
+    <string name="phone_entry_lang">tr</string>
+    <string name="phone_entry_page_lead">Alanları doldurup TV\'ye gönder\'e dokunun; bilgiler TV\'ye şifreli gider.</string>
+    <string name="phone_entry_page_bad_link">Bağlantı eksik. TV\'deki QR kodu yeniden okutun.</string>
+    <string name="phone_entry_page_paste">Yapıştır</string>
+    <string name="phone_entry_page_send">TV\'ye gönder</string>
+    <string name="phone_entry_page_sending">Gönderiliyor…</string>
+    <string name="phone_entry_page_sent">Gönderildi</string>
+    <string name="phone_entry_page_sent_body">TV\'ye bakın: bilgiler alanlara yazıldı. Bu sayfayı kapatabilirsiniz.</string>
+    <string name="phone_entry_page_failed">Gönderilemedi. TV\'deki pencere hâlâ açık mı? QR kodu yeniden okutup deneyin.</string>
+    <string name="phone_entry_page_empty">En az bir alanı doldurun.</string>
+    <string name="phone_entry_page_note">Bu sayfa yalnızca ev ağınızda ve TV\'deki pencere açıkken çalışır.</string>
+    <plurals name="event_escalated">
+        <item quantity="one">Alarm %2$d dakikadır kapatılmadı: Telegram ile %1$d kişiye haber verildi</item>
+        <item quantity="other">Alarm %2$d dakikadır kapatılmadı: Telegram ile %1$d kişiye haber verildi</item>
+    </plurals>
+    <plurals name="tg_found">
+        <item quantity="one">%d sohbet bulundu</item>
+        <item quantity="other">%d sohbet bulundu</item>
+    </plurals>
+    <plurals name="tg_summary">
+        <item quantity="one">%1$d dk kapatılmazsa · %2$d kişi</item>
+        <item quantity="other">%1$d dk kapatılmazsa · %2$d kişi</item>
+    </plurals>
 </resources>

@@ -8,4 +8,7 @@
     <string name="onb_done_tip_rules">Select a device to choose which events ring an alarm</string>
     <string name="perm_overlay_desc">Needed so the alarm appears on top of whatever is playing. Select and allow SwitchGuard.</string>
     <string name="ready_body">Fix these TV settings so SwitchGuard can always ring.</string>
+    <string name="alarm_boost_desc">Raises this device\'s alarm volume to maximum while the alarm rings and pauses what\'s playing; restored when you dismiss it</string>
+    <string name="test_alarm_sound_desc">Rings like a real alarm</string>
+    <string name="test_alarm_silent_desc">No sound: check the alarm screen without disturbing anyone</string>
 </resources>

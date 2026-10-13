@@ -598,4 +598,66 @@
         <item quantity="one">%d saved crash report will be attached. Nothing is shared unless you send it.</item>
         <item quantity="other">%d saved crash reports will be attached. Nothing is shared unless you send it.</item>
     </plurals>
+
+    <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
+    <string name="tg_alarm_header">🚨 SwitchGuard alarm not dismissed for %d min</string>
+    <string name="tg_footer">From: %s</string>
+    <string name="tg_dismissed">✅ SwitchGuard alarm dismissed at %1$s (%2$s after it started)</string>
+    <string name="tg_err_token">The bot token is invalid</string>
+    <string name="tg_err_blocked">The person blocked the bot or deleted the chat</string>
+    <string name="tg_err_chat">Chat not found: the person hasn\'t tapped Start in the bot</string>
+    <string name="event_escalation_failed">Alarm not dismissed for %1$d min, but Telegram couldn\'t be reached: %2$s</string>
+    <string name="tg_title">Tell someone else</string>
+    <string name="tg_desc">If an alarm isn\'t dismissed in time, the people you choose get a Telegram message, and another one once it\'s dismissed. Even if your phone is in another room at night, someone at home or a neighbour finds out. The messages are sent by a Telegram bot you create; no other server is involved.</string>
+    <string name="tg_step_bot">1. Telegram bot</string>
+    <string name="tg_step_bot_desc">In Telegram, open @BotFather, send /newbot and name your bot. Paste the token BotFather gives you below.</string>
+    <string name="tg_open_botfather">Open BotFather</string>
+    <string name="tg_token">Bot token</string>
+    <string name="tg_verify">Check token</string>
+    <string name="tg_bot_ok">Bot ready: @%s</string>
+    <string name="tg_step_people">2. People to tell</string>
+    <string name="tg_step_people_wait">Check the bot token first.</string>
+    <string name="tg_step_people_desc">Ask each person to open %s in Telegram and tap Start (you can also add the bot to a family group). Then tap Find people.</string>
+    <string name="tg_share">Share link</string>
+    <string name="tg_share_text">Could you open this bot and tap Start? Then you\'ll get a Telegram message if my SwitchGuard alarm isn\'t dismissed. %s</string>
+    <string name="tg_find">Find people</string>
+    <string name="tg_none_found">No one found. Try again after the person taps Start in the bot (Telegram only shows the last 24 hours).</string>
+    <string name="tg_group">group</string>
+    <string name="tg_step_when">3. When</string>
+    <string name="tg_when_desc">People are told if the alarm isn\'t dismissed within %d min.</string>
+    <string name="tg_test">Send a test message</string>
+    <string name="tg_test_message">👋 SwitchGuard test message: if an alarm isn\'t dismissed within %d min, you\'ll be told here.</string>
+    <string name="tg_test_sent">Test message sent</string>
+    <string name="tg_turn_off">Turn off</string>
+    <string name="phone_entry_button">Enter from phone</string>
+    <string name="phone_entry_title">Enter from your phone</string>
+    <string name="phone_entry_step1">1. Scan this code with your phone\'s camera.</string>
+    <string name="phone_entry_step2">2. Fill in the fields on the page that opens (pasting works) and tap Send to TV.</string>
+    <string name="phone_entry_step3">Your phone must be on the same Wi-Fi as this TV. The data is encrypted and never leaves your home network.</string>
+    <string name="phone_entry_waiting">Waiting for your phone…</string>
+    <string name="phone_entry_manual">No camera? Open this address on your phone: %s</string>
+    <string name="phone_entry_no_network">This device isn\'t connected to a network. Connect to Wi-Fi and try again.</string>
+    <string name="phone_entry_lang">en</string>
+    <string name="phone_entry_page_lead">Fill in the fields and tap Send to TV; the data goes to the TV encrypted.</string>
+    <string name="phone_entry_page_bad_link">The link is incomplete. Scan the QR code on the TV again.</string>
+    <string name="phone_entry_page_paste">Paste</string>
+    <string name="phone_entry_page_send">Send to TV</string>
+    <string name="phone_entry_page_sending">Sending…</string>
+    <string name="phone_entry_page_sent">Sent</string>
+    <string name="phone_entry_page_sent_body">Look at the TV: the fields are filled in. You can close this page.</string>
+    <string name="phone_entry_page_failed">Couldn\'t send. Is the window still open on the TV? Scan the QR code again and retry.</string>
+    <string name="phone_entry_page_empty">Fill in at least one field.</string>
+    <string name="phone_entry_page_note">This page only works on your home network while the window on the TV is open.</string>
+    <plurals name="event_escalated">
+        <item quantity="one">Alarm not dismissed for %2$d min: told %1$d person on Telegram</item>
+        <item quantity="other">Alarm not dismissed for %2$d min: told %1$d people on Telegram</item>
+    </plurals>
+    <plurals name="tg_found">
+        <item quantity="one">Found %d chat</item>
+        <item quantity="other">Found %d chats</item>
+    </plurals>
+    <plurals name="tg_summary">
+        <item quantity="one">If not dismissed in %1$d min · %2$d person</item>
+        <item quantity="other">If not dismissed in %1$d min · %2$d people</item>
+    </plurals>
 </resources>

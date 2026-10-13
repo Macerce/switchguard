@@ -228,6 +228,27 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var reminderMin: Int
         get() = prefs.getInt("reminderMin", 0)
         set(v) = put { putInt("reminderMin", v.coerceAtLeast(0)) }
+    // --- İkinci kişiye haber ver (Telegram) ---
+    /** Kullanıcının kendi Telegram botunun anahtarı (BotFather). */
+    var telegramToken: String
+        get() = secret("tgToken")
+        set(v) = putSecret("tgToken", v.trim())
+    var telegramRecipients: List<com.macerce.switchguard.core.Recipient>
+        get() = parsed.get("tgChats", prefs.getString("tgChats", null)) { com.macerce.switchguard.core.Recipient.listFromJson(it) }
+        set(v) = put { putString("tgChats", com.macerce.switchguard.core.Recipient.listToJson(v)) }
+    /** Botun kullanıcı adı ("t.me/<ad>" bağlantısı için); anahtar denenince kaydedilir. */
+    var telegramBot: String
+        get() = str("tgBot")
+        set(v) = put { putString("tgBot", v) }
+    /** Alarm bu kadar dakika kapatılmazsa haber ver; 0 = kapalı. */
+    var escalateMin: Int
+        get() = prefs.getInt("escalateMin", 0)
+        set(v) = put { putInt("escalateMin", v.coerceAtLeast(0)) }
+    /** Haber verme açık ve gönderilebilir durumda (anahtar ve en az bir kişi var). Şifre çözmeden bakılır. */
+    val escalationReady get() = escalateMin > 0 && str("tgToken").isNotEmpty() && telegramRecipients.isNotEmpty()
+
+    fun disableEscalation() = put { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin") }
+
     /** Üretici "otomatik başlatma" ayarı okunamaz: kullanıcı yaptığını "Yaptım" ile onaylar. */
     var autostartConfirmed: Boolean
         get() = prefs.getBoolean("autostartOk", false)
@@ -328,7 +349,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     companion object {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         /** Keystore ile şifreli saklanan anahtarlar. */
-        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken")
+        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken")
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
 
