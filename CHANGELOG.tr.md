@@ -6,6 +6,16 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.10.2 — 14 Ekim 2026
+**İkiz uygulama uyarısı**
+- Telefonun Çift uygulama (ikiz uygulama) özelliğiyle açılmış ikinci bir SwitchGuard kopyası artık fark ediliyor. Yan yana çalışan iki kopya her alarmı iki kez çalar, aynı eWeLink hesabını kullanınca birbirinin oturumunu kapatır; Xiaomi telefonlarda izinler de kapalı görünür. İkiz kopyada "Bu, SwitchGuard'ın ikinci kopyası", ana kopyada "Telefonda ikinci bir SwitchGuard var" uyarısı çıkıyor ve nasıl kaldırılacağını anlatıyor. İki kopyayı bilerek kullananlar uyarıyı kapatabilir.
+- Xiaomi, OPPO, realme, OnePlus, Samsung ve vivo ikiz uygulamaları ile Android 14+ klon profili ve özel alan tanınıyor.
+
+**Test alarmı**
+- Test alarmı artık sesli ya da sessiz (yalnızca ekran) çalabiliyor. Sessiz testte ses ve titreşim olmuyor; gece kimseyi uyandırmadan alarm ekranını ve bildirimi görebilirsiniz.
+- "10 saniye sonra çal" seçeneği: bu sürede telefonu kilitleyip alarm ekranının kilit ekranında açıldığını görebilirsiniz. TV'de başka bir uygulamaya geçip alarmın onun üstüne geldiğini görebilirsiniz.
+- Sessiz test sürerken gerçek bir alarm gelirse ses yine çalıyor.
+
 ## 2.10.1 — 13 Ekim 2026
 **Xiaomi telefonlar**
 - Xiaomi (MIUI / HyperOS), tam ekran izni açık olsa bile "Kilit ekranında görüntüle" ve "Arka planda çalışırken yeni pencereler açın" izinleri kapalıyken alarm ekranının kilit ekranında açılmasını engelliyor. Uygulama artık bu iki izni okuyor, "Alarm size ulaşmayabilir" kartında, Ayarlar'da ve ilk kurulumda gösteriyor; "Düzelt" düğmesi doğrudan Xiaomi'nin "Diğer izinler" sayfasını açıyor.

@@ -6,6 +6,16 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.10.2 — 2026-10-14
+**Dual apps warning**
+- A second copy of SwitchGuard made with the phone's Dual apps (app clone) feature is now detected. Two copies running side by side ring every alarm twice and sign each other out when they use the same eWeLink account; on Xiaomi phones permissions also appear switched off. The clone shows "This is a second copy of SwitchGuard", the main copy shows "There's a second SwitchGuard on this phone", and both explain how to remove it. If you use both copies on purpose, you can turn the warning off.
+- Detected: dual apps on Xiaomi, OPPO, realme, OnePlus, Samsung and vivo, plus the Android 14+ clone profile and private space.
+
+**Test alarm**
+- The test alarm can now ring with sound or silently (screen only). The silent test has no sound or vibration, so you can check the alarm screen and notification at night without waking anyone.
+- "Ring in 10 seconds": lock the phone meanwhile to see the alarm screen open on the lock screen. On a TV, switch to another app to see the alarm come up over it.
+- If a real alarm arrives during a silent test, it still rings.
+
 ## 2.10.1 — 2026-10-13
 **Xiaomi phones**
 - Xiaomi (MIUI / HyperOS) keeps the alarm screen off the lock screen while "Show on Lock screen" and "Open new windows while running in the background" are off, even when full-screen alarms are allowed. The app now reads both and shows them on the "Alarm may not reach you" card, in Settings and during setup; "Fix" opens Xiaomi's "Other permissions" page directly.
