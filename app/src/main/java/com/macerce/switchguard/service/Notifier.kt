@@ -149,8 +149,9 @@ class Notifier(private val context: Context, private val store: Store) {
     /**
      * Alarm bildirimini [lines] ile gösterir/günceller ve ses + titreşimi başlatır.
      * [deviceSound] son olayın cihazına özel ses; farklıysa çalan ses ona geçer (en yeni olay duyulsun).
+     * [silent]: sessiz test alarmı; ekran ve bildirim aynı, ses ve titreşim yok (çalan ses varsa sürer).
      */
-    fun showAlarm(lines: List<String>, deviceSound: String? = null) {
+    fun showAlarm(lines: List<String>, deviceSound: String? = null, silent: Boolean = false) {
         val dismiss = PendingIntent.getService(
             context, 1,
             Intent(context, MonitorService::class.java).setAction(MonitorService.ACTION_DISMISS),
@@ -178,7 +179,7 @@ class Notifier(private val context: Context, private val store: Store) {
         nm.notify(ID_ALARM, notification)
         // Android TV bildirimleri ekranda göstermez: alarm, açık olan her şeyin üstüne tam ekran çıkar.
         if (FormFactor.isTv(context)) AlarmActivity.show(context)
-        startSound(deviceSound?.let(Uri::parse))
+        if (!silent) startSound(deviceSound?.let(Uri::parse))
     }
 
     fun stopAlarm() {

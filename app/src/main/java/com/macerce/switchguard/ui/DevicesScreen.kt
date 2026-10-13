@@ -127,7 +127,7 @@ fun DevicesScreen(
     val alarm = remember(version) { store.pendingAlarm }
     val monitoring = remember(version) { store.monitoringEnabled }
     val readiness = remember(version, resumed) {
-        if (monitoring) Readiness.issues(readinessInput(context, store)) else emptyList()
+        Readiness.issues(readinessInput(context, store)).filter { monitoring || it in Readiness.SHOWN_WHEN_STOPPED }
     }
     // eWeLink'e giriş ya da Tuya bağlantısı: ikisinden biri yeter.
     val loggedIn = remember(version) { store.hasAnyAccount }
@@ -211,8 +211,10 @@ fun DevicesScreen(
                         LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
                     }
                 }
-                if (loggedIn && readiness.isNotEmpty()) {
-                    item(span = full) { ReadinessCard(readiness) }
+                // Girişten önce yalnızca ikiz uyarısı: aynı eWeLink hesabıyla ikinci kopyada giriş, diğerinin oturumunu kapatır.
+                val shownReadiness = if (loggedIn) readiness else readiness.filter { it in Readiness.SHOWN_WHEN_STOPPED }
+                if (shownReadiness.isNotEmpty()) {
+                    item(span = full) { ReadinessCard(shownReadiness) }
                 }
                 if (loggedIn && devices.isEmpty()) {
                     item(span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }

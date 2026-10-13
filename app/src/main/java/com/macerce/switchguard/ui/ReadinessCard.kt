@@ -17,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.rounded.BatteryAlert
+import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.DoNotDisturbOn
 import androidx.compose.material.icons.rounded.Fullscreen
 import androidx.compose.material.icons.rounded.Layers
@@ -67,6 +68,9 @@ fun readinessInput(context: Context, store: Store): ReadinessInput {
         lockScreenPopupAllowed = XiaomiPermissions.lockScreenPopup(context),
         // Xiaomi'de gerçek durum okunur; okunamayan markalarda kullanıcının onayı geçerlidir.
         autostartConfirmed = OemBackground.current(context)?.let { XiaomiPermissions.autostart(context) ?: store.autostartConfirmed },
+        runningAsTwin = TwinCopies.runningAsTwin(context),
+        otherCopyInstalled = TwinCopies.otherCopyInstalled(context),
+        twinAcknowledged = store.twinAcknowledged,
     )
 }
 
@@ -107,6 +111,10 @@ fun ReadinessCard(issues: List<ReadinessIssue>) {
 private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
     val oem = OemBackground.current(context)
     val (icon, title, desc) = when (issue) {
+        ReadinessIssue.TWIN_THIS_COPY ->
+            Triple(Icons.Rounded.ContentCopy, stringResource(R.string.ready_twin_this), stringResource(R.string.ready_twin_this_desc))
+        ReadinessIssue.TWIN_OTHER_COPY ->
+            Triple(Icons.Rounded.ContentCopy, stringResource(R.string.ready_twin_other), stringResource(R.string.ready_twin_other_desc))
         ReadinessIssue.NOTIFICATIONS_OFF ->
             Triple(Icons.Rounded.NotificationsOff, stringResource(R.string.ready_notifications), stringResource(R.string.ready_notifications_desc))
         ReadinessIssue.ALARM_CHANNEL_MUTED ->
@@ -140,11 +148,27 @@ private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError,
                     ),
-                ) { Text(stringResource(if (issue == ReadinessIssue.AUTOSTART_UNCONFIRMED) R.string.action_open_settings else R.string.ready_fix)) }
+                ) {
+                    Text(
+                        stringResource(
+                            when (issue) {
+                                ReadinessIssue.TWIN_THIS_COPY -> R.string.ready_twin_remove
+                                ReadinessIssue.AUTOSTART_UNCONFIRMED, ReadinessIssue.TWIN_OTHER_COPY -> R.string.action_open_settings
+                                else -> R.string.ready_fix
+                            }
+                        )
+                    )
+                }
                 // Üretici ayarının durumu okunamıyorsa kullanıcı yaptığını onaylar (Xiaomi'de okunur, onay gerekmez).
                 if (issue == ReadinessIssue.AUTOSTART_UNCONFIRMED && XiaomiPermissions.autostart(context) == null) {
                     TextButton(onClick = { store.autostartConfirmed = true }, modifier = Modifier.tvFocusRing()) {
                         Text(stringResource(R.string.ready_done), color = MaterialTheme.colorScheme.onErrorContainer)
+                    }
+                }
+                // İki kopya bilerek de kullanılabilir (her kopyada ayrı eWeLink hesabı): uyarı kalıcı olarak kapatılır.
+                if (issue == ReadinessIssue.TWIN_THIS_COPY || issue == ReadinessIssue.TWIN_OTHER_COPY) {
+                    TextButton(onClick = { store.twinAcknowledged = true }, modifier = Modifier.tvFocusRing()) {
+                        Text(stringResource(R.string.ready_twin_keep), color = MaterialTheme.colorScheme.onErrorContainer)
                     }
                 }
             }
@@ -154,6 +178,8 @@ private fun IssueRow(issue: ReadinessIssue, context: Context, store: Store) {
 
 private fun fix(issue: ReadinessIssue, context: Context, store: Store) {
     when (issue) {
+        ReadinessIssue.TWIN_THIS_COPY -> TwinCopies.openThisCopyInfo(context)
+        ReadinessIssue.TWIN_OTHER_COPY -> TwinCopies.openDualAppSettings(context)
         ReadinessIssue.NOTIFICATIONS_OFF -> Actions.openNotificationSettings(context)
         ReadinessIssue.ALARM_CHANNEL_MUTED -> runCatching {
             context.startActivity(

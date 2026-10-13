@@ -2,6 +2,10 @@ package com.macerce.switchguard.core
 
 /** Alarmın kullanıcıya ulaşmasını engelleyebilecek telefon ayarları (önem sırasıyla). */
 enum class ReadinessIssue {
+    /** Bu, uygulamanın ikiz kopyası (bkz. [TwinApp]). İkiz, diğer sorunların da kaynağı olabileceğinden en başta. */
+    TWIN_THIS_COPY,
+    /** Telefonda bu uygulamanın başka bir kopyası (ikiz, iş profili) daha var. */
+    TWIN_OTHER_COPY,
     NOTIFICATIONS_OFF,
     ALARM_CHANNEL_MUTED,
     DND_TOTAL_SILENCE,
@@ -35,11 +39,24 @@ data class ReadinessInput(
     val lockScreenPopupAllowed: Boolean?,
     /** Üretici "otomatik başlatma" ayarı: Xiaomi'de okunur, diğer markalarda kullanıcı yaptığını onaylar. */
     val autostartConfirmed: Boolean?,
+    /** Bu kopya ikiz mi ([TwinApp.isTwin]). */
+    val runningAsTwin: Boolean = false,
+    /** Başka bir profilde (ikiz, iş profili) bu uygulamanın bir kopyası daha kurulu mu. */
+    val otherCopyInstalled: Boolean = false,
+    /** Kullanıcı iki kopyayı bilerek kullandığını söyledi (ör. her kopyada ayrı eWeLink hesabı). */
+    val twinAcknowledged: Boolean = false,
 )
 
 /** "Alarm hazır mı?" kontrolü: ana ekrandaki kart bu listeyi gösterir. */
 object Readiness {
+    /** İzleme kapalıyken de gösterilenler: ikiz kopya izlemeyi açmadan önce de (giriş yaparken) sorun çıkarır. */
+    val SHOWN_WHEN_STOPPED = setOf(ReadinessIssue.TWIN_THIS_COPY, ReadinessIssue.TWIN_OTHER_COPY)
+
     fun issues(i: ReadinessInput): List<ReadinessIssue> = buildList {
+        if (!i.twinAcknowledged) {
+            if (i.runningAsTwin) add(ReadinessIssue.TWIN_THIS_COPY)
+            else if (i.otherCopyInstalled) add(ReadinessIssue.TWIN_OTHER_COPY)
+        }
         if (!i.notificationsEnabled) add(ReadinessIssue.NOTIFICATIONS_OFF)
         else if (!i.alarmChannelHigh) add(ReadinessIssue.ALARM_CHANNEL_MUTED)
         if (i.dndTotalSilence) add(ReadinessIssue.DND_TOTAL_SILENCE)

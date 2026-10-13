@@ -36,7 +36,7 @@ object Actions {
     fun startMonitoring(context: Context) = MonitorService.send(context, MonitorService.ACTION_START)
     fun stopMonitoring(context: Context) = MonitorService.send(context, MonitorService.ACTION_STOP)
     fun dismissAlarm(context: Context) = MonitorService.send(context, MonitorService.ACTION_DISMISS)
-    fun testAlarm(context: Context) = MonitorService.send(context, MonitorService.ACTION_TEST)
+    fun testAlarm(context: Context, silent: Boolean = false, delayMs: Long = 0) = MonitorService.test(context, silent, delayMs)
 
     /** Giriş veya hesap ayarı değişince izleme açıksa bağlantıyı tazele. */
     fun afterLogin(context: Context) {

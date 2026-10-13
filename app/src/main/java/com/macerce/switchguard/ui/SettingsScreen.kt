@@ -129,8 +129,10 @@ fun SettingsScreen(modifier: Modifier) {
     // version okunarak ayarlar her değişimde tazelenir.
     val s = remember(version, resumed) { store }
     val scope = rememberCoroutineScope()
-    val soundName = remember(version) {
-        val uri = s.alarmSoundUri?.let(Uri::parse)
+    // Yalnızca seçilen ses değişince okunur: Ringtone her oluşturulduğunda bir MediaPlayer hazırlar.
+    val soundUri = s.alarmSoundUri
+    val soundName = remember(soundUri) {
+        val uri = soundUri?.let(Uri::parse)
             ?: RingtoneManager.getActualDefaultRingtoneUri(context, RingtoneManager.TYPE_ALARM)
         uri?.let { runCatching { RingtoneManager.getRingtone(context, it)?.getTitle(context) }.getOrNull() }
             ?: resources.getString(R.string.default_sound)
@@ -367,7 +369,7 @@ fun SettingsScreen(modifier: Modifier) {
                     Icons.Rounded.NotificationsActive,
                     stringResource(R.string.test_alarm),
                     stringResource(R.string.test_alarm_desc),
-                    Modifier.clickable { Actions.testAlarm(context) },
+                    Modifier.clickable { dialog = { TestAlarmDialog(onDismiss = { dialog = null }) } },
                 )
             }
 
@@ -647,6 +649,69 @@ fun <T> ChoiceDialog(
         confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }
+
+/**
+ * Test alarmı: sesli ya da sessiz (gece başkasını uyandırmadan yalnızca ekran ve bildirim), istenirse 10 saniye sonra.
+ * Gecikmede telefon kilitlenir ve alarm ekranının kilit ekranında açıldığı görülür.
+ */
+@Composable
+private fun TestAlarmDialog(onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    var silent by remember { mutableStateOf(false) }
+    var delayed by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.test_alarm)) },
+        text = {
+            Column(Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState())) {
+                listOf(false to R.string.test_alarm_sound, true to R.string.test_alarm_silent).forEach { (value, label) ->
+                    Row(
+                        Modifier.fillMaxWidth().selectable(selected = silent == value, onClick = { silent = value })
+                            .tvFocusRing(RoundedCornerShape(12.dp), inside = true).padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = silent == value, onClick = null)
+                        Column(Modifier.padding(start = 12.dp)) {
+                            Text(stringResource(label), style = MaterialTheme.typography.bodyLarge)
+                            Text(
+                                stringResource(if (value) R.string.test_alarm_silent_desc else R.string.test_alarm_sound_desc),
+                                style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
+                }
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
+                Row(
+                    Modifier.fillMaxWidth().clickable { delayed = !delayed }
+                        .tvFocusRing(RoundedCornerShape(12.dp), inside = true).padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(stringResource(R.string.test_alarm_delay, TEST_DELAY_SEC), style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            stringResource(if (LocalIsTv.current) R.string.test_alarm_delay_desc_tv else R.string.test_alarm_delay_desc),
+                            style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Switch(checked = delayed, onCheckedChange = null, modifier = Modifier.padding(start = 12.dp))
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
+                Actions.testAlarm(context, silent, if (delayed) TEST_DELAY_SEC * 1000L else 0)
+                if (delayed) {
+                    Toast.makeText(context, resources.getString(R.string.test_alarm_scheduled, TEST_DELAY_SEC), Toast.LENGTH_LONG).show()
+                }
+                onDismiss()
+            }) { Text(stringResource(R.string.test_alarm_start)) }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}
+
+private const val TEST_DELAY_SEC = 10
 
 @Composable
 fun ConfirmDialog(title: String, body: String, confirm: String, onConfirm: () -> Unit, onDismiss: () -> Unit) {

@@ -232,6 +232,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var autostartConfirmed: Boolean
         get() = prefs.getBoolean("autostartOk", false)
         set(v) = put { putBoolean("autostartOk", v) }
+    /** Kullanıcı uygulamanın iki kopyasını bilerek kullanıyor: ikiz uyarısı gösterilmez (bkz. [com.macerce.switchguard.core.TwinApp]). */
+    var twinAcknowledged: Boolean
+        get() = prefs.getBoolean("twinOk", false)
+        set(v) = put { putBoolean("twinOk", v) }
     /** Alarm çalarken telefonun alarm ses seviyesini geçici olarak en yükseğe çıkar. */
     var alarmBoost: Boolean
         get() = prefs.getBoolean("alarmBoost", true)

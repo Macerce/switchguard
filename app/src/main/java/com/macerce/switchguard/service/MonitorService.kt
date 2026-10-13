@@ -168,6 +168,7 @@ class MonitorService : Service() {
                         persistRuntime()
                     }
                     store.pendingAlarm = emptyList()
+                    runtime.silentAlarm = false
                     notifier.stopAlarm()
                     StatusSurfaces.refresh(this)
                 }
@@ -184,10 +185,13 @@ class MonitorService : Service() {
                 return if (running) START_STICKY else START_NOT_STICKY
             }
             ACTION_TEST -> {
-                handler.post {
+                val silent = intent.getBooleanExtra(EXTRA_SILENT, false)
+                // Gecikme, telefonu kilitleyip alarm ekranının kilit ekranında açıldığını görmek için.
+                val delay = intent.getLongExtra(EXTRA_DELAY_MS, 0).coerceIn(0, MAX_TEST_DELAY_MS)
+                handler.postDelayed({
                     log.add("", getString(R.string.app_name), EventKind.TEST, strings.test, AlertAction.ALARM.name, EventArgs.Test)
-                    addAlarm(getString(R.string.test_alarm_line))
-                }
+                    addAlarm(getString(if (silent) R.string.test_alarm_line_silent else R.string.test_alarm_line), silent = silent)
+                }, delay)
                 return if (running) START_STICKY else START_NOT_STICKY
             }
             ACTION_DEMO -> {
@@ -239,7 +243,8 @@ class MonitorService : Service() {
             heartbeat(System.currentTimeMillis(), force = true)
             // Kapatılmamış alarm varsa (ör. telefon yeniden başladı) geri getir; yoksa önceki çalışmada
             // yükseltilip geri alınamamış alarm sesini eski seviyesine döndür.
-            store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it) } ?: notifier.restoreAlarmVolume()
+            store.pendingAlarm.takeIf { it.isNotEmpty() }?.let { notifier.showAlarm(it, silent = runtime.silentAlarm) }
+                ?: notifier.restoreAlarmVolume()
             setState(ConnState.CONNECTING)
             runCatching { metrics.prune() }
             SummaryScheduler.schedule(this)
@@ -263,6 +268,7 @@ class MonitorService : Service() {
             tuyaSocket.close()
             store.pendingAlarm = emptyList()
             runtime.alarmStartedAt = 0
+            runtime.silentAlarm = false
             runtime.clearEngine()
             grace = OfflineGrace()
             automations = AutomationEngine()
@@ -942,12 +948,18 @@ class MonitorService : Service() {
         if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall)
     }
 
-    /** [sound]: olayın cihazına özel ses (yoksa genel ses). */
-    private fun addAlarm(text: String, sound: String? = null) {
-        if (store.pendingAlarm.isEmpty()) runtime.alarmStartedAt = System.currentTimeMillis()
+    /**
+     * [sound]: olayın cihazına özel ses (yoksa genel ses). [silent]: sessiz test alarmı. Alarm ancak yalnızca sessiz
+     * testlerden oluşuyorsa sessiz kalır: gerçek bir olay gelince ses başlar, çalan alarma eklenen sessiz test onu susturmaz.
+     */
+    private fun addAlarm(text: String, sound: String? = null, silent: Boolean = false) {
+        if (store.pendingAlarm.isEmpty()) {
+            runtime.alarmStartedAt = System.currentTimeMillis()
+            runtime.silentAlarm = silent
+        } else if (!silent) runtime.silentAlarm = false
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
-        notifier.showAlarm(store.pendingAlarm, sound)
+        notifier.showAlarm(store.pendingAlarm, sound, silent = runtime.silentAlarm)
         StatusSurfaces.refresh(this)
     }
 
@@ -1029,6 +1041,11 @@ class MonitorService : Service() {
         const val ACTION_STOP = "stop"
         const val ACTION_DISMISS = "dismiss"
         const val ACTION_TEST = "test"
+        /** [ACTION_TEST]: ses ve titreşim olmadan (yalnızca ekran ve bildirim). */
+        const val EXTRA_SILENT = "silent"
+        /** [ACTION_TEST]: bu kadar ms sonra çal. */
+        const val EXTRA_DELAY_MS = "delayMs"
+        private const val MAX_TEST_DELAY_MS = 60_000L
         const val ACTION_SYNC = "sync"
         /** Giriş/ayar değişince: hata durumlarını sıfırla ve yeniden bağlan. */
         const val ACTION_RESTART = "restart"
@@ -1090,6 +1107,13 @@ class MonitorService : Service() {
             val intent = Intent(context, MonitorService::class.java).setAction(action)
             if (action == ACTION_START || action == ACTION_RESTART) context.startForegroundService(intent)
             else context.startService(intent)
+        }
+
+        fun test(context: Context, silent: Boolean, delayMs: Long) {
+            context.startService(
+                Intent(context, MonitorService::class.java).setAction(ACTION_TEST)
+                    .putExtra(EXTRA_SILENT, silent).putExtra(EXTRA_DELAY_MS, delayMs)
+            )
         }
 
         fun demo(context: Context, op: String, deviceId: String, channel: Int = 0) {

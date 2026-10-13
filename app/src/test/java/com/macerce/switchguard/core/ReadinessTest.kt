@@ -56,6 +56,25 @@ class ReadinessTest {
     }
 
     @Test
+    fun `ikiz kopya en basta ve bilerek kullaniliyorsa gosterilmez`() {
+        val twin = ok.copy(runningAsTwin = true, notificationsEnabled = false)
+        assertEquals(listOf(ReadinessIssue.TWIN_THIS_COPY, ReadinessIssue.NOTIFICATIONS_OFF), Readiness.issues(twin))
+        assertEquals(listOf(ReadinessIssue.NOTIFICATIONS_OFF), Readiness.issues(twin.copy(twinAcknowledged = true)))
+    }
+
+    @Test
+    fun `baska kopya varsa ana kopyada uyarilir`() {
+        assertEquals(listOf(ReadinessIssue.TWIN_OTHER_COPY), Readiness.issues(ok.copy(otherCopyInstalled = true)))
+        // İkizin kendisi diğer kopyayı görse de tek uyarı: "bu ikinci kopya".
+        assertEquals(listOf(ReadinessIssue.TWIN_THIS_COPY), Readiness.issues(ok.copy(runningAsTwin = true, otherCopyInstalled = true)))
+        assertTrue(Readiness.issues(ok.copy(otherCopyInstalled = true, twinAcknowledged = true)).isEmpty())
+    }
+
+    @Test
+    fun `izleme kapaliyken yalnizca ikiz uyarilari gosterilir`() =
+        assertEquals(setOf(ReadinessIssue.TWIN_THIS_COPY, ReadinessIssue.TWIN_OTHER_COPY), Readiness.SHOWN_WHEN_STOPPED)
+
+    @Test
     fun `sorunlar onem sirasiyla`() {
         val all = ReadinessInput(
             notificationsEnabled = true, alarmChannelHigh = false, dndTotalSilence = true, alarmVolume = 0, alarmVolumeMax = 7, alarmBoost = false,

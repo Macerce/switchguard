@@ -49,6 +49,11 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getLong("alarmStartedAt", 0)
         set(v) = put { putLong("alarmStartedAt", v) }
 
+    /** Çalan alarm yalnızca sessiz test alarmından oluşuyor: ses ve titreşim yok (gerçek bir olay gelince kalkar). */
+    var silentAlarm: Boolean
+        get() = prefs.getBoolean("silentAlarm", false)
+        set(v) = put { putBoolean("silentAlarm", v) }
+
     /** "İzleme durdu" uyarısının son gösterildiği an; bekçi her dakika denerken uyarı tekrar tekrar çalmasın. */
     var stoppedWarnedAt: Long
         get() = prefs.getLong("stoppedWarnedAt", 0)
