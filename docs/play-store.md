@@ -21,45 +21,57 @@
 
 **Kısa açıklama (TR, ≤80):** eWeLink ve Tuya prizleriniz kapanınca ya da koptuğunda anında alarm.
 
-**Tam açıklama (EN):**
+**Tam açıklama (EN):** _(2.11.0 ile güncellendi, 14 Ekim 2026)_
 > SwitchGuard watches the smart plugs and switches in your eWeLink and Tuya / Smart Life accounts and raises an alarm the moment something changes — a freezer plug switched off, a pump that stopped, a device that lost its connection.
 >
-> • Alarm that keeps ringing until you dismiss it, even in silent mode
+> • Alarm that keeps ringing until you dismiss it, even in silent mode — full screen, even on the lock screen
+> • "Alarm may not reach you" check: finds the phone settings that would silence your alarms and fixes them in one tap
+> • Tell someone else: if an alarm isn't dismissed in time, the people you choose get a Telegram message
+> • Ring again if not resolved: reminders while a device stays off, on or offline
 > • Live updates within seconds, with automatic backup checks
 > • Per-device rules: alarm, notification or nothing — for on, off, offline and online
 > • Ignore brief disconnections, quiet hours, a different alarm sound for each device, volume and vibration
 > • Automations: alarm when a switch stays on too long, or when a channel's power drops while it should be running (e.g. a pump that stalls — SONOFF SPM-4Relay / DUALR3)
 > • Power, voltage and energy readings on power-metering devices
 > • Switch devices on and off from the app and manage their eWeLink timers
-> • Full event history and an optional daily summary
+> • Home-screen widget and Quick Settings tile
+> • Full event history with CSV export, and an optional daily summary
+> • Encrypted backup file for moving to a new phone
+> • Phones, tablets and Android TV — on a TV the alarm comes up over whatever is playing
 > • English and Turkish, switchable in the app
 > • Try it first without an account: built-in demo devices simulate every feature
-> • No ads, no tracking, no account of ours — your data stays on your phone
+> • No ads, no tracking, no account of ours — your data stays on your device
 > • Free for 1 device; a one-time Pro purchase monitors all your devices
 >
 > Works with eWeLink (SONOFF) devices — needs a free eWeLink developer App ID — and with Tuya / Smart Life devices — needs a free Tuya Cloud project. The in-app guide walks you through either one.
 >
-> SwitchGuard is an independent app and is not affiliated with eWeLink, CoolKit, ITEAD or Tuya.
+> SwitchGuard is an independent app and is not affiliated with eWeLink, CoolKit, ITEAD, Tuya or Telegram.
 
-**Tam açıklama (TR):**
+**Tam açıklama (TR):** _(2.11.0 ile güncellendi, 14 Ekim 2026)_
 > SwitchGuard, eWeLink ve Tuya / Smart Life hesaplarınızdaki akıllı priz ve anahtarları izler ve bir şey değiştiği anda alarm çalar: kapanan bir dondurucu prizi, duran bir pompa, bağlantısı kopan bir cihaz.
 >
-> • Siz kapatana kadar susmayan alarm; telefon sessizdeyken bile
+> • Siz kapatana kadar susmayan alarm; telefon sessizdeyken bile, tam ekran ve kilit ekranında da
+> • "Alarm size ulaşmayabilir" kontrolü: alarmları susturabilecek telefon ayarlarını bulur, tek dokunuşla düzeltir
+> • İkinci kişiye haber ver: alarm zamanında kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider
+> • Düzelmezse yeniden çal: cihaz kapalı, açık ya da kopuk kaldıkça hatırlatma
 > • Saniyeler içinde canlı güncelleme, otomatik yedek kontroller
 > • Cihaz başına kurallar: açıldı, kapandı, koptu, geri geldi için alarm, bildirim veya hiçbiri
 > • Kısa kopmaları yok sayma, sessiz saatler, her cihaz için ayrı alarm sesi, ses seviyesi ve titreşim ayarı
 > • Otomasyonlar: bir anahtar fazla uzun açık kalınca ya da çalışması gerekirken bir kanalın gücü düşünce alarm (ör. duran bir pompa — SONOFF SPM-4Relay / DUALR3)
 > • Güç ölçen cihazlarda güç, voltaj ve enerji değerleri
 > • Cihazları uygulamadan açıp kapatma ve eWeLink zamanlayıcılarını yönetme
-> • Tüm olayların geçmişi ve isteğe bağlı günlük özet
+> • Ana ekran widget'ı ve Hızlı Ayarlar kutucuğu
+> • Tüm olayların geçmişi, CSV olarak dışa aktarma ve isteğe bağlı günlük özet
+> • Yeni telefona geçiş için şifreli yedek dosyası
+> • Telefon, tablet ve Android TV — TV'de alarm, o an ne açıksa onun üstüne gelir
 > • Türkçe ve İngilizce; uygulama içinden değiştirilebilir
 > • Hesap olmadan önce deneyin: yerleşik demo cihazlar tüm özellikleri canlandırır
-> • Reklam yok, izleme yok, bize ait hesap yok — verileriniz telefonunuzda kalır
+> • Reklam yok, izleme yok, bize ait hesap yok — verileriniz cihazınızda kalır
 > • 1 cihaz için ücretsiz; tek seferlik Pro satın alımıyla tüm cihazlar izlenir
 >
 > eWeLink (SONOFF) cihazlarıyla — ücretsiz bir eWeLink geliştirici App ID'si gerekir — ve Tuya / Smart Life cihazlarıyla — ücretsiz bir Tuya Cloud projesi gerekir — çalışır. Uygulama içi rehber ikisini de adım adım anlatır.
 >
-> SwitchGuard bağımsız bir uygulamadır; eWeLink, CoolKit, ITEAD veya Tuya ile bağlantılı değildir.
+> SwitchGuard bağımsız bir uygulamadır; eWeLink, CoolKit, ITEAD, Tuya veya Telegram ile bağlantılı değildir.
 
 **Kategori:** Araçlar (Tools) · **İçerik derecelendirmesi:** Herkes
 
@@ -134,6 +146,30 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 
 **TR:**
 > İlk sürüm: eWeLink (SONOFF) ve Tuya / Smart Life anahtarlarınız için anında alarm, cihaz başına kurallar, otomasyonlar (fazla açık kalma ve güç düşüşü alarmı), enerji değerleri, cihaz zamanlayıcıları, geçmiş ve günlük özet. Hesap olmadan yerleşik demo cihazlarla deneyebilirsiniz.
+
+## 4f. 2.11.0 sürüm notları (Play, ≤500 karakter; 2.10.2 + 2.11.0)
+**EN:**
+> New: tell someone else — if an alarm isn't dismissed in time, the people you choose get a Telegram message. On a TV, enter long keys from your phone by scanning a QR code. The test alarm can now be silent (screen only) or ring in 10 seconds so you can lock the phone first. Warns when a second copy of the app (Dual apps) is installed.
+
+**TR:**
+> Yeni: ikinci kişiye haber ver — alarm zamanında kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider. TV'de uzun anahtarları QR kodu okutup telefondan girin. Test alarmı artık sessiz (yalnızca ekran) çalabiliyor ya da 10 saniye sonra çalıyor; önce telefonu kilitleyebilirsiniz. Uygulamanın ikinci kopyası (Çift uygulama) kuruluysa uyarır.
+
+## 4g. Android TV (Play Console → Test ve yayınla → Ayarlar → Gelişmiş ayarlar → Form faktörleri → Ekle → Android TV)
+- Manifest hazır: `android.software.leanback` ve `android.hardware.touchscreen` `required="false"`, `LEANBACK_LAUNCHER` + `android:banner`.
+- TV kanalı ayrı değil: TV sürümü aynı AAB'den, kapalı test (Alpha) kanalıyla gelir. Formda "TV'yi kapalı test kanalına dahil et" seçilir.
+- **TV afişi (1280×720):** `docs/brand/tv-banner-1280x720.png` (kaynak `tv-banner.html`).
+- **TV ekran görüntüleri (1920×1080, Mi Box, Türkçe):** `docs/screenshots/play/tv/` → 1 cihazlar, 2 cihaz sayfası, 3 TV alarm ekranı, 4 telefondan gir (QR), 5 alarm ayarları. İngilizce giriş için aynı ekranlar uygulama dili İngilizce yapılıp yeniden alınmalı.
+- Google TV incelemesi ayrıca yapılır (kumandayla gezinme, kenar boşlukları, afiş); sonuç e-postayla gelir.
+
+## 4h. Üretim erişimi başvurusu (kapalı test 3 Ekim 2026'da yayına girdi → 14 gün 17 Ekim)
+Play Console → Kontrol paneli → "Üretime başvur". Sorular ve hazır cevaplar (EN):
+- **How did you recruit testers?** Colleagues in our hotel's technical team, family and friends who own SONOFF or Tuya smart plugs; invited by e-mail and added to the closed-test e-mail list (17 people).
+- **Engagement / feedback:** Testers used it on real devices (manhole water-level float relay, pumps, freezers, lighting) on Xiaomi phones and an Android TV box. Feedback came by e-mail (switchguardapp@gmail.com), in person and through the in-app "Send problem report".
+- **What did you change based on testing?** Xiaomi/HyperOS lock-screen permissions shown and fixed in-app; full-screen alarm on the lock screen; alarm volume restored after dismissing; remote-control focus fixes on Android TV; reminders while a problem lasts; warning for a second app copy (Dual apps); silent and delayed test alarm; Telegram notification to a second person; encrypted backup; widget and Quick Settings tile.
+- **Intended audience:** Homes and small businesses (hotels, workshops, farms) that use eWeLink/SONOFF or Tuya smart plugs to watch pumps, freezers, water levels and similar equipment, and need an alarm that can't be missed.
+- **Value:** eWeLink/Tuya apps only send a silent notification; SwitchGuard rings until dismissed, checks that the phone can actually ring, and tells someone else if nobody reacts.
+- **Expected installs (first year):** 1,000–10,000.
+- **Why ready:** 14+ days of closed testing on real hardware, all reported issues fixed, 229 unit tests and on-device tests in CI.
 
 ## 5. Görseller
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
