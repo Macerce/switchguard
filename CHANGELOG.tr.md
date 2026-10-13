@@ -6,6 +6,16 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.11.0 — 14 Ekim 2026
+**İkinci kişiye haber ver (Telegram)**
+- Alarm seçtiğiniz süre (2, 5, 10, 15 ya da 30 dakika) içinde kapatılmazsa seçtiğiniz kişilere ya da aile grubunuza Telegram mesajı gidiyor; alarm kapatılınca da "kapatıldı" mesajı gidiyor. Gece telefon başka odada kalsa bile evdeki biri ya da komşunuz haberdar oluyor (Ayarlar → Alarm → İkinci kişiye haber ver).
+- Mesajları sizin oluşturduğunuz Telegram botu gönderiyor; arada başka sunucu yok ve ücretsiz. Kurulum pencereniz adım adım götürüyor: BotFather'dan bot oluşturma, anahtarı deneme, kişilerin bota Başlat'a dokunması, "Kişileri bul", deneme mesajı.
+- Test alarmları kimseye mesaj göndermiyor. İnternet yoksa dakikada bir yeniden deneniyor; her deneme ve hata Geçmiş'te görünüyor.
+
+**TV: anahtarları telefondan girin**
+- TV'de App ID/Secret, Tuya Access ID/Secret ve Telegram bot anahtarı alanlarının yanında "Telefondan gir" düğmesi var. TV bir QR kodu gösteriyor; telefonun kamerasıyla okutup açılan sayfaya anahtarları yapıştırıyorsunuz, kumandayla uzun anahtar yazmanız gerekmiyor. Telefonda SwitchGuard kurulu olması gerekmiyor.
+- Bilgiler telefonun tarayıcısında QR koddaki tek seferlik anahtarla şifreleniyor ve doğrudan TV'ye gidiyor; ev ağınızdan çıkmıyor.
+
 ## 2.10.2 — 14 Ekim 2026
 **İkiz uygulama uyarısı**
 - Telefonun Çift uygulama (ikiz uygulama) özelliğiyle açılmış ikinci bir SwitchGuard kopyası artık fark ediliyor. Yan yana çalışan iki kopya her alarmı iki kez çalar, aynı eWeLink hesabını kullanınca birbirinin oturumunu kapatır; Xiaomi telefonlarda izinler de kapalı görünür. İkiz kopyada "Bu, SwitchGuard'ın ikinci kopyası", ana kopyada "Telefonda ikinci bir SwitchGuard var" uyarısı çıkıyor ve nasıl kaldırılacağını anlatıyor. İki kopyayı bilerek kullananlar uyarıyı kapatabilir.

@@ -20,8 +20,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 36
-        versionCode = 24
-        versionName = "2.10.2"
+        versionCode = 25
+        versionName = "2.11.0"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
@@ -81,6 +81,8 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.12.4")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // TV'de telefondan anahtar girme için QR kodu (yalnızca üretme).
+    implementation("com.google.zxing:core:3.5.3")
     implementation("com.android.billingclient:billing:9.1.0")
     // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")

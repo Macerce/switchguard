@@ -6,6 +6,16 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.11.0 — 2026-10-14
+**Tell someone else (Telegram)**
+- If an alarm isn't dismissed within the time you choose (2, 5, 10, 15 or 30 minutes), the people or family group you picked get a Telegram message, and another one once it's dismissed. Even if your phone is in another room at night, someone at home or a neighbour finds out (Settings → Alarm → Tell someone else).
+- The messages are sent by a Telegram bot you create: free, and no other server is involved. The setup window walks you through it: create a bot with BotFather, check the token, have people tap Start in the bot, "Find people", send a test message.
+- Test alarms never message anyone. Without internet it retries every minute; every attempt and error shows up in History.
+
+**TV: enter keys from your phone**
+- On a TV, the App ID/Secret, Tuya Access ID/Secret and Telegram bot token fields have an "Enter from phone" button. The TV shows a QR code; scan it with your phone's camera and paste the keys into the page that opens — no more typing long keys with the remote. SwitchGuard doesn't need to be installed on the phone.
+- What you type is encrypted in the phone's browser with a one-time key from the QR code and goes straight to the TV; it never leaves your home network.
+
 ## 2.10.2 — 2026-10-14
 **Dual apps warning**
 - A second copy of SwitchGuard made with the phone's Dual apps (app clone) feature is now detected. Two copies running side by side ring every alarm twice and sign each other out when they use the same eWeLink account; on Xiaomi phones permissions also appear switched off. The clone shows "This is a second copy of SwitchGuard", the main copy shows "There's a second SwitchGuard on this phone", and both explain how to remove it. If you use both copies on purpose, you can turn the warning off.
