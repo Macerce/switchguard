@@ -158,7 +158,7 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 - Manifest hazır: `android.software.leanback` ve `android.hardware.touchscreen` `required="false"`, `LEANBACK_LAUNCHER` + `android:banner`.
 - TV kanalı ayrı değil: TV sürümü aynı AAB'den, kapalı test (Alpha) kanalıyla gelir. Formda "TV'yi kapalı test kanalına dahil et" seçilir.
 - **TV afişi (1280×720):** `docs/brand/tv-banner-1280x720.png` (kaynak `tv-banner.html`).
-- **TV ekran görüntüleri (1920×1080, Mi Box, Türkçe):** `docs/screenshots/play/tv/` → 1 cihazlar, 2 cihaz sayfası, 3 TV alarm ekranı, 4 telefondan gir (QR), 5 alarm ayarları. İngilizce giriş için aynı ekranlar uygulama dili İngilizce yapılıp yeniden alınmalı.
+- **TV ekran görüntüleri (1920×1080, Mi Box):** `docs/screenshots/play/tv/tr/` (Türkçe giriş) ve `docs/screenshots/play/tv/en/` (İngilizce, varsayılan giriş) → 1 cihazlar, 2 cihaz sayfası, 3 TV alarm ekranı, 4 telefondan gir (QR), 5 alarm ayarları.
 - Google TV incelemesi ayrıca yapılır (kumandayla gezinme, kenar boşlukları, afiş); sonuç e-postayla gelir.
 
 ## 4h. Üretim erişimi başvurusu (kapalı test 3 Ekim 2026'da yayına girdi → 14 gün 17 Ekim)
