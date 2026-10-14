@@ -701,4 +701,24 @@
     </plurals>
     <string name="auto_if">Eğer</string>
     <string name="auto_then">O zaman</string>
+    <string name="automation_name_hint">ör. Pompa durdu</string>
+    <string name="automation_minutes_short">Süre</string>
+    <string name="automation_low_minutes_short">Bu kadar süre düşük kalırsa</string>
+    <string name="automation_grace_short">Açıldıktan sonra bekle</string>
+    <string name="automation_delay_short">İşlemden önce bekle</string>
+    <string name="automation_now">Hemen</string>
+    <string name="automation_summary">Özet</string>
+    <string name="action_decrease">Azalt</string>
+    <string name="action_increase">Artır</string>
+    <string name="evt_turned_on">Açılınca</string>
+    <string name="evt_turned_off">Kapanınca</string>
+    <string name="evt_stayed_on">Açık kalınca</string>
+    <string name="evt_stayed_off">Kapalı kalınca</string>
+    <string name="evt_went_offline">Çevrimdışı olunca</string>
+    <string name="evt_came_online">Çevrimiçi olunca</string>
+    <string name="evt_power_above">Güç yükselince</string>
+    <string name="evt_power_below">Güç düşünce</string>
+    <string name="evt_channel_power_low">Açıkken güç düşerse</string>
+    <string name="act_turn_on">Cihazı aç</string>
+    <string name="act_turn_off">Cihazı kapat</string>
 </resources>

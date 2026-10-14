@@ -705,4 +705,24 @@
     </plurals>
     <string name="auto_if">If</string>
     <string name="auto_then">Then</string>
+    <string name="automation_name_hint">e.g. Pump stopped</string>
+    <string name="automation_minutes_short">Duration</string>
+    <string name="automation_low_minutes_short">Low for at least</string>
+    <string name="automation_grace_short">Ignore after turn-on</string>
+    <string name="automation_delay_short">Wait before acting</string>
+    <string name="automation_now">At once</string>
+    <string name="automation_summary">Summary</string>
+    <string name="action_decrease">Decrease</string>
+    <string name="action_increase">Increase</string>
+    <string name="evt_turned_on">Turns on</string>
+    <string name="evt_turned_off">Turns off</string>
+    <string name="evt_stayed_on">Stays on</string>
+    <string name="evt_stayed_off">Stays off</string>
+    <string name="evt_went_offline">Goes offline</string>
+    <string name="evt_came_online">Comes online</string>
+    <string name="evt_power_above">Power goes up</string>
+    <string name="evt_power_below">Power goes down</string>
+    <string name="evt_channel_power_low">Power drops while on</string>
+    <string name="act_turn_on">Turn a device on</string>
+    <string name="act_turn_off">Turn a device off</string>
 </resources>

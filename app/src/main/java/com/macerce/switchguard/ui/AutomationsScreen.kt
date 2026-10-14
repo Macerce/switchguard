@@ -1,5 +1,31 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.ui.theme.raisedOnTile
+import com.macerce.switchguard.core.DeviceKinds
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextField
+import androidx.compose.material.icons.rounded.TimerOff
+import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.icons.rounded.Sensors
+import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.ElectricBolt
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.Cloud
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
+import androidx.compose.material.icons.automirrored.rounded.TrendingDown
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.border
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -248,7 +274,6 @@ fun ActionKind.title(): Int = when (this) {
 
 // ---------------------------------------------------------------- düzenleyici
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AutomationEditor(
     initial: Automation?,
@@ -263,16 +288,14 @@ private fun AutomationEditor(
     var triggerDevice by rememberSaveable { mutableStateOf(initial?.trigger?.deviceId ?: first?.id.orEmpty()) }
     var triggerKind by rememberSaveable { mutableStateOf(initial?.trigger?.kind ?: TriggerKind.TURNED_ON) }
     var triggerChannel by rememberSaveable { mutableStateOf(initial?.trigger?.channel ?: 0) }
-    var minutes by rememberSaveable { mutableStateOf(initial?.trigger?.minutes?.takeIf { it > 0 }?.toString() ?: "30") }
+    var minutes by rememberSaveable { mutableStateOf(initial?.trigger?.minutes?.takeIf { it > 0 } ?: 30) }
     var watts by rememberSaveable { mutableStateOf(initial?.trigger?.watts?.takeIf { it > 0 }?.let(::formatNumber) ?: "1000") }
-    var lowMinutes by rememberSaveable {
-        mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes?.toString() ?: "1")
-    }
-    var grace by rememberSaveable { mutableStateOf(initial?.trigger?.graceMinutes?.takeIf { it > 0 }?.toString() ?: "2") }
+    var lowMinutes by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes ?: 1) }
+    var grace by rememberSaveable { mutableStateOf(initial?.trigger?.graceMinutes?.takeIf { it > 0 } ?: 2) }
     var actionKind by rememberSaveable { mutableStateOf(initial?.action?.kind ?: ActionKind.NOTIFY) }
     var actionDevice by rememberSaveable { mutableStateOf(initial?.action?.deviceId?.ifEmpty { null } ?: first?.id.orEmpty()) }
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }
-    var delay by rememberSaveable { mutableStateOf(initial?.delayMinutes?.toString() ?: "0") }
+    var delay by rememberSaveable { mutableStateOf(initial?.delayMinutes ?: 0) }
     var confirmDelete by remember { mutableStateOf(false) }
 
     val src = devices.firstOrNull { it.id == triggerDevice }
@@ -287,25 +310,41 @@ private fun AutomationEditor(
     }
     if (triggerKind !in kinds) triggerKind = TriggerKind.TURNED_ON
 
-    val minutesValue = minutes.toIntOrNull()
     val wattsValue = watts.replace(',', '.').toDoubleOrNull()
-    val delayValue = delay.toIntOrNull()
-    val lowMinutesValue = lowMinutes.toIntOrNull()
-    val graceValue = grace.toIntOrNull()
     val valid = name.isNotBlank() && src != null &&
-        (!triggerKind.usesChannelPower || (lowMinutesValue != null && lowMinutesValue >= 0 && graceValue != null && graceValue >= 0)) &&
-        (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
-        (!actionKind.usesDevice || dst != null) &&
-        delayValue != null && delayValue >= 0
+        (!actionKind.usesDevice || dst != null)
+
+    // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
+    val draft = Automation(
+        id = initial?.id ?: NEW,
+        name = name.trim(),
+        enabled = initial?.enabled ?: true,
+        trigger = Trigger(
+            triggerKind, triggerDevice,
+            channel = if (triggerKind.usesChannel) triggerChannel else 0,
+            minutes = when {
+                triggerKind.usesMinutes -> minutes
+                triggerKind.usesChannelPower -> lowMinutes
+                else -> 0
+            },
+            watts = if (triggerKind.usesWatts) wattsValue ?: 0.0 else 0.0,
+            graceMinutes = if (triggerKind.usesChannelPower) grace else 0,
+        ),
+        action = if (actionKind.usesDevice) AutoAction(actionKind, actionDevice, actionChannel) else AutoAction(actionKind),
+        delayMinutes = delay,
+    )
 
     Column(modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(stringResource(if (initial == null) R.string.automation_new else R.string.automation_edit)) },
-            navigationIcon = { IconButton(modifier = Modifier.tvFocusRing(), onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) } },
+        AppTopBar(
+            stringResource(if (initial == null) R.string.automation_new else R.string.automation_edit),
+            navigationIcon = { BackButton(onBack) },
+            small = true,
             actions = {
                 if (initial != null) {
-                    IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
+                    IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) {
+                        Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete))
+                    }
                 }
             },
         )
@@ -314,62 +353,87 @@ private fun AutomationEditor(
             return
         }
         Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
-            OutlinedTextField(
+            // Ad
+            TextField(
                 value = name, onValueChange = { name = it },
                 label = { Text(stringResource(R.string.automation_name)) },
+                placeholder = { Text(stringResource(R.string.automation_name_hint)) },
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                shape = RoundedCornerShape(20.dp),
+                keyboardOptions = tvKeyboardOptions(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = tileColor(),
+                    unfocusedContainerColor = tileColor(),
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                ),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).tvTextField(),
             )
 
-            SectionTitle(stringResource(R.string.automation_when))
-            SectionCard {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Picker(stringResource(R.string.automation_device), devices, src, { it.name }) {
-                        triggerDevice = it.id; triggerChannel = 0
-                    }
-                    Picker(stringResource(R.string.automation_event), kinds, triggerKind, { stringResource(it.title()) }) { triggerKind = it }
-                    if (triggerKind.usesChannel && src?.isMultiChannel == true) {
-                        ChannelPicker(src, triggerChannel) { triggerChannel = it }
-                    }
-                    if (triggerKind.usesMinutes) {
-                        NumberField(minutes, stringResource(R.string.automation_minutes)) { minutes = it }
-                    }
-                    if (triggerKind.usesWatts) {
-                        NumberField(watts, stringResource(R.string.automation_watts), decimal = true) { watts = it }
-                    }
-                    if (triggerKind.usesChannelPower) {
-                        NumberField(lowMinutes, stringResource(R.string.automation_low_minutes)) { lowMinutes = it }
-                        NumberField(grace, stringResource(R.string.automation_grace)) { grace = it }
-                        src?.channelPowerOf(triggerChannel)?.let {
-                            Text(
-                                stringResource(R.string.automation_current_power, formatWatts(it)),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    } else if (triggerKind.usesWatts) {
-                        src?.power?.let {
-                            Text(
-                                stringResource(R.string.automation_current_power, formatWatts(it)),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
+            // ------------------------------------------------ Eğer
+            StepCard(Icons.Rounded.Sensors, Hue.BLUE, stringResource(R.string.auto_if), stringResource(R.string.automation_when)) {
+                FieldLabel(stringResource(R.string.automation_device))
+                DeviceChooser(devices, triggerDevice) { triggerDevice = it.id; triggerChannel = 0 }
+                if (triggerKind.usesChannel && src?.isMultiChannel == true) {
+                    FieldLabel(stringResource(R.string.automation_channel))
+                    ChannelChooser(src, triggerChannel) { triggerChannel = it }
+                }
+                FieldLabel(stringResource(R.string.automation_event))
+                OptionGrid(kinds, triggerKind, { it.icon() }, { stringResource(it.shortTitle()) }) { triggerKind = it }
+                if (triggerKind.usesMinutes) {
+                    Stepper(stringResource(R.string.automation_minutes_short), minutes, MINUTE_STEPS.filter { it > 0 }) { minutes = it }
+                }
+                if (triggerKind.usesWatts) {
+                    WattField(watts) { watts = it }
+                }
+                if (triggerKind.usesChannelPower) {
+                    Stepper(stringResource(R.string.automation_low_minutes_short), lowMinutes, LOW_STEPS) { lowMinutes = it }
+                    Stepper(stringResource(R.string.automation_grace_short), grace, GRACE_STEPS) { grace = it }
+                }
+                val now = when {
+                    triggerKind.usesChannelPower -> src?.channelPowerOf(triggerChannel)
+                    triggerKind.usesWatts -> src?.power
+                    else -> null
+                }
+                if (now != null) {
+                    Text(
+                        stringResource(R.string.automation_current_power, formatWatts(now)),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 8.dp),
+                    )
                 }
             }
 
-            SectionTitle(stringResource(R.string.automation_then))
-            SectionCard {
-                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Picker(stringResource(R.string.automation_action), ActionKind.entries, actionKind, { stringResource(it.title()) }) { actionKind = it }
-                    if (actionKind.usesDevice) {
-                        Picker(stringResource(R.string.automation_device), devices, dst, { it.name }) {
-                            actionDevice = it.id; actionChannel = 0
-                        }
-                        if (dst?.isMultiChannel == true) ChannelPicker(dst, actionChannel) { actionChannel = it }
+            // ------------------------------------------------ O zaman
+            StepCard(Icons.Rounded.Bolt, Hue.ORANGE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
+                FieldLabel(stringResource(R.string.automation_action))
+                OptionGrid(ActionKind.entries, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
+                if (actionKind.usesDevice) {
+                    FieldLabel(stringResource(R.string.automation_device))
+                    DeviceChooser(devices, actionDevice) { actionDevice = it.id; actionChannel = 0 }
+                    if (dst?.isMultiChannel == true) {
+                        FieldLabel(stringResource(R.string.automation_channel))
+                        ChannelChooser(dst, actionChannel) { actionChannel = it }
                     }
-                    NumberField(delay, stringResource(R.string.automation_delay)) { delay = it }
+                }
+                Stepper(stringResource(R.string.automation_delay_short), delay, DELAY_STEPS, zeroLabel = stringResource(R.string.automation_now)) { delay = it }
+            }
+
+            // ------------------------------------------------ Özet
+            if (src != null) {
+                val (whenText, thenText) = describe(draft, devices)
+                Column(
+                    Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
+                        .padding(16.dp),
+                ) {
+                    Text(stringResource(R.string.automation_summary), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    Spacer(Modifier.height(6.dp))
+                    Clause(stringResource(R.string.auto_if), whenText)
+                    Spacer(Modifier.height(2.dp))
+                    Clause(stringResource(R.string.auto_then), thenText)
                 }
             }
             Text(
@@ -381,30 +445,14 @@ private fun AutomationEditor(
 
             Button(
                 enabled = valid,
-                onClick = {
-                    onSave(
-                        Automation(
-                            id = initial?.id ?: UUID.randomUUID().toString(),
-                            name = name.trim(),
-                            enabled = initial?.enabled ?: true,
-                            trigger = Trigger(
-                                triggerKind, triggerDevice,
-                                channel = if (triggerKind.usesChannel) triggerChannel else 0,
-                                minutes = when {
-                                    triggerKind.usesMinutes -> minutesValue ?: 0
-                                    triggerKind.usesChannelPower -> lowMinutesValue ?: 0
-                                    else -> 0
-                                },
-                                watts = if (triggerKind.usesWatts) wattsValue ?: 0.0 else 0.0,
-                                graceMinutes = if (triggerKind.usesChannelPower) graceValue ?: 0 else 0,
-                            ),
-                            action = if (actionKind.usesDevice) AutoAction(actionKind, actionDevice, actionChannel) else AutoAction(actionKind),
-                            delayMinutes = delayValue ?: 0,
-                        )
-                    )
-                },
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(52.dp).tvFocusRing(),
-            ) { Text(stringResource(R.string.action_save)) }
+                onClick = { onSave(draft.copy(id = initial?.id ?: UUID.randomUUID().toString())) },
+                shape = RoundedCornerShape(18.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(56.dp).tvFocusRing(RoundedCornerShape(18.dp)),
+            ) {
+                Icon(Icons.Rounded.Check, null)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.action_save), style = MaterialTheme.typography.titleSmall)
+            }
         }
     }
 
@@ -419,22 +467,242 @@ private fun AutomationEditor(
     }
 }
 
+/** Dakika adımları: − / + bir sonraki anlamlı değere atlar (30 → 45 → 60 …). */
+private val MINUTE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360, 480, 720, 1440)
+private val DELAY_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120)
+private val LOW_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
+private val GRACE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
+
+/** Düzenleyicinin bir adımı: renkli simge, büyük başlık (Eğer / O zaman), altında alanlar. */
 @Composable
-private fun ChannelPicker(device: DeviceSnapshot, selected: Int, onPick: (Int) -> Unit) {
-    val channels = device.switches.keys.sorted()
-    Picker(stringResource(R.string.automation_channel), channels, selected, { stringResource(R.string.channel_n, it + 1) }, onPick)
+private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(24.dp)).background(tileColor()).padding(16.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            HueIcon(icon, hue, size = 40.dp)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text(title, style = MaterialTheme.typography.titleLarge)
+                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
+        content()
+    }
 }
 
 @Composable
-private fun NumberField(value: String, label: String, decimal: Boolean = false, onChange: (String) -> Unit) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = { v -> onChange(v.filter { it.isDigit() || (decimal && (it == '.' || it == ',')) }) },
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = if (decimal) KeyboardType.Decimal else KeyboardType.Number),
-        modifier = Modifier.fillMaxWidth(),
+private fun FieldLabel(text: String) {
+    Text(
+        text,
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
     )
+}
+
+/** Cihaz seçimi: yatay kaydırılan, simgeli kartlar. */
+@Composable
+private fun DeviceChooser(devices: List<DeviceSnapshot>, selectedId: String, onPick: (DeviceSnapshot) -> Unit) {
+    Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        devices.forEach { d ->
+            val selected = d.id == selectedId
+            val shape = RoundedCornerShape(18.dp)
+            val scheme = MaterialTheme.colorScheme
+            Column(
+                Modifier.width(112.dp)
+                    .tvFocusRing(shape)
+                    .clip(shape)
+                    .background(if (selected) scheme.primaryContainer else raisedOnTile())
+                    .then(if (selected) Modifier.border(2.dp, scheme.primary, shape) else Modifier)
+                    .selectable(selected = selected, onClick = { onPick(d) }, role = Role.RadioButton)
+                    .padding(12.dp),
+            ) {
+                val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud) { DeviceKinds.of(d) }
+                IconBadge(
+                    kind.icon(),
+                    tint = if (selected) scheme.onPrimary else scheme.onSurfaceVariant,
+                    background = if (selected) scheme.primary else tileColor(),
+                    size = 36,
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    d.name,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (selected) scheme.onPrimaryContainer else scheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    minLines = 2,
+                )
+            }
+        }
+    }
+}
+
+/** Kanal seçimi: numaralı düğmeler. */
+@Composable
+private fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        device.switches.keys.sorted().forEach { ch ->
+            val on = ch == selected
+            val shape = RoundedCornerShape(14.dp)
+            Box(
+                Modifier.size(52.dp)
+                    .tvFocusRing(shape)
+                    .clip(shape)
+                    .background(if (on) scheme.primary else raisedOnTile())
+                    .selectable(selected = on, onClick = { onPick(ch) }, role = Role.RadioButton),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text("${ch + 1}", style = MaterialTheme.typography.titleMedium, color = if (on) scheme.onPrimary else scheme.onSurface)
+            }
+        }
+    }
+}
+
+/** Seçenek kutucukları (iki sütun): simge + kısa ad; seçili olan dolu. */
+@Composable
+private fun <T> OptionGrid(
+    options: List<T>,
+    selected: T,
+    icon: (T) -> ImageVector,
+    label: @Composable (T) -> String,
+    hue: ((T) -> Hue)? = null,
+    onPick: (T) -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        options.chunked(2).forEach { row ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                row.forEach { o ->
+                    val on = o == selected
+                    val shape = RoundedCornerShape(16.dp)
+                    Row(
+                        Modifier.weight(1f).heightIn(min = 56.dp)
+                            .tvFocusRing(shape)
+                            .clip(shape)
+                            .background(if (on) scheme.primaryContainer else raisedOnTile())
+                            .then(if (on) Modifier.border(2.dp, scheme.primary, shape) else Modifier)
+                            .selectable(selected = on, onClick = { onPick(o) }, role = Role.RadioButton)
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        val h = hue?.invoke(o)
+                        if (h != null) {
+                            HueIcon(icon(o), h, size = 30.dp)
+                        } else {
+                            Icon(icon(o), null, tint = if (on) scheme.primary else scheme.onSurfaceVariant, modifier = Modifier.size(22.dp))
+                        }
+                        Spacer(Modifier.width(10.dp))
+                        Text(
+                            label(o),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (on) FontWeight.SemiBold else FontWeight.Normal,
+                            color = if (on) scheme.onPrimaryContainer else scheme.onSurface,
+                        )
+                    }
+                }
+                if (row.size == 1) Spacer(Modifier.weight(1f))
+            }
+        }
+    }
+}
+
+/** Sayı seçici: etiket, ortada değer, iki yanda − / + (anlamlı adımlarla). */
+@Composable
+private fun Stepper(label: String, value: Int, steps: List<Int>, zeroLabel: String? = null, onChange: (Int) -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    Row(
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(16.dp)).background(raisedOnTile())
+            .padding(horizontal = 8.dp, vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f).padding(start = 8.dp))
+        val lower = steps.lastOrNull { it < value }
+        val higher = steps.firstOrNull { it > value }
+        IconButton(enabled = lower != null, onClick = { lower?.let(onChange) }, modifier = Modifier.tvFocusRing()) {
+            Icon(Icons.Rounded.Remove, stringResource(R.string.action_decrease))
+        }
+        Text(
+            if (value == 0 && zeroLabel != null) zeroLabel else pluralStringResource(R.plurals.minutes_n, value, value),
+            style = MaterialTheme.typography.titleMedium,
+            color = scheme.primary,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.widthIn(min = 72.dp),
+        )
+        IconButton(enabled = higher != null, onClick = { higher?.let(onChange) }, modifier = Modifier.tvFocusRing()) {
+            Icon(Icons.Rounded.Add, stringResource(R.string.action_increase))
+        }
+    }
+}
+
+/** Güç eşiği: sayı alanı, sonunda "W". */
+@Composable
+private fun WattField(value: String, onChange: (String) -> Unit) {
+    TextField(
+        value = value,
+        onValueChange = { v -> onChange(v.filter { it.isDigit() || it == '.' || it == ',' }) },
+        label = { Text(stringResource(R.string.automation_watts)) },
+        suffix = { Text("W") },
+        singleLine = true,
+        shape = RoundedCornerShape(16.dp),
+        keyboardOptions = tvKeyboardOptions(KeyboardOptions(keyboardType = KeyboardType.Decimal)),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = raisedOnTile(),
+            unfocusedContainerColor = raisedOnTile(),
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+        ),
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp).tvTextField(),
+    )
+}
+
+private fun TriggerKind.icon(): ImageVector = when (this) {
+    TriggerKind.TURNED_ON -> Icons.Rounded.PowerSettingsNew
+    TriggerKind.TURNED_OFF -> Icons.Rounded.PowerOff
+    TriggerKind.STAYED_ON -> Icons.Rounded.Timer
+    TriggerKind.STAYED_OFF -> Icons.Rounded.TimerOff
+    TriggerKind.WENT_OFFLINE -> Icons.Rounded.CloudOff
+    TriggerKind.CAME_ONLINE -> Icons.Rounded.Cloud
+    TriggerKind.POWER_ABOVE -> Icons.AutoMirrored.Rounded.TrendingUp
+    TriggerKind.POWER_BELOW -> Icons.AutoMirrored.Rounded.TrendingDown
+    TriggerKind.CHANNEL_POWER_LOW -> Icons.Rounded.ElectricBolt
+}
+
+/** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
+private fun TriggerKind.shortTitle(): Int = when (this) {
+    TriggerKind.TURNED_ON -> R.string.evt_turned_on
+    TriggerKind.TURNED_OFF -> R.string.evt_turned_off
+    TriggerKind.STAYED_ON -> R.string.evt_stayed_on
+    TriggerKind.STAYED_OFF -> R.string.evt_stayed_off
+    TriggerKind.WENT_OFFLINE -> R.string.evt_went_offline
+    TriggerKind.CAME_ONLINE -> R.string.evt_came_online
+    TriggerKind.POWER_ABOVE -> R.string.evt_power_above
+    TriggerKind.POWER_BELOW -> R.string.evt_power_below
+    TriggerKind.CHANNEL_POWER_LOW -> R.string.evt_channel_power_low
+}
+
+private fun ActionKind.icon(): ImageVector = when (this) {
+    ActionKind.ALARM -> Icons.Rounded.Alarm
+    ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive
+    ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew
+    ActionKind.TURN_OFF -> Icons.Rounded.PowerOff
+}
+
+private fun ActionKind.hue(): Hue = when (this) {
+    ActionKind.ALARM -> Hue.RED
+    ActionKind.NOTIFY -> Hue.BLUE
+    ActionKind.TURN_ON -> Hue.GREEN
+    ActionKind.TURN_OFF -> Hue.SLATE
+}
+
+private fun ActionKind.editorTitle(): Int = when (this) {
+    ActionKind.ALARM -> R.string.auto_action_alarm
+    ActionKind.NOTIFY -> R.string.auto_action_notify
+    ActionKind.TURN_ON -> R.string.act_turn_on
+    ActionKind.TURN_OFF -> R.string.act_turn_off
 }
 
 /** Açılır seçim kutusu. */
