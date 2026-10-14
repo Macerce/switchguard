@@ -6,6 +6,23 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.12.0 — 2026-10-15
+**New look**
+- The Devices screen now looks like a smart-home app: devices are tiles in a grid (two per row on a phone). Each tile has an icon that matches what the device controls (light, water or pump, fridge, heating, fan, door, plug — guessed from its name), its state and power, and a round power button. A device that's on lights up in SwitchGuard green; an offline one is greyed out with a red dot.
+- Multi-channel devices (4CH, SPM, DualR3) get a wide tile with one button per channel, so you can switch any channel without opening the device. Channels that measure power show their watts.
+- At the top, a protection card shows whether monitoring is live, how many devices are on or offline, and the total power.
+- Device page: a large power button in the middle (large channel buttons on multi-channel devices), with connection, monitoring and power above it.
+- Automations read as "If … / Then …", with a coloured icon for the action.
+- The full-screen alarm now has rings spreading out from the bell.
+- The app always uses SwitchGuard's own colours (in light and dark) instead of taking them from the wallpaper, so it looks the same on every phone.
+
+**Simpler settings**
+- Settings is now a short list of categories: Accounts, Alarm, Quiet hours, Tell someone else, Daily summary, Monitoring, Permissions, Backup & transfer, Language, Help & about. Tap one to open its page. Each row shows a one-line summary, e.g. "2 permissions missing" in orange.
+- Tapping the Settings tab again takes you back to the list. On a TV, the remote returns to the row you opened.
+
+**Arrange devices**
+- Card size is now "Small card" (half a row) or "Large card" (full row). Multi-channel devices start large, the others small.
+
 ## 2.11.0 — 2026-10-14
 **Tell someone else (Telegram)**
 - If an alarm isn't dismissed within the time you choose (2, 5, 10, 15 or 30 minutes), the people or family group you picked get a Telegram message, and another one once it's dismissed. Even if your phone is in another room at night, someone at home or a neighbour finds out (Settings → Alarm → Tell someone else).

@@ -58,6 +58,16 @@ import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.ui.theme.Brand
+import com.macerce.switchguard.ui.theme.LocalDarkTheme
+import com.macerce.switchguard.ui.theme.StatusColors
+import com.macerce.switchguard.ui.theme.tileColor
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,24 +88,13 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
     val events = remember(logVersion) { log.recent(deviceId, limit = 15) }
 
     Column(Modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(device?.name ?: "", maxLines = 1, overflow = TextOverflow.Ellipsis) },
-            navigationIcon = {
-                IconButton(modifier = Modifier.tvFocusRing(), onClick = onBack) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.action_back)) }
-            },
-        )
+        AppTopBar(device?.name ?: "", navigationIcon = { BackButton(onBack) }, small = true)
         if (device == null) {
             Text(stringResource(R.string.device_missing), Modifier.padding(24.dp))
             return
         }
         Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 24.dp)) {
-            SectionTitle(stringResource(R.string.section_control))
-            SectionCard {
-                Column(Modifier.padding(vertical = 8.dp)) {
-                    Column(Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) { OnlineDot(device.online) }
-                    device.switches.toSortedMap().forEach { (ch, on) -> ChannelRow(device, ch, on) }
-                }
-            }
+            ControlHero(device, monitored)
 
             if (device.cloud == Cloud.DEMO) DemoSection(device)
 
@@ -148,7 +147,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                 SectionTitle(stringResource(R.string.section_rules))
                 SectionCard {
                     EventType.entries.forEachIndexed { i, type ->
-                        if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                        if (i > 0) RowDivider()
                         RuleRow(type, rules.actionFor(type)) { store.setRules(deviceId, rules.with(type, it)) }
                     }
                 }
@@ -177,7 +176,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                             }
                         }
                     }
-                    HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                    RowDivider()
                     InfoRow(
                         Icons.Rounded.NotificationImportant,
                         stringResource(R.string.device_critical),
@@ -194,7 +193,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                     Text(stringResource(R.string.no_events), Modifier.padding(20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 } else {
                     events.forEachIndexed { i, e ->
-                        if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                        if (i > 0) RowDivider()
                         EventRow(e, showDevice = false)
                     }
                 }
@@ -258,6 +257,65 @@ private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertActio
                     Text(stringResource(action.title()), fontWeight = if (current == action) FontWeight.SemiBold else null)
                 }
             }
+        }
+    }
+}
+
+/**
+ * Detayın üstü: tek kanallı cihazda ortada büyük güç düğmesi (açıkken kart marka renginde), çok kanallıda
+ * büyük kanal düğmeleri. Altında bağlantı, izleme ve (ölçülüyorsa) anlık güç.
+ */
+@Composable
+private fun ControlHero(device: DeviceSnapshot, monitored: Boolean) {
+    val dark = LocalDarkTheme.current
+    val single = !device.isMultiChannel && device.switches.size == 1
+    val anyOn = device.switches.values.any { it }
+    val active = single && anyOn && device.online
+    val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
+    val content = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurface
+    val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
+    Column(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
+            .clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            DeviceGlyph(device, active, size = 40)
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    stringResource(if (device.online) R.string.label_online_title else R.string.label_offline_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (device.online) content else StatusColors.offline,
+                )
+                Text(
+                    stringResource(if (monitored) R.string.monitored else R.string.not_monitored),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = muted,
+                )
+            }
+            if (device.hasEnergy && device.online) {
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(formatWatts(device.power ?: 0.0), style = MaterialTheme.typography.headlineSmall, color = content)
+                    Text(stringResource(R.string.energy_power), style = MaterialTheme.typography.labelMedium, color = muted)
+                }
+            }
+        }
+        Spacer(Modifier.height(20.dp))
+        if (single) {
+            val (channel, on) = device.switches.entries.first()
+            val control = rememberSwitchControl(device, channel, on)
+            PowerButton(control.shown, control.busy, device.online, control.toggle, size = 112.dp, onBrand = active)
+            Spacer(Modifier.height(12.dp))
+            Text(
+                stringResource(if (control.shown) R.string.state_on_title else R.string.state_off_title),
+                style = MaterialTheme.typography.headlineSmall,
+                color = content,
+            )
+            Text(stringResource(R.string.tap_to_toggle), style = MaterialTheme.typography.bodySmall, color = muted)
+            Spacer(Modifier.height(4.dp))
+        } else {
+            ChannelButtons(device, Modifier.fillMaxWidth(), height = 84)
         }
     }
 }

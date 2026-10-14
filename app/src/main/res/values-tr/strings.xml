@@ -110,14 +110,12 @@
     <string name="not_monitored">İzlenmiyor</string>
     <string name="power">Güç</string>
     <string name="channel_n">Kanal %d</string>
-    <string name="channels_summary">%1$d kanal · %2$d açık</string>
     <string name="action_expand">Kanalları göster</string>
     <string name="action_collapse">Kanalları gizle</string>
     <string name="control_failed">Cihaz değiştirilemedi: %s</string>
 
     <!-- Cihaz detayı -->
     <string name="device_missing">Bu cihaz artık hesabınızda değil.</string>
-    <string name="section_control">Kontrol</string>
     <string name="section_monitoring">İzleme</string>
     <string name="section_rules">Şu olduğunda</string>
     <string name="section_recent_events">Son olaylar</string>
@@ -141,7 +139,6 @@
     <string name="clear_history_body">Kaydedilen tüm olaylar silinecek. Bu işlem geri alınamaz.</string>
 
     <!-- Ayarlar -->
-    <string name="section_account">Hesap</string>
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Sessiz saatler</string>
     <string name="section_permissions">İzinler</string>
@@ -155,7 +152,6 @@
     <string name="oem_hint_transsion">Telefon yeniden başlayınca ya da temizlikten sonra izlemenin sürmesi için Phone Master\'da SwitchGuard için Otomatik başlatmayı açın.</string>
     <string name="oem_hint_asus">Telefon yeniden başlayınca izlemenin açılması için Otomatik başlatma yöneticisinde SwitchGuard\'a izin verin.</string>
     <string name="section_about">Hakkında</string>
-    <string name="section_general">Genel</string>
     <string name="tuya_account">Tuya / Smart Life</string>
     <string name="onb_platform_title">Cihazlarınız nerede?</string>
     <string name="onb_platform_body">Cihazlarınızı bugün hangi uygulamayla kontrol ediyorsanız onu seçin.</string>
@@ -181,7 +177,7 @@
     <string name="action_rename">Yeniden adlandır</string>
     <string name="section_priority">Öncelikli</string>
     <string name="section_other">Diğer</string>
-    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · ⇕ = küçük / büyük kart · etiket = kategori. Buraya dönmek için bir karta uzun basın.</string>
+    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · kart boyutu = küçük ya da büyük · etiket = kategori. Buraya dönmek için bir karta uzun basın.</string>
     <string name="layout_priority">Öncelikli yap</string>
     <string name="layout_unpriority">Öncelikten çıkar</string>
     <string name="layout_move_up">Yukarı taşı</string>
@@ -500,7 +496,7 @@
     <string name="demo_devices">Demo cihazlar</string>
     <string name="demo_devices_desc">Tüm özellikleri denemek için sanal cihazlar</string>
     <string name="section_demo">Demo: olay canlandır</string>
-    <string name="demo_hint">Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki Kontrol bölümünden açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.</string>
+    <string name="demo_hint">Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki düğmelerle açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.</string>
     <string name="demo_toggle">Dışarıdan aç/kapat</string>
     <string name="demo_toggle_channel">%d. kanalı dışarıdan aç/kapat</string>
     <string name="demo_disconnect">Bağlantıyı kopar</string>
@@ -656,4 +652,53 @@
         <item quantity="one">%1$d dk kapatılmazsa · %2$d kişi</item>
         <item quantity="other">%1$d dk kapatılmazsa · %2$d kişi</item>
     </plurals>
+
+    <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
+    <string name="stat_devices">Cihaz</string>
+    <string name="stat_on">Açık</string>
+    <string name="stat_offline">Çevrimdışı</string>
+    <string name="stat_power">Güç</string>
+    <string name="state_on_title">Açık</string>
+    <string name="state_off_title">Kapalı</string>
+    <string name="tap_to_toggle">Açmak ya da kapatmak için dokunun</string>
+    <string name="settings_accounts">Hesaplar</string>
+    <string name="settings_accounts_none">Bağlı hesap yok</string>
+    <string name="settings_backup">Yedekleme ve aktarım</string>
+    <string name="settings_backup_desc">Dosyaya yedekle ya da başka cihaza aktar</string>
+    <string name="settings_backup_desc_tv">Başka cihaza gönder ya da başka cihazdan al</string>
+    <string name="settings_about">Yardım ve hakkında</string>
+    <string name="settings_about_desc">Sürüm %s · rehberler ve iletişim</string>
+    <string name="settings_group_connections">Bağlantılar</string>
+    <string name="settings_group_alerts">Alarm ve bildirimler</string>
+    <string name="settings_group_app">Uygulama</string>
+    <string name="settings_group_support">Destek</string>
+    <string name="settings_try">Demo ve Pro</string>
+    <string name="settings_try_it">Deneme</string>
+    <string name="settings_sound">Ses</string>
+    <string name="settings_when_alarm">Alarm çalarken</string>
+    <string name="settings_monitoring_intro">SwitchGuard\'ın cihazlarınızı arka planda nasıl izlediği.</string>
+    <string name="settings_quiet_critical">Kritik olarak işaretlenen cihazlar sessiz saatlerde de çalar.</string>
+    <string name="settings_permissions_intro">Bunlar olmadan Android alarmın size ulaşmasını engelleyebilir.</string>
+    <string name="settings_other_devices">Diğer cihazlar</string>
+    <string name="settings_help">Yardım</string>
+    <string name="settings_contact">İletişim</string>
+    <string name="perm_all_ok">Hepsi tamam</string>
+    <string name="time_range">%1$s – %2$s</string>
+    <string name="daily_at">Her gün %s</string>
+    <string name="volume_pct">%%%d</string>
+    <string name="plan_pro">Pro · tüm cihazlar izleniyor</string>
+    <string name="demo_short">Demo</string>
+    <plurals name="perm_missing_n">
+        <item quantity="one">%d izin eksik</item>
+        <item quantity="other">%d izin eksik</item>
+    </plurals>
+    <string name="guard_ready">Bir şey değiştiği an alarm çalmaya hazır</string>
+    <string name="monitoring_summary_now">Kopunca hemen uyarır · %s</string>
+    <string name="monitoring_summary_grace">Kopunca %1$s bekler · %2$s</string>
+    <plurals name="plan_free">
+        <item quantity="one">Ücretsiz · %d cihaz izlenir</item>
+        <item quantity="other">Ücretsiz · %d cihaz izlenir</item>
+    </plurals>
+    <string name="auto_if">Eğer</string>
+    <string name="auto_then">O zaman</string>
 </resources>

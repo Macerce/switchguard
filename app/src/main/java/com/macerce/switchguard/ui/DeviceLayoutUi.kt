@@ -2,6 +2,7 @@ package com.macerce.switchguard.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +10,15 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.CropLandscape
+import androidx.compose.material.icons.rounded.CropSquare
 import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Delete
@@ -22,8 +26,6 @@ import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
-import androidx.compose.material.icons.rounded.UnfoldLess
-import androidx.compose.material.icons.rounded.UnfoldMore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Card
@@ -45,6 +47,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -71,11 +74,12 @@ fun sectionTitle(section: DeviceSection): String = when (section.kind) {
 @Composable
 fun LayoutSectionHeader(title: String, count: Int, collapsed: Boolean, onToggle: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().clickable(onClick = onToggle).padding(start = 20.dp, end = 16.dp, top = 8.dp, bottom = 0.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).tvFocusRing(RoundedCornerShape(12.dp), inside = true)
+            .clickable(onClick = onToggle).padding(start = 4.dp, end = 4.dp, top = 10.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface, modifier = Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
         Text("$count", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Icon(
             Icons.Rounded.ExpandMore,
@@ -90,7 +94,8 @@ fun LayoutSectionHeader(title: String, count: Int, collapsed: Boolean, onToggle:
 @Composable
 fun LayoutEditHint(onCategories: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Column(Modifier.padding(16.dp)) {
@@ -117,8 +122,11 @@ fun LayoutEditBar(
     val id = device.id
     var menu by remember { mutableStateOf(false) }
     var newCategory by remember { mutableStateOf(false) }
-    HorizontalDivider(color = MaterialTheme.colorScheme.surface)
-    Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 2.dp), verticalAlignment = Alignment.CenterVertically) {
+    RowDivider(inset = 0.dp)
+    FlowRow(
+        Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 2.dp),
+        itemVerticalAlignment = Alignment.CenterVertically,
+    ) {
         val priority = id in layout.priority
         IconButton(onClick = { onChange(layout.togglePriority(id)) }, modifier = Modifier.tvFocusRing()) {
             Icon(
@@ -154,13 +162,14 @@ fun LayoutEditBar(
         ) {
             Icon(Icons.Rounded.ArrowDownward, stringResource(R.string.layout_move_down))
         }
-        val compact = id in layout.compact
-        IconButton(onClick = { onChange(layout.toggleCompact(id)) }, modifier = Modifier.tvFocusRing()) {
-            Icon(
-                if (compact) Icons.Rounded.UnfoldMore else Icons.Rounded.UnfoldLess,
-                contentDescription = stringResource(if (compact) R.string.layout_large else R.string.layout_compact),
-            )
-        }
+        // Kart boyutu: düzenlemede tüm kartlar tam satır görünür, gerçek boyut bu düğmenin yazısıdır.
+        val large = layout.isLarge(device)
+        AssistChip(
+            onClick = { onChange(layout.toggleSize(device)) },
+            label = { Text(stringResource(if (large) R.string.layout_large else R.string.layout_compact), maxLines = 1) },
+            leadingIcon = { Icon(if (large) Icons.Rounded.CropLandscape else Icons.Rounded.CropSquare, null, Modifier.size(18.dp)) },
+            modifier = Modifier.padding(start = 4.dp).tvFocusRing(RoundedCornerShape(8.dp)),
+        )
         Spacer(Modifier.weight(1f))
         val current = layout.categories.firstOrNull { it.id == layout.categoryOf[id] }
         Column {
@@ -168,7 +177,7 @@ fun LayoutEditBar(
                 onClick = { menu = true },
                 label = { Text(current?.name ?: stringResource(R.string.category_none), maxLines = 1, overflow = TextOverflow.Ellipsis) },
                 leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Label, null, Modifier.size(18.dp)) },
-                modifier = Modifier.padding(end = 8.dp).tvFocusRing(RoundedCornerShape(8.dp)),
+                modifier = Modifier.padding(end = 8.dp).widthIn(max = 160.dp).tvFocusRing(RoundedCornerShape(8.dp)),
             )
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                 DropdownMenuItem(text = { Text(stringResource(R.string.category_none)) }, onClick = { onChange(layout.assign(id, null)); menu = false })

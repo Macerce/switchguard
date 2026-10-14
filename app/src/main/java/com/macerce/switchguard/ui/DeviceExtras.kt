@@ -113,19 +113,19 @@ fun EnergySection(device: DeviceSnapshot) {
             Metric(stringResource(R.string.energy_current), device.current?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–")
         }
         if (device.channelPower.isNotEmpty()) {
-            HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+            RowDivider(inset = 0.dp)
             Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 device.channelPower.toSortedMap().forEach { (ch, w) ->
                     Metric(stringResource(R.string.channel_n, ch + 1), formatWatts(w))
                 }
             }
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+        RowDivider(inset = 0.dp)
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
             Metric(stringResource(R.string.energy_today), DailySummary.formatKwh(days.last().second))
             Metric(stringResource(R.string.energy_month), DailySummary.formatKwh(month))
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+        RowDivider(inset = 0.dp)
         if (!hasData) {
             Text(
                 stringResource(R.string.energy_no_data),
@@ -239,7 +239,7 @@ fun TimersSection(device: DeviceSnapshot) {
                     Text(stringResource(R.string.timers_empty), Modifier.padding(16.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 list.forEachIndexed { i, e ->
-                    if (i > 0) HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                    if (i > 0) RowDivider(inset = 0.dp)
                     val t = e.timer
                     if (t == null) {
                         InfoRow(Icons.Rounded.Schedule, stringResource(R.string.timer_other), stringResource(R.string.timer_other_desc))
@@ -256,7 +256,7 @@ fun TimersSection(device: DeviceSnapshot) {
                         }
                     }
                 }
-                HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                RowDivider(inset = 0.dp)
                 val full = list.size >= DeviceTimers.MAX_TIMERS
                 InfoRow(
                     Icons.Rounded.Add,

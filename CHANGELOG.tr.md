@@ -6,6 +6,23 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.12.0 — 15 Ekim 2026
+**Yeni görünüm**
+- Cihazlar ekranı artık bir akıllı ev uygulaması gibi: cihazlar ızgarada kutucuklar halinde (telefonda satırda iki tane). Her kutucukta cihazın neyi kontrol ettiğine uyan bir simge (ışık, su ya da pompa, dondurucu, ısıtma, fan, kapı, priz; adından tahmin ediliyor), durumu, gücü ve yuvarlak bir güç düğmesi var. Açık cihazın kutucuğu SwitchGuard yeşiliyle parlıyor; çevrimdışı cihaz soluk ve kırmızı noktalı görünüyor.
+- Çok kanallı cihazlar (4CH, SPM, DualR3) her kanal için ayrı düğmesi olan geniş bir kutucukla gösteriliyor; cihazı açmadan istediğiniz kanalı açıp kapatabilirsiniz. Güç ölçen kanallar watt değerini de gösteriyor.
+- En üstteki koruma kartı izlemenin canlı olup olmadığını, kaç cihazın açık ya da çevrimdışı olduğunu ve toplam gücü gösteriyor.
+- Cihaz sayfası: ortada büyük bir güç düğmesi (çok kanallı cihazlarda büyük kanal düğmeleri), üstünde bağlantı, izleme ve güç bilgisi.
+- Otomasyonlar "Eğer … / O zaman …" diye okunuyor; eylemin renkli simgesi yanında.
+- Tam ekran alarmda zilin çevresinden dışa yayılan halkalar var.
+- Uygulama renklerini artık duvar kâğıdından almıyor, açık ve koyu temada SwitchGuard'ın kendi renklerini kullanıyor; her telefonda aynı görünüyor.
+
+**Daha sade ayarlar**
+- Ayarlar artık kısa bir kategori listesi: Hesaplar, Alarm, Sessiz saatler, İkinci kişiye haber ver, Günlük özet, İzleme, İzinler, Yedekleme ve aktarım, Dil, Yardım ve hakkında. Birine dokununca kendi sayfası açılıyor. Her satırda tek satırlık bir özet var, örneğin turuncu renkte "2 izin eksik".
+- Ayarlar sekmesine yeniden dokununca listeye dönülüyor. TV'de kumanda, açtığınız satıra geri geliyor.
+
+**Cihazları düzenle**
+- Kart boyutu artık "Küçük kart" (yarım satır) ya da "Büyük kart" (tam satır). Çok kanallı cihazlar büyük, diğerleri küçük başlıyor.
+
 ## 2.11.0 — 14 Ekim 2026
 **İkinci kişiye haber ver (Telegram)**
 - Alarm seçtiğiniz süre (2, 5, 10, 15 ya da 30 dakika) içinde kapatılmazsa seçtiğiniz kişilere ya da aile grubunuza Telegram mesajı gidiyor; alarm kapatılınca da "kapatıldı" mesajı gidiyor. Gece telefon başka odada kalsa bile evdeki biri ya da komşunuz haberdar oluyor (Ayarlar → Alarm → İkinci kişiye haber ver).

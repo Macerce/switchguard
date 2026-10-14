@@ -20,6 +20,7 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
@@ -46,6 +47,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.theme.tileColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -70,6 +72,12 @@ fun App() {
     }
 
     var tab by rememberSaveable { mutableStateOf(Tab.DEVICES) }
+    // Seçili sekmeye yeniden dokunmak o sekmenin başına döner (Ayarlar: alt sayfadan listeye).
+    var settingsHome by rememberSaveable { mutableIntStateOf(0) }
+    val select: (Tab) -> Unit = { t ->
+        if (t == tab && t == Tab.SETTINGS) settingsHome++
+        tab = t
+    }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
     // Detaydan dönünce kumandanın odağı açılan karta geri verilir (yoksa yan menüye düşer).
     var returnFocusTo by remember { mutableStateOf<String?>(null) }
@@ -123,7 +131,7 @@ fun App() {
                 )
                 Tab.AUTOMATIONS -> AutomationsScreen(mod)
                 Tab.HISTORY -> HistoryScreen(mod)
-                Tab.SETTINGS -> SettingsScreen(mod)
+                Tab.SETTINGS -> SettingsScreen(mod, homeRequests = settingsHome)
             }
         }
     }
@@ -141,13 +149,13 @@ fun App() {
             if (wide) {
                 // Tablet, Chromebook ve TV: alt menü yerine yan menü, içerik okunabilir genişlikte ortada.
                 Row(Modifier.fillMaxSize()) {
-                    NavigationRail(Modifier.fillMaxHeight()) {
+                    NavigationRail(Modifier.fillMaxHeight(), containerColor = MaterialTheme.colorScheme.background) {
                         Spacer(Modifier.weight(1f))
                         Tab.entries.forEach { t ->
                             NavigationRailItem(
                                 modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp), inside = true),
                                 selected = tab == t,
-                                onClick = { tab = t },
+                                onClick = { select(t) },
                                 icon = { tabIcon(t) },
                                 label = { Text(stringResource(t.label)) },
                             )
@@ -161,11 +169,11 @@ fun App() {
             } else {
                 Scaffold(
                     bottomBar = {
-                        NavigationBar {
+                        NavigationBar(containerColor = tileColor()) {
                             Tab.entries.forEach { t ->
                                 NavigationBarItem(
                                     selected = tab == t,
-                                    onClick = { tab = t },
+                                    onClick = { select(t) },
                                     icon = { tabIcon(t) },
                                     label = { Text(stringResource(t.label)) },
                                 )

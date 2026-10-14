@@ -112,7 +112,7 @@ fun BackupSection() {
             Icons.Rounded.Backup, stringResource(R.string.backup_create), stringResource(R.string.backup_create_desc),
             Modifier.clickable { askCreate = true },
         )
-        HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+        RowDivider()
         InfoRow(
             Icons.Rounded.SettingsBackupRestore, stringResource(R.string.backup_restore), stringResource(R.string.backup_restore_desc),
             Modifier.clickable { runCatching { picker.launch(arrayOf("*/*")) }.onFailure { toast(R.string.backup_failed) } },

@@ -79,12 +79,12 @@ fun readinessInput(context: Context, store: Store): ReadinessInput {
  * tek dokunuşla düzeltme. Sorun yoksa hiç görünmez.
  */
 @Composable
-fun ReadinessCard(issues: List<ReadinessIssue>) {
+fun ReadinessCard(issues: List<ReadinessIssue>, modifier: Modifier = Modifier) {
     if (issues.isEmpty()) return
     val context = LocalContext.current
     val store = Store.get(context)
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,

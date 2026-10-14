@@ -65,10 +65,28 @@ class DeviceLayoutTest {
     @Test fun `json gidis donus`() {
         val l = DeviceLayout(
             order = listOf("a", "b"), priority = setOf("a"), compact = setOf("b"),
-            categories = listOf(Category("k", "Rögarlar")), categoryOf = mapOf("b" to "k"), collapsed = setOf("k"),
+            categories = listOf(Category("k", "Rögarlar")), categoryOf = mapOf("b" to "k"), collapsed = setOf("k"), large = setOf("a"),
         )
         assertEquals(l, DeviceLayout.fromJson(l.toJson()))
         assertEquals(DeviceLayout(), DeviceLayout.fromJson(null))
         assertEquals(DeviceLayout(), DeviceLayout.fromJson("{bozuk"))
+    }
+
+    @Test fun `kart boyutu varsayilani cok kanalliya buyuk, tek kanalliya kucuk`() {
+        val single = d("s")
+        val multi = DeviceSnapshot("m", "Pano", true, mapOf(0 to false, 1 to true))
+        val l = DeviceLayout()
+        assertTrue(l.isLarge(multi))
+        assertTrue(!l.isLarge(single))
+        // Büyütülen tek kanallı büyük olur; tekrar basınca varsayılana döner ve açık seçim kalmaz.
+        val big = l.toggleSize(single)
+        assertEquals(setOf("s"), big.large)
+        assertTrue(big.isLarge(single))
+        assertEquals(DeviceLayout(), big.toggleSize(single))
+        // Küçültülen çok kanallı "compact"a yazılır.
+        val small = l.toggleSize(multi)
+        assertEquals(setOf("m"), small.compact)
+        assertTrue(!small.isLarge(multi))
+        assertEquals(DeviceLayout(), small.toggleSize(multi))
     }
 }

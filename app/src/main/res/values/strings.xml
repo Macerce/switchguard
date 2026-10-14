@@ -114,14 +114,12 @@
     <string name="not_monitored">Not monitored</string>
     <string name="power">Power</string>
     <string name="channel_n">Channel %d</string>
-    <string name="channels_summary">%1$d channels · %2$d on</string>
     <string name="action_expand">Show channels</string>
     <string name="action_collapse">Hide channels</string>
     <string name="control_failed">Couldn\'t change device: %s</string>
 
     <!-- Device detail -->
     <string name="device_missing">This device is no longer in your account.</string>
-    <string name="section_control">Control</string>
     <string name="section_monitoring">Monitoring</string>
     <string name="section_rules">When this happens</string>
     <string name="section_recent_events">Recent events</string>
@@ -145,7 +143,6 @@
     <string name="clear_history_body">All recorded events will be deleted. This can\'t be undone.</string>
 
     <!-- Settings -->
-    <string name="section_account">Account</string>
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Quiet hours</string>
     <string name="section_permissions">Permissions</string>
@@ -159,7 +156,6 @@
     <string name="oem_hint_transsion">Turn on Auto-start for SwitchGuard in Phone Master so monitoring survives reboots and cleanups.</string>
     <string name="oem_hint_asus">Allow SwitchGuard in Auto-start Manager so monitoring restarts after a reboot.</string>
     <string name="section_about">About</string>
-    <string name="section_general">General</string>
     <string name="tuya_account">Tuya / Smart Life</string>
     <string name="onb_platform_title">Where are your devices?</string>
     <string name="onb_platform_body">Choose the app you use to control your devices today.</string>
@@ -185,7 +181,7 @@
     <string name="action_rename">Rename</string>
     <string name="section_priority">Priority</string>
     <string name="section_other">Other</string>
-    <string name="layout_hint">Star = keep at the top · arrows = move · ⇕ = small / large card · tag = category. Long-press a card to come back here.</string>
+    <string name="layout_hint">Star = keep at the top · arrows = move · card size = small or large · tag = category. Long-press a card to come back here.</string>
     <string name="layout_priority">Mark as priority</string>
     <string name="layout_unpriority">Remove priority</string>
     <string name="layout_move_up">Move up</string>
@@ -504,7 +500,7 @@
     <string name="demo_devices">Demo devices</string>
     <string name="demo_devices_desc">Virtual devices for trying every feature</string>
     <string name="section_demo">Demo: simulate an event</string>
-    <string name="demo_hint">These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching from the Control section above counts as you and does not ring the alarm.</string>
+    <string name="demo_hint">These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching with the buttons above counts as you and does not ring the alarm.</string>
     <string name="demo_toggle">Switch from outside</string>
     <string name="demo_toggle_channel">Switch channel %d from outside</string>
     <string name="demo_disconnect">Lose connection</string>
@@ -660,4 +656,53 @@
         <item quantity="one">If not dismissed in %1$d min · %2$d person</item>
         <item quantity="other">If not dismissed in %1$d min · %2$d people</item>
     </plurals>
+
+    <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
+    <string name="stat_devices">Devices</string>
+    <string name="stat_on">On</string>
+    <string name="stat_offline">Offline</string>
+    <string name="stat_power">Power</string>
+    <string name="state_on_title">On</string>
+    <string name="state_off_title">Off</string>
+    <string name="tap_to_toggle">Tap to turn on or off</string>
+    <string name="settings_accounts">Accounts</string>
+    <string name="settings_accounts_none">No account connected</string>
+    <string name="settings_backup">Backup &amp; transfer</string>
+    <string name="settings_backup_desc">Back up to a file or move to another device</string>
+    <string name="settings_backup_desc_tv">Send to or receive from another device</string>
+    <string name="settings_about">Help &amp; about</string>
+    <string name="settings_about_desc">Version %s · guides and contact</string>
+    <string name="settings_group_connections">Connections</string>
+    <string name="settings_group_alerts">Alarms &amp; notifications</string>
+    <string name="settings_group_app">App</string>
+    <string name="settings_group_support">Support</string>
+    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try_it">Test</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_when_alarm">While an alarm is ringing</string>
+    <string name="settings_monitoring_intro">How SwitchGuard keeps watch over your devices in the background.</string>
+    <string name="settings_quiet_critical">Devices marked as critical still ring during quiet hours.</string>
+    <string name="settings_permissions_intro">Without these, Android may keep the alarm from reaching you.</string>
+    <string name="settings_other_devices">Other devices</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_contact">Contact</string>
+    <string name="perm_all_ok">All set</string>
+    <string name="time_range">%1$s – %2$s</string>
+    <string name="daily_at">Daily at %s</string>
+    <string name="volume_pct">%d%%</string>
+    <string name="plan_pro">Pro · all devices monitored</string>
+    <string name="demo_short">Demo</string>
+    <plurals name="perm_missing_n">
+        <item quantity="one">%d permission missing</item>
+        <item quantity="other">%d permissions missing</item>
+    </plurals>
+    <string name="guard_ready">Ready to ring the moment something changes</string>
+    <string name="monitoring_summary_now">Alerts at once when offline · %s</string>
+    <string name="monitoring_summary_grace">Waits %1$s when offline · %2$s</string>
+    <plurals name="plan_free">
+        <item quantity="one">Free · monitors %d device</item>
+        <item quantity="other">Free · monitors %d devices</item>
+    </plurals>
+    <string name="auto_if">If</string>
+    <string name="auto_then">Then</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
@@ -12,6 +13,7 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -38,21 +40,26 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AppLanguage
@@ -177,6 +184,15 @@ private fun AlarmScreen(lines: List<String>, onDismiss: () -> Unit, onOpenApp: (
     )
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
+    // Kırmızı zeminde durum çubuğu simgeleri her temada açık renk (temanın açık-tema ayarını ezer).
+    val view = LocalView.current
+    SideEffect {
+        val window = (view.context as? Activity)?.window ?: return@SideEffect
+        WindowCompat.getInsetsController(window, view).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
+    }
 
     Box(
         Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFF7A1010), Color(0xFF2A0606)))),
@@ -187,14 +203,35 @@ private fun AlarmScreen(lines: List<String>, onDismiss: () -> Unit, onOpenApp: (
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
+            // Simgenin çevresinde dışa yayılan halkalar (logodaki ses dalgaları gibi).
+            val waves = rememberInfiniteTransition(label = "waves")
+            val wave by waves.animateFloat(
+                initialValue = 0f, targetValue = 1f,
+                animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "wave",
+            )
             Box(
-                Modifier.size(120.dp).graphicsLayer { scaleX = pulse; scaleY = pulse }
-                    .background(Color.White.copy(alpha = 0.14f), CircleShape),
+                Modifier.size(200.dp).drawBehind {
+                    val base = 60.dp.toPx()
+                    for (k in 0..2) {
+                        val t = (wave + k / 3f) % 1f
+                        drawCircle(
+                            Color.White.copy(alpha = 0.28f * (1f - t)),
+                            radius = base + (size.minDimension / 2 - base) * t,
+                            style = Stroke(width = 3.dp.toPx()),
+                        )
+                    }
+                },
                 contentAlignment = Alignment.Center,
             ) {
-                Icon(Icons.Rounded.NotificationsActive, null, tint = Color.White, modifier = Modifier.size(64.dp))
+                Box(
+                    Modifier.size(120.dp).graphicsLayer { scaleX = pulse; scaleY = pulse }
+                        .background(Color.White.copy(alpha = 0.14f), CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Icon(Icons.Rounded.NotificationsActive, null, tint = Color.White, modifier = Modifier.size(64.dp))
+                }
             }
-            Spacer(Modifier.height(28.dp))
+            Spacer(Modifier.height(12.dp))
             // Uzun başlık iki satıra bölünebilir: satır yüksekliği yazı boyutuna göre verilmezse satırlar üst üste biner.
             Text(
                 stringResource(R.string.notif_alarm_title, lines.size),

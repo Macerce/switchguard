@@ -1,5 +1,11 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.ui.theme.LocalDarkTheme
+import com.macerce.switchguard.ui.theme.Brand
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -180,7 +186,13 @@ fun OnboardingScreen(onFinished: () -> Unit) {
 @Composable
 private fun StepHeader(icon: ImageVector, title: String, body: String) {
     Spacer(Modifier.height(24.dp))
-    IconBadge(icon, MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.primaryContainer, size = 72)
+    // Marka geçişli simge kutusu (Ayarlar'daki uygulama kartıyla aynı dil).
+    Box(
+        Modifier.size(72.dp).clip(RoundedCornerShape(22.dp)).background(Brand.guard(LocalDarkTheme.current)),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(icon, null, tint = Color.White, modifier = Modifier.size(40.dp))
+    }
     Spacer(Modifier.height(24.dp))
     Text(title, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
     Spacer(Modifier.height(12.dp))
@@ -189,9 +201,9 @@ private fun StepHeader(icon: ImageVector, title: String, body: String) {
 }
 
 @Composable
-private fun Feature(icon: ImageVector, text: String) {
-    Row(Modifier.padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
+private fun Feature(icon: ImageVector, text: String, hue: Hue = Hue.TEAL) {
+    Row(Modifier.padding(vertical = 6.dp), verticalAlignment = Alignment.CenterVertically) {
+        HueIcon(icon, hue, size = 36.dp)
         Spacer(Modifier.width(16.dp))
         Text(text, style = MaterialTheme.typography.bodyLarge)
     }
@@ -200,10 +212,10 @@ private fun Feature(icon: ImageVector, text: String) {
 @Composable
 private fun WelcomeStep() {
     StepHeader(Icons.Rounded.Shield, stringResource(R.string.onb_welcome_title), stringResource(R.string.onb_welcome_body))
-    Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_feature_alarm))
-    Feature(Icons.Rounded.PowerSettingsNew, stringResource(R.string.onb_feature_control))
-    Feature(Icons.Rounded.Tune, stringResource(R.string.onb_feature_rules))
-    Feature(Icons.Rounded.History, stringResource(R.string.onb_feature_history))
+    Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_feature_alarm), Hue.RED)
+    Feature(Icons.Rounded.PowerSettingsNew, stringResource(R.string.onb_feature_control), Hue.GREEN)
+    Feature(Icons.Rounded.Tune, stringResource(R.string.onb_feature_rules), Hue.INDIGO)
+    Feature(Icons.Rounded.History, stringResource(R.string.onb_feature_history), Hue.BLUE)
     Spacer(Modifier.height(16.dp))
     Text(stringResource(R.string.disclaimer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
 }
@@ -477,8 +489,8 @@ private fun PermissionCard(
 private fun DoneStep() {
     StepHeader(Icons.Rounded.CheckCircle, stringResource(R.string.onb_done_title), stringResource(R.string.onb_done_body))
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Feature(Icons.Rounded.Tune, stringResource(R.string.onb_done_tip_rules))
-        Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_done_tip_test))
+        Feature(Icons.Rounded.Tune, stringResource(R.string.onb_done_tip_rules), Hue.INDIGO)
+        Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_done_tip_test), Hue.RED)
     }
 }
 

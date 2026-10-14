@@ -108,8 +108,8 @@ fun HistoryScreen(modifier: Modifier) {
     val events = remember(logVersion, filter) { log.recent(filter) }
 
     Column(modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(stringResource(R.string.tab_history), fontWeight = FontWeight.SemiBold) },
+        AppTopBar(
+            stringResource(R.string.tab_history),
             actions = {
                 // TV'de dosya kaydetme ekranı (DocumentsUI) yok.
                 if (!LocalIsTv.current) {
@@ -148,7 +148,7 @@ fun HistoryScreen(modifier: Modifier) {
                     item(key = "c" + dayEvents.first().id) {
                         SectionCard {
                             dayEvents.forEachIndexed { i, e ->
-                                if (i > 0) androidx.compose.material3.HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                                if (i > 0) RowDivider()
                                 EventRow(e, showDevice = false)
                             }
                         }

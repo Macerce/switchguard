@@ -3,11 +3,12 @@ package com.macerce.switchguard.ui
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusGroup
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,19 +30,20 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.AlarmOff
 import androidx.compose.material.icons.rounded.CloudOff
-import androidx.compose.material.icons.rounded.ExpandMore
+import androidx.compose.material.icons.rounded.GppMaybe
 import androidx.compose.material.icons.rounded.Key
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.RemoveModerator
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
@@ -51,22 +54,16 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -76,14 +73,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -94,6 +95,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -102,10 +104,14 @@ import com.macerce.switchguard.core.Readiness
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.theme.Brand
+import com.macerce.switchguard.ui.theme.LocalDarkTheme
+import com.macerce.switchguard.ui.theme.StatusColors
+import com.macerce.switchguard.ui.theme.raisedOnTile
+import com.macerce.switchguard.ui.theme.tileColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DevicesScreen(
     modifier: Modifier,
@@ -154,8 +160,8 @@ fun DevicesScreen(
     }
 
     Column(modifier.fillMaxSize()) {
-        TopAppBar(
-            title = { Text(stringResource(R.string.app_name), fontWeight = FontWeight.SemiBold) },
+        AppTopBar(
+            title = stringResource(if (editMode) R.string.action_edit_layout else R.string.app_name),
             actions = {
                 if (editMode) {
                     val doneFocus = remember { FocusRequester() }
@@ -190,13 +196,16 @@ fun DevicesScreen(
             }
             onFocusRestored()
         }
+        val wide = isWideScreen()
         val list: @Composable () -> Unit = {
-            // Telefonda tek sütun; tablet/Chromebook/TV'de cihaz kartları ızgara, diğer kartlar tam satır.
+            // Akıllı ev uygulamaları gibi kutucuk ızgarası: telefonda iki sütun, geniş ekranda ekrana sığdığı kadar.
+            // Büyük kartlar ve bilgi kartları tam satır.
             val full: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) }
             LazyVerticalGrid(
-                columns = if (isWideScreen()) GridCells.Adaptive(minSize = 340.dp) else GridCells.Fixed(1),
-                contentPadding = PaddingValues(bottom = 24.dp),
+                columns = GridCells.Adaptive(minSize = if (wide) 220.dp else 150.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
                 item(span = full) {
@@ -204,22 +213,24 @@ fun DevicesScreen(
                         AlarmBanner(alarm) { Actions.dismissAlarm(context) }
                     }
                 }
-                item(span = full) {
-                    if (loggedIn) {
-                        ConnectionCard(connection.state, connection.detail, connection.lastSync, monitoring, devices.size)
-                    } else {
-                        LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
+                if (!editMode) {
+                    item(span = full) {
+                        if (loggedIn) {
+                            GuardCard(connection.state, connection.detail, connection.lastSync, monitoring, devices)
+                        } else {
+                            LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
+                        }
                     }
                 }
                 // Girişten önce yalnızca ikiz uyarısı: aynı eWeLink hesabıyla ikinci kopyada giriş, diğerinin oturumunu kapatır.
                 val shownReadiness = if (loggedIn) readiness else readiness.filter { it in Readiness.SHOWN_WHEN_STOPPED }
-                if (shownReadiness.isNotEmpty()) {
+                if (shownReadiness.isNotEmpty() && !editMode) {
                     item(span = full) { ReadinessCard(shownReadiness) }
                 }
                 if (loggedIn && devices.isEmpty()) {
                     item(span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }
                 }
-                if (loggedIn && !isPro && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
+                if (loggedIn && !isPro && !editMode && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
                     item(span = full) { ProHintCard { showPro = true } }
                 }
                 if (editMode) item(key = "edit-hint", span = full) { LayoutEditHint { showCategories = true } }
@@ -241,16 +252,21 @@ fun DevicesScreen(
                                 stringResource(R.string.category_no_devices),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(horizontal = 20.dp),
+                                modifier = Modifier.padding(horizontal = 4.dp),
                             )
                         }
                     }
                     if (!collapsed) {
-                        itemsIndexed(section.devices, key = { _, d -> d.id }) { i, device ->
-                            DeviceCard(
+                        itemsIndexed(
+                            section.devices,
+                            key = { _, d -> d.id },
+                            // Düzenlemede her kart tam satır: düzen araçları sığsın.
+                            span = { _, d -> if (editMode || layout.isLarge(d)) GridItemSpan(maxLineSpan) else GridItemSpan(1) },
+                        ) { i, device ->
+                            DeviceTile(
                                 device,
+                                large = editMode || layout.isLarge(device),
                                 monitored = device.id in monitoredIds,
-                                compact = device.id in layout.compact,
                                 priority = device.id in layout.priority,
                                 onClick = { if (!editMode) onOpenDevice(device.id) },
                                 onLongClick = { editMode = true },
@@ -273,7 +289,7 @@ fun DevicesScreen(
 @Composable
 private fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -314,26 +330,51 @@ private fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
     }
 }
 
+/**
+ * Koruma kartı: izlemenin durumu, son güncelleme ve cihaz sayaçları. Canlıyken marka renginde, sorun varken
+ * turuncu-kırmızı, izleme kapalıyken sade kart.
+ */
 @Composable
-private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, monitoring: Boolean, deviceCount: Int) {
+private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitoring: Boolean, devices: List<DeviceSnapshot>) {
     val context = LocalContext.current
+    val dark = LocalDarkTheme.current
     // "2 dk önce" metni kendiliğinden güncellensin.
     val now by produceState(System.currentTimeMillis()) {
         while (true) { delay(30_000); value = System.currentTimeMillis() }
     }
-    val shownState = if (monitoring) state else ConnState.STOPPED
+    val shown = if (monitoring) state else ConnState.STOPPED
+    val problem = shown in setOf(ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR)
+    val branded = shown != ConnState.STOPPED
+    val background: Brush = when {
+        problem -> Brand.problem(dark)
+        branded -> Brand.guard(dark)
+        else -> SolidColor(tileColor())
+    }
+    val content = if (branded) Brand.onActive else MaterialTheme.colorScheme.onSurface
+    val muted = if (branded) Brand.onActive.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
 
-    SectionCard {
-        Row(Modifier.padding(20.dp), verticalAlignment = Alignment.CenterVertically) {
-            IconBadge(
-                Icons.Rounded.Shield,
-                tint = connColor(shownState),
-                background = connColor(shownState).copy(alpha = 0.15f),
-                size = 52,
-            )
+    Column(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier.size(52.dp).background(if (branded) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    when {
+                        problem -> Icons.Rounded.GppMaybe
+                        branded -> Icons.Rounded.Shield
+                        else -> Icons.Rounded.RemoveModerator
+                    },
+                    contentDescription = null,
+                    tint = if (branded) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.size(30.dp),
+                )
+            }
             Spacer(Modifier.width(16.dp))
             Column(Modifier.weight(1f)) {
-                Text(stringResource(connTitle(shownState)), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
+                Text(stringResource(connTitle(shown)), style = MaterialTheme.typography.titleLarge, color = content)
                 val sub = when {
                     !monitoring -> stringResource(R.string.monitoring_off_hint)
                     detail.isNotEmpty() -> detail
@@ -342,34 +383,61 @@ private fun ConnectionCard(state: ConnState, detail: String, lastSync: Long, mon
                         // "now" 30 sn'de bir tazelenir; arada gelen senkron onu geçerse "… sonra" yazmasın.
                         DateUtils.getRelativeTimeSpanString(lastSync, maxOf(now, lastSync), DateUtils.SECOND_IN_MILLIS).toString(),
                     )
-                    else -> pluralStringResource(R.plurals.device_count, deviceCount, deviceCount)
+                    devices.isEmpty() -> pluralStringResource(R.plurals.device_count, devices.size, devices.size)
+                    else -> stringResource(R.string.guard_ready)
                 }
-                Text(sub, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(sub, style = MaterialTheme.typography.bodyMedium, color = muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
         }
-        HorizontalDivider(color = MaterialTheme.colorScheme.surface)
-        Box(Modifier.fillMaxWidth().padding(12.dp)) {
-            if (monitoring) {
-                FilledTonalButton(onClick = { Actions.stopMonitoring(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
-                    Icon(Icons.Rounded.Stop, null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.action_stop_monitoring))
-                }
-            } else {
-                Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
-                    Icon(Icons.Rounded.PlayArrow, null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.action_start_monitoring))
-                }
+        if (devices.isNotEmpty()) {
+            Spacer(Modifier.height(18.dp))
+            val on = devices.count { d -> d.online && d.switches.values.any { it } }
+            val offline = devices.count { !it.online }
+            val power = devices.filter { it.online && it.hasEnergy }.sumOf { it.power ?: 0.0 }
+            Row(Modifier.fillMaxWidth()) {
+                Stat(devices.size.toString(), stringResource(R.string.stat_devices), content, muted, Modifier.weight(1f))
+                Stat(on.toString(), stringResource(R.string.stat_on), content, muted, Modifier.weight(1f))
+                Stat(
+                    offline.toString(), stringResource(R.string.stat_offline),
+                    if (offline > 0 && !branded) StatusColors.offline else content, muted, Modifier.weight(1f),
+                )
+                if (devices.any { it.hasEnergy }) Stat(formatWatts(power), stringResource(R.string.stat_power), content, muted, Modifier.weight(1.3f))
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        if (monitoring) {
+            OutlinedButton(
+                onClick = { Actions.stopMonitoring(context) },
+                modifier = Modifier.tvFocusRing(),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = content),
+                border = BorderStroke(1.dp, if (branded) Color.White.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outline),
+            ) {
+                Icon(Icons.Rounded.Stop, null, Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.action_stop_monitoring))
+            }
+        } else {
+            Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth().height(52.dp).tvFocusRing()) {
+                Icon(Icons.Rounded.PlayArrow, null)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.action_start_monitoring), style = MaterialTheme.typography.titleSmall)
             }
         }
     }
 }
 
 @Composable
+private fun Stat(value: String, label: String, color: Color, muted: Color, modifier: Modifier = Modifier) {
+    Column(modifier) {
+        Text(value, style = MaterialTheme.typography.titleLarge, color = color, maxLines = 1)
+        Text(label, style = MaterialTheme.typography.labelMedium, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
+    }
+}
+
+@Composable
 private fun LoginPromptCard(sessionLost: Boolean) {
     val context = LocalContext.current
-    SectionCard {
+    SectionCard(horizontalPadding = 0) {
         Column(Modifier.padding(20.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (sessionLost) {
@@ -406,7 +474,7 @@ private fun LoginPromptCard(sessionLost: Boolean) {
 /** Ücretsiz sürümde birden fazla cihaz varken: yalnızca biri izleniyor. */
 @Composable
 private fun ProHintCard(onUpgrade: () -> Unit) {
-    SectionCard {
+    SectionCard(horizontalPadding = 0) {
         Row(Modifier.padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
             Icon(Icons.Rounded.WorkspacePremium, null, tint = MaterialTheme.colorScheme.primary)
             Spacer(Modifier.width(16.dp))
@@ -441,201 +509,247 @@ private fun EmptyDevices(showTuyaHint: Boolean) {
     }
 }
 
+/**
+ * Cihaz kutucuğu. Küçüğü yarım satırdır: simge, ad, durum ve tek kanallıysa güç düğmesi. Büyüğü tam satırdır;
+ * çok kanallı cihazda her kanal için ayrı düğme taşır. Açık (ve çevrimiçi) tek kanallı cihazın kutucuğu marka
+ * renginde parlar; çevrimdışı cihaz soluk görünür.
+ *
+ * Dokunmatikte kutucuğun tamamı detayı açar (uzun basış düzenleme). Kumandada kutucuk bir odak grubudur:
+ * zemin detayı açar, düğmeler ayrı ayrı seçilir; içlerinden biri seçiliyken kutucuğun çerçevesi yanar.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun DeviceCard(
+private fun DeviceTile(
     device: DeviceSnapshot,
+    large: Boolean,
     monitored: Boolean,
-    compact: Boolean,
     priority: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
     editBar: (@Composable () -> Unit)?,
     focusRequester: FocusRequester? = null,
 ) {
-    val anyOn = device.switches.values.any { it }
     val tv = LocalIsTv.current
-    val shape = RoundedCornerShape(if (compact) 18.dp else 24.dp)
-    ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).then(
-            when {
-                // Düzenleme modunda kart tıklanmaz: kumandanın odağı karttaki düzen düğmelerine geçebilsin.
-                editBar != null -> Modifier
-                // Kumandada kart tek parça odaklanırsa içindeki anahtar ve kanal satırı hiç seçilemez (odak
-                // kartın içine inmez). TV'de kart bir odak grubudur: başlık detayı açar, anahtar ve kanal satırı
-                // ayrı ayrı seçilir; içlerinden biri seçiliyken kartın çerçevesi yanar.
-                tv -> Modifier.tvFocusRing(shape).focusGroup()
-                else -> Modifier.combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            }
-        ),
-        shape = shape,
+    val dark = LocalDarkTheme.current
+    val anyOn = device.switches.values.any { it }
+    // Çok kanallıda kanal düğmeleri kendi durumunu gösterir; kutucuğun kendisi renklenmez.
+    val active = anyOn && device.online && !device.isMultiChannel && editBar == null
+    val shape = RoundedCornerShape(24.dp)
+    val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
+    val controls = editBar == null
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .then(if (tv && controls) Modifier.tvFocusRing(shape).focusGroup() else Modifier)
+            .clip(shape)
+            .background(background),
     ) {
-        val header = if (tv && editBar == null) {
-            Modifier.then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
-                .tvFocusRing(RoundedCornerShape(16.dp), inside = true)
-                .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-        } else Modifier
-        if (compact) {
-            CompactContent(device, anyOn, priority, header)
-        } else {
-            FullContent(device, anyOn, monitored, priority, header)
+        Box {
+            // Zemin: dokununca detay. İçerik onun üstündedir; düğmeler kendi dokunuşlarını alır.
+            if (controls) {
+                Box(
+                    Modifier
+                        .matchParentSize()
+                        .then(focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier)
+                        .combinedClickable(onClick = onClick, onLongClick = onLongClick),
+                )
+            }
+            if (large) LargeTileContent(device, active, monitored, priority, controls)
+            else SmallTileContent(device, active, monitored, priority, controls)
         }
         editBar?.invoke()
     }
 }
 
-/** Küçük kart: tek satırda durum, ad, güç ve (tek kanallıysa) anahtar. */
+/** Kutucuğun simgesi: cihaz türüne göre; açıkken beyaz halka, kapalıyken sade, çevrimdışıyken bulut. */
 @Composable
-private fun CompactContent(device: DeviceSnapshot, anyOn: Boolean, priority: Boolean, header: Modifier) {
-    Row(Modifier.padding(horizontal = 14.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
-        Row(Modifier.weight(1f).clip(RoundedCornerShape(16.dp)).then(header), verticalAlignment = Alignment.CenterVertically) {
-            IconBadge(
-                Icons.Rounded.PowerSettingsNew,
-                tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                background = if (anyOn && device.online) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
-                size = 34,
-            )
-            Spacer(Modifier.width(12.dp))
-            Column(Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(device.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
-                    if (priority) PriorityStar()
-                }
-                if (device.isMultiChannel && device.online) {
-                    Text(
-                        stringResource(R.string.channels_on_short, device.switches.values.count { it }, device.switches.size),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = if (anyOn) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                } else {
-                    OnlineDot(device.online)
-                }
-            }
-            if (device.hasEnergy && device.online) {
-                Text(
-                    formatWatts(device.power ?: 0.0),
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                )
-            }
+fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
+    val scheme = MaterialTheme.colorScheme
+    val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud) { DeviceKinds.of(device) }
+    val anyOn = device.switches.values.any { it }
+    val raised = raisedOnTile()
+    val (bg, tint) = when {
+        !device.online -> raised to scheme.outline
+        active -> Color.White.copy(alpha = 0.2f) to Color.White
+        anyOn -> scheme.primaryContainer to scheme.onPrimaryContainer
+        else -> raised to scheme.onSurfaceVariant
+    }
+    IconBadge(if (device.online) kind.icon() else Icons.Rounded.CloudOff, tint, bg, size)
+}
+
+/** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı". */
+@Composable
+private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean) {
+    val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        if (!device.online) {
+            Box(Modifier.size(8.dp).background(StatusColors.offline, CircleShape))
+            Spacer(Modifier.width(6.dp))
         }
-        if (!device.isMultiChannel && device.switches.size == 1) {
-            val (channel, on) = device.switches.entries.first()
-            ChannelSwitch(device, rememberSwitchControl(device, channel, on))
+        val onCount = device.switches.values.count { it }
+        val text = buildString {
+            append(
+                when {
+                    !device.online -> stringResource(R.string.label_offline_title)
+                    device.isMultiChannel -> stringResource(R.string.channels_on_short, onCount, device.switches.size)
+                    onCount > 0 -> stringResource(R.string.state_on_title)
+                    else -> stringResource(R.string.state_off_title)
+                }
+            )
+            if (device.online && device.hasEnergy) append(" · ").append(formatWatts(device.power ?: 0.0))
+        }
+        Text(
+            text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = if (!device.online) StatusColors.offline else muted,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f, fill = false),
+        )
+        Spacer(Modifier.width(6.dp))
+        Icon(
+            if (monitored) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
+            contentDescription = stringResource(if (monitored) R.string.monitored else R.string.not_monitored),
+            tint = when {
+                active -> Brand.onActive.copy(alpha = if (monitored) 0.95f else 0.6f)
+                monitored -> MaterialTheme.colorScheme.primary
+                else -> MaterialTheme.colorScheme.outline
+            },
+            modifier = Modifier.size(16.dp),
+        )
+    }
+}
+
+@Composable
+private fun TileName(device: DeviceSnapshot, active: Boolean, priority: Boolean, large: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            device.name,
+            style = if (large) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall,
+            color = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurface,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f, fill = false),
+        )
+        if (priority) {
+            Icon(
+                Icons.Rounded.Star,
+                contentDescription = stringResource(R.string.section_priority),
+                tint = if (active) Brand.onActive else MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(start = 4.dp).size(16.dp),
+            )
         }
     }
 }
 
 @Composable
-private fun PriorityStar() = Icon(
-    Icons.Rounded.Star,
-    contentDescription = stringResource(R.string.section_priority),
-    tint = MaterialTheme.colorScheme.primary,
-    modifier = Modifier.padding(start = 4.dp).size(16.dp),
-)
-
-@Composable
-private fun FullContent(device: DeviceSnapshot, anyOn: Boolean, monitored: Boolean, priority: Boolean, header: Modifier) {
-        Row(
-            Modifier.clip(RoundedCornerShape(24.dp)).then(header).padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 4.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconBadge(
-                Icons.Rounded.PowerSettingsNew,
-                tint = if (anyOn && device.online) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-                background = if (anyOn && device.online) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceContainerHigh,
-            )
-            Spacer(Modifier.width(14.dp))
-            Column(Modifier.weight(1f)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(device.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
-                        maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false))
-                    if (priority) PriorityStar()
-                }
-                OnlineDot(device.online)
-            }
-            // Yalnızca enerji ölçen cihazlarda anlık güç.
-            if (device.hasEnergy && device.online) {
-                Text(
-                    formatWatts(device.power ?: 0.0),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(end = 12.dp),
-                )
-            }
-            Icon(
-                if (monitored) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
-                contentDescription = stringResource(if (monitored) R.string.monitored else R.string.not_monitored),
-                tint = if (monitored) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
-            )
-        }
-        Column(Modifier.padding(start = 8.dp, top = 4.dp, end = 8.dp, bottom = 8.dp)) {
-            if (device.isMultiChannel) {
-                // Çok kanallı cihazlarda kanallar varsayılan olarak katlı; özet satırı açıp kapatır.
-                var expanded by rememberSaveable(device.id) { mutableStateOf(false) }
-                val arrowAngle by animateFloatAsState(if (expanded) 180f else 0f, label = "arrow")
-                val onCount = device.switches.values.count { it }
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .tvFocusRing(RoundedCornerShape(16.dp), inside = true)
-                        .clickable { expanded = !expanded }
-                        .padding(horizontal = 8.dp, vertical = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        stringResource(R.string.channels_summary, device.switches.size, onCount),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = if (onCount > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.weight(1f),
-                    )
-                    Icon(
-                        Icons.Rounded.ExpandMore,
-                        contentDescription = stringResource(if (expanded) R.string.action_collapse else R.string.action_expand),
-                        modifier = Modifier.rotate(arrowAngle),
-                    )
-                }
-                AnimatedVisibility(expanded, enter = expandVertically(), exit = shrinkVertically()) {
-                    Column {
-                        device.switches.toSortedMap().forEach { (channel, on) ->
-                            ChannelRow(device, channel, on)
-                        }
-                    }
-                }
-            } else {
-                device.switches.toSortedMap().forEach { (channel, on) ->
-                    ChannelRow(device, channel, on)
-                }
+private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+    // En az yükseklik: aynı satırdaki kutucuklar (bir ad tek, biri iki satır) aynı boyda görünsün.
+    Column(
+        Modifier.fillMaxWidth().heightIn(min = 148.dp).padding(14.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Row(verticalAlignment = Alignment.Top) {
+            DeviceGlyph(device, active)
+            Spacer(Modifier.weight(1f))
+            if (controls && !device.isMultiChannel && device.switches.size == 1) {
+                val (channel, on) = device.switches.entries.first()
+                val control = rememberSwitchControl(device, channel, on)
+                PowerButton(control.shown, control.busy, device.online, control.toggle, size = 42.dp, onBrand = active)
             }
         }
+        Column(Modifier.padding(top = 14.dp)) {
+            TileName(device, active, priority, large = false)
+            Spacer(Modifier.height(2.dp))
+            TileStatus(device, active, monitored)
+        }
+    }
 }
 
-/** Bir kanal satırı: etiket, durum ve aç/kapa anahtarı. İstek sürerken ilerleme gösterir. */
 @Composable
-fun ChannelRow(device: DeviceSnapshot, channel: Int, on: Boolean) {
+private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+    Column(Modifier.fillMaxWidth().padding(16.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            DeviceGlyph(device, active, size = 46)
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                TileName(device, active, priority, large = true)
+                Spacer(Modifier.height(2.dp))
+                TileStatus(device, active, monitored)
+            }
+            if (controls && !device.isMultiChannel && device.switches.size == 1) {
+                Spacer(Modifier.width(12.dp))
+                val (channel, on) = device.switches.entries.first()
+                val control = rememberSwitchControl(device, channel, on)
+                PowerButton(control.shown, control.busy, device.online, control.toggle, size = 48.dp, onBrand = active)
+            }
+        }
+        if (controls && device.isMultiChannel) {
+            Spacer(Modifier.height(14.dp))
+            ChannelButtons(device)
+        }
+    }
+}
+
+/** Çok kanallı cihazın kanal düğmeleri: satır başına en çok dört, her biri kanal numarası ve (ölçülüyorsa) gücü. */
+@Composable
+fun ChannelButtons(device: DeviceSnapshot, modifier: Modifier = Modifier, height: Int = 64) {
+    val channels = device.switches.toSortedMap().entries.toList()
+    Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        channels.chunked(4).forEach { row ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                row.forEach { (channel, on) ->
+                    ChannelButton(device, channel, on, Modifier.weight(1f).height(height.dp))
+                }
+                // Son satır eksikse düğmeler genişlemesin: boş yer tutucular.
+                repeat(4 - row.size) { Spacer(Modifier.weight(1f)) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ChannelButton(device: DeviceSnapshot, channel: Int, on: Boolean, modifier: Modifier) {
     val control = rememberSwitchControl(device, channel, on)
+    val scheme = MaterialTheme.colorScheme
     val shown = control.shown
-    Row(
-        Modifier.fillMaxWidth().padding(horizontal = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    val enabled = device.online
+    val shape = RoundedCornerShape(18.dp)
+    val bg = when {
+        !enabled -> Color.Transparent
+        shown -> scheme.primary
+        else -> raisedOnTile()
+    }
+    val fg = when {
+        !enabled -> scheme.outline
+        shown -> scheme.onPrimary
+        else -> scheme.onSurfaceVariant
+    }
+    val label = stringResource(R.string.channel_n, channel + 1)
+    val state = stringResource(if (shown) R.string.state_on_title else R.string.state_off_title)
+    Box(
+        modifier
+            .tvFocusRing(shape)
+            .clip(shape)
+            .background(bg)
+            .then(if (!shown && enabled) Modifier.border(1.dp, scheme.outlineVariant, shape) else Modifier)
+            .clickable(enabled = enabled, role = Role.Switch) { if (!control.busy) control.toggle(!shown) }
+            .semantics(mergeDescendants = true) { contentDescription = "$label, $state" },
+        contentAlignment = Alignment.Center,
     ) {
-        Text(
-            if (device.isMultiChannel) stringResource(R.string.channel_n, channel + 1) else stringResource(R.string.power),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.weight(1f),
-        )
-        Text(
-            stringResource(if (shown) R.string.label_on else R.string.label_off),
-            style = MaterialTheme.typography.labelLarge,
-            color = if (shown) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(Modifier.width(12.dp))
-        ChannelSwitch(device, control)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(Icons.Rounded.PowerSettingsNew, null, tint = fg, modifier = Modifier.size(16.dp))
+                Spacer(Modifier.width(4.dp))
+                Text("${channel + 1}", style = MaterialTheme.typography.titleMedium, color = fg)
+            }
+            val watts = device.channelPower[channel]
+            if (watts != null && enabled) {
+                Text(formatWatts(watts), style = MaterialTheme.typography.labelSmall, color = fg.copy(alpha = 0.85f), maxLines = 1)
+            }
+        }
+        if (control.busy) CircularProgressIndicator(Modifier.size(22.dp), strokeWidth = 2.dp, color = fg)
     }
 }
 
@@ -661,19 +775,5 @@ fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): Sw
             delay(15_000)
             pending = null
         }
-    }
-}
-
-@Composable
-fun ChannelSwitch(device: DeviceSnapshot, control: SwitchControl) {
-    Box(contentAlignment = Alignment.Center) {
-        // İstek sürerken anahtar devre dışı bırakılmaz (kumandada odak düşer, menüye atlardı); basış yok sayılır.
-        Switch(
-            checked = control.shown,
-            enabled = device.online,
-            onCheckedChange = { if (!control.busy) control.toggle(it) },
-            modifier = Modifier.tvFocusRing(RoundedCornerShape(50)),
-        )
-        if (control.busy) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
     }
 }

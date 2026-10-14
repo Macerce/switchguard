@@ -1,5 +1,16 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import com.macerce.switchguard.ui.theme.tileColor
+import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.PowerOff
+import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material.icons.rounded.Alarm
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.alpha
+import androidx.compose.foundation.background
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -93,7 +104,7 @@ fun AutomationsScreen(modifier: Modifier) {
 
     Box(modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
-            TopAppBar(title = { Text(stringResource(R.string.tab_automations), fontWeight = FontWeight.SemiBold) })
+            AppTopBar(stringResource(R.string.tab_automations))
             LazyColumn(
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -140,28 +151,58 @@ private fun EmptyAutomations() {
     }
 }
 
+/** Otomasyon kartı: eylemin renkli simgesi, adı ve "Eğer … / O zaman …" satırları (akıllı ev senaryosu dili). */
 @Composable
 private fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
-    ElevatedCard(Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(onClick = onClick), shape = RoundedCornerShape(20.dp)) {
-        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(Modifier.weight(1f)) {
-                Text(a.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.height(4.dp))
-                Text(
-                    describe(a, devices),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-            Spacer(Modifier.width(12.dp))
-            Switch(checked = a.enabled, onCheckedChange = onToggle)
+    val (icon, hue) = when (a.action.kind) {
+        ActionKind.ALARM -> Icons.Rounded.Alarm to Hue.RED
+        ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive to Hue.BLUE
+        ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew to Hue.GREEN
+        ActionKind.TURN_OFF -> Icons.Rounded.PowerOff to Hue.SLATE
+    }
+    val (whenText, thenText) = describe(a, devices)
+    val shape = RoundedCornerShape(24.dp)
+    Row(
+        Modifier.fillMaxWidth()
+            .tvFocusRing(shape)
+            .clip(shape)
+            .background(tileColor())
+            .clickable(onClick = onClick)
+            .padding(16.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Box(Modifier.alpha(if (a.enabled) 1f else 0.45f)) { HueIcon(icon, hue, size = 40.dp) }
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(a.name, style = MaterialTheme.typography.titleMedium)
+            Spacer(Modifier.height(6.dp))
+            Clause(stringResource(R.string.auto_if), whenText)
+            Spacer(Modifier.height(2.dp))
+            Clause(stringResource(R.string.auto_then), thenText)
         }
+        Spacer(Modifier.width(8.dp))
+        Switch(checked = a.enabled, onCheckedChange = onToggle)
     }
 }
 
-/** "Rögar · Kanal 1 açılınca → Lamba aç (5 dk sonra)" */
 @Composable
-private fun describe(a: Automation, devices: List<DeviceSnapshot>): String {
+private fun Clause(label: String, text: String) {
+    // Etiket metnin başında: uzun koşul tam genişlikte kayar.
+    val accent = MaterialTheme.colorScheme.primary
+    Text(
+        buildAnnotatedString {
+            withStyle(SpanStyle(color = accent, fontWeight = FontWeight.SemiBold)) { append(label) }
+            append("  ")
+            append(text)
+        },
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+}
+
+/** ("Rögar · Kanal 1 açılınca", "Lamba: aç · 5 dk sonra") */
+@Composable
+private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String, String> {
     val t = a.trigger
     val src = devices.firstOrNull { it.id == t.deviceId }
     val srcName = src?.let { channelLabel(it, t.channel, t.kind.usesChannel) } ?: stringResource(R.string.device_missing)
@@ -178,8 +219,8 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): String {
         val dstName = dst?.let { channelLabel(it, act.channel, true) } ?: stringResource(R.string.device_missing)
         "$dstName: " + stringResource(act.kind.title())
     } else stringResource(act.kind.title())
-    val delay = if (a.delayMinutes > 0) " " + stringResource(R.string.automation_after, a.delayMinutes) else ""
-    return "$srcName · $trigger → $action$delay"
+    val delay = if (a.delayMinutes > 0) " · " + stringResource(R.string.automation_after, a.delayMinutes) else ""
+    return "$srcName · $trigger" to "$action$delay"
 }
 
 @Composable
