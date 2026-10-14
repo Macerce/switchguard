@@ -193,7 +193,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
                     Text(stringResource(R.string.no_events), Modifier.padding(20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 } else {
                     events.forEachIndexed { i, e ->
-                        if (i > 0) RowDivider()
+                        if (i > 0) RowDivider(70.dp)
                         EventRow(e, showDevice = false)
                     }
                 }

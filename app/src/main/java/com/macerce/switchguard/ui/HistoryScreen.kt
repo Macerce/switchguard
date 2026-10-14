@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.ui.theme.raisedOnTile
+import androidx.compose.foundation.shape.CircleShape
 import android.text.format.DateUtils
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -148,7 +150,7 @@ fun HistoryScreen(modifier: Modifier) {
                     item(key = "c" + dayEvents.first().id) {
                         SectionCard {
                             dayEvents.forEachIndexed { i, e ->
-                                if (i > 0) RowDivider()
+                                if (i > 0) RowDivider(70.dp)
                                 EventRow(e, showDevice = false)
                             }
                         }
@@ -236,8 +238,16 @@ private fun eventStrings(): EventStrings {
 /** Geçmiş satırı: simge, metin, saat ve yapılan işlem rozeti. */
 @Composable
 fun EventRow(e: LoggedEvent, showDevice: Boolean) {
+    val action = runCatching { AlertAction.valueOf(e.action) }.getOrNull()
+    val scheme = MaterialTheme.colorScheme
+    // Simge zemini olayın sonucunu söyler: alarm kırmızı, bildirim turkuaz, diğerleri sade.
+    val (bg, fg) = when (action) {
+        AlertAction.ALARM -> scheme.errorContainer to scheme.onErrorContainer
+        AlertAction.NOTIFY -> scheme.primaryContainer to scheme.onPrimaryContainer
+        else -> raisedOnTile() to scheme.onSurfaceVariant
+    }
     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-        Icon(e.icon(), null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        IconBadge(e.icon(), fg, bg, size = 40)
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
             Text(e.text(eventStrings()), style = MaterialTheme.typography.bodyLarge)
             val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(e.time))
@@ -265,7 +275,7 @@ private fun ActionBadge(action: String) {
         AlertAction.NOTIFY -> MaterialTheme.colorScheme.secondaryContainer to MaterialTheme.colorScheme.onSecondaryContainer
         AlertAction.IGNORE -> Color.Transparent to MaterialTheme.colorScheme.outline
     }
-    Surface(color = bg, shape = MaterialTheme.shapes.small) {
+    Surface(color = bg, shape = CircleShape) {
         Text(
             stringResource(a.title()),
             style = MaterialTheme.typography.labelSmall,
