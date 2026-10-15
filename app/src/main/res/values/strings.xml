@@ -725,4 +725,5 @@
     <string name="evt_channel_power_low">Power drops while on</string>
     <string name="act_turn_on">Turn a device on</string>
     <string name="act_turn_off">Turn a device off</string>
+    <string name="automation_low_for_nograce">(for %d min)</string>
 </resources>

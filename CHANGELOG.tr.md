@@ -13,6 +13,8 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 - En üstteki koruma kartı izlemenin canlı olup olmadığını, kaç cihazın açık ya da çevrimdışı olduğunu ve toplam gücü gösteriyor.
 - Cihaz sayfası: ortada büyük bir güç düğmesi (çok kanallı cihazlarda büyük kanal düğmeleri), üstünde bağlantı, izleme ve güç bilgisi.
 - Otomasyonlar "Eğer … / O zaman …" diye okunuyor; eylemin renkli simgesi yanında.
+- Otomasyon düzenleyici açılır listeler yerine cihaz kartları, olay ve işlem kutucukları, numaralı kanal düğmeleri ve dakikalar için − / + kullanıyor; Kaydet'in üstünde "Eğer / O zaman" özeti var.
+- Geçmiş'te her olayın simgesi renkli bir daire içinde: alarmlar kırmızı, bildirimler turkuaz.
 - Tam ekran alarmda zilin çevresinden dışa yayılan halkalar var.
 - Uygulama renklerini artık duvar kâğıdından almıyor, açık ve koyu temada SwitchGuard'ın kendi renklerini kullanıyor; her telefonda aynı görünüyor.
 

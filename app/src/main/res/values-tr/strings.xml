@@ -721,4 +721,5 @@
     <string name="evt_channel_power_low">Açıkken güç düşerse</string>
     <string name="act_turn_on">Cihazı aç</string>
     <string name="act_turn_off">Cihazı kapat</string>
+    <string name="automation_low_for_nograce">(%d dk boyunca)</string>
 </resources>

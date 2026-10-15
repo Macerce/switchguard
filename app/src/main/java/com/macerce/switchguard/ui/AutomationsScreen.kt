@@ -236,7 +236,8 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String,
         TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> stringResource(t.kind.title()) + " " + pluralStringResource(R.plurals.minutes_n, t.minutes, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts)
         TriggerKind.CHANNEL_POWER_LOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts) + " " +
-            stringResource(R.string.automation_low_for, t.minutes, t.graceMinutes)
+            (if (t.graceMinutes > 0) stringResource(R.string.automation_low_for, t.minutes, t.graceMinutes)
+            else stringResource(R.string.automation_low_for_nograce, t.minutes))
         else -> stringResource(t.kind.title())
     }
     val act = a.action

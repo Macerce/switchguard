@@ -1,17 +1,23 @@
 # SwitchGuard
 
-Android app that watches the smart plugs and switches in your own **eWeLink / SONOFF** account and rings a real alarm the moment something changes — a pump that stopped, a freezer plug switched off, a device that lost its connection.
+Android app that watches the smart plugs and switches in your own **eWeLink / SONOFF** and **Tuya / Smart Life** accounts and rings a real alarm the moment something changes — a pump that stopped, a freezer plug switched off, a device that lost its connection. Runs on phones, tablets and Android TV.
 
-*Türkçe: eWeLink hesabınızdaki SONOFF priz ve anahtarları izler; kapandığında, açıldığında ya da bağlantısı koptuğunda siz kapatana kadar çalan bir alarm verir.*
+*Türkçe: eWeLink (SONOFF) ve Tuya / Smart Life hesaplarınızdaki priz ve anahtarları izler; kapandığında, açıldığında ya da bağlantısı koptuğunda siz kapatana kadar çalan bir alarm verir. Telefon, tablet ve Android TV'de çalışır.*
 
 <p>
-  <img src="docs/screenshots/05-devices.png" width="220" alt="Devices">
-  <img src="docs/screenshots/07-detail.png" width="220" alt="Device detail">
-  <img src="docs/screenshots/12-notification.png" width="220" alt="Alarm">
+  <img src="docs/screenshots/play/en/gunduz/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/play/en/gunduz/02-detail.png" width="200" alt="Device page">
+  <img src="docs/screenshots/play/en/gece/05-editor.png" width="200" alt="Automation editor">
+  <img src="docs/screenshots/play/en/gece/07-alarm.png" width="200" alt="Full-screen alarm">
 </p>
 
+## Download / İndir
+- **Google Play** (closed test): https://play.google.com/apps/testing/com.macerce.switchguard
+- **APK**: [Releases](https://github.com/Macerce/switchguard/releases) — download `SwitchGuard-x.y.z.apk` and open it on the phone. If SwitchGuard is already installed from Google Play, uninstall it first (different signature).
+
 ## Features
-- Alarm that keeps ringing until dismissed, even in silent mode; a different sound per device
+- Smart-home style home screen: device tiles with quick power buttons, one button per channel on multi-channel devices, live status and power
+- Alarm that keeps ringing until dismissed, even in silent mode, full screen on the lock screen; a different sound per device
 - Live updates over the eWeLink WebSocket, with HTTP resync and polling fallback
 - Per-device rules (alarm / notification / ignore) for off, on, offline and online
 - Offline grace period, quiet hours, remote on/off, eWeLink device timers, automations
@@ -22,7 +28,7 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - No server, no analytics, no ads — everything stays on the phone ([privacy policy](https://sites.google.com/view/switchguard-privacy))
 
 ## Several devices / Birden fazla cihaz
-Phone, tablet and (coming soon) Android TV: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account, and the keys must belong to the signed-in account. Share your devices to the extra account in the eWeLink app. Pro is bought once and works on all devices with the same Google account. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Phone, tablet and Android TV: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account, and the keys must belong to the signed-in account. Share your devices to the extra account in the eWeLink app. Pro is bought once and works on all devices with the same Google account. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ## Requirements
 - Android 8.0+ (API 26)

@@ -13,6 +13,8 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 - At the top, a protection card shows whether monitoring is live, how many devices are on or offline, and the total power.
 - Device page: a large power button in the middle (large channel buttons on multi-channel devices), with connection, monitoring and power above it.
 - Automations read as "If … / Then …", with a coloured icon for the action.
+- The automation editor uses device cards, tiles for events and actions, numbered channel buttons and − / + for minutes instead of drop-down lists, with an "If / Then" summary above Save.
+- History shows each event's icon on a coloured circle: red for alarms, teal for notifications.
 - The full-screen alarm now has rings spreading out from the bell.
 - The app always uses SwitchGuard's own colours (in light and dark) instead of taking them from the wallpaper, so it looks the same on every phone.
 

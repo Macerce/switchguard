@@ -154,11 +154,18 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 **TR:**
 > Yeni: ikinci kişiye haber ver — alarm zamanında kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider. TV'de uzun anahtarları QR kodu okutup telefondan girin. Test alarmı artık sessiz (yalnızca ekran) çalabiliyor ya da 10 saniye sonra çalıyor; önce telefonu kilitleyebilirsiniz. Uygulamanın ikinci kopyası (Çift uygulama) kuruluysa uyarır.
 
+## 4f2. 2.12.0 sürüm notları (Play, ≤500 karakter)
+**EN:**
+> New look: devices are now tiles with quick power buttons, one button per channel on multi-channel devices, and a protection card showing live status and total power. The device page has a large power button. Settings is a short list of categories, each with its own page. The automation editor uses device cards and buttons instead of drop-down lists, with an If / Then summary.
+
+**TR:**
+> Yeni görünüm: cihazlar artık hızlı güç düğmeli kutucuklar; çok kanallı cihazlarda her kanalın kendi düğmesi var ve en üstteki koruma kartı canlı durumu ve toplam gücü gösteriyor. Cihaz sayfasında büyük bir güç düğmesi var. Ayarlar, her biri kendi sayfasında açılan kısa bir kategori listesi oldu. Otomasyon düzenleyici açılır listeler yerine cihaz kartları ve düğmelerle çalışıyor, "Eğer / O zaman" özeti gösteriyor.
+
 ## 4g. Android TV (Play Console → Test ve yayınla → Ayarlar → Gelişmiş ayarlar → Form faktörleri → Ekle → Android TV)
 - Manifest hazır: `android.software.leanback` ve `android.hardware.touchscreen` `required="false"`, `LEANBACK_LAUNCHER` + `android:banner`.
 - TV kanalı ayrı değil: TV sürümü aynı AAB'den, kapalı test (Alpha) kanalıyla gelir. Formda "TV'yi kapalı test kanalına dahil et" seçilir.
 - **TV afişi (1280×720):** `docs/brand/tv-banner-1280x720.png` (kaynak `tv-banner.html`).
-- **TV ekran görüntüleri (1920×1080, Mi Box):** `docs/screenshots/play/tv/tr/` (Türkçe giriş) ve `docs/screenshots/play/tv/en/` (İngilizce, varsayılan giriş) → 1 cihazlar, 2 cihaz sayfası, 3 TV alarm ekranı, 4 telefondan gir (QR), 5 alarm ayarları.
+- **TV ekran görüntüleri (1920×1080, 2.12.0, Android TV emülatörü):** `docs/screenshots/play/tv/tr/` (Türkçe giriş) ve `docs/screenshots/play/tv/en/` (İngilizce, varsayılan giriş) → 1 cihazlar, 2 cihaz sayfası, 3 TV alarm ekranı, 4 telefondan gir (QR), 5 ayarlar.
 - Google TV incelemesi ayrıca yapılır (kumandayla gezinme, kenar boşlukları, afiş); sonuç e-postayla gelir.
 
 ## 4h. Üretim erişimi başvurusu (kapalı test 3 Ekim 2026'da yayına girdi → 14 gün 17 Ekim)
@@ -175,9 +182,9 @@ Play Console → Kontrol paneli → "Üretime başvur". Sorular ve hazır cevapl
 - **Uygulama simgesi (512×512):** `docs/brand/play-icon-512.png`
 - **Tanıtım görseli (1024×500):** `docs/brand/feature-graphic-1024x500.png` (EN), `docs/brand/feature-graphic-tr-1024x500.png` (TR)
 - **Logo kaynağı:** `docs/brand/logo.svg` (her boyutta kullanılabilir)
-- **Ekran görüntüleri (v2.6, gerçek telefon 1080×2400):** `docs/screenshots/play/`
+- **Ekran görüntüleri (2.12.0, 1080×2400, demo cihazlarla):** `docs/screenshots/play/`
   - **Yüklenecek olanlar:** `tr/secim/` → Türkçe mağaza girişi, `en/secim/` → İngilizce (varsayılan) giriş. 8'er görüntü, sırayla bir açık bir koyu tema:
-    1. Cihazlar (eWeLink + Tuya birlikte) · 2. Tuya prizinin enerji ekranı · 3. Cihaz kuralları · 4. Otomasyonlar · 5. Otomasyon düzenleyici · 6. Geçmiş · 7. Kurulum: "Cihazlarınız nerede?" (eWeLink / Tuya) · 8. Alarm ayarları
+    1. Cihazlar (kutucuklar, koruma kartı) · 2. Cihaz sayfası (büyük güç düğmesi) · 3. Cihaz kuralları · 4. Otomasyonlar · 5. Otomasyon düzenleyici · 6. Geçmiş · 7. Kilit ekranında tam ekran alarm · 8. Ayarlar (kategoriler)
   - `tr|en/gece/` ve `tr|en/gunduz/`: aynı 8 ekranın tüm koyu/açık halleri.
   - `docs/screenshots/` kökündekiler v2.0 emülatör görüntüleridir, kullanmayın.
 
