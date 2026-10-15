@@ -80,7 +80,7 @@ Yeni açılan eWeLink hesapları **geliştirici olarak kayıtlı gelmez**. Üst 
 
 > Bu iki bilgi bir şifre gibidir; kimseyle paylaşmayın.
 >
-> **Uygulamanın süresi 1 yıldır.** **Expiration Date** tarihinden önce geliştirici sitesinden yenileyin ya da yeni bir uygulama oluşturup SwitchGuard'daki App ID/Secret'ı güncelleyin (Ayarlar → Hesap → API bilgileri).
+> **Uygulamanın süresi 1 yıldır.** **Expiration Date** tarihinden önce geliştirici sitesinden yenileyin ya da yeni bir uygulama oluşturup SwitchGuard'daki App ID/Secret'ı güncelleyin (Ayarlar → Hesaplar → API bilgileri).
 
 ## 4. SwitchGuard'a girin
 
@@ -106,7 +106,7 @@ Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi
 
 **İleri** → izinleri verin (bildirim, arka planda çalışma) → **İzlemeyi başlat**.
 
-**Sonradan değiştirmek için:** **Ayarlar → Hesap → API bilgileri** (App ID/Secret) ve **Yeniden giriş yap**.
+**Sonradan değiştirmek için:** **Ayarlar → Hesaplar → API bilgileri** (App ID/Secret) ve **Yeniden giriş yap**.
 
 ![Ayarlar – hesaplar](img/app-tr-settings-accounts.jpg)
 
@@ -114,15 +114,14 @@ Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi
 
 ## Birden fazla cihazda kullanım (telefon, tablet, Android TV)
 
-> **Android TV desteği ve "Başka cihaza aktar" yakında** bir güncellemeyle gelecek. Aşağıdaki hesap kuralı telefon ve tablet için bugün de geçerlidir.
-
 - **Her cihaz için ayrı bir eWeLink hesabı gerekir. O hesapta geliştirici özelliği açılmalı (eWeLink onayı) ve o cihaza, o hesabın kendi API anahtarları (App ID ve App Secret) girilmelidir.** Cihaza girilen API anahtarları, o cihazda giriş yapılan eWeLink hesabına ait olmalıdır.
 - eWeLink, aynı hesapla yalnızca **bir** cihazda oturum açılmasına izin verir. Aynı hesapla ikinci bir cihazda giriş yaparsanız ilk cihazın oturumu kapanır (SwitchGuard bunu yüksek sesli bir uyarıyla bildirir).
 - Her ek cihaz için: 1) **eWeLink uygulamasından** yeni bir hesap açın (eWeLink'in giriş sayfasında kayıt seçeneği yoktur), 2) cihazlarınızı eWeLink uygulamasında **cihaz → Paylaş** ile o hesapla paylaşın, 3) o hesapla dev.ewelink.cc'de [geliştirici başvurusu](#hesabınız-henüz-geliştirici-değilse-yeni-hesaplar) yapıp onay bekleyin, 4) onaydan sonra o hesapta uygulama oluşturup App ID ve App Secret'ı alın ve o cihaza girin.
-- **Kurulumu aktarma (yakında):** Telefonda **Ayarlar → Başka cihaza aktar**, TV/tablette **Başka bir cihazdan aktar**. İki cihaz aynı Wi-Fi'da olmalı; TV'de görünen 6 haneli kodu telefona girersiniz. Tuya bilgileri, kurallar, otomasyonlar ve ayarlar ev ağınız içinde, kodla şifrelenerek aktarılır. eWeLink API anahtarları ve oturumu aktarılmaz — her cihaz kendi hesabının anahtarlarını kullanır.
+- **Kurulumu aktarma:** Telefonda **Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar**, TV/tablette kurulum sırasında **Başka bir cihazdan aktar** ya da **Ayarlar → Yedekleme ve aktarım → Başka cihazdan al**. İki cihaz aynı Wi-Fi'da olmalı; TV'de görünen 6 haneli kodu telefona girersiniz. Tuya bilgileri, kurallar, otomasyonlar ve ayarlar ev ağınız içinde, kodla şifrelenerek aktarılır. eWeLink API anahtarları ve oturumu aktarılmaz — her cihaz kendi hesabının anahtarlarını kullanır.
 - **TV'de giriş:** en kolayı, eWeLink giriş sayfasının altındaki **Login by QR code** seçeneğidir — QR kodu, o cihaz için açtığınız hesapla giriş yapılmış eWeLink uygulamasıyla okutun. Kumandayla da giriş yapılabilir; telefonunuzdaki Google TV uygulamasının klavyesiyle yazmak daha kolaydır.
 - **SwitchGuard Pro** bir kez satın alınır ve aynı Google hesabıyla tüm cihazlarınızda (telefon, tablet, TV) geçerlidir.
-- **Android TV'de alarm (yakında):** alarm, o an açık olan her şeyin (YouTube, kanal…) üstüne tam ekran çıkar ve kumandanın OK tuşuyla susturulur.
+- **TV'de uzun anahtarları yazmak:** API bilgileri penceresinde **Telefondan gir**'e basın, QR kodu telefonla okutun ve anahtarları telefonda yazın; ev Wi-Fi'ınız üzerinden şifreli olarak TV'ye gider.
+- **Android TV'de alarm:** alarm, o an açık olan her şeyin (YouTube, kanal…) üstüne tam ekran çıkar ve kumandanın OK tuşuyla susturulur.
 
 ## Sorun giderme
 
@@ -131,7 +130,7 @@ Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi
 | Giriş sayfası "redirect" / "invalid" hatası veriyor | Redirect URL iki tarafta **birebir** aynı mı? (`https://127.0.0.1`, sonda `/` yok, `http` değil `https`.) |
 | Giriş başarılı ama cihaz yok | Geliştirici sitesine ve SwitchGuard'a **cihazların bulunduğu hesapla** mı girdiniz? Bölge doğru mu? |
 | Başka bir telefonda aynı hesapla giriş yapınca ilk telefon çıkış yapıyor ("İzleme durdu — oturum kapandı" uyarısı) | eWeLink her hesap için tek oturuma izin verir. İkinci telefon için **ayrı bir eWeLink hesabı** açın ve cihazları eWeLink uygulamasından o hesapla **paylaşın**. |
-| Durum kartı **"İzleniyor (periyodik)"** kalıyor | Bazı App ID'lerde anlık bağlantı kapalı olabilir; SwitchGuard bu durumda düzenli kontrolle izlemeye devam eder. Ayarlar'daki **Yedek kontrol aralığı** ile sıklığı ayarlayabilirsiniz. |
+| Durum kartı **"İzleniyor (periyodik)"** kalıyor | Bazı App ID'lerde anlık bağlantı kapalı olabilir; SwitchGuard bu durumda düzenli kontrolle izlemeye devam eder. **Ayarlar → İzleme → Yedek kontrol aralığı** ile sıklığı ayarlayabilirsiniz. |
 
 ---
 

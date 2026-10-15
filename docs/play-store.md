@@ -120,7 +120,8 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - [ ] İnceleme eWeLink hesabı + bir cihaz paylaşımı (yukarıdaki talimat)
 - [ ] Uygulama oluştur → formlar (bölüm 4) → mağaza girişi (bölüm 3, 5)
 - [x] Kapalı test: 2.8.0 (17), "Testers" e-posta listesi (15 kişi), geri bildirim switchguardapp@gmail.com — 3 Ekim 2026'da incelemeye gönderildi
-- [ ] Google onayı → testçiler katılım linkine girsin (https://play.google.com/apps/testing/com.macerce.switchguard) → 12+ kişiyle 14 gün
+- [x] Google onayı: kapalı test 3 Ekim 2026'da yayına girdi; testçiler katılım linkinden katılıyor (https://play.google.com/apps/testing/com.macerce.switchguard)
+- [x] Alpha sürümleri: 2.10.1 (23) 13 Ekim, 2.11.0 (25) + Android TV 14 Ekim yayında; 2.12.0 (26) 15 Ekim 2026'da incelemeye gönderildi
 - [ ] Üretim erişimi başvurusu → üretim sürümü
 
 ## 4c. Uygulama içi ürün (Pro)

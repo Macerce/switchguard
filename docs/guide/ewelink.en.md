@@ -80,7 +80,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 > Treat these two like a password; don't share them.
 >
-> **The app is valid for 1 year.** Before its **Expiration Date**, renew it on the developer site or create a new one and update the App ID/Secret in SwitchGuard (Settings → Account → API credentials).
+> **The app is valid for 1 year.** Before its **Expiration Date**, renew it on the developer site or create a new one and update the App ID/Secret in SwitchGuard (Settings → Accounts → API credentials).
 
 ## 4. Enter them in SwitchGuard
 
@@ -106,7 +106,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 **Next** → grant permissions (notifications, background activity) → **Start monitoring**.
 
-**To change later:** **Settings → Account → API credentials** (App ID/Secret) and **Sign in again**.
+**To change later:** **Settings → Accounts → API credentials** (App ID/Secret) and **Sign in again**.
 
 ![Settings – accounts](img/app-en-settings-accounts.jpg)
 
@@ -114,15 +114,14 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 ## Using several devices (phone, tablet, Android TV)
 
-> **Android TV support and "Send to another device" are coming** in an update. The account rule below already applies to phones and tablets.
-
 - **Each device needs its own eWeLink account. That account must have the developer feature enabled (approved by eWeLink), and the device gets that account's own API keys (App ID and App Secret).** The API keys entered on a device must belong to the eWeLink account signed in on that device.
 - eWeLink allows a signed-in session on only **one** device per account. Signing in on a second device with the same account signs the first one out (SwitchGuard warns you loudly when that happens).
 - For each extra device: 1) create a new account **in the eWeLink app** (eWeLink's sign-in page has no sign-up), 2) share your devices with it in the eWeLink app (**device → Share**), 3) with that account, [apply as a developer](#if-your-account-isnt-a-developer-yet-new-accounts) on dev.ewelink.cc and wait for approval, 4) after approval create an app in that account and enter its App ID and App Secret on that device.
-- **Transferring the setup (coming soon):** on the phone **Settings → Send to another device**, on the TV/tablet **Transfer from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code. eWeLink API keys and the session are not transferred — each device uses its own account's keys.
+- **Transferring the setup:** on the phone **Settings → Backup & transfer → Send to another device**, on the TV/tablet **Transfer from another device** (during setup) or **Settings → Backup & transfer → Receive from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code. eWeLink API keys and the session are not transferred — each device uses its own account's keys.
 - **Signing in on a TV:** easiest is **Login by QR code** at the bottom of eWeLink's sign-in page — scan it with the eWeLink app signed in to the account you created for that device. The remote works too; the keyboard in the Google TV app on your phone is easier.
 - **SwitchGuard Pro** is bought once and works on all your devices (phone, tablet, TV) with the same Google account.
-- **Alarm on Android TV (coming soon):** the alarm appears full screen on top of whatever is playing (YouTube, TV…) and is dismissed with the remote's OK button.
+- **Typing long keys on a TV:** in the API credentials window tap **Enter from phone**, scan the QR code with your phone and type the keys there; they are sent to the TV encrypted over your Wi-Fi.
+- **Alarm on Android TV:** the alarm appears full screen on top of whatever is playing (YouTube, TV…) and is dismissed with the remote's OK button.
 
 ## Troubleshooting
 
@@ -131,7 +130,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 | The sign-in page shows a "redirect" / "invalid" error | Is the Redirect URL **exactly** the same on both sides? (`https://127.0.0.1`, no trailing `/`, `https` not `http`.) |
 | Signed in but no devices | Did you sign in to the developer site and SwitchGuard with **the account your devices are in**? Is the region right? |
 | Signing in on another phone signs the first one out ("Monitoring stopped — signed out" warning) | eWeLink allows one session per account. Give the second phone **its own eWeLink account** and **share** the devices to it from the eWeLink app. |
-| Status card stays **"Monitoring (periodic)"** | Live connection may be unavailable for some App IDs; SwitchGuard keeps watching with regular checks. Adjust the frequency in Settings → **Backup check interval**. |
+| Status card stays **"Monitoring (periodic)"** | Live connection may be unavailable for some App IDs; SwitchGuard keeps watching with regular checks. Adjust the frequency in **Settings → Monitoring → Backup check interval**. |
 
 ---
 

@@ -99,7 +99,7 @@ Bu adım yapılmazsa SwitchGuard çalışır ama değişiklikleri **ancak birka�
 
 **İlk kurulumda:** **Cihazlarınız nerede?** adımında **Tuya / Smart Life**'ı seçin → **İleri** → rehber adımı → **İleri** → **Access ID ve Secret gir**.
 
-**Sonradan eklemek için:** **Ayarlar → Hesap → Tuya / Smart Life**.
+**Sonradan eklemek için:** **Ayarlar → Hesaplar → Tuya / Smart Life**.
 
 | Kurulumda Tuya'yı seçin | Bağlantı adımı | Bilgileri girin |
 |---|---|---|
@@ -115,11 +115,10 @@ Cihazlarınız artık **Cihazlar** ekranında, eWeLink cihazlarıyla aynı liste
 
 ## Birden fazla cihazda kullanım (telefon, tablet, Android TV)
 
-> **Android TV desteği ve "Başka cihaza aktar" yakında** bir güncellemeyle gelecek.
-
 - Tuya'da oturum yoktur: **aynı Access ID ve Access Secret tüm cihazlarda çalışır**, hepsi aynı cihazları görür.
 - Tuya'nın anlık mesajları bir projede yalnızca **bir** cihaza gider; diğer cihazlar birkaç dakikada bir yoklayarak günceller. Anlık alarmın her cihazda olmasını istiyorsanız her cihaz için ayrı bir Tuya projesi açın (bir Smart Life hesabı en fazla 2 projeye bağlanabilir). Sürekli açık bir TV kutusu, anlık mesajları alan cihaz için iyi bir seçimdir.
-- **Kurulumu aktarma (yakında):** Telefonda **Ayarlar → Başka cihaza aktar**, TV/tablette **Başka bir cihazdan aktar** — Tuya bağlantısı aktarımdan hemen sonra çalışır.
+- **Kurulumu aktarma:** Telefonda **Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar**, TV/tablette kurulum sırasında **Başka bir cihazdan aktar** ya da **Ayarlar → Yedekleme ve aktarım → Başka cihazdan al** — Tuya bağlantısı aktarımdan hemen sonra çalışır.
+- **TV'de anahtarları yazmak:** Tuya penceresinde **Telefondan gir**'e basın, QR kodu okutun ve Access ID ile Secret'ı telefonda yazın.
 - eWeLink de kullanıyorsanız: **her cihazın kendi eWeLink hesabı ve o hesabın kendi API anahtarları** olmalıdır (ayrıntılar [eWeLink rehberinde](ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)).
 - **SwitchGuard Pro** bir kez satın alınır ve aynı Google hesabıyla tüm cihazlarınızda geçerlidir.
 
