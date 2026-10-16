@@ -101,4 +101,18 @@ class AutomationFormTest {
 
         assertEquals(a, AutomationForm.from(a, devices).build(a.id, a.enabled))
     }
+
+    @Test
+    fun channelPowerAlertWithoutGraceKeepsZeroGrace() {
+        val a = Automation(
+            id = "a2", name = "Pompa boşa döndü", enabled = true,
+            trigger = Trigger(TriggerKind.CHANNEL_POWER_LOW, "pump", channel = 0, minutes = 1, watts = 50.0, graceMinutes = 0),
+            action = AutoAction(ActionKind.ALARM),
+        )
+
+        val f = AutomationForm.from(a, devices)
+
+        assertEquals("0", f.grace)
+        assertEquals(a, f.build(a.id, a.enabled))
+    }
 }

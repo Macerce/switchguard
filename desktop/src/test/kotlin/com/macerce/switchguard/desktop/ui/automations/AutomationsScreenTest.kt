@@ -1,5 +1,8 @@
 package com.macerce.switchguard.desktop.ui.automations
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -9,9 +12,12 @@ import androidx.compose.ui.test.performTextInput
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.AppGraph
+import com.macerce.switchguard.desktop.ui.LocalStrings
+import com.macerce.switchguard.desktop.ui.SwitchGuardTheme
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -36,7 +42,11 @@ class AutomationsScreenTest {
     @After
     fun tearDown() = graph.shutdown()
 
-    private fun show() = compose.setContent { AutomationsScreen(graph, graph.strings()) }
+    private fun show() = compose.setContent {
+        SwitchGuardTheme("light") {
+            CompositionLocalProvider(LocalStrings provides graph.strings()) { AutomationsScreen(graph, graph.strings()) }
+        }
+    }
 
     @Test
     fun emptyListShowsExamples() {
@@ -50,12 +60,11 @@ class AutomationsScreenTest {
         show()
 
         compose.onNodeWithTag("add-automation").performClick()
-        compose.onNodeWithText("Name").performTextInput("Pump turned off")
-        compose.onNodeWithTag("pick-event").performScrollTo().performClick()
-        compose.onNodeWithText("Turns Off").performClick() // olay listesi: her kelime büyük harfle
-        compose.onNodeWithTag("pick-action").performScrollTo().performClick()
-        compose.onNodeWithText("Ring alarm").performClick()
-        compose.onNodeWithText("Save").performScrollTo().performClick()
+        compose.onNodeWithTag("save-automation").performScrollTo().assertIsNotEnabled() // ad yokken kaydedilemez
+        compose.onNodeWithTag("automation-name").performTextInput("Pump turned off")
+        compose.onNodeWithTag("event-TURNED_OFF").performScrollTo().performClick()
+        compose.onNodeWithTag("action-ALARM").performScrollTo().performClick()
+        compose.onNodeWithTag("save-automation").performScrollTo().performClick()
 
         compose.waitUntil(5_000) { graph.store.automations.size == 1 }
         val a = graph.store.automations.single()
@@ -63,6 +72,47 @@ class AutomationsScreenTest {
         assertEquals(ActionKind.ALARM, a.action.kind)
         assertEquals(TriggerKind.TURNED_OFF, a.trigger.kind)
         assertEquals(true, a.enabled)
+    }
+
+    @Test
+    fun stepperMovesToTheNextMeaningfulValue() {
+        show()
+
+        compose.onNodeWithTag("add-automation").performClick()
+        compose.onNodeWithTag("automation-name").performTextInput("Long on")
+        compose.onNodeWithTag("event-STAYED_ON").performScrollTo().performClick()
+        compose.onNodeWithTag("minutes-value").assertTextEquals("30 minutes")
+        compose.onNodeWithTag("minutes-plus").performScrollTo().performClick()
+        compose.onNodeWithTag("minutes-value").assertTextEquals("45 minutes")
+        compose.onNodeWithTag("delay-value").assertTextEquals("At once") // bekleme 0 = hemen
+        compose.onNodeWithTag("delay-minus").assertIsNotEnabled()
+        compose.onNodeWithTag("delay-plus").performScrollTo().performClick()
+        compose.onNodeWithTag("save-automation").performScrollTo().performClick()
+
+        compose.waitUntil(5_000) { graph.store.automations.size == 1 }
+        val a = graph.store.automations.single()
+        assertEquals(45, a.trigger.minutes)
+        assertEquals(1, a.delayMinutes)
+    }
+
+    @Test
+    fun turningADeviceOnPicksTheTargetDeviceAndChannel() {
+        show()
+
+        compose.onNodeWithTag("add-automation").performClick()
+        compose.onNodeWithTag("automation-name").performTextInput("Light on")
+        compose.onNodeWithTag("action-TURN_ON").performScrollTo().performClick()
+        compose.onNodeWithTag("action-device-${Demo.PUMPS}").performScrollTo().performClick()
+        compose.onNodeWithTag("action-channel-2").performScrollTo().performClick() // numaralı düğme "3"
+        compose.onNodeWithTag("automation-summary").performScrollTo()
+        compose.onNodeWithText("Channel 3: Turn on", substring = true).assertExists() // özetteki "O zaman" satırı
+        compose.onNodeWithTag("save-automation").performScrollTo().performClick()
+
+        compose.waitUntil(5_000) { graph.store.automations.size == 1 }
+        val action = graph.store.automations.single().action
+        assertEquals(ActionKind.TURN_ON, action.kind)
+        assertEquals(Demo.PUMPS, action.deviceId)
+        assertEquals(2, action.channel)
     }
 
     @Test
@@ -83,7 +133,7 @@ class AutomationsScreenTest {
         show()
 
         compose.onNodeWithText(a.name).performClick()
-        compose.onNodeWithText("Delete").performClick()
+        compose.onNodeWithTag("delete-automation").performClick()
         compose.onNodeWithText("Delete this alert?").assertExists()
         compose.onNodeWithTag("confirm-delete").performClick()
 

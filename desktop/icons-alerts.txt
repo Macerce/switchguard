@@ -1,0 +1,17 @@
+# Uyarılar ve alarm penceresinin kullandığı genişletilmiş simgeler (biçim ve kurallar: icons.txt).
+# Bunlar icons.txt'de de var; burada da durur ki ortak liste küçülünce bu ekranlar derlenmeye devam etsin.
+automirrored/rounded/TrendingDown
+automirrored/rounded/TrendingUp
+automirrored/rounded/VolumeOff
+rounded/Alarm
+rounded/Bolt
+rounded/Cloud
+rounded/CloudOff
+rounded/ElectricBolt
+rounded/NotificationsActive
+rounded/PowerOff
+rounded/PowerSettingsNew
+rounded/Remove
+rounded/Sensors
+rounded/Timer
+rounded/TimerOff
