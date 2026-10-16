@@ -93,8 +93,9 @@ TuyaDialog, EwelinkDialogs).
   kişiler (`findChats`) → bekleme süresi (`Escalation.DELAYS`) → kapat), `Store.telegram*`, `escalateMin`,
   `disableEscalation`. t.me bağlantısı tarayıcıda açılır.
 - İzleme: sorgulama aralığı, çevrimdışı bekleme, **kör kalma uyarısı** (`Store.blindAlertMin`), Tuya canlı.
-- Günlük özet: telefondaki ayarlar (aç/kapa, saat). Masaüstünde özetin kendisi henüz gönderilmiyorsa satır
-  "yakında" denmeden gizlenir — karar: gönderim yoksa bu kategori listede gösterilmez.
+- Günlük özet: telefondaki ayarlar (aç/kapa, saat, önizleme). Gönderimi (seçilen saatte Windows bildirimi) ana
+  oturum motora ekliyor: `graph.engine.previewSummary()` önizleme bildirimini hemen gösterir, ayar değişince başka
+  bir şey çağırmak gerekmez (motor her tick'te saate bakar).
 - Yardım ve hakkında: rehberler, videolar, iletişim, gizlilik, sürüm (mevcut HelpSection içeriği).
 
 ### C. Uyarılar ve alarm penceresi
