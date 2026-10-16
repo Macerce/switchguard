@@ -120,6 +120,13 @@ fun SettingsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modif
                 stack = emptyList()
             }
         }
+        // Başka ekrandan istenen alt sayfa (AppState.openSettings): liste yerine doğrudan o sayfa.
+        val request by graph.appState.settingsOpen.collectAsState()
+        LaunchedEffect(request) {
+            val page = request?.let { name -> SettingsPage.entries.firstOrNull { it.name == name } } ?: return@LaunchedEffect
+            stack = listOf(page)
+            graph.appState.settingsOpen.value = null
+        }
         val open: (SettingsPage) -> Unit = { stack = stack + it }
         val back: () -> Unit = { stack = stack.dropLast(1) }
 

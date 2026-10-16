@@ -25,11 +25,8 @@
     <string name="desktop_slept">Bilgisayar %1$d dk uykudaydı — bu sürede kısa olaylar kaçmış olabilir.</string>
 
     <!-- Cihazlar -->
-    <string name="devices_empty">Henüz cihaz yok. SwitchGuard\'ı denemek için demo cihazları açın.</string>
 
     <!-- İzleme -->
-    <string name="monitoring_start">İzlemeyi başlat</string>
-    <string name="monitoring_stop">İzlemeyi durdur</string>
 
 
     <!-- Ayarlar -->
@@ -43,8 +40,6 @@
     <string name="desktop_theme_light">Açık</string>
     <string name="desktop_theme_dark">Koyu</string>
     <string name="desktop_open_logs">Günlük klasörünü aç</string>
-    <string name="desktop_section_backup">Yedekleme</string>
-    <string name="desktop_section_help">Yardım ve kurulum</string>
 
     <!-- Sesler -->
     <string name="desktop_notify_sound">Bildirim sesi</string>
@@ -106,8 +101,6 @@
     <!-- eWeLink -->
     <string name="desktop_ewelink_pc_notice">Bu bilgisayar ayrı bir cihazdır: kendi eWeLink hesabı, o hesapta dev.ewelink.cc geliştirici onayı ve o hesabın App ID / App Secret bilgisi gerekir.</string>
     <string name="desktop_ewelink_keys_missing">API bilgileri henüz girilmedi</string>
-    <string name="desktop_ewelink_logged_in_x">Giriş yapıldı · %1$s · bölge %2$s</string>
-    <string name="desktop_ewelink_not_logged_in_x">Giriş yapılmadı · App ID %1$s</string>
     <string name="desktop_ewelink_secret_kept">Kayıtlı Secret\'ı korumak için boş bırakın</string>
     <string name="desktop_ewelink_login_title">eWeLink ile giriş</string>
     <string name="desktop_ewelink_login_steps">1. Tarayıcıda açılan sayfada giriş yapın.\n2. Tarayıcı ardından \"bağlanılamıyor\" sayfası gösterir; bu normaldir.\n3. Adres çubuğundaki adresi kopyalayın. SwitchGuard kendiliğinden alır.</string>
@@ -148,7 +141,6 @@
     <string name="desktop_ok">Tamam</string>
 
     <!-- Cihazlar -->
-    <string name="desktop_drag_hint">Kartı taşımak için basılı tutun</string>
 
     <string name="desktop_windows_step_8">Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.</string>
 
@@ -156,18 +148,6 @@
     <string name="desktop_automation_hint">Uyarılar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
 
     <!-- Cihaz seçenekleri ve kart boyutu -->
-    <string name="desktop_options">Seçenekler…</string>
-    <string name="desktop_options_title_x">Seçenekler · %1$s</string>
-    <string name="desktop_section_rules">İzleme ve kurallar</string>
-    <string name="desktop_section_view">Görünüm</string>
-    <string name="desktop_section_simulation">Simülasyon (demo)</string>
-    <string name="desktop_compact_card">Küçük kart</string>
-    <string name="desktop_compact_card_desc">Tek satırda yalnızca ad, durum ve anahtar</string>
-    <string name="desktop_not_monitored">İzlenmiyor</string>
-    <string name="desktop_card_size">Kart boyutu</string>
-    <string name="desktop_card_large">Büyük</string>
-    <string name="desktop_card_medium">Orta</string>
-    <string name="desktop_card_small">Küçük</string>
 
     <!-- Uyarılar (otomasyonlar ekranı) -->
     <string name="desktop_alerts_tab">Uyarılar</string>

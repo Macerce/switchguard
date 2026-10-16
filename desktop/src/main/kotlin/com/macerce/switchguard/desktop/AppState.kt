@@ -34,6 +34,15 @@ class AppState {
     /** Ayarlar sekmesine yeniden tıklandı: alt sayfadan kategori listesine dönülür (her tıklamada artar). */
     val settingsHome = MutableStateFlow(0)
 
+    /** Başka bir ekrandan istenen Ayarlar alt sayfası (`SettingsPage` adı, ör. "ACCOUNTS"); açılınca null'a döner. */
+    val settingsOpen = MutableStateFlow<String?>(null)
+
+    /** Ayarlar sekmesine geçip [page] alt sayfasını açar (ör. Cihazlar'daki "Hesap ekle", "Yeniden giriş yap"). */
+    fun openSettings(page: String) {
+        settingsOpen.value = page
+        tab.value = Tab.SETTINGS
+    }
+
     /** Sol menüden sekme seçimi: seçili sekmeye yeniden tıklamak o sekmenin başına döner. */
     fun select(t: Tab) {
         if (t == tab.value && t == Tab.SETTINGS) settingsHome.update { it + 1 }

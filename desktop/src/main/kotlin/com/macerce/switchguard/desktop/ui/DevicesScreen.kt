@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,7 +48,6 @@ import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.desktop.AppGraph
-import com.macerce.switchguard.desktop.AppState
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.ui.devices.AlarmBanner
 import com.macerce.switchguard.desktop.ui.devices.BlindCard
@@ -81,7 +81,13 @@ import sh.calvin.reorderable.rememberReorderableLazyGridState
  * `Store.deviceLayout`'a yazılır; anahtar ve izleme komutları motora gider.
  */
 @Composable
-fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier) {
+fun DevicesScreen(
+    graph: AppGraph,
+    strings: Strings,
+    modifier: Modifier = Modifier,
+    /** Kaydırma yeri sekmenin dışında tutulur (AppNav): cihaz sayfasından dönünce liste aynı yerde kalır. */
+    gridState: LazyGridState = rememberLazyGridState(),
+) {
     val store = graph.store
     val engine = graph.engine
     val version by store.version.collectAsState()
@@ -151,7 +157,6 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                     },
                 )
                 Box(Modifier.weight(1f).fillMaxWidth()) {
-                    val gridState = rememberLazyGridState()
                     val reorder = rememberReorderableLazyGridState(gridState) { from, to ->
                         val a = from.key as? String
                         val b = to.key as? String
@@ -181,7 +186,7 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                                     )
                                 } else {
                                     NoAccountCard(
-                                        onAccounts = { graph.appState.select(AppState.Tab.SETTINGS) },
+                                        onAccounts = { graph.appState.openSettings("ACCOUNTS") },
                                         // Motor üzerinden (anlık görüntülerle yarışmasın).
                                         onDemo = { engine.setDemo(true, strings.demoNames()) },
                                     )
@@ -190,7 +195,7 @@ fun DevicesScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifi
                             val sessionText = warning ?: if (sessionLost) strings["session_lost_body"] else null
                             if (sessionText != null) {
                                 item(key = "session", span = full) {
-                                    SessionLostCard(sessionText) { graph.appState.select(AppState.Tab.SETTINGS) }
+                                    SessionLostCard(sessionText) { graph.appState.openSettings("ACCOUNTS") }
                                 }
                             }
                             blind?.let { text -> item(key = "blind", span = full) { BlindCard(text) } }

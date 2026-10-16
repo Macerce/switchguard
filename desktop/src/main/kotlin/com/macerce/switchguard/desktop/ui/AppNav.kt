@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.History
@@ -77,6 +78,8 @@ fun AppNav(graph: AppGraph, strings: Strings) {
         if (tab == Tab.HISTORY) withContext(Dispatchers.IO) { graph.store.historySeenId = graph.eventLog.latestId() }
     }
     var unseen by remember { mutableIntStateOf(0) }
+    // Cihazlar ızgarasının kaydırma yeri: cihaz sayfası ya da başka sekme açılıp dönülünce korunur.
+    val devicesGrid = rememberLazyGridState()
     LaunchedEffect(logVersion, version) {
         unseen = withContext(Dispatchers.IO) {
             // İlk kez: eski kayıtlar rozete dolmasın, sayım bundan sonrası için başlasın.
@@ -115,7 +118,7 @@ fun AppNav(graph: AppGraph, strings: Strings) {
                 if (deviceId != null) {
                     DeviceDetailScreen(graph, deviceId, onBack = { state.openDevice.value = null })
                 } else when (tab) {
-                    Tab.DEVICES -> DevicesScreen(graph, strings, Modifier.fillMaxSize())
+                    Tab.DEVICES -> DevicesScreen(graph, strings, Modifier.fillMaxSize(), devicesGrid)
                     Tab.AUTOMATIONS -> AutomationsScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.HISTORY -> HistoryScreen(graph, Modifier.fillMaxSize())
                     Tab.SETTINGS -> SettingsScreen(graph, strings)
