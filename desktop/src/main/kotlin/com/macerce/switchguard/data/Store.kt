@@ -353,11 +353,6 @@ class Store internal constructor(
         get() = str("language")
         set(v) = edit { put("language", v) }
     /** "system", "light" ya da "dark". */
-    /** Masaüstü: Cihazlar ekranındaki kart boyutu ("large" / "medium" / "small"). */
-    var cardSize: String
-        get() = str("cardSize", "large")
-        set(v) = edit { put("cardSize", v) }
-
     var theme: String
         get() = str("theme", "system")
         set(v) = edit { put("theme", v) }

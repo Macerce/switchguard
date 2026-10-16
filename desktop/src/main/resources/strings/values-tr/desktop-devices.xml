@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Cihazlar -->
+    <string name="desktop_just_now">az önce</string>
+    <string name="desktop_ago">%1$s önce</string>
+    <string name="desktop_no_account_title">Bağlı hesap yok</string>
+    <string name="desktop_no_account_body">Cihazlarınızı izlemek için Ayarlar › Hesaplar\'dan eWeLink ya da Tuya hesabınızı bağlayın. Kurulum yapmadan denemek için demo cihazları açabilirsiniz.</string>
+    <string name="desktop_add_account">Hesap ekle</string>
+    <string name="desktop_layout_hint">Yıldız = en üstte tut · oklar ya da tutamaktan sürükle = taşı (bir kartı basılı tutup da sürükleyebilirsiniz) · kart boyutu = küçük ya da büyük · etiket = kategori.</string>
+    <string name="desktop_drag_handle">Taşımak için sürükleyin</string>
+
+    <!-- Cihaz sayfası -->
+    <string name="desktop_click_to_toggle">Açmak ya da kapatmak için tıklayın</string>
+    <string name="desktop_hour">Saat</string>
+    <string name="desktop_minute">Dakika</string>
 </resources>
