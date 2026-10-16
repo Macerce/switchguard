@@ -173,6 +173,7 @@
     <string name="action_enter_keys">Access ID ve Secret gir</string>
     <string name="action_change">Değiştir</string>
     <string name="action_edit_layout">Cihazları düzenle</string>
+    <string name="action_close">Kapat</string>
     <string name="action_done">Bitti</string>
     <string name="action_rename">Yeniden adlandır</string>
     <string name="section_priority">Öncelikli</string>

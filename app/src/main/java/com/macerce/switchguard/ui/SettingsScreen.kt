@@ -19,6 +19,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -753,8 +754,9 @@ private fun QuietPage() {
 @Composable
 private fun SummaryPage() {
     val context = LocalContext.current
-    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
+    // Önizleme penceresinin satırları; boş liste = henüz kayıt yok. null = pencere kapalı.
+    var preview by remember { mutableStateOf<List<String>?>(null) }
     val time = rememberTimePicker()
     val (store, version) = settingsState()
     val s = remember(version) { store }
@@ -781,16 +783,33 @@ private fun SummaryPage() {
             Divider()
             InfoRow(
                 Icons.Rounded.Visibility, stringResource(R.string.daily_summary_preview), null,
-                Modifier.clickable {
-                    scope.launch {
-                        if (!Actions.previewSummary(context)) {
-                            Toast.makeText(context, resources.getString(R.string.summary_no_data), Toast.LENGTH_LONG).show()
-                        }
-                    }
-                },
+                Modifier.clickable { scope.launch { preview = Actions.summaryLines(context).orEmpty() } },
             )
         }
     }
+    preview?.let { lines -> SummaryPreviewDialog(lines) { preview = null } }
+}
+
+/** Bugünün özeti küçük bir pencerede (telefon, tablet ve TV'de aynı). [lines] boşsa "henüz kayıt yok". */
+@Composable
+private fun SummaryPreviewDialog(lines: List<String>, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Summarize, contentDescription = null) },
+        title = { Text(stringResource(R.string.summary_title)) },
+        text = {
+            Column(Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (lines.isEmpty()) {
+                    Text(stringResource(R.string.summary_no_data), style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_close)) }
+        },
+    )
 }
 
 // ---------------------------------------------------------------- İzinler

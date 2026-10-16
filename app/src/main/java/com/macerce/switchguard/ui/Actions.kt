@@ -88,12 +88,11 @@ object Actions {
             }
         }
 
-    /** Günlük özeti hemen bildirim olarak gösterir; hiç kayıt yoksa false. */
-    suspend fun previewSummary(context: Context): Boolean = withContext(Dispatchers.IO) {
-        val lines = DailySummary.build(context) ?: return@withContext false
-        Notifier(context, Store.get(context)).notifySummary(context.getString(R.string.summary_title), lines)
-        true
-    }
+    /**
+     * Bugünün özeti (Ayarlar → Günlük özet → önizleme penceresi); hiç kayıt yoksa null. Bildirim gönderilmez:
+     * özet bildirimi sessiz kanalda olduğundan telefonda yalnız simge görünür, TV'de hiç görünmez.
+     */
+    suspend fun summaryLines(context: Context): List<String>? = withContext(Dispatchers.IO) { DailySummary.build(context) }
 
     /** Cihazdaki eWeLink zamanlayıcıları (uygulamanın tanımadıkları da dahil, korunmak üzere). */
     suspend fun loadTimers(context: Context, deviceId: String): Result<List<TimerEntry>> = withContext(Dispatchers.IO) {

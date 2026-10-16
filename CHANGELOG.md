@@ -8,6 +8,7 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ## 2.12.2 — 2026-10-17
 **Fixes**
+- Settings → Daily summary → "Show today's summary now" opens the summary in a small window. It used to send a notification, which showed only an icon in the status bar on a phone and nothing at all on a TV.
 - Automations: when you opened a "power drops while on" automation whose "wait after turning on" was 0 minutes, the editor showed 2 minutes and saved 2 if you pressed Save. A saved 0 is now kept.
 
 ## 2.12.1 — 2026-10-16

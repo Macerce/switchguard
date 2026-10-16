@@ -8,6 +8,7 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ## 2.12.2 — 17 Ekim 2026
 **Düzeltmeler**
+- Ayarlar → Günlük özet → "Bugünün özetini şimdi göster" özeti küçük bir pencerede açıyor. Önceden bildirim gönderiyordu; telefonda durum çubuğunda yalnızca simge görünüyor, TV'de hiç görünmüyordu.
 - Otomasyonlar: "açıkken gücü düşerse" otomasyonunda "açıldıktan sonra bekle" 0 dakikaysa, düzenleyici açılınca 2 dakika görünüyor ve Kaydet'e basılınca 2 olarak kaydediliyordu. Kayıtlı 0 artık korunuyor.
 
 ## 2.12.1 — 16 Ekim 2026

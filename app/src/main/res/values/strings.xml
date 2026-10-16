@@ -177,6 +177,7 @@
     <string name="action_enter_keys">Enter Access ID and Secret</string>
     <string name="action_change">Change</string>
     <string name="action_edit_layout">Arrange devices</string>
+    <string name="action_close">Close</string>
     <string name="action_done">Done</string>
     <string name="action_rename">Rename</string>
     <string name="section_priority">Priority</string>
