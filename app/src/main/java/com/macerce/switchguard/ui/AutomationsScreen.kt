@@ -292,7 +292,8 @@ private fun AutomationEditor(
     var minutes by rememberSaveable { mutableStateOf(initial?.trigger?.minutes?.takeIf { it > 0 } ?: 30) }
     var watts by rememberSaveable { mutableStateOf(initial?.trigger?.watts?.takeIf { it > 0 }?.let(::formatNumber) ?: "1000") }
     var lowMinutes by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes ?: 1) }
-    var grace by rememberSaveable { mutableStateOf(initial?.trigger?.graceMinutes?.takeIf { it > 0 } ?: 2) }
+    // Kayıtlı 0 ("bekleme yok") korunur; yalnızca yeni ya da başka türden otomasyonda varsayılan 2 dk.
+    var grace by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.graceMinutes ?: 2) }
     var actionKind by rememberSaveable { mutableStateOf(initial?.action?.kind ?: ActionKind.NOTIFY) }
     var actionDevice by rememberSaveable { mutableStateOf(initial?.action?.deviceId?.ifEmpty { null } ?: first?.id.orEmpty()) }
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }

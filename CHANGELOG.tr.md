@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.12.2 — 17 Ekim 2026
+**Düzeltmeler**
+- Otomasyonlar: "açıkken gücü düşerse" otomasyonunda "açıldıktan sonra bekle" 0 dakikaysa, düzenleyici açılınca 2 dakika görünüyor ve Kaydet'e basılınca 2 olarak kaydediliyordu. Kayıtlı 0 artık korunuyor.
+
 ## 2.12.1 — 16 Ekim 2026
 **Düzeltmeler**
 - TV: saat seçimi (sessiz saatlerin başlangıcı ve bitişi, günlük özet saati, cihaz zamanlayıcıları) artık kumandayla yapılabiliyor. Sistemin saat kadranı kumandayla kullanılamıyordu; TV'de uygulama artık kendi saat seçicisini gösteriyor: yukarı ve aşağı saati ya da dakikayı değiştirir, saatteyken OK dakikaya geçer, dakikadayken OK kaydeder, Geri tuşu vazgeçer. Telefon ve tablette alışılmış saat penceresi kalıyor.
