@@ -83,7 +83,9 @@ data class AutomationForm(
                 minutes = if (t.kind.usesMinutes && t.minutes > 0) t.minutes.toString() else "30",
                 watts = t.watts.takeIf { it > 0 }?.let(::formatNumber) ?: "1000",
                 lowMinutes = if (t.kind.usesChannelPower) t.minutes.toString() else "1",
-                grace = t.graceMinutes.takeIf { it > 0 }?.toString() ?: "2",
+                // Kayıtlı kanal gücü uyarısının bekleme süresi olduğu gibi gelir: 0 (beklemeden bak) geçerli bir değerdir,
+                // varsayılana (2) çevrilirse açıp kaydetmek uyarının davranışını sessizce değiştirirdi.
+                grace = if (t.kind.usesChannelPower) t.graceMinutes.toString() else "2",
                 actionKind = initial.action.kind,
                 actionDevice = initial.action.deviceId.ifEmpty { first },
                 actionChannel = initial.action.channel,
@@ -102,4 +104,25 @@ data class AutomationForm(
 
         private fun formatNumber(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
     }
+}
+
+/**
+ * Düzenleyicideki − / + adımlayıcılarının değerleri (telefondaki 2.12 ile aynı): düğme bir sonraki anlamlı değere
+ * atlar (30 → 45 → 60 …). Listede olmayan bir değer (eski bir uyarıdan, ör. 7 dk) olduğu gibi gösterilir; düğmeler
+ * ondan en yakın alt/üst adıma gider.
+ */
+internal object Steps {
+    /** "Açık/kapalı kalınca" süresi: 0 olamaz. */
+    val MINUTES = listOf(1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360, 480, 720, 1440)
+    /** İşlemden önce bekleme: 0 = hemen. */
+    val DELAY = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120)
+    /** Kanal gücü düşük kalma süresi ve açılıştan sonra güce bakılmayan süre. */
+    val LOW = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
+    val GRACE = LOW
+
+    /** − düğmesinin gideceği değer; daha küçük adım yoksa null (düğme pasif). */
+    fun lower(value: Int, steps: List<Int>): Int? = steps.lastOrNull { it < value }
+
+    /** + düğmesinin gideceği değer; daha büyük adım yoksa null (düğme pasif). */
+    fun higher(value: Int, steps: List<Int>): Int? = steps.firstOrNull { it > value }
 }
