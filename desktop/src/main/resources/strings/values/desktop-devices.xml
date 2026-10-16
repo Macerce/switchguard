@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Cihazlar -->
+    <string name="desktop_just_now">just now</string>
+    <string name="desktop_ago">%1$s ago</string>
+    <string name="desktop_no_account_title">No account connected</string>
+    <string name="desktop_no_account_body">Connect your eWeLink or Tuya account in Settings › Accounts to monitor your devices. To try SwitchGuard without any setup, turn on the demo devices.</string>
+    <string name="desktop_add_account">Add an account</string>
+    <string name="desktop_layout_hint">Star = keep on top · arrows or drag the handle = move (you can also press and hold a card and drag it) · card size = small or large · label = category.</string>
+    <string name="desktop_drag_handle">Drag to move</string>
+
+    <!-- Cihaz sayfası -->
+    <string name="desktop_click_to_toggle">Click to turn on or off</string>
+    <string name="desktop_hour">Hour</string>
+    <string name="desktop_minute">Minute</string>
 </resources>
