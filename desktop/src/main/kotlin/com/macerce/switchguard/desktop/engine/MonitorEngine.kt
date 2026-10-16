@@ -184,15 +184,14 @@ class MonitorEngine(
     }
 
     /**
-     * Ayarlar → Günlük özet → Önizle (telefondaki `Actions.previewSummary`): bugünün özetini hemen bildirir.
-     * [onResult] motor iş parçacığında: kayıt yoksa false.
+     * Ayarlar → Günlük özet → "Bugünün özetini şimdi göster" (telefondaki `Actions.summaryLines`): bugünün özet
+     * satırları, arayüz bir pencerede gösterir (bildirim gönderilmez). [onResult] motor iş parçacığında: kayıt yoksa null.
      */
-    fun previewSummary(onResult: (Boolean) -> Unit = {}) {
+    fun summaryPreview(onResult: (List<String>?) -> Unit) {
         scheduler.post {
             val lines = runCatching { DailySummary.build(store, metrics, strings(), clock.wall()) }
                 .onFailure { Log.w(TAG, "summary failed", it) }.getOrNull()
-            if (lines != null) host.notify(lines.joinToString("\n"), null, title = strings()["summary_title"])
-            onResult(lines != null)
+            onResult(lines)
         }
     }
 

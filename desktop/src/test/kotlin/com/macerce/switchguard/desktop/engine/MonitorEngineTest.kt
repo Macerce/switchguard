@@ -834,15 +834,16 @@ class MonitorEngineTest {
     }
 
     @Test
-    fun summaryPreviewNotifiesAtOnce() {
+    fun summaryPreviewReturnsTheLinesWithoutNotifying() {
         startWith(pump(on = true), rules = emptyMap())
-        var result: Boolean? = null
+        var result: List<String>? = null
+        val notifications = host.notifications.size
 
-        engine.previewSummary { result = it }
+        engine.summaryPreview { result = it }
         scheduler.advance(0)
 
-        assertEquals(true, result)
-        assertEquals(strings["summary_title"], host.notificationTitles.last())
+        assertTrue(result!!.isNotEmpty())
+        assertEquals("the preview is shown in a window, not as a notification", notifications, host.notifications.size)
     }
 
     @Test

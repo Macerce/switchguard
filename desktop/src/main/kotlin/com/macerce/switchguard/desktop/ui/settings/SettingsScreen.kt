@@ -310,7 +310,7 @@ private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPag
             SettingsPage.ALARM -> AlarmPage(graph, strings, open)
             SettingsPage.QUIET -> QuietPage(graph.store, strings)
             SettingsPage.TELEGRAM -> TelegramPage(graph.store, onDone = onBack)
-            SettingsPage.SUMMARY -> SummaryPage(graph.store, strings, preview = graph.engine::previewSummary)
+            SettingsPage.SUMMARY -> SummaryPage(graph.store, strings, preview = graph.engine::summaryPreview)
             SettingsPage.MONITORING -> MonitoringPage(graph, strings)
             SettingsPage.WINDOWS -> WindowsPage(graph, strings)
             SettingsPage.BACKUP -> BackupPage(graph, strings)

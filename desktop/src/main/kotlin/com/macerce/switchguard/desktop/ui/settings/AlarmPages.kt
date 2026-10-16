@@ -1,7 +1,11 @@
 package com.macerce.switchguard.desktop.ui.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -193,16 +197,17 @@ fun QuietPage(store: Store, strings: Strings) {
 
 /**
  * Ayarlar → Günlük özet: aç/kapa, gönderim saati, bugünün özetini hemen göster. Gönderimi motor yapar (her tick'te
- * saate bakar), ayar değişince başka bir şey çağırmak gerekmez. [preview] motorun `previewSummary`'si (testte sahte);
- * sonucu motor iş parçacığında verir, kayıt yoksa satırda açıklama görünür.
+ * saate bakar), ayar değişince başka bir şey çağırmak gerekmez. [preview] motorun `summaryPreview`'ı (testte sahte);
+ * sonucu motor iş parçacığında verir; özet telefondaki gibi küçük bir pencerede gösterilir (kayıt yoksa açıklamasıyla).
  */
 @Composable
-fun SummaryPage(store: Store, strings: Strings, preview: ((Boolean) -> Unit) -> Unit) {
+fun SummaryPage(store: Store, strings: Strings, preview: ((List<String>?) -> Unit) -> Unit) {
     val version by store.version.collectAsState()
     val enabled = remember(version) { store.dailySummaryEnabled }
     val minute = remember(version) { store.dailySummaryMinute }
     var picking by remember { mutableStateOf(false) }
-    var noData by remember { mutableStateOf(false) }
+    // Önizleme penceresinin satırları; boş liste = henüz kayıt yok, null = pencere kapalı.
+    var shown by remember { mutableStateOf<List<String>?>(null) }
     val scope = rememberCoroutineScope()
 
     PageIntro(str("daily_summary_desc"))
@@ -213,17 +218,19 @@ fun SummaryPage(store: Store, strings: Strings, preview: ((Boolean) -> Unit) -> 
             InfoRow(Icons.Rounded.Schedule, str("daily_summary_time"), formatMinute(strings, minute), Modifier.clickable { picking = true })
             RowDivider()
             InfoRow(
-                Icons.Rounded.Visibility, str("daily_summary_preview"), if (noData) str("summary_no_data") else null,
+                Icons.Rounded.Visibility, str("daily_summary_preview"), null,
                 Modifier.clickable {
                     scope.launch {
-                        val ok = suspendCancellableCoroutine { c -> preview { c.resume(it) } }
-                        noData = !ok
+                        val lines = suspendCancellableCoroutine { c -> preview { c.resume(it) } }
+                        shown = lines.orEmpty()
                     }
                 },
             )
         }
     }
     PageIntro(str("desktop_summary_note"), Modifier.padding(top = 8.dp))
+
+    shown?.let { lines -> SummaryPreviewDialog(lines) { shown = null } }
 
     if (picking) {
         TimeDialog(
@@ -234,4 +241,31 @@ fun SummaryPage(store: Store, strings: Strings, preview: ((Boolean) -> Unit) -> 
             onDismiss = { picking = false },
         )
     }
+}
+
+/** Bugünün özeti küçük bir pencerede (telefondaki SummaryPreviewDialog). [lines] boşsa "henüz kayıt yok". */
+@Composable
+private fun SummaryPreviewDialog(lines: List<String>, onDismiss: () -> Unit) {
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Summarize, contentDescription = null) },
+        title = { androidx.compose.material3.Text(str("summary_title")) },
+        text = {
+            Column(
+                Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                if (lines.isEmpty()) {
+                    androidx.compose.material3.Text(str("summary_no_data"), style = MaterialTheme.typography.bodyMedium)
+                } else {
+                    lines.forEach { androidx.compose.material3.Text(it, style = MaterialTheme.typography.bodyMedium) }
+                }
+            }
+        },
+        confirmButton = {
+            androidx.compose.material3.TextButton(onClick = onDismiss, modifier = Modifier.testTag("summary-close")) {
+                androidx.compose.material3.Text(str("action_close"))
+            }
+        },
+    )
 }
