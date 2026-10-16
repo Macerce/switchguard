@@ -30,7 +30,7 @@ kapanır, açılır ya da bağlantısı koparsa bilgisayarda tam ekran alarm ça
 
 2. HESAPLARI BAĞLAMA
 --------------------
-Uygulamada: Ayarlar → Hesap. Her pencerede "Nasıl kurulur?" bölümü adım adım
+Uygulamada: Ayarlar → Hesaplar. Her pencerede "Nasıl kurulur?" bölümü adım adım
 anlatır.
 
 Tuya / Smart Life:
@@ -50,18 +50,32 @@ eWeLink:
   - Video (50 sn):  https://youtu.be/jK_KcG2OPao
 
 
-3. YEDEK VE BAŞKA BİLGİSAYARA GEÇİŞ
+3. ALARM, HATIRLATMA VE İKİNCİ KİŞİ
 -----------------------------------
-- Ayarlar → Yedekleme → "Dosyaya yedekle…": tüm ayarlar, hesap anahtarları,
+- Ayarlar → Alarm → Test alarmı: "Sesli" ya da "Sessiz", hemen ya da
+  10 saniye sonra. Sessiz test pencereyi gösterir, ses çalmaz.
+- Ayarlar → Alarm → Düzelmezse yeniden çal: alarmı kapattınız ama cihaz
+  hâlâ sorunluysa 10 / 30 / 60 dakikada bir yeniden çalar.
+- Ayarlar → İkinci kişiye haber ver: alarm seçtiğiniz süre içinde
+  kapatılmazsa kendi Telegram botunuz seçtiğiniz kişilere mesaj atar
+  (telefondaki ile aynı kurulum).
+- Cihaz sayfası → Kritik cihaz: bu cihazın alarmı sessiz saatlerde de çalar.
+- Ayarlar → İzleme → İzleme durursa uyar: internet ya da bulut
+  gidince belirlediğiniz süreden sonra uyarır.
+
+
+4. YEDEK VE BAŞKA BİLGİSAYARA GEÇİŞ
+-----------------------------------
+- Ayarlar → Yedekleme ve aktarım → "Dosyaya yedekle…": tüm ayarlar, hesap anahtarları,
   kurallar ve yüklediğiniz sesler tek bir şifreli dosyaya (.sgbackup) yazılır.
 - Şifre en az 8 karakter. Şifreyi unutursanız yedek açılamaz.
 - Format sonrası ya da yeni bilgisayarda: SwitchGuard'ı kurun →
-  Ayarlar → Yedekleme → "Dosyadan geri yükle…" → şifre → Geri yükle.
+  Ayarlar → Yedekleme ve aktarım → "Dosyadan geri yükle…" → şifre → Geri yükle.
 - Geri yüklemeden sonra eWeLink'e Ayarlar'dan bir kez yeniden giriş yapın
   (güvenlik için oturum yedeğe girmez).
 
 
-4. KALDIRMA
+5. KALDIRMA
 -----------
 Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.
 Ayarlarınız ve geçmişiniz AppData › Roaming › SwitchGuard klasöründe kalır;
