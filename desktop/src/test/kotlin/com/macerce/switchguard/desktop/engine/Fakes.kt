@@ -164,7 +164,7 @@ class FakeTuyaLive : TuyaLive {
 
 /** Motorun platforma yaptığı her çağrıyı kaydeder. */
 class FakeHost : MonitorHost {
-    data class Alarm(val lines: List<String>, val sound: String?)
+    data class Alarm(val lines: List<String>, val sound: String?, val silent: Boolean = false)
 
     val alarms = mutableListOf<Alarm>()
     var ensureVisibleCalls = 0
@@ -177,9 +177,14 @@ class FakeHost : MonitorHost {
         private set
     val statuses = mutableListOf<Pair<ConnState, String>>()
     val keepAwake = mutableListOf<Boolean>()
+    /** Bildirim başlıkları ([notifications] ile aynı sırada; null = uygulama adı). */
+    val notificationTitles = mutableListOf<String?>()
+    val blindWarnings = mutableListOf<String>()
+    var clearBlindCalls = 0
+        private set
 
-    override fun showAlarm(lines: List<String>, sound: String?) {
-        alarms += Alarm(lines, sound)
+    override fun showAlarm(lines: List<String>, sound: String?, silent: Boolean) {
+        alarms += Alarm(lines, sound, silent)
     }
 
     override fun ensureAlarmVisible() {
@@ -190,8 +195,17 @@ class FakeHost : MonitorHost {
         stopAlarmCalls++
     }
 
-    override fun notify(text: String, sound: String?) {
+    override fun notify(text: String, sound: String?, title: String?) {
         notifications += text to sound
+        notificationTitles += title
+    }
+
+    override fun monitorBlind(text: String) {
+        blindWarnings += text
+    }
+
+    override fun clearBlind() {
+        clearBlindCalls++
     }
 
     override fun sessionLost(text: String, detail: String) {

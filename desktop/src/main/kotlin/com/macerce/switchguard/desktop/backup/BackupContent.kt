@@ -36,10 +36,12 @@ object BackupContent {
         "rules", "automations", "layout", "freeDevice",
         // sesler
         "alarmSound", "notifySound", "alarmVolume",
-        // sessiz saatler
-        "quietEnabled", "quietStart", "quietEnd",
+        // sessiz saatler, hatırlatma
+        "quietEnabled", "quietStart", "quietEnd", "reminderMin",
+        // ikinci kişiye haber ver (Telegram; telefonda da yedeğe girer)
+        "tgToken", "tgBot", "tgChats", "escalateMin",
         // izleme ve genel
-        "monitoring", "pollIntervalSec", "offlineGraceSec", "alwaysAwake",
+        "monitoring", "pollIntervalSec", "offlineGraceSec", "blindAlertMin", "alwaysAwake",
         "autostart", "language", "theme", "demo", "onboardingDone", "summaryEnabled", "summaryMinute",
         // görünüm (masaüstü)
         "cardSize",

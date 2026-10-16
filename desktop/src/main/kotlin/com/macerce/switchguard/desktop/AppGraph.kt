@@ -5,6 +5,7 @@ import androidx.compose.ui.window.TrayState
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.MetricsLog
+import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.data.DpapiCodec
 import com.macerce.switchguard.desktop.engine.MonitorEngine
@@ -51,7 +52,8 @@ class AppGraph(val dataDir: Path) {
     private var current = Strings.load(loadedLanguage)
 
     val host = DesktopHost(store, sounds, appState, notifications, ::strings)
-    val engine = MonitorEngine(store, eventLog, metrics, ::strings, host, Sources.real(store))
+    val runtime = RuntimeState(dataDir.resolve("runtime.json"))
+    val engine = MonitorEngine(store, eventLog, metrics, runtime, ::strings, host, Sources.real(store))
 
     init {
         appState.setStatus(ConnState.STOPPED, strings()["state_stopped"])

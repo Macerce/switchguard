@@ -9,6 +9,7 @@ import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.QuietHours
+import com.macerce.switchguard.core.Recipient
 import com.macerce.switchguard.desktop.Log
 import com.macerce.switchguard.desktop.data.SecretCodec
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -237,7 +238,11 @@ class Store internal constructor(
         set(v) = edit { put("transferSource", v) }
 
     val hasCredentials get() = appId.isNotEmpty() && appSecret.isNotEmpty()
-    val isLoggedIn get() = accessToken.isNotEmpty()
+    /** Şifre çözmeden bakılır (sık çağrılır); çözülemeyen token ilk istekte oturum hatasına döner. */
+    val isLoggedIn get() = str("at").isNotEmpty()
+
+    /** Kayıtlı bir gizli değer (App Secret, token, Tuya Secret, bot anahtarı) bu bilgisayarda çözülemedi: yeniden girilmeli. */
+    val secretsUnreadable: Boolean get() = synchronized(lock) { undecodable.any { (k, v) -> root.optString(k) == v } }
 
     fun logout(): Unit = edit { remove("at"); remove("rt"); remove("apikey"); remove("email") }
 
@@ -271,7 +276,8 @@ class Store internal constructor(
         } ?: emptyMap()
         set(v) = edit { put("tuyaScales", JSONObject(v.mapValues { JSONObject(it.value) }).toString()) }
 
-    val hasTuya get() = tuyaAccessId.isNotEmpty() && tuyaSecret.isNotEmpty()
+    /** Şifre çözmeden bakılır: anahtar okunamazsa Tuya "bağlı değil" görünmez, kimlik hatası verir. */
+    val hasTuya get() = tuyaAccessId.isNotEmpty() && str("tuyaSecret").isNotEmpty()
     /** eWeLink'e giriş yapılmış, Tuya bağlanmış ya da demo açık: izlenecek en az bir kaynak var. */
     val hasAnyAccount get() = isLoggedIn || hasTuya || demoMode
 
@@ -324,6 +330,10 @@ class Store internal constructor(
     var pollIntervalSec: Int
         get() = int("pollIntervalSec", 30)
         set(v) = edit { put("pollIntervalSec", v.coerceAtLeast(MIN_POLL)) }
+    /** İzleme bu kadar dakika kör kalırsa (internet/bulut yok) uyar; 0 = kapalı. */
+    var blindAlertMin: Int
+        get() = int("blindAlertMin", 10)
+        set(v) = edit { put("blindAlertMin", v.coerceAtLeast(0)) }
     /** Offline olayını bu kadar bekletip kısa kopmaları yok say (0 = hemen). */
     var offlineGraceSec: Int
         get() = int("offlineGraceSec", 0)
@@ -365,6 +375,32 @@ class Store internal constructor(
         get() = synchronized(lock) { root.optDouble("alarmVolume", 1.0).toFloat() }
         // Float'ı en kısa ondalık gösterimiyle yaz (0.05f → 0.05, 0.05000000074505806 değil).
         set(v) = edit { put("alarmVolume", v.coerceIn(0.05f, 1f).toString().toDouble()) }
+    /** Alarm kapatıldı ama durum sürüyorsa bu kadar dakika sonra yeniden çal; 0 = kapalı. */
+    var reminderMin: Int
+        get() = int("reminderMin", 0)
+        set(v) = edit { put("reminderMin", v.coerceAtLeast(0)) }
+
+    // --- İkinci kişiye haber ver (Telegram) ---
+    /** Kullanıcının kendi Telegram botunun anahtarı (BotFather). */
+    var telegramToken: String
+        get() = secret("tgToken")
+        set(v) = setSecret("tgToken", v.trim())
+    var telegramRecipients: List<Recipient>
+        get() = Recipient.listFromJson(strOrNull("tgChats"))
+        set(v) = edit { put("tgChats", Recipient.listToJson(v)) }
+    /** Botun kullanıcı adı ("t.me/<ad>" bağlantısı için); anahtar denenince kaydedilir. */
+    var telegramBot: String
+        get() = str("tgBot")
+        set(v) = edit { put("tgBot", v) }
+    /** Alarm bu kadar dakika kapatılmazsa haber ver; 0 = kapalı. */
+    var escalateMin: Int
+        get() = int("escalateMin", 0)
+        set(v) = edit { put("escalateMin", v.coerceAtLeast(0)) }
+    /** Haber verme açık ve gönderilebilir durumda (anahtar ve en az bir kişi var). Şifre çözmeden bakılır. */
+    val escalationReady get() = escalateMin > 0 && str("tgToken").isNotEmpty() && telegramRecipients.isNotEmpty()
+
+    fun disableEscalation(): Unit = edit { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin") }
+
     var quietHours: QuietHours
         get() = QuietHours(
             bool("quietEnabled", false),
@@ -462,6 +498,6 @@ class Store internal constructor(
         private const val SECRET_RETRY_DELAY_MS = 50L
 
         /** Diske yalnızca [SecretCodec] ile kodlanarak yazılan alanlar. */
-        val SECRET_KEYS: Set<String> = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken")
+        val SECRET_KEYS: Set<String> = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken")
     }
 }

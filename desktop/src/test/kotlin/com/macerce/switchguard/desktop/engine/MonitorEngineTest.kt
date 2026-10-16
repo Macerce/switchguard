@@ -19,6 +19,7 @@ import com.macerce.switchguard.data.EventKind
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.MetricsLog
+import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.data.PlainCodec
 import com.macerce.switchguard.desktop.i18n.Strings
@@ -55,6 +56,11 @@ class MonitorEngineTest {
     private lateinit var log: EventLog
     private lateinit var metrics: MetricsLog
     private lateinit var engine: MonitorEngine
+    private lateinit var runtime: RuntimeState
+
+    /** Gönderilen Telegram mesajları (sohbet, metin); [telegramError] doluysa gönderim o hatayla düşer. */
+    private val telegramSent = mutableListOf<Pair<Long, String>>()
+    private var telegramError: Exception? = null
 
     @Before
     fun setUp() {
@@ -65,8 +71,12 @@ class MonitorEngineTest {
         // eWeLink'e girilmiş, WebSocket için apikey hazır.
         store.accessToken = "token"
         store.userApiKey = "apikey"
-        val sources = Sources(ewelink, { ewelinkLive.attach(it) }, tuya, { tuyaLive.attach(it) })
-        engine = MonitorEngine(store, log, metrics, { strings }, host, sources, clock, scheduler)
+        val sources = Sources(ewelink, { ewelinkLive.attach(it) }, tuya, { tuyaLive.attach(it) }) { _, chat, text ->
+            telegramError?.let { throw it }
+            telegramSent += chat to text
+        }
+        runtime = RuntimeState(dir.resolve("runtime.json"))
+        engine = MonitorEngine(store, log, metrics, runtime, { strings }, host, sources, clock, scheduler, telegramRunner = { it() })
     }
 
     /** Windows açık veritabanı dosyasını silemez; geçici klasör temizlenmeden önce kapat. */
@@ -562,7 +572,257 @@ class MonitorEngineTest {
         assertEquals(stopsBefore + 1, host.stopAlarmCalls)
     }
 
+    // ---------------------------------------------------------------- telefon 2.9–2.12: güvenilirlik ve haber verme
+
+    @Test
+    fun criticalDeviceStillRingsInQuietHours() {
+        clock.wallMs = wallAt(3, 0)
+        store.quietHours = QuietHours(enabled = true, startMinute = 23 * 60, endMinute = 7 * 60)
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        engine.updateRules(id) { it.copy(critical = true) }
+        scheduler.advance(0)
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertEquals(1, host.alarms.size)
+        assertEquals("ALARM", log.recent(id).first().action)
+    }
+
+    @Test
+    fun dismissingLogsTheResponseTime() {
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+        clock.advance(90_000)
+
+        engine.dismissAlarm(store.pendingAlarm)
+        scheduler.advance(0)
+
+        val dismissed = log.recent().first { it.kind == EventKind.DISMISSED }
+        assertTrue(dismissed.text, dismissed.text.contains("1 event") && dismissed.text.contains("1 min 30 s"))
+        assertTrue(store.pendingAlarm.isEmpty())
+    }
+
+    @Test
+    fun reminderRingsAgainWhileTheProblemLasts() {
+        store.reminderMin = 10
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+        engine.dismissAlarm(store.pendingAlarm)
+        scheduler.advance(0)
+        val afterDismiss = host.alarms.size
+
+        scheduler.advance(9 * 60_000L)
+        assertEquals(afterDismiss, host.alarms.size)
+        scheduler.advance(75_000)
+
+        assertEquals(afterDismiss + 1, host.alarms.size)
+        val reminder = log.recent(id).first()
+        assertEquals(EventKind.REMINDER, reminder.kind)
+        assertTrue(reminder.text, reminder.text.contains("Pump") && reminder.text.contains("OFF"))
+    }
+
+    @Test
+    fun reminderStopsWhenTheDeviceRecovers() {
+        store.reminderMin = 10
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM, EventType.TURNED_ON to AlertAction.IGNORE))
+        cloudUpdate(switches = mapOf(0 to false))
+        engine.dismissAlarm(store.pendingAlarm)
+        scheduler.advance(0)
+        cloudUpdate(switches = mapOf(0 to true))
+        val alarms = host.alarms.size
+
+        scheduler.advance(15 * 60_000L)
+
+        assertEquals(alarms, host.alarms.size)
+        assertTrue(log.recent(id).none { it.kind == EventKind.REMINDER })
+    }
+
+    @Test
+    fun undismissedAlarmTellsSomeoneOnTelegramOnceAndThenTheDismissal() {
+        readyTelegram(minutes = 5)
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+
+        scheduler.advance(4 * 60_000L)
+        assertTrue(telegramSent.isEmpty())
+        scheduler.advance(60_000L + 100)
+        assertEquals(1, telegramSent.size)
+        assertEquals(42L, telegramSent[0].first)
+        assertTrue(telegramSent[0].second, telegramSent[0].second.contains("Pump"))
+
+        scheduler.advance(10 * 60_000L)
+        assertEquals("once per alarm", 1, telegramSent.size)
+        assertEquals(1, log.recent().count { it.kind == EventKind.ESCALATION })
+
+        engine.dismissAlarm(store.pendingAlarm)
+        scheduler.advance(0)
+        assertEquals("the dismissal is reported too", 2, telegramSent.size)
+    }
+
+    @Test
+    fun testAlarmNeverTellsAnyone() {
+        readyTelegram(minutes = 2)
+        engine.testAlarm()
+        scheduler.advance(10 * 60_000L)
+
+        assertEquals(1, host.alarms.size)
+        assertTrue(telegramSent.isEmpty())
+    }
+
+    @Test
+    fun failedTelegramIsLoggedOnceAndRetried() {
+        readyTelegram(minutes = 2)
+        telegramError = java.io.IOException("offline")
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+
+        scheduler.advance(4 * 60_000L)
+        assertTrue(telegramSent.isEmpty())
+        val failures = log.recent().filter { it.kind == EventKind.ESCALATION }
+        assertEquals("logged once, not on every retry", 1, failures.size)
+
+        telegramError = null
+        scheduler.advance(2 * 60_000L)
+        assertEquals(1, telegramSent.size)
+    }
+
+    @Test
+    fun invalidBotTokenIsNotRetried() {
+        readyTelegram(minutes = 2)
+        telegramError = com.macerce.switchguard.api.TelegramException(401, "Unauthorized")
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        cloudUpdate(switches = mapOf(0 to false))
+        scheduler.advance(3 * 60_000L)
+        telegramError = null
+
+        scheduler.advance(10 * 60_000L)
+
+        assertTrue(telegramSent.isEmpty())
+        assertTrue(log.recent().first { it.kind == EventKind.ESCALATION }.text.contains(strings["tg_err_token"]))
+    }
+
+    @Test
+    fun silentTestAlarmShowsWithoutSoundUntilARealEvent() {
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        engine.testAlarm(silent = true)
+        scheduler.advance(0)
+        assertTrue(host.alarms.last().silent)
+        assertEquals(strings["test_alarm_line_silent"], store.pendingAlarm.last().substringAfter("  "))
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertFalse("a real event brings the sound back", host.alarms.last().silent)
+    }
+
+    @Test
+    fun delayedTestAlarmWaits() {
+        engine.testAlarm(delayMs = 10_000)
+        scheduler.advance(9_000)
+        assertTrue(host.alarms.isEmpty())
+
+        scheduler.advance(1_000)
+
+        assertEquals(1, host.alarms.size)
+    }
+
+    @Test
+    fun longOutageWarnsOnceAndReportsRecovery() {
+        store.blindAlertMin = 10
+        startWith(pump(), rules = emptyMap())
+        ewelink.onGetDevices = { throw java.io.IOException("down") }
+
+        scheduler.advance(5 * 60_000L)
+        assertTrue(host.blindWarnings.isEmpty())
+        scheduler.advance(6 * 60_000L)
+        assertEquals(1, host.blindWarnings.size)
+        scheduler.advance(10 * 60_000L)
+        assertEquals("warned once", 1, host.blindWarnings.size)
+
+        ewelink.onGetDevices = null
+        scheduler.advance(60_000L)
+
+        assertEquals(1, host.clearBlindCalls)
+        assertEquals(2, log.recent().count { it.kind == EventKind.MONITOR_BLIND })
+        assertEquals(strings["notif_monitor_title"], host.notificationTitles.last())
+    }
+
+    @Test
+    fun restartAfterAnUnexpectedStopLogsTheGap() {
+        startWith(pump(), rules = emptyMap())
+        scheduler.advance(60_000)
+        // Uygulama kapandı ya da bilgisayar kapatıldı: kullanıcı izlemeyi durdurmadı.
+        engine.shutdown()
+        scheduler.advance(0)
+        clock.advance(30 * 60_000L)
+
+        val (again, sched) = newEngine()
+        sched.advance(0)
+
+        val gap = log.recent().filter { it.kind == EventKind.MONITOR_GAP }
+        assertEquals(1, gap.size)
+        assertTrue(gap[0].text, gap[0].text.contains("31 min") || gap[0].text.contains("30 min"))
+        assertEquals(strings["notif_monitor_title"], host.notificationTitles.last())
+        again.shutdown()
+        sched.advance(0)
+    }
+
+    @Test
+    fun stoppingMonitoringIsNotAGap() {
+        startWith(pump(), rules = emptyMap())
+        scheduler.advance(60_000)
+        engine.stop()
+        scheduler.advance(0)
+        engine.shutdown()
+        scheduler.advance(0)
+        clock.advance(30 * 60_000L)
+
+        val (again, sched) = newEngine()
+        sched.advance(0)
+
+        assertTrue(log.recent().none { it.kind == EventKind.MONITOR_GAP })
+        again.shutdown()
+        sched.advance(0)
+    }
+
+    @Test
+    fun pendingOfflineSurvivesARestart() {
+        store.offlineGraceSec = 60
+        startWith(pump(), rules = mapOf(EventType.WENT_OFFLINE to AlertAction.ALARM))
+        cloudUpdate(online = false)
+        assertTrue(host.alarms.isEmpty())
+        engine.shutdown()
+        scheduler.advance(0)
+        clock.advance(2 * 60_000L)
+
+        val (again, sched) = newEngine()
+        again.start()
+        sched.advance(0)
+
+        assertEquals("the drop that was waiting still rings", 1, host.alarms.size)
+        again.shutdown()
+        sched.advance(0)
+    }
+
     // ---------------------------------------------------------------- yardımcılar
+
+    private fun readyTelegram(minutes: Int) {
+        store.telegramToken = "123456:abc"
+        store.telegramRecipients = listOf(com.macerce.switchguard.core.Recipient(42, "Ali"))
+        store.escalateMin = minutes
+    }
+
+    /** Uygulama yeniden açıldı: aynı ayarlar, geçmiş ve `runtime.json` ile yeni motor (kendi zamanlayıcısıyla). */
+    private fun newEngine(): Pair<MonitorEngine, ManualScheduler> {
+        val sched = ManualScheduler(clock)
+        val sources = Sources(ewelink, { FakeEwelinkLive().attach(it) }, tuya, { FakeTuyaLive().attach(it) }) { _, chat, text ->
+            telegramSent += chat to text
+        }
+        val e = MonitorEngine(
+            store, log, metrics, RuntimeState(tmp.root.toPath().resolve("runtime.json")), { strings }, host, sources, clock, sched,
+            telegramRunner = { it() },
+        )
+        return e to sched
+    }
 
     private fun pump(on: Boolean = true, online: Boolean = true) =
         DeviceSnapshot(id, "Pump", online = online, switches = mapOf(0 to on))

@@ -176,4 +176,6 @@
     <string name="desktop_alert_edit">Edit alert</string>
     <string name="desktop_alert_delete_title">Delete this alert?</string>
     <string name="desktop_alerts_need_monitoring">Monitoring is off — alerts do not run until you start it.</string>
+    <string name="desktop_secrets_unreadable">Saved keys can\'t be read on this computer (for example, the settings were copied from another computer). Enter your eWeLink and Tuya details again in Settings.</string>
+    <string name="desktop_blind_hint">Check the internet connection and that the computer isn\'t asleep.</string>
 </resources>

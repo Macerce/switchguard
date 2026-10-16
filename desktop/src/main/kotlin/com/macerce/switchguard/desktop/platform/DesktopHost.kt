@@ -40,11 +40,21 @@ class DesktopHost(
     /** Gerçekten çalmaya başlamış ses (yalnızca `loop` başarılıysa); aynı ses yeni satırla baştan başlayıp tıkırdamasın. */
     private var ringing: Ringing? = null
 
+    /** Alarm yalnızca sessiz test alarmından oluşuyor: pencere var, ses yok (bkz. [showAlarm]). */
+    private var silentAlarm = false
+
     @Synchronized
-    override fun showAlarm(lines: List<String>, sound: String?) {
+    override fun showAlarm(lines: List<String>, sound: String?, silent: Boolean) {
         silenced = null
+        silentAlarm = silent
         state.setAlarmLines(lines)
-        ring(Ringing(sound ?: store.alarmSoundUri, store.alarmVolume))
+        if (silent) {
+            wanted = null
+            ringing = null
+            sounds.stop()
+        } else {
+            ring(Ringing(sound ?: store.alarmSoundUri, store.alarmVolume))
+        }
         display.wake()
         state.raiseAlarmWindow()
     }
@@ -56,11 +66,11 @@ class DesktopHost(
         // Kullanıcı az önce kapattı, motor temizliği yolda: geri getirme.
         if (pending == silenced) return
         if (state.alarmLines.value.isEmpty() && pending.isNotEmpty()) {
-            showAlarm(pending, null)
+            showAlarm(pending, null, silentAlarm)
             return
         }
         // Ses bekçisi: hiç başlayamadıysa ya da sonradan durduysa (ses cihazı değişti) yeniden başlat.
-        ring(wanted ?: Ringing(store.alarmSoundUri, store.alarmVolume))
+        if (!silentAlarm) ring(wanted ?: Ringing(store.alarmSoundUri, store.alarmVolume))
         display.keepOn()
         state.raiseAlarmWindow()
     }
@@ -93,14 +103,15 @@ class DesktopHost(
     @Synchronized
     override fun stopAlarm() {
         silenced = null
+        silentAlarm = false
         wanted = null
         ringing = null
         sounds.stop()
         state.clearAlarm()
     }
 
-    override fun notify(text: String, sound: String?) {
-        notifications.enqueue(Notification(strings()["app_name"], text, Notification.Type.Info))
+    override fun notify(text: String, sound: String?, title: String?) {
+        notifications.enqueue(Notification(title ?: strings()["app_name"], text, Notification.Type.Info))
         // Cihaza özel ses yoksa masaüstünün bildirim sesi (o da yoksa yerleşik varsayılan).
         sounds.once(sound ?: store.notifySoundUri, store.alarmVolume)
     }
@@ -112,6 +123,16 @@ class DesktopHost(
 
     override fun clearWarning() {
         state.setWarning(null)
+    }
+
+    /** Telefonda kalıcı bildirim; burada Cihazlar ekranındaki uyarı kartı + bir Windows bildirimi. */
+    override fun monitorBlind(text: String) {
+        state.setBlind(text)
+        notifications.enqueue(Notification(strings()["notif_blind_title"], text, Notification.Type.Warning))
+    }
+
+    override fun clearBlind() {
+        state.setBlind(null)
     }
 
     override fun statusChanged(state: ConnState, text: String) {

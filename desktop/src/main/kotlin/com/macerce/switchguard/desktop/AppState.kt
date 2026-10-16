@@ -36,6 +36,11 @@ class AppState {
     /** Kullanıcı yeniden giriş yapana kadar kalan oturum uyarısı; yoksa null. */
     val warning: StateFlow<String?> = _warning.asStateFlow()
 
+    private val _blind = MutableStateFlow<String?>(null)
+
+    /** İzleme uzun süredir cihazları göremiyor: düzelene kadar kalan uyarı metni; yoksa null. */
+    val blind: StateFlow<String?> = _blind.asStateFlow()
+
     private val _alarmRaise = MutableStateFlow(0)
     val alarmRaise: StateFlow<Int> = _alarmRaise.asStateFlow()
 
@@ -56,6 +61,10 @@ class AppState {
 
     fun setWarning(text: String?) {
         _warning.value = text
+    }
+
+    fun setBlind(text: String?) {
+        _blind.value = text
     }
 
     /** Alarm penceresini öne getirmesini ister (her tick'te çağrılabilir). */

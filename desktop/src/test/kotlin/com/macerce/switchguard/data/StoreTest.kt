@@ -118,7 +118,7 @@ class StoreTest {
 
     @Test
     fun everySecretKeyIsEncodedOnDisk() {
-        val keys = listOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken")
+        val keys = listOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken")
         assertEquals(keys.toSet(), Store.SECRET_KEYS)
         val s = store()
         s.appSecret = "S1"
@@ -127,6 +127,7 @@ class StoreTest {
         s.userApiKey = "S4"
         s.tuyaSecret = "S5"
         s.tuyaToken = "S6"
+        s.telegramToken = "S7"
         val text = raw()
         val o = JSONObject(text)
         keys.forEachIndexed { i, key ->
@@ -146,8 +147,14 @@ class StoreTest {
     fun undecodableSecretReadsAsEmpty() {
         store().accessToken = "tok"
         val s = store(NullCodec)
+        assertFalse(s.secretsUnreadable)
         assertEquals("", s.accessToken)
-        assertFalse(s.isLoggedIn)
+        // Telefondaki gibi: oturum şifre çözmeden "var" görünür, ilk istek oturum hatası verir ve kullanıcıya
+        // anahtarların okunamadığı söylenir (secretsUnreadable).
+        assertTrue(s.isLoggedIn)
+        assertTrue(s.secretsUnreadable)
+        s.accessToken = ""
+        assertFalse("a new value clears the warning", s.secretsUnreadable)
     }
 
     @Test
@@ -247,12 +254,18 @@ class StoreTest {
         s.tuyaLive = true
         s.language = "tr"
         s.theme = "dark"
+        s.blindAlertMin = 5
+        s.reminderMin = 10
+        s.telegramRecipients = listOf(com.macerce.switchguard.core.Recipient(42, "Ali"))
+        s.telegramBot = "mybot"
+        s.escalateMin = 2
         val expected = setOf(
             "appId", "redirectUrl", "region", "email", "transferReceived", "transferSource",
             "tuyaId", "tuyaRegion", "tuyaTokenExp", "tuyaScales", "demo", "sessionLost", "onboardingDone",
             "monitoring", "alwaysAwake", "pollIntervalSec", "offlineGraceSec", "alarmSound", "alarmVolume",
             "quietEnabled", "quietStart", "quietEnd", "layout", "historySeen", "freeDevice",
             "summaryEnabled", "summaryMinute", "pendingAlarm", "autostart", "tuyaLive", "language", "theme",
+            "blindAlertMin", "reminderMin", "tgChats", "tgBot", "escalateMin",
         )
         assertEquals(expected, JSONObject(raw()).keySet())
         val b = store()
@@ -268,6 +281,36 @@ class StoreTest {
         assertEquals("tr", b.language)
         assertEquals("dark", b.theme)
         assertEquals(DeviceLayout(priority = setOf("x")), b.deviceLayout)
+        assertEquals(5, b.blindAlertMin)
+        assertEquals(10, b.reminderMin)
+        assertEquals(listOf(com.macerce.switchguard.core.Recipient(42, "Ali")), b.telegramRecipients)
+        assertEquals("mybot", b.telegramBot)
+        assertEquals(2, b.escalateMin)
+    }
+
+    @Test
+    fun escalationIsReadyOnlyWithTokenRecipientsAndDelay() {
+        val s = store()
+        assertFalse(s.escalationReady)
+        s.telegramToken = "123456:abc"
+        s.escalateMin = 5
+        assertFalse("no recipients yet", s.escalationReady)
+        s.telegramRecipients = listOf(com.macerce.switchguard.core.Recipient(1, "A"))
+        assertTrue(s.escalationReady)
+        s.disableEscalation()
+        val b = store()
+        assertFalse(b.escalationReady)
+        assertEquals("", b.telegramToken)
+        assertEquals(emptyList<com.macerce.switchguard.core.Recipient>(), b.telegramRecipients)
+        assertEquals(0, b.escalateMin)
+    }
+
+    @Test
+    fun newSettingsHaveThePhoneDefaults() {
+        val s = store()
+        assertEquals(10, s.blindAlertMin)
+        assertEquals(0, s.reminderMin)
+        assertEquals(0, s.escalateMin)
     }
 
     @Test

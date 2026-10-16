@@ -16,6 +16,11 @@ object EventKind {
     const val SHORT_DROP = "SHORT_DROP" // Bekleme süresinde geri gelen kısa kopma
     const val TEST = "TEST"
     const val AUTOMATION = "AUTOMATION" // Otomasyonun yaptığı işlem
+    const val MONITOR_GAP = "MONITOR_GAP" // İzlemenin çalışmadığı aralık
+    const val MONITOR_BLIND = "MONITOR_BLIND" // İzleme kör kaldı / yeniden çalışıyor
+    const val DISMISSED = "DISMISSED" // Alarm kapatıldı (tepki süresiyle)
+    const val REMINDER = "REMINDER" // Alarm kapatıldı ama durum sürüyor
+    const val ESCALATION = "ESCALATION" // Alarm kapatılmadı, ikinci kişiye haber verildi
     const val SYSTEM = "SYSTEM"        // Uygulamanın kendi durumu (masaüstüne özgü)
 }
 
@@ -65,11 +70,19 @@ class EventLog(file: Path) : AutoCloseable {
     }
 
     @Synchronized
-    fun recent(deviceId: String? = null, limit: Int = 500): List<LoggedEvent> {
-        val where = if (deviceId != null) " WHERE device_id = ?" else ""
+    fun recent(deviceId: String? = null, limit: Int = 500): List<LoggedEvent> = query(deviceId, null, limit)
+
+    /** Dışa aktarma: [deviceId] (null = hepsi) ve [since] (null = en baştan) için tüm kayıtlar, yeniden eskiye. */
+    @Synchronized
+    fun export(deviceId: String?, since: Long?): List<LoggedEvent> = query(deviceId, since, MAX_ROWS)
+
+    private fun query(deviceId: String?, since: Long?, limit: Int): List<LoggedEvent> {
+        val clauses = listOfNotNull(deviceId?.let { "device_id = ?" }, since?.let { "ts >= ?" })
+        val where = if (clauses.isEmpty()) "" else " WHERE " + clauses.joinToString(" AND ")
         db.prepareStatement("SELECT * FROM events$where ORDER BY ts DESC LIMIT ?").use { ps ->
             var i = 1
             if (deviceId != null) ps.setString(i++, deviceId)
+            if (since != null) ps.setLong(i++, since)
             ps.setInt(i, limit)
             ps.executeQuery().use { rs ->
                 val out = ArrayList<LoggedEvent>()

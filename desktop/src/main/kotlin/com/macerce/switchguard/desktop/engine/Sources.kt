@@ -2,6 +2,7 @@ package com.macerce.switchguard.desktop.engine
 
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
+import com.macerce.switchguard.api.TelegramClient
 import com.macerce.switchguard.api.TuyaClient
 import com.macerce.switchguard.api.TuyaSocket
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -32,6 +33,11 @@ interface TuyaApi {
     fun scalesFor(deviceId: String): Map<String, Int>
 }
 
+/** [TelegramClient]'in motorun kullandığı kısmı (ikinci kişiye haber verme). */
+fun interface TelegramApi {
+    fun send(token: String, chatId: Long, text: String)
+}
+
 /** [TuyaSocket]'in motorun kullandığı kısmı. */
 interface TuyaLive {
     val ready: Boolean
@@ -48,6 +54,7 @@ class Sources(
     val ewelinkLive: (EwelinkSocket.Listener) -> EwelinkLive,
     val tuya: TuyaApi,
     val tuyaLive: (TuyaSocket.Listener) -> TuyaLive,
+    val telegram: TelegramApi = TelegramApi { token, chatId, text -> TelegramClient.send(token, chatId, text) },
 ) {
     companion object {
         fun real(store: Store): Sources {
