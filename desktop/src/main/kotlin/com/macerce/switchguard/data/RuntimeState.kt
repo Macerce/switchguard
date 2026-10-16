@@ -16,7 +16,8 @@ import java.nio.file.StandardCopyOption.REPLACE_EXISTING
  * (aynı alan adları). [Store]'dan ayrı dosyada ([file], `runtime.json`) tutulur: Store'a her yazma arayüzü yeniden
  * çizer, bu bilgiler ise sık değişir ve arayüzü ilgilendirmez. Değeri değişmeyen yazmalar diske gitmez.
  *
- * Masaüstü farkları: telefondaki `savedAlarmVolume` (sistem alarm sesi) ve `stoppedWarnedAt` (servis bekçisi) yok.
+ * Masaüstü farkları: telefondaki `savedAlarmVolume` (sistem alarm sesi) ve `stoppedWarnedAt` (servis bekçisi) yok;
+ * günlük özetin zamanlaması ([summarySentFor], [summaryKey]) burada (telefonda AlarmManager).
  * Dosya okunamaz ya da bozuksa boş başlanır: bu bilgiler kaybolsa da en kötü ihtimalle bir bekleme baştan başlar.
  */
 class RuntimeState(private val file: Path) {
@@ -104,6 +105,16 @@ class RuntimeState(private val file: Path) {
     var escalatedFor: Long
         get() = long("escalatedFor")
         set(v) = set("escalatedFor", v)
+
+    /** Masaüstü: gönderilen son günlük özetin zamanı (bkz. `MonitorEngine.checkSummary`). */
+    var summarySentFor: Long
+        get() = long("summarySentFor")
+        set(v) = set("summarySentFor", v)
+
+    /** Masaüstü: özet ayarının son görülen hali ("off" / "on/<dakika>"); değişince o anki özet atlanır. */
+    var summaryKey: String?
+        get() = str("summaryKey")
+        set(v) = set("summaryKey", v)
 
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = synchronized(lock) {

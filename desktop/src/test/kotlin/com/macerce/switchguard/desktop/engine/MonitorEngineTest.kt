@@ -803,6 +803,56 @@ class MonitorEngineTest {
         sched.advance(0)
     }
 
+    // ---------------------------------------------------------------- günlük özet (masaüstü: motor zamanlar)
+
+    @Test
+    fun dailySummaryIsSentOnceAtItsTime() {
+        store.dailySummaryEnabled = true
+        store.dailySummaryMinute = 13 * 60 // saat 12:00'de başlıyoruz
+        startWith(pump(), rules = emptyMap())
+
+        scheduler.advance(59 * 60_000L)
+        assertTrue(host.notificationTitles.none { it == strings["summary_title"] })
+        scheduler.advance(2 * 60_000L)
+        assertEquals(1, host.notificationTitles.count { it == strings["summary_title"] })
+
+        scheduler.advance(3 * 60 * 60_000L)
+        assertEquals("once a day", 1, host.notificationTitles.count { it == strings["summary_title"] })
+    }
+
+    @Test
+    fun turningTheSummaryOnAfterItsTimeWaitsForTomorrow() {
+        store.dailySummaryEnabled = true
+        store.dailySummaryMinute = 11 * 60 // saat 12:00: bugünkü zaman geçti
+        startWith(pump(), rules = emptyMap())
+
+        scheduler.advance(30 * 60_000L)
+        assertTrue(host.notificationTitles.none { it == strings["summary_title"] })
+
+        scheduler.advance(23 * 60 * 60_000L) // ertesi gün 11:30
+        assertEquals(1, host.notificationTitles.count { it == strings["summary_title"] })
+    }
+
+    @Test
+    fun summaryPreviewNotifiesAtOnce() {
+        startWith(pump(on = true), rules = emptyMap())
+        var result: Boolean? = null
+
+        engine.previewSummary { result = it }
+        scheduler.advance(0)
+
+        assertEquals(true, result)
+        assertEquals(strings["summary_title"], host.notificationTitles.last())
+    }
+
+    @Test
+    fun summaryDueAtIsTheLatestPastTime() {
+        val zone = ZoneId.systemDefault()
+        val noon = wallAt(12, 0)
+        assertEquals(wallAt(11, 0), DailySummary.dueAt(noon, 11 * 60, zone))
+        assertEquals(wallAt(13, 0) - 24 * 3_600_000L, DailySummary.dueAt(noon, 13 * 60, zone))
+    }
+
     // ---------------------------------------------------------------- yardımcılar
 
     private fun readyTelegram(minutes: Int) {

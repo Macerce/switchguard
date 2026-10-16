@@ -183,6 +183,19 @@ class MonitorEngine(
         }
     }
 
+    /**
+     * Ayarlar → Günlük özet → Önizle (telefondaki `Actions.previewSummary`): bugünün özetini hemen bildirir.
+     * [onResult] motor iş parçacığında: kayıt yoksa false.
+     */
+    fun previewSummary(onResult: (Boolean) -> Unit = {}) {
+        scheduler.post {
+            val lines = runCatching { DailySummary.build(store, metrics, strings(), clock.wall()) }
+                .onFailure { Log.w(TAG, "summary failed", it) }.getOrNull()
+            if (lines != null) host.notify(lines.joinToString("\n"), null, title = strings()["summary_title"])
+            onResult(lines != null)
+        }
+    }
+
     /** `ACTION_DEMO`: [op] = [DEMO_TOGGLE] / [DEMO_ONLINE] / [DEMO_POWER]. */
     fun demo(op: String, deviceId: String, channel: Int = 0) {
         // Simülasyon gerçek akıştan geçsin diye izleme kapalıysa önce açılır.
@@ -389,6 +402,7 @@ class MonitorEngine(
         persistRuntime()
         heartbeat(wall)
         checkBlind(wall)
+        checkSummary(wall)
 
         if (authFailed || !store.isLoggedIn) return
         keepChannelPowerLive(wall)
@@ -818,6 +832,27 @@ class MonitorEngine(
             }
             null -> Unit
         }
+    }
+
+    /**
+     * Masaüstü: günlük özet (telefonda AlarmManager + SummaryReceiver). Özet saati geçtiyse ve o zamanın özeti
+     * gönderilmediyse gönderilir; bilgisayar o saatte uyuyorduysa uyanınca en çok [DailySummary.LATE_MS] geç. Ayar
+     * değişince o anki zaman gönderilmiş sayılır: telefondaki gibi saat bugün geçtiyse ilk özet yarın gelir.
+     */
+    private fun checkSummary(wall: Long) {
+        val key = if (store.dailySummaryEnabled) "on/${store.dailySummaryMinute}" else "off"
+        val due = DailySummary.dueAt(wall, store.dailySummaryMinute)
+        if (runtime.summaryKey != key) {
+            runtime.summaryKey = key
+            runtime.summarySentFor = due
+            return
+        }
+        if (!store.dailySummaryEnabled || runtime.summarySentFor >= due) return
+        runtime.summarySentFor = due
+        if (wall - due > DailySummary.LATE_MS) return
+        val lines = runCatching { DailySummary.build(store, metrics, strings(), wall) }
+            .onFailure { Log.w(TAG, "summary failed", it) }.getOrNull() ?: return
+        host.notify(lines.joinToString("\n"), null, title = strings()["summary_title"])
     }
 
     private var lastHeartbeatAt = 0L
