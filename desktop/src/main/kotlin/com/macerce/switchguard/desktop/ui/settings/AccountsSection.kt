@@ -40,7 +40,7 @@ fun AccountsSection(graph: AppGraph, strings: Strings, version: Int) {
     // --- Tuya ---
     SettingRow(
         strings["tuya_account"],
-        if (hasTuya) strings.format("tuya_connected_x", strings["tuya_region_$tuyaRegion"], tuyaDevices) else strings["desktop_tuya_not_connected"],
+        if (hasTuya) strings.plural("tuya_connected_x", tuyaDevices, strings["tuya_region_$tuyaRegion"], tuyaDevices) else strings["desktop_tuya_not_connected"],
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             if (hasTuya) {

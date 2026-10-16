@@ -25,6 +25,58 @@
     <string name="action_dismiss_alarm">DISMISS ALARM</string>
     <string name="action_clear_history">Clear history</string>
 
+    <string name="action_export">Export</string>
+    <string name="export_title">Export history</string>
+    <string name="export_desc_all">Saves a CSV file you can open in Excel or Google Sheets, with every device\'s events.</string>
+    <string name="export_desc_device">Saves a CSV file you can open in Excel or Google Sheets, with the selected device\'s events.</string>
+    <string name="export_range_day">Last 24 hours</string>
+    <string name="export_range_week">Last 7 days</string>
+    <string name="export_range_month">Last 30 days</string>
+    <string name="export_range_all">Everything</string>
+    <string name="export_failed">Couldn\'t export the history</string>
+    <string name="export_file_word">history</string>
+    <string name="export_col_date">Date</string>
+    <string name="export_col_time">Time</string>
+    <string name="export_col_device">Device</string>
+    <string name="export_col_event">Event</string>
+    <string name="export_col_action">Action</string>
+    <string name="section_backup">Backup</string>
+    <string name="backup_create">Back up to a file</string>
+    <string name="backup_create_desc">Rules, automations, settings and the Tuya and eWeLink keys go into a password-protected file</string>
+    <string name="backup_restore">Restore from a file</string>
+    <string name="backup_restore_desc">Moving to a new phone? Pick the backup file and enter its password</string>
+    <string name="backup_password_title_create">Backup password</string>
+    <string name="backup_password_hint_create">The backup can\'t be opened without this password, so write it down. At least 6 characters.</string>
+    <string name="backup_password_title_open">Password of the backup</string>
+    <string name="backup_password">Password</string>
+    <string name="backup_password_repeat">Repeat password</string>
+    <string name="backup_password_short">At least 6 characters</string>
+    <string name="backup_password_mismatch">The passwords don\'t match</string>
+    <string name="backup_working">Working…</string>
+    <string name="backup_saved">Backup saved</string>
+    <string name="backup_failed">Couldn\'t complete the backup operation</string>
+    <string name="backup_wrong_password">Wrong password or damaged file</string>
+    <string name="backup_not_backup">This isn\'t a SwitchGuard backup file</string>
+    <string name="backup_too_new">This backup was made by a newer SwitchGuard; update the app first</string>
+    <string name="backup_other_platform">This backup was made by SwitchGuard for Windows and can\'t be restored on a phone</string>
+    <string name="backup_retry">The backup wasn\'t saved because the screen was reloaded. Please try again.</string>
+    <string name="backup_restore_title">Restore this backup?</string>
+    <string name="backup_restore_body">Backup from %1$s (version %2$s):\n%3$s\n\nYour settings are replaced by the ones in the backup; an account connection that isn\'t in the backup stays as it is. You may need to sign in to eWeLink again.</string>
+    <string name="backup_item_ewelink">eWeLink API keys</string>
+    <string name="backup_item_tuya">Tuya connection</string>
+    <string name="backup_item_settings">Alarm, monitoring and quiet-hours settings</string>
+    <string name="backup_restored">Backup restored</string>
+    <string name="action_restore">Restore</string>
+    <string name="backup_file_word">backup</string>
+    <string name="widget_description">Shows whether monitoring is running and any ringing alarm</string>
+    <string name="widget_sample">Live · watching 3 devices</string>
+    <string name="state_service_stopped">Monitoring isn\'t running — tap to open</string>
+    <string name="secrets_unreadable">Saved keys can\'t be read on this phone (for example, the app data was copied from another phone). Enter your eWeLink and Tuya details again in Settings.</string>
+    <string name="crash_report">Send a problem report</string>
+    <string name="crash_report_desc_none">Something wrong? Prepares an email with diagnostic details. Nothing is shared unless you send it.</string>
+    <string name="crash_report_subject">SwitchGuard %s problem report</string>
+    <string name="crash_report_clear">Delete saved crash reports</string>
+    <string name="crash_report_no_mail">No email app found</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>
@@ -47,17 +99,13 @@
     <string name="state_auth_error">Session expired — sign in again</string>
     <string name="state_error">eWeLink error</string>
     <string name="state_stopped">Monitoring is off</string>
-    <string name="status_live">Live · watching %d device(s)</string>
-    <string name="status_polling">Watching %1$d device(s) · every %2$d s</string>
     <string name="detail_ws_unsupported">Instant updates unavailable for this App ID; using periodic checks (changes shorter than the interval may be missed)</string>
     <string name="detail_reconnecting">Reconnecting for instant updates…</string>
     <string name="detail_api_error">Error code %d</string>
     <string name="monitoring_off_hint">Start monitoring to get alarms</string>
     <string name="last_update">Updated %s</string>
-    <string name="device_count">%d device(s)</string>
 
     <!-- Devices screen -->
-    <string name="alarm_banner_title">Alarm · %d change(s)</string>
     <string name="alarm_banner_more">+%d more</string>
     <string name="login_needed_title">Sign-in required</string>
     <string name="login_needed_body">Sign in with your eWeLink account to see your devices.</string>
@@ -66,14 +114,12 @@
     <string name="not_monitored">Not monitored</string>
     <string name="power">Power</string>
     <string name="channel_n">Channel %d</string>
-    <string name="channels_summary">%1$d channels · %2$d on</string>
     <string name="action_expand">Show channels</string>
     <string name="action_collapse">Hide channels</string>
     <string name="control_failed">Couldn\'t change device: %s</string>
 
     <!-- Device detail -->
     <string name="device_missing">This device is no longer in your account.</string>
-    <string name="section_control">Control</string>
     <string name="section_monitoring">Monitoring</string>
     <string name="section_rules">When this happens</string>
     <string name="section_recent_events">Recent events</string>
@@ -97,7 +143,6 @@
     <string name="clear_history_body">All recorded events will be deleted. This can\'t be undone.</string>
 
     <!-- Settings -->
-    <string name="section_account">Account</string>
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Quiet hours</string>
     <string name="section_permissions">Permissions</string>
@@ -111,7 +156,6 @@
     <string name="oem_hint_transsion">Turn on Auto-start for SwitchGuard in Phone Master so monitoring survives reboots and cleanups.</string>
     <string name="oem_hint_asus">Allow SwitchGuard in Auto-start Manager so monitoring restarts after a reboot.</string>
     <string name="section_about">About</string>
-    <string name="section_general">General</string>
     <string name="tuya_account">Tuya / Smart Life</string>
     <string name="onb_platform_title">Where are your devices?</string>
     <string name="onb_platform_body">Choose the app you use to control your devices today.</string>
@@ -137,7 +181,7 @@
     <string name="action_rename">Rename</string>
     <string name="section_priority">Priority</string>
     <string name="section_other">Other</string>
-    <string name="layout_hint">Star = keep at the top · arrows = move · ⇕ = small / large card · tag = category. Long-press a card to come back here.</string>
+    <string name="layout_hint">Star = keep at the top · arrows = move · card size = small or large · tag = category. Long-press a card to come back here.</string>
     <string name="layout_priority">Mark as priority</string>
     <string name="layout_unpriority">Remove priority</string>
     <string name="layout_move_up">Move up</string>
@@ -157,7 +201,6 @@
     <string name="onb_open_guide">Open the illustrated guide</string>
     <string name="onb_tuya_privacy">These keys are stored only on this phone and are sent nowhere except Tuya\'s own servers.</string>
     <string name="tuya_not_connected">Not connected · tap to connect</string>
-    <string name="tuya_connected_x">Connected · %1$s · %2$d device(s)</string>
     <string name="tuya_dialog_title">Connect Tuya / Smart Life</string>
     <string name="tuya_dialog_desc">Enter the Access ID and Access Secret of your Tuya Cloud project (platform.tuya.com → Cloud → your project → Overview). Your Smart Life / Tuya app account must be linked to the project.</string>
     <string name="tuya_region">Data center</string>
@@ -166,7 +209,6 @@
     <string name="tuya_region_cn">China</string>
     <string name="tuya_region_in">India</string>
     <string name="tuya_checking">Connecting to Tuya…</string>
-    <string name="tuya_connected_ok">Tuya connected: %d device(s) found</string>
     <string name="tuya_shared_hint">A device shared with you is missing? Tuya only lists the devices in your homes. Ask the owner to add you as a home member in Smart Life (Me → Home Management → Add Member).</string>
     <string name="tuya_connected_none">Tuya connected, but no devices were found. Check that your Smart Life / Tuya app account is linked to the project in the same data center.</string>
     <string name="tuya_disconnect">Disconnect</string>
@@ -191,8 +233,25 @@
     <string name="offline_grace">Ignore brief disconnections</string>
     <string name="offline_grace_desc">Wait this long before alerting that a device went offline. If it comes back in time, no alert is raised.</string>
     <string name="grace_off">Off (alert immediately)</string>
-    <string name="seconds_n">%d seconds</string>
-    <string name="minutes_n">%d minute(s)</string>
+    <string name="dur_seconds">%d s</string>
+    <string name="dur_min_sec">%1$d min %2$d s</string>
+    <string name="dur_minutes">%d min</string>
+    <string name="dur_hour_min">%1$d h %2$d min</string>
+    <string name="dur_day_hour">%1$d d %2$d h</string>
+    <string name="event_monitor_gap">Monitoring was interrupted: %1$s (%2$s). Changes during this time may have been missed.</string>
+    <string name="event_monitor_blind">Monitoring isn\'t working (since %1$s): device states can\'t be read.</string>
+    <string name="event_monitor_restored">Monitoring is working again (it was down for %1$s).</string>
+    <string name="event_reminder">Reminder: %1$s is still %2$s (%3$s since the alarm)</string>
+    <string name="notif_blind_title">SwitchGuard can\'t monitor</string>
+    <string name="notif_monitor_title">Monitoring status</string>
+    <string name="monitoring_stopped_title">Monitoring stopped</string>
+    <string name="monitoring_stopped_body">The phone stopped SwitchGuard in the background and it couldn\'t restart. Tap to resume; to prevent this, allow unrestricted background activity.</string>
+    <string name="blind_hint">Check the internet connection and Settings › Permissions (battery).</string>
+    <string name="channel_health">Monitoring problems</string>
+    <string name="channel_health_desc">Warns when SwitchGuard can\'t watch your devices</string>
+    <string name="blind_alert">Warn if monitoring stops</string>
+    <string name="blind_alert_desc">No internet or no cloud connection for this long: you get a warning</string>
+    <string name="blind_alert_off">Off</string>
     <string name="poll_interval">Backup check interval</string>
     <string name="poll_interval_desc">Used only when instant updates aren\'t available.</string>
     <string name="poll_interval_value">Every %d s</string>
@@ -201,15 +260,32 @@
     <string name="device_sound">Sound for this device</string>
     <string name="device_sound_default">Same as general alarm sound</string>
     <string name="device_sound_reset">Use general sound</string>
+    <string name="device_critical">Critical device</string>
+    <string name="device_critical_desc">Its alarms ring even during quiet hours</string>
     <string name="channel_events_custom">Events (device sounds)</string>
     <string name="channel_events_custom_desc">Notifications for devices that have their own sound. The sound is played by the app.</string>
     <string name="alarm_volume">Alarm volume · %d%%</string>
     <string name="vibrate">Vibrate</string>
+    <string name="alarm_boost">Ring at full volume</string>
+    <string name="alarm_boost_desc">Raises the phone\'s alarm volume to maximum while the alarm rings and pauses music; restored when you dismiss it</string>
+    <string name="reminder">Ring again if not resolved</string>
+    <string name="reminder_desc">After you dismiss an alarm, it rings again at this interval while the device stays in the state that caused it (still off, still on or offline). Stops when the device is back to normal.</string>
+    <string name="reminder_every">Every %d min</string>
     <string name="test_alarm">Test alarm</string>
-    <string name="test_alarm_desc">Rings the alarm now so you can check sound and volume</string>
+    <string name="test_alarm_desc">Try the alarm now: with sound or silently, right away or after 10 seconds</string>
     <string name="test_alarm_line">Test alarm</string>
+    <string name="test_alarm_line_silent">Silent test alarm</string>
+    <string name="test_alarm_sound">With sound</string>
+    <string name="test_alarm_sound_desc">Rings and vibrates like a real alarm</string>
+    <string name="test_alarm_silent">Silent (screen only)</string>
+    <string name="test_alarm_silent_desc">No sound or vibration: check the alarm screen and notification at night without waking anyone</string>
+    <string name="test_alarm_delay">Ring in %d seconds</string>
+    <string name="test_alarm_delay_desc">Lock the phone meanwhile to see the alarm screen open on the lock screen</string>
+    <string name="test_alarm_delay_desc_tv">Switch to another app meanwhile to see the alarm come up over it</string>
+    <string name="test_alarm_start">Start</string>
+    <string name="test_alarm_scheduled">The test alarm rings in %d seconds</string>
     <string name="quiet_hours">Quiet hours</string>
-    <string name="quiet_hours_desc">During these hours alarms become silent notifications</string>
+    <string name="quiet_hours_desc">During these hours alarms become notifications (critical devices still ring)</string>
     <string name="quiet_start">Starts</string>
     <string name="quiet_end">Ends</string>
     <string name="perm_notifications">Notifications</string>
@@ -218,6 +294,34 @@
     <string name="perm_battery">Background activity</string>
     <string name="perm_battery_ok">Unrestricted</string>
     <string name="perm_battery_missing">Restricted — alarms may be delayed. Tap to fix.</string>
+    <string name="perm_full_screen">Full-screen alarm</string>
+    <string name="perm_full_screen_missing">Not allowed — the alarm won\'t fill the lock screen. Tap to fix.</string>
+    <string name="perm_lock_popup">Lock screen alarm (Xiaomi)</string>
+    <string name="perm_lock_popup_missing">Off — the alarm won\'t open over the lock screen. Tap to fix.</string>
+    <string name="ready_title">Alarms may not reach you</string>
+    <string name="ready_body">Fix these phone settings so SwitchGuard can always ring.</string>
+    <string name="ready_fix">Fix</string>
+    <string name="ready_done">I did it</string>
+    <string name="ready_notifications">Notifications are off</string>
+    <string name="ready_notifications_desc">Alarms and warnings can\'t be shown.</string>
+    <string name="ready_channel">Alarm notifications are turned down</string>
+    <string name="ready_channel_desc">The “Alarms” notification category isn\'t set to high priority, so the alarm won\'t pop up or fill the screen.</string>
+    <string name="ready_dnd">Do Not Disturb: total silence</string>
+    <string name="ready_dnd_desc">In this mode even alarm sounds are muted.</string>
+    <string name="ready_volume">Alarm volume is very low</string>
+    <string name="ready_volume_desc">The phone\'s alarm volume is at or near zero, so you may not hear SwitchGuard. Fix turns on “Ring at full volume”.</string>
+    <string name="ready_battery">Background activity is restricted</string>
+    <string name="ready_battery_desc">The phone may put monitoring to sleep; alarms can be late or missed.</string>
+    <string name="ready_full_screen">Full-screen alarm is not allowed</string>
+    <string name="ready_full_screen_desc">With the phone locked, the alarm can\'t open its large screen.</string>
+    <string name="ready_lock_popup">Xiaomi blocks the alarm screen</string>
+    <string name="ready_lock_popup_desc">With the phone locked, the alarm screen can\'t open. Tap Fix, open Other permissions and turn on “Show on Lock screen” and “Open new windows while running in the background”.</string>
+    <string name="ready_twin_this">This is a second copy of SwitchGuard</string>
+    <string name="ready_twin_this_desc">This copy was made with the phone\'s Dual apps (app clone) feature. Two copies running side by side ring every alarm twice and sign each other out when they use the same eWeLink account; on Xiaomi phones the other copy\'s permissions also appear switched off. Use one copy: tap Remove and uninstall this copy on the page that opens.</string>
+    <string name="ready_twin_other">There\'s a second SwitchGuard on this phone</string>
+    <string name="ready_twin_other_desc">Another copy of SwitchGuard was made with the phone\'s Dual apps (app clone) feature. Two copies running side by side ring every alarm twice and sign each other out when they use the same eWeLink account; on Xiaomi phones this copy\'s permissions can also appear switched off. Remove the second copy: touch and hold its icon (the one with the small badge) and tap Uninstall.</string>
+    <string name="ready_twin_remove">Remove</string>
+    <string name="ready_twin_keep">I use both on purpose</string>
     <string name="setup_guide">Setup guide</string>
     <string name="setup_guide_desc">Show the first-run setup again</string>
     <string name="privacy_policy">Privacy policy</string>
@@ -257,6 +361,8 @@
     <string name="onb_perm_body">These permissions make sure alarms reach you, even when the screen is off.</string>
     <string name="onb_perm_notif_desc">Required to show alarms.</string>
     <string name="onb_perm_battery_desc">Lets monitoring keep running in the background so alarms aren\'t delayed.</string>
+    <string name="onb_perm_full_screen_desc">Lets the alarm open its large screen while the phone is locked.</string>
+    <string name="onb_perm_lock_popup_desc">On Xiaomi phones, lets the alarm open over the lock screen.</string>
     <string name="onb_done_title">All set!</string>
     <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
     <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>
@@ -394,7 +500,7 @@
     <string name="demo_devices">Demo devices</string>
     <string name="demo_devices_desc">Virtual devices for trying every feature</string>
     <string name="section_demo">Demo: simulate an event</string>
-    <string name="demo_hint">These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching from the Control section above counts as you and does not ring the alarm.</string>
+    <string name="demo_hint">These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching with the buttons above counts as you and does not ring the alarm.</string>
     <string name="demo_toggle">Switch from outside</string>
     <string name="demo_toggle_channel">Switch channel %d from outside</string>
     <string name="demo_disconnect">Lose connection</string>
@@ -407,11 +513,12 @@
     <string name="perm_overlay">Show alarm over other apps</string>
     <string name="perm_overlay_desc">Needed on Android TV so the alarm appears on top of whatever is playing. Tap and allow SwitchGuard.</string>
     <string name="tv_keyboard_hint">Tip: type or paste from your phone with the Google TV app (remote → keyboard).</string>
+    <string name="tv_time_hint">Up and down change the value. OK on the hour moves to minutes, OK on the minutes saves, Back cancels.</string>
     <string name="onb_platform_transfer">Transfer from another device</string>
     <string name="onb_platform_transfer_desc">Already set up on your phone? Get Tuya keys, rules and settings over your home Wi-Fi. For eWeLink this device needs its own account and that account\'s own API keys.</string>
     <string name="onb_transfer_title">Transfer from your phone</string>
     <string name="onb_transfer_body">Both devices must be on the same Wi-Fi network.</string>
-    <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Send to another device, pick this device and enter the code below.</string>
+    <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Backup &amp; transfer → Send to another device, pick this device and enter the code below.</string>
     <string name="transfer_code_label">Code</string>
     <string name="transfer_waiting">Waiting for your phone…</string>
     <string name="transfer_received">Setup received: Tuya keys, rules and settings are here. If you use eWeLink, now enter the API keys of the account you created for this device.</string>
@@ -436,4 +543,188 @@
     <string name="transfer_other_account_body_generic">Don\'t sign in on this device with the eWeLink account used on your other device (e.g. your phone) — eWeLink allows one session per account and the other device is signed out. For this device: create a new account in the eWeLink app, share your devices with it (device → Share), apply as a developer with that account on dev.ewelink.cc and wait for eWeLink\'s approval, then enter that account\'s API keys (App ID / App Secret) here. The API keys entered here must belong to the account signed in here.</string>
     <string name="transfer_tv_qr_hint">Easiest on a TV: choose “Login by QR code” at the bottom of the sign-in page and scan it with the eWeLink app signed in to the account you created for this device.</string>
     <string name="transfer_send_warning_body">The TV or tablet needs its own eWeLink account: create a new account in the eWeLink app, share your devices with it, apply as a developer with that account and wait for eWeLink\'s approval, then enter that account\'s API keys on the other device. eWeLink keys are not transferred; Tuya keys, rules and settings are. Signing in there with this phone\'s account signs this phone out.</string>
+    <plurals name="event_alarm_dismissed">
+        <item quantity="one">Alarm dismissed · %1$d event · response time %2$s</item>
+        <item quantity="other">Alarm dismissed · %1$d events · response time %2$s</item>
+    </plurals>
+    <plurals name="status_live">
+        <item quantity="one">Live · watching %d device</item>
+        <item quantity="other">Live · watching %d devices</item>
+    </plurals>
+    <plurals name="status_polling">
+        <item quantity="one">Watching %1$d device · every %2$d s</item>
+        <item quantity="other">Watching %1$d devices · every %2$d s</item>
+    </plurals>
+    <plurals name="device_count">
+        <item quantity="one">%d device</item>
+        <item quantity="other">%d devices</item>
+    </plurals>
+    <plurals name="alarm_banner_title">
+        <item quantity="one">Alarm · %d change</item>
+        <item quantity="other">Alarm · %d changes</item>
+    </plurals>
+    <plurals name="tuya_connected_x">
+        <item quantity="one">Connected · %1$s · %2$d device</item>
+        <item quantity="other">Connected · %1$s · %2$d devices</item>
+    </plurals>
+    <plurals name="tuya_connected_ok">
+        <item quantity="one">Tuya connected: %d device found</item>
+        <item quantity="other">Tuya connected: %d devices found</item>
+    </plurals>
+    <plurals name="seconds_n">
+        <item quantity="one">%d second</item>
+        <item quantity="other">%d seconds</item>
+    </plurals>
+    <plurals name="minutes_n">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <plurals name="export_done">
+        <item quantity="one">%d entry exported</item>
+        <item quantity="other">%d entries exported</item>
+    </plurals>
+    <plurals name="backup_item_rules">
+        <item quantity="one">%d device\'s rules</item>
+        <item quantity="other">%d devices\' rules</item>
+    </plurals>
+    <plurals name="backup_item_automations">
+        <item quantity="one">%d automation</item>
+        <item quantity="other">%d automations</item>
+    </plurals>
+    <plurals name="crash_report_desc_some">
+        <item quantity="one">%d saved crash report will be attached. Nothing is shared unless you send it.</item>
+        <item quantity="other">%d saved crash reports will be attached. Nothing is shared unless you send it.</item>
+    </plurals>
+
+    <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
+    <string name="tg_alarm_header">🚨 SwitchGuard alarm not dismissed for %d min</string>
+    <string name="tg_footer">From: %s</string>
+    <string name="tg_dismissed">✅ SwitchGuard alarm dismissed at %1$s (%2$s after it started)</string>
+    <string name="tg_err_token">The bot token is invalid</string>
+    <string name="tg_err_blocked">The person blocked the bot or deleted the chat</string>
+    <string name="tg_err_chat">Chat not found: the person hasn\'t tapped Start in the bot</string>
+    <string name="event_escalation_failed">Alarm not dismissed for %1$d min, but Telegram couldn\'t be reached: %2$s</string>
+    <string name="tg_title">Tell someone else</string>
+    <string name="tg_desc">If an alarm isn\'t dismissed in time, the people you choose get a Telegram message, and another one once it\'s dismissed. Even if your phone is in another room at night, someone at home or a neighbour finds out. The messages are sent by a Telegram bot you create; no other server is involved.</string>
+    <string name="tg_step_bot">1. Telegram bot</string>
+    <string name="tg_step_bot_desc">In Telegram, open @BotFather, send /newbot and name your bot. Paste the token BotFather gives you below.</string>
+    <string name="tg_open_botfather">Open BotFather</string>
+    <string name="tg_token">Bot token</string>
+    <string name="tg_verify">Check token</string>
+    <string name="tg_bot_ok">Bot ready: @%s</string>
+    <string name="tg_step_people">2. People to tell</string>
+    <string name="tg_step_people_wait">Check the bot token first.</string>
+    <string name="tg_step_people_desc">Ask each person to open %s in Telegram and tap Start (you can also add the bot to a family group). Then tap Find people.</string>
+    <string name="tg_share">Share link</string>
+    <string name="tg_share_text">Could you open this bot and tap Start? Then you\'ll get a Telegram message if my SwitchGuard alarm isn\'t dismissed. %s</string>
+    <string name="tg_find">Find people</string>
+    <string name="tg_none_found">No one found. Try again after the person taps Start in the bot (Telegram only shows the last 24 hours).</string>
+    <string name="tg_group">group</string>
+    <string name="tg_step_when">3. When</string>
+    <string name="tg_when_desc">People are told if the alarm isn\'t dismissed within %d min.</string>
+    <string name="tg_test">Send a test message</string>
+    <string name="tg_test_message">👋 SwitchGuard test message: if an alarm isn\'t dismissed within %d min, you\'ll be told here.</string>
+    <string name="tg_test_sent">Test message sent</string>
+    <string name="tg_turn_off">Turn off</string>
+    <string name="phone_entry_button">Enter from phone</string>
+    <string name="phone_entry_title">Enter from your phone</string>
+    <string name="phone_entry_step1">1. Scan this code with your phone\'s camera.</string>
+    <string name="phone_entry_step2">2. Fill in the fields on the page that opens (pasting works) and tap Send to TV.</string>
+    <string name="phone_entry_step3">Your phone must be on the same Wi-Fi as this TV. The data is encrypted and never leaves your home network.</string>
+    <string name="phone_entry_waiting">Waiting for your phone…</string>
+    <string name="phone_entry_manual">No camera? Open this address on your phone: %s</string>
+    <string name="phone_entry_no_network">This device isn\'t connected to a network. Connect to Wi-Fi and try again.</string>
+    <string name="phone_entry_lang">en</string>
+    <string name="phone_entry_page_lead">Fill in the fields and tap Send to TV; the data goes to the TV encrypted.</string>
+    <string name="phone_entry_page_bad_link">The link is incomplete. Scan the QR code on the TV again.</string>
+    <string name="phone_entry_page_paste">Paste</string>
+    <string name="phone_entry_page_send">Send to TV</string>
+    <string name="phone_entry_page_sending">Sending…</string>
+    <string name="phone_entry_page_sent">Sent</string>
+    <string name="phone_entry_page_sent_body">Look at the TV: the fields are filled in. You can close this page.</string>
+    <string name="phone_entry_page_failed">Couldn\'t send. Is the window still open on the TV? Scan the QR code again and retry.</string>
+    <string name="phone_entry_page_empty">Fill in at least one field.</string>
+    <string name="phone_entry_page_note">This page only works on your home network while the window on the TV is open.</string>
+    <plurals name="event_escalated">
+        <item quantity="one">Alarm not dismissed for %2$d min: told %1$d person on Telegram</item>
+        <item quantity="other">Alarm not dismissed for %2$d min: told %1$d people on Telegram</item>
+    </plurals>
+    <plurals name="tg_found">
+        <item quantity="one">Found %d chat</item>
+        <item quantity="other">Found %d chats</item>
+    </plurals>
+    <plurals name="tg_summary">
+        <item quantity="one">If not dismissed in %1$d min · %2$d person</item>
+        <item quantity="other">If not dismissed in %1$d min · %2$d people</item>
+    </plurals>
+
+    <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
+    <string name="stat_devices">Devices</string>
+    <string name="stat_on">On</string>
+    <string name="stat_offline">Offline</string>
+    <string name="stat_power">Power</string>
+    <string name="state_on_title">On</string>
+    <string name="state_off_title">Off</string>
+    <string name="tap_to_toggle">Tap to turn on or off</string>
+    <string name="settings_accounts">Accounts</string>
+    <string name="settings_accounts_none">No account connected</string>
+    <string name="settings_backup">Backup &amp; transfer</string>
+    <string name="settings_backup_desc">Back up to a file or move to another device</string>
+    <string name="settings_backup_desc_tv">Send to or receive from another device</string>
+    <string name="settings_about">Help &amp; about</string>
+    <string name="settings_about_desc">Version %s · guides and contact</string>
+    <string name="settings_group_connections">Connections</string>
+    <string name="settings_group_alerts">Alarms &amp; notifications</string>
+    <string name="settings_group_app">App</string>
+    <string name="settings_group_support">Support</string>
+    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try_it">Test</string>
+    <string name="settings_sound">Sound</string>
+    <string name="settings_when_alarm">While an alarm is ringing</string>
+    <string name="settings_monitoring_intro">How SwitchGuard keeps watch over your devices in the background.</string>
+    <string name="settings_quiet_critical">Devices marked as critical still ring during quiet hours.</string>
+    <string name="settings_permissions_intro">Without these, Android may keep the alarm from reaching you.</string>
+    <string name="settings_other_devices">Other devices</string>
+    <string name="settings_help">Help</string>
+    <string name="settings_contact">Contact</string>
+    <string name="perm_all_ok">All set</string>
+    <string name="time_range">%1$s – %2$s</string>
+    <string name="daily_at">Daily at %s</string>
+    <string name="volume_pct">%d%%</string>
+    <string name="plan_pro">Pro · all devices monitored</string>
+    <string name="demo_short">Demo</string>
+    <plurals name="perm_missing_n">
+        <item quantity="one">%d permission missing</item>
+        <item quantity="other">%d permissions missing</item>
+    </plurals>
+    <string name="guard_ready">Ready to ring the moment something changes</string>
+    <string name="monitoring_summary_now">Alerts at once when offline · %s</string>
+    <string name="monitoring_summary_grace">Waits %1$s when offline · %2$s</string>
+    <plurals name="plan_free">
+        <item quantity="one">Free · monitors %d device</item>
+        <item quantity="other">Free · monitors %d devices</item>
+    </plurals>
+    <string name="auto_if">If</string>
+    <string name="auto_then">Then</string>
+    <string name="automation_name_hint">e.g. Pump stopped</string>
+    <string name="automation_minutes_short">Duration</string>
+    <string name="automation_low_minutes_short">Low for at least</string>
+    <string name="automation_grace_short">Ignore after turn-on</string>
+    <string name="automation_delay_short">Wait before acting</string>
+    <string name="automation_now">At once</string>
+    <string name="automation_summary">Summary</string>
+    <string name="action_decrease">Decrease</string>
+    <string name="action_increase">Increase</string>
+    <string name="evt_turned_on">Turns on</string>
+    <string name="evt_turned_off">Turns off</string>
+    <string name="evt_stayed_on">Stays on</string>
+    <string name="evt_stayed_off">Stays off</string>
+    <string name="evt_went_offline">Goes offline</string>
+    <string name="evt_came_online">Comes online</string>
+    <string name="evt_power_above">Power goes up</string>
+    <string name="evt_power_below">Power goes down</string>
+    <string name="evt_channel_power_low">Power drops while on</string>
+    <string name="act_turn_on">Turn a device on</string>
+    <string name="act_turn_off">Turn a device off</string>
+    <string name="automation_low_for_nograce">(for %d min)</string>
 </resources>

@@ -45,11 +45,25 @@ class RulesTest {
     }
 
     @Test
+    fun `kritik cihazin alarmi sessiz saatte de alarm kalir`() {
+        assertEquals(AlertAction.ALARM, RuleEngine.effective(AlertAction.ALARM, quiet = true, critical = true))
+        assertEquals(AlertAction.NOTIFY, RuleEngine.effective(AlertAction.NOTIFY, quiet = true, critical = true))
+        assertEquals(AlertAction.NOTIFY, RuleEngine.effective(AlertAction.ALARM, quiet = true, critical = false))
+    }
+
+    @Test
+    fun `kritik varsayilan olarak kapali`() {
+        assertFalse(DeviceRules().critical)
+        assertFalse(DeviceRules.mapFromJson("""{"a":{"monitored":true,"actions":{}}}""").getValue("a").critical)
+    }
+
+    @Test
     fun `kurallar json gidis donus`() {
         val rules = mapOf(
             "a" to DeviceRules(monitored = false, actions = mapOf(EventType.TURNED_ON to AlertAction.IGNORE)),
             "b" to DeviceRules(),
             "c" to DeviceRules(soundUri = "content://media/internal/audio/media/42"),
+            "d" to DeviceRules(critical = true),
         )
         assertEquals(rules, DeviceRules.mapFromJson(DeviceRules.mapToJson(rules)))
     }

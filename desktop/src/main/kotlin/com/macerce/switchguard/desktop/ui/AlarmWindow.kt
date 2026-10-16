@@ -110,7 +110,7 @@ private fun AlarmWindowContent(
                 Icon(Icons.Filled.Warning, contentDescription = null, tint = Color.White, modifier = Modifier.size(96.dp))
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    strings.format("alarm_banner_title", lines.size),
+                    strings.plural("alarm_banner_title", lines.size, lines.size),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,

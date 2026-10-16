@@ -39,10 +39,46 @@ class StringsTest {
 
     @Test
     fun formatsPositionalArgs() {
-        val text = Strings.load("en").format("status_polling", 3, 30)
-        assertTrue(text, text.contains("3"))
-        assertTrue(text, text.contains("30"))
-        assertEquals("Watching 3 device(s) · every 30 s", text)
+        val text = Strings.load("en").format("label_channel", "Pump", 2)
+        assertTrue(text, text.contains("Pump"))
+        assertTrue(text, text.contains("2"))
+    }
+
+    // ---------------------------------------------------------------- çoğul metinler (telefondaki getQuantityString)
+
+    @Test
+    fun pluralPicksOneOrOther() {
+        val en = Strings.load("en")
+        assertEquals("Watching 1 device · every 30 s", en.plural("status_polling", 1, 1, 30))
+        assertEquals("Watching 3 devices · every 30 s", en.plural("status_polling", 3, 3, 30))
+        assertEquals("1 minute", en.plural("minutes_n", 1, 1))
+        assertEquals("5 minutes", en.plural("minutes_n", 5, 5))
+    }
+
+    @Test
+    fun turkishPluralIsLoaded() {
+        val tr = Strings.load("tr")
+        assertEquals("5 dakika", tr.plural("minutes_n", 5, 5))
+        assertNotEquals(Strings.load("en").plural("minutes_n", 5, 5), tr.plural("minutes_n", 5, 5))
+    }
+
+    @Test
+    fun missingPluralReturnsTheKeyAndNeverThrows() {
+        assertEquals("no_such_plural", Strings.load("en").plural("no_such_plural", 2, 2))
+        val s = Strings("tr", emptyMap(), emptyMap(), mapOf("k" to mapOf("other" to "%1\$d dk")), mapOf("k" to mapOf("other" to "%1\$s min")))
+        assertEquals("beş min", s.plural("k", 5, "beş"))
+    }
+
+    @Test
+    fun everyEnglishPluralHasTurkishWithTheSameArguments() {
+        val english = Strings.parsePlurals(resource("/strings/values/strings.xml"))
+        val turkish = Strings.parsePlurals(resource("/strings/values-tr/strings.xml"))
+        assertTrue("no plurals parsed", english.isNotEmpty())
+        for ((key, en) in english) {
+            val tr = turkish[key]
+            assertTrue("no Turkish plural for $key", tr != null)
+            assertEquals("$key: EN '${en["other"]}' / TR '${tr!!["other"]}'", specifiers(en.getValue("other")), specifiers(tr.getValue("other")))
+        }
     }
 
     @Test
@@ -107,6 +143,10 @@ class StringsTest {
         assertEquals(s["device_missing"], e.deviceMissing)
         assertEquals(s.format("automation_failed", "text", "boom"), e.automationFailed("text", "boom"))
         assertEquals(s.format("power_data_stale", "Pump"), e.powerStale("Pump"))
+        assertEquals(s.plural("event_escalated", 2, 2, 5), e.escalation(2, 5, null))
+        assertEquals(s.format("event_escalation_failed", 5, "boom"), e.escalation(0, 5, "boom"))
+        assertTrue(e.alarmDismissed(3, 130_000).contains("2"))
+        assertTrue(e.reminder("Pump", "ON", 600_000).contains("Pump"))
     }
 
     @Test

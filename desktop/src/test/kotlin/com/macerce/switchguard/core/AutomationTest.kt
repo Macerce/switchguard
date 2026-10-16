@@ -206,4 +206,78 @@ class AutomationTest {
         assertEquals(null, d.channelPowerOf(0))
         assertEquals(false, d.hasChannelPower)
     }
+
+    // ---- servis yeniden başlayınca durum korunur
+
+    private fun restarted(e: AutomationEngine, automations: List<Automation>) =
+        AutomationEngine().also { it.restore(e.saveState(), automations) }
+
+    @Test
+    fun `gecikmeli eylem servis yeniden baslasa da zamaninda calisir`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        assertTrue(e.onStates(map(dev(true)), map(dev(false)), a, 0).isEmpty())
+        val r = restarted(e, a)
+        assertEquals(5 * min, r.nextDueAt(map(dev(false)), a))
+        assertTrue(r.onTick(map(dev(false)), a, 4 * min).isEmpty())
+        assertEquals(a, r.onTick(map(dev(false)), a, 5 * min))
+    }
+
+    @Test
+    fun `silinen otomasyonun bekleyen eylemi geri yuklenmez`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        e.onStates(map(dev(true)), map(dev(false)), a, 0)
+        val r = AutomationEngine().also { it.restore(e.saveState(), emptyList()) }
+        assertTrue(r.onTick(map(dev(false)), a, 10 * min).isEmpty())
+    }
+
+    @Test
+    fun `acik kalma suresi yeniden baslatmada bastan baslamaz`() {
+        val a = listOf(auto(TriggerKind.STAYED_ON, minutes = 10))
+        val e = AutomationEngine()
+        e.onStates(map(dev(false)), map(dev(true)), a, 0)
+        val r = restarted(e, a)
+        // Yeniden başlayınca ilk senkron: kayıtlı durum da yeni durum da "açık".
+        assertTrue(r.onStates(map(dev(true)), map(dev(true)), a, 3 * min).isEmpty())
+        assertEquals(10 * min, r.nextDueAt(map(dev(true)), a))
+        assertEquals(a, r.onTick(map(dev(true)), a, 10 * min))
+    }
+
+    @Test
+    fun `tetiklenmis sure yeniden baslatmadan sonra tekrar tetiklenmez`() {
+        val a = listOf(auto(TriggerKind.STAYED_ON, minutes = 10))
+        val e = AutomationEngine()
+        e.onStates(map(dev(false)), map(dev(true)), a, 0)
+        assertEquals(a, e.onTick(map(dev(true)), a, 10 * min))
+        val r = restarted(e, a)
+        assertTrue(r.onStates(map(dev(true)), map(dev(true)), a, 12 * min).isEmpty())
+        assertTrue(r.onTick(map(dev(true)), a, 20 * min).isEmpty())
+    }
+
+    @Test
+    fun `bozuk durum kaydi yok sayilir`() {
+        val a = listOf(auto(TriggerKind.STAYED_ON, minutes = 10))
+        val r = AutomationEngine().also { it.restore("bozuk", a); it.restore(null, a) }
+        r.onStates(map(dev(false)), map(dev(true)), a, 0)
+        assertEquals(a, r.onTick(map(dev(true)), a, 10 * min))
+    }
+
+    @Test
+    fun `devre disi birakilan otomasyonun bekleyen eylemi calismaz`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        e.onStates(map(dev(true)), map(dev(false)), a, 0)
+        val disabled = a.map { it.copy(enabled = false) }
+        assertTrue(e.onTick(map(dev(false)), disabled, 5 * min).isEmpty())
+    }
+
+    @Test
+    fun `bekleyen eylem otomasyonun guncel tanimiyla calisir`() {
+        val a = listOf(auto(TriggerKind.TURNED_OFF, delay = 5))
+        val e = AutomationEngine()
+        e.onStates(map(dev(true)), map(dev(false)), a, 0)
+        val edited = a.map { it.copy(name = "yeni ad") }
+        assertEquals(edited, e.onTick(map(dev(false)), edited, 5 * min))
+    }
 }

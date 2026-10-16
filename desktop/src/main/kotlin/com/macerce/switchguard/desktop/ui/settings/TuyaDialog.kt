@@ -108,7 +108,7 @@ fun TuyaDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Unit) {
                         error = result !is TuyaResult.Connected
                         message = when (result) {
                             is TuyaResult.Connected -> if (result.devices > 0) {
-                                strings.format("tuya_connected_ok", result.devices) + "\n\n" + strings["tuya_shared_hint"]
+                                strings.plural("tuya_connected_ok", result.devices, result.devices) + "\n\n" + strings["tuya_shared_hint"]
                             } else {
                                 strings["tuya_connected_none"]
                             }

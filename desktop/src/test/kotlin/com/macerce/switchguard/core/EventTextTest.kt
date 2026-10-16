@@ -13,6 +13,12 @@ class EventTextTest {
         deviceMissing = "This device is no longer in your account.",
         automationFailed = { t, e -> "$t — failed: $e" },
         powerStale = { "$it: no channel power data for 5 minutes." },
+        monitorGap = { from, to -> "Monitoring was down $from–$to" },
+        monitorBlind = { "Monitoring not working since $it" },
+        monitorRestored = { from, to -> "Monitoring working again after ${to - from}" },
+        alarmDismissed = { n, ms -> "Alarm dismissed: $n events, $ms ms" },
+        reminder = { label, state, ms -> "Reminder: $label is still $state ($ms ms)" },
+        escalation = { n, min, err -> if (err == null) "Not dismissed for $min min: told $n" else "Not dismissed for $min min, couldn't tell: $err" },
     )
     private val tr = EventStrings(
         ChangeLabels("AÇIK", "KAPALI", "ONLINE", "OFFLINE") { n, c -> "$n (K$c)" },
@@ -22,6 +28,12 @@ class EventTextTest {
         deviceMissing = "Bu cihaz artık hesabınızda değil.",
         automationFailed = { t, e -> "$t — başarısız: $e" },
         powerStale = { "$it: kanal gücü verisi 5 dakikadır alınamıyor." },
+        monitorGap = { from, to -> "İzleme durdu: $from–$to" },
+        monitorBlind = { "İzleme çalışmıyor: $it" },
+        monitorRestored = { from, to -> "İzleme yeniden çalışıyor: ${to - from}" },
+        alarmDismissed = { n, ms -> "Alarm kapatıldı: $n olay, $ms ms" },
+        reminder = { label, state, ms -> "Hatırlatma: $label hâlâ $state ($ms ms)" },
+        escalation = { n, min, err -> if (err == null) "$min dk kapatılmadı: $n kişi" else "$min dk kapatılmadı, haber verilemedi: $err" },
     )
     private val both = listOf(en, tr)
     private val rogar = "Rögar Su Seviye Bildirimi"
@@ -38,6 +50,10 @@ class EventTextTest {
             EventArgs.ShortDrop, EventArgs.Test, EventArgs.PowerStale,
             EventArgs.AutoMissing("x"), EventArgs.AutoSwitch("a", 1, true, false, "boom"),
             EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
+            EventArgs.MonitorGap(1_000, 61_000), EventArgs.MonitorBlind(5_000), EventArgs.MonitorRestored(5_000, 9_000),
+            EventArgs.AlarmDismissed(3, 130_000),
+            EventArgs.Reminder(1, multi = true, connection = false, to = false, durationMs = 60_000),
+            EventArgs.Reminder(0, multi = false, connection = true, to = false, durationMs = 90_000),
         )
         all.forEach { assertEquals(it, EventArgs.parse(it.toJson())) }
         assertNull(EventArgs.parse(null)); assertNull(EventArgs.parse("{bad"))
@@ -84,5 +100,33 @@ class EventTextTest {
 
     @Test fun unknownTextStaysUnparsed() {
         assertNull(EventArgs.fromLegacy("TURNED_ON", rogar, "something else", both))
+    }
+
+    @Test fun monitorGapRendersInEachLanguage() {
+        val a = EventArgs.MonitorGap(1_000, 61_000)
+        assertEquals("İzleme durdu: 1000–61000", a.render("SwitchGuard", tr))
+        assertEquals("Monitoring was down 1000–61000", a.render("SwitchGuard", en))
+    }
+
+    @Test fun blindAndRestoredRender() {
+        assertEquals("İzleme çalışmıyor: 5000", EventArgs.MonitorBlind(5_000).render("SwitchGuard", tr))
+        assertEquals("Monitoring working again after 4000", EventArgs.MonitorRestored(5_000, 9_000).render("SwitchGuard", en))
+    }
+
+    @Test fun alarmDismissedRendersCountAndResponseTime() {
+        assertEquals("Alarm kapatıldı: 3 olay, 130000 ms", EventArgs.AlarmDismissed(3, 130_000).render("SwitchGuard", tr))
+        assertEquals("Alarm dismissed: 1 events, 9000 ms", EventArgs.AlarmDismissed(1, 9_000).render("SwitchGuard", en))
+    }
+
+    @Test fun reminderRendersChannelAndState() {
+        assertEquals("Hatırlatma: $rogar (K2) hâlâ KAPALI (60000 ms)",
+            EventArgs.Reminder(1, multi = true, connection = false, to = false, durationMs = 60_000).render(rogar, tr))
+        assertEquals("Reminder: Pump is still OFFLINE (90000 ms)",
+            EventArgs.Reminder(0, multi = false, connection = true, to = false, durationMs = 90_000).render("Pump", en))
+    }
+
+    @Test fun reminderArgsFromChange() {
+        val r = AlarmReminders.Reminder(Change.Switch("r", rogar, 1, true, from = true, to = false), 60_000)
+        assertEquals(EventArgs.Reminder(1, multi = true, connection = false, to = false, durationMs = 60_000), EventArgs.Reminder.of(r))
     }
 }

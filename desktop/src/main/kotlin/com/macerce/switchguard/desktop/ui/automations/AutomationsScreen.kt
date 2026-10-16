@@ -148,7 +148,7 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>, strings: Str
     val t = a.trigger
     val srcName = devices.firstOrNull { it.id == t.deviceId }?.let { channelLabel(it, t.channel, t.kind.usesChannel, strings) } ?: strings["device_missing"]
     val trigger = when (t.kind) {
-        TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> strings[t.kind.titleKey()] + " " + strings.format("minutes_n", t.minutes)
+        TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> strings[t.kind.titleKey()] + " " + strings.plural("minutes_n", t.minutes, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts)
         TriggerKind.CHANNEL_POWER_LOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts) + " " +
             strings.format("automation_low_for", t.minutes, t.graceMinutes)

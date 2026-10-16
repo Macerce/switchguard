@@ -64,7 +64,7 @@ fun SettingsScreen(graph: AppGraph, strings: Strings) {
             )
             ChoiceRow(
                 strings["offline_grace"],
-                options = GRACE_CHOICES.map { it to if (it == 0) strings["grace_off"] else strings.format("seconds_n", it) },
+                options = GRACE_CHOICES.map { it to if (it == 0) strings["grace_off"] else strings.plural("seconds_n", it, it) },
                 selected = s.grace,
                 onSelect = { store.offlineGraceSec = it },
             )

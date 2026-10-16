@@ -11,6 +11,18 @@ class EventStrings(
     val deviceMissing: String,
     val automationFailed: (text: String, error: String) -> String,
     val powerStale: (name: String) -> String,
+    /** İzlemenin durduğu aralık (ms, duvar saati). */
+    val monitorGap: (from: Long, to: Long) -> String,
+    /** İzleme [since]'den beri çalışmıyor. */
+    val monitorBlind: (since: Long) -> String,
+    /** İzleme yeniden çalışıyor; [from]–[to] arası kördü. */
+    val monitorRestored: (from: Long, to: Long) -> String,
+    /** Alarm kapatıldı: kaç olay vardı, ilk olaydan kapatılana kadar geçen süre. */
+    val alarmDismissed: (count: Int, responseMs: Long) -> String,
+    /** Hatırlatma: [label] hâlâ [state]; ilk alarmdan bu yana [durationMs]. */
+    val reminder: (label: String, state: String, durationMs: Long) -> String,
+    /** Alarm [minutes] dakikadır kapatılmadı: [recipients] kişiye haber verildi ya da ([error]) verilemedi. */
+    val escalation: (recipients: Int, minutes: Int, error: String?) -> String,
 )
 
 /**
@@ -31,6 +43,25 @@ sealed class EventArgs {
         val error: String? = null,
     ) : EventArgs()
     data class AutoAlert(val automation: String, val source: String?) : EventArgs()
+    /** İzleme [from]–[to] arasında çalışmadı (servis kapatıldı, telefon kapalıydı). */
+    data class MonitorGap(val from: Long, val to: Long) : EventArgs()
+    /** İzleme [since]'den beri kör (internet/bulut/oturum sorunu). */
+    data class MonitorBlind(val since: Long) : EventArgs()
+    data class MonitorRestored(val from: Long, val to: Long) : EventArgs()
+    /** Alarm kapatıldı; [responseMs] = ilk olaydan kapatılana kadar geçen süre (tepki süresi). */
+    data class AlarmDismissed(val count: Int, val responseMs: Long) : EventArgs()
+    /** Alarm kapatıldı ama durum sürüyor: [connection] ise bağlantı, değilse [channel] kanalı hâlâ [to]. */
+    data class Reminder(val channel: Int, val multi: Boolean, val connection: Boolean, val to: Boolean, val durationMs: Long) : EventArgs() {
+        companion object {
+            fun of(r: AlarmReminders.Reminder) = when (val c = r.change) {
+                is Change.Switch -> Reminder(c.channel, c.multiChannel, connection = false, to = c.to, durationMs = r.durationMs)
+                is Change.Connection -> Reminder(0, multi = false, connection = true, to = c.to, durationMs = r.durationMs)
+            }
+        }
+    }
+
+    /** İkinci kişiye haber verme (Telegram). [error] doluysa gönderilemedi. */
+    data class Escalation(val recipients: Int, val minutes: Int, val error: String? = null) : EventArgs()
 
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
@@ -46,6 +77,19 @@ sealed class EventArgs {
             if (error != null) s.automationFailed(text, error) else text
         }
         is AutoAlert -> s.automationFired(automation).let { if (source != null) "$it ($source)" else it }
+        is MonitorGap -> s.monitorGap(from, to)
+        is MonitorBlind -> s.monitorBlind(since)
+        is MonitorRestored -> s.monitorRestored(from, to)
+        is AlarmDismissed -> s.alarmDismissed(count, responseMs)
+        is Reminder -> {
+            val label = if (!connection && multi) s.labels.channel(deviceName, channel + 1) else deviceName
+            val state = when {
+                connection -> if (to) s.labels.online else s.labels.offline
+                else -> if (to) s.labels.on else s.labels.off
+            }
+            s.reminder(label, state, durationMs)
+        }
+        is Escalation -> s.escalation(recipients, minutes, error)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -61,6 +105,15 @@ sealed class EventArgs {
                 a.error?.let { put("err", it) }
             }
             is AutoAlert -> { put("t", "auto_alert"); put("auto", a.automation); a.source?.let { put("src", it) } }
+            is MonitorGap -> { put("t", "gap"); put("from", a.from); put("to", a.to) }
+            is MonitorBlind -> { put("t", "blind"); put("since", a.since) }
+            is MonitorRestored -> { put("t", "restored"); put("from", a.from); put("to", a.to) }
+            is AlarmDismissed -> { put("t", "dismissed"); put("n", a.count); put("ms", a.responseMs) }
+            is Reminder -> {
+                put("t", "reminder"); put("ch", a.channel); put("multi", a.multi); put("conn", a.connection)
+                put("to", a.to); put("ms", a.durationMs)
+            }
+            is Escalation -> { put("t", "escalation"); put("n", a.recipients); put("min", a.minutes); a.error?.let { put("err", it) } }
         }
     }.toString()
 
@@ -81,6 +134,12 @@ sealed class EventArgs {
                         if (o.has("err")) o.getString("err") else null,
                     )
                     "auto_alert" -> AutoAlert(o.getString("auto"), if (o.has("src")) o.getString("src") else null)
+                    "gap" -> MonitorGap(o.getLong("from"), o.getLong("to"))
+                    "blind" -> MonitorBlind(o.getLong("since"))
+                    "restored" -> MonitorRestored(o.getLong("from"), o.getLong("to"))
+                    "dismissed" -> AlarmDismissed(o.getInt("n"), o.getLong("ms"))
+                    "reminder" -> Reminder(o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("conn"), o.getBoolean("to"), o.getLong("ms"))
+                    "escalation" -> Escalation(o.getInt("n"), o.getInt("min"), if (o.has("err")) o.getString("err") else null)
                     else -> null
                 }
             }.getOrNull()

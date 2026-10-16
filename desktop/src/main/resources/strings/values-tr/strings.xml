@@ -23,6 +23,58 @@
     <string name="action_dismiss_alarm">ALARMI KAPAT</string>
     <string name="action_clear_history">Geçmişi temizle</string>
 
+    <string name="action_export">Dışa aktar</string>
+    <string name="export_title">Geçmişi dışa aktar</string>
+    <string name="export_desc_all">Excel ya da Google E-Tablolar\'da açılabilen bir CSV dosyası kaydeder; tüm cihazların olaylarını içerir.</string>
+    <string name="export_desc_device">Excel ya da Google E-Tablolar\'da açılabilen bir CSV dosyası kaydeder; yalnızca seçili cihazın olaylarını içerir.</string>
+    <string name="export_range_day">Son 24 saat</string>
+    <string name="export_range_week">Son 7 gün</string>
+    <string name="export_range_month">Son 30 gün</string>
+    <string name="export_range_all">Tümü</string>
+    <string name="export_failed">Geçmiş dışa aktarılamadı</string>
+    <string name="export_file_word">gecmis</string>
+    <string name="export_col_date">Tarih</string>
+    <string name="export_col_time">Saat</string>
+    <string name="export_col_device">Cihaz</string>
+    <string name="export_col_event">Olay</string>
+    <string name="export_col_action">İşlem</string>
+    <string name="section_backup">Yedekleme</string>
+    <string name="backup_create">Şifreli yedek al</string>
+    <string name="backup_create_desc">Kurallar, otomasyonlar, ayarlar ile Tuya ve eWeLink anahtarları şifreli bir dosyaya kaydedilir</string>
+    <string name="backup_restore">Yedekten geri yükle</string>
+    <string name="backup_restore_desc">Yeni telefona mı geçtiniz? Yedek dosyasını seçin ve şifresini girin</string>
+    <string name="backup_password_title_create">Yedek şifresi</string>
+    <string name="backup_password_hint_create">Bu şifre olmadan yedek açılamaz; bir yere not edin. En az 6 karakter.</string>
+    <string name="backup_password_title_open">Yedeğin şifresi</string>
+    <string name="backup_password">Şifre</string>
+    <string name="backup_password_repeat">Şifre (tekrar)</string>
+    <string name="backup_password_short">En az 6 karakter</string>
+    <string name="backup_password_mismatch">Şifreler aynı değil</string>
+    <string name="backup_working">Hazırlanıyor…</string>
+    <string name="backup_saved">Yedek kaydedildi</string>
+    <string name="backup_failed">Yedekleme işlemi tamamlanamadı</string>
+    <string name="backup_wrong_password">Şifre yanlış ya da dosya bozuk</string>
+    <string name="backup_not_backup">Bu bir SwitchGuard yedek dosyası değil</string>
+    <string name="backup_too_new">Bu yedek daha yeni bir SwitchGuard sürümüyle alınmış; önce uygulamayı güncelleyin</string>
+    <string name="backup_other_platform">Bu yedek SwitchGuard\'ın Windows sürümüyle alınmış; telefonda geri yüklenemez</string>
+    <string name="backup_retry">Ekran yeniden yüklendiği için yedek kaydedilmedi. Lütfen tekrar deneyin.</string>
+    <string name="backup_restore_title">Bu yedek geri yüklensin mi?</string>
+    <string name="backup_restore_body">%1$s tarihli yedek (sürüm %2$s):\n%3$s\n\nAyarlarınız yedektekilerle değiştirilir; yedekte olmayan hesap bağlantısı olduğu gibi kalır. eWeLink\'e yeniden giriş yapmanız gerekebilir.</string>
+    <string name="backup_item_ewelink">eWeLink API anahtarları</string>
+    <string name="backup_item_tuya">Tuya bağlantısı</string>
+    <string name="backup_item_settings">Alarm, izleme ve sessiz saat ayarları</string>
+    <string name="backup_restored">Yedek geri yüklendi</string>
+    <string name="action_restore">Geri yükle</string>
+    <string name="backup_file_word">yedek</string>
+    <string name="widget_description">İzlemenin çalışıp çalışmadığını ve çalan alarmı gösterir</string>
+    <string name="widget_sample">Canlı · 3 cihaz izleniyor</string>
+    <string name="state_service_stopped">İzleme çalışmıyor — açmak için dokunun</string>
+    <string name="secrets_unreadable">Kayıtlı anahtarlar bu telefonda okunamıyor (ör. uygulama verisi başka telefondan kopyalandı). eWeLink ve Tuya bilgilerini Ayarlar\'dan yeniden girin.</string>
+    <string name="crash_report">Hata raporu gönder</string>
+    <string name="crash_report_desc_none">Bir sorun mu var? Tanılama bilgileriyle bir e-posta hazırlar. Siz göndermeden hiçbir şey paylaşılmaz.</string>
+    <string name="crash_report_subject">SwitchGuard %s hata raporu</string>
+    <string name="crash_report_clear">Kayıtlı hataları sil</string>
+    <string name="crash_report_no_mail">E-posta uygulaması bulunamadı</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>
@@ -43,17 +95,13 @@
     <string name="state_auth_error">Oturum sona erdi — yeniden giriş yapın</string>
     <string name="state_error">eWeLink hatası</string>
     <string name="state_stopped">İzleme kapalı</string>
-    <string name="status_live">Canlı · %d cihaz izleniyor</string>
-    <string name="status_polling">%1$d cihaz izleniyor · %2$d sn\'de bir</string>
     <string name="detail_ws_unsupported">Bu App ID ile anlık bildirim kullanılamıyor; periyodik kontrol yapılıyor (aralıktan kısa değişiklikler kaçabilir)</string>
     <string name="detail_reconnecting">Anlık bağlantı yeniden kuruluyor…</string>
     <string name="detail_api_error">Hata kodu %d</string>
     <string name="monitoring_off_hint">Alarm almak için izlemeyi başlatın</string>
     <string name="last_update">Güncellendi: %s</string>
-    <string name="device_count">%d cihaz</string>
 
     <!-- Cihazlar -->
-    <string name="alarm_banner_title">Alarm · %d değişiklik</string>
     <string name="alarm_banner_more">+%d daha</string>
     <string name="login_needed_title">Giriş gerekli</string>
     <string name="login_needed_body">Cihazlarınızı görmek için eWeLink hesabınızla giriş yapın.</string>
@@ -62,14 +110,12 @@
     <string name="not_monitored">İzlenmiyor</string>
     <string name="power">Güç</string>
     <string name="channel_n">Kanal %d</string>
-    <string name="channels_summary">%1$d kanal · %2$d açık</string>
     <string name="action_expand">Kanalları göster</string>
     <string name="action_collapse">Kanalları gizle</string>
     <string name="control_failed">Cihaz değiştirilemedi: %s</string>
 
     <!-- Cihaz detayı -->
     <string name="device_missing">Bu cihaz artık hesabınızda değil.</string>
-    <string name="section_control">Kontrol</string>
     <string name="section_monitoring">İzleme</string>
     <string name="section_rules">Şu olduğunda</string>
     <string name="section_recent_events">Son olaylar</string>
@@ -93,7 +139,6 @@
     <string name="clear_history_body">Kaydedilen tüm olaylar silinecek. Bu işlem geri alınamaz.</string>
 
     <!-- Ayarlar -->
-    <string name="section_account">Hesap</string>
     <string name="section_alarm">Alarm</string>
     <string name="section_quiet_hours">Sessiz saatler</string>
     <string name="section_permissions">İzinler</string>
@@ -107,7 +152,6 @@
     <string name="oem_hint_transsion">Telefon yeniden başlayınca ya da temizlikten sonra izlemenin sürmesi için Phone Master\'da SwitchGuard için Otomatik başlatmayı açın.</string>
     <string name="oem_hint_asus">Telefon yeniden başlayınca izlemenin açılması için Otomatik başlatma yöneticisinde SwitchGuard\'a izin verin.</string>
     <string name="section_about">Hakkında</string>
-    <string name="section_general">Genel</string>
     <string name="tuya_account">Tuya / Smart Life</string>
     <string name="onb_platform_title">Cihazlarınız nerede?</string>
     <string name="onb_platform_body">Cihazlarınızı bugün hangi uygulamayla kontrol ediyorsanız onu seçin.</string>
@@ -133,7 +177,7 @@
     <string name="action_rename">Yeniden adlandır</string>
     <string name="section_priority">Öncelikli</string>
     <string name="section_other">Diğer</string>
-    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · ⇕ = küçük / büyük kart · etiket = kategori. Buraya dönmek için bir karta uzun basın.</string>
+    <string name="layout_hint">Yıldız = en üstte tut · oklar = taşı · kart boyutu = küçük ya da büyük · etiket = kategori. Buraya dönmek için bir karta uzun basın.</string>
     <string name="layout_priority">Öncelikli yap</string>
     <string name="layout_unpriority">Öncelikten çıkar</string>
     <string name="layout_move_up">Yukarı taşı</string>
@@ -153,7 +197,6 @@
     <string name="onb_open_guide">Resimli rehberi aç</string>
     <string name="onb_tuya_privacy">Bu bilgiler yalnızca bu telefonda saklanır ve Tuya\'nın kendi sunucuları dışında hiçbir yere gönderilmez.</string>
     <string name="tuya_not_connected">Bağlı değil · bağlamak için dokunun</string>
-    <string name="tuya_connected_x">Bağlı · %1$s · %2$d cihaz</string>
     <string name="tuya_dialog_title">Tuya / Smart Life bağla</string>
     <string name="tuya_dialog_desc">Tuya Cloud projenizin Access ID ve Access Secret bilgilerini girin (platform.tuya.com → Cloud → projeniz → Overview). Smart Life / Tuya uygulama hesabınız projeye bağlı olmalı.</string>
     <string name="tuya_region">Veri merkezi</string>
@@ -162,7 +205,6 @@
     <string name="tuya_region_cn">Çin</string>
     <string name="tuya_region_in">Hindistan</string>
     <string name="tuya_checking">Tuya\'ya bağlanılıyor…</string>
-    <string name="tuya_connected_ok">Tuya bağlandı: %d cihaz bulundu</string>
     <string name="tuya_shared_hint">Size paylaşılan bir cihaz görünmüyor mu? Tuya yalnızca evlerinizdeki cihazları listeler. Cihaz sahibinden sizi Smart Life\'ta ev üyesi olarak eklemesini isteyin (Ben → Ev Yönetimi → Üye Ekle).</string>
     <string name="tuya_connected_none">Tuya bağlandı ama hiç cihaz bulunamadı. Smart Life / Tuya uygulama hesabınızın projeye aynı veri merkezinde bağlı olduğunu kontrol edin.</string>
     <string name="tuya_disconnect">Bağlantıyı kaldır</string>
@@ -187,8 +229,25 @@
     <string name="offline_grace">Kısa kopmaları yok say</string>
     <string name="offline_grace_desc">Bir cihazın bağlantısı koptuğunda uyarmadan önce bu kadar bekle. Süre içinde geri gelirse uyarı verilmez.</string>
     <string name="grace_off">Kapalı (hemen uyar)</string>
-    <string name="seconds_n">%d saniye</string>
-    <string name="minutes_n">%d dakika</string>
+    <string name="dur_seconds">%d sn</string>
+    <string name="dur_min_sec">%1$d dk %2$d sn</string>
+    <string name="dur_minutes">%d dk</string>
+    <string name="dur_hour_min">%1$d sa %2$d dk</string>
+    <string name="dur_day_hour">%1$d g %2$d sa</string>
+    <string name="event_monitor_gap">İzleme kesintiye uğradı: %1$s (%2$s). Bu sürede olan değişiklikler kaçırılmış olabilir.</string>
+    <string name="event_monitor_blind">İzleme çalışmıyor (başlangıç %1$s): cihazların durumu alınamıyor.</string>
+    <string name="event_monitor_restored">İzleme yeniden çalışıyor (%1$s boyunca çalışmadı).</string>
+    <string name="event_reminder">Hatırlatma: %1$s hâlâ %2$s (alarmdan bu yana %3$s)</string>
+    <string name="notif_blind_title">SwitchGuard izleyemiyor</string>
+    <string name="notif_monitor_title">İzleme durumu</string>
+    <string name="monitoring_stopped_title">İzleme durdu</string>
+    <string name="monitoring_stopped_body">Telefon SwitchGuard\'ı arka planda durdurdu ve yeniden başlatılamadı. Devam etmek için dokunun; tekrar olmaması için arka plan çalışmasına izin verin.</string>
+    <string name="blind_hint">İnternet bağlantısını ve Ayarlar › İzinler (pil) bölümünü kontrol edin.</string>
+    <string name="channel_health">İzleme sorunları</string>
+    <string name="channel_health_desc">SwitchGuard cihazlarınızı izleyemediğinde uyarır</string>
+    <string name="blind_alert">İzleme durursa uyar</string>
+    <string name="blind_alert_desc">Bu kadar süre internet ya da bulut bağlantısı olmazsa uyarı verir</string>
+    <string name="blind_alert_off">Kapalı</string>
     <string name="poll_interval">Yedek kontrol aralığı</string>
     <string name="poll_interval_desc">Yalnızca anlık bildirim kullanılamadığında kullanılır.</string>
     <string name="poll_interval_value">%d sn\'de bir</string>
@@ -197,15 +256,32 @@
     <string name="device_sound">Bu cihazın sesi</string>
     <string name="device_sound_default">Genel alarm sesiyle aynı</string>
     <string name="device_sound_reset">Genel sesi kullan</string>
+    <string name="device_critical">Kritik cihaz</string>
+    <string name="device_critical_desc">Alarmları sessiz saatlerde de çalar</string>
     <string name="channel_events_custom">Olaylar (cihaz sesleri)</string>
     <string name="channel_events_custom_desc">Kendi sesi seçilmiş cihazların bildirimleri. Sesi uygulama çalar.</string>
     <string name="alarm_volume">Alarm ses seviyesi · %%%d</string>
     <string name="vibrate">Titreşim</string>
+    <string name="alarm_boost">Alarm tam seste çalsın</string>
+    <string name="alarm_boost_desc">Alarm çalarken telefonun alarm sesini en yükseğe çıkarır ve müziği duraklatır; alarmı kapatınca eski haline döner</string>
+    <string name="reminder">Düzelmezse yeniden çal</string>
+    <string name="reminder_desc">Alarmı kapattıktan sonra cihaz alarmı çaldıran durumda kaldıkça (hâlâ kapalı, hâlâ açık ya da kopuk) bu aralıkla yeniden çalar. Cihaz normale dönünce durur.</string>
+    <string name="reminder_every">%d dakikada bir</string>
     <string name="test_alarm">Test alarmı</string>
-    <string name="test_alarm_desc">Sesi ve seviyesini kontrol etmek için alarmı şimdi çalar</string>
+    <string name="test_alarm_desc">Alarmı şimdi dener: sesli ya da sessiz, hemen ya da 10 saniye sonra</string>
     <string name="test_alarm_line">Test alarmı</string>
+    <string name="test_alarm_line_silent">Sessiz test alarmı</string>
+    <string name="test_alarm_sound">Sesli</string>
+    <string name="test_alarm_sound_desc">Gerçek alarm gibi çalar ve titreşir</string>
+    <string name="test_alarm_silent">Sessiz (yalnızca ekran)</string>
+    <string name="test_alarm_silent_desc">Ses ve titreşim yok: gece kimseyi uyandırmadan alarm ekranını ve bildirimi görürsünüz</string>
+    <string name="test_alarm_delay">%d saniye sonra çal</string>
+    <string name="test_alarm_delay_desc">Bu sürede telefonu kilitleyin: alarm ekranının kilit ekranında açıldığını görürsünüz</string>
+    <string name="test_alarm_delay_desc_tv">Bu sürede başka bir uygulamaya geçin: alarmın onun üstüne geldiğini görürsünüz</string>
+    <string name="test_alarm_start">Başlat</string>
+    <string name="test_alarm_scheduled">Test alarmı %d saniye sonra çalacak</string>
     <string name="quiet_hours">Sessiz saatler</string>
-    <string name="quiet_hours_desc">Bu saatlerde alarmlar sessiz bildirime dönüşür</string>
+    <string name="quiet_hours_desc">Bu saatlerde alarmlar bildirime dönüşür (kritik cihazlar yine çalar)</string>
     <string name="quiet_start">Başlangıç</string>
     <string name="quiet_end">Bitiş</string>
     <string name="perm_notifications">Bildirimler</string>
@@ -214,6 +290,34 @@
     <string name="perm_battery">Arka plan çalışması</string>
     <string name="perm_battery_ok">Kısıtlama yok</string>
     <string name="perm_battery_missing">Kısıtlı — alarmlar gecikebilir. Düzeltmek için dokunun.</string>
+    <string name="perm_full_screen">Tam ekran alarm</string>
+    <string name="perm_full_screen_missing">İzin yok — alarm kilit ekranında tam ekran açılmaz. Düzeltmek için dokunun.</string>
+    <string name="perm_lock_popup">Kilit ekranında alarm (Xiaomi)</string>
+    <string name="perm_lock_popup_missing">Kapalı — alarm kilit ekranında açılmaz. Düzeltmek için dokunun.</string>
+    <string name="ready_title">Alarm size ulaşmayabilir</string>
+    <string name="ready_body">SwitchGuard\'ın her zaman çalabilmesi için bu telefon ayarlarını düzeltin.</string>
+    <string name="ready_fix">Düzelt</string>
+    <string name="ready_done">Yaptım</string>
+    <string name="ready_notifications">Bildirimler kapalı</string>
+    <string name="ready_notifications_desc">Alarmlar ve uyarılar gösterilemez.</string>
+    <string name="ready_channel">Alarm bildirimleri kısılmış</string>
+    <string name="ready_channel_desc">“Alarmlar” bildirim kategorisi yüksek önemde değil; alarm üstte ya da tam ekran açılmaz.</string>
+    <string name="ready_dnd">Rahatsız Etmeyin: tamamen sessiz</string>
+    <string name="ready_dnd_desc">Bu modda alarm sesleri de susar.</string>
+    <string name="ready_volume">Alarm sesi çok kısık</string>
+    <string name="ready_volume_desc">Telefonun alarm ses seviyesi sıfır ya da sıfıra yakın; SwitchGuard\'ı duymayabilirsiniz. Düzelt, “Alarm tam seste çalsın” ayarını açar.</string>
+    <string name="ready_battery">Arka plan kısıtlı</string>
+    <string name="ready_battery_desc">Telefon izlemeyi uyutabilir; alarmlar gecikebilir ya da kaçabilir.</string>
+    <string name="ready_full_screen">Tam ekran alarm izni yok</string>
+    <string name="ready_full_screen_desc">Telefon kilitliyken alarm büyük ekranıyla açılamaz.</string>
+    <string name="ready_lock_popup">Xiaomi alarm ekranını engelliyor</string>
+    <string name="ready_lock_popup_desc">Telefon kilitliyken alarm ekranı açılamaz. Düzelt\'e dokunun, Diğer izinler\'i açın ve “Kilit ekranında görüntüle” ile “Arka planda çalışırken yeni pencereler açın” izinlerini açın.</string>
+    <string name="ready_twin_this">Bu, SwitchGuard\'ın ikinci kopyası</string>
+    <string name="ready_twin_this_desc">Bu kopya telefonun Çift uygulama (ikiz uygulama) özelliğiyle açılmış. Yan yana çalışan iki kopya her alarmı iki kez çalar, aynı eWeLink hesabını kullanınca birbirinin oturumunu kapatır; Xiaomi telefonlarda diğer kopyanın izinleri de kapalı görünür. Tek kopya kullanın: Kaldır\'a dokunun ve açılan sayfada bu kopyayı kaldırın.</string>
+    <string name="ready_twin_other">Telefonda ikinci bir SwitchGuard var</string>
+    <string name="ready_twin_other_desc">Telefonun Çift uygulama (ikiz uygulama) özelliğiyle SwitchGuard\'ın bir kopyası daha açılmış. Yan yana çalışan iki kopya her alarmı iki kez çalar, aynı eWeLink hesabını kullanınca birbirinin oturumunu kapatır; Xiaomi telefonlarda bu kopyanın izinleri de kapalı görünebilir. İkinci kopyayı kaldırın: simgesine (küçük işaretli olana) basılı tutun ve Kaldır\'a dokunun.</string>
+    <string name="ready_twin_remove">Kaldır</string>
+    <string name="ready_twin_keep">İkisini bilerek kullanıyorum</string>
     <string name="setup_guide">Kurulum rehberi</string>
     <string name="setup_guide_desc">İlk kurulum adımlarını tekrar göster</string>
     <string name="privacy_policy">Gizlilik politikası</string>
@@ -253,6 +357,8 @@
     <string name="onb_perm_body">Bu izinler, ekran kapalıyken bile alarmların size ulaşmasını sağlar.</string>
     <string name="onb_perm_notif_desc">Alarmları göstermek için gerekli.</string>
     <string name="onb_perm_battery_desc">İzlemenin arka planda sürmesini ve alarmların gecikmemesini sağlar.</string>
+    <string name="onb_perm_full_screen_desc">Telefon kilitliyken alarmın büyük ekranıyla açılmasını sağlar.</string>
+    <string name="onb_perm_lock_popup_desc">Xiaomi telefonlarda alarmın kilit ekranının üstünde açılmasını sağlar.</string>
     <string name="onb_done_title">Hazırsınız!</string>
     <string name="onb_done_body">İzlemeyi şimdi başlatın. Her şeyi daha sonra ayrıntılı olarak ayarlayabilirsiniz.</string>
     <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını seçmek için bir cihaza dokunun</string>
@@ -390,7 +496,7 @@
     <string name="demo_devices">Demo cihazlar</string>
     <string name="demo_devices_desc">Tüm özellikleri denemek için sanal cihazlar</string>
     <string name="section_demo">Demo: olay canlandır</string>
-    <string name="demo_hint">Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki Kontrol bölümünden açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.</string>
+    <string name="demo_hint">Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki düğmelerle açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.</string>
     <string name="demo_toggle">Dışarıdan aç/kapat</string>
     <string name="demo_toggle_channel">%d. kanalı dışarıdan aç/kapat</string>
     <string name="demo_disconnect">Bağlantıyı kopar</string>
@@ -403,11 +509,12 @@
     <string name="perm_overlay">Alarmı diğer uygulamaların üstünde göster</string>
     <string name="perm_overlay_desc">Android TV\'de alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Dokunun ve SwitchGuard\'a izin verin.</string>
     <string name="tv_keyboard_hint">İpucu: Telefonunuzdaki Google TV uygulamasıyla (kumanda → klavye) yazabilir ya da yapıştırabilirsiniz.</string>
+    <string name="tv_time_hint">Yukarı ve aşağı tuşları değeri değiştirir. Saatteyken OK dakikaya geçer, dakikadayken OK kaydeder, Geri tuşu vazgeçer.</string>
     <string name="onb_platform_transfer">Başka bir cihazdan aktar</string>
     <string name="onb_platform_transfer_desc">Telefonunuzda zaten kurulu mu? Tuya bilgilerini, kuralları ve ayarları ev Wi-Fi\'ı üzerinden alın. eWeLink için bu cihaza ayrı bir hesap ve o hesabın kendi API anahtarları gerekir.</string>
     <string name="onb_transfer_title">Telefonunuzdan aktarın</string>
     <string name="onb_transfer_body">İki cihaz da aynı Wi-Fi ağında olmalı.</string>
-    <string name="transfer_receive_steps">Telefonunuzda SwitchGuard → Ayarlar → Başka cihaza aktar\'ı açın, bu cihazı seçin ve aşağıdaki kodu girin.</string>
+    <string name="transfer_receive_steps">Telefonunuzda SwitchGuard → Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar\'ı açın, bu cihazı seçin ve aşağıdaki kodu girin.</string>
     <string name="transfer_code_label">Kod</string>
     <string name="transfer_waiting">Telefonunuz bekleniyor…</string>
     <string name="transfer_received">Kurulum alındı: Tuya bilgileri, kurallar ve ayarlar bu cihazda. eWeLink kullanıyorsanız şimdi bu cihaz için açtığınız hesabın API anahtarlarını girin.</string>
@@ -432,4 +539,188 @@
     <string name="transfer_other_account_body_generic">Bu cihazda, diğer cihazınızda (ör. telefonunuzda) kullandığınız eWeLink hesabıyla giriş YAPMAYIN — eWeLink hesap başına tek oturuma izin verir, diğer cihazdaki oturum kapanır. Bu cihaz için: eWeLink uygulamasından yeni bir hesap açın, cihazlarınızı (cihaz → Paylaş) o hesapla paylaşın, o hesapla dev.ewelink.cc\'de geliştirici başvurusu yapıp eWeLink onayını bekleyin ve o hesabın API anahtarlarını (App ID / App Secret) buraya girin. Buraya girilen API anahtarları, burada giriş yapılan hesaba ait olmalıdır.</string>
     <string name="transfer_tv_qr_hint">TV\'de en kolayı: giriş sayfasının altındaki “Login by QR code” seçeneğini seçin ve QR kodu, bu cihaz için açtığınız hesapla giriş yapılmış eWeLink uygulamasıyla okutun.</string>
     <string name="transfer_send_warning_body">TV ya da tablet için ayrı bir eWeLink hesabı gerekir: eWeLink uygulamasından yeni hesap açın, cihazlarınızı o hesapla paylaşın, o hesapla geliştirici başvurusu yapıp eWeLink onayını bekleyin ve o hesabın API anahtarlarını diğer cihaza girin. eWeLink anahtarları aktarılmaz; Tuya bilgileri, kurallar ve ayarlar aktarılır. Bu telefondaki hesapla diğer cihazda giriş yapılırsa bu telefondaki oturum kapanır.</string>
+    <plurals name="event_alarm_dismissed">
+        <item quantity="one">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
+        <item quantity="other">Alarm kapatıldı · %1$d olay · tepki süresi %2$s</item>
+    </plurals>
+    <plurals name="status_live">
+        <item quantity="one">Canlı · %d cihaz izleniyor</item>
+        <item quantity="other">Canlı · %d cihaz izleniyor</item>
+    </plurals>
+    <plurals name="status_polling">
+        <item quantity="one">%1$d cihaz izleniyor · %2$d sn\'de bir</item>
+        <item quantity="other">%1$d cihaz izleniyor · %2$d sn\'de bir</item>
+    </plurals>
+    <plurals name="device_count">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
+    <plurals name="alarm_banner_title">
+        <item quantity="one">Alarm · %d değişiklik</item>
+        <item quantity="other">Alarm · %d değişiklik</item>
+    </plurals>
+    <plurals name="tuya_connected_x">
+        <item quantity="one">Bağlı · %1$s · %2$d cihaz</item>
+        <item quantity="other">Bağlı · %1$s · %2$d cihaz</item>
+    </plurals>
+    <plurals name="tuya_connected_ok">
+        <item quantity="one">Tuya bağlandı: %d cihaz bulundu</item>
+        <item quantity="other">Tuya bağlandı: %d cihaz bulundu</item>
+    </plurals>
+    <plurals name="seconds_n">
+        <item quantity="one">%d saniye</item>
+        <item quantity="other">%d saniye</item>
+    </plurals>
+    <plurals name="minutes_n">
+        <item quantity="one">%d dakika</item>
+        <item quantity="other">%d dakika</item>
+    </plurals>
+    <plurals name="export_done">
+        <item quantity="one">%d kayıt dışa aktarıldı</item>
+        <item quantity="other">%d kayıt dışa aktarıldı</item>
+    </plurals>
+    <plurals name="backup_item_rules">
+        <item quantity="one">%d cihazın kuralları</item>
+        <item quantity="other">%d cihazın kuralları</item>
+    </plurals>
+    <plurals name="backup_item_automations">
+        <item quantity="one">%d otomasyon</item>
+        <item quantity="other">%d otomasyon</item>
+    </plurals>
+    <plurals name="crash_report_desc_some">
+        <item quantity="one">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
+        <item quantity="other">%d kayıtlı hata e-postaya eklenir. Siz göndermeden hiçbir şey paylaşılmaz.</item>
+    </plurals>
+
+    <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
+    <string name="tg_alarm_header">🚨 SwitchGuard alarmı %d dakikadır kapatılmadı</string>
+    <string name="tg_footer">Gönderen: %s</string>
+    <string name="tg_dismissed">✅ SwitchGuard alarmı kapatıldı: %1$s (başladıktan %2$s sonra)</string>
+    <string name="tg_err_token">Bot anahtarı geçersiz</string>
+    <string name="tg_err_blocked">Kişi botu engellemiş ya da sohbeti silmiş</string>
+    <string name="tg_err_chat">Sohbet bulunamadı: kişi bota Başlat\'a dokunmamış</string>
+    <string name="event_escalation_failed">Alarm %1$d dakikadır kapatılmadı ama Telegram ile haber verilemedi: %2$s</string>
+    <string name="tg_title">İkinci kişiye haber ver</string>
+    <string name="tg_desc">Alarm belirli bir süre içinde kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider; alarm kapatılınca da haber verilir. Gece telefon başka odada kalsa bile evdeki biri ya da komşunuz haberdar olur. Mesajları sizin oluşturduğunuz Telegram botu gönderir, arada başka bir sunucu yoktur.</string>
+    <string name="tg_step_bot">1. Telegram botu</string>
+    <string name="tg_step_bot_desc">Telegram\'da @BotFather\'ı açın, /newbot yazın ve botunuza bir ad verin. BotFather\'ın verdiği anahtarı (token) aşağıya yapıştırın.</string>
+    <string name="tg_open_botfather">BotFather\'ı aç</string>
+    <string name="tg_token">Bot anahtarı (token)</string>
+    <string name="tg_verify">Anahtarı dene</string>
+    <string name="tg_bot_ok">Bot hazır: @%s</string>
+    <string name="tg_step_people">2. Haber verilecek kişiler</string>
+    <string name="tg_step_people_wait">Önce bot anahtarını deneyin.</string>
+    <string name="tg_step_people_desc">Haber verilecek kişi Telegram\'da %s bağlantısını açıp Başlat\'a dokunsun (botu bir aile grubuna da ekleyebilirsiniz). Sonra Kişileri bul\'a dokunun.</string>
+    <string name="tg_share">Bağlantıyı paylaş</string>
+    <string name="tg_share_text">Bu botu açıp Başlat\'a dokunur musun? SwitchGuard alarmım kapatılmazsa sana Telegram\'dan haber gelecek. %s</string>
+    <string name="tg_find">Kişileri bul</string>
+    <string name="tg_none_found">Kimse bulunamadı. Kişi bota Başlat\'a dokunduktan sonra tekrar deneyin (Telegram yalnızca son 24 saati gösterir).</string>
+    <string name="tg_group">grup</string>
+    <string name="tg_step_when">3. Ne zaman</string>
+    <string name="tg_when_desc">Alarm %d dakika içinde kapatılmazsa haber verilir.</string>
+    <string name="tg_test">Deneme mesajı gönder</string>
+    <string name="tg_test_message">👋 SwitchGuard deneme mesajı: alarm %d dakika içinde kapatılmazsa size buradan haber verilecek.</string>
+    <string name="tg_test_sent">Deneme mesajı gönderildi</string>
+    <string name="tg_turn_off">Kapat</string>
+    <string name="phone_entry_button">Telefondan gir</string>
+    <string name="phone_entry_title">Telefondan girin</string>
+    <string name="phone_entry_step1">1. Telefonunuzun kamerasıyla bu kodu okutun.</string>
+    <string name="phone_entry_step2">2. Açılan sayfada alanları doldurun (yapıştırabilirsiniz) ve TV\'ye gönder\'e dokunun.</string>
+    <string name="phone_entry_step3">Telefon bu TV ile aynı Wi-Fi ağında olmalı. Bilgiler şifreli gider ve ev ağından çıkmaz.</string>
+    <string name="phone_entry_waiting">Telefondan bekleniyor…</string>
+    <string name="phone_entry_manual">Kamera yoksa telefonda şu adresi açın: %s</string>
+    <string name="phone_entry_no_network">Bu cihaz ağa bağlı değil. Wi-Fi\'a bağlanıp tekrar deneyin.</string>
+    <string name="phone_entry_lang">tr</string>
+    <string name="phone_entry_page_lead">Alanları doldurup TV\'ye gönder\'e dokunun; bilgiler TV\'ye şifreli gider.</string>
+    <string name="phone_entry_page_bad_link">Bağlantı eksik. TV\'deki QR kodu yeniden okutun.</string>
+    <string name="phone_entry_page_paste">Yapıştır</string>
+    <string name="phone_entry_page_send">TV\'ye gönder</string>
+    <string name="phone_entry_page_sending">Gönderiliyor…</string>
+    <string name="phone_entry_page_sent">Gönderildi</string>
+    <string name="phone_entry_page_sent_body">TV\'ye bakın: bilgiler alanlara yazıldı. Bu sayfayı kapatabilirsiniz.</string>
+    <string name="phone_entry_page_failed">Gönderilemedi. TV\'deki pencere hâlâ açık mı? QR kodu yeniden okutup deneyin.</string>
+    <string name="phone_entry_page_empty">En az bir alanı doldurun.</string>
+    <string name="phone_entry_page_note">Bu sayfa yalnızca ev ağınızda ve TV\'deki pencere açıkken çalışır.</string>
+    <plurals name="event_escalated">
+        <item quantity="one">Alarm %2$d dakikadır kapatılmadı: Telegram ile %1$d kişiye haber verildi</item>
+        <item quantity="other">Alarm %2$d dakikadır kapatılmadı: Telegram ile %1$d kişiye haber verildi</item>
+    </plurals>
+    <plurals name="tg_found">
+        <item quantity="one">%d sohbet bulundu</item>
+        <item quantity="other">%d sohbet bulundu</item>
+    </plurals>
+    <plurals name="tg_summary">
+        <item quantity="one">%1$d dk kapatılmazsa · %2$d kişi</item>
+        <item quantity="other">%1$d dk kapatılmazsa · %2$d kişi</item>
+    </plurals>
+
+    <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
+    <string name="stat_devices">Cihaz</string>
+    <string name="stat_on">Açık</string>
+    <string name="stat_offline">Çevrimdışı</string>
+    <string name="stat_power">Güç</string>
+    <string name="state_on_title">Açık</string>
+    <string name="state_off_title">Kapalı</string>
+    <string name="tap_to_toggle">Açmak ya da kapatmak için dokunun</string>
+    <string name="settings_accounts">Hesaplar</string>
+    <string name="settings_accounts_none">Bağlı hesap yok</string>
+    <string name="settings_backup">Yedekleme ve aktarım</string>
+    <string name="settings_backup_desc">Dosyaya yedekle ya da başka cihaza aktar</string>
+    <string name="settings_backup_desc_tv">Başka cihaza gönder ya da başka cihazdan al</string>
+    <string name="settings_about">Yardım ve hakkında</string>
+    <string name="settings_about_desc">Sürüm %s · rehberler ve iletişim</string>
+    <string name="settings_group_connections">Bağlantılar</string>
+    <string name="settings_group_alerts">Alarm ve bildirimler</string>
+    <string name="settings_group_app">Uygulama</string>
+    <string name="settings_group_support">Destek</string>
+    <string name="settings_try">Demo ve Pro</string>
+    <string name="settings_try_it">Deneme</string>
+    <string name="settings_sound">Ses</string>
+    <string name="settings_when_alarm">Alarm çalarken</string>
+    <string name="settings_monitoring_intro">SwitchGuard\'ın cihazlarınızı arka planda nasıl izlediği.</string>
+    <string name="settings_quiet_critical">Kritik olarak işaretlenen cihazlar sessiz saatlerde de çalar.</string>
+    <string name="settings_permissions_intro">Bunlar olmadan Android alarmın size ulaşmasını engelleyebilir.</string>
+    <string name="settings_other_devices">Diğer cihazlar</string>
+    <string name="settings_help">Yardım</string>
+    <string name="settings_contact">İletişim</string>
+    <string name="perm_all_ok">Hepsi tamam</string>
+    <string name="time_range">%1$s – %2$s</string>
+    <string name="daily_at">Her gün %s</string>
+    <string name="volume_pct">%%%d</string>
+    <string name="plan_pro">Pro · tüm cihazlar izleniyor</string>
+    <string name="demo_short">Demo</string>
+    <plurals name="perm_missing_n">
+        <item quantity="one">%d izin eksik</item>
+        <item quantity="other">%d izin eksik</item>
+    </plurals>
+    <string name="guard_ready">Bir şey değiştiği an alarm çalmaya hazır</string>
+    <string name="monitoring_summary_now">Kopunca hemen uyarır · %s</string>
+    <string name="monitoring_summary_grace">Kopunca %1$s bekler · %2$s</string>
+    <plurals name="plan_free">
+        <item quantity="one">Ücretsiz · %d cihaz izlenir</item>
+        <item quantity="other">Ücretsiz · %d cihaz izlenir</item>
+    </plurals>
+    <string name="auto_if">Eğer</string>
+    <string name="auto_then">O zaman</string>
+    <string name="automation_name_hint">ör. Pompa durdu</string>
+    <string name="automation_minutes_short">Süre</string>
+    <string name="automation_low_minutes_short">Bu kadar süre düşük kalırsa</string>
+    <string name="automation_grace_short">Açıldıktan sonra bekle</string>
+    <string name="automation_delay_short">İşlemden önce bekle</string>
+    <string name="automation_now">Hemen</string>
+    <string name="automation_summary">Özet</string>
+    <string name="action_decrease">Azalt</string>
+    <string name="action_increase">Artır</string>
+    <string name="evt_turned_on">Açılınca</string>
+    <string name="evt_turned_off">Kapanınca</string>
+    <string name="evt_stayed_on">Açık kalınca</string>
+    <string name="evt_stayed_off">Kapalı kalınca</string>
+    <string name="evt_went_offline">Çevrimdışı olunca</string>
+    <string name="evt_came_online">Çevrimiçi olunca</string>
+    <string name="evt_power_above">Güç yükselince</string>
+    <string name="evt_power_below">Güç düşünce</string>
+    <string name="evt_channel_power_low">Açıkken güç düşerse</string>
+    <string name="act_turn_on">Cihazı aç</string>
+    <string name="act_turn_off">Cihazı kapat</string>
+    <string name="automation_low_for_nograce">(%d dk boyunca)</string>
 </resources>

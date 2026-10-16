@@ -15,18 +15,43 @@ data class DeviceSection(val kind: Kind, val category: Category?, val devices: L
 
 /**
  * Cihazlar ekranının kullanıcı düzeni: elle sıralama, öncelikli (en üste sabit) cihazlar,
- * küçük kartlar ve kategoriler. Cihaz kimlikleriyle tutulur; listede olmayan (yeni) cihazlar
+ * kart boyutları ve kategoriler. Cihaz kimlikleriyle tutulur; listede olmayan (yeni) cihazlar
  * sona, ada göre eklenir; artık olmayan cihazların kayıtları zararsızca yok sayılır.
  */
 data class DeviceLayout(
     val order: List<String> = emptyList(),
     val priority: Set<String> = emptySet(),
+    /** Kullanıcının küçülttüğü kartlar. */
     val compact: Set<String> = emptySet(),
     val categories: List<Category> = emptyList(),
     val categoryOf: Map<String, String> = emptyMap(),
     /** Katlanmış bölümlerin anahtarları ([DeviceSection.key]). */
     val collapsed: Set<String> = emptySet(),
+    /** Kullanıcının büyüttüğü kartlar (tam satır). */
+    val large: Set<String> = emptySet(),
 ) {
+    /**
+     * Kart tam satır mı: kullanıcı seçtiyse o; seçmediyse çok kanallılar büyük (kanal düğmeleri sığsın),
+     * tek kanallılar yarım satır (ızgarada yan yana iki kutucuk).
+     */
+    fun isLarge(device: DeviceSnapshot): Boolean = when (device.id) {
+        in large -> true
+        in compact -> false
+        else -> device.isMultiChannel
+    }
+
+    /** Kartı büyüt/küçült; varsayılan boyuta dönülürse açık seçim saklanmaz. */
+    fun toggleSize(device: DeviceSnapshot): DeviceLayout {
+        val id = device.id
+        val wantLarge = !isLarge(device)
+        val cleared = copy(large = large - id, compact = compact - id)
+        return when {
+            wantLarge == device.isMultiChannel -> cleared
+            wantLarge -> cleared.copy(large = cleared.large + id)
+            else -> cleared.copy(compact = cleared.compact + id)
+        }
+    }
+
     /** Tüm cihazlar, kullanıcının sırasıyla. */
     fun sorted(devices: List<DeviceSnapshot>): List<DeviceSnapshot> {
         val index = order.withIndex().associate { it.value to it.index }
@@ -109,6 +134,7 @@ data class DeviceLayout(
         .put("categories", JSONArray().apply { categories.forEach { put(JSONObject().put("id", it.id).put("name", it.name)) } })
         .put("categoryOf", JSONObject(categoryOf))
         .put("collapsed", JSONArray(collapsed.toList()))
+        .put("large", JSONArray(large.toList()))
         .toString()
 
     companion object {
@@ -121,7 +147,10 @@ data class DeviceLayout(
                     (0 until a.length()).map { a.getJSONObject(it).let { c -> Category(c.getString("id"), c.getString("name")) } }
                 }.orEmpty()
                 val of = o.optJSONObject("categoryOf")?.let { m -> m.keys().asSequence().associateWith { m.getString(it) } }.orEmpty()
-                DeviceLayout(strings("order"), strings("priority").toSet(), strings("compact").toSet(), cats, of, strings("collapsed").toSet())
+                DeviceLayout(
+                    strings("order"), strings("priority").toSet(), strings("compact").toSet(), cats, of,
+                    strings("collapsed").toSet(), strings("large").toSet(),
+                )
             }.getOrDefault(DeviceLayout())
         }
     }

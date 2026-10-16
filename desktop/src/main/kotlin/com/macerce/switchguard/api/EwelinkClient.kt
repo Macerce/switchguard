@@ -3,6 +3,7 @@ package com.macerce.switchguard.api
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Signer
+import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.data.Store
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -112,12 +113,18 @@ class EwelinkClient(private val store: Store) {
         return "wss://$domain:${json.optInt("port", 443)}/api/ws"
     }
 
-    private fun <T> withTokenRetry(call: () -> T): T = try {
-        call()
-    } catch (e: ApiException) {
-        if (e.code !in TOKEN_ERRORS) throw e
-        refresh()
-        call()
+    private fun <T> withTokenRetry(call: () -> T): T {
+        sentToken.remove()
+        return try {
+            call()
+        } catch (e: ApiException) {
+            if (e.code !in TOKEN_ERRORS) throw e
+            // İsteğin gerçekten gönderdiği token: başka bir istek bu arada yenilediyse tekrar yenilenmez.
+            val used = sentToken.get() ?: store.accessToken
+            // Servis ve ekran aynı anda hata alabilir: yalnızca biri yeniler (bkz. TokenRefresh).
+            tokens.refreshIfStale(used, { store.accessToken }) { refresh() }
+            call()
+        }
     }
 
     private fun refresh() {
@@ -125,6 +132,8 @@ class EwelinkClient(private val store: Store) {
         try {
             saveTokens(postSigned("/v2/user/refresh", JSONObject().put("rt", store.refreshToken)))
         } catch (e: ApiException) {
+            // Sunucunun geçici hatası oturumu bitirmez; sonraki senkron yeniden dener.
+            if (TokenRefresh.isTransient(e.code)) throw e
             // eWeLink her hesap + App ID için tek oturum tutar: başka cihazda giriş, bu refresh token'ı da iptal eder.
             store.logout()
             store.sessionLost = true
@@ -150,8 +159,10 @@ class EwelinkClient(private val store: Store) {
     }
 
     private fun authed(method: String, path: String, body: String?): String {
-        if (store.accessToken.isEmpty()) throw AuthException(401, "not logged in")
-        val text = send(method, path, body, "Bearer " + store.accessToken)
+        val token = store.accessToken
+        if (token.isEmpty()) throw AuthException(401, "not logged in")
+        sentToken.set(token)
+        val text = send(method, path, body, "Bearer $token")
         checkResponse(text)
         return text
     }
@@ -176,6 +187,10 @@ class EwelinkClient(private val store: Store) {
     companion object {
         const val OAUTH_PAGE = "https://c2ccdn.coolkit.cc/oauth/index.html"
         private val TOKEN_ERRORS = setOf(401, 402)
+        /** Uygulama genelinde tek: farklı EwelinkClient örnekleri de aynı kilidi kullanır. */
+        private val tokens = TokenRefresh()
+        /** Bu thread'in son isteğinde kullanılan access token (bkz. withTokenRetry). */
+        private val sentToken = ThreadLocal<String>()
         private val JSON = "application/json".toMediaType()
         private val random = SecureRandom()
 

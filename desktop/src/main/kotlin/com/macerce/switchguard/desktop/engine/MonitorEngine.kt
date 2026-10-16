@@ -807,7 +807,7 @@ class MonitorEngine(
                 scheduler.postDelayed(store.offlineGraceSec * 1000L + 50) { tick() }
                 return
             }
-            if (change.to && grace.cameBack(change.deviceId)) {
+            if (change.to && grace.cameBack(change.deviceId, wall)) {
                 record(change.deviceId, change.name, EventKind.SHORT_DROP, eventStrings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
                 return
             }
@@ -890,8 +890,8 @@ class MonitorEngine(
         val count = store.monitoredIds().size
         val s = strings()
         val text = when (state) {
-            ConnState.LIVE -> s.format("status_live", count)
-            ConnState.POLLING -> s.format("status_polling", count, store.pollIntervalSec)
+            ConnState.LIVE -> s.plural("status_live", count, count)
+            ConnState.POLLING -> s.plural("status_polling", count, count, store.pollIntervalSec)
             ConnState.CONNECTING -> s["state_connecting"]
             ConnState.NO_INTERNET -> s["state_no_internet"]
             ConnState.AUTH_ERROR -> s["state_auth_error"]
