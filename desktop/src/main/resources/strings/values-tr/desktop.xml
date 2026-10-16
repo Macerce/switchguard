@@ -87,8 +87,8 @@
     <string name="desktop_windows_step_2">Windows \"Bilgisayarınız Windows tarafından korundu\" (SmartScreen) derse Ek bilgi → Yine de çalıştır\'a basın. Uygulama henüz imzalı olmadığı için bu uyarı çıkar.</string>
     <string name="desktop_windows_step_3">SwitchGuard kullanıcı klasörünüze (AppData › Local › SwitchGuard) kurulur, masaüstüne ve Başlat menüsüne kısayol ekler.</string>
     <string name="desktop_windows_step_4">Windows\'ta oturum açınca kendiliğinden tepside (saatin yanında) başlar. Pencereyi kapatmak uygulamayı kapatmaz; tamamen çıkmak için tepsi simgesi → Çıkış.</string>
-    <string name="desktop_windows_step_5">Hesaplarınızı Ayarlar → Hesap bölümünden ekleyin (Tuya ve eWeLink anlatımları aşağıda).</string>
-    <string name="desktop_windows_step_6">Başka bir bilgisayara geçerken: eskisinde Ayarlar → Yedekleme → Dosyaya yedekle; yenisine kurup Dosyadan geri yükle; ardından eWeLink\'e yeniden giriş yapın.</string>
+    <string name="desktop_windows_step_5">Hesaplarınızı Ayarlar → Hesaplar bölümünden ekleyin (Tuya ve eWeLink anlatımları aşağıda).</string>
+    <string name="desktop_windows_step_6">Başka bir bilgisayara geçerken: eskisinde Ayarlar → Yedekleme ve aktarım → Dosyaya yedekle; yenisine kurup Dosyadan geri yükle; ardından eWeLink\'e yeniden giriş yapın.</string>
     <string name="desktop_windows_step_7">Kaldırmak için: Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.</string>
 
     <!-- Hesaplar -->

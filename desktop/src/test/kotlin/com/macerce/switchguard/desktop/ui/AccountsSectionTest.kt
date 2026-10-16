@@ -6,6 +6,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.macerce.switchguard.desktop.AppGraph
+import com.macerce.switchguard.desktop.ui.settings.SettingsPage
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -37,7 +38,7 @@ class AccountsSectionTest {
     @Test
     fun disconnectAfterConfirmClearsTuya() {
         tuyaConnected()
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
         compose.onNodeWithText("Disconnect").performScrollTo().performClick()
         compose.onNodeWithText("Remove").performClick()
@@ -50,7 +51,7 @@ class AccountsSectionTest {
     @Test
     fun cancellingTheDisconnectKeepsTuya() {
         tuyaConnected()
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
         compose.onNodeWithText("Disconnect").performScrollTo().performClick()
         compose.onNodeWithText("Cancel").performClick()
@@ -62,7 +63,7 @@ class AccountsSectionTest {
     @Test
     fun tuyaLiveAsksBeforeTurningOn() {
         tuyaConnected()
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.MONITORING) }
 
         compose.onNodeWithText("Tuya live updates on this computer").performScrollTo().performClick()
         compose.waitForIdle()
@@ -74,16 +75,16 @@ class AccountsSectionTest {
     }
 
     @Test
-    fun withoutTuyaThereIsAConnectButtonAndNoLiveSwitch() {
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+    fun withoutTuyaThereIsAConnectButton() {
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
         compose.onNodeWithText("Connect").performScrollTo()
-        compose.onNodeWithText("Tuya live updates on this computer").assertDoesNotExist()
+        compose.onNodeWithText("Disconnect").assertDoesNotExist()
     }
 
     @Test
     fun apiCredentialsAreSaved() {
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
         compose.onNodeWithText("API credentials").performScrollTo().performClick()
         compose.onNodeWithText("App ID").performTextInput("my-app")
@@ -101,7 +102,7 @@ class AccountsSectionTest {
         graph.store.appId = "app"
         graph.store.appSecret = "secret"
         graph.store.accessToken = "token"
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
         compose.onNodeWithText("Remove account").performScrollTo().performClick()
         compose.onNodeWithText("Remove").performClick()
@@ -118,8 +119,31 @@ class AccountsSectionTest {
         graph.store.accessToken = "token"
         graph.store.accountEmail = "macerce@gmail.com"
         graph.store.region = "eu"
-        compose.setContent { SettingsScreen(graph, graph.strings()) }
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
 
-        compose.onNodeWithText("Signed in · ma***@gmail.com · region eu").performScrollTo()
+        compose.onNodeWithText("ma***@gmail.com").performScrollTo()
+        compose.onNodeWithText("Region: EU").assertExists()
+        compose.onNodeWithText("Sign in again").assertExists()
+        compose.onNodeWithText("App ID: app…").assertExists()
+    }
+
+    @Test
+    fun withoutKeysTheAccountRowAsksForThem() {
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
+
+        compose.onNodeWithText("Not signed in").assertExists()
+        compose.onNodeWithText("Not set").assertExists()
+        compose.onNodeWithText("Sign in with eWeLink").assertDoesNotExist()
+        compose.onNodeWithText("Remove account").assertDoesNotExist()
+    }
+
+    @Test
+    fun withKeysButNoSessionThereIsASignInButton() {
+        graph.store.appId = "app"
+        graph.store.appSecret = "secret"
+        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ACCOUNTS) }
+
+        compose.onNodeWithText("Sign in with eWeLink").assertExists()
+        compose.onNodeWithText("Sign out").assertDoesNotExist()
     }
 }

@@ -92,7 +92,7 @@ fun TuyaDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Unit) {
                 message?.let {
                     Text(it, style = MaterialTheme.typography.bodyMedium, color = if (error) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)
                 }
-                SetupSteps(strings["desktop_how_to_setup"], Setup.tuyaSteps(strings), Setup.tuyaActions(strings))
+                SetupSteps(strings["desktop_how_to_setup"], Setup.tuyaSteps(strings), Setup.tuyaActions(strings), inDialog = true)
             }
         },
         confirmButton = {

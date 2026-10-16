@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Ayarlar: kategori listesi -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Starts with Windows · keeps the computer awake</string>
+    <string name="desktop_settings_windows_no_autostart">Doesn\'t start with Windows</string>
+    <string name="desktop_settings_windows_may_sleep">The computer may go to sleep</string>
+    <string name="desktop_settings_windows_intro">So that SwitchGuard keeps watch on this computer without interruption. If either is off, alarms can be missed after a restart or while the computer sleeps.</string>
+    <string name="desktop_settings_appearance">Language &amp; appearance</string>
+    <string name="desktop_settings_backup_desc">Back up to an encrypted file or restore from one</string>
+    <string name="desktop_settings_secrets_warn">Saved keys can\'t be read on this computer</string>
+    <string name="desktop_settings_setup">Setup walkthroughs</string>
+    <string name="desktop_theme_desc">Light, dark or the same as Windows.</string>
+
+    <!-- Test alarmı -->
+    <string name="desktop_test_alarm_sound_desc">Rings like a real alarm</string>
+    <string name="desktop_test_alarm_silent_desc">No sound: check the alarm window and notification at night without waking anyone</string>
+    <string name="desktop_test_alarm_delay_desc">Switch to another window or lock the screen meanwhile to see the alarm come up over everything</string>
+
+    <!-- İkinci kişiye haber ver -->
+    <string name="desktop_tg_desc">If an alarm isn\'t dismissed in time, the people you choose get a Telegram message, and another one once it\'s dismissed. Even if no one is at the computer at night, someone at home or a neighbour finds out. The messages are sent by a Telegram bot you create; no other server is involved.</string>
+    <string name="desktop_tg_step_people_desc">Ask each person to open %s in Telegram and tap Start (you can also add the bot to a family group). Then click Find people.</string>
+    <string name="desktop_tg_open_link">Open the bot</string>
+    <string name="desktop_tg_copy_link">Copy invitation</string>
+    <string name="desktop_tg_link_copied">Invitation copied: paste it into a message to the person.</string>
+    <string name="desktop_tg_checking">Checking…</string>
+
+    <!-- Saat seçimi -->
+    <string name="desktop_time_hint">Use the arrows, the mouse wheel or the keyboard: ↑ ↓ change the value, you can type digits, Enter saves.</string>
+    <string name="desktop_time_hour">Hour</string>
+    <string name="desktop_time_minute">Minute</string>
+
+    <!-- Günlük özet, yedekleme, yardım -->
+    <string name="desktop_summary_note">The summary arrives as a Windows notification at the chosen time while SwitchGuard is running.</string>
+    <string name="desktop_backup_move_note">Moving to another computer: back up to a file on the old one, install SwitchGuard on the new one and restore from the file, then sign in to eWeLink again.</string>
+    <string name="desktop_open_logs_desc">Attach the log files when you report a problem</string>
+    <string name="desktop_contact_copied">No email app could be opened; the address was copied to the clipboard.</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -25,33 +26,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Links
+import com.macerce.switchguard.desktop.ui.tileColor
 
 /** Bir düğme: metni ve tıklanınca yapılan iş; iş kullanıcıya gösterilecek kısa bir not döndürebilir. */
 class SetupAction(val label: String, val run: () -> String?)
 
-/** Açılır kurulum anlatımı: numaralı adımlar ve altında bağlantı/kopyalama düğmeleri. */
+/**
+ * Açılır kurulum anlatımı: numaralı adımlar ve altında bağlantı/kopyalama düğmeleri. Ayarlar sayfasında kart
+ * ([SectionCard] gibi); pencere içinde [inDialog] ile kenar boşluğu olmadan ve pencere zemininden ayrılan tonda.
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun SetupSteps(title: String, steps: List<String>, actions: List<SetupAction>, initiallyOpen: Boolean = false) {
+fun SetupSteps(title: String, steps: List<String>, actions: List<SetupAction>, initiallyOpen: Boolean = false, inDialog: Boolean = false) {
     var open by remember { mutableStateOf(initiallyOpen) }
     var note by remember { mutableStateOf<String?>(null) }
     Card(
-        Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        Modifier.fillMaxWidth().padding(horizontal = if (inDialog) 0.dp else 16.dp, vertical = if (inDialog) 0.dp else 4.dp),
+        shape = RoundedCornerShape(if (inDialog) 16.dp else 24.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (inDialog) MaterialTheme.colorScheme.surfaceContainerHighest else tileColor(),
+        ),
     ) {
         Row(
-            Modifier.fillMaxWidth().clickable { open = !open }.padding(16.dp),
+            Modifier.fillMaxWidth().clickable { open = !open }.padding(horizontal = 20.dp, vertical = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)
+            Text(title, Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
             Icon(if (open) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown, contentDescription = null)
         }
         AnimatedVisibility(open) {
-            Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 steps.forEachIndexed { i, step ->
                     Row {
                         Text("${i + 1}.", Modifier.padding(end = 8.dp), style = MaterialTheme.typography.bodyMedium)

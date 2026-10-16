@@ -1,70 +1,72 @@
 package com.macerce.switchguard.desktop.ui.settings
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Hub
+import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Modifier
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.accounts.TuyaConnect
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.ui.InfoRow
+import com.macerce.switchguard.desktop.ui.SectionCard
+import com.macerce.switchguard.desktop.ui.SectionTitle
+import com.macerce.switchguard.desktop.ui.str
 
 /**
- * Ayarlar → Hesap: eWeLink ([EwelinkRows]), Tuya / Smart Life (bağla, değiştir, kaldır, canlı bildirimler) ve demo
- * cihazları. Okunan değerler `store.version` her değiştiğinde yeniden okunur (çağıranın `remember(version)`'ı).
+ * Ayarlar → Hesaplar (telefondaki AccountsPage): eWeLink ([EwelinkRows]), Tuya / Smart Life (bağla, değiştir,
+ * bağlantıyı kes) ve demo cihazları. Tuya canlı bildirimleri İzleme sayfasında. Okunan değerler `store.version` her
+ * değiştiğinde yeniden okunur.
  */
 @Composable
-fun AccountsSection(graph: AppGraph, strings: Strings, version: Int) {
+fun AccountsPage(graph: AppGraph, strings: Strings) {
     val store = graph.store
+    val version by store.version.collectAsState()
     val hasTuya = remember(version) { store.hasTuya }
     val tuyaDevices = remember(version) { store.snapshots.count { it.cloud == Cloud.TUYA } }
     val tuyaRegion = remember(version) { store.tuyaRegion }
-    val tuyaLive = remember(version) { store.tuyaLive }
     val demo = remember(version) { store.demoMode }
-    var dialog by remember { mutableStateOf<String?>(null) } // "tuya", "tuya-remove", "tuya-live"
-
-    SectionTitle(strings["section_account"])
+    var dialog by remember { mutableStateOf<String?>(null) } // "tuya", "tuya-remove"
 
     // --- eWeLink ---
+    SectionTitle("eWeLink")
     EwelinkRows(graph, strings, version)
 
     // --- Tuya ---
-    SettingRow(
-        strings["tuya_account"],
-        if (hasTuya) strings.plural("tuya_connected_x", tuyaDevices, strings["tuya_region_$tuyaRegion"], tuyaDevices) else strings["desktop_tuya_not_connected"],
-    ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    SectionTitle(str("tuya_account"))
+    SectionCard {
+        InfoRow(
+            Icons.Rounded.Hub,
+            str("tuya_account"),
+            if (hasTuya) strings.plural("tuya_connected_x", tuyaDevices, strings["tuya_region_$tuyaRegion"], tuyaDevices)
+            else str("desktop_tuya_not_connected"),
+            Modifier.clickable { dialog = "tuya" },
+        ) {
             if (hasTuya) {
-                TextButton(onClick = { dialog = "tuya" }) { Text(strings["action_change"]) }
-                OutlinedButton(onClick = { dialog = "tuya-remove" }) { Text(strings["tuya_disconnect"]) }
+                TextButton(onClick = { dialog = "tuya-remove" }) { Text(str("tuya_disconnect")) }
             } else {
-                Button(onClick = { dialog = "tuya" }) { Text(strings["desktop_connect"]) }
-            }
-        }
-    }
-    if (hasTuya) {
-        SwitchRow(strings["desktop_tuya_live"], strings["desktop_tuya_live_desc"], tuyaLive) { on ->
-            if (on) {
-                dialog = "tuya-live"
-            } else {
-                store.tuyaLive = false
-                applyEngineSettings(graph)
+                Button(onClick = { dialog = "tuya" }) { Text(str("desktop_connect")) }
             }
         }
     }
 
-    // --- Demo ---
-    SwitchRow(strings["demo_devices"], strings["demo_devices_desc"], demo) { on ->
-        graph.engine.setDemo(on, strings.demoNames()) // motor üzerinden; hesap kalmadıysa izleme de durur
+    // --- Demo --- (telefonda "Demo ve Pro"; masaüstünde Pro her zaman açık)
+    SectionTitle(str("demo_short"))
+    SectionCard {
+        SwitchInfoRow(Icons.Rounded.Science, str("demo_devices"), str("demo_devices_desc"), demo) { on ->
+            graph.engine.setDemo(on, strings.demoNames()) // motor üzerinden; hesap kalmadıysa izleme de durur
+        }
     }
 
     when (dialog) {
@@ -72,10 +74,6 @@ fun AccountsSection(graph: AppGraph, strings: Strings, version: Int) {
         "tuya-remove" -> Confirm(strings, strings["desktop_tuya_disconnect_confirm"], strings["desktop_remove"], onDismiss = { dialog = null }) {
             TuyaConnect(store).disconnect()
             if (!store.hasAnyAccount) graph.engine.stop() else applyEngineSettings(graph)
-        }
-        "tuya-live" -> Confirm(strings, strings["desktop_tuya_live_warning"], strings["desktop_turn_on"], onDismiss = { dialog = null }) {
-            store.tuyaLive = true
-            applyEngineSettings(graph)
         }
     }
 }

@@ -87,8 +87,8 @@
     <string name="desktop_windows_step_2">If Windows says \"Windows protected your PC\" (SmartScreen), press More info → Run anyway. The app is not signed yet; that is why it warns.</string>
     <string name="desktop_windows_step_3">SwitchGuard is installed in your user folder (AppData › Local › SwitchGuard) and adds shortcuts to the desktop and the Start menu.</string>
     <string name="desktop_windows_step_4">It starts by itself in the tray (next to the clock) when you sign in to Windows. Closing the window does not stop it; to quit, use the tray icon → Exit.</string>
-    <string name="desktop_windows_step_5">Add your accounts in Settings → Account (the Tuya and eWeLink steps are below).</string>
-    <string name="desktop_windows_step_6">Moving to another computer: on the old one, Settings → Backup → Back up to a file; install on the new one, Restore from a file, then sign in to eWeLink again.</string>
+    <string name="desktop_windows_step_5">Add your accounts in Settings → Accounts (the Tuya and eWeLink steps are below).</string>
+    <string name="desktop_windows_step_6">Moving to another computer: on the old one, Settings → Backup &amp; transfer → Back up to a file; install on the new one, Restore from a file, then sign in to eWeLink again.</string>
     <string name="desktop_windows_step_7">To uninstall: Windows Settings → Apps → Installed apps → SwitchGuard → Uninstall.</string>
 
     <!-- Hesaplar -->
