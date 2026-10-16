@@ -1,14 +1,19 @@
 package com.macerce.switchguard.desktop.ui.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Logout
+import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.DeleteOutline
+import androidx.compose.material.icons.rounded.Key
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -38,12 +43,18 @@ import com.macerce.switchguard.desktop.accounts.Parsed
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.ClipboardWatcher
 import com.macerce.switchguard.desktop.platform.Links
+import com.macerce.switchguard.desktop.ui.InfoRow
+import com.macerce.switchguard.desktop.ui.RowDivider
+import com.macerce.switchguard.desktop.ui.SectionCard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** Ayarlar → Hesap → eWeLink satırı: durum, her zaman görünen uyarı ve düğmeler. */
+/**
+ * Ayarlar → Hesaplar → eWeLink kartı (telefondaki gibi): hesap (giriş / yeniden giriş), API bilgileri, çıkış ve hesabı
+ * kaldırma satırları; altında bu bilgisayarın ayrı hesap gerektirdiği notu.
+ */
 @Composable
 fun EwelinkRows(graph: AppGraph, strings: Strings, version: Int) {
     val store = graph.store
@@ -54,24 +65,41 @@ fun EwelinkRows(graph: AppGraph, strings: Strings, version: Int) {
     val appId = remember(version) { store.appId }
     var dialog by remember { mutableStateOf<String?>(null) } // "keys", "login", "logout", "remove"
 
-    val state = when {
-        loggedIn -> strings.format("desktop_ewelink_logged_in_x", EwelinkLogin.maskEmail(email).ifEmpty { "—" }, region)
-        hasKeys -> strings.format("desktop_ewelink_not_logged_in_x", appId)
-        else -> strings["desktop_ewelink_keys_missing"]
+    SectionCard {
+        InfoRow(
+            Icons.Rounded.AccountCircle,
+            when {
+                loggedIn -> EwelinkLogin.maskEmail(email).ifEmpty { strings["logged_in"] }
+                else -> strings["not_logged_in"]
+            },
+            when {
+                loggedIn -> strings.format("region_x", region.uppercase())
+                !hasKeys -> strings["desktop_ewelink_keys_missing"]
+                else -> null
+            },
+            Modifier.clickable { dialog = if (hasKeys) "login" else "keys" },
+        ) {
+            if (hasKeys) {
+                TextButton(onClick = { dialog = "login" }) { Text(strings[if (loggedIn) "action_relogin" else "action_login"]) }
+            }
+        }
+        RowDivider()
+        InfoRow(
+            Icons.Rounded.Key,
+            strings["api_credentials"],
+            if (hasKeys) strings.format("app_id_x", appId.take(6) + "…") else strings["not_set"],
+            Modifier.clickable { dialog = "keys" },
+        )
+        if (loggedIn) {
+            RowDivider()
+            InfoRow(Icons.AutoMirrored.Rounded.Logout, strings["action_logout"], modifier = Modifier.clickable { dialog = "logout" })
+        }
+        if (hasKeys) {
+            RowDivider()
+            InfoRow(Icons.Rounded.DeleteOutline, strings["desktop_ewelink_remove"], modifier = Modifier.clickable { dialog = "remove" })
+        }
     }
-    SettingRow("eWeLink", state)
-    Text(
-        strings["desktop_ewelink_pc_notice"],
-        style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = Modifier.padding(horizontal = 24.dp),
-    )
-    Row(Modifier.padding(horizontal = 24.dp, vertical = 8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        OutlinedButton(onClick = { dialog = "keys" }) { Text(strings["api_credentials"]) }
-        if (hasKeys && !loggedIn) Button(onClick = { dialog = "login" }) { Text(strings["action_login"]) }
-        if (loggedIn) OutlinedButton(onClick = { dialog = "logout" }) { Text(strings["action_logout"]) }
-        if (hasKeys) TextButton(onClick = { dialog = "remove" }) { Text(strings["desktop_ewelink_remove"]) }
-    }
+    PageIntro(strings["desktop_ewelink_pc_notice"], Modifier.padding(top = 8.dp))
 
     /** Hesap değişti: izlenecek bir şey kalmadıysa izleme durur, yoksa (açıksa) yeniden bağlanır. */
     fun afterAccountChange() {
@@ -126,7 +154,7 @@ fun ApiCredentialsDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Uni
                     label = { Text("Redirect URL") }, singleLine = true,
                     supportingText = { Text(strings["redirect_hint"]) },
                 )
-                SetupSteps(strings["desktop_how_to_setup"], Setup.ewelinkSteps(strings), Setup.ewelinkActions(strings, store))
+                SetupSteps(strings["desktop_how_to_setup"], Setup.ewelinkSteps(strings), Setup.ewelinkActions(strings, store), inDialog = true)
             }
         },
         confirmButton = {

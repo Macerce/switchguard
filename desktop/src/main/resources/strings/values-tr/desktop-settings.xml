@@ -1,4 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Ayarlar: kategori listesi -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Windows ile başlar · bilgisayarı uyanık tutar</string>
+    <string name="desktop_settings_windows_no_autostart">Windows ile başlamıyor</string>
+    <string name="desktop_settings_windows_may_sleep">Bilgisayar uykuya geçebilir</string>
+    <string name="desktop_settings_windows_intro">SwitchGuard\'ın bu bilgisayarda kesintisiz izlemesi için. Biri kapalıysa yeniden başlatmadan sonra ya da bilgisayar uyurken alarmlar kaçabilir.</string>
+    <string name="desktop_settings_appearance">Dil ve görünüm</string>
+    <string name="desktop_settings_backup_desc">Şifreli dosyaya yedekle ya da dosyadan geri yükle</string>
+    <string name="desktop_settings_secrets_warn">Kayıtlı anahtarlar bu bilgisayarda okunamıyor</string>
+    <string name="desktop_settings_setup">Kurulum anlatımları</string>
+    <string name="desktop_theme_desc">Açık, koyu ya da Windows\'takiyle aynı.</string>
+
+    <!-- Test alarmı -->
+    <string name="desktop_test_alarm_sound_desc">Gerçek alarm gibi çalar</string>
+    <string name="desktop_test_alarm_silent_desc">Ses yok: gece kimseyi uyandırmadan alarm penceresini ve bildirimi görürsünüz</string>
+    <string name="desktop_test_alarm_delay_desc">Bu sürede başka bir pencereye geçin ya da ekranı kilitleyin: alarmın her şeyin üstünde açıldığını görürsünüz</string>
+
+    <!-- İkinci kişiye haber ver -->
+    <string name="desktop_tg_desc">Alarm belirli bir süre içinde kapatılmazsa seçtiğiniz kişilere Telegram mesajı gider; alarm kapatılınca da haber verilir. Gece bilgisayarın başında kimse olmasa bile evdeki biri ya da komşunuz haberdar olur. Mesajları sizin oluşturduğunuz Telegram botu gönderir, arada başka bir sunucu yoktur.</string>
+    <string name="desktop_tg_step_people_desc">Haber verilecek kişi Telegram\'da %s bağlantısını açıp Başlat\'a dokunsun (botu bir aile grubuna da ekleyebilirsiniz). Sonra Kişileri bul\'a basın.</string>
+    <string name="desktop_tg_open_link">Botu aç</string>
+    <string name="desktop_tg_copy_link">Daveti kopyala</string>
+    <string name="desktop_tg_link_copied">Davet kopyalandı: kişiye mesajla gönderin.</string>
+    <string name="desktop_tg_checking">Deneniyor…</string>
+
+    <!-- Saat seçimi -->
+    <string name="desktop_time_hint">Okları, fare tekerleğini ya da klavyeyi kullanın: ↑ ↓ değeri değiştirir, rakam yazabilirsiniz, Enter kaydeder.</string>
+    <string name="desktop_time_hour">Saat</string>
+    <string name="desktop_time_minute">Dakika</string>
+
+    <!-- Günlük özet, yedekleme, yardım -->
+    <string name="desktop_summary_note">Özet, seçilen saatte SwitchGuard açıksa Windows bildirimi olarak gelir.</string>
+    <string name="desktop_backup_move_note">Başka bir bilgisayara geçerken: eskisinde dosyaya yedekleyin, yenisine SwitchGuard\'ı kurup dosyadan geri yükleyin, ardından eWeLink\'e yeniden giriş yapın.</string>
+    <string name="desktop_open_logs_desc">Bir sorun bildirirken günlük dosyalarını e-postaya ekleyebilirsiniz</string>
+    <string name="desktop_contact_copied">E-posta uygulaması açılamadı; adres panoya kopyalandı.</string>
 </resources>

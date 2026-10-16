@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.rounded.MusicNote
+import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Sounds
+import com.macerce.switchguard.desktop.ui.InfoRow
+import com.macerce.switchguard.desktop.ui.RowDivider
 import com.macerce.switchguard.desktop.sound.ImportResult
 import com.macerce.switchguard.desktop.sound.Reason
 import com.macerce.switchguard.desktop.sound.SoundImport
@@ -133,16 +137,19 @@ fun chooseSoundFile(title: String): Path? {
     return Paths.get(dir, name)
 }
 
-/** Ayarlar → Alarm: alarm sesi ve bildirim sesi satırları. */
+/** Ayarlar → Alarm: alarm sesi ve bildirim sesi satırları (kart içinde, aralarında ayraç). */
 @Composable
 fun SoundRows(graph: AppGraph, strings: Strings, alarmSound: String?, notifySound: String?) {
     var editing by remember { mutableStateOf<String?>(null) } // "alarm" / "notify"
-    SettingRow(strings["alarm_sound"], onClick = { editing = "alarm" }) {
-        Text(Sounds.displayName(alarmSound ?: Sounds.DEFAULT_ALARM, strings), color = MaterialTheme.colorScheme.primary)
-    }
-    SettingRow(strings["desktop_notify_sound"], onClick = { editing = "notify" }) {
-        Text(Sounds.displayName(notifySound ?: Sounds.DEFAULT_NOTIFY, strings), color = MaterialTheme.colorScheme.primary)
-    }
+    InfoRow(
+        Icons.Rounded.MusicNote, strings["alarm_sound"], Sounds.displayName(alarmSound ?: Sounds.DEFAULT_ALARM, strings),
+        Modifier.clickable { editing = "alarm" },
+    )
+    RowDivider()
+    InfoRow(
+        Icons.Rounded.Notifications, strings["desktop_notify_sound"], Sounds.displayName(notifySound ?: Sounds.DEFAULT_NOTIFY, strings),
+        Modifier.clickable { editing = "notify" },
+    )
     when (editing) {
         "alarm" -> SoundPickerDialog(
             graph, strings, strings["alarm_sound"], alarmSound, Sounds.DEFAULT_ALARM,

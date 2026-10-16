@@ -6,15 +6,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,20 +28,89 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import com.macerce.switchguard.desktop.ui.InfoRow
+import com.macerce.switchguard.desktop.ui.str
 
-/** Bölüm başlığı (telefondaki ayarlar ekranı gibi renkli, küçük). */
+// Ayarlar sayfalarının satırları. Kart içindeki satırlar ortak InfoRow'dur (telefondaki gibi); burada yalnızca
+// masaüstüne uyarlanmış çeşitleri var: satırın tamamı anahtarı değiştirir, seçenekler radyo düğmeli pencerede.
+
+/**
+ * Kart içinde anahtarlı satır (telefondaki `InfoRow { Switch }`). Satırın tamamı tıklanır: fareyle de klavyeyle
+ * (Boşluk) de kolay, küçük anahtarı tutturmak gerekmez.
+ */
 @Composable
-fun SectionTitle(text: String) {
-    Text(
-        text,
-        style = MaterialTheme.typography.titleSmall,
-        color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp, bottom = 8.dp),
+fun SwitchInfoRow(
+    icon: ImageVector,
+    title: String,
+    subtitle: String? = null,
+    checked: Boolean,
+    enabled: Boolean = true,
+    onChange: (Boolean) -> Unit,
+) {
+    InfoRow(
+        icon, title, subtitle,
+        Modifier.toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onChange),
+    ) {
+        Switch(checked = checked, onCheckedChange = null, enabled = enabled)
+    }
+}
+
+/**
+ * Seçenek penceresi (telefondaki `ChoiceDialog`): açıklama ve radyo düğmeli seçenekler. Bir seçeneğe tıklamak onu
+ * kaydeder ve pencereyi kapatır; Esc ya da "İptal" vazgeçer.
+ */
+@Composable
+fun <T> ChoiceDialog(
+    title: String,
+    description: String?,
+    options: List<T>,
+    selected: T,
+    label: @Composable (T) -> String,
+    onPick: (T) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(title) },
+        text = {
+            Column(Modifier.heightIn(max = 460.dp).verticalScroll(rememberScrollState())) {
+                if (!description.isNullOrEmpty()) {
+                    Text(description, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 12.dp))
+                }
+                options.forEach { o ->
+                    Row(
+                        Modifier.fillMaxWidth()
+                            .selectable(selected = o == selected, role = Role.RadioButton, onClick = { onPick(o); onDismiss() })
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        RadioButton(selected = o == selected, onClick = null)
+                        Text(label(o), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 12.dp))
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(str("action_cancel")) } },
     )
 }
+
+/** Sayfa başındaki ya da kart altındaki kısa açıklama (telefondaki `PageIntro`). */
+@Composable
+fun PageIntro(text: String, modifier: Modifier = Modifier) {
+    Text(
+        text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier.padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 4.dp),
+    )
+}
+
+// ---------------------------------------------------------------- eski satırlar
+// Cihaz seçenekleri penceresi (DeviceOptionsDialog) bunları kullanıyor; o pencere cihaz sayfasına taşınınca kalkabilir.
 
 /** Başlık + isteğe bağlı açıklama; sağda [trailing]. Tıklanabilirse [onClick]. */
 @Composable
@@ -127,9 +202,4 @@ fun SliderRow(
             modifier = Modifier.fillMaxWidth().testTag(tag),
         )
     }
-}
-
-@Composable
-fun SectionDivider() {
-    HorizontalDivider(Modifier.padding(top = 8.dp))
 }

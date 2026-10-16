@@ -1,10 +1,14 @@
 package com.macerce.switchguard.desktop.ui.settings
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Backup
+import androidx.compose.material.icons.rounded.SettingsBackupRestore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.LinearProgressIndicator
@@ -28,6 +32,8 @@ import com.macerce.switchguard.desktop.backup.BackupService
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Autostart
 import com.macerce.switchguard.desktop.syncAutostart
+import com.macerce.switchguard.desktop.ui.InfoRow
+import com.macerce.switchguard.desktop.ui.RowDivider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,7 +55,7 @@ private sealed interface Step {
 }
 
 /**
- * Ayarlar → Yedekleme: "Dosyaya yedekle…" (dosya seç → şifre ×2 → yaz) ve "Dosyadan geri yükle…" (dosya seç → şifre →
+ * Ayarlar → Yedekleme ve aktarım (kart içindeki iki satır): "Dosyaya yedekle…" (dosya seç → şifre ×2 → yaz) ve "Dosyadan geri yükle…" (dosya seç → şifre →
  * özet ve uyarı → izlemeyi durdur → geri yükle → Windows ile başlat ayarını uygula → gerekirse izlemeyi başlat).
  * Dosya işleri arka planda; [chooseTarget]/[chooseSource] testlerde değiştirilir (Windows dosya penceresi açılmasın).
  */
@@ -64,12 +70,15 @@ fun BackupSection(
     var step by remember { mutableStateOf<Step?>(null) }
     val scope = rememberCoroutineScope()
 
-    SettingRow(strings["desktop_backup_create"], strings["desktop_backup_create_desc"], onClick = {
-        chooseTarget(BackupService.defaultFileName(LocalDate.now()))?.let { step = Step.NewPassword(withExtension(it)) }
-    })
-    SettingRow(strings["desktop_backup_restore"], strings["desktop_backup_restore_desc"], onClick = {
-        chooseSource()?.let { step = Step.Password(it) }
-    })
+    InfoRow(
+        Icons.Rounded.Backup, strings["desktop_backup_create"], strings["desktop_backup_create_desc"],
+        Modifier.clickable { chooseTarget(BackupService.defaultFileName(LocalDate.now()))?.let { step = Step.NewPassword(withExtension(it)) } },
+    )
+    RowDivider()
+    InfoRow(
+        Icons.Rounded.SettingsBackupRestore, strings["desktop_backup_restore"], strings["desktop_backup_restore_desc"],
+        Modifier.clickable { chooseSource()?.let { step = Step.Password(it) } },
+    )
 
     fun errorText(e: BackupException, failedKey: String) = when (e.kind) {
         BackupException.Kind.WRONG_PASSWORD_OR_DAMAGED -> strings["desktop_restore_wrong_password"]
