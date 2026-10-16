@@ -23,11 +23,30 @@ kotlin {
     }
 }
 
+// Genişletilmiş Material simgeleri ~38 MB: tamamı yerine yalnızca icons.txt'deki simgelerin sınıflarını içeren ince jar.
+// Listede olmayan bir simge derlenmez (sınıfı yok), böylece çalışırken eksik simge hatası olamaz.
+val iconsExtended: Configuration by configurations.creating { isTransitive = false }
+
+val slimIcons by tasks.registering(Jar::class) {
+    // icons.txt + ekran gruplarının kendi listeleri (icons-*.txt).
+    val lists = projectDir.listFiles { f -> f.name == "icons.txt" || (f.name.startsWith("icons-") && f.name.endsWith(".txt")) }!!.sorted()
+    val names = lists.flatMap { it.readLines() }.map { it.trim() }.filter { it.isNotEmpty() && !it.startsWith("#") }.distinct()
+    inputs.files(lists)
+    archiveFileName.set("icons-slim.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("icons"))
+    from({ zipTree(iconsExtended.singleFile) }) {
+        // Kotlin derleyicisi üst düzey tanımları (Icons.Rounded.X uzantıları) bu dosyadan bulur.
+        include("META-INF/*.kotlin_module")
+        names.forEach { include("androidx/compose/material/icons/${it}Kt.class", "androidx/compose/material/icons/${it}Kt$*.class") }
+    }
+}
+
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
-    // Yalnizca Icons.Filled.Warning kullaniliyor (core icinde); materialIconsExtended ~38 MB tuttugu icin cikarildi.
     implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+    iconsExtended("org.jetbrains.compose.material:material-icons-extended-desktop:1.7.3")
+    implementation(files(slimIcons))
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("org.json:json:20240303")
     implementation("net.java.dev.jna:jna:5.19.1")

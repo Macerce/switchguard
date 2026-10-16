@@ -23,10 +23,23 @@ class AppState {
     val status: StateFlow<Pair<ConnState, String>> = _status.asStateFlow()
 
     /** Ana penceredeki sekme (sol menü). */
-    enum class Tab { DEVICES, AUTOMATIONS, SETTINGS }
+    enum class Tab { DEVICES, AUTOMATIONS, HISTORY, SETTINGS }
 
     /** Seçili sekme; pencere yeniden kurulsa da (hata sonrası) korunur. */
     val tab = MutableStateFlow(Tab.DEVICES)
+
+    /** Açık cihaz sayfası (Cihazlar sekmesinin üstünde); null = liste. Telefondaki `openDeviceId`. */
+    val openDevice = MutableStateFlow<String?>(null)
+
+    /** Ayarlar sekmesine yeniden tıklandı: alt sayfadan kategori listesine dönülür (her tıklamada artar). */
+    val settingsHome = MutableStateFlow(0)
+
+    /** Sol menüden sekme seçimi: seçili sekmeye yeniden tıklamak o sekmenin başına döner. */
+    fun select(t: Tab) {
+        if (t == tab.value && t == Tab.SETTINGS) settingsHome.update { it + 1 }
+        if (t == Tab.DEVICES) openDevice.value = null
+        tab.value = t
+    }
 
     /** Ana pencere görünür mü; kapatma düğmesi gizler, tepsi "Aç" yeniden gösterir. */
     val windowVisible = MutableStateFlow(true)

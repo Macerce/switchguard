@@ -93,7 +93,7 @@ class StringsTest {
 
     @Test
     fun everyEnglishKeyHasTurkish() {
-        for (file in listOf("strings.xml", "desktop.xml")) {
+        for (file in Strings.FILES) {
             val english = translatableKeys("/strings/values/$file")
             val turkish = Strings.parse(resource("/strings/values-tr/$file")).keys
             val missing = english - turkish
@@ -103,7 +103,7 @@ class StringsTest {
 
     @Test
     fun loadedTextsHaveNoLeftoverEscapes() {
-        for (dir in listOf("values", "values-tr")) for (file in listOf("strings.xml", "desktop.xml")) {
+        for (dir in listOf("values", "values-tr")) for (file in Strings.FILES) {
             for ((key, text) in Strings.parse(resource("/strings/$dir/$file"))) {
                 assertTrue("$dir/$file $key: $text", !text.contains('\\') && !text.contains("&amp;"))
             }
@@ -115,8 +115,13 @@ class StringsTest {
     fun desktopKeysNeverShadowPhoneKeys() {
         for (dir in listOf("values", "values-tr")) {
             val phone = Strings.parse(resource("/strings/$dir/strings.xml")).keys
-            val desktop = Strings.parse(resource("/strings/$dir/desktop.xml")).keys
-            assertTrue("$dir: desktop.xml redefines ${phone intersect desktop}", (phone intersect desktop).isEmpty())
+            val seen = mutableSetOf<String>()
+            for (file in Strings.FILES - "strings.xml") {
+                val desktop = Strings.parse(resource("/strings/$dir/$file")).keys
+                assertTrue("$dir: $file redefines ${phone intersect desktop}", (phone intersect desktop).isEmpty())
+                assertTrue("$dir: $file repeats ${seen intersect desktop}", (seen intersect desktop).isEmpty())
+                seen += desktop
+            }
         }
     }
 
@@ -201,7 +206,7 @@ class StringsTest {
 
     @Test
     fun englishAndTurkishTakeTheSameFormatArguments() {
-        for (file in listOf("strings.xml", "desktop.xml")) {
+        for (file in Strings.FILES) {
             val english = Strings.parse(resource("/strings/values/$file"))
             val turkish = Strings.parse(resource("/strings/values-tr/$file"))
             for ((key, tr) in turkish) {

@@ -127,7 +127,11 @@ class Strings internal constructor(
 
     companion object {
         private const val TAG = "Strings"
-        private val FILES = listOf("strings.xml", "desktop.xml")
+        /**
+         * Telefonun metinleri + masaüstüne özgüler. Masaüstü metinleri ekran grubuna göre ayrı dosyalarda (birlikte
+         * çalışılırken aynı dosyaya yazılıp çakışmasın); hiçbiri telefon anahtarını gölgeleyemez (StringsTest).
+         */
+        internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml")
 
         /** [language] "tr" ya da "en"; boşsa sistem dili Türkçeyse "tr", değilse "en"; bilinmeyen dil "en" olur. */
         fun load(language: String): Strings {
