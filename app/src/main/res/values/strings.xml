@@ -513,11 +513,12 @@
     <string name="perm_overlay">Show alarm over other apps</string>
     <string name="perm_overlay_desc">Needed on Android TV so the alarm appears on top of whatever is playing. Tap and allow SwitchGuard.</string>
     <string name="tv_keyboard_hint">Tip: type or paste from your phone with the Google TV app (remote → keyboard).</string>
+    <string name="tv_time_hint">Up and down change the value. OK on the hour moves to minutes, OK on the minutes saves, Back cancels.</string>
     <string name="onb_platform_transfer">Transfer from another device</string>
     <string name="onb_platform_transfer_desc">Already set up on your phone? Get Tuya keys, rules and settings over your home Wi-Fi. For eWeLink this device needs its own account and that account\'s own API keys.</string>
     <string name="onb_transfer_title">Transfer from your phone</string>
     <string name="onb_transfer_body">Both devices must be on the same Wi-Fi network.</string>
-    <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Send to another device, pick this device and enter the code below.</string>
+    <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Backup &amp; transfer → Send to another device, pick this device and enter the code below.</string>
     <string name="transfer_code_label">Code</string>
     <string name="transfer_waiting">Waiting for your phone…</string>
     <string name="transfer_received">Setup received: Tuya keys, rules and settings are here. If you use eWeLink, now enter the API keys of the account you created for this device.</string>

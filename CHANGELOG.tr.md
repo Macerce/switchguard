@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.12.1 — 16 Ekim 2026
+**Düzeltmeler**
+- TV: saat seçimi (sessiz saatlerin başlangıcı ve bitişi, günlük özet saati, cihaz zamanlayıcıları) artık kumandayla yapılabiliyor. Sistemin saat kadranı kumandayla kullanılamıyordu; TV'de uygulama artık kendi saat seçicisini gösteriyor: yukarı ve aşağı saati ya da dakikayı değiştirir, saatteyken OK dakikaya geçer, dakikadayken OK kaydeder, Geri tuşu vazgeçer. Telefon ve tablette alışılmış saat penceresi kalıyor.
+- TV: telefondan alma adımları artık Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar yolunu gösteriyor.
+
 ## 2.12.0 — 15 Ekim 2026
 **Yeni görünüm**
 - Cihazlar ekranı artık bir akıllı ev uygulaması gibi: cihazlar ızgarada kutucuklar halinde (telefonda satırda iki tane). Her kutucukta cihazın neyi kontrol ettiğine uyan bir simge (ışık, su ya da pompa, dondurucu, ısıtma, fan, kapı, priz; adından tahmin ediliyor), durumu, gücü ve yuvarlak bir güç düğmesi var. Açık cihazın kutucuğu SwitchGuard yeşiliyle parlıyor; çevrimdışı cihaz soluk ve kırmızı noktalı görünüyor.

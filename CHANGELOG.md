@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.12.1 — 2026-10-16
+**Fixes**
+- TV: choosing a time (quiet hours start and end, daily summary time, device timers) now works with the remote. The system's clock face couldn't be used with the remote; on a TV the app now shows its own time picker: up and down change the hour or minutes, OK on the hour moves to minutes, OK on the minutes saves, Back cancels. Phones and tablets keep the usual clock.
+- TV: the steps for receiving from a phone now point to Settings → Backup & transfer → Send to another device.
+
 ## 2.12.0 — 2026-10-15
 **New look**
 - The Devices screen now looks like a smart-home app: devices are tiles in a grid (two per row on a phone). Each tile has an icon that matches what the device controls (light, water or pump, fridge, heating, fan, door, plug — guessed from its name), its state and power, and a round power button. A device that's on lights up in SwitchGuard green; an offline one is greyed out with a red dot.

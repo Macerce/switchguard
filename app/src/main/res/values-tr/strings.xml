@@ -509,11 +509,12 @@
     <string name="perm_overlay">Alarmı diğer uygulamaların üstünde göster</string>
     <string name="perm_overlay_desc">Android TV\'de alarmın o an açık olan her şeyin üstüne çıkması için gerekli. Dokunun ve SwitchGuard\'a izin verin.</string>
     <string name="tv_keyboard_hint">İpucu: Telefonunuzdaki Google TV uygulamasıyla (kumanda → klavye) yazabilir ya da yapıştırabilirsiniz.</string>
+    <string name="tv_time_hint">Yukarı ve aşağı tuşları değeri değiştirir. Saatteyken OK dakikaya geçer, dakikadayken OK kaydeder, Geri tuşu vazgeçer.</string>
     <string name="onb_platform_transfer">Başka bir cihazdan aktar</string>
     <string name="onb_platform_transfer_desc">Telefonunuzda zaten kurulu mu? Tuya bilgilerini, kuralları ve ayarları ev Wi-Fi\'ı üzerinden alın. eWeLink için bu cihaza ayrı bir hesap ve o hesabın kendi API anahtarları gerekir.</string>
     <string name="onb_transfer_title">Telefonunuzdan aktarın</string>
     <string name="onb_transfer_body">İki cihaz da aynı Wi-Fi ağında olmalı.</string>
-    <string name="transfer_receive_steps">Telefonunuzda SwitchGuard → Ayarlar → Başka cihaza aktar\'ı açın, bu cihazı seçin ve aşağıdaki kodu girin.</string>
+    <string name="transfer_receive_steps">Telefonunuzda SwitchGuard → Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar\'ı açın, bu cihazı seçin ve aşağıdaki kodu girin.</string>
     <string name="transfer_code_label">Kod</string>
     <string name="transfer_waiting">Telefonunuz bekleniyor…</string>
     <string name="transfer_received">Kurulum alındı: Tuya bilgileri, kurallar ve ayarlar bu cihazda. eWeLink kullanıyorsanız şimdi bu cihaz için açtığınız hesabın API anahtarlarını girin.</string>

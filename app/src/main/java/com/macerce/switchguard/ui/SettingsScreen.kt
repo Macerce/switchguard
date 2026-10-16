@@ -1,7 +1,6 @@
 package com.macerce.switchguard.ui
 
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
@@ -723,6 +722,7 @@ private fun AlarmPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
 @Composable
 private fun QuietPage() {
     val context = LocalContext.current
+    val time = rememberTimePicker()
     val (store, version) = settingsState()
     val q = remember(version) { store.quietHours }
     PageIntro(stringResource(R.string.quiet_hours_desc))
@@ -732,14 +732,16 @@ private fun QuietPage() {
         }
         if (q.enabled) {
             Divider()
+            val startTitle = stringResource(R.string.quiet_start)
             InfoRow(
-                Icons.Rounded.Schedule, stringResource(R.string.quiet_start), formatMinute(context, q.startMinute),
-                Modifier.clickable { pickTime(context, q.startMinute) { store.quietHours = store.quietHours.copy(startMinute = it) } },
+                Icons.Rounded.Schedule, startTitle, formatMinute(context, q.startMinute),
+                Modifier.clickable { time.pick(startTitle, q.startMinute) { store.quietHours = store.quietHours.copy(startMinute = it) } },
             )
             Divider()
+            val endTitle = stringResource(R.string.quiet_end)
             InfoRow(
-                Icons.Rounded.Schedule, stringResource(R.string.quiet_end), formatMinute(context, q.endMinute),
-                Modifier.clickable { pickTime(context, q.endMinute) { store.quietHours = store.quietHours.copy(endMinute = it) } },
+                Icons.Rounded.Schedule, endTitle, formatMinute(context, q.endMinute),
+                Modifier.clickable { time.pick(endTitle, q.endMinute) { store.quietHours = store.quietHours.copy(endMinute = it) } },
             )
         }
     }
@@ -753,6 +755,7 @@ private fun SummaryPage() {
     val context = LocalContext.current
     val resources = LocalResources.current
     val scope = rememberCoroutineScope()
+    val time = rememberTimePicker()
     val (store, version) = settingsState()
     val s = remember(version) { store }
     PageIntro(stringResource(R.string.daily_summary_desc))
@@ -765,10 +768,11 @@ private fun SummaryPage() {
         }
         if (s.dailySummaryEnabled) {
             Divider()
+            val timeTitle = stringResource(R.string.daily_summary_time)
             InfoRow(
-                Icons.Rounded.Schedule, stringResource(R.string.daily_summary_time), formatMinute(context, s.dailySummaryMinute),
+                Icons.Rounded.Schedule, timeTitle, formatMinute(context, s.dailySummaryMinute),
                 Modifier.clickable {
-                    pickTime(context, s.dailySummaryMinute) {
+                    time.pick(timeTitle, s.dailySummaryMinute) {
                         store.dailySummaryMinute = it
                         SummaryScheduler.schedule(context)
                     }
@@ -1019,13 +1023,6 @@ fun formatMinute(context: android.content.Context, minute: Int): String {
         set(Calendar.HOUR_OF_DAY, minute / 60); set(Calendar.MINUTE, minute % 60)
     }
     return AndroidDateFormat.getTimeFormat(context).format(cal.time)
-}
-
-fun pickTime(context: android.content.Context, minute: Int, onPick: (Int) -> Unit) {
-    TimePickerDialog(
-        context, { _, h, m -> onPick(h * 60 + m) },
-        minute / 60, minute % 60, AndroidDateFormat.is24HourFormat(context),
-    ).show()
 }
 
 @Composable

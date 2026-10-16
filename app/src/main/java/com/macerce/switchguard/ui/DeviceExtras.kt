@@ -308,15 +308,17 @@ private fun TimerDialog(
     onDismiss: () -> Unit,
 ) {
     val context = LocalContext.current
+    val time = rememberTimePicker()
     var t by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(if (isNew) R.string.timer_add else R.string.timer_edit)) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                val timeTitle = stringResource(R.string.timer_time)
                 InfoRow(
-                    Icons.Rounded.Schedule, stringResource(R.string.timer_time), formatMinute(context, t.hour * 60 + t.minute),
-                    Modifier.clickable { pickTime(context, t.hour * 60 + t.minute) { m -> t = t.copy(hour = m / 60, minute = m % 60) } },
+                    Icons.Rounded.Schedule, timeTitle, formatMinute(context, t.hour * 60 + t.minute),
+                    Modifier.clickable { time.pick(timeTitle, t.hour * 60 + t.minute) { m -> t = t.copy(hour = m / 60, minute = m % 60) } },
                 )
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                     listOf(true, false).forEachIndexed { i, on ->
