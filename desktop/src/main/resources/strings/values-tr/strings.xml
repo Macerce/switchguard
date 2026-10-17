@@ -724,4 +724,25 @@
     <string name="act_turn_on">Cihazı aç</string>
     <string name="act_turn_off">Cihazı kapat</string>
     <string name="automation_low_for_nograce">(%d dk boyunca)</string>
+    <!-- Uyarılar sekmesi (2.13) -->
+    <string name="tab_alerts">Uyarılar</string>
+    <string name="alerts_ready">Alarm hazır</string>
+    <string name="alerts_ready_desc">İzlenen cihazlardaki değişiklikler anında çalar.</string>
+    <string name="alerts_monitoring_off">İzleme kapalı</string>
+    <string name="alerts_monitoring_off_desc">İzlemeyi başlatana kadar uyarılar çalışmaz.</string>
+    <string name="section_device_alerts">Cihaz uyarıları</string>
+    <string name="section_device_alerts_desc">Her cihazın hangi değişiklikte alarm ya da bildirim verdiği</string>
+    <string name="device_alerts_not_monitored">İzlenmiyor</string>
+    <string name="device_alerts_none">İzleniyor · alarm ya da bildirim yok</string>
+    <string name="device_alerts_alarm">Alarm: %s</string>
+    <string name="device_alerts_notify">Bildirim: %s</string>
+    <string name="device_alert_rules">Uyarı kuralları</string>
+    <string name="section_conditional_alerts">Koşullu uyarılar</string>
+    <string name="conditional_alerts_desc">Cihaz bir süre açık ya da kapalı kalınca veya gücü değişince uyar</string>
+    <string name="conditional_alerts_empty">Henüz koşullu uyarı yok. Örnek: pompa 1 dakika boyunca 50 W\'ın altında çekerse alarm çal.</string>
+    <string name="section_alert_settings">Uyarı ayarları</string>
+    <string name="alert_new">Yeni uyarı</string>
+    <string name="alert_edit">Uyarıyı düzenle</string>
+    <string name="alert_delete_title">Bu uyarı silinsin mi?</string>
+    <string name="automations_empty_desc">Otomasyonlar cihazları kendiliğinden açar ya da kapatır. Örnek: dondurucunun gücü artınca fanı aç, ışık 2 saat açık kalınca kapat.</string>
 </resources>

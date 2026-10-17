@@ -8,8 +8,8 @@ import androidx.compose.ui.test.performScrollTo
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.sound.ImportResult
 import com.macerce.switchguard.desktop.sound.SoundImport
-import com.macerce.switchguard.desktop.ui.settings.SettingsPage
-import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
+import com.macerce.switchguard.desktop.ui.alerts.AlertsPage
+import com.macerce.switchguard.desktop.ui.alerts.AlertsScreen
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -40,7 +40,7 @@ class SoundPickerTest {
 
     @Test
     fun pickingABuiltInSoundSavesIt() {
-        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ALARM) }
+        compose.setContent { AlertsScreen(graph, graph.strings(), startPage = AlertsPage.Alarm) }
 
         compose.onNodeWithText("Alarm sound").performScrollTo().performClick()
         compose.onNodeWithText("Beep").performClick()
@@ -51,7 +51,7 @@ class SoundPickerTest {
 
     @Test
     fun notificationSoundIsSavedSeparately() {
-        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ALARM) }
+        compose.setContent { AlertsScreen(graph, graph.strings(), startPage = AlertsPage.Alarm) }
 
         compose.onNodeWithText("Notification sound").performScrollTo().performClick()
         compose.onNodeWithText("Pulse").performClick()
@@ -71,7 +71,7 @@ class SoundPickerTest {
         )
         val imported = SoundImport(graph.soundsDir).import(wav)
         assertTrue(imported.toString(), imported is ImportResult.Ok)
-        compose.setContent { SettingsScreen(graph, graph.strings(), startPage = SettingsPage.ALARM) }
+        compose.setContent { AlertsScreen(graph, graph.strings(), startPage = AlertsPage.Alarm) }
 
         compose.onNodeWithText("Alarm sound").performScrollTo().performClick()
         compose.onNodeWithText("kapı zili").assertIsDisplayed().performClick()

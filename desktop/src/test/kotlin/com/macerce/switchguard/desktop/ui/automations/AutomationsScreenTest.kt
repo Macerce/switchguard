@@ -25,6 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+/** Otomasyon sekmesi: yalnızca cihaz açan/kapatan kayıtlar; düzenleyici otomasyon modunda. */
 class AutomationsScreenTest {
     @get:Rule val tmp = TemporaryFolder()
     @get:Rule val compose = createComposeRule()
@@ -52,7 +53,18 @@ class AutomationsScreenTest {
     fun emptyListShowsExamples() {
         show()
 
-        compose.onNodeWithText("No alerts yet").assertExists()
+        compose.onNodeWithText("No automations yet").assertExists()
+        compose.onNodeWithText(graph.strings()["automations_empty_desc"]).assertExists()
+    }
+
+    @Test
+    fun alertsAreNotListedHere() {
+        // Alarm/bildirim veren kayıt Uyarılar sekmesinde; burada yalnızca cihazı açan/kapatan.
+        graph.store.automations = listOf(sample(), sample().copy(id = "n1", name = "Ring me", action = AutoAction(ActionKind.ALARM)))
+        show()
+
+        compose.onNodeWithText("Long on").assertExists()
+        compose.onNodeWithText("Ring me").assertDoesNotExist()
     }
 
     @Test
@@ -60,16 +72,21 @@ class AutomationsScreenTest {
         show()
 
         compose.onNodeWithTag("add-automation").performClick()
+        compose.onNodeWithText("New automation").assertExists()
         compose.onNodeWithTag("save-automation").performScrollTo().assertIsNotEnabled() // ad yokken kaydedilemez
-        compose.onNodeWithTag("automation-name").performTextInput("Pump turned off")
+        // Otomasyon modunda yalnızca cihazı aç / kapat sunulur.
+        compose.onNodeWithTag("action-ALARM").assertDoesNotExist()
+        compose.onNodeWithTag("action-NOTIFY").assertDoesNotExist()
+        compose.onNodeWithTag("automation-name").performTextInput("Pump off at night")
         compose.onNodeWithTag("event-TURNED_OFF").performScrollTo().performClick()
-        compose.onNodeWithTag("action-ALARM").performScrollTo().performClick()
+        compose.onNodeWithTag("action-TURN_OFF").performScrollTo().performClick()
         compose.onNodeWithTag("save-automation").performScrollTo().performClick()
 
         compose.waitUntil(5_000) { graph.store.automations.size == 1 }
         val a = graph.store.automations.single()
-        assertEquals("Pump turned off", a.name)
-        assertEquals(ActionKind.ALARM, a.action.kind)
+        assertEquals("Pump off at night", a.name)
+        assertEquals(ActionKind.TURN_OFF, a.action.kind)
+        assertEquals(graph.store.snapshots.first().id, a.action.deviceId)
         assertEquals(TriggerKind.TURNED_OFF, a.trigger.kind)
         assertEquals(true, a.enabled)
     }
@@ -134,7 +151,7 @@ class AutomationsScreenTest {
 
         compose.onNodeWithText(a.name).performClick()
         compose.onNodeWithTag("delete-automation").performClick()
-        compose.onNodeWithText("Delete this alert?").assertExists()
+        compose.onNodeWithText(graph.strings()["automation_delete_title"]).assertExists()
         compose.onNodeWithTag("confirm-delete").performClick()
 
         compose.waitUntil(5_000) { graph.store.automations.isEmpty() }
@@ -145,7 +162,7 @@ class AutomationsScreenTest {
         return Automation(
             id = "a1", name = "Long on", enabled = true,
             trigger = Trigger(TriggerKind.STAYED_ON, device.id, channel = 0, minutes = 30),
-            action = AutoAction(ActionKind.NOTIFY),
+            action = AutoAction(ActionKind.TURN_OFF, device.id),
         )
     }
 }

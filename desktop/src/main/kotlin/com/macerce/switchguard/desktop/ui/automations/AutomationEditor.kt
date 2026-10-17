@@ -50,11 +50,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -93,7 +93,11 @@ import java.util.UUID
  * kutucukları, süreler için − / + adımlayıcı, güç eşiği alanı); "O zaman" adımı (işlem kutucukları, hedef cihaz ve
  * kanal, bekleme); "Eğer / O zaman" özeti; Kaydet. Sil başlıktadır ve önce sorar. Durum, varsayılanlar ve doğrulama
  * [AutomationForm]'da; bu dosya yalnızca alanları değiştirir. Masaüstü farkları: cihaz kartları yatay kaydırma yerine
- * satıra sığmayınca alta iner (fare tekerleği dikey kaydırır), geniş pencerede kutucuklar üç-dört sütun, Esc geri döner.
+ * satıra sığmayınca alta iner (fare tekerleği dikey kaydırır), geniş pencerede olay kutucukları üç sütun, Esc geri döner.
+ *
+ * Mod (telefon 2.13): uyarı modunda işlem kutucukları yalnız Alarm çal / Bildirim gönder (hedef cihaz yok), otomasyon
+ * modunda yalnız Cihazı aç / kapat; başlık ve silme sorusu da moda göre. [newMode] yeni kaydın modudur; var olan kayıt
+ * işleminin modunda açılır.
  */
 @Composable
 internal fun AutomationEditor(
@@ -104,10 +108,12 @@ internal fun AutomationEditor(
     onSave: (Automation) -> Unit,
     onDelete: () -> Unit,
     onBack: () -> Unit,
+    newMode: AutomationMode = AutomationMode.ALERT,
 ) {
-    var form by remember { mutableStateOf(AutomationForm.from(initial, devices)) }
+    val mode = initial?.let { AutomationMode.of(it) } ?: newMode
+    var form by remember { mutableStateOf(AutomationForm.from(initial, devices, mode)) }
     var confirmDelete by remember { mutableStateOf(false) }
-    val f = form.normalized(devices)
+    val f = form.normalized(devices).inMode(mode)
     val src = devices.firstOrNull { it.id == f.triggerDevice }
     val dst = devices.firstOrNull { it.id == f.actionDevice }
 
@@ -123,7 +129,7 @@ internal fun AutomationEditor(
     ) {
         Column(Modifier.align(Alignment.TopCenter).readableWidth().fillMaxSize()) {
             PageHeader(
-                strings[if (initial == null) "desktop_alert_new" else "desktop_alert_edit"],
+                strings[if (initial == null) mode.newTitle else mode.editTitle],
                 onBack = onBack,
                 actions = {
                     if (initial != null) {
@@ -188,7 +194,7 @@ internal fun AutomationEditor(
                 StepCard(Icons.Rounded.Bolt, Hue.ORANGE, strings["auto_then"], strings["automation_then"]) {
                     FieldLabel(strings["automation_action"])
                     OptionGrid(
-                        ActionKind.entries, f.actionKind, wideColumns = 4,
+                        mode.actions, f.actionKind, wideColumns = 2,
                         icon = { it.icon() }, label = { strings[it.editorTitleKey()] }, tag = { "action-${it.name}" }, hue = { it.hue() },
                     ) { form = f.copy(actionKind = it) }
                     if (f.actionKind.usesDevice) {
@@ -223,7 +229,7 @@ internal fun AutomationEditor(
                     }
                 }
                 Text(
-                    strings["desktop_automation_hint"],
+                    strings[mode.hint],
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
@@ -247,7 +253,7 @@ internal fun AutomationEditor(
     if (confirmDelete) {
         AlertDialog(
             onDismissRequest = { confirmDelete = false },
-            title = { Text(strings["desktop_alert_delete_title"]) },
+            title = { Text(strings[mode.deleteTitle]) },
             text = { Text(f.name) },
             confirmButton = {
                 TextButton(onClick = {

@@ -18,6 +18,8 @@ import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.pressKey
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.AppState
+import com.macerce.switchguard.desktop.ui.alerts.AlertsPage
+import com.macerce.switchguard.desktop.ui.alerts.AlertsScreen
 import com.macerce.switchguard.desktop.ui.settings.AlarmPage
 import com.macerce.switchguard.desktop.ui.settings.SettingsPage
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
@@ -48,6 +50,10 @@ class SettingsScreenTest {
 
     private fun show(page: SettingsPage? = null) = compose.setContent { SettingsScreen(graph, graph.strings(), startPage = page) }
 
+    /** Alarm ve Sessiz saatler 2.13'te Uyarılar sekmesinde; sayfalar aynı. Test alarmı sahte (gerçekten çalmasın). */
+    private fun showAlerts(page: AlertsPage) =
+        compose.setContent { AlertsScreen(graph, graph.strings(), startPage = page, testAlarm = { _, _ -> }) }
+
     /** Sayfa doğrudan (motor/kayıt defteri yerine sahte işlevlerle) çizilir; metinler SettingsScreen'deki gibi sağlanır. */
     private fun showPage(content: @androidx.compose.runtime.Composable () -> Unit) = compose.setContent {
         CompositionLocalProvider(LocalStrings provides graph.strings()) { content() }
@@ -60,9 +66,11 @@ class SettingsScreenTest {
         graph.store.reminderMin = 10
         show()
 
-        for (title in listOf("Accounts", "Alarm", "Quiet hours", "Tell someone else", "Daily summary", "Monitoring", "Windows", "Backup & transfer", "Language & appearance", "Help & about")) {
+        for (title in listOf("Accounts", "Monitoring", "Windows", "Daily summary", "Backup & transfer", "Language & appearance", "Help & about")) {
             compose.onNodeWithText(title).performScrollTo()
         }
+        // Uyarı ayarları Uyarılar sekmesine taşındı.
+        for (title in listOf("Alarm", "Quiet hours", "Tell someone else")) compose.onNodeWithText(title).assertDoesNotExist()
         compose.onNodeWithText("No account connected").performScrollTo()
         compose.onNodeWithText("English · System").performScrollTo()
     }
@@ -80,12 +88,12 @@ class SettingsScreenTest {
     fun categoryOpensItsPageAndBackReturnsToTheList() {
         show()
 
-        compose.onNodeWithText("Alarm").performClick()
-        compose.onNodeWithText("Alarm sound").assertExists()
+        compose.onNodeWithText("Monitoring").performClick()
+        compose.onNodeWithText("Backup check interval").assertExists()
         compose.onNodeWithContentDescription("Back").performClick()
         compose.waitForIdle()
 
-        compose.onNodeWithText("Alarm sound").assertDoesNotExist()
+        compose.onNodeWithText("Backup check interval").assertDoesNotExist()
         compose.onNodeWithText("Accounts").assertExists()
     }
 
@@ -104,7 +112,7 @@ class SettingsScreenTest {
 
     @Test
     fun telegramOpenedFromTheAlarmPageGoesBackToAlarm() {
-        show(SettingsPage.ALARM)
+        showAlerts(AlertsPage.Alarm)
 
         compose.onNodeWithText("Tell someone else").performClick()
         compose.onNodeWithText("Check token").assertExists()
@@ -184,7 +192,7 @@ class SettingsScreenTest {
 
     @Test
     fun volumeSliderStaysWithinLimits() {
-        show(SettingsPage.ALARM)
+        showAlerts(AlertsPage.Alarm)
 
         compose.onNodeWithTag("alarm-volume").performScrollTo().performSemanticsAction(SemanticsActions.SetProgress) { it(0f) }
         compose.waitForIdle()
@@ -194,7 +202,7 @@ class SettingsScreenTest {
 
     @Test
     fun reminderChoiceIsSaved() {
-        show(SettingsPage.ALARM)
+        showAlerts(AlertsPage.Alarm)
 
         compose.onNodeWithText("Ring again if not resolved").performClick()
         compose.onNodeWithText("Every 30 min").performClick()
@@ -208,7 +216,7 @@ class SettingsScreenTest {
     fun testAlarmDialogStartsASilentDelayedAlarm() {
         // Gerçek alarm çalmasın: motor yerine sahte.
         val started = mutableListOf<Pair<Boolean, Long>>()
-        showPage { AlarmPage(graph, graph.strings(), open = {}, testAlarm = { silent, delay -> started += silent to delay }) }
+        showPage { AlarmPage(graph, graph.strings(), onTelegram = {}, testAlarm = { silent, delay -> started += silent to delay }) }
 
         compose.onNodeWithText("Test alarm").performClick()
         compose.onNodeWithText("Silent (screen only)").performClick()
@@ -223,7 +231,7 @@ class SettingsScreenTest {
     @Test
     fun cancellingTheTestAlarmStartsNothing() {
         val started = mutableListOf<Pair<Boolean, Long>>()
-        showPage { AlarmPage(graph, graph.strings(), open = {}, testAlarm = { silent, delay -> started += silent to delay }) }
+        showPage { AlarmPage(graph, graph.strings(), onTelegram = {}, testAlarm = { silent, delay -> started += silent to delay }) }
 
         compose.onNodeWithText("Test alarm").performClick()
         compose.onNodeWithText("Cancel").performClick()
@@ -234,7 +242,7 @@ class SettingsScreenTest {
 
     @Test
     fun quietHoursStartIsPickedWithTheArrows() {
-        show(SettingsPage.QUIET)
+        showAlerts(AlertsPage.Quiet)
 
         compose.onNode(hasText("Quiet hours") and isToggleable()).performClick()
         compose.onNodeWithText("Starts").performClick()
@@ -251,7 +259,7 @@ class SettingsScreenTest {
     @Test
     fun quietHoursEndCanBeTyped() {
         graph.store.quietHours = graph.store.quietHours.copy(enabled = true)
-        show(SettingsPage.QUIET)
+        showAlerts(AlertsPage.Quiet)
 
         compose.onNodeWithText("Ends").performClick()
         compose.onNodeWithTag("time-hour").performClick().performKeyInput { pressKey(Key.Zero); pressKey(Key.Six) }

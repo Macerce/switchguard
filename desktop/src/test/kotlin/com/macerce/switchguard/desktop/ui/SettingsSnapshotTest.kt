@@ -72,7 +72,6 @@ class SettingsSnapshotTest {
             }
             // Uzun sayfaların tamamı (kaydırmadan).
             shot("home-full", dark, height = 1280) { SettingsScreen(graph, strings) }
-            shot("telegram-full", dark, height = 1300) { SettingsScreen(graph, strings, startPage = SettingsPage.TELEGRAM) }
             shot("about-full", dark, height = 1300) { SettingsScreen(graph, strings, startPage = SettingsPage.ABOUT) }
         }
     }

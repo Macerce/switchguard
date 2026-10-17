@@ -12,9 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.History
-import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -38,22 +39,25 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.AppState.Tab
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.ui.alerts.AlertsScreen
 import com.macerce.switchguard.desktop.ui.automations.AutomationsScreen
 import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/** Sol menüdeki sekmelerin adı (metin anahtarı) ve simgesi. Telefondaki App.kt'nin Tab'ı; "Uyarılar" masaüstü adı. */
+/** Sol menüdeki sekmelerin adı (metin anahtarı) ve simgesi; telefondaki App.kt'nin Tab'ı (2.13). */
 private fun Tab.label(): String = when (this) {
     Tab.DEVICES -> "tab_devices"
-    Tab.AUTOMATIONS -> "desktop_alerts_tab"
+    Tab.ALERTS -> "tab_alerts"
+    Tab.AUTOMATIONS -> "tab_automations"
     Tab.HISTORY -> "tab_history"
     Tab.SETTINGS -> "tab_settings"
 }
 
 private fun Tab.icon(): ImageVector = when (this) {
     Tab.DEVICES -> Icons.Rounded.Devices
-    Tab.AUTOMATIONS -> Icons.Rounded.Notifications
+    Tab.ALERTS -> Icons.Rounded.NotificationsActive
+    Tab.AUTOMATIONS -> Icons.Rounded.AutoMode
     Tab.HISTORY -> Icons.Rounded.History
     Tab.SETTINGS -> Icons.Rounded.Settings
 }
@@ -62,7 +66,7 @@ private fun Tab.icon(): ImageVector = when (this) {
 fun Modifier.readableWidth(max: Dp = 840.dp): Modifier = this.widthIn(max = max)
 
 /**
- * Sol menü (Cihazlar · Uyarılar · Geçmiş · Ayarlar) ve seçili ekran; telefondaki App.kt'nin geniş ekran düzeni.
+ * Sol menü (Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar) ve seçili ekran; telefondaki App.kt'nin geniş ekran düzeni.
  * Seçim ve açık cihaz [com.macerce.switchguard.desktop.AppState]'te: pencere yeniden kurulsa da korunur. Geçmiş rozeti:
  * son bakıştan beri alarm/bildirim üretmiş olay sayısı; Geçmiş açıkken yeni olaylar da görülmüş sayılır.
  */
@@ -119,6 +123,7 @@ fun AppNav(graph: AppGraph, strings: Strings) {
                     DeviceDetailScreen(graph, deviceId, onBack = { state.openDevice.value = null })
                 } else when (tab) {
                     Tab.DEVICES -> DevicesScreen(graph, strings, Modifier.fillMaxSize(), devicesGrid)
+                    Tab.ALERTS -> AlertsScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.AUTOMATIONS -> AutomationsScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.HISTORY -> HistoryScreen(graph, Modifier.fillMaxSize())
                     Tab.SETTINGS -> SettingsScreen(graph, strings)

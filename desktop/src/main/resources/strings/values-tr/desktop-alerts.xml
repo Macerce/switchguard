@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Uyarılar sekmesi -->
+    <string name="desktop_alerts_windows_desc">Yeniden başlatmadan sonra ya da bilgisayar uyurken alarmlar kaçabilir. Ayarlar › Windows\'tan düzeltmek için tıklayın.</string>
+    <string name="desktop_alert_hint">Uyarılar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz.</string>
 </resources>
