@@ -77,8 +77,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.focusGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -96,21 +101,24 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.AutomationTab
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.data.Store
 import java.util.UUID
 
-private const val NEW = "new"
+/** Düzenleyicide yeni kayıt (kimliği kaydederken verilir). */
+const val NEW_AUTOMATION = "new"
 
+/** Otomasyon sekmesi: yalnızca cihaz açıp kapatan otomasyonlar (alarm/bildirim verenler Uyarılar'da). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutomationsScreen(modifier: Modifier) {
     val context = LocalContext.current
     val store = remember { Store.get(context) }
     val version by store.version.collectAsStateWithLifecycle()
-    val automations = remember(version) { store.automations }
+    val automations = remember(version) { AutomationTab.AUTOMATIONS.of(store.automations) }
     val devices = remember(version) { store.snapshots }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
@@ -118,6 +126,7 @@ fun AutomationsScreen(modifier: Modifier) {
     editing?.let { id ->
         BackHandler { editing = null }
         AutomationEditor(
+            tab = AutomationTab.AUTOMATIONS,
             initial = automations.firstOrNull { it.id == id },
             devices = devices,
             modifier = modifier,
@@ -154,10 +163,10 @@ fun AutomationsScreen(modifier: Modifier) {
             }
         }
         ExtendedFloatingActionButton(
-            onClick = { editing = NEW },
+            onClick = { editing = NEW_AUTOMATION },
             icon = { Icon(Icons.Rounded.Add, null) },
             text = { Text(stringResource(R.string.automation_add)) },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).tvFocusRing(RoundedCornerShape(16.dp)),
         )
     }
 }
@@ -170,16 +179,26 @@ private fun EmptyAutomations() {
         Text(stringResource(R.string.automations_empty), style = MaterialTheme.typography.bodyLarge)
         Spacer(Modifier.height(12.dp))
         Text(
-            stringResource(R.string.automations_examples),
+            stringResource(R.string.automations_empty_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
         )
     }
 }
 
-/** Otomasyon kartı: eylemin renkli simgesi, adı ve "Eğer … / O zaman …" satırları (akıllı ev senaryosu dili). */
+/**
+ * Otomasyon kartı (Otomasyon sekmesinde ve Uyarılar'daki koşullu uyarılarda): eylemin renkli simgesi, adı ve
+ * "Eğer … / O zaman …" satırları (akıllı ev senaryosu dili).
+ */
 @Composable
-private fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
+fun AutomationCard(
+    a: Automation,
+    devices: List<DeviceSnapshot>,
+    onClick: () -> Unit,
+    onToggle: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val (icon, hue) = when (a.action.kind) {
         ActionKind.ALARM -> Icons.Rounded.Alarm to Hue.RED
         ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive to Hue.BLUE
@@ -189,7 +208,7 @@ private fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, onClick
     val (whenText, thenText) = describe(a, devices)
     val shape = RoundedCornerShape(24.dp)
     Row(
-        Modifier.fillMaxWidth()
+        modifier.fillMaxWidth()
             .tvFocusRing(shape)
             .clip(shape)
             .background(tileColor())
@@ -275,8 +294,13 @@ fun ActionKind.title(): Int = when (this) {
 
 // ---------------------------------------------------------------- düzenleyici
 
+/**
+ * Otomasyon ve koşullu uyarı düzenleyicisi. [tab] işlem seçeneklerini belirler: Uyarılar'da yalnızca alarm çal /
+ * bildirim gönder (hedef cihaz yok), Otomasyon'da yalnızca cihazı aç / kapat. Var olan kayıt kendi sekmesinden açılır.
+ */
 @Composable
-private fun AutomationEditor(
+fun AutomationEditor(
+    tab: AutomationTab,
     initial: Automation?,
     devices: List<DeviceSnapshot>,
     modifier: Modifier,
@@ -284,6 +308,7 @@ private fun AutomationEditor(
     onDelete: () -> Unit,
     onBack: () -> Unit,
 ) {
+    val alert = tab == AutomationTab.ALERTS
     val first = devices.firstOrNull()
     var name by rememberSaveable { mutableStateOf(initial?.name ?: "") }
     var triggerDevice by rememberSaveable { mutableStateOf(initial?.trigger?.deviceId ?: first?.id.orEmpty()) }
@@ -294,11 +319,24 @@ private fun AutomationEditor(
     var lowMinutes by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes ?: 1) }
     // Kayıtlı 0 ("bekleme yok") korunur; yalnızca yeni ya da başka türden otomasyonda varsayılan 2 dk.
     var grace by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.graceMinutes ?: 2) }
-    var actionKind by rememberSaveable { mutableStateOf(initial?.action?.kind ?: ActionKind.NOTIFY) }
+    // Yeni kayıtta sekmenin ilk işlemi (Uyarılar: alarm çal, Otomasyon: cihazı aç).
+    var actionKind by rememberSaveable { mutableStateOf(initial?.action?.kind?.takeIf { it in tab.actions } ?: tab.actions.first()) }
     var actionDevice by rememberSaveable { mutableStateOf(initial?.action?.deviceId?.ifEmpty { null } ?: first?.id.orEmpty()) }
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }
     var delay by rememberSaveable { mutableStateOf(initial?.delayMinutes ?: 0) }
     var confirmDelete by remember { mutableStateOf(false) }
+    // Kumanda: açan öğe (Ekle, kart) ekrandan kalkınca odak yan menüye düşüyordu; düzenleyicide geri okuna ver.
+    // Ad alanına verilmez: programla odaklanınca TV klavyesi kendiliğinden açılıyor.
+    val tv = LocalIsTv.current
+    val entry = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        if (!tv) return@LaunchedEffect
+        for (attempt in 1..20) {
+            val ok = runCatching { entry.requestFocus() }.getOrNull()
+            if (ok != null && ok != false) break
+            delay(50)
+        }
+    }
 
     val src = devices.firstOrNull { it.id == triggerDevice }
     val dst = devices.firstOrNull { it.id == actionDevice }
@@ -319,7 +357,7 @@ private fun AutomationEditor(
 
     // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
     val draft = Automation(
-        id = initial?.id ?: NEW,
+        id = initial?.id ?: NEW_AUTOMATION,
         name = name.trim(),
         enabled = initial?.enabled ?: true,
         trigger = Trigger(
@@ -339,8 +377,13 @@ private fun AutomationEditor(
 
     Column(modifier.fillMaxSize()) {
         AppTopBar(
-            stringResource(if (initial == null) R.string.automation_new else R.string.automation_edit),
-            navigationIcon = { BackButton(onBack) },
+            stringResource(
+                when {
+                    alert -> if (initial == null) R.string.alert_new else R.string.alert_edit
+                    else -> if (initial == null) R.string.automation_new else R.string.automation_edit
+                }
+            ),
+            navigationIcon = { Box(Modifier.focusRequester(entry).focusGroup()) { BackButton(onBack) } },
             small = true,
             actions = {
                 if (initial != null) {
@@ -410,7 +453,7 @@ private fun AutomationEditor(
             // ------------------------------------------------ O zaman
             StepCard(Icons.Rounded.Bolt, Hue.ORANGE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
                 FieldLabel(stringResource(R.string.automation_action))
-                OptionGrid(ActionKind.entries, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
+                OptionGrid(tab.actions, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
                 if (actionKind.usesDevice) {
                     FieldLabel(stringResource(R.string.automation_device))
                     DeviceChooser(devices, actionDevice) { actionDevice = it.id; actionChannel = 0 }
@@ -438,12 +481,15 @@ private fun AutomationEditor(
                     Clause(stringResource(R.string.auto_then), thenText)
                 }
             }
-            Text(
-                stringResource(R.string.automation_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-            )
+            // Zamanlayıcı önerisi cihaz açıp kapatan otomasyonlar için; koşullu uyarıda yeri yok.
+            if (!alert) {
+                Text(
+                    stringResource(R.string.automation_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                )
+            }
 
             Button(
                 enabled = valid,
@@ -460,7 +506,7 @@ private fun AutomationEditor(
 
     if (confirmDelete) {
         ConfirmDialog(
-            title = stringResource(R.string.automation_delete_title),
+            title = stringResource(if (alert) R.string.alert_delete_title else R.string.automation_delete_title),
             body = name,
             confirm = stringResource(R.string.action_delete),
             onConfirm = { confirmDelete = false; onDelete() },

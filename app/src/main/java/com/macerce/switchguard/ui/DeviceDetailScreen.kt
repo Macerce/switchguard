@@ -43,6 +43,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -79,12 +81,8 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
     val logVersion by log.version.collectAsStateWithLifecycle()
 
     val device = remember(version) { store.snapshots.firstOrNull { it.id == deviceId } }
-    val rules = remember(version) { store.rulesFor(deviceId) }
     // Kural açık olsa bile ücretsiz sürümde başka cihaz izleniyorsa bu cihaz izlenmez.
-    val monitoredIds = remember(version) { store.monitoredIds() }
-    val monitored = deviceId in monitoredIds
-    var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
-    dialog?.invoke()
+    val monitored = remember(version) { deviceId in store.monitoredIds() }
     val events = remember(logVersion) { log.recent(deviceId, limit = 15) }
 
     Column(Modifier.fillMaxSize()) {
@@ -105,87 +103,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
             if (device.cloud == Cloud.EWELINK) TimersSection(device)
 
-            SectionTitle(stringResource(R.string.section_monitoring))
-            SectionCard {
-                // Demo cihazları ücretsiz sürüm sınırına sayılmaz.
-                val demo = Demo.isDemo(deviceId)
-                val other = monitoredIds.firstOrNull { it != deviceId && !Demo.isDemo(it) }.takeUnless { demo }
-                InfoRow(
-                    Icons.Rounded.NotificationsActive,
-                    stringResource(R.string.monitor_this_device),
-                    if (!monitored && !store.isPro && other != null) stringResource(R.string.pro_limit_detail, Entitlement.FREE_DEVICES)
-                    else stringResource(R.string.monitor_this_device_desc),
-                ) {
-                    Switch(checked = monitored, onCheckedChange = { on ->
-                        when {
-                            !on -> store.setRules(deviceId, rules.copy(monitored = false))
-                            store.isPro || other == null -> {
-                                if (!demo) store.freeDeviceId = deviceId
-                                store.setRules(deviceId, rules.copy(monitored = true))
-                            }
-                            else -> {
-                                val otherName = store.snapshots.firstOrNull { it.id == other }?.name.orEmpty()
-                                dialog = {
-                                    FreeSlotDialog(
-                                        otherName = otherName,
-                                        onSwitch = {
-                                            store.freeDeviceId = deviceId
-                                            store.setRules(deviceId, rules.copy(monitored = true))
-                                            dialog = null
-                                        },
-                                        onUpgrade = { dialog = { ProDialog(onDismiss = { dialog = null }) } },
-                                        onDismiss = { dialog = null },
-                                    )
-                                }
-                            }
-                        }
-                    })
-                }
-            }
-
-            if (monitored) {
-                SectionTitle(stringResource(R.string.section_rules))
-                SectionCard {
-                    EventType.entries.forEachIndexed { i, type ->
-                        if (i > 0) RowDivider()
-                        RuleRow(type, rules.actionFor(type)) { store.setRules(deviceId, rules.with(type, it)) }
-                    }
-                }
-                Text(
-                    stringResource(R.string.rules_hint),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
-                )
-
-                val pickSound = rememberSoundPicker { uri -> store.setRules(deviceId, rules.copy(soundUri = uri?.toString())) }
-                val custom = rules.soundUri?.let(Uri::parse)
-                val soundName = remember(rules.soundUri) {
-                    if (custom == null) null else soundTitle(context, custom)
-                } ?: stringResource(if (custom == null) R.string.device_sound_default else R.string.default_sound)
-                SectionCard {
-                    InfoRow(
-                        Icons.Rounded.MusicNote,
-                        stringResource(R.string.device_sound),
-                        soundName,
-                        Modifier.clickable { pickSound(custom) },
-                    ) {
-                        if (custom != null) {
-                            IconButton(modifier = Modifier.tvFocusRing(), onClick = { store.setRules(deviceId, rules.copy(soundUri = null)) }) {
-                                Icon(Icons.Rounded.Close, stringResource(R.string.device_sound_reset))
-                            }
-                        }
-                    }
-                    RowDivider()
-                    InfoRow(
-                        Icons.Rounded.NotificationImportant,
-                        stringResource(R.string.device_critical),
-                        stringResource(R.string.device_critical_desc),
-                    ) {
-                        Switch(checked = rules.critical, onCheckedChange = { store.setRules(deviceId, rules.copy(critical = it)) })
-                    }
-                }
-            }
+            DeviceAlertRules(deviceId)
 
             SectionTitle(stringResource(R.string.section_recent_events))
             SectionCard {
@@ -201,6 +119,106 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 
             SectionTitle(stringResource(R.string.section_advanced))
             SectionCard { RawDataRow(deviceId) }
+        }
+    }
+}
+
+/**
+ * Cihazın uyarı kuralları: izle anahtarı, olay başına Alarm/Bildirim/Yok, cihaza özel ses ve kritik cihaz.
+ * Cihaz sayfasında ve Uyarılar sekmesindeki "Uyarı kuralları" sayfasında aynıdır; çağıranın sütununa yerleşir.
+ * [focusRequester] izle anahtarına bağlanır (kumandada sayfa açılınca odak oraya verilsin diye).
+ */
+@Composable
+fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
+    val context = LocalContext.current
+    val store = remember { Store.get(context) }
+    val version by store.version.collectAsStateWithLifecycle()
+    val rules = remember(version) { store.rulesFor(deviceId) }
+    // Kural açık olsa bile ücretsiz sürümde başka cihaz izleniyorsa bu cihaz izlenmez.
+    val monitoredIds = remember(version) { store.monitoredIds() }
+    val monitored = deviceId in monitoredIds
+    var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
+    dialog?.invoke()
+
+    SectionTitle(stringResource(R.string.section_monitoring))
+    SectionCard {
+        // Demo cihazları ücretsiz sürüm sınırına sayılmaz.
+        val demo = Demo.isDemo(deviceId)
+        val other = monitoredIds.firstOrNull { it != deviceId && !Demo.isDemo(it) }.takeUnless { demo }
+        InfoRow(
+            Icons.Rounded.NotificationsActive,
+            stringResource(R.string.monitor_this_device),
+            if (!monitored && !store.isPro && other != null) stringResource(R.string.pro_limit_detail, Entitlement.FREE_DEVICES)
+            else stringResource(R.string.monitor_this_device_desc),
+        ) {
+            Switch(checked = monitored, modifier = focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier, onCheckedChange = { on ->
+                when {
+                    !on -> store.setRules(deviceId, rules.copy(monitored = false))
+                    store.isPro || other == null -> {
+                        if (!demo) store.freeDeviceId = deviceId
+                        store.setRules(deviceId, rules.copy(monitored = true))
+                    }
+                    else -> {
+                        val otherName = store.snapshots.firstOrNull { it.id == other }?.name.orEmpty()
+                        dialog = {
+                            FreeSlotDialog(
+                                otherName = otherName,
+                                onSwitch = {
+                                    store.freeDeviceId = deviceId
+                                    store.setRules(deviceId, rules.copy(monitored = true))
+                                    dialog = null
+                                },
+                                onUpgrade = { dialog = { ProDialog(onDismiss = { dialog = null }) } },
+                                onDismiss = { dialog = null },
+                            )
+                        }
+                    }
+                }
+            })
+        }
+    }
+
+    if (!monitored) return
+
+    SectionTitle(stringResource(R.string.section_rules))
+    SectionCard {
+        EventType.entries.forEachIndexed { i, type ->
+            if (i > 0) RowDivider()
+            RuleRow(type, rules.actionFor(type)) { store.setRules(deviceId, rules.with(type, it)) }
+        }
+    }
+    Text(
+        stringResource(R.string.rules_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+    )
+
+    val pickSound = rememberSoundPicker { uri -> store.setRules(deviceId, rules.copy(soundUri = uri?.toString())) }
+    val custom = rules.soundUri?.let(Uri::parse)
+    val soundName = remember(rules.soundUri) {
+        if (custom == null) null else soundTitle(context, custom)
+    } ?: stringResource(if (custom == null) R.string.device_sound_default else R.string.default_sound)
+    SectionCard {
+        InfoRow(
+            Icons.Rounded.MusicNote,
+            stringResource(R.string.device_sound),
+            soundName,
+            Modifier.clickable { pickSound(custom) },
+        ) {
+            if (custom != null) {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { store.setRules(deviceId, rules.copy(soundUri = null)) }) {
+                    Icon(Icons.Rounded.Close, stringResource(R.string.device_sound_reset))
+                }
+            }
+        }
+        RowDivider()
+        InfoRow(
+            Icons.Rounded.NotificationImportant,
+            stringResource(R.string.device_critical),
+            stringResource(R.string.device_critical_desc),
+        ) {
+            Switch(checked = rules.critical, onCheckedChange = { store.setRules(deviceId, rules.copy(critical = it)) })
         }
     }
 }

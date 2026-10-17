@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
@@ -51,8 +52,10 @@ import com.macerce.switchguard.ui.theme.tileColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+/** Sekmeler (alt menü / yan menü) bu sırayla. Uyarılar uygulamanın asıl işi: Cihazlar'ın hemen yanında. */
 private enum class Tab(val label: Int, val icon: ImageVector) {
     DEVICES(R.string.tab_devices, Icons.Rounded.Devices),
+    ALERTS(R.string.tab_alerts, Icons.Rounded.NotificationsActive),
     AUTOMATIONS(R.string.tab_automations, Icons.Rounded.AutoMode),
     HISTORY(R.string.tab_history, Icons.Rounded.History),
     SETTINGS(R.string.tab_settings, Icons.Rounded.Settings),
@@ -78,6 +81,8 @@ fun App() {
         if (t == tab && t == Tab.SETTINGS) settingsHome++
         tab = t
     }
+    // Uyarılar'daki durum kartından Ayarlar › İzinler'e geçiş; Ayarlar o sayfayla açılınca söner.
+    var openPermissions by rememberSaveable { mutableStateOf(false) }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
     // Detaydan dönünce kumandanın odağı açılan karta geri verilir (yoksa yan menüye düşer).
     var returnFocusTo by remember { mutableStateOf<String?>(null) }
@@ -129,9 +134,15 @@ fun App() {
                     restoreFocusTo = returnFocusTo,
                     onFocusRestored = { returnFocusTo = null },
                 )
+                Tab.ALERTS -> AlertsScreen(mod, onOpenPermissions = { openPermissions = true; tab = Tab.SETTINGS })
                 Tab.AUTOMATIONS -> AutomationsScreen(mod)
                 Tab.HISTORY -> HistoryScreen(mod)
-                Tab.SETTINGS -> SettingsScreen(mod, homeRequests = settingsHome)
+                Tab.SETTINGS -> SettingsScreen(
+                    mod,
+                    homeRequests = settingsHome,
+                    openPermissions = openPermissions,
+                    onPermissionsOpened = { openPermissions = false },
+                )
             }
         }
     }

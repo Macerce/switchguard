@@ -138,8 +138,11 @@ import java.util.Calendar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-/** Ayarlar alt sayfaları. Ana sayfa yalnızca bunların listesidir; her biri dokununca açılır. */
-private enum class SettingsPage(val title: Int) {
+/**
+ * Ayarlar alt sayfaları. Ana sayfa yalnızca bunların listesidir; her biri dokununca açılır.
+ * Alarm ve Sessiz saatler Uyarılar sekmesinin "Uyarı ayarları"ndan açılır (aynı sayfalar, bkz. [SettingsSubPage]).
+ */
+internal enum class SettingsPage(val title: Int) {
     ACCOUNTS(R.string.settings_accounts),
     ALARM(R.string.section_alarm),
     QUIET(R.string.section_quiet_hours),
@@ -153,11 +156,25 @@ private enum class SettingsPage(val title: Int) {
 /**
  * Ayarlar: üstte uygulama/plan kartı, altında gruplanmış kategoriler. Kategoriye dokununca kendi sayfası açılır;
  * geri tuşu (ya da sekmeye yeniden dokunmak) listeye döner. Kumandada listeye dönünce odak açılan satıra verilir.
+ * [openPermissions]: başka sekmeden (Uyarılar'daki durum kartı) İzinler sayfasına gelindi; açılınca [onPermissionsOpened].
  */
 @Composable
-fun SettingsScreen(modifier: Modifier, homeRequests: Int = 0) {
-    var page by rememberSaveable { mutableStateOf<SettingsPage?>(null) }
+fun SettingsScreen(
+    modifier: Modifier,
+    homeRequests: Int = 0,
+    openPermissions: Boolean = false,
+    onPermissionsOpened: () -> Unit = {},
+) {
+    // İzinler'e gelindiyse liste hiç görünmeden (geçişsiz) o sayfayla açılır.
+    var page by rememberSaveable { mutableStateOf(if (openPermissions) SettingsPage.PERMISSIONS else null) }
     var lastOpened by rememberSaveable { mutableStateOf<SettingsPage?>(null) }
+    LaunchedEffect(openPermissions) {
+        if (openPermissions) {
+            page = SettingsPage.PERMISSIONS
+            lastOpened = SettingsPage.PERMISSIONS
+            onPermissionsOpened()
+        }
+    }
     var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
     val showDialog: ((@Composable () -> Unit)?) -> Unit = { dialog = it }
     BackHandler(enabled = page != null) { page = null }
@@ -244,37 +261,7 @@ private fun SettingsHome(
                 )
             }
 
-            SectionTitle(stringResource(R.string.settings_group_alerts))
-            SectionCard {
-                MenuRow(
-                    Icons.Rounded.NotificationsActive, Hue.RED, stringResource(R.string.section_alarm),
-                    onClick = { onOpen(SettingsPage.ALARM) }, modifier = row(SettingsPage.ALARM),
-                    summary = alarmSummary(s),
-                )
-                Divider(68.dp)
-                MenuRow(
-                    Icons.Rounded.Bedtime, Hue.INDIGO, stringResource(R.string.section_quiet_hours),
-                    onClick = { onOpen(SettingsPage.QUIET) }, modifier = row(SettingsPage.QUIET),
-                    summary = s.quietHours.let { q ->
-                        if (!q.enabled) stringResource(R.string.state_off_title)
-                        else stringResource(R.string.time_range, formatMinute(context, q.startMinute), formatMinute(context, q.endMinute))
-                    },
-                )
-                Divider(68.dp)
-                MenuRow(
-                    Icons.AutoMirrored.Rounded.Send, Hue.BLUE, stringResource(R.string.tg_title),
-                    onClick = { showDialog { TelegramDialog(store) { showDialog(null) } } },
-                    summary = escalationSummary(s),
-                )
-                Divider(68.dp)
-                MenuRow(
-                    Icons.Rounded.Summarize, Hue.AMBER, stringResource(R.string.section_summary),
-                    onClick = { onOpen(SettingsPage.SUMMARY) }, modifier = row(SettingsPage.SUMMARY),
-                    summary = if (s.dailySummaryEnabled) stringResource(R.string.daily_at, formatMinute(context, s.dailySummaryMinute))
-                    else stringResource(R.string.state_off_title),
-                )
-            }
-
+            // Alarm, Sessiz saatler ve İkinci kişiye haber ver Uyarılar sekmesinde ("Uyarı ayarları").
             SectionTitle(stringResource(R.string.settings_group_app))
             SectionCard {
                 MenuRow(
@@ -289,6 +276,13 @@ private fun SettingsHome(
                     onClick = { onOpen(SettingsPage.PERMISSIONS) }, modifier = row(SettingsPage.PERMISSIONS),
                     summary = stringResource(R.string.perm_all_ok),
                     warning = if (missing > 0) pluralStringResource(R.plurals.perm_missing_n, missing, missing) else null,
+                )
+                Divider(68.dp)
+                MenuRow(
+                    Icons.Rounded.Summarize, Hue.AMBER, stringResource(R.string.section_summary),
+                    onClick = { onOpen(SettingsPage.SUMMARY) }, modifier = row(SettingsPage.SUMMARY),
+                    summary = if (s.dailySummaryEnabled) stringResource(R.string.daily_at, formatMinute(context, s.dailySummaryMinute))
+                    else stringResource(R.string.state_off_title),
                 )
                 Divider(68.dp)
                 MenuRow(
@@ -380,7 +374,7 @@ private fun accountsSummary(s: Store): String {
 }
 
 @Composable
-private fun alarmSummary(s: Store): String {
+internal fun alarmSummary(s: Store): String {
     val context = LocalContext.current
     val resources = LocalResources.current
     val soundUri = s.alarmSoundUri
@@ -407,7 +401,7 @@ private fun missingPermissions(context: android.content.Context): Int {
 }
 
 @Composable
-private fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog: ((@Composable () -> Unit)?) -> Unit) {
+internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog: ((@Composable () -> Unit)?) -> Unit) {
     val tv = LocalIsTv.current
     // Kumanda: sayfa açılınca odak içerikteki ilk öğeye.
     val content = remember { FocusRequester() }
@@ -1082,7 +1076,7 @@ fun <T> ChoiceDialog(
  * Gecikmede telefon kilitlenir ve alarm ekranının kilit ekranında açıldığı görülür.
  */
 @Composable
-private fun TestAlarmDialog(onDismiss: () -> Unit) {
+internal fun TestAlarmDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
     val resources = LocalResources.current
     var silent by remember { mutableStateOf(false) }
