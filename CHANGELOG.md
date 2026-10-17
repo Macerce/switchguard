@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.12.3 — 2026-10-17
+**Fixes**
+- Daily summary: a device switched from the app while monitoring was off (or a demo device after turning demo mode off and on) could be counted as on for the whole day. These changes are now recorded too.
+
 ## 2.12.2 — 2026-10-17
 **Fixes**
 - Settings → Daily summary → "Show today's summary now" opens the summary in a small window. It used to send a notification, which showed only an icon in the status bar on a phone and nothing at all on a TV.

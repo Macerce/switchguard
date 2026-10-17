@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.12.3 — 17 Ekim 2026
+**Düzeltmeler**
+- Günlük özet: izleme kapalıyken uygulamadan açılıp kapatılan cihaz (ya da demo kapatılıp yeniden açılınca demo cihazı) bütün gün açık sayılabiliyordu. Bu değişiklikler de artık kaydediliyor.
+
 ## 2.12.2 — 17 Ekim 2026
 **Düzeltmeler**
 - Ayarlar → Günlük özet → "Bugünün özetini şimdi göster" özeti küçük bir pencerede açıyor. Önceden bildirim gönderiyordu; telefonda durum çubuğunda yalnızca simge görünüyor, TV'de hiç görünmüyordu.

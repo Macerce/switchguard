@@ -22,6 +22,7 @@ import com.macerce.switchguard.core.DeviceTimers
 import com.macerce.switchguard.core.RepeatTimer
 import com.macerce.switchguard.core.TimerEntry
 import com.macerce.switchguard.data.LiveState
+import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.DailySummary
 import com.macerce.switchguard.service.MonitorService
@@ -80,10 +81,14 @@ object Actions {
                 if (store.monitoringEnabled && service != null) {
                     service.onControlled(device.id, channel, on)
                 } else {
-                    // İzleme kapalı (ya da servis henüz yok): durumu doğrudan güncelle.
-                    store.snapshots = store.snapshots.map {
+                    // İzleme kapalı (ya da servis henüz yok): durumu doğrudan güncelle. Ölçüm de yazılır: yoksa günlük
+                    // özet ve grafikler cihazı son kaydedilen durumda (ör. bütün gün açık) sanır.
+                    val previous = store.snapshots.associateBy { it.id }
+                    val next = store.snapshots.map {
                         if (it.id == device.id) Demo.recompute(it.copy(switches = it.switches + (channel to on))) else it
                     }
+                    runCatching { MetricsLog.get(context).record(previous, next) }
+                    store.snapshots = next
                 }
             }
         }
@@ -171,7 +176,10 @@ object Actions {
 
     /** Hesapsız deneme için demo cihazlarını açar. */
     fun enableDemo(context: Context) {
-        Store.get(context).enableDemo(
+        val store = Store.get(context)
+        // Yeniden açılan demo cihazları varsayılan durumla gelir: özetler eski son durumu sürdürmesin.
+        val previous = store.snapshots.associateBy { it.id }
+        store.enableDemo(
             Demo.Names(
                 freezer = context.getString(R.string.demo_freezer),
                 pumps = context.getString(R.string.demo_pumps),
@@ -180,6 +188,7 @@ object Actions {
                 lightLeftOn = context.getString(R.string.demo_auto_light),
             )
         )
+        runCatching { MetricsLog.get(context).record(previous, store.snapshots) }
     }
 
     fun disableDemo(context: Context) {
