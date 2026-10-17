@@ -208,12 +208,13 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
         }
 
         // ------------------------------------------------ Koşullu uyarılar
-        Row(verticalAlignment = Alignment.Bottom) {
-            SectionTitle(str("section_conditional_alerts"), Modifier.weight(1f))
+        // "Ekle" başlıkla aynı hizada (başlığın üst boşluğu kadar aşağıda), kartlardan uzak.
+        Row(verticalAlignment = Alignment.Top) {
+            SectionTitle(str("section_conditional_alerts"), Modifier.weight(1f).padding(top = 8.dp))
             FilledTonalButton(
                 onClick = { open(AlertsPage.Editor(null)) },
                 enabled = devices.isNotEmpty(),
-                modifier = Modifier.padding(end = 16.dp, bottom = 2.dp).testTag("add-alert"),
+                modifier = Modifier.padding(top = 20.dp, end = 16.dp).height(36.dp).testTag("add-alert"),
             ) {
                 Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))

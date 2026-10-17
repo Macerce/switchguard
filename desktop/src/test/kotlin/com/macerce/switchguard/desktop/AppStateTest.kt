@@ -38,6 +38,24 @@ class AppStateTest {
     }
 
     @Test
+    fun tabsFollowThePhoneOrder() {
+        assertEquals(
+            listOf(AppState.Tab.DEVICES, AppState.Tab.ALERTS, AppState.Tab.AUTOMATIONS, AppState.Tab.HISTORY, AppState.Tab.SETTINGS),
+            AppState.Tab.entries,
+        )
+    }
+
+    @Test
+    fun clickingTheSelectedAlertsTabAgainAsksForItsStart() {
+        val s = AppState()
+        s.select(AppState.Tab.ALERTS)
+        assertEquals(0, s.alertsHome.value) // ilk seçim başa dönme isteği değil
+        s.select(AppState.Tab.ALERTS)
+        assertEquals(1, s.alertsHome.value)
+        assertEquals(0, s.settingsHome.value)
+    }
+
+    @Test
     fun warningCanBeSetAndCleared() {
         val s = AppState()
         assertNull(s.warning.value)

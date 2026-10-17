@@ -26,13 +26,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.HelpOutline
-import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Backup
-import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.DesktopWindows
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
@@ -61,7 +58,6 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
-import com.macerce.switchguard.desktop.platform.Sounds
 import com.macerce.switchguard.desktop.ui.Brand
 import com.macerce.switchguard.desktop.ui.Hue
 import com.macerce.switchguard.desktop.ui.LocalDarkTheme

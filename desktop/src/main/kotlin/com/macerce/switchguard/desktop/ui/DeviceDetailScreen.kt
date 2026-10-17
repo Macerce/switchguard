@@ -21,11 +21,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -52,12 +52,12 @@ import com.macerce.switchguard.desktop.ui.devices.DemoSection
 import com.macerce.switchguard.desktop.ui.devices.DeviceActions
 import com.macerce.switchguard.desktop.ui.devices.DeviceGlyph
 import com.macerce.switchguard.desktop.ui.devices.DeviceRulesSection
-import com.macerce.switchguard.desktop.ui.devices.rememberDeviceRules
 import com.macerce.switchguard.desktop.ui.devices.DeviceUi
 import com.macerce.switchguard.desktop.ui.devices.EnergySection
 import com.macerce.switchguard.desktop.ui.devices.LocalDeviceUi
 import com.macerce.switchguard.desktop.ui.devices.RawDataRow
 import com.macerce.switchguard.desktop.ui.devices.TimersSection
+import com.macerce.switchguard.desktop.ui.devices.rememberDeviceRules
 import com.macerce.switchguard.desktop.ui.devices.rememberSwitchControl
 import com.macerce.switchguard.desktop.ui.devices.watts
 import com.macerce.switchguard.desktop.ui.history.EventRow
