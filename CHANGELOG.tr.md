@@ -6,6 +6,19 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.13.0 — 17 Ekim 2026
+**Uyarıların kendi sekmesi var**
+- Menü artık Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar. SwitchGuard'ın asıl işi uyarmak; uyarıyla ilgili her şey tek yerde:
+  - durum kartı: "Alarm hazır", izleme kapalı ya da alarmı engelleyebilecek ayarlar; Test alarmı düğmesi;
+  - cihaz uyarıları: her cihazın hangi değişiklikte alarm ya da bildirim verdiği (kritik cihazlar işaretli); dokununca o cihazın uyarı kuralları açılır;
+  - koşullu uyarılar: cihaz bir süre açık ya da kapalı kalınca veya gücü değişince uyar;
+  - uyarı ayarları: Alarm, Sessiz saatler ve İkinci kişiye haber ver, Ayarlar'dan buraya taşındı.
+- Otomasyon sekmesinde artık yalnızca cihazı açan ya da kapatan kurallar var. Yeni koşullu uyarı varsayılan olarak alarm çalar.
+
+**İzleme**
+- Anlık bağlantı çalışırken tek bir başarısız bulut kontrolü (ör. ağ değişiminde tek bir zaman aşımı) artık "İnternet yok" göstermiyor; kontrol 15 sn, 30 sn, 1 dk ve 2 dk sonra yeniden deneniyor. Önceden koruma kartı, alarmlar gelmeye devam etse de 5 dakikaya kadar sorun gösteriyordu.
+- Yalnızca kendisiyle paylaşılmış cihazları olan hesaplar (ör. ikinci cihazda kullanılan hesap) artık 30 saniyede bir kontrol yerine anlık bağlantıyla izleniyor.
+
 ## 2.12.3 — 17 Ekim 2026
 **Düzeltmeler**
 - Günlük özet: izleme kapalıyken uygulamadan açılıp kapatılan cihaz (ya da demo kapatılıp yeniden açılınca demo cihazı) bütün gün açık sayılabiliyordu. Bu değişiklikler de artık kaydediliyor.

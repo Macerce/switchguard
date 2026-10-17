@@ -6,6 +6,19 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.13.0 — 2026-10-17
+**Alerts get their own tab**
+- The menu is now Devices · Alerts · Automation · History · Settings. Alerts are what SwitchGuard is for, so everything about them is in one place:
+  - a status card: "Alarm is ready", monitoring off, or settings that may stop the alarm, with a Test alarm button;
+  - device alerts: what each device rings or notifies for (critical devices are marked); tap one to change its alert rules;
+  - conditional alerts: ring when a device stays on or off for a while, or its power changes;
+  - alert settings: Alarm, Quiet hours and Tell someone else, moved here from Settings.
+- Automation now shows only rules that switch devices on or off. A new conditional alert rings by default.
+
+**Monitoring**
+- One failed cloud check (for example a single timeout on a network change) no longer shows "no internet" while the live connection still works; the check is retried after 15 s, 30 s, 1 min and 2 min. Before, the status card showed a problem for up to 5 minutes although alarms kept coming.
+- Accounts that only have devices shared with them (for example the account used on a second device) now get a live connection instead of checking every 30 seconds.
+
 ## 2.12.3 — 2026-10-17
 **Fixes**
 - Daily summary: a device switched from the app while monitoring was off (or a demo device after turning demo mode off and on) could be counted as on for the whole day. These changes are now recorded too.
