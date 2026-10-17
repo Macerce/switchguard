@@ -43,6 +43,9 @@ eWeLink:
   - Bu bilgisayar ayrı bir cihazdır: kendi eWeLink hesabı, o hesapta
     dev.ewelink.cc geliştirici onayı ve o hesabın App ID / App Secret bilgisi
     gerekir. Telefonunuzdaki hesabı kullanırsanız telefonun oturumu kapanır.
+  - Cihazları telefondaki hesaptan bu hesaba paylaşmanız yeterli; paylaşılan
+    cihazlar da anlık izlenir.
+  - Kayıtlı App Secret pencerede noktalarla görünür; göz simgesiyle açılır.
   - Redirect URL birebir: https://127.0.0.1
   - Girişten sonra tarayıcı "bağlanılamıyor" sayfasında kalır; bu normaldir.
     Adres çubuğundaki adresi kopyalayın, SwitchGuard kendiliğinden alır.
