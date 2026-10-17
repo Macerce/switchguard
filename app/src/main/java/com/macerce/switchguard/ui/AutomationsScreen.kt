@@ -77,8 +77,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.focusGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import kotlinx.coroutines.delay
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -161,7 +166,7 @@ fun AutomationsScreen(modifier: Modifier) {
             onClick = { editing = NEW_AUTOMATION },
             icon = { Icon(Icons.Rounded.Add, null) },
             text = { Text(stringResource(R.string.automation_add)) },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp),
+            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).tvFocusRing(RoundedCornerShape(16.dp)),
         )
     }
 }
@@ -320,6 +325,18 @@ fun AutomationEditor(
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }
     var delay by rememberSaveable { mutableStateOf(initial?.delayMinutes ?: 0) }
     var confirmDelete by remember { mutableStateOf(false) }
+    // Kumanda: açan öğe (Ekle, kart) ekrandan kalkınca odak yan menüye düşüyordu; düzenleyicide geri okuna ver.
+    // Ad alanına verilmez: programla odaklanınca TV klavyesi kendiliğinden açılıyor.
+    val tv = LocalIsTv.current
+    val entry = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        if (!tv) return@LaunchedEffect
+        for (attempt in 1..20) {
+            val ok = runCatching { entry.requestFocus() }.getOrNull()
+            if (ok != null && ok != false) break
+            delay(50)
+        }
+    }
 
     val src = devices.firstOrNull { it.id == triggerDevice }
     val dst = devices.firstOrNull { it.id == actionDevice }
@@ -366,7 +383,7 @@ fun AutomationEditor(
                     else -> if (initial == null) R.string.automation_new else R.string.automation_edit
                 }
             ),
-            navigationIcon = { BackButton(onBack) },
+            navigationIcon = { Box(Modifier.focusRequester(entry).focusGroup()) { BackButton(onBack) } },
             small = true,
             actions = {
                 if (initial != null) {
