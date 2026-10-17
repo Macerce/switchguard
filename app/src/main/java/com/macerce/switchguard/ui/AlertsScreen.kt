@@ -230,11 +230,12 @@ private fun AlertsHome(
             }
 
             // ------------------------------------------------ Koşullu uyarılar
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.Bottom) {
-                SectionTitle(stringResource(R.string.section_conditional_alerts), Modifier.weight(1f))
+            // "Ekle" başlıkla aynı yazı çizgisinde.
+            Row(Modifier.fillMaxWidth()) {
+                SectionTitle(stringResource(R.string.section_conditional_alerts), Modifier.weight(1f).alignByBaseline())
                 TextButton(
                     onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.EDITOR, NEW_AUTOMATION), "add") },
-                    modifier = focus("add").padding(end = 12.dp).tvFocusRing(RoundedCornerShape(20.dp)),
+                    modifier = focus("add").alignByBaseline().padding(end = 12.dp).tvFocusRing(RoundedCornerShape(20.dp)),
                 ) {
                     Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))

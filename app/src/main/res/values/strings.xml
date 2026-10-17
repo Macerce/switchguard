@@ -367,7 +367,7 @@
     <string name="onb_done_title">All set!</string>
     <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
     <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>
-    <string name="onb_done_tip_test">Use “Test alarm” in Settings to check the sound</string>
+    <string name="onb_done_tip_test">Use “Test alarm” on the Alerts tab to check the sound</string>
 
     <!-- Notifications -->
     <string name="channel_alarm">Device alarm</string>
