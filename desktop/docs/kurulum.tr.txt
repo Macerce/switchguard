@@ -50,18 +50,25 @@ eWeLink:
   - Video (50 sn):  https://youtu.be/jK_KcG2OPao
 
 
-3. ALARM, HATIRLATMA VE İKİNCİ KİŞİ
------------------------------------
-- Ayarlar → Alarm → Test alarmı: "Sesli" ya da "Sessiz", hemen ya da
-  10 saniye sonra. Sessiz test pencereyi gösterir, ses çalmaz.
-- Ayarlar → Alarm → Düzelmezse yeniden çal: alarmı kapattınız ama cihaz
-  hâlâ sorunluysa 10 / 30 / 60 dakikada bir yeniden çalar.
-- Ayarlar → İkinci kişiye haber ver: alarm seçtiğiniz süre içinde
-  kapatılmazsa kendi Telegram botunuz seçtiğiniz kişilere mesaj atar
-  (telefondaki ile aynı kurulum).
-- Cihaz sayfası → Kritik cihaz: bu cihazın alarmı sessiz saatlerde de çalar.
-- Ayarlar → İzleme → İzleme durursa uyar: internet ya da bulut
-  gidince belirlediğiniz süreden sonra uyarır.
+3. UYARILAR VE OTOMASYON
+------------------------
+Sol menü: Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar.
+- Uyarılar sekmesi uyarıyla ilgili her şeyi toplar:
+  - Üstteki kart: "Alarm hazır" mı, değilse neden; "Test alarmı" düğmesi
+    ("Sesli" ya da "Sessiz", hemen ya da 10 saniye sonra; sessiz test
+    pencereyi gösterir, ses çalmaz).
+  - Cihaz uyarıları: hangi cihaz neyde alarm ya da bildirim verir. Cihaza
+    tıklayınca kuralları açılır; "Kritik cihaz" seçilirse alarmı sessiz
+    saatlerde de çalar.
+  - Koşullu uyarılar: cihaz bir süre açık ya da kapalı kalınca veya gücü
+    değişince alarm.
+  - Uyarı ayarları: Alarm (ses, ses düzeyi, düzelmezse 10 / 30 / 60 dakikada
+    bir yeniden çal), Sessiz saatler, İkinci kişiye haber ver (alarm
+    seçtiğiniz süre içinde kapatılmazsa kendi Telegram botunuz seçtiğiniz
+    kişilere mesaj atar; telefondaki ile aynı kurulum).
+- Otomasyon sekmesi cihazları kendiliğinden açar ya da kapatır.
+- Ayarlar → İzleme → İzleme durursa uyar: internet ya da bulut gidince
+  belirlediğiniz süreden sonra uyarır.
 
 
 4. YEDEK VE BAŞKA BİLGİSAYARA GEÇİŞ

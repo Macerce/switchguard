@@ -36,4 +36,6 @@
     <string name="desktop_backup_move_note">Moving to another computer: back up to a file on the old one, install SwitchGuard on the new one and restore from the file, then sign in to eWeLink again.</string>
     <string name="desktop_open_logs_desc">Attach the log files when you report a problem</string>
     <string name="desktop_contact_copied">No email app could be opened; the address was copied to the clipboard.</string>
+    <string name="desktop_secret_show">Show App Secret</string>
+    <string name="desktop_secret_hide">Hide App Secret</string>
 </resources>

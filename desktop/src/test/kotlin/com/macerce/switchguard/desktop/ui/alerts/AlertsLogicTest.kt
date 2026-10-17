@@ -49,7 +49,7 @@ class AlertsLogicTest {
     @Test
     fun aNewRecordStartsWithTheModesActionAndAnExistingOneKeepsItsOwn() {
         val devices = listOf(DeviceSnapshot("d1", "Pump", online = true, switches = mapOf(0 to false), cloud = Cloud.DEMO))
-        assertEquals(ActionKind.NOTIFY, AutomationForm.from(null, devices, AutomationMode.ALERT).actionKind)
+        assertEquals(ActionKind.ALARM, AutomationForm.from(null, devices, AutomationMode.ALERT).actionKind)
         assertEquals(ActionKind.TURN_ON, AutomationForm.from(null, devices, AutomationMode.AUTOMATION).actionKind)
         val existing = auto("x", ActionKind.TURN_OFF).copy(action = AutoAction(ActionKind.TURN_OFF, "d1"))
         assertEquals(ActionKind.TURN_OFF, AutomationForm.from(existing, devices, AutomationMode.ALERT).actionKind)

@@ -367,7 +367,7 @@
     <string name="onb_done_title">All set!</string>
     <string name="onb_done_body">Start monitoring now. You can fine-tune everything later.</string>
     <string name="onb_done_tip_rules">Tap a device to choose which events ring an alarm</string>
-    <string name="onb_done_tip_test">Use “Test alarm” in Settings to check the sound</string>
+    <string name="onb_done_tip_test">Use “Test alarm” on the Alerts tab to check the sound</string>
 
     <!-- Notifications -->
     <string name="channel_alarm">Device alarm</string>
@@ -728,6 +728,10 @@
     <string name="act_turn_on">Turn a device on</string>
     <string name="act_turn_off">Turn a device off</string>
     <string name="automation_low_for_nograce">(for %d min)</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d phone setting needs fixing</item>
+        <item quantity="other">%d phone settings need fixing</item>
+    </plurals>
     <!-- Uyarılar sekmesi (2.13) -->
     <string name="tab_alerts">Alerts</string>
     <string name="alerts_ready">Alarm is ready</string>

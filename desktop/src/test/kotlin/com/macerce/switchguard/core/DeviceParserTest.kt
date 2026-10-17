@@ -46,6 +46,24 @@ class DeviceParserTest {
     }
 
     @Test
+    fun `apikey ev listesinde kendi evden alinir`() {
+        val body = """
+        {"error":0,"data":{"familyList":[
+          {"id":"f2","apikey":"other-key","familyType":2},
+          {"id":"f1","apikey":"my-key","familyType":1}
+        ]}}
+        """.trimIndent()
+        assertEquals("my-key", DeviceParser.familyApiKey(body))
+    }
+
+    @Test
+    fun `ev listesi bos ya da yoksa apikey yok`() {
+        assertEquals(null, DeviceParser.familyApiKey("""{"error":0,"data":{"familyList":[]}}"""))
+        assertEquals(null, DeviceParser.familyApiKey("""{"error":0,"data":{}}"""))
+        assertEquals(null, DeviceParser.familyApiKey("""{"error":0,"data":{"familyList":[{"id":"f1","apikey":""}]}}"""))
+    }
+
+    @Test
     fun `snapshot json gidis donus`() {
         val devices = DeviceParser.parseThingList(json)
         assertEquals(devices, DeviceParser.snapshotsFromJson(DeviceParser.snapshotsToJson(devices)))

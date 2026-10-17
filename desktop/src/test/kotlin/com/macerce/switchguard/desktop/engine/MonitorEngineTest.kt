@@ -854,6 +854,21 @@ class MonitorEngineTest {
         assertEquals(wallAt(13, 0) - 24 * 3_600_000L, DailySummary.dueAt(noon, 13 * 60, zone))
     }
 
+    // ---------------------------------------------------------------- anlık bağlantının apikey'i
+
+    @Test
+    fun liveConnectionUsesTheFamilyApiKeyWhenTheProfileIsClosedAndDevicesAreShared() {
+        // Profil yolu 407 (sahte loadProfile hiçbir şey yazmaz), cihazlar paylaşılmış: apikey yalnız ev listesinde.
+        store.userApiKey = ""
+        ewelink.onLoadFamily = { store.userApiKey = "family-key" }
+
+        startWith(pump(), rules = emptyMap())
+
+        assertEquals(1, ewelink.loadFamilyCalls)
+        assertEquals("family-key", store.userApiKey)
+        assertEquals("the WebSocket is opened instead of falling back to polling", 1, ewelinkLive.connects)
+    }
+
     // ---------------------------------------------------------------- tek bir senkron hatası "koptu" göstermesin
 
     @Test

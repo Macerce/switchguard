@@ -10,6 +10,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.ui.platform.testTag
 import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.DeleteOutline
@@ -121,16 +127,17 @@ fun EwelinkRows(graph: AppGraph, strings: Strings, version: Int) {
 }
 
 /**
- * App ID, App Secret ve Redirect URL. Kayıtlı Secret gösterilmez; alan boş bırakılırsa korunur. App ID değişirse
- * eski oturum o uygulamaya ait olduğundan oturum kapatılır.
+ * App ID, App Secret ve Redirect URL. Kayıtlı Secret telefondaki gibi alana gelir, noktalarla gizli; göz düğmesiyle
+ * görülebilir (önceden boş gelirdi ve kaydedilmemiş sanılıyordu). App ID değişirse eski oturum o uygulamaya ait
+ * olduğundan oturum kapatılır.
  */
 @Composable
 fun ApiCredentialsDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Unit) {
     val store = graph.store
     var appId by remember { mutableStateOf(store.appId) }
-    var secret by remember { mutableStateOf("") }
+    var secret by remember { mutableStateOf(store.appSecret) }
+    var showSecret by remember { mutableStateOf(false) }
     var redirect by remember { mutableStateOf(store.redirectUrl) }
-    val hadSecret = remember { store.appSecret.isNotEmpty() }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -143,11 +150,18 @@ fun ApiCredentialsDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Uni
                 Text(strings["desktop_ewelink_pc_notice"], style = MaterialTheme.typography.bodyMedium)
                 OutlinedTextField(appId, { appId = it }, Modifier.fillMaxWidth(), label = { Text("App ID") }, singleLine = true)
                 OutlinedTextField(
-                    secret, { secret = it }, Modifier.fillMaxWidth(),
+                    secret, { secret = it }, Modifier.fillMaxWidth().testTag("app-secret"),
                     label = { Text("App Secret") }, singleLine = true,
-                    placeholder = { if (hadSecret) Text(strings["desktop_ewelink_secret_kept"]) },
-                    visualTransformation = PasswordVisualTransformation(),
+                    visualTransformation = if (showSecret) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    trailingIcon = {
+                        IconButton(onClick = { showSecret = !showSecret }) {
+                            Icon(
+                                if (showSecret) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
+                                contentDescription = strings[if (showSecret) "desktop_secret_hide" else "desktop_secret_show"],
+                            )
+                        }
+                    },
                 )
                 OutlinedTextField(
                     redirect, { redirect = it }, Modifier.fillMaxWidth(),
@@ -158,10 +172,10 @@ fun ApiCredentialsDialog(graph: AppGraph, strings: Strings, onDismiss: () -> Uni
             }
         },
         confirmButton = {
-            Button(enabled = appId.isNotBlank() && (secret.isNotBlank() || hadSecret), onClick = {
+            Button(enabled = appId.isNotBlank() && secret.isNotBlank(), onClick = {
                 if (appId.trim() != store.appId) store.logout()
                 store.appId = appId
-                if (secret.isNotBlank()) store.appSecret = secret
+                if (secret.trim() != store.appSecret) store.appSecret = secret
                 store.redirectUrl = redirect
                 onDismiss()
             }) { Text(strings["action_save"]) }

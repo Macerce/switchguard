@@ -80,6 +80,16 @@ class FakeEwelink(var deviceList: List<DeviceSnapshot> = emptyList()) : EwelinkA
 
     override fun loadProfile() = Unit
 
+    /** Ev listesi okununca çalışır (gerçek istemci apikey'i Store'a yazar; testte bu kanca yazar). */
+    var onLoadFamily: (() -> Unit)? = null
+    var loadFamilyCalls = 0
+        private set
+
+    override fun loadFamilyApiKey() {
+        loadFamilyCalls++
+        onLoadFamily?.invoke()
+    }
+
     override fun setSwitch(d: DeviceSnapshot, channel: Int, on: Boolean) {
         switched += Triple(d.id, channel, on)
         deviceList = deviceList.map { if (it.id == d.id) it.copy(switches = it.switches + (channel to on)) else it }

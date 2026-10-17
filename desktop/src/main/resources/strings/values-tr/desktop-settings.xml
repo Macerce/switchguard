@@ -36,4 +36,6 @@
     <string name="desktop_backup_move_note">Başka bir bilgisayara geçerken: eskisinde dosyaya yedekleyin, yenisine SwitchGuard\'ı kurup dosyadan geri yükleyin, ardından eWeLink\'e yeniden giriş yapın.</string>
     <string name="desktop_open_logs_desc">Bir sorun bildirirken günlük dosyalarını e-postaya ekleyebilirsiniz</string>
     <string name="desktop_contact_copied">E-posta uygulaması açılamadı; adres panoya kopyalandı.</string>
+    <string name="desktop_secret_show">App Secret\'ı göster</string>
+    <string name="desktop_secret_hide">App Secret\'ı gizle</string>
 </resources>

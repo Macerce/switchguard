@@ -24,7 +24,7 @@ class AutomationFormTest {
         assertEquals("lamp", f.triggerDevice)
         assertEquals("lamp", f.actionDevice)
         assertEquals(TriggerKind.TURNED_ON, f.triggerKind)
-        assertEquals(ActionKind.NOTIFY, f.actionKind)
+        assertEquals("a new alert rings by default, like the phone", ActionKind.ALARM, f.actionKind)
         assertEquals("30", f.minutes)
         assertEquals("1000", f.watts)
         assertEquals("0", f.delay)

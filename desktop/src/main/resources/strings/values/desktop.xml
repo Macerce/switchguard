@@ -101,7 +101,6 @@
     <!-- eWeLink -->
     <string name="desktop_ewelink_pc_notice">This computer is a separate device: it needs its own eWeLink account, developer access approved on dev.ewelink.cc, and that account\'s App ID and App Secret.</string>
     <string name="desktop_ewelink_keys_missing">No API credentials yet</string>
-    <string name="desktop_ewelink_secret_kept">Leave empty to keep the saved secret</string>
     <string name="desktop_ewelink_login_title">Sign in with eWeLink</string>
     <string name="desktop_ewelink_login_steps">1. Sign in on the page that opened in your browser.\n2. The browser then shows a \"can\'t connect\" page; that is expected.\n3. Copy the address from the address bar. SwitchGuard picks it up by itself.</string>
     <string name="desktop_ewelink_paste_hint">Or paste the address here</string>

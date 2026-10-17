@@ -363,7 +363,7 @@
     <string name="onb_done_title">Hazırsınız!</string>
     <string name="onb_done_body">İzlemeyi şimdi başlatın. Her şeyi daha sonra ayrıntılı olarak ayarlayabilirsiniz.</string>
     <string name="onb_done_tip_rules">Hangi olayların alarm çalacağını seçmek için bir cihaza dokunun</string>
-    <string name="onb_done_tip_test">Sesi denemek için Ayarlar\'daki “Test alarmı”nı kullanın</string>
+    <string name="onb_done_tip_test">Sesi denemek için Uyarılar sekmesindeki “Test alarmı”nı kullanın</string>
 
     <!-- Bildirimler -->
     <string name="channel_alarm">Cihaz alarmı</string>
@@ -724,6 +724,10 @@
     <string name="act_turn_on">Cihazı aç</string>
     <string name="act_turn_off">Cihazı kapat</string>
     <string name="automation_low_for_nograce">(%d dk boyunca)</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d telefon ayarı düzeltilmeli</item>
+        <item quantity="other">%d telefon ayarı düzeltilmeli</item>
+    </plurals>
     <!-- Uyarılar sekmesi (2.13) -->
     <string name="tab_alerts">Uyarılar</string>
     <string name="alerts_ready">Alarm hazır</string>

@@ -101,7 +101,6 @@
     <!-- eWeLink -->
     <string name="desktop_ewelink_pc_notice">Bu bilgisayar ayrı bir cihazdır: kendi eWeLink hesabı, o hesapta dev.ewelink.cc geliştirici onayı ve o hesabın App ID / App Secret bilgisi gerekir.</string>
     <string name="desktop_ewelink_keys_missing">API bilgileri henüz girilmedi</string>
-    <string name="desktop_ewelink_secret_kept">Kayıtlı Secret\'ı korumak için boş bırakın</string>
     <string name="desktop_ewelink_login_title">eWeLink ile giriş</string>
     <string name="desktop_ewelink_login_steps">1. Tarayıcıda açılan sayfada giriş yapın.\n2. Tarayıcı ardından \"bağlanılamıyor\" sayfası gösterir; bu normaldir.\n3. Adres çubuğundaki adresi kopyalayın. SwitchGuard kendiliğinden alır.</string>
     <string name="desktop_ewelink_paste_hint">Ya da adresi buraya yapıştırın</string>

@@ -12,6 +12,7 @@ import com.macerce.switchguard.data.Store
 interface EwelinkApi {
     fun getDevices(): List<DeviceSnapshot>
     fun loadProfile()
+    fun loadFamilyApiKey()
     fun setSwitch(d: DeviceSnapshot, channel: Int, on: Boolean)
     fun requestLiveEnergy(d: DeviceSnapshot, seconds: Int)
 }
@@ -65,6 +66,7 @@ class Sources(
                 ewelink = object : EwelinkApi {
                     override fun getDevices() = ewelink.getDevices()
                     override fun loadProfile() = ewelink.loadProfile()
+                    override fun loadFamilyApiKey() = ewelink.loadFamilyApiKey()
                     override fun setSwitch(d: DeviceSnapshot, channel: Int, on: Boolean) = ewelink.setSwitch(d, channel, on)
                     override fun requestLiveEnergy(d: DeviceSnapshot, seconds: Int) = ewelink.requestLiveEnergy(d, seconds)
                 },

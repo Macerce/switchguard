@@ -2,7 +2,7 @@
 
 Telefon uygulamasıyla masaüstü uygulamasının senkronizasyon dosyası: kopyalanan `core/`, `api/` ve `data/` dosyaları ile masaüstüne yeniden yazılan / taşınan dosyalar (`Store`, `MonitorService`, `Notifier` + `AlarmActivity`).
 
-Kaynak: `master` `3698408` (telefon 2.12.3; 2026-10-17). İlk kopya `tv-tablet` `132e7fe`'den alınmıştı.
+Kaynak: `master` `4bbc24d` (telefon 2.13.0; 2026-10-17). İlk kopya `tv-tablet` `132e7fe`'den alınmıştı.
 
 ## Kopyalanan Dosyalar (core/)
 

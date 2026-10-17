@@ -12,7 +12,7 @@ import com.macerce.switchguard.core.Automation
 enum class AutomationMode(
     /** Düzenleyicide sunulan işlemler. */
     val actions: List<ActionKind>,
-    /** Yeni kaydın işlemi: uyarıda bildirim (düzenleyicinin bugünkü varsayılanı), otomasyonda cihazı aç. */
+    /** Yeni kaydın işlemi: uyarıda alarm (telefondaki gibi; uygulamanın asıl işi), otomasyonda cihazı aç. */
     val defaultAction: ActionKind,
     val newTitle: String,
     val editTitle: String,
@@ -21,7 +21,7 @@ enum class AutomationMode(
     val hint: String,
 ) {
     ALERT(
-        listOf(ActionKind.ALARM, ActionKind.NOTIFY), ActionKind.NOTIFY,
+        listOf(ActionKind.ALARM, ActionKind.NOTIFY), ActionKind.ALARM,
         "alert_new", "alert_edit", "alert_delete_title", "desktop_alert_hint",
     ),
     AUTOMATION(
