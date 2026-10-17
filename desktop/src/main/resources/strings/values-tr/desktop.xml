@@ -145,17 +145,11 @@
     <string name="desktop_windows_step_8">Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.</string>
 
     <!-- Otomasyonlar -->
-    <string name="desktop_automation_hint">Uyarılar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
+    <string name="desktop_automation_hint">Otomasyonlar izleme açıkken bu bilgisayarda çalışır. Bilgisayar kapalıyken ya da uykudayken çalışmaz; yine de çalışması gereken saatli işler için cihazın kendi zamanlayıcılarını kullanın.</string>
 
     <!-- Cihaz seçenekleri ve kart boyutu -->
 
-    <!-- Uyarılar (otomasyonlar ekranı) -->
-    <string name="desktop_alerts_tab">Uyarılar</string>
-    <string name="desktop_alerts_empty">Henüz uyarı yok</string>
-    <string name="desktop_alert_new">Yeni uyarı</string>
-    <string name="desktop_alert_edit">Uyarıyı düzenle</string>
-    <string name="desktop_alert_delete_title">Bu uyarı silinsin mi?</string>
-    <string name="desktop_alerts_need_monitoring">İzleme kapalı — başlatana kadar uyarılar çalışmaz.</string>
+    <!-- Motorun uyarıları -->
     <string name="desktop_secrets_unreadable">Kayıtlı anahtarlar bu bilgisayarda okunamıyor (ör. ayarlar başka bir bilgisayardan kopyalandı). eWeLink ve Tuya bilgilerini Ayarlar\'dan yeniden girin.</string>
     <string name="desktop_blind_hint">İnternet bağlantısını ve bilgisayarın uykuda olmadığını kontrol edin.</string>
 </resources>

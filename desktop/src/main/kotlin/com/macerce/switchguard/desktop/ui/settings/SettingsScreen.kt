@@ -26,13 +26,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.HelpOutline
-import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Backup
-import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.DesktopWindows
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Language
-import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
@@ -61,7 +58,6 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
-import com.macerce.switchguard.desktop.platform.Sounds
 import com.macerce.switchguard.desktop.ui.Brand
 import com.macerce.switchguard.desktop.ui.Hue
 import com.macerce.switchguard.desktop.ui.LocalDarkTheme
@@ -77,13 +73,11 @@ import com.macerce.switchguard.desktop.ui.tileColor
 
 /**
  * Ayarlar alt sayfaları ve başlıklarının metin anahtarı. Ana sayfa yalnızca bunların listesidir; her biri tıklanınca
- * açılır. Telefondaki `SettingsPage`; İzinler yerine Windows, dil ve tema için Dil ve görünüm, Telegram ayrı sayfa.
+ * açılır. Telefondaki `SettingsPage`; İzinler yerine Windows, dil ve tema için Dil ve görünüm. Alarm, Sessiz saatler
+ * ve İkinci kişiye haber ver 2.13'te Uyarılar sekmesine taşındı (`ui/alerts/AlertsScreen`).
  */
 enum class SettingsPage(val title: String) {
     ACCOUNTS("settings_accounts"),
-    ALARM("section_alarm"),
-    QUIET("section_quiet_hours"),
-    TELEGRAM("tg_title"),
     SUMMARY("section_summary"),
     MONITORING("section_monitoring"),
     WINDOWS("desktop_settings_windows"),
@@ -101,11 +95,12 @@ internal fun applyEngineSettings(graph: AppGraph) {
 }
 
 /**
- * Ayarlar (telefondaki 2.12 düzeni): üstte uygulama kartı, altında gruplanmış kategoriler; her satırda tek satırlık
- * özet, sorun varsa turuncu uyarı. Kategoriye tıklayınca kendi sayfası açılır (geri oku, farenin geri tuşu ya da
- * Ayarlar sekmesine yeniden tıklamak — `AppState.settingsHome` — listeye döner). Alt sayfalar bir yığındır: Alarm
- * sayfasından açılan "İkinci kişiye haber ver" geri okuyla Alarm'a döner. Her değişiklik hemen `Store`'a yazılır
- * (Telegram sayfası "Kaydet"te); arayüz `store.version` ile yeniden çizilir. [startPage] testler ve ekran görüntüleri için.
+ * Ayarlar (telefondaki 2.13 düzeni): üstte uygulama kartı, altında gruplanmış kategoriler (Bağlantılar, Uygulama,
+ * Destek); her satırda tek satırlık özet, sorun varsa turuncu uyarı. Uyarıyla ilgili ayarlar (Alarm, Sessiz saatler,
+ * İkinci kişiye haber ver) Uyarılar sekmesindedir. Kategoriye tıklayınca kendi sayfası açılır (geri oku, farenin geri
+ * tuşu ya da Ayarlar sekmesine yeniden tıklamak — `AppState.settingsHome` — listeye döner). Alt sayfalar bir yığındır.
+ * Her değişiklik hemen `Store`'a yazılır; arayüz `store.version` ile yeniden çizilir. [startPage] testler ve ekran
+ * görüntüleri için.
  */
 @Composable
 fun SettingsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier, startPage: SettingsPage? = null) {
@@ -144,7 +139,7 @@ fun SettingsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modif
         ) { pages ->
             when (val page = pages.lastOrNull()) {
                 null -> SettingsHome(graph, strings, open)
-                else -> SettingsSubPage(graph, strings, page, onBack = back, open = open)
+                else -> SettingsSubPage(graph, strings, page, onBack = back)
             }
         }
     }
@@ -197,17 +192,6 @@ private fun SettingsHome(graph: AppGraph, strings: Strings, onOpen: (SettingsPag
             )
         }
 
-        SectionTitle(str("settings_group_alerts"))
-        SectionCard {
-            MenuRow(Icons.Rounded.NotificationsActive, Hue.RED, str("section_alarm"), onClick = { onOpen(SettingsPage.ALARM) }, summary = s.alarm)
-            RowDivider(68.dp)
-            MenuRow(Icons.Rounded.Bedtime, Hue.INDIGO, str("section_quiet_hours"), onClick = { onOpen(SettingsPage.QUIET) }, summary = s.quiet)
-            RowDivider(68.dp)
-            MenuRow(Icons.AutoMirrored.Rounded.Send, Hue.BLUE, str("tg_title"), onClick = { onOpen(SettingsPage.TELEGRAM) }, summary = s.telegram)
-            RowDivider(68.dp)
-            MenuRow(Icons.Rounded.Summarize, Hue.AMBER, str("section_summary"), onClick = { onOpen(SettingsPage.SUMMARY) }, summary = s.summary)
-        }
-
         SectionTitle(str("settings_group_app"))
         SectionCard {
             MenuRow(Icons.Rounded.Sync, Hue.GREEN, str("section_monitoring"), onClick = { onOpen(SettingsPage.MONITORING) }, summary = s.monitoring)
@@ -216,6 +200,8 @@ private fun SettingsHome(graph: AppGraph, strings: Strings, onOpen: (SettingsPag
                 Icons.Rounded.DesktopWindows, Hue.ORANGE, str("desktop_settings_windows"),
                 onClick = { onOpen(SettingsPage.WINDOWS) }, summary = s.windows, warning = s.windowsWarning,
             )
+            RowDivider(68.dp)
+            MenuRow(Icons.Rounded.Summarize, Hue.AMBER, str("section_summary"), onClick = { onOpen(SettingsPage.SUMMARY) }, summary = s.summary)
             RowDivider(68.dp)
             MenuRow(Icons.Rounded.Backup, Hue.PURPLE, str("settings_backup"), onClick = { onOpen(SettingsPage.BACKUP) }, summary = str("desktop_settings_backup_desc"))
             RowDivider(68.dp)
@@ -275,16 +261,6 @@ internal class HomeSummaries(store: Store, strings: Strings) {
         else -> null
     }
 
-    val alarm: String = Sounds.displayName(store.alarmSoundUri ?: Sounds.DEFAULT_ALARM, strings) + " · " +
-        strings.format("volume_pct", Math.round(store.alarmVolume * 100))
-
-    val quiet: String = store.quietHours.let { q ->
-        if (!q.enabled) strings["state_off_title"]
-        else strings.format("time_range", formatMinute(strings, q.startMinute), formatMinute(strings, q.endMinute))
-    }
-
-    val telegram: String = escalationSummary(store, strings)
-
     val summary: String =
         if (store.dailySummaryEnabled) strings.format("daily_at", formatMinute(strings, store.dailySummaryMinute))
         else strings["state_off_title"]
@@ -292,10 +268,7 @@ internal class HomeSummaries(store: Store, strings: Strings) {
     val monitoring: String = monitoringSummary(strings, store.offlineGraceSec, strings.format("poll_interval_value", store.pollIntervalSec))
 
     /** Windows: ikisi de açıksa özet; kapalı olan her biri uyarıdır (bilgisayar yeniden başlayınca ya da uyuyunca alarm kaçar). */
-    val windowsWarning: String? = listOfNotNull(
-        strings["desktop_settings_windows_no_autostart"].takeIf { !store.autostart },
-        strings["desktop_settings_windows_may_sleep"].takeIf { !store.alwaysAwake },
-    ).takeIf { it.isNotEmpty() }?.joinToString(" · ")
+    val windowsWarning: String? = windowsWarning(store, strings)
 
     val windows: String = strings["desktop_settings_windows_ok"]
 
@@ -303,13 +276,10 @@ internal class HomeSummaries(store: Store, strings: Strings) {
 }
 
 @Composable
-private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPage, onBack: () -> Unit, open: (SettingsPage) -> Unit) {
+private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPage, onBack: () -> Unit) {
     SettingsPageFrame(str(page.title), onBack = onBack) {
         when (page) {
             SettingsPage.ACCOUNTS -> AccountsPage(graph, strings)
-            SettingsPage.ALARM -> AlarmPage(graph, strings, open)
-            SettingsPage.QUIET -> QuietPage(graph.store, strings)
-            SettingsPage.TELEGRAM -> TelegramPage(graph.store, onDone = onBack)
             SettingsPage.SUMMARY -> SummaryPage(graph.store, strings, preview = graph.engine::summaryPreview)
             SettingsPage.MONITORING -> MonitoringPage(graph, strings)
             SettingsPage.WINDOWS -> WindowsPage(graph, strings)
@@ -319,6 +289,19 @@ private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPag
         }
     }
 }
+
+/**
+ * Windows ile başlat ve uyanık tut kapalıysa her biri için uyarının metin anahtarı (bilgisayar yeniden başlayınca ya da
+ * uyuyunca alarm kaçar); ikisi de açıksa boş. Ayarlar'daki Windows satırı ve Uyarılar sekmesinin durum kartı bunu gösterir.
+ */
+internal fun windowsIssues(autostart: Boolean, alwaysAwake: Boolean): List<String> = listOfNotNull(
+    "desktop_settings_windows_no_autostart".takeIf { !autostart },
+    "desktop_settings_windows_may_sleep".takeIf { !alwaysAwake },
+)
+
+/** [windowsIssues]'ın tek satırlık metni; sorun yoksa null. */
+internal fun windowsWarning(store: Store, strings: Strings): String? =
+    windowsIssues(store.autostart, store.alwaysAwake).takeIf { it.isNotEmpty() }?.joinToString(" · ") { strings[it] }
 
 // ---------------------------------------------------------------- etiketler (telefondaki yardımcılar)
 

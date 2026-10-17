@@ -70,10 +70,17 @@ data class AutomationForm(
     /** Türkçe klavyedeki virgül de kabul edilir ("1,5"). */
     private fun wattsValue(): Double? = watts.trim().replace(',', '.').toDoubleOrNull()
 
+    /** İşlem bu modda sunulmuyorsa modun varsayılan işlemine döner (düzenleyici yalnızca modun işlemlerini gösterir). */
+    fun inMode(mode: AutomationMode): AutomationForm = if (actionKind in mode.actions) this else copy(actionKind = mode.defaultAction)
+
     companion object {
-        fun from(initial: Automation?, devices: List<DeviceSnapshot>): AutomationForm {
+        /**
+         * Düzenleyicinin ilk durumu. Var olan kayıt olduğu gibi gelir (modu işleminden belli); yeni kayıt [mode]'un
+         * varsayılan işlemiyle başlar.
+         */
+        fun from(initial: Automation?, devices: List<DeviceSnapshot>, mode: AutomationMode = AutomationMode.ALERT): AutomationForm {
             val first = devices.firstOrNull()?.id.orEmpty()
-            if (initial == null) return AutomationForm(triggerDevice = first, actionDevice = first)
+            if (initial == null) return AutomationForm(triggerDevice = first, actionKind = mode.defaultAction, actionDevice = first)
             val t = initial.trigger
             return AutomationForm(
                 name = initial.name,

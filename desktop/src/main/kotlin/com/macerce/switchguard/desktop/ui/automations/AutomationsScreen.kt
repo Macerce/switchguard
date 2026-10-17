@@ -14,13 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Alarm
-import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -45,6 +46,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.ActionKind
@@ -64,16 +66,17 @@ import java.util.Locale
 private const val NEW = "new"
 
 /**
- * Uyarılar (telefondaki "Otomasyon" ekranının masaüstü karşılığı; kullanıcı burada "uyarı" der): telefondaki 2.12
- * listesi — "Eğer … / O zaman …" kartları, eylemin renkli simgesi, aç/kapa — ve tam sayfa düzenleyici
- * ([AutomationEditor]). Ekleme, değiştirme ve silme motor üzerinden yapılır (`MonitorEngine.saveAutomation` /
- * `deleteAutomation`); değerlendirme zaten motorda.
+ * Otomasyon sekmesi (telefondaki 2.13 "Otomasyon" ekranı): yalnızca cihaz açan/kapatan kayıtlar
+ * ([AutomationMode.AUTOMATION]; alarm/bildirim verenler Uyarılar sekmesindeki "Koşullu uyarılar"da) — "Eğer … /
+ * O zaman …" kartları, eylemin renkli simgesi, aç/kapa — ve tam sayfa düzenleyici ([AutomationEditor], otomasyon
+ * modunda). Ekleme, değiştirme ve silme motor üzerinden yapılır (`MonitorEngine.saveAutomation` / `deleteAutomation`);
+ * değerlendirme zaten motorda.
  */
 @Composable
 fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier) {
     val store = graph.store
     val version by store.version.collectAsState()
-    val automations = remember(version) { store.automations }
+    val automations = remember(version) { store.automations.inMode(AutomationMode.AUTOMATION) }
     val devices = remember(version) { store.snapshots }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by remember { mutableStateOf<String?>(null) }
@@ -93,13 +96,14 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                 editing = null
             },
             onBack = { editing = null },
+            newMode = AutomationMode.AUTOMATION,
         )
         return
     }
 
     Box(modifier.fillMaxSize()) {
         Column(Modifier.align(Alignment.TopCenter).readableWidth().fillMaxSize()) {
-            PageHeader(strings["desktop_alerts_tab"])
+            PageHeader(strings["tab_automations"])
             LazyColumn(
                 Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
@@ -108,7 +112,7 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                 if (!monitoring && automations.isNotEmpty()) {
                     item {
                         Text(
-                            strings["desktop_alerts_need_monitoring"],
+                            strings["automations_need_monitoring"],
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error,
                             modifier = Modifier.padding(horizontal = 8.dp),
@@ -142,21 +146,26 @@ private fun EmptyAutomations(strings: Strings) {
         Modifier.fillMaxWidth().padding(vertical = 32.dp, horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Icon(Icons.Rounded.Notifications, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Icon(Icons.Rounded.AutoMode, null, Modifier.size(48.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(12.dp))
-        Text(strings["desktop_alerts_empty"], style = MaterialTheme.typography.bodyLarge)
+        Text(strings["automations_empty"], style = MaterialTheme.typography.bodyLarge)
         Spacer(Modifier.height(12.dp))
         Text(
-            strings["automations_examples"],
+            strings["automations_empty_desc"],
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.widthIn(max = 560.dp),
         )
     }
 }
 
-/** Uyarı kartı: eylemin renkli simgesi (kapalıysa soluk), adı ve "Eğer … / O zaman …" satırları; sağda aç/kapa. */
+/**
+ * Kayıt kartı (koşullu uyarı ya da otomasyon): eylemin renkli simgesi (kapalıysa soluk), adı ve "Eğer … / O zaman …"
+ * satırları; sağda aç/kapa. Uyarılar sekmesi de kullanır.
+ */
 @Composable
-private fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
+internal fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
     val (whenText, thenText) = describe(a, devices, strings)
     val shape = RoundedCornerShape(24.dp)
     Row(

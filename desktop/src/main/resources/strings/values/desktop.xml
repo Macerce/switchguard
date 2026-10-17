@@ -145,17 +145,11 @@
     <string name="desktop_windows_step_8">Installing a new version: first uninstall the old one (step 7), then run the new setup file. Your settings, accounts and sounds are kept.</string>
 
     <!-- Otomasyonlar -->
-    <string name="desktop_automation_hint">Alerts run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
+    <string name="desktop_automation_hint">Automations run on this computer while monitoring is on. They do not run while the computer is off or asleep; for timed jobs that must run anyway, use the timers on the device itself.</string>
 
     <!-- Cihaz seçenekleri ve kart boyutu -->
 
-    <!-- Uyarılar (otomasyonlar ekranı) -->
-    <string name="desktop_alerts_tab">Alerts</string>
-    <string name="desktop_alerts_empty">No alerts yet</string>
-    <string name="desktop_alert_new">New alert</string>
-    <string name="desktop_alert_edit">Edit alert</string>
-    <string name="desktop_alert_delete_title">Delete this alert?</string>
-    <string name="desktop_alerts_need_monitoring">Monitoring is off — alerts do not run until you start it.</string>
+    <!-- Motorun uyarıları -->
     <string name="desktop_secrets_unreadable">Saved keys can\'t be read on this computer (for example, the settings were copied from another computer). Enter your eWeLink and Tuya details again in Settings.</string>
     <string name="desktop_blind_hint">Check the internet connection and that the computer isn\'t asleep.</string>
 </resources>

@@ -21,8 +21,9 @@ import org.junit.rules.TemporaryFolder
 import java.nio.file.Files
 
 /**
- * Uyarılar listesi, düzenleyici ve alarm ekranının görsel örnekleri (açık + koyu, Türkçe, demo cihazları);
- * `build/snapshots/alerts-*.png`. Karşılaştırma yapmaz, gözle bakmak içindir.
+ * Otomasyon listesi, düzenleyici (yeni kayıt uyarı modunda) ve alarm ekranının görsel örnekleri (açık + koyu, Türkçe,
+ * demo cihazları); `build/snapshots/alerts-*.png`. Uyarılar sekmesininkiler `AlertsSnapshotTest`'te. Karşılaştırma
+ * yapmaz, gözle bakmak içindir.
  */
 class AutomationsSnapshotTest {
     @get:Rule val tmp = TemporaryFolder()

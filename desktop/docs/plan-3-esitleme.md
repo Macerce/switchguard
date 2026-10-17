@@ -24,7 +24,8 @@ Tarih: 2026-10-16 · Dal: `windows` · Kullanıcı isteği: "PC sürümünü And
   TV odak halkası `tvFocusRing` yok, Android izin/pil/üretici ayarları yok, Toast yerine Snackbar ya da satır içi metin,
   Intent yerine `desktop/platform/Links`, `Dispatchers.IO` + state).
 - **Masaüstü kararları korunur:** otomasyon sekmesinin adı arayüzde **"Uyarılar"** (`desktop_alerts_*` anahtarları;
-  kullanıcı kararı); Pro her zaman açık (Pro/satın alma ekranı yok); eWeLink girişi tarayıcı + pano izleme
+  kullanıcı kararı — 2026-10-17'de değişti: telefon 2.13 ile Uyarılar ve Otomasyon ayrı sekmeler, `ui/alerts/`,
+  `AutomationMode`); Pro her zaman açık (Pro/satın alma ekranı yok); eWeLink girişi tarayıcı + pano izleme
   (`ui/settings/EwelinkDialogs.kt`, `accounts/`), Tuya bağlama (`ui/settings/TuyaDialog.kt`), ses yükleme
   (`sound/`, `ui/settings/SoundPicker.kt`), şifreli yedek (`backup/`, `ui/settings/BackupSection.kt`), Windows ile başlat /
   uyanık tut / Tuya canlı (`platform/`). Bunların mantığı değişmez, arayüzü yeni düzene taşınır.

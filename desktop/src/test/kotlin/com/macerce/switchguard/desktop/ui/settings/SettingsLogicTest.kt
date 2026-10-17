@@ -74,8 +74,9 @@ class SettingsLogicTest {
 
         assertEquals("Tuya · Demo", h.accounts)
         assertNull(h.accountsWarning)
-        assertEquals("22:00 – 06:30", h.quiet)
-        assertEquals("Kapalı", h.telegram)
+        val a = AlertSettingsSummaries(s, tr)
+        assertEquals("22:00 – 06:30", a.quiet)
+        assertEquals("Kapalı", a.telegram)
         assertEquals("Kapalı", h.summary)
         assertEquals("Kopunca 2 dakika bekler · 60 sn'de bir", h.monitoring)
         assertNull(h.windowsWarning)
@@ -97,7 +98,8 @@ class SettingsLogicTest {
         assertEquals("Monitoring stopped — signed out", h.accountsWarning)
         assertEquals("Doesn't start with Windows", h.windowsWarning)
         assertEquals("No account connected", h.accounts)
-        assertTrue(h.telegram, h.telegram.contains("5 min") && h.telegram.contains("2 people"))
+        val telegram = AlertSettingsSummaries(s, en).telegram
+        assertTrue(telegram, telegram.contains("5 min") && telegram.contains("2 people"))
         assertTrue(h.summary, h.summary.contains("9:00"))
     }
 

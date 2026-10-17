@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Masaüstüne özgü metinler (telefon anahtarlarını gölgeleyemez). -->
 <resources>
+    <!-- Uyarılar sekmesi -->
+    <string name="desktop_alerts_windows_desc">Alarms can be missed after a restart or while the computer sleeps. Click to fix it in Settings › Windows.</string>
+    <string name="desktop_alert_hint">Alerts run on this computer while monitoring is on. They do not run while the computer is off or asleep.</string>
 </resources>

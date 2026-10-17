@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.platform.Sounds
 import com.macerce.switchguard.desktop.ui.InfoRow
 import com.macerce.switchguard.desktop.ui.RowDivider
 import com.macerce.switchguard.desktop.ui.SectionCard
@@ -53,18 +54,34 @@ import kotlin.math.roundToInt
 /** Hatırlatma seçenekleri (dk); 0 = kapalı. */
 private val REMINDER_CHOICES = listOf(0, 10, 30, 60)
 
+/**
+ * Uyarılar sekmesindeki "Uyarı ayarları" satırlarının özetleri (Alarm, Sessiz saatler, İkinci kişiye haber ver);
+ * `store.version` her değiştiğinde bir kez hesaplanır.
+ */
+internal class AlertSettingsSummaries(store: Store, strings: Strings) {
+    val alarm: String = Sounds.displayName(store.alarmSoundUri ?: Sounds.DEFAULT_ALARM, strings) + " · " +
+        strings.format("volume_pct", Math.round(store.alarmVolume * 100))
+
+    val quiet: String = store.quietHours.let { q ->
+        if (!q.enabled) strings["state_off_title"]
+        else strings.format("time_range", formatMinute(strings, q.startMinute), formatMinute(strings, q.endMinute))
+    }
+
+    val telegram: String = escalationSummary(store, strings)
+}
+
 // ---------------------------------------------------------------- Alarm
 
 /**
- * Ayarlar → Alarm (telefondaki AlarmPage): alarm ve bildirim sesi, ses düzeyi; alarm çalarken hatırlatma ve ikinci
- * kişiye haber verme (Telegram sayfasını [open] açar); test alarmı penceresi. [testAlarm] testlerde sahtedir
- * (bilgisayarda gerçekten alarm çalmasın).
+ * Uyarılar › Uyarı ayarları › Alarm (telefondaki AlarmPage; 2.13'e kadar Ayarlar'daydı): alarm ve bildirim sesi, ses
+ * düzeyi; alarm çalarken hatırlatma ve ikinci kişiye haber verme (Telegram sayfasını [onTelegram] açar); test alarmı
+ * penceresi. [testAlarm] testlerde sahtedir (bilgisayarda gerçekten alarm çalmasın).
  */
 @Composable
 fun AlarmPage(
     graph: AppGraph,
     strings: Strings,
-    open: (SettingsPage) -> Unit,
+    onTelegram: () -> Unit,
     testAlarm: (silent: Boolean, delayMs: Long) -> Unit = graph.engine::testAlarm,
 ) {
     val store = graph.store
@@ -100,7 +117,7 @@ fun AlarmPage(
         RowDivider()
         InfoRow(
             Icons.AutoMirrored.Rounded.Send, str("tg_title"), escalation,
-            Modifier.clickable { open(SettingsPage.TELEGRAM) },
+            Modifier.clickable(onClick = onTelegram),
         ) { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 
@@ -157,7 +174,7 @@ private fun VolumeRow(value: Float, onFinished: (Float) -> Unit) {
 
 // ---------------------------------------------------------------- Sessiz saatler
 
-/** Ayarlar → Sessiz saatler: aç/kapa, başlangıç ve bitiş (saat penceresi), kritik cihaz açıklaması. */
+/** Uyarılar › Uyarı ayarları › Sessiz saatler: aç/kapa, başlangıç ve bitiş (saat penceresi), kritik cihaz açıklaması. */
 @Composable
 fun QuietPage(store: Store, strings: Strings) {
     val version by store.version.collectAsState()

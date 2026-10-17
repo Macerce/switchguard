@@ -728,4 +728,25 @@
     <string name="act_turn_on">Turn a device on</string>
     <string name="act_turn_off">Turn a device off</string>
     <string name="automation_low_for_nograce">(for %d min)</string>
+    <!-- Uyarılar sekmesi (2.13) -->
+    <string name="tab_alerts">Alerts</string>
+    <string name="alerts_ready">Alarm is ready</string>
+    <string name="alerts_ready_desc">Changes on monitored devices ring at once.</string>
+    <string name="alerts_monitoring_off">Monitoring is off</string>
+    <string name="alerts_monitoring_off_desc">Alerts don\'t run until you start monitoring.</string>
+    <string name="section_device_alerts">Device alerts</string>
+    <string name="section_device_alerts_desc">What each device rings or notifies for</string>
+    <string name="device_alerts_not_monitored">Not monitored</string>
+    <string name="device_alerts_none">Monitored · no alarm or notification</string>
+    <string name="device_alerts_alarm">Alarm: %s</string>
+    <string name="device_alerts_notify">Notification: %s</string>
+    <string name="device_alert_rules">Alert rules</string>
+    <string name="section_conditional_alerts">Conditional alerts</string>
+    <string name="conditional_alerts_desc">Ring when a device stays on or off for a while, or its power changes</string>
+    <string name="conditional_alerts_empty">No conditional alerts yet. For example: ring if the pump draws under 50 W for 1 minute.</string>
+    <string name="section_alert_settings">Alert settings</string>
+    <string name="alert_new">New alert</string>
+    <string name="alert_edit">Edit alert</string>
+    <string name="alert_delete_title">Delete this alert?</string>
+    <string name="automations_empty_desc">Automations switch devices on or off by themselves. For example: turn the fan on when the freezer\'s power rises, or turn a light off after it stays on for 2 hours.</string>
 </resources>
