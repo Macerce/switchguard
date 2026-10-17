@@ -228,7 +228,10 @@ class MonitorEngine(
     fun setDemo(on: Boolean, names: Demo.Names) {
         scheduler.post {
             if (on) {
+                // Yeniden açılan demo cihazları varsayılan durumla gelir: özetler eski son durumu sürdürmesin.
+                val previous = store.snapshots.associateBy { it.id }
                 store.enableDemo(names)
+                recordMetrics(previous, store.snapshots)
             } else {
                 store.disableDemo()
                 if (store.monitoringEnabled && !store.hasAnyAccount) stopMonitoring()
@@ -268,10 +271,14 @@ class MonitorEngine(
                 if (running) {
                     onControlled(device.id, channel, on)
                 } else {
-                    // İzleme kapalı: durumu doğrudan güncelle.
-                    store.snapshots = store.snapshots.map {
+                    // İzleme kapalı: durumu doğrudan güncelle. Metrik de yazılır: yoksa günlük özet ve grafikler
+                    // cihazı son kaydedilen durumda (ör. bütün gün açık) sanır.
+                    val previous = store.snapshots.associateBy { it.id }
+                    val next = store.snapshots.map {
                         if (it.id == device.id) Demo.recompute(it.copy(switches = it.switches + (channel to on))) else it
                     }
+                    store.snapshots = next
+                    recordMetrics(previous, next)
                 }
             }
             onResult(result.exceptionOrNull())
@@ -771,6 +778,11 @@ class MonitorEngine(
         runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
         persistRuntime()
         heartbeat(wall)
+    }
+
+    /** Anlık görüntü değişikliğini ölçüm günlüğüne yazar; yazılamazsa yalnızca günlüğe not düşülür. */
+    private fun recordMetrics(previous: Map<String, DeviceSnapshot>, current: List<DeviceSnapshot>) {
+        runCatching { metrics.record(previous, current, clock.wall()) }.onFailure { Log.w(TAG, "metrics write failed; continuing", it) }
     }
 
     /** Önceki çalışmadan kalan bekleyen işleri yükler; motor kurulurken iş parçacığının ilk işi olarak çalışır. */

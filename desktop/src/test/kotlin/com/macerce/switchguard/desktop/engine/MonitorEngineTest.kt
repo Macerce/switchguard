@@ -854,6 +854,45 @@ class MonitorEngineTest {
         assertEquals(wallAt(13, 0) - 24 * 3_600_000L, DailySummary.dueAt(noon, 13 * 60, zone))
     }
 
+    // ---------------------------------------------------------------- günlük özetin verisi (metrikler)
+
+    @Test
+    fun switchingWhileMonitoringIsOffIsRecordedForTheSummary() {
+        startWith(pump(on = true), rules = emptyMap())
+        engine.stop()
+        scheduler.advance(0)
+        val from = clock.wall()
+
+        engine.control(id, 0, false)
+        scheduler.advance(0)
+        clock.advance(60 * 60_000L)
+
+        val usage = metrics.usage(id, 0, from, clock.wall())
+        assertEquals("the pump was turned off: not on for the whole hour", 0L, usage.onMillis)
+    }
+
+    @Test
+    fun turningDemoBackOnRecordsTheFreshDeviceStates() {
+        store.logout()
+        engine.setDemo(true, strings.demoNames())
+        scheduler.advance(0)
+        val light = store.snapshots.first { it.id == Demo.LIGHT }
+        engine.control(light.id, 0, true)
+        scheduler.advance(0)
+        engine.setDemo(false, strings.demoNames())
+        scheduler.advance(0)
+        clock.advance(60_000)
+
+        engine.setDemo(true, strings.demoNames())
+        scheduler.advance(0)
+        val from = clock.wall()
+        clock.advance(60 * 60_000L)
+
+        val fresh = store.snapshots.first { it.id == Demo.LIGHT }.switches.getValue(0)
+        val usage = metrics.usage(Demo.LIGHT, 0, from, clock.wall())
+        assertEquals("usage follows the re-created device", if (fresh) 60 * 60_000L else 0L, usage.onMillis)
+    }
+
     // ---------------------------------------------------------------- yardımcılar
 
     private fun readyTelegram(minutes: Int) {
