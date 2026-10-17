@@ -27,6 +27,7 @@ import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.MonitorGap
 import com.macerce.switchguard.core.OfflineGrace
 import com.macerce.switchguard.core.RuleEngine
+import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.core.TuyaEvent
 import com.macerce.switchguard.core.TuyaParser
 import com.macerce.switchguard.core.WsEvent
@@ -99,6 +100,8 @@ class MonitorEngine(
     private var reconnectAttempt = 0
     private var nextReconnectAt = 0L
     private var lastSyncAt = 0L
+    /** Anlık bağlantı canlıyken üst üste başarısız senkron sayısı (bkz. [retrySyncSoon]). */
+    private var syncRetryAttempt = 0
     /** Kanal gücü izlenen cihazlar: son canlı enerji isteği, son gelen kanal gücü, "veri yok" uyarısı verildi mi. */
     private val liveEnergyRequestedAt = mutableMapOf<String, Long>()
     private val channelPowerSeenAt = mutableMapOf<String, Long>()
@@ -110,6 +113,7 @@ class MonitorEngine(
     private var tuyaReconnectAttempt = 0
     private var tuyaNextConnectAt = 0L
     private var lastTuyaSyncAt = 0L
+    private var tuyaSyncRetryAttempt = 0
     /** Bilgiler hatalı ya da deneme süresi bitmiş: kota harcamamak için seyrek denenir. */
     private var tuyaBlocked = false
     private var tuyaWarned = false
@@ -543,6 +547,7 @@ class MonitorEngine(
         }
         try {
             replaceCloud(Cloud.EWELINK, client.getDevices())
+            syncRetryAttempt = 0
             if (authFailed) {
                 authFailed = false
                 host.clearWarning()
@@ -552,13 +557,29 @@ class MonitorEngine(
         } catch (e: AuthException) {
             onAuthFailed()
         } catch (e: IOException) {
+            // Anlık bağlantı canlıyken tek bir HTTP hatası izlemeyi durdurmaz (bkz. retrySyncSoon).
+            if (socket.ready) retrySyncSoon(e)
             // Bilgisayarın interneti yok: cihaz "offline" sayılmaz, sadece durum güncellenir.
-            setState(ConnState.NO_INTERNET)
+            else setState(ConnState.NO_INTERNET)
         } catch (e: ApiException) {
-            setState(ConnState.ERROR, strings().format("detail_api_error", e.code))
+            if (socket.ready && TokenRefresh.isTransient(e.code)) retrySyncSoon(e)
+            else setState(ConnState.ERROR, strings().format("detail_api_error", e.code))
         } catch (e: Exception) {
             setState(ConnState.ERROR, e.message.orEmpty())
         }
+    }
+
+    /**
+     * Anlık bağlantı (WebSocket) canlıyken HTTP senkronu düştü (ör. ağ değişiminde tek bir zaman aşımı). İzleme sürüyor,
+     * olaylar WebSocket'ten geliyor: durum "internet yok"a çevrilmez (kullanıcı izlemenin koptuğunu sanır ve bir sonraki
+     * olağan senkron 5 dk sonradır), senkron [SYNC_RETRY_MS] aralıklarıyla yeniden denenir. Bağlantı gerçekten koptuysa
+     * WebSocket de düşer (ping/bayatlık denetimi) ve durum oradan güncellenir.
+     */
+    private fun retrySyncSoon(cause: Exception) {
+        val delay = SYNC_RETRY_MS[syncRetryAttempt.coerceAtMost(SYNC_RETRY_MS.size - 1)]
+        syncRetryAttempt++
+        Log.w(TAG, "eWeLink sync failed while live (${cause.javaClass.simpleName}); retrying in ${delay / 1000}s")
+        scheduler.postDelayed(delay) { if (running && socket.ready) sync() }
     }
 
     /**
@@ -724,6 +745,7 @@ class MonitorEngine(
         if (!store.hasTuya) return
         try {
             replaceCloud(Cloud.TUYA, tuya.getDevices())
+            tuyaSyncRetryAttempt = 0
             tuyaBlocked = false
             tuyaWarned = false
             if (tuyaSocket.ready) setTuyaState(ConnState.LIVE, synced = true)
@@ -733,11 +755,20 @@ class MonitorEngine(
         } catch (e: TuyaAuthException) {
             onTuyaBlocked(strings()["tuya_auth_error"])
         } catch (e: IOException) {
-            setTuyaState(ConnState.NO_INTERNET)
+            // Mesaj servisi canlıyken tek bir HTTP hatası izlemeyi durdurmaz (bkz. retrySyncSoon).
+            if (tuyaSocket.ready) retryTuyaSyncSoon(e) else setTuyaState(ConnState.NO_INTERNET)
         } catch (e: Exception) {
             Log.w(TAG, "Tuya sync failed", e)
             setTuyaState(ConnState.ERROR, e.message.orEmpty())
         }
+    }
+
+    /** [retrySyncSoon]'un Tuya karşılığı: mesaj servisi canlıyken başarısız senkron kısa aralıklarla yeniden denenir. */
+    private fun retryTuyaSyncSoon(cause: Exception) {
+        val delay = SYNC_RETRY_MS[tuyaSyncRetryAttempt.coerceAtMost(SYNC_RETRY_MS.size - 1)]
+        tuyaSyncRetryAttempt++
+        Log.w(TAG, "Tuya sync failed while live (${cause.javaClass.simpleName}); retrying in ${delay / 1000}s")
+        scheduler.postDelayed(delay) { if (running && tuyaSocket.ready) syncTuya() }
     }
 
     /** İzleme fiilen durdu: durumu göster, bir kez bildirim ver. */
@@ -1258,6 +1289,8 @@ class MonitorEngine(
         /** Cihazların durumunun alınamadığı durumlar. */
         private val BLIND_STATES = setOf(ConnState.CONNECTING, ConnState.NO_INTERNET, ConnState.ERROR, ConnState.AUTH_ERROR)
         private const val RESYNC_MS = 5 * 60_000L
+        /** Anlık bağlantı canlıyken başarısız senkronun yeniden deneme aralıkları (sonuncusu tekrarlanır). */
+        private val SYNC_RETRY_MS = longArrayOf(15_000, 30_000, 60_000, 120_000)
         private const val ESCALATION_RETRY_MS = 60_000L
         /** Yeniden denemenin işe yaramayacağı Telegram hataları: 400 sohbet yok, 401 anahtar geçersiz, 403 bot engellendi. */
         private val PERMANENT_TELEGRAM_ERRORS = setOf(400, 401, 403)

@@ -854,6 +854,61 @@ class MonitorEngineTest {
         assertEquals(wallAt(13, 0) - 24 * 3_600_000L, DailySummary.dueAt(noon, 13 * 60, zone))
     }
 
+    // ---------------------------------------------------------------- tek bir senkron hatası "koptu" göstermesin
+
+    @Test
+    fun aFailedSyncWhileTheLiveConnectionWorksKeepsTheStateAndRetriesSoon() {
+        startWith(pump(), rules = emptyMap())
+        ewelinkLive.goLive()
+        scheduler.advance(0)
+        assertEquals(ConnState.LIVE, host.statuses.last().first)
+        val calls = ewelink.getDevicesCalls
+        ewelink.onGetDevices = { throw java.io.IOException("timeout") }
+
+        scheduler.advance(5 * 60_000L + 1_000) // olağan senkron (WebSocket canlıyken 5 dk'da bir)
+        assertEquals(calls + 1, ewelink.getDevicesCalls)
+        assertEquals("the live connection still works", ConnState.LIVE, host.statuses.last().first)
+
+        ewelink.onGetDevices = null
+        scheduler.advance(20_000) // kısa yeniden deneme, 5 dk beklenmez
+        assertEquals(calls + 2, ewelink.getDevicesCalls)
+        assertEquals(ConnState.LIVE, host.statuses.last().first)
+    }
+
+    @Test
+    fun aFailedSyncWithoutTheLiveConnectionShowsNoInternet() {
+        startWith(pump(), rules = emptyMap()) // WebSocket hiç hazır olmadı: sorgulama
+        ewelink.onGetDevices = { throw java.io.IOException("down") }
+
+        scheduler.advance(31_000)
+
+        assertEquals(ConnState.NO_INTERNET, host.statuses.last().first)
+    }
+
+    @Test
+    fun aFailedTuyaSyncWhileTuyaIsLiveKeepsTheStateAndRetriesSoon() {
+        store.logout()
+        store.tuyaAccessId = "id"
+        store.tuyaSecret = "secret"
+        store.tuyaLive = true
+        tuya.deviceList = listOf(DeviceSnapshot(id, "Plug", online = true, switches = mapOf(0 to true), cloud = Cloud.TUYA))
+        engine.start()
+        scheduler.advance(0)
+        tuyaLive.goLive()
+        scheduler.advance(0)
+        assertEquals(ConnState.LIVE, host.statuses.last().first)
+        val calls = tuya.getDevicesCalls
+        tuya.failWith = java.io.IOException("timeout")
+
+        scheduler.advance(15 * 60_000L + 1_000) // olağan Tuya senkronu (canlıyken 15 dk'da bir)
+        assertEquals(calls + 1, tuya.getDevicesCalls)
+        assertEquals(ConnState.LIVE, host.statuses.last().first)
+
+        tuya.failWith = null
+        scheduler.advance(20_000)
+        assertEquals(calls + 2, tuya.getDevicesCalls)
+    }
+
     // ---------------------------------------------------------------- günlük özetin verisi (metrikler)
 
     @Test

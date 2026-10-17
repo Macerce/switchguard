@@ -130,8 +130,12 @@ class FakeTuya(var deviceList: List<DeviceSnapshot> = emptyList()) : TuyaApi {
         private set
     val switched = mutableListOf<Triple<String, Int, Boolean>>()
 
+    /** Doluysa [getDevices] bu hatayı fırlatır (zaman aşımı, internet yok...). */
+    var failWith: Exception? = null
+
     override fun getDevices(): List<DeviceSnapshot> {
         getDevicesCalls++
+        failWith?.let { throw it }
         return deviceList
     }
 
@@ -151,6 +155,12 @@ class FakeTuyaLive : TuyaLive {
         private set
 
     fun attach(listener: TuyaSocket.Listener): FakeTuyaLive = apply { this.listener = listener }
+
+    /** Mesaj servisi bağlandı: anlık olaylar gelmeye başlar. */
+    fun goLive() {
+        ready = true
+        listener.onReady()
+    }
 
     override fun connect() {
         connects++
