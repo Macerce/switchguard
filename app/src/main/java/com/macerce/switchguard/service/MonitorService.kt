@@ -446,9 +446,13 @@ class MonitorService : Service() {
         nextReconnectAt = 0
         try {
             if (store.userApiKey.isEmpty()) {
-                // Profil yolu bazı App ID'lere kapalı (407); o zaman apikey cihaz listesinden alınır.
+                // Profil yolu bazı App ID'lere kapalı (407); o zaman apikey cihaz listesinden, o da yoksa (yalnız
+                // paylaşılan cihazlar) ev listesinden alınır.
                 try { client.loadProfile() } catch (e: ApiException) { Log.w(TAG, "profile unavailable: ${e.message}") }
                 if (store.userApiKey.isEmpty()) client.getDevices()
+                if (store.userApiKey.isEmpty()) {
+                    try { client.loadFamilyApiKey() } catch (e: ApiException) { Log.w(TAG, "family unavailable: ${e.message}") }
+                }
             }
             if (store.userApiKey.isEmpty()) {
                 wsUnsupported = true

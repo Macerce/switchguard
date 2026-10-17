@@ -45,6 +45,18 @@ object DeviceParser {
         return null
     }
 
+    /**
+     * Kullanıcının kendi apikey'i `GET /v2/family` yanıtından. Profil yolu bazı App ID'lere kapalı (407) ve hesapta
+     * yalnız paylaşılan cihazlar varsa (ör. ikinci cihaz için açılmış hesap) cihaz listesinden de çıkmaz; evler ise
+     * hesaba bağlıdır. Kendi evi (familyType 1) tercih edilir, yoksa ilki.
+     */
+    fun familyApiKey(body: String): String? {
+        val list = JSONObject(body).optJSONObject("data")?.optJSONArray("familyList") ?: return null
+        val families = (0 until list.length()).mapNotNull { list.optJSONObject(it) }
+        val own = families.firstOrNull { it.optInt("familyType") == 1 } ?: families.firstOrNull()
+        return own?.optString("apikey")?.takeIf { it.isNotEmpty() }
+    }
+
     /** Tek cihaz sorgusunun (`POST /v2/device/thing`) ham params nesnesi. */
     fun parseSingleParams(body: String): JSONObject? =
         JSONObject(body).optJSONObject("data")?.optJSONArray("thingList")

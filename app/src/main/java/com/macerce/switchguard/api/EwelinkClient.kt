@@ -63,6 +63,12 @@ class EwelinkClient(private val store: Store) {
         user.optString("email").takeIf { it.isNotEmpty() }?.let { store.accountEmail = it }
     }
 
+    /** Profil yolu kapalıysa (407) ve cihazlar paylaşılmışsa apikey'i ev listesinden alır (bkz. DeviceParser.familyApiKey). */
+    fun loadFamilyApiKey() {
+        val body = withTokenRetry { authed("GET", "/v2/family", null) }
+        DeviceParser.familyApiKey(body)?.let { store.userApiKey = it }
+    }
+
     fun getDevices(): List<DeviceSnapshot> {
         val body = withTokenRetry { authed("GET", "/v2/device/thing?num=0", null) }
         if (store.userApiKey.isEmpty()) DeviceParser.ownApiKey(body)?.let { store.userApiKey = it }
