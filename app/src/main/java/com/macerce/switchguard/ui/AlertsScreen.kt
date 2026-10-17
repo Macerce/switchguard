@@ -45,7 +45,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -102,14 +101,16 @@ private data class AlertsRoute(val kind: Kind, val id: String = "") : java.io.Se
 @Composable
 fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
     var route by rememberSaveable { mutableStateOf<AlertsRoute?>(null) }
-    // Kumanda: alt sayfadan dönünce odak açan satıra verilir.
-    var lastOpened by rememberSaveable { mutableStateOf<String?>(null) }
+    // Kumanda: alt sayfadan dönünce odak açan satıra verilir. Yalnızca dönüşte istenir: açılışta istenirse
+    // geçiş sürerken çıkan listedeki satıra odaklanır, liste kalkınca odak kaybolur.
+    var opened by rememberSaveable { mutableStateOf<String?>(null) }
+    var restoreFocus by remember { mutableStateOf<String?>(null) }
     var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
     val showDialog: ((@Composable () -> Unit)?) -> Unit = { dialog = it }
     // Alt sayfadan dönünce liste kaldığı yerden sürsün.
     val scroll = rememberScrollState()
-    BackHandler(enabled = route != null) { route = null }
-    val back = { route = null }
+    val back = { restoreFocus = opened; route = null }
+    BackHandler(enabled = route != null) { back() }
 
     AnimatedContent(
         targetState = route,
@@ -125,9 +126,9 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
         when (target?.kind) {
             null -> AlertsHome(
                 scroll = scroll,
-                focusKey = lastOpened,
-                onFocusRestored = { lastOpened = null },
-                onOpen = { r, key -> lastOpened = key; route = r },
+                focusKey = restoreFocus,
+                onFocusRestored = { restoreFocus = null },
+                onOpen = { r, key -> opened = key; route = r },
                 showDialog = showDialog,
                 onOpenPermissions = onOpenPermissions,
             )
@@ -230,18 +231,7 @@ private fun AlertsHome(
             }
 
             // ------------------------------------------------ Koşullu uyarılar
-            // "Ekle" başlıkla aynı yazı çizgisinde.
-            Row(Modifier.fillMaxWidth()) {
-                SectionTitle(stringResource(R.string.section_conditional_alerts), Modifier.weight(1f).alignByBaseline())
-                TextButton(
-                    onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.EDITOR, NEW_AUTOMATION), "add") },
-                    modifier = focus("add").alignByBaseline().padding(end = 12.dp).tvFocusRing(RoundedCornerShape(20.dp)),
-                ) {
-                    Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.automation_add))
-                }
-            }
+            SectionTitle(stringResource(R.string.section_conditional_alerts))
             SectionDescription(stringResource(R.string.conditional_alerts_desc))
             if (alerts.isEmpty()) {
                 SectionCard {
@@ -268,6 +258,11 @@ private fun AlertsHome(
                     }
                 }
             }
+            // Listenin altında tam genişlik: kumandada yukarı/aşağıyla doğrudan ulaşılır (başlığın sağında
+            // dururken tam genişlik satırlar arasında atlanıyordu).
+            AddTile(stringResource(R.string.automation_add), focus("add").padding(start = 16.dp, end = 16.dp, top = 12.dp)) {
+                onOpen(AlertsRoute(AlertsRoute.Kind.EDITOR, NEW_AUTOMATION), "add")
+            }
 
             // ------------------------------------------------ Uyarı ayarları (Ayarlar'dan taşındı)
             SectionTitle(stringResource(R.string.section_alert_settings))
@@ -291,6 +286,25 @@ private fun AlertsHome(
                 )
             }
         }
+    }
+}
+
+/** "Ekle" kutucuğu: listenin altında, marka renginde artı ve metin. */
+@Composable
+private fun AddTile(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(24.dp)
+    Row(
+        modifier.fillMaxWidth().height(56.dp)
+            .tvFocusRing(shape)
+            .clip(shape)
+            .background(tileColor())
+            .clickable(onClick = onClick, role = Role.Button),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(Icons.Rounded.Add, null, tint = MaterialTheme.colorScheme.primary)
+        Spacer(Modifier.width(8.dp))
+        Text(text, style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -480,12 +494,13 @@ private fun DeviceAlertRulesPage(deviceId: String, onBack: () -> Unit) {
     val store = remember { Store.get(context) }
     val version by store.version.collectAsStateWithLifecycle()
     val device = remember(version) { store.snapshots.firstOrNull { it.id == deviceId } }
-    // Kumanda: sayfa açılınca odak içerikteki ilk öğeye.
-    val content = remember { FocusRequester() }
+    // Kumanda: sayfa açılınca odak ilk öğeye, izle anahtarına (gruba istenirse sağdaki anahtar atlanıp
+    // soldaki ilk kural düğmesine gidiyor, sayfa da aşağı kayıyor).
+    val first = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         if (!tv) return@LaunchedEffect
         for (attempt in 1..20) {
-            val ok = runCatching { content.requestFocus() }.getOrNull()
+            val ok = runCatching { first.requestFocus() }.getOrNull()
             if (ok != null && ok != false) break
             delay(50)
         }
@@ -496,13 +511,13 @@ private fun DeviceAlertRulesPage(deviceId: String, onBack: () -> Unit) {
             Text(stringResource(R.string.device_missing), Modifier.padding(24.dp))
             return
         }
-        Column(Modifier.focusRequester(content).focusGroup().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
+        Column(Modifier.focusGroup().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
             Row(Modifier.padding(horizontal = 24.dp, vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
                 DeviceGlyph(device, active = false, size = 40)
                 Spacer(Modifier.width(12.dp))
                 Text(device.name, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
             }
-            DeviceAlertRules(deviceId)
+            DeviceAlertRules(deviceId, focusRequester = first)
         }
     }
 }

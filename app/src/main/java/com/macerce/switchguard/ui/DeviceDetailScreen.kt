@@ -43,6 +43,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -124,9 +126,10 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 /**
  * Cihazın uyarı kuralları: izle anahtarı, olay başına Alarm/Bildirim/Yok, cihaza özel ses ve kritik cihaz.
  * Cihaz sayfasında ve Uyarılar sekmesindeki "Uyarı kuralları" sayfasında aynıdır; çağıranın sütununa yerleşir.
+ * [focusRequester] izle anahtarına bağlanır (kumandada sayfa açılınca odak oraya verilsin diye).
  */
 @Composable
-fun DeviceAlertRules(deviceId: String) {
+fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
     val context = LocalContext.current
     val store = remember { Store.get(context) }
     val version by store.version.collectAsStateWithLifecycle()
@@ -148,7 +151,7 @@ fun DeviceAlertRules(deviceId: String) {
             if (!monitored && !store.isPro && other != null) stringResource(R.string.pro_limit_detail, Entitlement.FREE_DEVICES)
             else stringResource(R.string.monitor_this_device_desc),
         ) {
-            Switch(checked = monitored, onCheckedChange = { on ->
+            Switch(checked = monitored, modifier = focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier, onCheckedChange = { on ->
                 when {
                     !on -> store.setRules(deviceId, rules.copy(monitored = false))
                     store.isPro || other == null -> {
