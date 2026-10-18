@@ -13,12 +13,12 @@ val keystoreProps = Properties().apply {
 
 android {
     namespace = "com.macerce.switchguard"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 30
         versionName = "2.13.0"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
@@ -67,28 +67,28 @@ android {
 }
 
 dependencies {
-    val composeBom = platform("androidx.compose:compose-bom:2025.12.01")
+    val composeBom = platform("androidx.compose:compose-bom:2026.09.00")
     implementation(composeBom)
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("androidx.compose.ui:ui")
 
-    implementation("androidx.core:core-ktx:1.17.0")
-    implementation("androidx.activity:activity-compose:1.12.4")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
+    implementation("androidx.core:core-ktx:1.19.1")
+    implementation("androidx.activity:activity-compose:1.13.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     // TV'de telefondan anahtar girme için QR kodu (yalnızca üretme).
-    implementation("com.google.zxing:core:3.5.3")
+    implementation("com.google.zxing:core:3.5.4")
     implementation("com.android.billingclient:billing:9.1.0")
     // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")
 
     testImplementation("junit:junit:4.13.2")
     // android.jar içindeki org.json JVM testlerinde boş stub; gerçeğini ekliyoruz.
-    testImplementation("org.json:json:20240303")
+    testImplementation("org.json:json:20260814")
 
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test:rules:1.6.1")
-    androidTestImplementation("androidx.test:core:1.6.1")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test:runner:1.7.0")
+    androidTestImplementation("androidx.test:rules:1.7.0")
+    androidTestImplementation("androidx.test:core:1.7.0")
+    androidTestImplementation("androidx.test.ext:junit:1.3.0")
 }

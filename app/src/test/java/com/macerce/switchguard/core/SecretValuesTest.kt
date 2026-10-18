@@ -41,7 +41,7 @@ class SecretValuesTest {
         var rewritten: String? = null
         assertEquals("eski-token", values.read("eski-token") { rewritten = it })
         assertTrue(SecretFormat.isSealed(rewritten!!))
-        assertEquals("eski-token", values.read(rewritten!!) {})
+        assertEquals("eski-token", values.read(rewritten) {})
     }
 
     @Test
