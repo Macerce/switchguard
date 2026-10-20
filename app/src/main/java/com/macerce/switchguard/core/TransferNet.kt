@@ -8,8 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.BufferedInputStream
 import java.io.OutputStreamWriter
 import java.net.InetSocketAddress
 import java.net.ServerSocket
@@ -53,8 +52,7 @@ class TransferReceiver(
 
     private fun handle(s: Socket) {
         s.soTimeout = 15_000
-        val line = BufferedReader(InputStreamReader(s.getInputStream(), Charsets.UTF_8)).readLine() ?: return
-        if (line.length > MAX_BYTES) return
+        val line = BoundedLine.read(BufferedInputStream(s.getInputStream()), MAX_BYTES) ?: return
         val out = OutputStreamWriter(s.getOutputStream(), Charsets.UTF_8)
         val reply = try {
             val plain = Transfer.decrypt(code, JSONObject(line))
@@ -155,6 +153,8 @@ class TransferDiscovery(context: Context, private val onPeers: (List<TransferPee
 }
 
 object TransferSender {
+    private const val MAX_REPLY_BYTES = 4 * 1024
+
     sealed interface Result {
         data class Ok(val device: String) : Result
         data object WrongCode : Result
@@ -170,7 +170,8 @@ object TransferSender {
             val out = OutputStreamWriter(s.getOutputStream(), Charsets.UTF_8)
             out.write(msg.toString() + "\n")
             out.flush()
-            val reply = JSONObject(BufferedReader(InputStreamReader(s.getInputStream(), Charsets.UTF_8)).readLine())
+            // Ağda alıcı gibi görünen başka bir cihaz da cevap verebilir: cevap kısa olmalı.
+            val reply = JSONObject(BoundedLine.read(BufferedInputStream(s.getInputStream()), MAX_REPLY_BYTES) ?: error("no reply"))
             if (reply.optBoolean("ok")) Result.Ok(reply.optString("device")) else Result.WrongCode
         }
     } catch (e: Exception) {

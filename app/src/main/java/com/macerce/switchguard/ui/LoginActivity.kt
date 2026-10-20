@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.core.AppLanguage
+import com.macerce.switchguard.core.EwelinkRegion
 import com.macerce.switchguard.data.Store
 
 /**
@@ -79,8 +80,9 @@ class LoginActivity : Activity() {
         handled = true
 
         val code = uri.getQueryParameter("code")
-        val region = uri.getQueryParameter("region") ?: store.region
-        if (code.isNullOrEmpty() || uri.getQueryParameter("state") != state) {
+        // Bölge sunucu adresine yazılır: bilinmeyen bir değer gelirse giriş reddedilir.
+        val region = uri.getQueryParameter("region").let { if (it == null) store.region else EwelinkRegion.parse(it) }
+        if (code.isNullOrEmpty() || uri.getQueryParameter("state") != state || region == null) {
             finishWith(getString(R.string.login_failed_no_code))
             return true
         }
