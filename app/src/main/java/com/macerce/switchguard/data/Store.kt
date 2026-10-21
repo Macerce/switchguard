@@ -10,6 +10,7 @@ import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
+import com.macerce.switchguard.core.EwelinkRegion
 import com.macerce.switchguard.core.ParseCache
 import com.macerce.switchguard.core.QuietHours
 import com.macerce.switchguard.core.SecretValues
@@ -88,8 +89,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("redirectUrl", DEFAULT_REDIRECT)
         set(v) = put { putString("redirectUrl", v.trim().ifEmpty { DEFAULT_REDIRECT }) }
     var region: String
-        get() = str("region", "eu")
-        set(v) = put { putString("region", v) }
+        // Sunucu adresine yazılır: geri yüklenen yedekten bilinmeyen bir değer gelse de varsayılana düşer.
+        get() = EwelinkRegion.parse(str("region")) ?: EwelinkRegion.DEFAULT
+        set(v) = put { putString("region", EwelinkRegion.parse(v) ?: EwelinkRegion.DEFAULT) }
     var accessToken: String
         get() = secret("at")
         set(v) = putSecret("at", v)
