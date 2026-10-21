@@ -202,6 +202,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var alwaysAwake: Boolean
         get() = prefs.getBoolean("alwaysAwake", false)
         set(v) = put { putBoolean("alwaysAwake", v) }
+    /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
+    var energyPrice: Double
+        get() = str("energyPrice").toDoubleOrNull() ?: 0.0
+        set(v) = put { putString("energyPrice", v.coerceAtLeast(0.0).toString()) }
     /** WebSocket kullanılamazsa yedek sorgulama aralığı. */
     var pollIntervalSec: Int
         get() = prefs.getInt("pollIntervalSec", 30)

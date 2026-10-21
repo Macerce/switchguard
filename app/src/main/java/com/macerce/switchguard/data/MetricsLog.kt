@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.EnergyMath
+import com.macerce.switchguard.core.EnergyPeriod
+import com.macerce.switchguard.core.EnergyReport
+import com.macerce.switchguard.core.EnergySummary
 import com.macerce.switchguard.core.PowerSample
 import com.macerce.switchguard.core.StateSample
 import com.macerce.switchguard.core.Usage
@@ -93,6 +96,17 @@ class MetricsLog private constructor(context: Context) :
     }
 
     fun kwh(deviceId: String, from: Long, to: Long): Double = EnergyMath.kwh(powerSamples(deviceId, from, to), from, to)
+
+    /** [anchor] anını içeren gün/ay/yıl için dilim dilim tüketim raporu. */
+    fun summary(deviceId: String, period: EnergyPeriod, anchor: Long, now: Long = System.currentTimeMillis()): EnergySummary {
+        val (from, to) = EnergyReport.range(period, anchor)
+        return EnergyReport.summarize(period, anchor, powerSamples(deviceId, from, minOf(to, now)), now)
+    }
+
+    /** En eski ölçümün zamanı (raporda geriye gitme sınırı); kayıt yoksa null. */
+    fun firstPowerTime(deviceId: String): Long? = readableDatabase.rawQuery(
+        "SELECT MIN(ts) FROM power WHERE device_id=?", arrayOf(deviceId),
+    ).use { c -> if (c.moveToFirst() && !c.isNull(0)) c.getLong(0) else null }
 
     fun usage(deviceId: String, channel: Int, from: Long, to: Long): Usage {
         val args = arrayOf(deviceId, channel.toString(), from.toString())

@@ -6,6 +6,20 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.14.0 — 2026-10-21
+**Energy history and reports**
+- On the page of a device that measures energy, pick Day · Month · Year to see past consumption and use the arrows to go back through days, months and years. The chart shows hours, days or months; tap a bar for that slice's consumption, peak power and cost.
+- Each period shows the total, average power, peak power (with time), daily/monthly average and the busiest hour/day/month.
+- Enter a price per kWh to see the estimated cost.
+- Get report: saves the selected period as a PDF (to print or share) or CSV (Excel). The report has a summary, a chart, consumption, share, average and peak power, peak time, measured time and cost for every hour/day/month, and how often the switch was turned on and how long it stayed on.
+
+**Security**
+- The eWeLink region can only be one of the known servers (eu, us, as, cn), so sign-in details cannot be sent to another server.
+- Wi-Fi transfer to another device limits how much data it reads, so a broken or malicious sender cannot fill the app's memory.
+
+**Under the hood**
+- Targets Android 17 (API 37); build tools and libraries updated (AGP 9.4, Kotlin 2.4, Compose 2026.09).
+
 ## 2.13.0 — 2026-10-17
 **Alerts get their own tab**
 - The menu is now Devices · Alerts · Automation · History · Settings. Alerts are what SwitchGuard is for, so everything about them is in one place:

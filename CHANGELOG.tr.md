@@ -6,6 +6,20 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.14.0 — 21 Ekim 2026
+**Enerji geçmişi ve rapor**
+- Enerji ölçen cihazların sayfasında Gün · Ay · Yıl seçilerek geçmiş tüketim görülür; oklarla önceki günlere, aylara, yıllara gidilir. Grafik günde saat saat, ayda gün gün, yılda ay ay gösterir; bir çubuğa dokununca o dilimin tüketimi, en yüksek gücü ve maliyeti yazılır.
+- Her dönem için toplam, ortalama güç, en yüksek güç (zamanıyla), günlük/aylık ortalama ve en çok tüketen saat/gün/ay.
+- kWh fiyatı girilirse tahmini maliyet gösterilir.
+- Rapor al: seçili dönem PDF (yazdırmak, paylaşmak) ya da CSV (Excel) olarak kaydedilir. Raporda özet, grafik, her saat/gün/ay için tüketim, pay, ortalama ve en yüksek güç, zirve anı, ölçülen süre, maliyet ve anahtarın kaç kez açılıp ne kadar açık kaldığı bulunur.
+
+**Güvenlik**
+- eWeLink bölgesi yalnızca bilinen sunuculardan (eu, us, as, cn) biri olabilir; giriş bilgileri başka bir sunucuya gönderilemez.
+- Wi-Fi ile başka cihaza aktarmada gelen veri boyutu sınırlandı; bozuk ya da kötü niyetli bir gönderici uygulamanın belleğini dolduramaz.
+
+**Altyapı**
+- Android 17 (API 37) hedefleniyor; derleme araçları ve kütüphaneler güncellendi (AGP 9.4, Kotlin 2.4, Compose 2026.09).
+
 ## 2.13.0 — 17 Ekim 2026
 **Uyarıların kendi sekmesi var**
 - Menü artık Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar. SwitchGuard'ın asıl işi uyarmak; uyarıyla ilgili her şey tek yerde:

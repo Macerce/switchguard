@@ -4,6 +4,28 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.text.format.DateFormat as AndroidDateFormat
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.runtime.mutableDoubleStateOf
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import com.macerce.switchguard.core.EnergyPeriod
+import com.macerce.switchguard.core.EnergyReport
+import com.macerce.switchguard.core.EnergySummary
+import com.macerce.switchguard.data.Store
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -73,7 +95,7 @@ fun formatNumber(v: Double): String =
 
 // ---------------------------------------------------------------- enerji
 
-/** Enerji ölçen cihazlarda: anlık değerler, bugün/bu ay tüketim ve son 7 günün grafiği. */
+/** Enerji ölçen cihazlarda: anlık değerler, bugün/bu ay tüketim ve gün/ay/yıl geçmişi + rapor. */
 @Composable
 fun EnergySection(device: DeviceSnapshot) {
     val context = LocalContext.current
@@ -92,13 +114,7 @@ fun EnergySection(device: DeviceSnapshot) {
 
     val now = System.currentTimeMillis()
     val today = DailySummary.startOfDay(now)
-    val days = remember(metricsVersion, today) {
-        (6 downTo 0).map { back ->
-            val from = Calendar.getInstance().apply { timeInMillis = today; add(Calendar.DAY_OF_MONTH, -back) }.timeInMillis
-            val to = Calendar.getInstance().apply { timeInMillis = from; add(Calendar.DAY_OF_MONTH, 1) }.timeInMillis
-            from to metrics.kwh(device.id, from, minOf(to, now))
-        }
-    }
+    val todayKwh = remember(metricsVersion, today) { metrics.kwh(device.id, today, now) }
     val month = remember(metricsVersion, today) {
         val from = Calendar.getInstance().apply { timeInMillis = today; set(Calendar.DAY_OF_MONTH, 1) }.timeInMillis
         metrics.kwh(device.id, from, now)
@@ -122,7 +138,7 @@ fun EnergySection(device: DeviceSnapshot) {
         }
         RowDivider(inset = 0.dp)
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Metric(stringResource(R.string.energy_today), DailySummary.formatKwh(days.last().second))
+            Metric(stringResource(R.string.energy_today), DailySummary.formatKwh(todayKwh))
             Metric(stringResource(R.string.energy_month), DailySummary.formatKwh(month))
         }
         RowDivider(inset = 0.dp)
@@ -134,7 +150,7 @@ fun EnergySection(device: DeviceSnapshot) {
                 modifier = Modifier.padding(16.dp),
             )
         } else {
-            WeekBars(days)
+            EnergyHistory(device, metricsVersion)
         }
     }
     Text(
@@ -158,31 +174,232 @@ private fun Metric(label: String, value: String, big: Boolean = false) {
     }
 }
 
-/** Son 7 gün: gün başına yatay çubuk + değer (okunaklı, eksen gerektirmez). */
+/**
+ * Gün / ay / yıl seçilerek geçmiş tüketim: dönemler arasında ileri-geri, çubuk grafik (dokunulan çubuğun
+ * değeri yazılır), toplam, maliyet ve en yüksek değerler; seçili dönem PDF ya da CSV rapor olarak kaydedilir.
+ */
 @Composable
-private fun WeekBars(days: List<Pair<Long, Double>>) {
-    val max = days.maxOf { it.second }.takeIf { it > 0 } ?: 1.0
-    val dayFormat = remember { AndroidDateFormat.getBestDateTimePattern(Locale.getDefault(), "EEE d") }
-    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(stringResource(R.string.energy_last_7_days), style = MaterialTheme.typography.labelLarge)
-        days.forEach { (start, kwh) ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    AndroidDateFormat.format(dayFormat, start).toString(),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.width(64.dp),
-                )
-                Box(Modifier.weight(1f).height(14.dp)) {
-                    Box(
-                        Modifier.fillMaxHeight()
-                            .fillMaxWidth((kwh / max).toFloat().coerceIn(0.01f, 1f))
-                            .background(MaterialTheme.colorScheme.primary, RoundedCornerShape(4.dp))
+private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    val locale = resources.configuration.locales[0]
+    val metrics = remember { MetricsLog.get(context) }
+    val store = remember { Store.get(context) }
+    val scope = rememberCoroutineScope()
+
+    var period by rememberSaveable { mutableStateOf(EnergyPeriod.DAY) }
+    var anchor by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
+    var selected by remember(period, anchor) { mutableStateOf<Int?>(null) }
+    var price by remember { mutableDoubleStateOf(store.energyPrice) }
+    var editPrice by remember { mutableStateOf(false) }
+    var chooseReport by remember { mutableStateOf(false) }
+
+    val now = System.currentTimeMillis()
+    val (start, end) = EnergyReport.range(period, anchor)
+    val isCurrent = now in start until end
+    val first = remember(metricsVersion) { metrics.firstPowerTime(device.id) }
+    // Yalnızca içinde bulunulan dönem yeni ölçümle değişir; geçmiş dönemler bir kez hesaplanır.
+    val summary by produceState<EnergySummary?>(null, period, start, if (isCurrent) metricsVersion else -1) {
+        value = withContext(Dispatchers.IO) { metrics.summary(device.id, period, start) }
+    }
+
+    @Composable
+    fun saver(format: EnergyExport.Format) =
+        rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument(format.mime)) { uri ->
+            if (uri == null) return@rememberLauncherForActivityResult
+            scope.launch {
+                val ok = runCatching { EnergyExport.write(context, uri, device, period, start, format) }.isSuccess
+                Toast.makeText(
+                    context, resources.getString(if (ok) R.string.energy_report_done else R.string.energy_report_failed),
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+        }
+    val pdfSaver = saver(EnergyExport.Format.PDF)
+    val csvSaver = saver(EnergyExport.Format.CSV)
+
+    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            val periods = EnergyPeriod.entries
+            periods.forEachIndexed { i, p ->
+                SegmentedButton(
+                    selected = period == p,
+                    onClick = { period = p },
+                    shape = SegmentedButtonDefaults.itemShape(i, periods.size),
+                ) {
+                    Text(stringResource(when (p) {
+                        EnergyPeriod.DAY -> R.string.energy_period_day
+                        EnergyPeriod.MONTH -> R.string.energy_period_month
+                        EnergyPeriod.YEAR -> R.string.energy_period_year
+                    }))
+                }
+            }
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(
+                onClick = { anchor = EnergyReport.shift(period, anchor, -1) },
+                enabled = first != null && first < start,
+                modifier = Modifier.tvFocusRing(),
+            ) { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowLeft, stringResource(R.string.energy_prev)) }
+            Text(
+                EnergyFormat.periodLabel(period, start, locale),
+                style = MaterialTheme.typography.titleSmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(1f),
+            )
+            IconButton(
+                onClick = { anchor = EnergyReport.shift(period, anchor, 1) },
+                enabled = !isCurrent && start < now,
+                modifier = Modifier.tvFocusRing(),
+            ) { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, stringResource(R.string.energy_next)) }
+        }
+
+        val s = summary
+        if (s == null) {
+            Box(Modifier.fillMaxWidth().height(120.dp), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+        } else if (s.coveredMs == 0L) {
+            Text(
+                stringResource(R.string.energy_period_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        } else {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Metric(stringResource(R.string.energy_total), DailySummary.formatKwh(s.kwh), big = true)
+                if (price > 0) Metric(stringResource(R.string.energy_cost), EnergyFormat.money(s.kwh * price, locale))
+            }
+            PeriodBars(s, selected, locale) { selected = if (selected == it) null else it }
+            val sel = selected?.let { s.buckets.getOrNull(it) }
+            val peakText = stringResource(R.string.energy_peak)
+            Text(
+                if (sel != null) EnergyFormat.sliceLabel(period, sel, locale) + ": " + DailySummary.formatKwh(sel.kwh) +
+                    (sel.peakWatts?.let { " · $peakText " + formatWatts(it) } ?: "") +
+                    (if (price > 0) " · " + EnergyFormat.money(sel.kwh * price, locale) else "")
+                else s.peak?.let { p ->
+                    "$peakText: " + formatWatts(p.peakWatts!!) + " (" +
+                        EnergyFormat.peakTime(if (period == EnergyPeriod.DAY) period else EnergyPeriod.YEAR, p.peakAt!!, locale) + ")"
+                }.orEmpty(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(24.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                s.avgWatts?.let { Metric(stringResource(R.string.energy_avg_power), formatWatts(it)) }
+                EnergyFormat.averageLabel(period)?.let { label ->
+                    s.avgPerActiveBucket?.let { Metric(stringResource(label), DailySummary.formatKwh(it)) }
+                }
+                s.busiest?.let { b ->
+                    Metric(stringResource(EnergyFormat.busiestLabel(period)), EnergyFormat.sliceLabel(period, b, locale))
+                }
+            }
+        }
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // TV'de dosya kaydetme ekranı (DocumentsUI) yok.
+            if (!LocalIsTv.current) {
+                FilledTonalButton(onClick = { chooseReport = true }, enabled = s != null) {
+                    Icon(Icons.Rounded.Description, null, Modifier.size(18.dp))
+                    Text(stringResource(R.string.energy_report), Modifier.padding(start = 8.dp))
+                }
+            }
+            TextButton(onClick = { editPrice = true }, modifier = Modifier.tvFocusRing()) {
+                Text(stringResource(R.string.energy_set_price) + (if (price > 0) ": " + EnergyFormat.money(price, locale) else ""))
+            }
+        }
+    }
+
+    if (chooseReport) {
+        AlertDialog(
+            onDismissRequest = { chooseReport = false },
+            title = { Text(stringResource(R.string.energy_report_title)) },
+            text = {
+                Column {
+                    Text(stringResource(R.string.energy_report_desc, EnergyFormat.periodLabel(period, start, locale)))
+                    TextButton(onClick = {
+                        chooseReport = false
+                        pdfSaver.launch(EnergyExport.fileName(context, device, period, start, EnergyExport.Format.PDF))
+                    }) { Text(stringResource(R.string.energy_report_pdf)) }
+                    TextButton(onClick = {
+                        chooseReport = false
+                        csvSaver.launch(EnergyExport.fileName(context, device, period, start, EnergyExport.Format.CSV))
+                    }) { Text(stringResource(R.string.energy_report_csv)) }
+                }
+            },
+            confirmButton = {},
+            dismissButton = { TextButton(onClick = { chooseReport = false }) { Text(stringResource(android.R.string.cancel)) } },
+        )
+    }
+    if (editPrice) {
+        var text by remember { mutableStateOf(if (price > 0) formatPrice(price) else "") }
+        val symbol = EnergyFormat.currency()?.getSymbol(locale) ?: ""
+        AlertDialog(
+            onDismissRequest = { editPrice = false },
+            title = { Text(stringResource(R.string.energy_price_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(stringResource(R.string.energy_price_desc, symbol))
+                    OutlinedTextField(
+                        value = text,
+                        onValueChange = { v -> text = v.filter { it.isDigit() || it == ',' || it == '.' }.take(10) },
+                        singleLine = true,
+                        suffix = { Text("$symbol / kWh") },
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     )
                 }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    store.energyPrice = text.replace(',', '.').toDoubleOrNull() ?: 0.0
+                    price = store.energyPrice
+                    editPrice = false
+                }) { Text(stringResource(android.R.string.ok)) }
+            },
+            dismissButton = { TextButton(onClick = { editPrice = false }) { Text(stringResource(android.R.string.cancel)) } },
+        )
+    }
+}
+
+private fun formatPrice(v: Double): String = java.math.BigDecimal.valueOf(v).stripTrailingZeros().toPlainString()
+
+/** Dönemin dilimleri dikey çubuklarla; dokunulan çubuk vurgulanır. */
+@Composable
+private fun PeriodBars(summary: EnergySummary, selected: Int?, locale: Locale, onSelect: (Int) -> Unit) {
+    val buckets = summary.buckets
+    val max = buckets.maxOf { it.kwh }.takeIf { it > 0 } ?: 1.0
+    val every = when (summary.period) { EnergyPeriod.DAY -> 3; EnergyPeriod.MONTH -> 5; EnergyPeriod.YEAR -> 1 }
+    val primary = MaterialTheme.colorScheme.primary
+    val dim = primary.copy(alpha = 0.35f)
+    Column {
+        Text(
+            if (buckets.any { it.kwh > 0 }) DailySummary.formatKwh(max) else "",
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Row(Modifier.fillMaxWidth().height(120.dp), verticalAlignment = Alignment.Bottom) {
+            buckets.forEachIndexed { i, b ->
+                Box(
+                    Modifier.weight(1f).fillMaxHeight().clickable { onSelect(i) },
+                    contentAlignment = Alignment.BottomCenter,
+                ) {
+                    Box(
+                        Modifier.fillMaxWidth(0.7f)
+                            .fillMaxHeight((b.kwh / max).toFloat().coerceIn(if (b.kwh > 0) 0.02f else 0.005f, 1f))
+                            .background(
+                                if (selected == null || selected == i) primary else dim,
+                                RoundedCornerShape(topStart = 2.dp, topEnd = 2.dp),
+                            )
+                    )
+                }
+            }
+        }
+        Row(Modifier.fillMaxWidth()) {
+            buckets.forEachIndexed { i, b ->
                 Text(
-                    DailySummary.formatKwh(kwh),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.width(76.dp).padding(start = 8.dp),
+                    if (i % every == 0) EnergyFormat.axisLabel(summary.period, b.start, locale) else "",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Visible,
+                    modifier = Modifier.weight(1f),
                 )
             }
         }
