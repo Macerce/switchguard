@@ -50,8 +50,10 @@ Release builds need a `keystore.properties` + keystore in the project root (not 
 - Tuya / Smart Life: [English](docs/guide/tuya.en.md) · [Türkçe](docs/guide/tuya.tr.md)
 
 ## Videos / Videolar
-- **New in 2.12 – a tour of the app (EN):** https://youtube.com/shorts/jvm0hx0gATk
-- **2.12 yenilikleri – uygulama turu (TR):** https://youtube.com/shorts/2KeUgJrCCEU
+- **New in 2.15 – smart alerts, scenes, energy reports (EN):** https://youtube.com/shorts/bOtFBjHoefE
+- **2.15 yenilikleri – akıllı uyarılar, sahneler, enerji raporu (TR):** https://youtube.com/shorts/y3QRZvVoeK4
+- New in 2.12 – a tour of the app (EN): https://youtube.com/shorts/jvm0hx0gATk
+- 2.12 yenilikleri – uygulama turu (TR): https://youtube.com/shorts/2KeUgJrCCEU
 - First setup in one minute / İlk kurulum (1 dk): https://youtube.com/shorts/jarBmMg2kYA
 - Connecting eWeLink / eWeLink'i bağlama: https://youtu.be/jK_KcG2OPao
 - Connecting Tuya / Smart Life / Tuya'yı bağlama: https://youtu.be/sCdvMs7CSic
