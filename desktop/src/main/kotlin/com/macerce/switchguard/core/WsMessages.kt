@@ -57,8 +57,12 @@ object WsMessages {
             current = energy?.current ?: snapshot.current,
             channelPower = if (energy == null || energy.channelPowers.isEmpty()) snapshot.channelPower
             else snapshot.channelPower + energy.channelPowers,
+            // Sinyal anlık iletide sık ve küçük oynar: her oynama kaydı yeniden yazmasın, yalnızca belirgin değişim.
+            rssi = Signal.rssiOf(update.params)?.takeIf { snapshot.rssi == null || kotlin.math.abs(it - snapshot.rssi) >= RSSI_STEP } ?: snapshot.rssi,
         )
     }
 
     const val DEFAULT_HB = 145
+    /** Anlık iletide sinyalin güncellenmesi için en az değişim (dBm). */
+    const val RSSI_STEP = 5
 }

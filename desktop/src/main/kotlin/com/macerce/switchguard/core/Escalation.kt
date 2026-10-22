@@ -55,6 +55,20 @@ object Escalation {
         return if (body.length <= MAX_CHARS) body else body.take(MAX_CHARS - 1) + "…"
     }
 
+    /**
+     * Kademeli haber: vakti gelmiş ve henüz haber verilmemiş kişiler. [stages] kişi → dakika ([default] yoksa).
+     * [done]: bu alarm için haber verilen ya da vazgeçilenler.
+     */
+    fun dueRecipients(
+        recipients: List<Recipient>, stages: Map<Long, Int>, default: Int, realAlarmAt: Long, done: Set<Long>, now: Long,
+    ): List<Recipient> {
+        if (realAlarmAt <= 0) return emptyList()
+        return recipients.filter { r ->
+            val min = stages[r.id] ?: default
+            min > 0 && r.id !in done && now - realAlarmAt >= min * 60_000L
+        }
+    }
+
     /** Bot anahtarı biçimi: "123456789:AA…" (BotFather'ın verdiği). */
     fun isTokenFormat(token: String): Boolean = TOKEN.matches(token.trim())
 

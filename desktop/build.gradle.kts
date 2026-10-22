@@ -57,6 +57,9 @@ dependencies {
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4") { exclude(group = "junit") }
     // Cihaz kartlarını basılı tutup sürükleyerek sıralama (Apache-2.0).
     implementation("sh.calvin.reorderable:reorderable:3.1.0")
+    // Raporları PDF olarak kaydetmek (Apache-2.0): telefondaki Canvas çizimi Graphics2D üzerinden vektör PDF'e.
+    implementation("org.apache.pdfbox:pdfbox:3.0.5")
+    implementation("de.rototor.pdfbox:graphics2d:3.0.5")
     testImplementation("junit:junit:4.13.2")
     @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
     testImplementation(compose.desktop.uiTestJUnit4)

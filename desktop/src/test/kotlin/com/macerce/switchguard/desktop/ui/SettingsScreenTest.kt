@@ -272,8 +272,8 @@ class SettingsScreenTest {
     @Test
     fun dailySummarySwitchAndPreview() {
         var previews = 0
-        var lines: List<String>? = null
-        showPage { SummaryPage(graph.store, graph.strings(), preview = { previews++; it(lines) }) }
+        // Rapor ayrı bir pencerede açılır (telefon 2.15 rapor ekranı); burada yalnızca motordan istendiği denetlenir.
+        showPage { SummaryPage(graph.store, graph.strings(), preview = { previews++; it(null) }) }
 
         compose.onNode(hasText("Daily summary notification") and isToggleable()).performClick()
         compose.onNodeWithText("Show today’s summary now").performClick()
@@ -281,15 +281,5 @@ class SettingsScreenTest {
 
         assertEquals(true, graph.store.dailySummaryEnabled)
         assertEquals(1, previews)
-        compose.onNodeWithText("No data recorded yet. Data is collected while monitoring is on.").assertExists()
-        compose.onNodeWithTag("summary-close").performClick()
-        compose.waitForIdle()
-
-        // Özet satırları pencerede görünür (telefondaki gibi; bildirim değil).
-        lines = listOf("Pump: turned on 2×, on for 10 min")
-        compose.onNodeWithText("Show today’s summary now").performClick()
-        compose.waitForIdle()
-        compose.onNodeWithText("Today’s summary").assertExists()
-        compose.onNodeWithText("Pump: turned on 2×, on for 10 min").assertExists()
     }
 }

@@ -44,10 +44,7 @@ object EnergyParser {
 
     private fun number(params: JSONObject, key: String): Double? {
         if (!params.has(key)) return null
-        return when (val v = params.opt(key)) {
-            is Number -> v.toDouble()
-            is String -> v.trim().toDoubleOrNull()
-            else -> null
-        }
+        val v = params.opt(key)
+        return if (v is Number) v.toDouble() else (v as? String)?.trim()?.toDoubleOrNull()
     }
 }

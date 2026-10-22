@@ -6,6 +6,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
+import androidx.compose.material.icons.rounded.ElectricBolt
+import androidx.compose.material.icons.rounded.MonitorHeart
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.AlarmOff
@@ -54,7 +59,12 @@ fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventKind.MONITOR_BLIND -> Icons.Rounded.WifiOff
     EventKind.DISMISSED -> Icons.Rounded.AlarmOff
     EventKind.REMINDER -> Icons.Rounded.Snooze
-    EventKind.ESCALATION -> Icons.AutoMirrored.Rounded.Send
+    EventKind.ESCALATION, EventKind.TELEGRAM -> Icons.AutoMirrored.Rounded.Send
+    EventKind.OUTAGE -> Icons.Rounded.ElectricBolt
+    EventKind.ENERGY -> Icons.AutoMirrored.Rounded.TrendingUp
+    EventKind.WATCHDOG -> Icons.Rounded.MonitorHeart
+    EventKind.SCENE -> Icons.Rounded.PlayArrow
+    EventKind.PRESENCE -> Icons.Rounded.Home
     EventKind.SYSTEM -> Icons.Rounded.Bedtime
     else -> Icons.Rounded.Alarm
 }

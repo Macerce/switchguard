@@ -118,7 +118,8 @@ fun loadEnergy(metrics: MetricsLog, deviceId: String, now: Long, zone: ZoneId = 
  * sayfa açıkken cihazdan aralıklarla canlı güç istenir; POW modelleri aksi halde seyrek gönderir.
  */
 @Composable
-fun EnergySection(device: DeviceSnapshot, metrics: MetricsLog, requestLive: (suspend () -> Unit)?) {
+fun EnergySection(device: DeviceSnapshot, metrics: MetricsLog, store: com.macerce.switchguard.data.Store, requestLive: (suspend () -> Unit)?) {
+    val ui = LocalDeviceUi.current
     val strings = LocalStrings.current
     val locale = strings.locale
     val metricsVersion by metrics.version.collectAsState()
@@ -163,7 +164,7 @@ fun EnergySection(device: DeviceSnapshot, metrics: MetricsLog, requestLive: (sus
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(16.dp),
             )
-            else -> WeekBars(d.days, strings)
+            else -> EnergyHistory(device, metrics, store) { ui.message(it) }
         }
     }
     Text(

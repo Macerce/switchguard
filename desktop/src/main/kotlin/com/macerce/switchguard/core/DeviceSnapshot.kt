@@ -23,6 +23,8 @@ data class DeviceSnapshot(
     val cloud: Cloud = Cloud.EWELINK,
     /** Tuya: kanal numarası → veri noktası kodu ("switch_1", "switch" ...); komut gönderirken gerekir. */
     val switchCodes: Map<Int, String> = emptyMap(),
+    /** Wi-Fi sinyal gücü (dBm, ör. -62); cihaz bildirmiyorsa null (eWeLink "rssi"). */
+    val rssi: Int? = null,
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     val hasEnergy: Boolean get() = power != null

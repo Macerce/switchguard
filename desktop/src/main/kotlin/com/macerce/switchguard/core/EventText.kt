@@ -23,6 +23,26 @@ class EventStrings(
     val reminder: (label: String, state: String, durationMs: Long) -> String,
     /** Alarm [minutes] dakikadır kapatılmadı: [recipients] kişiye haber verildi ya da ([error]) verilemedi. */
     val escalation: (recipients: Int, minutes: Int, error: String?) -> String,
+    /** Elektrik kesilmiş olabilir: izlenen [devices] cihazın hepsi koptu. */
+    val outage: (devices: Int) -> String = { "" },
+    /** Elektrik geldi: kesinti [from]–[to]. */
+    val outageEnded: (from: Long, to: Long) -> String = { _, _ -> "" },
+    /** [name] dün ortalamadan belirgin fazla ([high]) ya da az enerji harcadı. */
+    val energyAnomaly: (name: String, high: Boolean, kwh: Double, average: Double) -> String = { _, _, _, _ -> "" },
+    /** Bu ayın tahmini maliyeti bütçeyi aştı. */
+    val budget: (cost: Double, budget: Double) -> String = { _, _ -> "" },
+    /** [who] alarmı Telegram'dan üstlendi; [responseMs] = alarmdan bu yana. */
+    val telegramAck: (who: String, responseMs: Long) -> String = { _, _ -> "" },
+    /** [who] Telegram'dan [label]'ı açtı/kapattı. */
+    val telegramSwitch: (who: String, label: String, on: Boolean, error: String?) -> String = { _, _, _, _ -> "" },
+    /** Bekçi: [name] [silentMs]'dir sinyal vermiyor ([lost]) ya da yeniden veriyor. */
+    val watchdog: (name: String, lost: Boolean, silentMs: Long) -> String = { _, _, _ -> "" },
+    /** Bu cihazın şarjı kesildi ([lost]) ya da geri geldi ([ms] süren kesintiden sonra). */
+    val charger: (lost: Boolean, ms: Long) -> String = { _, _ -> "" },
+    /** Sahne çalıştırıldı: [ok] cihaz değişti, [failed] değişmedi; [by] kim/ne çalıştırdı. */
+    val scene: (name: String, ok: Int, failed: Int, by: String?) -> String = { _, _, _, _ -> "" },
+    /** Evde/dışarıda değişti ([by] kim) ya da tatil bitti. */
+    val presence: (away: Boolean, by: String?, vacationEnded: Boolean) -> String = { _, _, _ -> "" },
 )
 
 /**
@@ -63,6 +83,19 @@ sealed class EventArgs {
     /** İkinci kişiye haber verme (Telegram). [error] doluysa gönderilemedi. */
     data class Escalation(val recipients: Int, val minutes: Int, val error: String? = null) : EventArgs()
 
+    data class Outage(val devices: Int) : EventArgs()
+    data class OutageEnded(val from: Long, val to: Long) : EventArgs()
+    /** Dünkü tüketim [kwh], önceki günlerin ortalaması [average]. */
+    data class EnergyAnomaly(val high: Boolean, val kwh: Double, val average: Double) : EventArgs()
+    data class Budget(val cost: Double, val budget: Double) : EventArgs()
+    data class TelegramAck(val who: String, val responseMs: Long) : EventArgs()
+    data class TelegramSwitch(val who: String, val channel: Int, val multi: Boolean, val on: Boolean, val error: String? = null) : EventArgs()
+    /** [name]: izlenen diğer cihaz (telefon, TV). */
+    data class Watchdog(val name: String, val lost: Boolean, val silentMs: Long) : EventArgs()
+    data class Charger(val lost: Boolean, val ms: Long) : EventArgs()
+    data class SceneRun(val name: String, val ok: Int, val failed: Int, val by: String? = null) : EventArgs()
+    data class Presence(val away: Boolean, val by: String? = null, val vacationEnded: Boolean = false) : EventArgs()
+
     /** [deviceName]: kayıttaki cihaz adı. */
     fun render(deviceName: String, s: EventStrings): String = when (this) {
         is Switch -> Change.Switch("", deviceName, channel, multi, from, to).describe(s.labels)
@@ -90,6 +123,16 @@ sealed class EventArgs {
             s.reminder(label, state, durationMs)
         }
         is Escalation -> s.escalation(recipients, minutes, error)
+        is Outage -> s.outage(devices)
+        is OutageEnded -> s.outageEnded(from, to)
+        is EnergyAnomaly -> s.energyAnomaly(deviceName, high, kwh, average)
+        is Budget -> s.budget(cost, budget)
+        is TelegramAck -> s.telegramAck(who, responseMs)
+        is TelegramSwitch -> s.telegramSwitch(who, if (multi) s.labels.channel(deviceName, channel + 1) else deviceName, on, error)
+        is Watchdog -> s.watchdog(name, lost, silentMs)
+        is Charger -> s.charger(lost, ms)
+        is SceneRun -> s.scene(name, ok, failed, by)
+        is Presence -> s.presence(away, by, vacationEnded)
     }
 
     fun toJson(): String = JSONObject().apply {
@@ -114,6 +157,19 @@ sealed class EventArgs {
                 put("to", a.to); put("ms", a.durationMs)
             }
             is Escalation -> { put("t", "escalation"); put("n", a.recipients); put("min", a.minutes); a.error?.let { put("err", it) } }
+            is Outage -> { put("t", "outage"); put("n", a.devices) }
+            is OutageEnded -> { put("t", "outage_end"); put("from", a.from); put("to", a.to) }
+            is EnergyAnomaly -> { put("t", "energy"); put("high", a.high); put("kwh", a.kwh); put("avg", a.average) }
+            is Budget -> { put("t", "budget"); put("cost", a.cost); put("budget", a.budget) }
+            is TelegramAck -> { put("t", "tg_ack"); put("who", a.who); put("ms", a.responseMs) }
+            is TelegramSwitch -> {
+                put("t", "tg_switch"); put("who", a.who); put("ch", a.channel); put("multi", a.multi); put("on", a.on)
+                a.error?.let { put("err", it) }
+            }
+            is Watchdog -> { put("t", "watchdog"); put("name", a.name); put("lost", a.lost); put("ms", a.silentMs) }
+            is Charger -> { put("t", "charger"); put("lost", a.lost); put("ms", a.ms) }
+            is SceneRun -> { put("t", "scene"); put("name", a.name); put("ok", a.ok); put("fail", a.failed); a.by?.let { put("by", it) } }
+            is Presence -> { put("t", "presence"); put("away", a.away); a.by?.let { put("by", it) }; put("vacEnd", a.vacationEnded) }
         }
     }.toString()
 
@@ -140,6 +196,19 @@ sealed class EventArgs {
                     "dismissed" -> AlarmDismissed(o.getInt("n"), o.getLong("ms"))
                     "reminder" -> Reminder(o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("conn"), o.getBoolean("to"), o.getLong("ms"))
                     "escalation" -> Escalation(o.getInt("n"), o.getInt("min"), if (o.has("err")) o.getString("err") else null)
+                    "outage" -> Outage(o.getInt("n"))
+                    "outage_end" -> OutageEnded(o.getLong("from"), o.getLong("to"))
+                    "energy" -> EnergyAnomaly(o.getBoolean("high"), o.getDouble("kwh"), o.getDouble("avg"))
+                    "budget" -> Budget(o.getDouble("cost"), o.getDouble("budget"))
+                    "tg_ack" -> TelegramAck(o.getString("who"), o.getLong("ms"))
+                    "tg_switch" -> TelegramSwitch(
+                        o.getString("who"), o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("on"),
+                        if (o.has("err")) o.getString("err") else null,
+                    )
+                    "watchdog" -> Watchdog(o.getString("name"), o.getBoolean("lost"), o.getLong("ms"))
+                    "charger" -> Charger(o.getBoolean("lost"), o.getLong("ms"))
+                    "scene" -> SceneRun(o.getString("name"), o.getInt("ok"), o.getInt("fail"), if (o.has("by")) o.getString("by") else null)
+                    "presence" -> Presence(o.getBoolean("away"), if (o.has("by")) o.getString("by") else null, o.optBoolean("vacEnd"))
                     else -> null
                 }
             }.getOrNull()

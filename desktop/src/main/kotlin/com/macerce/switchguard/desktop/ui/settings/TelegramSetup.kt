@@ -68,7 +68,9 @@ interface TelegramApi {
 object TelegramClientApi : TelegramApi {
     override fun botUsername(token: String) = TelegramClient.botUsername(token)
     override fun findChats(token: String) = TelegramClient.findChats(token)
-    override fun send(token: String, chatId: Long, text: String) = TelegramClient.send(token, chatId, text)
+    override fun send(token: String, chatId: Long, text: String) {
+        TelegramClient.send(token, chatId, text)
+    }
 }
 
 private const val DEFAULT_DELAY = 5

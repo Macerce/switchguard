@@ -51,6 +51,12 @@ class Strings internal constructor(
         return "$template [${args.joinToString(", ")}]"
     }
 
+    /** Telefondaki `stringArrayResource`: `<string-array>` öğeleri. */
+    fun array(key: String): List<String> = generateSequence(0) { it + 1 }.map { table["$key[$it]"] ?: english["$key[$it]"] }.takeWhile { it != null }.map { it!! }.toList()
+
+    /** Telefondaki `getString(id, ...)`: argüman yoksa şablon olduğu gibi ([get]), varsa [format]. */
+    fun str(key: String, vararg args: Any): String = if (args.isEmpty()) get(key) else format(key, *args)
+
     /**
      * Çoğul metin (telefondaki `getQuantityString`): [count] 1 ise "one", değilse "other" şablonu [args] ile biçimlenir.
      * İngilizce ve Türkçe yalnızca bu iki biçimi kullanır. [format] gibi asla fırlatmaz.
@@ -114,7 +120,41 @@ class Strings internal constructor(
         escalation = { n, min, err ->
             if (err == null) plural("event_escalated", n, n, min) else format("event_escalation_failed", min, err)
         },
+        outage = { n -> plural("event_outage", n, n) },
+        outageEnded = { from, to -> format("event_outage_ended", DurationText.format(to - from, durations()), timeRange(from, to)) },
+        energyAnomaly = { name, high, kwh, avg ->
+            val pct = kotlin.math.abs(((kwh / avg - 1) * 100).toInt())
+            format(if (high) "event_energy_high" else "event_energy_low", name, pct, formatKwh(kwh), formatKwh(avg))
+        },
+        budget = { cost, budget -> format("event_budget", money(cost), money(budget)) },
+        telegramAck = { who, ms -> format("event_tg_ack", who, DurationText.format(ms, durations())) },
+        telegramSwitch = { who, label, on, err ->
+            val text = format("event_tg_switch", who, label, get(if (on) "label_on" else "label_off"))
+            if (err != null) format("automation_failed", text, err) else text
+        },
+        charger = { lost, ms ->
+            if (lost) get("desktop_event_ac_lost") else format("desktop_event_ac_back", DurationText.format(ms, durations()))
+        },
+        scene = { name, ok, failed, by ->
+            val base = plural("event_scene", ok, name, ok)
+            val fail = if (failed > 0) plural("event_scene_failed", failed, failed) else ""
+            base + fail + (by?.let { " · $it" } ?: "")
+        },
+        presence = { away, by, ended ->
+            if (ended) get("event_vacation_ended")
+            else get(if (away) "event_presence_away" else "event_presence_home") + (by?.let { " · $it" } ?: "")
+        },
+        watchdog = { name, lost, ms ->
+            format(if (lost) "event_watchdog_lost" else "event_watchdog_back", name, DurationText.format(ms, durations()))
+        },
     )
+
+    /** "1,25 kWh" / "350 Wh" (telefondaki `DailySummary.formatKwh`). */
+    fun formatKwh(kwh: Double): String =
+        if (kwh < 1) String.format(locale, "%.0f Wh", kwh * 1000) else String.format(locale, "%.2f kWh", kwh)
+
+    /** Para tutarı, sistemin para birimiyle (telefondaki `EnergyFormat.money`). */
+    fun money(amount: Double): String = com.macerce.switchguard.desktop.ui.energy.EnergyFormat.money(amount, locale)
 
     /** Telefondaki `Actions.enableDemo` ile aynı anahtarlar. */
     fun demoNames() = Demo.Names(
@@ -131,7 +171,7 @@ class Strings internal constructor(
          * Telefonun metinleri + masaüstüne özgüler. Masaüstü metinleri ekran grubuna göre ayrı dosyalarda (birlikte
          * çalışılırken aynı dosyaya yazılıp çakışmasın); hiçbiri telefon anahtarını gölgeleyemez (StringsTest).
          */
-        internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml")
+        internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml", "desktop-v06.xml")
 
         /** [language] "tr" ya da "en"; boşsa sistem dili Türkçeyse "tr", değilse "en"; bilinmeyen dil "en" olur. */
         fun load(language: String): Strings {
@@ -161,11 +201,19 @@ class Strings internal constructor(
 
         /** Android `<string name="...">` öğelerini ([unescape] uygulanmış) okur. */
         internal fun parse(xml: InputStream): Map<String, String> {
-            val nodes = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml).getElementsByTagName("string")
+            val doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(xml)
+            val nodes = doc.getElementsByTagName("string")
             val out = LinkedHashMap<String, String>()
             for (i in 0 until nodes.length) {
                 val e = nodes.item(i) as Element
                 out[e.getAttribute("name")] = unescape(e.textContent)
+            }
+            // <string-array>: öğeler "ad[0]", "ad[1]" … anahtarlarıyla ([array]).
+            val arrays = doc.getElementsByTagName("string-array")
+            for (i in 0 until arrays.length) {
+                val e = arrays.item(i) as Element
+                val items = e.getElementsByTagName("item")
+                for (j in 0 until items.length) out[e.getAttribute("name") + "[$j]"] = unescape(items.item(j).textContent)
             }
             return out
         }

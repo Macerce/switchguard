@@ -43,6 +43,10 @@ object BackupContent {
         // izleme ve genel
         "monitoring", "pollIntervalSec", "offlineGraceSec", "blindAlertMin", "alwaysAwake",
         "autostart", "language", "theme", "demo", "onboardingDone", "summaryEnabled", "summaryMinute",
+        // telefon 2.14–2.15: enerji fiyatları, akıllı uyarılar, sahneler, konum, Telegram ek işleri
+        "energyPrice", "devicePrices", "threeZone", "priceDay", "pricePeak", "priceNight", "budget",
+        "outageDetect", "energyAnomaly", "weeklyReport", "softenAtHome", "scenes", "lat", "lon",
+        "tgCommands", "tgControl", "tgForward", "tgStages", "wdMode", "wdMin", "chargerOutage",
     )
 
     val CLEARED: Set<String> = setOf(

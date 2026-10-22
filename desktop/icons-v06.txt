@@ -1,0 +1,20 @@
+# Masaüstü 0.6 (telefon 2.14–2.15): enerji geçmişi, akıllı uyarılar, sahneler, yeni tetikleyiciler.
+rounded/WbSunny
+rounded/WbTwilight
+automirrored/rounded/DirectionsWalk
+rounded/AutoAwesome
+rounded/BeachAccess
+rounded/BatteryChargingFull
+rounded/CalendarMonth
+rounded/Keyboard
+rounded/MonitorHeart
+rounded/Payments
+rounded/Savings
+rounded/Stairs
+rounded/Description
+rounded/ErrorOutline
+rounded/ExpandLess
+rounded/ExpandMore
+rounded/WarningAmber
+rounded/TableChart
+rounded/Wifi

@@ -280,7 +280,7 @@ private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPag
     SettingsPageFrame(str(page.title), onBack = onBack) {
         when (page) {
             SettingsPage.ACCOUNTS -> AccountsPage(graph, strings)
-            SettingsPage.SUMMARY -> SummaryPage(graph.store, strings, preview = graph.engine::summaryPreview)
+            SettingsPage.SUMMARY -> SummaryPage(graph.store, strings, preview = graph.engine::dailyDoc)
             SettingsPage.MONITORING -> MonitoringPage(graph, strings)
             SettingsPage.WINDOWS -> WindowsPage(graph, strings)
             SettingsPage.BACKUP -> BackupPage(graph, strings)

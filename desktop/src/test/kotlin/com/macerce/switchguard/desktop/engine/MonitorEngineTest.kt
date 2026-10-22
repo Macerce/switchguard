@@ -71,10 +71,10 @@ class MonitorEngineTest {
         // eWeLink'e girilmiş, WebSocket için apikey hazır.
         store.accessToken = "token"
         store.userApiKey = "apikey"
-        val sources = Sources(ewelink, { ewelinkLive.attach(it) }, tuya, { tuyaLive.attach(it) }) { _, chat, text ->
+        val sources = Sources(ewelink, { ewelinkLive.attach(it) }, tuya, { tuyaLive.attach(it) }, fakeTelegram { chat, text ->
             telegramError?.let { throw it }
             telegramSent += chat to text
-        }
+        })
         runtime = RuntimeState(dir.resolve("runtime.json"))
         engine = MonitorEngine(store, log, metrics, runtime, { strings }, host, sources, clock, scheduler, telegramRunner = { it() })
     }
@@ -350,6 +350,9 @@ class MonitorEngineTest {
 
         engine.demo(MonitorEngine.DEMO_ONLINE, Demo.FREEZER, 0)
         scheduler.advance(0)
+        // Telefon 2.15: birden çok cihaz izlenirken tek kopma, elektrik kesintisi mi diye kısa süre bekletilir.
+        assertTrue(host.alarms.isEmpty())
+        scheduler.advance(com.macerce.switchguard.core.OutageWatch.WINDOW_MS + 1_000)
 
         assertEquals(1, host.alarms.size)
         assertEquals(listOf(EventType.WENT_OFFLINE.name to "ALARM"), log.recent(Demo.FREEZER).map { it.kind to it.action })
@@ -965,6 +968,20 @@ class MonitorEngineTest {
 
     // ---------------------------------------------------------------- yardımcılar
 
+    /** Yalnızca gönderimi kaydeden sahte Telegram; yoklama boş döner. */
+    private fun fakeTelegram(onSend: (Long, String) -> Unit) = object : TelegramApi {
+        override fun send(token: String, chatId: Long, text: String, markup: String?, silent: Boolean, html: Boolean): Long {
+            onSend(chatId, text)
+            return 1
+        }
+        override fun updates(token: String, offset: Long) = "{\"ok\":true,\"result\":[]}"
+        override fun answerCallback(token: String, callbackId: String, text: String) = Unit
+        override fun removeButtons(token: String, chatId: Long, messageId: Long) = Unit
+        override fun edit(token: String, chatId: Long, messageId: Long, text: String) = Unit
+        override fun pin(token: String, chatId: Long, messageId: Long) = Unit
+        override fun chat(token: String, chatId: Long) = "{\"ok\":true,\"result\":{}}"
+    }
+
     private fun readyTelegram(minutes: Int) {
         store.telegramToken = "123456:abc"
         store.telegramRecipients = listOf(com.macerce.switchguard.core.Recipient(42, "Ali"))
@@ -974,9 +991,9 @@ class MonitorEngineTest {
     /** Uygulama yeniden açıldı: aynı ayarlar, geçmiş ve `runtime.json` ile yeni motor (kendi zamanlayıcısıyla). */
     private fun newEngine(): Pair<MonitorEngine, ManualScheduler> {
         val sched = ManualScheduler(clock)
-        val sources = Sources(ewelink, { FakeEwelinkLive().attach(it) }, tuya, { FakeTuyaLive().attach(it) }) { _, chat, text ->
+        val sources = Sources(ewelink, { FakeEwelinkLive().attach(it) }, tuya, { FakeTuyaLive().attach(it) }, fakeTelegram { chat, text ->
             telegramSent += chat to text
-        }
+        })
         val e = MonitorEngine(
             store, log, metrics, RuntimeState(tmp.root.toPath().resolve("runtime.json")), { strings }, host, sources, clock, sched,
             telegramRunner = { it() },

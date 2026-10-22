@@ -218,13 +218,13 @@ fun QuietPage(store: Store, strings: Strings) {
  * sonucu motor iş parçacığında verir; özet telefondaki gibi küçük bir pencerede gösterilir (kayıt yoksa açıklamasıyla).
  */
 @Composable
-fun SummaryPage(store: Store, strings: Strings, preview: ((List<String>?) -> Unit) -> Unit) {
+fun SummaryPage(store: Store, strings: Strings, preview: ((com.macerce.switchguard.core.ReportDoc?) -> Unit) -> Unit) {
     val version by store.version.collectAsState()
     val enabled = remember(version) { store.dailySummaryEnabled }
     val minute = remember(version) { store.dailySummaryMinute }
     var picking by remember { mutableStateOf(false) }
-    // Önizleme penceresinin satırları; boş liste = henüz kayıt yok, null = pencere kapalı.
-    var shown by remember { mutableStateOf<List<String>?>(null) }
+    // Önizleme penceresindeki rapor; null = pencere kapalı.
+    var shown by remember { mutableStateOf<com.macerce.switchguard.core.ReportDoc?>(null) }
     val scope = rememberCoroutineScope()
 
     PageIntro(str("daily_summary_desc"))
@@ -238,8 +238,7 @@ fun SummaryPage(store: Store, strings: Strings, preview: ((List<String>?) -> Uni
                 Icons.Rounded.Visibility, str("daily_summary_preview"), null,
                 Modifier.clickable {
                     scope.launch {
-                        val lines = suspendCancellableCoroutine { c -> preview { c.resume(it) } }
-                        shown = lines.orEmpty()
+                        shown = suspendCancellableCoroutine { c -> preview { c.resume(it) } }
                     }
                 },
             )
@@ -247,7 +246,12 @@ fun SummaryPage(store: Store, strings: Strings, preview: ((List<String>?) -> Uni
     }
     PageIntro(str("desktop_summary_note"), Modifier.padding(top = 8.dp))
 
-    shown?.let { lines -> SummaryPreviewDialog(lines) { shown = null } }
+    shown?.let { doc ->
+        com.macerce.switchguard.desktop.ui.report.ReportWindow(
+            doc, onDismiss = { shown = null },
+            onPdf = { com.macerce.switchguard.desktop.ui.report.ReportActions.savePdf(scope, strings, doc, null) },
+        )
+    }
 
     if (picking) {
         TimeDialog(
@@ -258,31 +262,4 @@ fun SummaryPage(store: Store, strings: Strings, preview: ((List<String>?) -> Uni
             onDismiss = { picking = false },
         )
     }
-}
-
-/** Bugünün özeti küçük bir pencerede (telefondaki SummaryPreviewDialog). [lines] boşsa "henüz kayıt yok". */
-@Composable
-private fun SummaryPreviewDialog(lines: List<String>, onDismiss: () -> Unit) {
-    androidx.compose.material3.AlertDialog(
-        onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Rounded.Summarize, contentDescription = null) },
-        title = { androidx.compose.material3.Text(str("summary_title")) },
-        text = {
-            Column(
-                Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                if (lines.isEmpty()) {
-                    androidx.compose.material3.Text(str("summary_no_data"), style = MaterialTheme.typography.bodyMedium)
-                } else {
-                    lines.forEach { androidx.compose.material3.Text(it, style = MaterialTheme.typography.bodyMedium) }
-                }
-            }
-        },
-        confirmButton = {
-            androidx.compose.material3.TextButton(onClick = onDismiss, modifier = Modifier.testTag("summary-close")) {
-                androidx.compose.material3.Text(str("action_close"))
-            }
-        },
-    )
 }

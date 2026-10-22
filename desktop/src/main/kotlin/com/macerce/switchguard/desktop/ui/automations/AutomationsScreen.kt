@@ -36,6 +36,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -50,6 +54,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.ActiveWindow
+import com.macerce.switchguard.core.ConditionKind
+import com.macerce.switchguard.core.PresenceRule
+import com.macerce.switchguard.core.Scene
+import androidx.compose.material.icons.rounded.PlayArrow
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.TriggerKind
@@ -80,6 +89,23 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
     val devices = remember(version) { store.snapshots }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by remember { mutableStateOf<String?>(null) }
+    var editingScene by remember { mutableStateOf<String?>(null) }
+    val scenes = remember(version) { store.scenes }
+    val snackbar = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    editingScene?.let { id ->
+        SceneEditor(
+            initial = scenes.firstOrNull { it.id == id },
+            devices = remember(version) { store.deviceLayout.sections(store.snapshots).flatMap { it.devices } },
+            strings = strings,
+            modifier = modifier,
+            onSave = { graph.engine.saveScene(it); editingScene = null },
+            onDelete = { graph.engine.deleteScene(id); editingScene = null },
+            onBack = { editingScene = null },
+        )
+        return
+    }
 
     editing?.let { id ->
         AutomationEditor(
@@ -97,6 +123,8 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
             },
             onBack = { editing = null },
             newMode = AutomationMode.AUTOMATION,
+            store = store,
+            outdoorTemp = graph.runtime.outdoorTemp,
         )
         return
     }
@@ -119,12 +147,25 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                         )
                     }
                 }
+                item {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(strings["scenes_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 4.dp))
+                        ScenesStrip(scenes, strings, onRun = { sc ->
+                            graph.engine.runScene(sc) { ok, failed ->
+                                scope.launch { snackbar.showSnackbar(strings.format("scene_ran", sc.name, ok, failed)) }
+                            }
+                        }) { editingScene = it }
+                        Text(strings["automations_rules_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                    }
+                }
                 if (automations.isEmpty()) {
                     item { EmptyAutomations(strings) }
                 }
                 items(automations, key = { it.id }) { a ->
                     AutomationCard(
-                        a, devices, strings,
+                        a, devices, strings, scenes = scenes,
                         onClick = { editing = a.id },
                         onToggle = { on -> graph.engine.saveAutomation(a.copy(enabled = on)) },
                     )
@@ -137,6 +178,7 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
             text = { Text(strings["automation_add"]) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(24.dp).testTag("add-automation"),
         )
+        SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp))
     }
 }
 
@@ -165,8 +207,10 @@ private fun EmptyAutomations(strings: Strings) {
  * satırları; sağda aç/kapa. Uyarılar sekmesi de kullanır.
  */
 @Composable
-internal fun AutomationCard(a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit) {
-    val (whenText, thenText) = describe(a, devices, strings)
+internal fun AutomationCard(
+    a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit, scenes: List<Scene> = emptyList(),
+) {
+    val (whenText, thenText) = describe(a, devices, strings, scenes)
     val shape = RoundedCornerShape(24.dp)
     Row(
         Modifier.fillMaxWidth()
@@ -210,26 +254,78 @@ internal fun Clause(label: String, text: String) {
  * Kartın ve düzenleyici özetinin iki satırı (telefondaki `describe`): ("Rögar · Kanal 1 · açılınca",
  * "Lamba: Aç · (5 dk sonra)").
  */
-internal fun describe(a: Automation, devices: List<DeviceSnapshot>, strings: Strings): Pair<String, String> {
+internal fun describe(a: Automation, devices: List<DeviceSnapshot>, strings: Strings, scenes: List<Scene> = emptyList()): Pair<String, String> {
     val t = a.trigger
-    val srcName = devices.firstOrNull { it.id == t.deviceId }?.let { channelLabel(it, t.channel, t.kind.usesChannel, strings) } ?: strings["device_missing"]
+    val srcName = if (!t.kind.usesDevice) null
+        else devices.firstOrNull { it.id == t.deviceId }?.let { channelLabel(it, t.channel, t.kind.usesChannel, strings) } ?: strings["device_missing"]
     val trigger = when (t.kind) {
+        TriggerKind.SUNRISE, TriggerKind.SUNSET -> strings[t.kind.titleKey()] + (if (t.minutes == 0) "" else " · " + offsetLabel(t.minutes, strings))
+        TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> strings[t.kind.titleKey()] + " " + formatTemp(t.watts)
         TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> strings[t.kind.titleKey()] + " " + strings.plural("minutes_n", t.minutes, t.minutes)
-        TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts)
+        TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts) +
+            (if (t.minutes > 0) " " + strings.format("automation_power_for", holdLabel(t.minutes, strings)) else "")
         TriggerKind.CHANNEL_POWER_LOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts) + " " +
             if (t.graceMinutes > 0) strings.format("automation_low_for", t.minutes, t.graceMinutes)
             else strings.format("automation_low_for_nograce", t.minutes)
         else -> strings[t.kind.titleKey()]
     }
     val act = a.action
-    val action = if (act.kind.usesDevice) {
-        val dstName = devices.firstOrNull { it.id == act.deviceId }?.let { channelLabel(it, act.channel, true, strings) } ?: strings["device_missing"]
-        "$dstName: " + strings[act.kind.titleKey()]
-    } else {
-        strings[act.kind.titleKey()]
+    val action = when {
+        act.kind.usesDevice -> {
+            val dstName = devices.firstOrNull { it.id == act.deviceId }?.let { channelLabel(it, act.channel, true, strings) } ?: strings["device_missing"]
+            "$dstName: " + strings[act.kind.titleKey()]
+        }
+        act.kind == ActionKind.RUN_SCENE ->
+            strings.format("auto_action_scene", scenes.firstOrNull { it.id == act.deviceId }?.name ?: strings["device_missing"])
+        else -> strings[act.kind.titleKey()]
     }
     val delay = if (a.delayMinutes > 0) " · " + strings.format("automation_after", a.delayMinutes) else ""
-    return "$srcName · $trigger" to "$action$delay"
+    val extras = buildList {
+        a.window?.let { add(windowText(it, strings)) }
+        a.condition?.let { c ->
+            val name = devices.firstOrNull { it.id == c.deviceId }?.let { channelLabel(it, c.channel, c.kind.usesChannel, strings) } ?: strings["device_missing"]
+            add(strings.format("cond_clause", name, strings[c.kind.titleKey()]))
+        }
+        a.presence?.let { add(strings[if (it == PresenceRule.AWAY) "presence_only_away" else "presence_only_home"]) }
+    }.joinToString("") { " · $it" }
+    return (if (srcName != null) "$srcName · $trigger" else trigger) + extras to "$action$delay"
+}
+
+/** "15 dk önce", "1 sa sonra", "tam vaktinde". */
+internal fun offsetLabel(minutes: Int, strings: Strings): String = when {
+    minutes == 0 -> strings["sun_exact"]
+    minutes < 0 -> strings.format("sun_before", holdLabel(-minutes, strings))
+    else -> strings.format("sun_after", holdLabel(minutes, strings))
+}
+
+/** "45 dk", "6 sa", "1 sa 30 dk". */
+internal fun holdLabel(minutes: Int, strings: Strings): String = when {
+    minutes < 60 -> strings.plural("minutes_n", minutes, minutes)
+    minutes % 60 == 0 -> strings.plural("hours_n", minutes / 60, minutes / 60)
+    else -> strings.format("dur_hour_min", minutes / 60, minutes % 60)
+}
+
+internal fun formatTemp(v: Double): String = (if (v == Math.floor(v)) v.toLong().toString() else v.toString()) + " °C"
+
+/** "22:00–06:00, hafta içi". */
+internal fun windowText(w: ActiveWindow, strings: Strings): String {
+    val time = if (w.startMinute == w.endMinute) strings["window_all_day"]
+        else strings.format("time_range", com.macerce.switchguard.desktop.ui.settings.formatMinute(strings, w.startMinute),
+            com.macerce.switchguard.desktop.ui.settings.formatMinute(strings, w.endMinute))
+    val days = when (w.days) {
+        ActiveWindow.ALL_DAYS -> null
+        0b0011111 -> strings["days_weekdays"]
+        0b1100000 -> strings["days_weekend"]
+        else -> strings.array("day_short").filterIndexed { i, _ -> w.days and (1 shl i) != 0 }.joinToString(" ")
+    }
+    return if (days != null) "$time, $days" else time
+}
+
+internal fun ConditionKind.titleKey(): String = when (this) {
+    ConditionKind.IS_ON -> "cond_is_on"
+    ConditionKind.IS_OFF -> "cond_is_off"
+    ConditionKind.IS_ONLINE -> "cond_is_online"
+    ConditionKind.IS_OFFLINE -> "cond_is_offline"
 }
 
 private fun channelLabel(d: DeviceSnapshot, channel: Int, withChannel: Boolean, strings: Strings): String =
@@ -246,6 +342,10 @@ internal fun TriggerKind.titleKey(): String = when (this) {
     TriggerKind.POWER_ABOVE -> "trigger_power_above"
     TriggerKind.POWER_BELOW -> "trigger_power_below"
     TriggerKind.CHANNEL_POWER_LOW -> "trigger_channel_power_low"
+    TriggerKind.SUNRISE -> "trigger_sunrise"
+    TriggerKind.SUNSET -> "trigger_sunset"
+    TriggerKind.TEMP_ABOVE -> "trigger_temp_above"
+    TriggerKind.TEMP_BELOW -> "trigger_temp_below"
 }
 
 /** İşlemin kısa adı ("Aç", "Alarm çal"); kartta ve özette. */
@@ -254,6 +354,7 @@ internal fun ActionKind.titleKey(): String = when (this) {
     ActionKind.TURN_OFF -> "auto_action_turn_off"
     ActionKind.ALARM -> "auto_action_alarm"
     ActionKind.NOTIFY -> "auto_action_notify"
+    ActionKind.RUN_SCENE -> "act_run_scene"
 }
 
 /** İşlemin simgesi ve rengi: kartta ve düzenleyicinin işlem kutucuklarında aynı. */
@@ -262,6 +363,7 @@ internal fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive
     ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew
     ActionKind.TURN_OFF -> Icons.Rounded.PowerOff
+    ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow
 }
 
 internal fun ActionKind.hue(): Hue = when (this) {
@@ -269,6 +371,7 @@ internal fun ActionKind.hue(): Hue = when (this) {
     ActionKind.NOTIFY -> Hue.BLUE
     ActionKind.TURN_ON -> Hue.GREEN
     ActionKind.TURN_OFF -> Hue.SLATE
+    ActionKind.RUN_SCENE -> Hue.PURPLE
 }
 
 internal fun formatWatts(w: Double): String =

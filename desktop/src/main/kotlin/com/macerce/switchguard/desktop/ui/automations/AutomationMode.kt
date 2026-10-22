@@ -25,7 +25,7 @@ enum class AutomationMode(
         "alert_new", "alert_edit", "alert_delete_title", "desktop_alert_hint",
     ),
     AUTOMATION(
-        listOf(ActionKind.TURN_ON, ActionKind.TURN_OFF), ActionKind.TURN_ON,
+        listOf(ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.RUN_SCENE), ActionKind.TURN_ON,
         "automation_new", "automation_edit", "automation_delete_title", "desktop_automation_hint",
     );
 

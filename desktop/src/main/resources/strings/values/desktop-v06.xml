@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Masaüstü 0.6 (telefon 2.14–2.15 eşitlemesi) için masaüstüne özgü metinler. -->
+<resources>
+    <string name="desktop_event_ac_lost">This computer is running on battery: possible power outage</string>
+    <string name="desktop_event_ac_back">This computer is plugged in again: power was out for %s</string>
+    <string name="desktop_location_search">Search for a city</string>
+    <string name="desktop_location_search_desc">Type a city or town name and pick it from the list. Only the coordinates are saved, on this computer.</string>
+    <string name="desktop_location_city">City</string>
+    <string name="desktop_location_find">Search</string>
+    <string name="desktop_location_none">Nothing found. Try another spelling or enter the coordinates.</string>
+    <string name="desktop_smart_ac">Power cut when this computer goes on battery</string>
+    <string name="desktop_smart_ac_desc">For a laptop left plugged in at home: if it runs on battery for a minute, it counts as a power cut, even without internet (the Telegram message goes once the connection is back).</string>
+    <string name="desktop_location_desc">Needed for sunrise/sunset and outdoor temperature rules. Kept only on this computer; for the temperature it is sent to Open-Meteo rounded to about 100 m.</string>
+</resources>

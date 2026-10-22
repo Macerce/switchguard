@@ -90,6 +90,15 @@ import com.macerce.switchguard.desktop.ui.raisedOnTile
 import com.macerce.switchguard.desktop.ui.settings.AlarmPage
 import com.macerce.switchguard.desktop.ui.settings.AlertSettingsSummaries
 import com.macerce.switchguard.desktop.ui.settings.QuietPage
+import com.macerce.switchguard.desktop.ui.settings.SmartPage
+import com.macerce.switchguard.desktop.ui.HueIcon
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.BeachAccess
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import com.macerce.switchguard.desktop.ui.settings.SettingsPageFrame
 import com.macerce.switchguard.desktop.ui.settings.TEST_DELAY_SEC
 import com.macerce.switchguard.desktop.ui.settings.TelegramPage
@@ -112,6 +121,9 @@ sealed interface AlertsPage {
     data object Quiet : AlertsPage
 
     data object Telegram : AlertsPage
+
+    /** Akıllı uyarılar (telefon 2.15). */
+    data object Smart : AlertsPage
 }
 
 /**
@@ -166,6 +178,9 @@ fun AlertsScreen(
                 }
                 AlertsPage.Quiet -> SettingsPageFrame(str("section_quiet_hours"), onBack = back) { QuietPage(graph.store, strings) }
                 AlertsPage.Telegram -> SettingsPageFrame(str("tg_title"), onBack = back) { TelegramPage(graph.store, onDone = back) }
+                AlertsPage.Smart -> SettingsPageFrame(str("smart_title"), onBack = back) {
+                    SmartPage(graph, strings, onTelegram = { open(AlertsPage.Telegram) })
+                }
             }
         }
     }
@@ -193,6 +208,7 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
             onFixWindows = { graph.appState.openSettings("WINDOWS") },
             testAlarm = testAlarm,
         )
+        PresenceCard(graph, strings)
 
         // ------------------------------------------------ Cihaz uyarıları
         SectionTitle(str("section_device_alerts"))
@@ -260,6 +276,56 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
                 Icons.AutoMirrored.Rounded.Send, Hue.BLUE, str("tg_title"),
                 onClick = { open(AlertsPage.Telegram) }, summary = summaries.telegram, modifier = Modifier.testTag("alert-settings-telegram"),
             )
+            RowDivider(68.dp)
+            MenuRow(
+                Icons.Rounded.AutoAwesome, Hue.AMBER, str("smart_title"),
+                onClick = { open(AlertsPage.Smart) }, summary = str("smart_summary"), modifier = Modifier.testTag("alert-settings-smart"),
+            )
+        }
+    }
+}
+
+/** Evde / Dışarıda seçimi (telefondaki `PresenceCard`); tatildeyse bitiş günü yazar ve seçim kilitlenir. */
+@Composable
+private fun PresenceCard(graph: AppGraph, strings: Strings) {
+    val store = graph.store
+    val version by store.version.collectAsState()
+    val vacation = remember(version) { store.onVacation() }
+    val away = remember(version) { store.awayMode }
+    SectionCard(Modifier.padding(top = 8.dp)) {
+        Row(Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                if (vacation) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        HueIcon(Icons.Rounded.BeachAccess, Hue.AMBER, size = 28.dp)
+                        Text(
+                            strings.format("vacation_until", java.text.SimpleDateFormat("d MMM", strings.locale).format(java.util.Date(store.vacationUntil - 1))),
+                            style = MaterialTheme.typography.bodyLarge, modifier = Modifier.padding(start = 12.dp),
+                        )
+                    }
+                } else {
+                    Text(str("presence_section"), style = MaterialTheme.typography.titleSmall)
+                }
+                Text(
+                    str(if (vacation) "vacation_effect" else if (away) "presence_away_desc" else "presence_home_desc"),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
+            if (!vacation) {
+                Spacer(Modifier.width(16.dp))
+                SingleChoiceSegmentedButtonRow {
+                    listOf(false, true).forEachIndexed { i, a ->
+                        SegmentedButton(
+                            selected = away == a,
+                            onClick = { graph.engine.setAway(a) },
+                            shape = SegmentedButtonDefaults.itemShape(i, 2),
+                            icon = { Icon(if (a) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home, null, Modifier.size(18.dp)) },
+                            modifier = Modifier.testTag("presence-$a"),
+                        ) { Text(str(if (a) "presence_away" else "presence_home")) }
+                    }
+                }
+            }
         }
     }
 }
@@ -540,5 +606,7 @@ private fun ConditionalAlertEditor(graph: AppGraph, strings: Strings, automation
         },
         onBack = onDone,
         newMode = AutomationMode.ALERT,
+        store = graph.store,
+        outdoorTemp = graph.runtime.outdoorTemp,
     )
 }

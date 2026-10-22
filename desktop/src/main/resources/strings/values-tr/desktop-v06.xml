@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Masaüstü 0.6 (telefon 2.14–2.15 eşitlemesi) için masaüstüne özgü metinler. -->
+<resources>
+    <string name="desktop_event_ac_lost">Bu bilgisayar pille çalışıyor: elektrik kesilmiş olabilir</string>
+    <string name="desktop_event_ac_back">Bu bilgisayar yeniden prizde: elektrik %s kesikti</string>
+    <string name="desktop_location_search">Şehir ara</string>
+    <string name="desktop_location_search_desc">Şehir ya da ilçe adını yazın, listeden seçin. Yalnızca koordinatlar bu bilgisayarda saklanır.</string>
+    <string name="desktop_location_city">Şehir</string>
+    <string name="desktop_location_find">Ara</string>
+    <string name="desktop_location_none">Bulunamadı. Başka bir yazımla deneyin ya da koordinatları girin.</string>
+    <string name="desktop_smart_ac">Bilgisayar pile geçince elektrik kesildi say</string>
+    <string name="desktop_smart_ac_desc">Evde prize takılı bırakılan dizüstü için: bir dakika pille çalışırsa kesinti sayılır, internet olmasa da (Telegram mesajı bağlantı gelince gider).</string>
+    <string name="desktop_location_desc">Gün doğumu/batımı ve dış sıcaklık kuralları için gerekir. Yalnızca bu bilgisayarda tutulur; sıcaklık için Open-Meteo\'ya ≈100 m\'ye yuvarlanarak gönderilir.</string>
+</resources>

@@ -21,6 +21,12 @@ object EventKind {
     const val DISMISSED = "DISMISSED" // Alarm kapatıldı (tepki süresiyle)
     const val REMINDER = "REMINDER" // Alarm kapatıldı ama durum sürüyor
     const val ESCALATION = "ESCALATION" // Alarm kapatılmadı, ikinci kişiye haber verildi
+    const val OUTAGE = "OUTAGE" // Elektrik kesintisi başladı / bitti
+    const val ENERGY = "ENERGY" // Anormal tüketim, aylık bütçe
+    const val TELEGRAM = "TELEGRAM" // Telegram'dan gelen işlem (alarmı üstlenme, aç/kapa)
+    const val WATCHDOG = "WATCHDOG" // Bekçi: diğer cihaz sinyal vermiyor / yeniden veriyor
+    const val SCENE = "SCENE" // Sahne çalıştırıldı
+    const val PRESENCE = "PRESENCE" // Evde / dışarıda değişti, tatil bitti
     const val SYSTEM = "SYSTEM"        // Uygulamanın kendi durumu (masaüstüne özgü)
 }
 
@@ -97,6 +103,14 @@ class EventLog(file: Path) : AutoCloseable {
             }
         }
     }
+
+    /** [deviceId] için [since]'den beri [kind] türündeki kayıt sayısı (ör. haftalık kopma). */
+    @Synchronized
+    fun count(deviceId: String, kind: String, since: Long): Int =
+        db.prepareStatement("SELECT COUNT(*) FROM events WHERE device_id = ? AND kind = ? AND ts >= ?").use { ps ->
+            ps.setString(1, deviceId); ps.setString(2, kind); ps.setLong(3, since)
+            ps.executeQuery().use { if (it.next()) it.getInt(1) else 0 }
+        }
 
     /** En son kaydın kimliği; kayıt yoksa 0. */
     @Synchronized

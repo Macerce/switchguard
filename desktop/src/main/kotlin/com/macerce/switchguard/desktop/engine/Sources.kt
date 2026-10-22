@@ -34,9 +34,27 @@ interface TuyaApi {
     fun scalesFor(deviceId: String): Map<String, Int>
 }
 
-/** [TelegramClient]'in motorun kullandığı kısmı (ikinci kişiye haber verme). */
-fun interface TelegramApi {
-    fun send(token: String, chatId: Long, text: String)
+/** [TelegramClient]'in motorun kullandığı kısmı (haber verme, komutlar, bekçi). Hepsi engelleyicidir. */
+interface TelegramApi {
+    fun send(token: String, chatId: Long, text: String, markup: String? = null, silent: Boolean = false, html: Boolean = false): Long
+    fun updates(token: String, offset: Long): String
+    fun answerCallback(token: String, callbackId: String, text: String)
+    fun removeButtons(token: String, chatId: Long, messageId: Long)
+    fun edit(token: String, chatId: Long, messageId: Long, text: String)
+    fun pin(token: String, chatId: Long, messageId: Long)
+    fun chat(token: String, chatId: Long): String
+
+    /** Gerçek [TelegramClient]. */
+    object Real : TelegramApi {
+        override fun send(token: String, chatId: Long, text: String, markup: String?, silent: Boolean, html: Boolean) =
+            TelegramClient.send(token, chatId, text, markup, silent, html)
+        override fun updates(token: String, offset: Long) = TelegramClient.updates(token, offset)
+        override fun answerCallback(token: String, callbackId: String, text: String) = TelegramClient.answerCallback(token, callbackId, text)
+        override fun removeButtons(token: String, chatId: Long, messageId: Long) = TelegramClient.removeButtons(token, chatId, messageId)
+        override fun edit(token: String, chatId: Long, messageId: Long, text: String) = TelegramClient.edit(token, chatId, messageId, text)
+        override fun pin(token: String, chatId: Long, messageId: Long) = TelegramClient.pin(token, chatId, messageId)
+        override fun chat(token: String, chatId: Long) = TelegramClient.chat(token, chatId)
+    }
 }
 
 /** [TuyaSocket]'in motorun kullandığı kısmı. */
@@ -55,7 +73,9 @@ class Sources(
     val ewelinkLive: (EwelinkSocket.Listener) -> EwelinkLive,
     val tuya: TuyaApi,
     val tuyaLive: (TuyaSocket.Listener) -> TuyaLive,
-    val telegram: TelegramApi = TelegramApi { token, chatId, text -> TelegramClient.send(token, chatId, text) },
+    val telegram: TelegramApi = TelegramApi.Real,
+    /** Dış sıcaklık (°C), Open-Meteo'dan. */
+    val weather: (lat: Double, lon: Double) -> Double = { lat, lon -> com.macerce.switchguard.api.WeatherClient.temperature(lat, lon) },
 ) {
     companion object {
         fun real(store: Store): Sources {

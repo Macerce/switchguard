@@ -8,6 +8,10 @@ import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Entitlement
+import com.macerce.switchguard.core.EwelinkRegion
+import com.macerce.switchguard.core.Presence
+import com.macerce.switchguard.core.Scene
+import com.macerce.switchguard.core.Tariff
 import com.macerce.switchguard.core.QuietHours
 import com.macerce.switchguard.core.Recipient
 import com.macerce.switchguard.desktop.Log
@@ -211,8 +215,9 @@ class Store internal constructor(
         get() = str("redirectUrl", DEFAULT_REDIRECT)
         set(v) = edit { put("redirectUrl", v.trim().ifEmpty { DEFAULT_REDIRECT }) }
     var region: String
-        get() = str("region", "eu")
-        set(v) = edit { put("region", v) }
+        // Sunucu adresine yazılır: geri yüklenen yedekten bilinmeyen bir değer gelse de varsayılana düşer.
+        get() = EwelinkRegion.parse(str("region")) ?: EwelinkRegion.DEFAULT
+        set(v) = edit { put("region", EwelinkRegion.parse(v) ?: EwelinkRegion.DEFAULT) }
     var accessToken: String
         get() = secret("at")
         set(v) = setSecret("at", v)
@@ -394,7 +399,124 @@ class Store internal constructor(
     /** Haber verme açık ve gönderilebilir durumda (anahtar ve en az bir kişi var). Şifre çözmeden bakılır. */
     val escalationReady get() = escalateMin > 0 && str("tgToken").isNotEmpty() && telegramRecipients.isNotEmpty()
 
-    fun disableEscalation(): Unit = edit { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin") }
+    fun disableEscalation(): Unit = edit { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin"); remove("wdMode") }
+
+    /** Telegram'dan /durum, /ac, /kapat komutları ve "Gördüm" düğmesi. */
+    var telegramCommands: Boolean
+        get() = bool("tgCommands", true)
+        set(v) = edit { put("tgCommands", v) }
+    /** Telegram'dan cihaz açıp kapatmaya izin (varsayılan kapalı: yalnızca durum sorulabilir). */
+    var telegramControl: Boolean
+        get() = bool("tgControl", false)
+        set(v) = edit { put("tgControl", v) }
+    /** Elektrik kesintisi, tüketim, bekçi ve haftalık rapor Telegram'a da yazılsın. */
+    var telegramForward: Boolean
+        get() = bool("tgForward", true)
+        set(v) = edit { put("tgForward", v) }
+    /** Bekçi rolü: [WATCHDOG_OFF], [WATCHDOG_SEND] (bu cihaz sinyal verir) ya da [WATCHDOG_WATCH] (diğerini denetler). */
+    var watchdogMode: Int
+        get() = int("wdMode", WATCHDOG_OFF)
+        set(v) = edit { put("wdMode", v) }
+    /** Denetleyen: diğer cihaz bu kadar dakika sinyal vermezse alarm. */
+    var watchdogMin: Int
+        get() = int("wdMin", 60)
+        set(v) = edit { put("wdMin", v.coerceAtLeast(15)) }
+    /** Kademeli haber: kişi/grup → kaç dakika sonra (yoksa [escalateMin]). */
+    var telegramStages: Map<Long, Int>
+        get() = runCatching { JSONObject(str("tgStages", "{}")).let { o -> o.keys().asSequence().associate { it.toLong() to o.getInt(it) } } }
+            .getOrDefault(emptyMap())
+        set(v) = edit { put("tgStages", JSONObject(v.mapKeys { it.key.toString() }).toString()) }
+    fun stageFor(chatId: Long): Int = telegramStages[chatId] ?: escalateMin
+
+    // --- Akıllı uyarılar ---
+    /** İzlenen cihazların hepsi birlikte koparsa tek "elektrik kesildi" olayı. */
+    var outageDetect: Boolean
+        get() = bool("outageDetect", true)
+        set(v) = edit { put("outageDetect", v) }
+    /** Bir cihaz dün ortalamasından belirgin fazla/az enerji harcadıysa bildir. */
+    var energyAnomaly: Boolean
+        get() = bool("energyAnomaly", true)
+        set(v) = edit { put("energyAnomaly", v) }
+    /** Aylık tahmini maliyet bunu geçince bildir; 0 = kapalı ([energyPrice] gerekir). */
+    var monthlyBudget: Double
+        get() = str("budget").toDoubleOrNull() ?: 0.0
+        set(v) = edit { put("budget", v.coerceAtLeast(0.0).toString()) }
+    /** Masaüstü: bu bilgisayar (prize takılı dizüstü) prizden çıkınca elektrik kesintisi say. Yalnızca bu bilgisayara ait. */
+    var chargerOutage: Boolean
+        get() = bool("chargerOutage", false)
+        set(v) = edit { put("chargerOutage", v) }
+
+    /** Evde / Dışarıda modu (true = dışarıda). Tatilde her zaman dışarıda sayılır ([isAway]). */
+    var awayMode: Boolean
+        get() = bool("away", false)
+        set(v) = edit { put("away", v) }
+    /** Evdeyken kritik olmayan cihazların alarmı bildirime düşer (sessiz saat gibi). */
+    var softenAtHome: Boolean
+        get() = bool("softenAtHome", false)
+        set(v) = edit { put("softenAtHome", v) }
+    /** Tatil modunun bittiği an (ms); 0 = kapalı. */
+    var vacationUntil: Long
+        get() = long("vacationUntil", 0)
+        set(v) = edit { put("vacationUntil", v) }
+    fun isAway(now: Long = System.currentTimeMillis()) = Presence.away(awayMode, vacationUntil, now)
+    fun onVacation(now: Long = System.currentTimeMillis()) = Presence.vacation(vacationUntil, now)
+
+    var scenes: List<Scene>
+        get() = Scene.listFromJson(strOrNull("scenes"))
+        set(v) = edit { put("scenes", Scene.listToJson(v)) }
+    fun saveScene(s: Scene): Unit = synchronized(lock) {
+        val list = scenes
+        scenes = if (list.any { it.id == s.id }) list.map { if (it.id == s.id) s else it } else list + s
+    }
+    fun deleteScene(id: String): Unit = synchronized(lock) { scenes = scenes.filterNot { it.id == id } }
+
+    /** Gün doğumu/batımı ve hava sıcaklığı kuralları için konum; null = girilmedi. */
+    var latitude: Double?
+        get() = str("lat").toDoubleOrNull()
+        set(v) = edit { put("lat", v?.toString() ?: "") }
+    var longitude: Double?
+        get() = str("lon").toDoubleOrNull()
+        set(v) = edit { put("lon", v?.toString() ?: "") }
+
+    /** Pazartesi sabahı geçen haftanın raporu. */
+    var weeklyReport: Boolean
+        get() = bool("weeklyReport", false)
+        set(v) = edit { put("weeklyReport", v) }
+
+    // --- Enerji ---
+    /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
+    var energyPrice: Double
+        get() = str("energyPrice").toDoubleOrNull() ?: 0.0
+        set(v) = edit { put("energyPrice", v.coerceAtLeast(0.0).toString()) }
+    /** Cihaza özel kWh fiyatları (cihaz → fiyat); olmayan cihaz [energyPrice]'ı kullanır. */
+    var devicePrices: Map<String, Double>
+        get() = runCatching { JSONObject(str("devicePrices", "{}")).let { o -> o.keys().asSequence().associateWith { o.getDouble(it) } } }
+            .getOrDefault(emptyMap())
+        set(v) = edit { put("devicePrices", JSONObject(v.filterValues { it > 0 }).toString()) }
+    /** Cihazın kWh fiyatı: kendi fiyatı, yoksa varsayılan; 0 = maliyet hesaplanmaz. */
+    fun priceFor(deviceId: String): Double = devicePrices[deviceId] ?: energyPrice
+    /** Varsayılan tarife üç zamanlı mı (gündüz/puant/gece); değilse [energyPrice] tek fiyat. */
+    var threeZone: Boolean
+        get() = bool("threeZone", false)
+        set(v) = edit { put("threeZone", v) }
+    var priceDay: Double
+        get() = str("priceDay").toDoubleOrNull() ?: 0.0
+        set(v) = edit { put("priceDay", v.coerceAtLeast(0.0).toString()) }
+    var pricePeak: Double
+        get() = str("pricePeak").toDoubleOrNull() ?: 0.0
+        set(v) = edit { put("pricePeak", v.coerceAtLeast(0.0).toString()) }
+    var priceNight: Double
+        get() = str("priceNight").toDoubleOrNull() ?: 0.0
+        set(v) = edit { put("priceNight", v.coerceAtLeast(0.0).toString()) }
+    /** Cihazın tarifesi: kendi fiyatı varsa tek fiyat, yoksa varsayılan (tek ya da üç zamanlı). */
+    fun tariffFor(deviceId: String): Tariff = devicePrices[deviceId]?.let { Tariff.Flat(it) }
+        ?: if (threeZone) Tariff.ThreeZone(priceDay, pricePeak, priceNight) else Tariff.Flat(energyPrice)
+    /** Hiçbir cihaz için fiyat yok: maliyet hesaplanamaz. */
+    val hasAnyPrice get() = energyPrice > 0 || devicePrices.isNotEmpty() || (threeZone && (priceDay > 0 || pricePeak > 0 || priceNight > 0))
+    /** [price] null ya da 0 ise cihazın kendi fiyatı kalkar (varsayılan kullanılır). */
+    fun setDevicePrice(deviceId: String, price: Double?): Unit = synchronized(lock) {
+        devicePrices = if (price == null || price <= 0) devicePrices - deviceId else devicePrices + (deviceId to price)
+    }
 
     var quietHours: QuietHours
         get() = QuietHours(
@@ -484,6 +606,9 @@ class Store internal constructor(
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
+        const val WATCHDOG_OFF = 0
+        const val WATCHDOG_SEND = 1
+        const val WATCHDOG_WATCH = 2
         private const val TAG = "Store"
 
         /** Not Defteri gibi araçların eklediği UTF-8 işareti. */

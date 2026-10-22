@@ -429,9 +429,55 @@
     <string name="energy_current">Akım</string>
     <string name="energy_today">Bugün</string>
     <string name="energy_month">Bu ay</string>
-    <string name="energy_last_7_days">Son 7 gün</string>
     <string name="energy_no_data">Tüketim geçmişi izleme açıkken kaydedilir. Bir süre sonra tekrar bakın.</string>
     <string name="energy_hint">Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafından hesaplanır; cihazın kendi uygulamasındaki (eWeLink, Smart Life) değerden biraz farklı olabilir.</string>
+    <string name="energy_period_day">Gün</string>
+    <string name="energy_period_month">Ay</string>
+    <string name="energy_period_year">Yıl</string>
+    <string name="energy_prev">Önceki</string>
+    <string name="energy_next">Sonraki</string>
+    <string name="energy_total">Toplam</string>
+    <string name="energy_cost">Tahmini maliyet</string>
+    <string name="energy_avg_power">Ortalama güç</string>
+    <string name="energy_peak">En yüksek güç</string>
+    <string name="energy_busiest_hour">En çok tüketen saat</string>
+    <string name="energy_busiest_day">En çok tüketen gün</string>
+    <string name="energy_busiest_month">En çok tüketen ay</string>
+    <string name="energy_avg_per_day">Günlük ortalama</string>
+    <string name="energy_avg_per_month">Aylık ortalama</string>
+    <string name="energy_coverage">Ölçülen süre</string>
+    <string name="energy_period_empty">Bu dönem için ölçüm yok.</string>
+    <string name="energy_set_price">kWh fiyatı</string>
+    <string name="energy_price_title">Elektrik fiyatı</string>
+    <string name="energy_price_desc">Raporda tahmini maliyeti görmek için 1 kWh için ödediğiniz fiyatı (%1$s) girin. Boş ya da 0 bırakırsanız maliyet gösterilmez.</string>
+    <string name="energy_report">Rapor al</string>
+    <string name="energy_report_title">Enerji raporu</string>
+    <string name="energy_report_desc">Seçili dönemi (%1$s) saat, gün ya da ay ayrıntısıyla; toplam, en yüksek değerler, maliyet ve anahtar kullanımıyla kaydeder.</string>
+    <string name="energy_report_pdf">PDF rapor (yazdırmak ya da paylaşmak için)</string>
+    <string name="energy_report_csv">CSV tablo (Excel, Google E-Tablolar)</string>
+    <string name="energy_report_done">Rapor kaydedildi</string>
+    <string name="energy_report_failed">Rapor kaydedilemedi</string>
+    <string name="energy_report_file_word">enerji</string>
+    <string name="energy_report_device">Cihaz</string>
+    <string name="energy_report_period">Dönem</string>
+    <string name="energy_report_created">Oluşturulma</string>
+    <string name="energy_report_price">kWh fiyatı</string>
+    <string name="energy_report_summary">Özet</string>
+    <string name="energy_report_details">Ayrıntı</string>
+    <string name="energy_report_usage">Anahtar kullanımı</string>
+    <string name="energy_report_usage_line">%1$s: %2$d kez açıldı, %3$s açık kaldı</string>
+    <string name="energy_report_col_hour">Saat</string>
+    <string name="energy_report_col_day">Gün</string>
+    <string name="energy_report_col_month">Ay</string>
+    <string name="energy_report_col_kwh">Tüketim (kWh)</string>
+    <string name="energy_report_col_share">Pay (%)</string>
+    <string name="energy_report_col_avg">Ortalama (W)</string>
+    <string name="energy_report_col_peak">En yüksek (W)</string>
+    <string name="energy_report_col_peak_at">Zirve anı</string>
+    <string name="energy_report_col_covered">Ölçülen süre</string>
+    <string name="energy_report_col_cost">Maliyet</string>
+    <string name="energy_report_page">Sayfa %1$d / %2$d</string>
+    <string name="energy_report_coverage_of">%1$s / %2$s (%%%3$d)</string>
 
     <!-- Zamanlayıcılar -->
     <string name="section_timers">Zamanlayıcılar (cihazda)</string>
@@ -749,4 +795,431 @@
     <string name="alert_edit">Uyarıyı düzenle</string>
     <string name="alert_delete_title">Bu uyarı silinsin mi?</string>
     <string name="automations_empty_desc">Otomasyonlar cihazları kendiliğinden açar ya da kapatır. Örnek: dondurucunun gücü artınca fanı aç, ışık 2 saat açık kalınca kapat.</string>
+    <!-- 2.15: akıllı uyarılar -->
+    <plurals name="hours_n">
+        <item quantity="one">%d saat</item>
+        <item quantity="other">%d saat</item>
+    </plurals>
+    <string name="automation_hold_short">En az şu kadar sürerse</string>
+    <string name="automation_power_for">%s boyunca</string>
+    <string name="energy_price_device_desc">%1$s için 1 kWh fiyatı (%2$s); tahmini maliyet bununla hesaplanır. Boş bırakırsanız varsayılan fiyat kullanılır.</string>
+    <string name="energy_price_default_hint">Varsayılan fiyat: %s / kWh</string>
+    <string name="energy_price_as_default">Diğer cihazlar için de varsayılan yap</string>
+
+    <plurals name="event_outage">
+        <item quantity="one">Elektrik kesilmiş olabilir: izlenen cihaz koptu</item>
+        <item quantity="other">Elektrik kesilmiş olabilir: izlenen %d cihazın hepsi birlikte koptu</item>
+    </plurals>
+    <string name="event_outage_ended">Elektrik geldi: kesinti %1$s sürdü (%2$s)</string>
+    <string name="event_energy_high">%1$s dün normalden %%%2$d fazla enerji harcadı (%3$s; ortalama %4$s)</string>
+    <string name="event_energy_low">%1$s dün normalden %%%2$d az enerji harcadı (%3$s; ortalama %4$s) — çalıştığını kontrol edin</string>
+    <string name="event_budget">Bu ayın tahmini elektrik maliyeti %1$s oldu (bütçe %2$s)</string>
+    <string name="event_tg_ack">%1$s alarmı Telegram\'dan üstlendi (başladıktan %2$s sonra)</string>
+    <string name="event_tg_switch">Telegram (%1$s): %2$s → %3$s</string>
+    <string name="event_watchdog_lost">%1$s %2$s\'dır sinyal vermiyor: oradaki izleme durmuş olabilir</string>
+    <string name="event_watchdog_back">%1$s yeniden sinyal veriyor (%2$s sessiz kaldı)</string>
+
+    <string name="tg_ack_button">✅ Gördüm, ilgileniyorum</string>
+    <string name="tg_ack_done">Alarm susturuldu. Teşekkürler!</string>
+    <string name="tg_ack_stale">Bu alarm zaten kapatılmış.</string>
+    <string name="tg_someone">Biri</string>
+    <string name="tg_help">SwitchGuard komutları:
+/durum – izleme, alarm ve cihazlar
+/gordum – çalan alarmı üstlen
+/ac ad [kanal] – cihazı aç
+/kapat ad [kanal] – cihazı kapat
+/sahne ad – sahneyi çalıştır
+/evde · /disarida – evde / dışarıda
+
+Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarılar).</string>
+    <string name="tg_no_alarm">Çalan alarm yok.</string>
+    <string name="tg_cmd_too_old">Bu komut geç ulaştığı için uygulanmadı. Lütfen yeniden gönderin.</string>
+    <string name="tg_control_off">Bu cihazda Telegram\'dan aç/kapa kapalı (Uyarılar → Akıllı uyarılar).</string>
+    <string name="tg_usage_on">Hangi cihaz? Örnek: /ac Lamba</string>
+    <string name="tg_usage_off">Hangi cihaz? Örnek: /kapat Lamba</string>
+    <string name="tg_need_channel">%1$s %2$d kanallı: kanal numarasını da yazın, ör. /ac %1$s 1</string>
+    <string name="tg_ambiguous">Birden çok cihaz eşleşti: %s. Lütfen tam adı yazın.</string>
+    <string name="tg_not_found">“%s” adlı cihaz yok. Liste için /durum gönderin.</string>
+    <string name="tg_status_title">SwitchGuard durumu</string>
+    <string name="tg_status_monitoring">İzleme: %s</string>
+    <string name="tg_status_no_alarm">Alarm: yok</string>
+    <plurals name="tg_status_alarm">
+        <item quantity="one">🚨 Alarm çalıyor (%d olay)</item>
+        <item quantity="other">🚨 Alarm çalıyor (%d olay)</item>
+    </plurals>
+    <string name="tg_status_outage">Elektrik kesintisi sürüyor: %s</string>
+    <string name="tg_status_hint">/ac ad ya da /kapat ad ile cihazı değiştirebilirsiniz.</string>
+    <string name="tg_state_live">canlı</string>
+    <string name="tg_state_polling">düzenli denetleniyor</string>
+    <string name="wd_beat_running">SwitchGuard çalışıyor</string>
+    <string name="wd_beat_stopped">SwitchGuard izlemesi kapatıldı</string>
+    <string name="wd_beat_at">Son sinyal: %s</string>
+
+    <string name="weekly_title">Haftalık rapor</string>
+    <string name="weekly_outage_none">Elektrik kesintisi: yok</string>
+    <plurals name="weekly_outages">
+        <item quantity="one">Elektrik kesintisi: %1$d kez, toplam %2$s</item>
+        <item quantity="other">Elektrik kesintisi: %1$d kez, toplam %2$s</item>
+    </plurals>
+    <plurals name="weekly_month_outages">
+        <item quantity="one">Bu ay: %1$d kesinti, toplam %2$s</item>
+        <item quantity="other">Bu ay: %1$d kesinti, toplam %2$s</item>
+    </plurals>
+    <string name="weekly_alarms_none">Alarm: yok</string>
+    <plurals name="weekly_alarms">
+        <item quantity="one">Alarm: %1$d (ortalama tepki %2$s)</item>
+        <item quantity="other">Alarm: %1$d (ortalama tepki %2$s)</item>
+    </plurals>
+    <plurals name="weekly_escalations">
+        <item quantity="one">İkinci kişiye haber: %d kez</item>
+        <item quantity="other">İkinci kişiye haber: %d kez</item>
+    </plurals>
+    <string name="weekly_drops">Kopmalar: %s</string>
+    <string name="weekly_gap">İzlemenin çalışmadığı süre: %s</string>
+    <string name="weekly_energy">Tüketim: %s</string>
+    <string name="weekly_energy_top">En çok tüketen: %1$s, %2$s</string>
+
+    <string name="smart_title">Akıllı uyarılar</string>
+    <string name="smart_summary">Elektrik kesintisi, tüketim, haftalık rapor, Telegram</string>
+    <string name="smart_desc">Tüm cihazlarınıza birlikte bakan uyarılar: elektrik kesintisi, anormal tüketim ve haftalık özet. Telegram ile ayrıca durumu sorabilir, alarmı üstlenebilir ve cihazları uzaktan açıp kapatabilirsiniz.</string>
+    <string name="smart_outage_section">Elektrik kesintisi</string>
+    <string name="smart_outage">Elektrik kesintisini algıla</string>
+    <string name="smart_outage_desc">İzlenen cihazların hepsi birlikte koparsa her biri için ayrı alarm yerine tek "elektrik kesildi" uyarısı gelir; elektrik gelince kesintinin süresi bildirilir.</string>
+    <string name="smart_energy_section">Tüketim</string>
+    <string name="smart_anomaly">Anormal tüketim</string>
+    <string name="smart_anomaly_desc">Her sabah dünü önceki iki haftayla karşılaştırır. Çok fazla tüketim arıza, çok az tüketim (neredeyse hiç çalışmayan dondurucu) cihazın durduğu anlamına gelebilir.</string>
+    <string name="smart_budget">Aylık bütçe</string>
+    <string name="smart_budget_on">%s üstünde uyar</string>
+    <string name="smart_budget_desc">Enerji ölçen cihazların bu ayki tahmini maliyeti bu tutara ulaşınca ayda bir kez bildirilir.</string>
+    <string name="smart_budget_needs_price">Önce bir cihazın enerji sayfasından elektrik fiyatını girin: fiyat olmadan maliyet hesaplanamaz.</string>
+    <string name="smart_weekly_section">Haftalık rapor</string>
+    <string name="smart_weekly">Haftalık rapor</string>
+    <string name="smart_weekly_desc">Her pazartesi 09:00\'da geçen haftanın kesintileri, alarmları ve tepki süresi, kopmaları ve tüketimi. Telegram kuruluysa oraya da gider.</string>
+    <string name="smart_weekly_preview">Bu haftanın raporunu göster</string>
+    <string name="smart_tg_section">Telegram</string>
+    <string name="smart_tg_needs_setup">Komutlar, iletme ve bekçi için önce Telegram\'ı kurun.</string>
+    <string name="smart_tg_commands">Komutlar ve "Gördüm" düğmesi</string>
+    <string name="smart_tg_commands_desc">Listenizdeki kişiler /durum yazabilir ve çalan alarmı üstlenebilir. Alarm mesajına "Gördüm" düğmesi eklenir: dokununca telefondaki alarm susar.</string>
+    <string name="smart_tg_control">Aç/kapa izni</string>
+    <string name="smart_tg_control_desc">/ac ve /kapat komutları. Yalnızca listenizdeki kişiler kullanabilir.</string>
+    <string name="smart_tg_forward">Akıllı uyarıları Telegram\'a da gönder</string>
+    <string name="smart_tg_forward_desc">Elektrik kesintisi, anormal tüketim, bütçe uyarısı ve haftalık rapor Telegram\'a da yazılır.</string>
+    <string name="smart_wd">Bekçi</string>
+    <string name="smart_wd_desc">Aynı botu kullanan iki cihaz birbirini izler (ör. telefon ve TV kutusu). Sinyal veren cihaz Telegram sohbetindeki sabitlenmiş mesajı günceller; denetleyen cihaz mesaj güncellenmezse alarm çalar ve kişilerinize yazar. Sabit mesajı kaldırmayın.</string>
+    <string name="smart_tg_commands_list">Komutlar: /durum · /gordum · /ac ad · /kapat ad · /sahne ad · /evde · /disarida · /yardim</string>
+    <string name="wd_send">Bu cihaz sinyal versin</string>
+    <string name="wd_watch">Diğer cihazı denetle (%d dk)</string>
+    <!-- 2.15: şarj, kurallar, tarife, widget -->
+    <string name="event_charger_lost">Bu cihazın şarjı kesildi: elektrik kesilmiş olabilir</string>
+    <string name="event_charger_back">Bu cihaz yeniden şarj oluyor: elektrik %s kesikti</string>
+    <string name="smart_charger">Şarjı elektrik algılayıcısı olarak kullan</string>
+    <string name="smart_charger_desc">Bu telefon/tablet yerinde prize takılı duruyorsa, şarjın bir dakika kesik kalması elektrik kesintisi sayılır; internet gitse de çalışır. Haber Telegram\'a mobil veriyle gider.</string>
+
+    <string name="widget_device_label">SwitchGuard düğmesi</string>
+    <string name="widget_device_description">Bir cihazı ya da kanalı tek dokunuşla açıp kapatır</string>
+    <string name="widget_device_sample">Lamba</string>
+    <string name="widget_device_choose">Cihaz seçin</string>
+    <string name="widget_device_tap">Uygulamayı açmak için dokunun</string>
+    <string name="widget_device_hint">Başka cihaz seçmek için sonra widget\'a uzun basın.</string>
+
+    <string name="trigger_sunrise">gün doğunca</string>
+    <string name="trigger_sunset">gün batınca</string>
+    <string name="trigger_temp_above">dış sıcaklık şunu aşınca:</string>
+    <string name="trigger_temp_below">dış sıcaklık şunun altına inince:</string>
+    <string name="evt_sunrise">Gün doğumu</string>
+    <string name="evt_sunset">Gün batımı</string>
+    <string name="evt_temp_above">Sıcaklık üstünde</string>
+    <string name="evt_temp_below">Sıcaklık altında</string>
+    <string name="sun_offset">Kaydır</string>
+    <string name="sun_exact">Tam vaktinde</string>
+    <string name="sun_before">%s önce</string>
+    <string name="sun_after">%s sonra</string>
+    <string name="automation_temp">Dış sıcaklık</string>
+    <string name="automation_current_temp">Şu an: %s</string>
+    <string name="auto_only">Yalnızca</string>
+    <string name="auto_only_desc">İsteğe bağlı ek sınırlar</string>
+    <string name="window_toggle">Yalnızca şu saatlerde</string>
+    <string name="window_start">Başlangıç</string>
+    <string name="window_end">Bitiş</string>
+    <string name="window_all_day">Bütün gün</string>
+    <string name="window_all_day_hint">Başlangıç ve bitiş aynı: seçili günlerde bütün gün.</string>
+    <string-array name="day_short">
+        <item>Pzt</item>
+        <item>Sal</item>
+        <item>Çar</item>
+        <item>Per</item>
+        <item>Cum</item>
+        <item>Cmt</item>
+        <item>Paz</item>
+    </string-array>
+    <string name="cond_toggle">Ve başka bir cihaz şu durumdaysa…</string>
+    <string name="cond_state">Durum</string>
+    <string name="cond_clause">%1$s %2$s ise</string>
+    <string name="cond_is_on">açık</string>
+    <string name="cond_is_off">kapalı</string>
+    <string name="cond_is_online">çevrimiçi</string>
+    <string name="cond_is_offline">çevrimdışı</string>
+
+    <string name="location_title">Konum</string>
+    <string name="location_desc">Gün doğumu/batımı ve dış sıcaklık kuralları için gerekir. Yalnızca bu cihazda tutulur; sıcaklık için Open-Meteo\'ya ≈100 m\'ye yuvarlanarak gönderilir.</string>
+    <string name="location_needed">Henüz konum yok: gün doğumu, gün batımı ve sıcaklık kuralları için gerekli.</string>
+    <string name="location_set">Konum: %1$s, %2$s</string>
+    <string name="location_use_phone">Bu cihazın konumunu kullan</string>
+    <string name="location_manual">Elle gir</string>
+    <string name="location_manual_desc">Enlem ve boylam, derece olarak (ör. İstanbul için 41.0082 ve 28.9784). Bir harita uygulamasından kopyalayabilirsiniz.</string>
+    <string name="location_lat">Enlem</string>
+    <string name="location_lon">Boylam</string>
+    <string name="location_unavailable">Konum okunamadı. Konumu açın ya da elle girin.</string>
+
+    <string name="tariff_title">Elektrik tarifesi</string>
+    <string name="tariff_desc">Kendi fiyatı olmayan cihazlar için varsayılan fiyat. Üç zamanlı tarifede her saat kendi diliminin fiyatıyla hesaplanır: gündüz 06–17, puant 17–22, gece 22–06.</string>
+    <string name="tariff_single">Tek zamanlı</string>
+    <string name="tariff_three">Üç zamanlı (gündüz / puant / gece)</string>
+    <string name="tariff_three_short">Üç zamanlı</string>
+    <string name="tariff_none">Girilmedi</string>
+    <string name="tariff_price">Fiyat</string>
+    <string name="tariff_day">Gündüz (06–17)</string>
+    <string name="tariff_peak">Puant (17–22)</string>
+    <string name="tariff_night">Gece (22–06)</string>
+    <string name="tariff_three_text">kWh başına gündüz %1$s · puant %2$s · gece %3$s</string>
+    <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
+    <string name="min_short">dk</string>
+    <string name="wear_source">Saat</string>
+
+    <string name="connection_title">Bağlantı</string>
+    <string name="signal_value">Wi-Fi sinyali: %1$s (%2$d dBm)</string>
+    <string name="signal_unknown">Bu cihaz Wi-Fi sinyalini bildirmiyor</string>
+    <string name="signal_excellent">çok iyi</string>
+    <string name="signal_good">iyi</string>
+    <string name="signal_fair">orta</string>
+    <string name="signal_weak">zayıf</string>
+    <plurals name="drops_week">
+        <item quantity="one">Son 7 günde %d kez koptu</item>
+        <item quantity="other">Son 7 günde %d kez koptu</item>
+    </plurals>
+    <string name="drops_cause_signal">Sık kopuyor ve sinyal zayıf: en olası neden Wi-Fi. Modemi ya da cihazı yaklaştırın veya bir Wi-Fi güçlendirici ekleyin.</string>
+    <string name="drops_cause_power">Sinyal iyi olduğu hâlde sık kopuyor: neden büyük olasılıkla elektrik (gevşek priz, kesintiler) ya da modemin yeniden başlaması.</string>
+    <string name="drops_cause_unknown">Sık kopuyor. Cihazın yanında Wi-Fi sinyalini ve modemin kendiliğinden yeniden başlayıp başlamadığını kontrol edin.</string>
+    <string name="signal_weak_hint">Sinyal zayıf: cihaz kopmaya başlayabilir. Modeme yaklaştırmak işe yarar.</string>
+    <string name="signal_explain">dBm sinyal gücüdür: 0\'a yakın olan daha iyi. -55 üstü çok iyi, -67\'ye kadar iyi, -75\'e kadar orta, altı zayıf.</string>
+
+    <string name="standby_title">Bekleme tüketimi</string>
+    <string name="standby_month">Böyle sürerse ayda %s</string>
+    <string name="standby_explain">Son 7 günün en düşük saatlik ortalaması: bu cihazın (ve ona takılı olanların) "hiçbir şey yapmıyorken" bile altına inmediği güç. TV, modem ve şarj aletleri beklemede genellikle bu kadar çeker.</string>
+
+    <string name="presence_section">Evde / Dışarıda</string>
+    <string name="presence_home">Evdeyim</string>
+    <string name="presence_away">Dışarıdayım</string>
+    <string name="presence_home_desc">"Yalnızca dışarıdayken" kuralları çalışmaz. Çıkarken Dışarıdayım\'a geçin (widget, saat ya da Telegram /disarida ile de olur).</string>
+    <string name="presence_away_desc">Dışarıdasınız: "yalnızca dışarıdayken" kuralları etkin.</string>
+    <string name="presence_soften">Evdeyken alarmlar yumuşasın</string>
+    <string name="presence_soften_desc">Evdeyken kritik olmayan cihazların alarmı bildirime düşer (sessiz saatler gibi). Kritik cihazlar her zaman çalar.</string>
+    <string name="presence_toggle">Yalnızca evdeyken / dışarıdayken</string>
+    <string name="presence_only_away">yalnızca dışarıdayken</string>
+    <string name="presence_only_home">yalnızca evdeyken</string>
+    <string name="event_presence_away">Mod: dışarıda</string>
+    <string name="event_presence_home">Mod: evde</string>
+    <string name="tg_presence_away">🚶 Mod dışarıda olarak ayarlandı.</string>
+    <string name="tg_presence_home">🏠 Mod evde olarak ayarlandı.</string>
+
+    <string name="vacation_title">Tatil modu</string>
+    <string name="vacation_desc">Kapalı. Tatildeyken dışarıda sayılırsınız, sessiz saatler yok sayılır (her alarm çalar) ve her sabah rapor gelir.</string>
+    <string name="vacation_until">%s tarihine kadar tatilde</string>
+    <string name="vacation_effect">Dışarıda sayılıyorsunuz, sessiz saatler kapalı ve her sabah 09:00\'da rapor geliyor. Kendiliğinden biter.</string>
+    <string name="vacation_pick">Tatil bitişi</string>
+    <string name="vacation_end_now">Bitir</string>
+    <string name="event_vacation_ended">Tatil modu bitti</string>
+
+    <string name="stages_title">Kademeli haber</string>
+    <string name="stages_desc">Her kişiye kendi bekleme süresi dolunca yazılır. Örneğin komşuya 5, akrabaya 15, aile grubuna 30 dakika sonra. Biri "Gördüm" derse sıradakilere yazılmaz.</string>
+    <string name="stages_after">%d dk</string>
+    <string name="tg_alarm_earlier">Daha önce haber verilenler: %s</string>
+
+    <string name="scenes_title">Sahneler</string>
+    <string name="automations_rules_title">Kurallar</string>
+    <string name="scene_add">Sahne ekle</string>
+    <string name="scene_new">Yeni sahne</string>
+    <string name="scene_edit">Sahneyi düzenle</string>
+    <string name="scene_name">Sahne adı</string>
+    <string name="scene_name_hint">ör. Hepsini kapat</string>
+    <string name="scene_desc">Sahne çalışınca her cihaza ne olacağını seçin. "Dokunma"da bırakılan cihazlar değişmez.</string>
+    <string name="scene_skip">Dokunma</string>
+    <string name="scene_delete_title">Bu sahne silinsin mi?</string>
+    <string name="scene_none_yet">Önce bir sahne oluşturun (Otomasyon sekmesinin üstünde).</string>
+    <plurals name="scene_devices">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
+    <string name="scene_ran">%1$s: %2$d değişti, %3$d atlandı</string>
+    <string name="act_run_scene">Sahneyi çalıştır</string>
+    <string name="auto_action_scene">"%s" sahnesini çalıştır</string>
+    <plurals name="event_scene">
+        <item quantity="one">"%1$s" sahnesi çalıştı: %2$d cihaz değişti</item>
+        <item quantity="other">"%1$s" sahnesi çalıştı: %2$d cihaz değişti</item>
+    </plurals>
+    <plurals name="event_scene_failed">
+        <item quantity="one">, %d cihaz değiştirilemedi (çevrimdışı)</item>
+        <item quantity="other">, %d cihaz değiştirilemedi (çevrimdışı)</item>
+    </plurals>
+    <string name="tg_scene_done">✅ %1$s: %2$d değişti, %3$d değişmedi</string>
+    <string name="tg_scene_not_found">"%1$s" adlı sahne yok. Sahneler: %2$s</string>
+
+    <string name="widget_presence_choice">Evde / Dışarıda</string>
+    <string name="widget_presence_choice_desc">Değiştirmek için widget\'a dokunun</string>
+    <string name="widget_presence_tap">Değiştirmek için dokunun</string>
+    <string name="widget_scene_tap">Çalıştırmak için dokunun</string>
+
+    <!-- Raporlar -->
+    <string name="report_what_title">Bu rapor neyi gösterir</string>
+    <string name="report_actions_title">Ne yapmalı</string>
+    <string name="report_glossary_title">Kullanılan terimler</string>
+    <string name="report_what_to_do">Ne yapmalı: %s</string>
+    <string name="report_what_to_do_short">Ne yapmalı:</string>
+    <string name="report_save_pdf">PDF olarak kaydet</string>
+    <string name="report_send_telegram">Telegram\'a gönder</string>
+    <string name="report_none">Yok</string>
+    <string name="report_subtitle">%1$s · %2$d cihaz</string>
+    <string name="report_footnote">Değerler SwitchGuard\'ın kendi ölçümlerinden gelir. Tüketim ve maliyet tahminidir; faturanızla küçük farklar olabilir.</string>
+    <string name="report_vs_last_week">geçen haftaya</string>
+    <string name="report_vs_yesterday">düne</string>
+    <string name="report_vs_last_month">geçen aya</string>
+    <string name="report_vs_last_year">geçen yıla</string>
+    <string name="report_trend_up">▲ %1$s göre %%%2$d fazla</string>
+    <string name="report_trend_down">▼ %1$s göre %%%2$d az</string>
+    <string name="report_trend_same">%s göre aşağı yukarı aynı</string>
+    <string name="report_trend_new">Yeni (%1$s göre; önce %2$s)</string>
+
+    <string name="weekly_intro">Son 7 günün özeti: elektrik kesintileri, alarmlar ve ne kadar sürede kapatıldıkları, hangi cihazların neden koptuğu ve ne kadar enerji harcandığı. Her değer bir önceki haftayla karşılaştırılır. Yeşil sorun yok, turuncu göz atmaya değer demek; en sondaki "Ne yapmalı" listesi önerileri toplar.</string>
+    <string name="daily_report_title">Günlük rapor</string>
+    <string name="daily_report_intro">Tatildeyken son 24 saatin özeti: kesintiler, alarmlar, kopmalar ve tüketim; bir önceki günle karşılaştırmalı.</string>
+    <string name="kpi_outage">Elektrik kesintisi</string>
+    <plurals name="kpi_outage_value">
+        <item quantity="one">%1$d kez · %2$s</item>
+        <item quantity="other">%1$d kez · %2$s</item>
+    </plurals>
+    <string name="kpi_outage_caption">İzlenen cihazların hepsinin birlikte koptuğu durumlar ve toplam süresi.</string>
+    <string name="kpi_alarms">Alarm</string>
+    <string name="kpi_alarms_caption">Çalan ve kapatılan alarmlar (telefondan, saatten ya da Telegram\'dan).</string>
+    <string name="kpi_alarms_today_caption">Bugün kapatılan alarmlar.</string>
+    <string name="kpi_response">Ortalama tepki</string>
+    <string name="kpi_response_caption">Alarm başladıktan kapatılana kadar geçen süre. Kısa olması iyidir; 10 dakikanın üstü kontrol etmeye değer.</string>
+    <string name="kpi_uptime">İzleme kapsamı</string>
+    <string name="kpi_uptime_caption">Dönemin ne kadarında izlemenin çalıştığı. Telefon kapalıysa ya da sistem uygulamayı durdurduysa düşer.</string>
+    <string name="kpi_energy">Tüketim</string>
+    <string name="kpi_energy_caption">Enerji ölçen cihazların toplamı.</string>
+    <string name="kpi_energy_today_caption">Gece yarısından beri, enerji ölçen cihazlar.</string>
+    <string name="kpi_cost">Tahmini maliyet</string>
+    <string name="kpi_cost_caption_week">Tarifenize göre. Bu hızla ayda yaklaşık %s.</string>
+    <string name="kpi_cost_caption_day">Tarifenize göre. Bu hızla ayda yaklaşık %s.</string>
+    <string name="kpi_cost_today_caption">Tarifenize göre, gece yarısından beri.</string>
+    <string name="kpi_drops">Kopma</string>
+    <string name="kpi_drops_caption">Bugün cihazların internet bağlantısının kaç kez koptuğu.</string>
+
+    <string name="rep_sec_events">Kesintiler ve alarmlar</string>
+    <string name="rep_sec_events_explain">Dönemdeki elektrik kesintileri ve alarmlar; alarmlarla ne kadar hızlı ilgilenildiği.</string>
+    <string name="rep_outage_item">Elektrik kesintisi: %1$s, %2$s sürdü</string>
+    <string name="rep_no_outage">Bu dönemde elektrik kesintisi olmadı.</string>
+    <plurals name="rep_month_outages">
+        <item quantity="one">Bu ay şimdiye kadar: %1$d kesinti, toplam %2$s.</item>
+        <item quantity="other">Bu ay şimdiye kadar: %1$d kesinti, toplam %2$s.</item>
+    </plurals>
+    <string name="rep_no_alarms">Bu dönemde hiç alarm çalmadı.</string>
+    <string name="rep_slow_response">Alarmlar ortalama %s sonra kapatıldı: bir alarm uzun süre fark edilmeyebilir.</string>
+    <string name="rep_good_response">Alarmlar ortalama %s sonra kapatıldı.</string>
+    <plurals name="rep_escalations">
+        <item quantity="one">İkinci kişiye Telegram\'dan %d kez haber verildi.</item>
+        <item quantity="other">İkinci kişiye Telegram\'dan %d kez haber verildi.</item>
+    </plurals>
+    <string name="act_check_sound">Alarm sesinin yüksek olduğunu ve telefonun gece başka odada kalmadığını kontrol edin; kademeli Telegram haberi de yardımcı olur.</string>
+    <string name="act_add_second_person">Telegram\'dan ikinci bir kişi ekleyin (Uyarılar → İkinci kişiye haber ver): siz duymazsanız o duysun.</string>
+
+    <string name="rep_sec_conn">Bağlantı</string>
+    <string name="rep_sec_conn_explain">Her cihazın internet bağlantısının ne sıklıkla koptuğu ve Wi-Fi sinyalinin ne kadar güçlü olduğu. Sık kopma, kaçan olay demektir.</string>
+    <string name="rep_col_device">Cihaz</string>
+    <string name="rep_col_drops">Kopma</string>
+    <string name="rep_col_signal">Sinyal</string>
+    <string name="rep_signal_cell">%1$s (%2$d dBm)</string>
+    <string name="rep_drops_signal">%1$s %2$d kez koptu ve sinyali zayıf (%3$d dBm).</string>
+    <string name="rep_drops_power">%1$s sinyali iyi olduğu hâlde %2$d kez koptu.</string>
+    <string name="rep_drops_unknown">%1$s %2$d kez koptu.</string>
+    <string name="rep_weak_no_drops">%1$s cihazının sinyali zayıf (%2$d dBm), henüz kopmadı.</string>
+    <string name="rep_conn_ok">Hiçbir cihaz sık kopmadı.</string>
+    <string name="rep_conn_note">Sinyal: 0\'a yakın olan daha iyi (-67 dBm üstü iyi). Sinyal bildirmeyen cihazlarda "—" görünür.</string>
+    <string name="act_move_closer">Cihazı ya da modemi yaklaştırın veya bir Wi-Fi güçlendirici ekleyin.</string>
+    <string name="act_check_power">Cihazın prizini ve elektriğini, modemin kendiliğinden yeniden başlayıp başlamadığını kontrol edin.</string>
+    <string name="act_check_wifi">Cihazın yanında Wi-Fi sinyalini kontrol edin.</string>
+
+    <string name="rep_sec_energy">Tüketim</string>
+    <string name="rep_sec_energy_explain">Enerji ölçen her cihazın ne kadar harcadığı, toplamdaki payı ve tahmini maliyeti; önceki dönemle yan yana.</string>
+    <string name="rep_col_kwh">kWh</string>
+    <string name="rep_col_share">Pay</string>
+    <string name="rep_col_cost">Maliyet</string>
+    <string name="rep_col_last_week">Geçen hafta</string>
+    <string name="rep_col_yesterday">Dün</string>
+    <string name="rep_energy_note">kWh: harcanan enerji. Pay: toplamdaki payı. Maliyet: tarifenize göre tahmini.</string>
+    <string name="rep_standby">%1$s hiç %2$s altına inmiyor: beklemede ayda yaklaşık %3$s</string>
+    <string name="rep_top_consumer">En çok %1$s harcadı: toplamın %%%2$d\'i.</string>
+    <string name="act_standby">Sürekli gerekmiyorsa bir otomasyonla gece kapatın (ör. 00:00\'da kapat, 07:00\'de aç).</string>
+    <string name="act_check_high">%s cihazını kontrol edin: açık kalan kapı, tıkalı filtre ya da arıza tüketimi artırabilir.</string>
+    <string name="act_check_low">%s cihazını hemen kontrol edin: çok düşük tüketim çalışmayı bıraktığını gösterebilir (ör. soğutmayan dondurucu).</string>
+
+    <string name="rep_sec_monitor">İzleme</string>
+    <string name="rep_sec_monitor_explain">SwitchGuard\'ın bütün süre boyunca izleyip izlemediği. Aradaki boşlukta olanlar kaçmış olabilir.</string>
+    <string name="rep_gap">İzleme toplam %s çalışmadı.</string>
+    <string name="rep_no_gap">İzleme kesintisiz çalıştı.</string>
+    <string name="act_battery">SwitchGuard için pil optimizasyonunu kapatın ve otomatik başlatmaya izin verin (Ayarlar → İzinler).</string>
+
+    <string name="gl_kwh">kWh</string>
+    <string name="gl_kwh_def">Kilovatsaat; elektrik faturasındaki birim. 1000 W\'lık bir ısıtıcı bir saat çalışırsa 1 kWh harcar.</string>
+    <string name="gl_w">W (vat)</string>
+    <string name="gl_w_def">O anda çekilen güç. Lamba ≈10 W, buzdolabı çalışırken ≈100–150 W, su ısıtıcı ≈2000 W.</string>
+    <string name="gl_outage">Elektrik kesintisi</string>
+    <string name="gl_outage_def">İzlenen cihazların hepsinin 90 saniye içinde kopması ya da (açıksa) bu telefonun bir dakika şarjsız kalması.</string>
+    <string name="gl_response">Tepki süresi</string>
+    <string name="gl_response_def">Alarmın ilk olayından kapatılmasına kadar geçen süre.</string>
+    <string name="gl_uptime">İzleme kapsamı</string>
+    <string name="gl_uptime_def">SwitchGuard\'ın çalışıp bağlı olduğu sürenin payı. Kalan sürede olanlar kaçmış olabilir.</string>
+    <string name="gl_dbm">dBm (sinyal)</string>
+    <string name="gl_dbm_def">Wi-Fi sinyal gücü. 0\'a yakın olan daha güçlü: -50 çok iyi, -70 orta, -80 zayıf.</string>
+    <string name="gl_standby">Bekleme tüketimi</string>
+    <string name="gl_standby_def">Cihazın hiç altına inmediği en düşük güç; kapalı ya da boşta görünürken bile çektiği.</string>
+    <string name="gl_peak">En yüksek güç</string>
+    <string name="gl_peak_def">Dönemde ölçülen en yüksek güç. Kısa sıçramalar (motorun kalkışı gibi) normaldir.</string>
+    <string name="gl_coverage">Ölçüm kapsamı</string>
+    <string name="gl_coverage_def">Dönemin ne kadarının gerçekten ölçüldüğü. İzleme kapalıyken kayıt tutulmaz; gerçek tüketim biraz daha yüksek olabilir.</string>
+    <string name="gl_tariff">Tarife</string>
+    <string name="gl_tariff_def">Tahminde kullanılan kWh fiyatı. Üç zamanlı tarifede her saat kendi diliminin fiyatıyla hesaplanır.</string>
+
+    <string name="energy_report_subtitle">%1$s · %2$s · oluşturuldu %3$s</string>
+    <string name="energy_report_intro">%1$s cihazının %2$s döneminde ne kadar elektrik harcadığı. Üstteki kartlar özet; grafik tüketimi dilim dilim gösterir (koyu çubuk en yüksek, kesikli çizgi ortalama); sondaki tablo ayrıntıyı verir. "Öne çıkanlar" bölümü dikkat çekenleri açıklar.</string>
+    <string name="kpi_total_caption">Dönemde harcanan enerji (faturadaki birim).</string>
+    <string name="kpi_avg_power_caption">Ölçülen süre boyunca ortalama çekilen güç.</string>
+    <string name="kpi_peak_caption">En yüksek an: %s</string>
+    <string name="kpi_bucket_avg_caption">Ölçülen dilimlerin ortalaması.</string>
+    <string name="kpi_coverage_caption">%2$s sürenin %1$s kadarı ölçüldü. Kapsam düşükse tüketimin bir kısmı bu rakamlarda yok.</string>
+    <string name="ins_title">Öne çıkanlar</string>
+    <string name="ins_explain">Bu dönemde dikkat çekenler, sade bir dille.</string>
+    <string name="ins_busiest">En çok enerji %1$s diliminde harcandı: toplamın %%%2$d\'i.</string>
+    <string name="ins_more">%2$s göre %%%1$d fazla.</string>
+    <string name="ins_less">%2$s göre %%%1$d az.</string>
+    <string name="ins_coverage">Dönemin yalnızca %%%d\'i ölçüldü: gerçek tüketim gösterilenden fazla.</string>
+    <string name="ins_projection">Bu hızla ay yaklaşık %s ile kapanır.</string>
+    <string name="ins_standby">Hiç %1$s altına inmiyor: yalnızca beklemede ayda yaklaşık %2$s.</string>
+    <string name="ins_nothing">Bu dönemde olağan dışı bir şey yok.</string>
+    <string name="usage_explain">Her anahtarın kaç kez açıldığı ve ne kadar açık kaldığı.</string>
+    <string name="chart_title">%s başına tüketim</string>
+    <string name="chart_explain">Her çubuk dönemin bir dilimi. Koyu çubuk en yüksek, kesikli çizgi ölçülen dilimlerin ortalaması.</string>
+    <string name="chart_legend_bar">Tüketim (kWh)</string>
+    <string name="chart_legend_busiest">En yüksek</string>
+    <string name="chart_legend_avg">Ortalama</string>
+    <string name="table_explain">Grafiğin arkasındaki sayılar, dilim dilim.</string>
+    <string name="table_note">kWh: harcanan enerji · Pay: toplamdaki payı (%) · Ort./En yüksek: W cinsinden güç · Ölçülen: gerçekten ölçülen süre · –: ölçüm yok.</string>
+
+    <string name="daily_intro">Her cihazın bugün ne yaptığı: kaç kez açıldığı, ne kadar açık kaldığı ve ne kadar enerji harcadığı.</string>
+    <string name="daily_devices">Cihazlar</string>
+    <string name="daily_devices_explain">Yalnızca bugün hareketi olan cihazlar listelenir.</string>
+    <string name="daily_col_on">Açılma</string>
+    <string name="daily_col_time">Açık kalma</string>
+    <string name="daily_table_note">Açılma: bugün kaç kez açıldığı. Açık kalma: toplam açık kaldığı süre.</string>
+    <string name="daily_longest">Bugün en uzun %1$s açık kaldı: %2$s.</string>
 </resources>

@@ -22,10 +22,50 @@ object TelegramClient {
 
     /** Bota yazan kişiler ve botun eklendiği gruplar (Telegram son 24 saati tutar). */
     fun findChats(token: String): List<Recipient> = Escalation.chatsFromUpdates(call(token, "getUpdates").toString())
+        .let { found -> (seenChats + found).associateBy { it.id }.values.toList() }
 
-    fun send(token: String, chatId: Long, text: String) {
-        call(token, "sendMessage", FormBody.Builder().add("chat_id", chatId.toString()).add("text", text).build())
+    /**
+     * İzleme sırasında komutları okurken görülen sohbetler: eski güncellemeler onaylanıp silindiğinden "Kişileri bul"
+     * onları artık göremez.
+     */
+    @Volatile var seenChats: List<Recipient> = emptyList()
+
+    /** Mesaj gönderir; [markup] satır içi düğmeler (JSON). Gönderilen mesajın numarasını döner. */
+    fun send(token: String, chatId: Long, text: String, markup: String? = null, silent: Boolean = false, html: Boolean = false): Long {
+        val body = FormBody.Builder().add("chat_id", chatId.toString()).add("text", text)
+        if (html) body.add("parse_mode", "HTML")
+        if (markup != null) body.add("reply_markup", markup)
+        if (silent) body.add("disable_notification", "true")
+        return call(token, "sendMessage", body.build()).optJSONObject("result")?.optLong("message_id") ?: 0
     }
+
+    /** Onaylanmamış güncellemeler (bekletmeden). [offset]'ten küçükler Telegram'da silinir. */
+    fun updates(token: String, offset: Long): String =
+        call(token, "getUpdates", FormBody.Builder().add("offset", offset.toString()).add("timeout", "0").build()).toString()
+
+    /** Düğmeye dokunan kişiye kısa yanıt (Telegram'da küçük bir uyarı olarak görünür). */
+    fun answerCallback(token: String, callbackId: String, text: String) {
+        call(token, "answerCallbackQuery", FormBody.Builder().add("callback_query_id", callbackId).add("text", text).build())
+    }
+
+    /** Mesajdaki düğmeleri kaldırır. */
+    fun removeButtons(token: String, chatId: Long, messageId: Long) {
+        call(token, "editMessageReplyMarkup", FormBody.Builder().add("chat_id", chatId.toString()).add("message_id", messageId.toString()).build())
+    }
+
+    fun edit(token: String, chatId: Long, messageId: Long, text: String) {
+        call(token, "editMessageText", FormBody.Builder().add("chat_id", chatId.toString()).add("message_id", messageId.toString()).add("text", text).build())
+    }
+
+    /** Mesajı sohbetin başına sabitler (bildirim göndermeden). */
+    fun pin(token: String, chatId: Long, messageId: Long) {
+        call(token, "pinChatMessage", FormBody.Builder().add("chat_id", chatId.toString()).add("message_id", messageId.toString())
+            .add("disable_notification", "true").build())
+    }
+
+    /** Sohbet bilgisi (sabit mesaj dahil), JSON. */
+    fun chat(token: String, chatId: Long): String =
+        call(token, "getChat", FormBody.Builder().add("chat_id", chatId.toString()).build()).toString()
 
     private fun call(token: String, method: String, body: FormBody? = null): JSONObject {
         val request = Request.Builder().url("$BASE${token.trim()}/$method")

@@ -1,7 +1,14 @@
 package com.macerce.switchguard.data
 
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.EnergyBucket
 import com.macerce.switchguard.core.EnergyMath
+import com.macerce.switchguard.core.EnergyPeriod
+import com.macerce.switchguard.core.EnergyReport
+import com.macerce.switchguard.core.EnergySummary
+import com.macerce.switchguard.core.EnergyWatch
+import com.macerce.switchguard.core.Standby
+import com.macerce.switchguard.core.Tariff
 import com.macerce.switchguard.core.PowerSample
 import com.macerce.switchguard.core.StateSample
 import com.macerce.switchguard.core.Usage
@@ -92,6 +99,40 @@ class MetricsLog(file: Path) : AutoCloseable {
 
     @Synchronized
     fun kwh(deviceId: String, from: Long, to: Long): Double = EnergyMath.kwh(powerSamples(deviceId, from, to), from, to)
+
+    /** [anchor] anını içeren gün/ay/yıl için dilim dilim tüketim raporu. */
+    fun summary(
+        deviceId: String, period: EnergyPeriod, anchor: Long, now: Long = System.currentTimeMillis(), tariff: Tariff? = null,
+    ): EnergySummary {
+        val (from, to) = EnergyReport.range(period, anchor)
+        return EnergyReport.summarize(period, anchor, powerSamples(deviceId, from, minOf(to, now)), now, tariff = tariff)
+    }
+
+    /** [from, to) aralığının tahmini maliyeti. */
+    fun cost(deviceId: String, from: Long, to: Long, tariff: Tariff): Double =
+        if (!tariff.hasPrice) 0.0 else tariff.cost(powerSamples(deviceId, from, to), from, to)
+
+    /** En eski ölçümün zamanı (raporda geriye gitme sınırı); kayıt yoksa null. */
+    @Synchronized
+    fun firstPowerTime(deviceId: String): Long? =
+        db.prepareStatement("SELECT MIN(ts) FROM power WHERE device_id=?").use { ps ->
+            ps.setString(1, deviceId)
+            ps.executeQuery().use { rs -> if (rs.next()) rs.getLong(1).takeUnless { rs.wasNull() } else null }
+        }
+
+    /** Son [days] günün saatlik dilimleri (bekleme tüketimi için). */
+    fun hourly(deviceId: String, now: Long = System.currentTimeMillis(), days: Int = 7): List<EnergyBucket> =
+        (1..days).flatMap { d -> summary(deviceId, EnergyPeriod.DAY, EnergyWatch.dayStart(now, -d), now).buckets }
+
+    fun standby(deviceId: String, now: Long = System.currentTimeMillis()) = Standby.baseline(hourly(deviceId, now))
+
+    /** Aralıktaki güç ölçümü sayısı: izlemenin o gün ne kadar açık olduğunun ölçüsü (bkz. EnergyWatch.MIN_SAMPLES). */
+    @Synchronized
+    fun sampleCount(deviceId: String, from: Long, to: Long): Int =
+        db.prepareStatement("SELECT COUNT(*) FROM power WHERE device_id=? AND ts>=? AND ts<?").use { ps ->
+            ps.setString(1, deviceId); ps.setLong(2, from); ps.setLong(3, to)
+            ps.executeQuery().use { if (it.next()) it.getInt(1) else 0 }
+        }
 
     @Synchronized
     fun usage(deviceId: String, channel: Int, from: Long, to: Long): Usage {

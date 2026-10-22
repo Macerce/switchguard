@@ -114,6 +114,7 @@ fun DeviceDetailScreen(graph: AppGraph, deviceId: String, onBack: () -> Unit, ac
                         val scroll = rememberScrollState()
                         Column(Modifier.fillMaxSize().verticalScroll(scroll).padding(bottom = 24.dp)) {
                             ControlHero(device, rules.monitored)
+                            com.macerce.switchguard.desktop.ui.devices.ConnectionCard(device, graph.eventLog)
 
                             if (device.cloud == Cloud.DEMO) DemoSection(device) { op, ch -> graph.engine.demo(op, deviceId, ch) }
 
@@ -122,7 +123,10 @@ fun DeviceDetailScreen(graph: AppGraph, deviceId: String, onBack: () -> Unit, ac
                             if (device.hasEnergy || device.hasChannelPower) {
                                 val live: (suspend () -> Unit)? =
                                     if (device.cloud == Cloud.EWELINK && store.isLoggedIn) ({ actions.requestLiveEnergy(device) }) else null
-                                EnergySection(device, graph.metrics, live)
+                                EnergySection(device, graph.metrics, store, live)
+                            }
+                            if (device.hasEnergy && device.cloud != Cloud.DEMO) {
+                                com.macerce.switchguard.desktop.ui.devices.StandbyCard(device, graph.metrics, store)
                             }
 
                             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.

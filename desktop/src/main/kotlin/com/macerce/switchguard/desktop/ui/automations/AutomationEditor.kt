@@ -73,6 +73,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.ConditionKind
+import com.macerce.switchguard.core.PresenceRule
+import com.macerce.switchguard.core.Scene
+import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.desktop.ui.settings.TimeDialog
+import com.macerce.switchguard.desktop.ui.settings.formatMinute
+import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.AcUnit
+import androidx.compose.material.icons.rounded.WbSunny
+import androidx.compose.material.icons.rounded.WbTwilight
+import androidx.compose.material.icons.rounded.LocalFireDepartment
+import androidx.compose.material3.Switch
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -109,7 +124,13 @@ internal fun AutomationEditor(
     onDelete: () -> Unit,
     onBack: () -> Unit,
     newMode: AutomationMode = AutomationMode.ALERT,
+    /** Gün doğumu ve sıcaklık kuralları için konum ve son dış sıcaklık; sahne listesi. Testlerde verilmeyebilir. */
+    store: Store? = null,
+    outdoorTemp: Double? = null,
 ) {
+    val scenes = store?.scenes.orEmpty()
+    var pickTime by remember { mutableStateOf<Pair<String, Int>?>(null) }
+    var locationVersion by remember { mutableStateOf(0) }
     val mode = initial?.let { AutomationMode.of(it) } ?: newMode
     var form by remember { mutableStateOf(AutomationForm.from(initial, devices, mode)) }
     var confirmDelete by remember { mutableStateOf(false) }
@@ -148,24 +169,54 @@ internal fun AutomationEditor(
 
                 // ------------------------------------------------ Eğer
                 StepCard(Icons.Rounded.Sensors, Hue.BLUE, strings["auto_if"], strings["automation_when"]) {
-                    FieldLabel(strings["automation_device"])
-                    DeviceChooser(devices, f.triggerDevice, "trigger-device") { form = f.copy(triggerDevice = it.id, triggerChannel = 0) }
-                    if (f.triggerKind.usesChannel && src?.isMultiChannel == true) {
-                        FieldLabel(strings["automation_channel"])
-                        ChannelChooser(src, f.triggerChannel, "trigger-channel") { form = f.copy(triggerChannel = it) }
-                    }
                     FieldLabel(strings["automation_event"])
                     OptionGrid(
-                        AutomationForm.kindsFor(src), f.triggerKind, wideColumns = 3,
+                        AutomationForm.kindsFor(src), f.triggerKind, wideColumns = 4,
                         icon = { it.icon() }, label = { strings[it.shortTitleKey()] }, tag = { "event-${it.name}" },
                     ) { form = f.copy(triggerKind = it) }
+                    if (f.triggerKind.usesDevice) {
+                        FieldLabel(strings["automation_device"])
+                        DeviceChooser(devices, f.triggerDevice, "trigger-device") { form = f.copy(triggerDevice = it.id, triggerChannel = 0) }
+                        if (f.triggerKind.usesChannel && src?.isMultiChannel == true) {
+                            FieldLabel(strings["automation_channel"])
+                            ChannelChooser(src, f.triggerChannel, "trigger-channel") { form = f.copy(triggerChannel = it) }
+                        }
+                    }
+                    if (f.triggerKind.isSun) {
+                        // "Gün doğumundan 15 dk önce", "gün batımından 1 sa sonra".
+                        Stepper(strings["sun_offset"], f.offset, Steps.OFFSET, strings, "offset", format = { offsetLabel(it, strings) }) {
+                            form = f.copy(offset = it)
+                        }
+                    }
+                    if (f.triggerKind.usesTemp) {
+                        NumberField(f.temp, strings["automation_temp"], "°C", "temp", allowNegative = true) { form = f.copy(temp = it) }
+                        outdoorTemp?.let {
+                            Text(
+                                strings.format("automation_current_temp", formatTemp(it)),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(top = 8.dp),
+                            )
+                        }
+                    }
+                    if ((f.triggerKind.isSun || f.triggerKind.usesTemp) && store != null) {
+                        androidx.compose.runtime.key(locationVersion) {
+                            LocationSetup(store, strings, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
+                        }
+                    }
                     if (f.triggerKind.usesMinutes) {
                         Stepper(strings["automation_minutes_short"], f.minutes.toIntOrNull() ?: 30, Steps.MINUTES, strings, "minutes") {
                             form = f.copy(minutes = it.toString())
                         }
                     }
                     if (f.triggerKind.usesWatts) {
-                        WattField(f.watts, strings) { form = f.copy(watts = it) }
+                        NumberField(f.watts, strings["automation_watts"], "W", "watts") { form = f.copy(watts = it) }
+                    }
+                    if (f.triggerKind.allowsHold) {
+                        // Ör. "4 saattir hiç çalışmadı" (dondurucu arızası), "6 saattir durmadı" (kompresör).
+                        Stepper(strings["automation_hold_short"], f.holdMinutes, Steps.HOLD, strings, "hold", zeroLabel = strings["automation_now"]) {
+                            form = f.copy(holdMinutes = it)
+                        }
                     }
                     if (f.triggerKind.usesChannelPower) {
                         Stepper(strings["automation_low_minutes_short"], f.lowMinutes.toIntOrNull() ?: 1, Steps.LOW, strings, "low-minutes") {
@@ -190,6 +241,48 @@ internal fun AutomationEditor(
                     }
                 }
 
+                // ------------------------------------------------ Yalnızca / Ve
+                StepCard(Icons.Rounded.Tune, Hue.PURPLE, strings["auto_only"], strings["auto_only_desc"]) {
+                    ToggleLine(strings["window_toggle"], f.windowOn, "window") { form = f.copy(windowOn = it) }
+                    if (f.windowOn) {
+                        val startTitle = strings["window_start"]
+                        val endTitle = strings["window_end"]
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
+                            TimeChip(startTitle, formatMinute(strings, f.windowStart), Modifier.weight(1f)) { pickTime = "start" to f.windowStart }
+                            TimeChip(endTitle, formatMinute(strings, f.windowEnd), Modifier.weight(1f)) { pickTime = "end" to f.windowEnd }
+                        }
+                        DayChips(f.windowDays, strings) { form = f.copy(windowDays = it) }
+                        if (f.windowStart == f.windowEnd) {
+                            Text(strings["window_all_day_hint"], style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp))
+                        }
+                    }
+                    ToggleLine(strings["presence_toggle"], f.presence != null, "presence") { form = f.copy(presence = if (it) PresenceRule.AWAY else null) }
+                    f.presence?.let { rule ->
+                        Spacer(Modifier.height(8.dp))
+                        OptionGrid(
+                            PresenceRule.entries, rule, wideColumns = 2,
+                            icon = { if (it == PresenceRule.AWAY) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home },
+                            label = { strings[if (it == PresenceRule.AWAY) "presence_away" else "presence_home"] }, tag = { "presence-${it.name}" },
+                        ) { form = f.copy(presence = it) }
+                    }
+                    ToggleLine(strings["cond_toggle"], f.condOn, "cond") { form = f.copy(condOn = it) }
+                    if (f.condOn) {
+                        val condSrc = devices.firstOrNull { it.id == f.condDevice }
+                        FieldLabel(strings["automation_device"])
+                        DeviceChooser(devices, f.condDevice, "cond-device") { form = f.copy(condDevice = it.id, condChannel = 0) }
+                        if (f.condKind.usesChannel && condSrc?.isMultiChannel == true) {
+                            FieldLabel(strings["automation_channel"])
+                            ChannelChooser(condSrc, f.condChannel, "cond-channel") { form = f.copy(condChannel = it) }
+                        }
+                        FieldLabel(strings["cond_state"])
+                        OptionGrid(
+                            ConditionKind.entries, f.condKind, wideColumns = 4,
+                            icon = { it.icon() }, label = { strings[it.titleKey()] }, tag = { "cond-${it.name}" },
+                        ) { form = f.copy(condKind = it) }
+                    }
+                }
+
                 // ------------------------------------------------ O zaman
                 StepCard(Icons.Rounded.Bolt, Hue.ORANGE, strings["auto_then"], strings["automation_then"]) {
                     FieldLabel(strings["automation_action"])
@@ -197,6 +290,17 @@ internal fun AutomationEditor(
                         mode.actions, f.actionKind, wideColumns = 2,
                         icon = { it.icon() }, label = { strings[it.editorTitleKey()] }, tag = { "action-${it.name}" }, hue = { it.hue() },
                     ) { form = f.copy(actionKind = it) }
+                    if (f.actionKind == ActionKind.RUN_SCENE) {
+                        FieldLabel(strings["scenes_title"])
+                        if (scenes.isEmpty()) {
+                            Text(strings["scene_none_yet"], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        } else {
+                            OptionGrid(
+                                scenes.map { it.id }, f.sceneId, wideColumns = 3,
+                                icon = { Icons.Rounded.PlayArrow }, label = { id -> scenes.first { it.id == id }.name }, tag = { "scene-$it" },
+                            ) { form = f.copy(sceneId = it) }
+                        }
+                    }
                     if (f.actionKind.usesDevice) {
                         FieldLabel(strings["automation_device"])
                         DeviceChooser(devices, f.actionDevice, "action-device") { form = f.copy(actionDevice = it.id, actionChannel = 0) }
@@ -212,8 +316,8 @@ internal fun AutomationEditor(
                 }
 
                 // ------------------------------------------------ Özet
-                if (src != null) {
-                    val (whenText, thenText) = describe(f.build(initial?.id.orEmpty(), initial?.enabled ?: true), devices, strings)
+                if (src != null || !f.triggerKind.usesDevice) {
+                    val (whenText, thenText) = describe(f.build(initial?.id.orEmpty(), initial?.enabled ?: true), devices, strings, scenes)
                     Column(
                         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
                             .clip(RoundedCornerShape(20.dp))
@@ -237,7 +341,7 @@ internal fun AutomationEditor(
 
                 val saveShape = RoundedCornerShape(18.dp)
                 Button(
-                    enabled = f.isValid(devices),
+                    enabled = f.isValid(devices, scenes),
                     onClick = { onSave(f.build(initial?.id ?: UUID.randomUUID().toString(), initial?.enabled ?: true)) },
                     shape = saveShape,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(56.dp).testTag("save-automation"),
@@ -248,6 +352,17 @@ internal fun AutomationEditor(
                 }
             }
         }
+    }
+
+    pickTime?.let { (which, initialMinute) ->
+        TimeDialog(
+            strings[if (which == "start") "window_start" else "window_end"], initialMinute, strings.locale,
+            onPick = { m ->
+                form = if (which == "start") form.copy(windowStart = m) else form.copy(windowEnd = m)
+                pickTime = null
+            },
+            onDismiss = { pickTime = null },
+        )
     }
 
     if (confirmDelete) {
@@ -436,7 +551,10 @@ private fun <T> OptionGrid(
 
 /** Dakika seçici: etiket, ortada değer, iki yanda − / + ([Steps] ile anlamlı adımlar); uçta düğme pasif. */
 @Composable
-private fun Stepper(label: String, value: Int, steps: List<Int>, strings: Strings, tag: String, zeroLabel: String? = null, onChange: (Int) -> Unit) {
+private fun Stepper(
+    label: String, value: Int, steps: List<Int>, strings: Strings, tag: String, zeroLabel: String? = null,
+    format: ((Int) -> String)? = null, onChange: (Int) -> Unit,
+) {
     val lower = Steps.lower(value, steps)
     val higher = Steps.higher(value, steps)
     Row(
@@ -449,7 +567,11 @@ private fun Stepper(label: String, value: Int, steps: List<Int>, strings: String
             Icon(Icons.Rounded.Remove, strings["action_decrease"])
         }
         Text(
-            if (value == 0 && zeroLabel != null) zeroLabel else strings.plural("minutes_n", value, value),
+            when {
+                format != null -> format(value)
+                value == 0 && zeroLabel != null -> zeroLabel
+                else -> holdLabel(value, strings)
+            },
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
@@ -461,14 +583,14 @@ private fun Stepper(label: String, value: Int, steps: List<Int>, strings: String
     }
 }
 
-/** Güç eşiği: sayı alanı (Türkçe klavyenin virgülü de), sonunda "W". */
+/** Sayı alanı (güç eşiği W, sıcaklık °C; Türkçe klavyenin virgülü de); [allowNegative] eksi değere izin verir. */
 @Composable
-private fun WattField(value: String, strings: Strings, onChange: (String) -> Unit) {
+private fun NumberField(value: String, label: String, suffix: String, tag: String, allowNegative: Boolean = false, onChange: (String) -> Unit) {
     TextField(
         value = value,
-        onValueChange = { v -> onChange(v.filter { it.isDigit() || it == '.' || it == ',' }) },
-        label = { Text(strings["automation_watts"]) },
-        suffix = { Text("W") },
+        onValueChange = { v -> onChange(v.filterIndexed { i, c -> c.isDigit() || c == '.' || c == ',' || (allowNegative && c == '-' && i == 0) }) },
+        label = { Text(label) },
+        suffix = { Text(suffix) },
         singleLine = true,
         shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -478,8 +600,66 @@ private fun WattField(value: String, strings: Strings, onChange: (String) -> Uni
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
         ),
-        modifier = Modifier.fillMaxWidth().padding(top = 12.dp).testTag("watts"),
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp).testTag(tag),
     )
+}
+
+/** Başlık ve anahtar: "Yalnızca şu saatlerde", "Ve şu koşulda". */
+@Composable
+private fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(12.dp)).background(raisedOnTile())
+            .selectable(selected = checked, onClick = { onChange(!checked) }, role = Role.Switch)
+            .padding(horizontal = 16.dp, vertical = 8.dp).testTag("toggle-$tag"),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(text, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+        Switch(checked = checked, onCheckedChange = null)
+    }
+}
+
+@Composable
+private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(12.dp)
+    Column(
+        modifier.clip(shape).background(raisedOnTile())
+            .selectable(selected = false, onClick = onClick, role = Role.Button)
+            .padding(horizontal = 14.dp, vertical = 10.dp),
+    ) {
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.primary)
+    }
+}
+
+/** Haftanın günleri (Pzt…Paz); en az bir gün seçili kalır. */
+@Composable
+private fun DayChips(days: Int, strings: Strings, onChange: (Int) -> Unit) {
+    val names = strings.array("day_short")
+    val scheme = MaterialTheme.colorScheme
+    Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+        names.forEachIndexed { i, n ->
+            val on = days and (1 shl i) != 0
+            val shape = RoundedCornerShape(10.dp)
+            Box(
+                Modifier.weight(1f).heightIn(min = 36.dp).clip(shape)
+                    .background(if (on) scheme.primary else raisedOnTile())
+                    .selectable(selected = on, role = Role.Checkbox, onClick = {
+                        val next = days xor (1 shl i)
+                        if (next != 0) onChange(next)
+                    }).testTag("day-$i"),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(n, style = MaterialTheme.typography.labelMedium, color = if (on) scheme.onPrimary else scheme.onSurface, maxLines = 1)
+            }
+        }
+    }
+}
+
+private fun ConditionKind.icon(): ImageVector = when (this) {
+    ConditionKind.IS_ON -> Icons.Rounded.PowerSettingsNew
+    ConditionKind.IS_OFF -> Icons.Rounded.PowerOff
+    ConditionKind.IS_ONLINE -> Icons.Rounded.Cloud
+    ConditionKind.IS_OFFLINE -> Icons.Rounded.CloudOff
 }
 
 private fun TriggerKind.icon(): ImageVector = when (this) {
@@ -492,6 +672,10 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.POWER_ABOVE -> Icons.AutoMirrored.Rounded.TrendingUp
     TriggerKind.POWER_BELOW -> Icons.AutoMirrored.Rounded.TrendingDown
     TriggerKind.CHANNEL_POWER_LOW -> Icons.Rounded.ElectricBolt
+    TriggerKind.SUNRISE -> Icons.Rounded.WbSunny
+    TriggerKind.SUNSET -> Icons.Rounded.WbTwilight
+    TriggerKind.TEMP_ABOVE -> Icons.Rounded.LocalFireDepartment
+    TriggerKind.TEMP_BELOW -> Icons.Rounded.AcUnit
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -505,6 +689,10 @@ private fun TriggerKind.shortTitleKey(): String = when (this) {
     TriggerKind.POWER_ABOVE -> "evt_power_above"
     TriggerKind.POWER_BELOW -> "evt_power_below"
     TriggerKind.CHANNEL_POWER_LOW -> "evt_channel_power_low"
+    TriggerKind.SUNRISE -> "evt_sunrise"
+    TriggerKind.SUNSET -> "evt_sunset"
+    TriggerKind.TEMP_ABOVE -> "evt_temp_above"
+    TriggerKind.TEMP_BELOW -> "evt_temp_below"
 }
 
 /** İşlem kutucuklarındaki adlar: cihaz işlemleri "Cihazı aç / kapat" (kartta kısa "Aç / Kapat"). */
@@ -513,4 +701,5 @@ private fun ActionKind.editorTitleKey(): String = when (this) {
     ActionKind.NOTIFY -> "auto_action_notify"
     ActionKind.TURN_ON -> "act_turn_on"
     ActionKind.TURN_OFF -> "act_turn_off"
+    ActionKind.RUN_SCENE -> "act_run_scene"
 }

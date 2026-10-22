@@ -116,9 +116,74 @@ class RuntimeState(private val file: Path) {
         get() = str("summaryKey")
         set(v) = set("summaryKey", v)
 
+    private fun bool(key: String, def: Boolean = false): Boolean = synchronized(lock) { root.optBoolean(key, def) }
+
+    /** Elektrik kesintisi algılamanın durumu ([com.macerce.switchguard.core.OutageWatch.toJson]). */
+    var outage: String?
+        get() = str("outage")
+        set(v) = set("outage", v)
+
+    /** Bu kurulumun kısa kimliği: aynı botu kullanan cihazlar "Gördüm" düğmesinin kime ait olduğunu bilsin. Yedeğe girmez. */
+    val installTag: String
+        get() = str("installTag") ?: java.util.UUID.randomUUID().toString().take(8).also { set("installTag", it) }
+
+    /** Telegram: onaylanan son güncelleme (getUpdates offset) ve işlenen en büyük güncelleme numarası. */
+    var tgOffset: Long
+        get() = long("tgOffset")
+        set(v) = set("tgOffset", v)
+    var tgHandled: Long
+        get() = long("tgHandled")
+        set(v) = set("tgHandled", v)
+
+    /** Bekçi (gönderen): sabitlenen mesajın sohbeti ve numarası; 0 = henüz yok. */
+    var beatChat: Long
+        get() = long("beatChat")
+        set(v) = set("beatChat", v)
+    var beatMessage: Long
+        get() = long("beatMessage")
+        set(v) = set("beatMessage", v)
+    /** Bekçi (denetleyen): diğer cihazın son sinyali ve sessizlik alarmı verildi mi. */
+    var watchLastBeat: Long
+        get() = long("watchBeat")
+        set(v) = set("watchBeat", v)
+    var watchAlarmed: Boolean
+        get() = bool("watchAlarmed")
+        set(v) = set("watchAlarmed", v)
+
+    /** Tüketim: anormallik denetiminin yapıldığı gün (gün başlangıcı, ms) ve bütçe uyarısı verilen ay ("2026-10"). */
+    var energyCheckedDay: Long
+        get() = long("energyDay")
+        set(v) = set("energyDay", v)
+    var budgetWarnedMonth: String
+        get() = str("budgetMonth") ?: ""
+        set(v) = set("budgetMonth", v)
+
+    /** Masaüstü: AC gücünün kesildiği an (dizüstü şarjdan kesinti algılama); 0 = prizde. */
+    var chargerLostAt: Long
+        get() = long("chargerLost")
+        set(v) = set("chargerLost", v)
+    /** Son okunan dış sıcaklık (°C): düzenleyicide "şu an 12 °C" için. */
+    var outdoorTemp: Double?
+        get() = str("outdoorTemp")?.toDoubleOrNull()
+        set(v) = set("outdoorTemp", v?.toString())
+
+    /** Kademeli haber: çalan alarm için haber verilen ve vazgeçilen (kalıcı hata) sohbetler. */
+    var escalatedChats: Set<Long>
+        get() = (str("escalatedChats") ?: "").split(',').mapNotNull { it.toLongOrNull() }.toSet()
+        set(v) = set("escalatedChats", v.joinToString(","))
+    /** Tatil modunun bittiği bildirilen tatil (bitiş anı). */
+    var vacationEndNotified: Long
+        get() = long("vacationEnd")
+        set(v) = set("vacationEnd", v)
+
+    /** Masaüstü: gönderilen son haftalık raporun zamanı (telefonda AlarmManager). */
+    var weeklySentFor: Long
+        get() = long("weeklySentFor")
+        set(v) = set("weeklySentFor", v)
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
     fun clearEngine() = synchronized(lock) {
-        val had = listOf("grace", "automation", "reminders").filter { root.has(it) }
+        val had = listOf("grace", "automation", "reminders", "outage").filter { root.has(it) }
         if (had.isEmpty()) return@synchronized
         had.forEach { root.remove(it) }
         persist()
