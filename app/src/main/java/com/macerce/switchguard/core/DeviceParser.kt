@@ -26,6 +26,7 @@ object DeviceParser {
                 voltage = energy?.voltage,
                 current = energy?.current,
                 channelPower = energy?.channelPowers.orEmpty(),
+                rssi = Signal.rssiOf(params),
             )
         }
         return result
@@ -90,6 +91,7 @@ object DeviceParser {
             if (d.channelPower.isNotEmpty()) {
                 o.put("channelPower", JSONObject().apply { d.channelPower.forEach { (k, v) -> put(k.toString(), v) } })
             }
+            d.rssi?.let { o.put("rssi", it) }
             if (d.cloud != Cloud.EWELINK) o.put("cloud", d.cloud.name)
             if (d.switchCodes.isNotEmpty()) {
                 o.put("switchCodes", JSONObject().apply { d.switchCodes.forEach { (k, v) -> put(k.toString(), v) } })
@@ -120,6 +122,7 @@ object DeviceParser {
                 switchCodes = o.optJSONObject("switchCodes")?.let { sc ->
                     sc.keys().asSequence().associate { it.toInt() to sc.getString(it) }
                 }.orEmpty(),
+                rssi = if (o.has("rssi")) o.optInt("rssi") else null,
             )
         }
     }

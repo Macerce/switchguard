@@ -18,6 +18,8 @@ data class EnergyBucket(
     val peakAt: Long?,
     /** Ölçümle kapsanan süre (ms): izleme kapalıyken geçen süre buna girmez. */
     val coveredMs: Long,
+    /** Tahmini maliyet (tarifeyle, her dakika kendi zaman dilimi fiyatıyla); tarife yoksa 0. */
+    val cost: Double = 0.0,
 )
 
 /** Bir dönemin raporu: dilimler ve toplamlar. */
@@ -28,6 +30,7 @@ data class EnergySummary(
     val buckets: List<EnergyBucket>,
 ) {
     val kwh get() = buckets.sumOf { it.kwh }
+    val cost get() = buckets.sumOf { it.cost }
     val coveredMs get() = buckets.sumOf { it.coveredMs }
     val avgWatts get() = if (coveredMs > 0) kwh * 1000 * 3_600_000.0 / coveredMs else null
     val peak get() = buckets.filter { it.peakWatts != null }.maxByOrNull { it.peakWatts!! }
@@ -87,9 +90,13 @@ object EnergyReport {
         now: Long,
         zone: TimeZone = TimeZone.getDefault(),
         maxGapMs: Long = EnergyMath.MAX_GAP_MS,
+        tariff: Tariff? = null,
     ): EnergySummary {
         val (start, end) = range(period, anchor, zone)
-        val buckets = slices(period, anchor, zone).map { (from, to) -> bucket(samples, from, minOf(to, now), to, maxGapMs) }
+        val buckets = slices(period, anchor, zone).map { (from, to) ->
+            val until = minOf(to, now)
+            bucket(samples, from, until, to, maxGapMs).copy(cost = tariff?.cost(samples, from, until, zone, maxGapMs) ?: 0.0)
+        }
         return EnergySummary(period, start, end, buckets)
     }
 

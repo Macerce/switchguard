@@ -5,10 +5,10 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 *Türkçe: eWeLink (SONOFF) ve Tuya / Smart Life hesaplarınızdaki priz ve anahtarları izler; kapandığında, açıldığında ya da bağlantısı koptuğunda siz kapatana kadar çalan bir alarm verir. Telefon, tablet ve Android TV'de çalışır.*
 
 <p>
-  <img src="docs/screenshots/play/en/gunduz/01-devices.png" width="200" alt="Devices">
-  <img src="docs/screenshots/play/en/gunduz/02-detail.png" width="200" alt="Device page">
-  <img src="docs/screenshots/play/en/gece/05-editor.png" width="200" alt="Automation editor">
-  <img src="docs/screenshots/play/en/gece/07-alarm.png" width="200" alt="Full-screen alarm">
+  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energy history">
+  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Scenes and automations">
+  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Full-screen alarm">
 </p>
 
 ## Download / İndir
@@ -21,9 +21,12 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - Live updates over the eWeLink WebSocket, with HTTP resync and polling fallback
 - Per-device rules (alarm / notification / ignore) for off, on, offline and online
 - Offline grace period, quiet hours, remote on/off, eWeLink device timers, automations
-- Energy readings for power-metering devices, daily summary, full event history
+- Energy history by day, month and year with cost (single or three-rate tariff), standby consumption and PDF/CSV reports
+- Smart alerts: one alert for a power outage (all devices offline together, or the phone unplugged), unusual consumption, monthly budget, weekly report
+- At home / Away and vacation mode; scenes; automations on sunrise, sunset, outside temperature, sustained power, with hour/day and "and if" limits
+- Daily summary and full event history; device widget; Wear OS watch app
 - Loud warning when the eWeLink session is lost (e.g. same account signed in on another phone)
-- Tell someone else: a Telegram message to the people you choose if an alarm isn't dismissed in time
+- Telegram: tell the people you choose (in stages) if an alarm isn't dismissed in time, commands (/status, /on, /off, /scene, /away …), an "I've seen it" button and a watchdog message
 - Free for 1 device; a one-time Pro purchase on Google Play monitors all devices
 - No server, no analytics, no ads — everything stays on the phone ([privacy policy](https://sites.google.com/view/switchguard-privacy))
 

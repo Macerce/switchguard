@@ -6,6 +6,33 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.15.0 — 2026-10-22
+**Smart alerts** (Alerts → Alert settings → Smart alerts)
+- Power outage: if all monitored devices go offline together you get one "power outage" alert instead of one per device, and a message with the duration when power returns. A phone or tablet left plugged in at the site can also act as a power sensor: unplugged for a minute counts as an outage, even without internet (sent by Telegram over mobile data).
+- At home / Away and vacation mode: at home, alarms of non-critical devices become notifications; rules can run only when away; on vacation every alarm rings and a report is sent each morning. Switch from the Alerts tab, the widget, the watch or Telegram.
+- Unusual consumption: each morning yesterday is compared with the previous two weeks; much higher (a fault) or much lower (a freezer that barely ran) use is reported. Optional monthly budget.
+- Weekly report every Monday at 09:00: outages, alarms and response time, disconnections and consumption, compared with the week before.
+
+**Telegram**
+- Commands: /status, /ack, /on name, /off name, /scene name, /home, /away. An alarm message has an "I've seen it" button that takes over the alarm.
+- Staged notification: tell one person after N minutes, another after M minutes if still nobody responded.
+- Watchdog: a pinned message shows that SwitchGuard is alive, so the other person knows when the phone stopped working.
+
+**Automations**
+- New triggers: sunrise and sunset (with an offset), warmer than / colder than (outside temperature from Open-Meteo), and power above/below for at least N minutes.
+- Limits: only during certain hours and days, only when at home or away, and "and only if another device is on/off".
+- Scenes: switch several devices with one tap (also from the widget, the watch and Telegram).
+
+**Energy**
+- Price per kWh per device, and single-rate or three-rate (day / peak / night) tariffs.
+- Standby consumption: the power a device never goes below, and what it costs per month.
+- Reports redesigned: daily summary, weekly report and energy report share one layout in the app, in PDF and in Telegram — summary cards, a chart, highlights in plain words, "what to do", details and terms used.
+- Wi-Fi signal of each device and why it disconnected, in the weekly report.
+
+**New**
+- Device widget: turns one device or channel on and off with a tap.
+- Wear OS watch app: alarms on the wrist, dismiss, switch devices and run scenes.
+
 ## 2.14.0 — 2026-10-21
 **Energy history and reports**
 - On the page of a device that measures energy, pick Day · Month · Year to see past consumption and use the arrows to go back through days, months and years. The chart shows hours, days or months; tap a bar for that slice's consumption, peak power and cost.

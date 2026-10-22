@@ -1,16 +1,26 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.Compare
+import com.macerce.switchguard.core.EnergyReport
+import com.macerce.switchguard.core.Finding
+import com.macerce.switchguard.core.Kpi
+import com.macerce.switchguard.core.ReportDoc
+import com.macerce.switchguard.core.ReportSection
+import com.macerce.switchguard.core.ReportTable
+import com.macerce.switchguard.core.Severity
+import com.macerce.switchguard.core.Tone
+import com.macerce.switchguard.core.Trend
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
-import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.text.format.DateFormat as AndroidDateFormat
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Csv
+import com.macerce.switchguard.core.Tariff
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DurationText
 import com.macerce.switchguard.core.EnergyBucket
@@ -75,6 +85,14 @@ object EnergyFormat {
     /** Fiyatın para birimi (telefonun bölgesinden); bilinmiyorsa null. */
     fun currency(): Currency? = runCatching { Currency.getInstance(Locale.getDefault()) }.getOrNull()
 
+    /** "2,50 ₺ / kWh" ya da "Gündüz 2,50 · Puant 3,80 · Gece 1,40 ₺ / kWh". */
+    fun tariffText(context: Context, tariff: Tariff, locale: Locale): String = when (tariff) {
+        is Tariff.Flat -> money(tariff.price, locale) + " / kWh"
+        is Tariff.ThreeZone -> context.getString(
+            R.string.tariff_three_text, money(tariff.day, locale), money(tariff.peak, locale), money(tariff.night, locale),
+        )
+    }
+
     fun money(amount: Double, locale: Locale): String {
         val c = currency() ?: return decimal(locale, 2).format(amount)
         return NumberFormat.getCurrencyInstance(locale).apply { currency = c }.format(amount)
@@ -112,9 +130,13 @@ object EnergyExport {
         val device: DeviceSnapshot,
         val summary: EnergySummary,
         val usages: List<Pair<String, Usage>>,
-        val price: Double,
+        val tariff: Tariff,
         val now: Long,
+        /** Önceki dönem (karşılaştırma için) ve bekleme tüketimi; yoksa null. */
+        val previous: EnergySummary? = null,
+        val standby: com.macerce.switchguard.core.Standby.Result? = null,
     ) {
+        val withCost get() = tariff.hasPrice
         val period get() = summary.period
         val elapsed get() = (minOf(summary.end, now) - summary.start).coerceAtLeast(0)
     }
@@ -123,13 +145,17 @@ object EnergyExport {
         withContext(Dispatchers.IO) {
             val now = System.currentTimeMillis()
             val metrics = MetricsLog.get(context)
-            val summary = metrics.summary(device.id, period, anchor, now)
+            val tariff = Store.get(context).tariffFor(device.id)
+            val summary = metrics.summary(device.id, period, anchor, now, tariff)
             val until = minOf(summary.end, now)
             val usages = device.switches.keys.sorted().map { ch ->
                 val label = if (device.isMultiChannel) context.getString(R.string.channel_n, ch + 1) else device.name
                 label to metrics.usage(device.id, ch, summary.start, until)
             }
-            val report = Report(device, summary, usages, Store.get(context).energyPrice, now)
+            val previous = runCatching { metrics.summary(device.id, period, EnergyReport.shift(period, anchor, -1), now, tariff) }.getOrNull()
+                ?.takeIf { it.coveredMs > 0 }
+            val standby = runCatching { metrics.standby(device.id, now) }.getOrNull()
+            val report = Report(device, summary, usages, tariff, now, previous, standby)
             val out = context.contentResolver.openOutputStream(uri, "wt") ?: error("no output stream")
             out.use {
                 when (format) {
@@ -156,7 +182,7 @@ object EnergyExport {
         val durations = EventLog.durations(context)
         return buildList {
             add(context.getString(R.string.energy_total) to DailySummary.formatKwh(s.kwh))
-            if (r.price > 0) add(context.getString(R.string.energy_cost) to EnergyFormat.money(s.kwh * r.price, locale))
+            if (r.withCost) add(context.getString(R.string.energy_cost) to EnergyFormat.money(s.cost, locale))
             EnergyFormat.averageLabel(r.period)?.let { label ->
                 s.avgPerActiveBucket?.let { add(context.getString(label) to DailySummary.formatKwh(it)) }
             }
@@ -203,7 +229,7 @@ object EnergyExport {
         rows += listOf(context.getString(R.string.energy_report_device), r.device.name)
         rows += listOf(context.getString(R.string.energy_report_period), EnergyFormat.periodLabel(r.period, r.summary.start, locale))
         rows += listOf(context.getString(R.string.energy_report_created), created)
-        if (r.price > 0) rows += listOf(context.getString(R.string.energy_report_price), EnergyFormat.money(r.price, locale))
+        if (r.withCost) rows += listOf(context.getString(R.string.energy_report_price), EnergyFormat.tariffText(context, r.tariff, locale))
         rows += emptyList<String>()
         rows += listOf(context.getString(R.string.energy_report_summary))
         summaryLines(context, r).forEach { (k, v) -> rows += listOf(k, v) }
@@ -216,7 +242,7 @@ object EnergyExport {
             sliceColumn(r.period), R.string.energy_report_col_kwh, R.string.energy_report_col_share,
             R.string.energy_report_col_avg, R.string.energy_report_col_peak, R.string.energy_report_col_peak_at,
             R.string.energy_report_col_covered,
-        ).map(context::getString) + listOfNotNull(context.getString(R.string.energy_report_col_cost).takeIf { r.price > 0 })
+        ).map(context::getString) + listOfNotNull(context.getString(R.string.energy_report_col_cost).takeIf { r.withCost })
         rows += header
         val total = r.summary.kwh
         r.summary.buckets.forEach { b ->
@@ -228,11 +254,11 @@ object EnergyExport {
                 b.peakWatts?.let(one::format).orEmpty(),
                 b.peakAt?.let { peakAt(context, r, it) }.orEmpty(),
                 if (b.coveredMs > 0) DurationText.format(b.coveredMs, durations) else "",
-            ) + listOfNotNull(money.format(b.kwh * r.price).takeIf { r.price > 0 })
+            ) + listOfNotNull(money.format(b.cost).takeIf { r.withCost })
         }
         rows += listOf(context.getString(R.string.energy_total), kwh.format(total), if (total > 0) one.format(100.0) else "") +
             listOf("", "", "", DurationText.format(r.summary.coveredMs, durations)) +
-            listOfNotNull(money.format(total * r.price).takeIf { r.price > 0 })
+            listOfNotNull(money.format(r.summary.cost).takeIf { r.withCost })
         rows += emptyList<String>()
         rows += listOf(context.getString(R.string.energy_hint))
         val separator = Csv.separatorFor(DecimalFormatSymbols.getInstance(locale).decimalSeparator)
@@ -241,252 +267,184 @@ object EnergyExport {
 
     // ------------------------------------------------------------ PDF
 
-    private const val W = 595f // A4, 1/72 inç
-    private const val H = 842f
-    private const val M = 40f
-    private const val ROW = 15f
-    private val ACCENT = Color.rgb(0x1F, 0x6F, 0xEB)
-    private val MUTED = Color.rgb(0x5F, 0x63, 0x68)
-    private val LINE = Color.rgb(0xDA, 0xDC, 0xE0)
-    private val ZEBRA = Color.rgb(0xF4, 0xF6, 0xF8)
+    /** PDF'in metin kısmı: göstergeler (açıklamalı), öne çıkanlar, anahtar kullanımı, terimler. */
+    private fun doc(context: Context, r: Report): ReportDoc {
+        val locale = locale(context)
+        val s = r.summary
+        val durations = EventLog.durations(context)
+        val created = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale).format(Date(r.now))
+        val periodText = EnergyFormat.periodLabel(r.period, s.start, locale)
+        val prevLabel = context.getString(when (r.period) {
+            EnergyPeriod.DAY -> R.string.report_vs_yesterday
+            EnergyPeriod.MONTH -> R.string.report_vs_last_month
+            EnergyPeriod.YEAR -> R.string.report_vs_last_year
+        })
+        fun trend(now: Double, before: Double?): Trend? {
+            if (before == null || (now == 0.0 && before == 0.0)) return null
+            val pct = Compare.change(now, before)
+            val text = when {
+                pct == null -> context.getString(R.string.report_trend_new, prevLabel, DailySummary.formatKwh(before))
+                kotlin.math.abs(pct) < Compare.SAME_PERCENT -> context.getString(R.string.report_trend_same, prevLabel)
+                pct > 0 -> context.getString(R.string.report_trend_up, prevLabel, pct)
+                else -> context.getString(R.string.report_trend_down, prevLabel, -pct)
+            }
+            return Trend(text, Compare.tone(pct, lowerIsBetter = true))
+        }
+        val pct = if (r.elapsed > 0) (s.coveredMs * 100 / r.elapsed).toInt().coerceIn(0, 100) else 0
 
-    private fun paint(size: Float, color: Int = Color.BLACK, bold: Boolean = false, align: Paint.Align = Paint.Align.LEFT) =
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            textSize = size; this.color = color; textAlign = align
-            typeface = Typeface.create(Typeface.SANS_SERIF, if (bold) Typeface.BOLD else Typeface.NORMAL)
+        val kpis = buildList {
+            add(Kpi(context.getString(R.string.energy_total), DailySummary.formatKwh(s.kwh), context.getString(R.string.kpi_total_caption), trend(s.kwh, r.previous?.kwh)))
+            if (r.withCost) add(Kpi(context.getString(R.string.energy_cost), EnergyFormat.money(s.cost, locale), EnergyFormat.tariffText(context, r.tariff, locale)))
+            s.avgWatts?.let { add(Kpi(context.getString(R.string.energy_avg_power), formatWatts(it), context.getString(R.string.kpi_avg_power_caption))) }
+            s.peak?.let { p -> add(Kpi(context.getString(R.string.energy_peak), formatWatts(p.peakWatts!!), context.getString(R.string.kpi_peak_caption, peakAt(context, r, p.peakAt!!)))) }
+            EnergyFormat.averageLabel(r.period)?.let { label ->
+                s.avgPerActiveBucket?.let { add(Kpi(context.getString(label), DailySummary.formatKwh(it), context.getString(R.string.kpi_bucket_avg_caption))) }
+            }
+            add(Kpi(context.getString(R.string.energy_coverage), context.getString(R.string.volume_pct, pct), context.getString(R.string.kpi_coverage_caption,
+                DurationText.format(s.coveredMs, durations), DurationText.format(r.elapsed, durations)), tone = if (pct < 90) Tone.WARN else Tone.GOOD))
         }
 
-    /** Sayfaları sırayla açar; [dry] iken çizmeden yalnızca sayfa sayar (alt bilgideki "Sayfa x / y" için). */
-    private class Pages(val doc: PdfDocument?, val footer: (Canvas, Int) -> Unit) {
-        var count = 0
-        var page: PdfDocument.Page? = null
-        var canvas: Canvas? = null
-        var y = M
-
-        fun next() {
-            finish()
-            count++
-            y = M
-            if (doc != null) {
-                page = doc.startPage(PdfDocument.PageInfo.Builder(W.toInt(), H.toInt(), count).create())
-                canvas = page!!.canvas
+        val findings = mutableListOf<Finding>()
+        s.busiest?.takeIf { s.kwh > 0 }?.let { b ->
+            findings += Finding(Severity.INFO, context.getString(R.string.ins_busiest, EnergyFormat.sliceLabel(r.period, b, locale), (b.kwh * 100 / s.kwh).toInt()))
+        }
+        r.previous?.let { prev ->
+            val change = Compare.change(s.kwh, prev.kwh)
+            if (change != null && kotlin.math.abs(change) >= 20 && r.elapsed >= (s.end - s.start)) {
+                findings += Finding(if (change > 0) Severity.WARN else Severity.GOOD,
+                    context.getString(if (change > 0) R.string.ins_more else R.string.ins_less, kotlin.math.abs(change), prevLabel))
             }
         }
-
-        fun finish() {
-            val p = page ?: return
-            footer(canvas!!, count)
-            doc!!.finishPage(p)
-            page = null
-            canvas = null
+        if (pct < 90) findings += Finding(Severity.WARN, context.getString(R.string.ins_coverage, pct), context.getString(R.string.act_battery))
+        // İçinde bulunulan ay: bu hızla ay sonu tahmini.
+        if (r.period == EnergyPeriod.MONTH && r.now < s.end && s.coveredMs > 3 * 86_400_000L) {
+            val factor = (s.end - s.start).toDouble() / s.coveredMs
+            val kwh = s.kwh * factor
+            findings += Finding(Severity.INFO, context.getString(R.string.ins_projection, DailySummary.formatKwh(kwh)) +
+                (if (r.withCost) " (≈ ${EnergyFormat.money(s.cost * factor, locale)})" else ""))
         }
-
-        /** [height] sığmıyorsa yeni sayfa; true döndürürse yeni sayfa açıldı. */
-        fun ensure(height: Float): Boolean {
-            if (y + height <= H - M - 20) return false
-            next()
-            return true
+        r.standby?.let { st ->
+            findings += Finding(Severity.INFO, context.getString(R.string.ins_standby, formatWatts(st.watts), DailySummary.formatKwh(st.monthlyKwh)), context.getString(R.string.act_standby))
         }
+        if (findings.isEmpty()) findings += Finding(Severity.GOOD, context.getString(R.string.ins_nothing))
+        val usage = usageLines(context, r).map { Finding(Severity.INFO, it) }
+
+        return ReportDoc(
+            title = context.getString(R.string.energy_report_title),
+            subtitle = context.getString(R.string.energy_report_subtitle, r.device.name, periodText, created),
+            intro = context.getString(R.string.energy_report_intro, r.device.name, periodText),
+            kpis = kpis,
+            sections = listOfNotNull(
+                ReportSection(context.getString(R.string.ins_title), context.getString(R.string.ins_explain), findings),
+                usage.takeIf { it.isNotEmpty() }?.let { ReportSection(context.getString(R.string.energy_report_usage), context.getString(R.string.usage_explain), it) },
+            ),
+            glossary = listOf(
+                R.string.gl_kwh to R.string.gl_kwh_def, R.string.gl_w to R.string.gl_w_def,
+                R.string.gl_peak to R.string.gl_peak_def, R.string.gl_coverage to R.string.gl_coverage_def,
+                R.string.gl_standby to R.string.gl_standby_def,
+            ).map { (k, v) -> context.getString(k) to context.getString(v) } +
+                listOfNotNull((context.getString(R.string.gl_tariff) to context.getString(R.string.gl_tariff_def)).takeIf { r.withCost }),
+            footnote = context.getString(R.string.energy_hint),
+        )
     }
 
     private fun pdf(context: Context, r: Report): PdfDocument {
-        // Önce sayfa sayısı (kuru geçiş), sonra asıl çizim.
-        val total = layout(context, r, Pages(null) { _, _ -> }).count
-        val doc = PdfDocument()
-        val foot = paint(8f, MUTED)
-        val footRight = paint(8f, MUTED, align = Paint.Align.RIGHT)
-        layout(context, r, Pages(doc) { c, n ->
-            c.drawText("SwitchGuard · " + r.device.name, M, H - M + 8, foot)
-            c.drawText(context.getString(R.string.energy_report_page, n, total), W - M, H - M + 8, footRight)
-        }).finish()
-        return doc
-    }
-
-    private fun layout(context: Context, r: Report, pages: Pages): Pages {
         val locale = locale(context)
-        val title = paint(20f, ACCENT, bold = true)
-        val h2 = paint(12f, bold = true)
-        val label = paint(9f, MUTED)
-        val text = paint(9.5f)
-        val bold = paint(9.5f, bold = true)
-        pages.next()
-        fun c() = pages.canvas
-
-        // Başlık
-        c()?.drawText(context.getString(R.string.energy_report_title), M, pages.y + 18, title)
-        pages.y += 30
-        val created = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, locale).format(Date(r.now))
-        val head = listOfNotNull(
-            context.getString(R.string.energy_report_device) to r.device.name,
-            context.getString(R.string.energy_report_period) to EnergyFormat.periodLabel(r.period, r.summary.start, locale),
-            context.getString(R.string.energy_report_created) to created,
-            (context.getString(R.string.energy_report_price) to EnergyFormat.money(r.price, locale)).takeIf { r.price > 0 },
+        return ReportPdf.render(
+            context, doc(context, r), "SwitchGuard · " + r.device.name,
+            middle = { pages ->
+                ReportPdf.sectionTitle(pages, context.getString(R.string.chart_title, context.getString(sliceColumn(r.period)).lowercase(locale)), context.getString(R.string.chart_explain))
+                val chartH = 150f
+                pages.ensure(chartH + 30)
+                pages.canvas?.let { chart(context, it, r, locale, ReportPdf.M, pages.y, ReportPdf.W - 2 * ReportPdf.M, chartH) }
+                pages.y += chartH + 30
+            },
+            end = { pages ->
+                ReportPdf.sectionTitle(pages, context.getString(R.string.energy_report_details), context.getString(R.string.table_explain))
+                table(context, r, pages)
+            },
         )
-        head.forEach { (k, v) ->
-            c()?.drawText(k, M, pages.y + 10, label)
-            c()?.drawText(v, M + 90, pages.y + 10, bold)
-            pages.y += ROW
-        }
-        pages.y += 6
-        c()?.drawLine(M, pages.y, W - M, pages.y, paint(1f, LINE))
-        pages.y += 16
-
-        // Özet: iki sütunlu kutucuklar
-        c()?.drawText(context.getString(R.string.energy_report_summary), M, pages.y + 10, h2)
-        pages.y += 20
-        val lines = summaryLines(context, r)
-        val colW = (W - 2 * M) / 2
-        lines.chunked(2).forEach { pair ->
-            pair.forEachIndexed { i, (k, v) ->
-                val x = M + i * colW
-                c()?.drawText(k, x, pages.y + 9, label)
-                c()?.drawText(fit(v, text, colW - 10), x, pages.y + 22, text)
-            }
-            pages.y += 30
-        }
-
-        // Anahtar kullanımı
-        val usage = usageLines(context, r)
-        if (usage.isNotEmpty()) {
-            pages.y += 4
-            c()?.drawText(context.getString(R.string.energy_report_usage), M, pages.y + 10, h2)
-            pages.y += 18
-            usage.forEach {
-                pages.ensure(ROW)
-                c()?.drawText(fit(it, text, W - 2 * M), M, pages.y + 10, text)
-                pages.y += ROW
-            }
-        }
-
-        // Grafik
-        pages.y += 10
-        val chartH = 130f
-        pages.ensure(chartH + 30)
-        c()?.let { chart(it, r, locale, M, pages.y, W - 2 * M, chartH) }
-        pages.y += chartH + 26
-
-        // Tablo
-        c()?.drawText(context.getString(R.string.energy_report_details), M, pages.y + 10, h2)
-        pages.y += 18
-        table(context, r, pages)
-
-        // Not
-        pages.y += 10
-        val note = paint(8f, MUTED)
-        wrap(context.getString(R.string.energy_hint), note, W - 2 * M).forEach {
-            pages.ensure(11f)
-            c()?.drawText(it, M, pages.y + 8, note)
-            pages.y += 11
-        }
-        return pages
     }
 
-    private fun chart(c: Canvas, r: Report, locale: Locale, x: Float, y: Float, w: Float, h: Float) {
+    /** Sütun grafik: y ekseni (kWh, üç ızgara çizgisi), dilim etiketleri, ortalama çizgisi ve açıklaması. */
+    private fun chart(context: Context, c: Canvas, r: Report, locale: Locale, x: Float, y: Float, w: Float, h: Float) {
         val buckets = r.summary.buckets
-        val axis = paint(7.5f, MUTED, align = Paint.Align.CENTER)
-        val axisLeft = paint(7.5f, MUTED)
+        val muted = ReportPdf.MUTED
+        val axis = ReportPdf.paint(7f, muted, align = Paint.Align.CENTER)
+        val axisRight = ReportPdf.paint(7f, muted, align = Paint.Align.RIGHT)
         val max = buckets.maxOfOrNull { it.kwh }?.takeIf { it > 0 } ?: 1.0
-        val plotTop = y + 12
-        val plotH = h - 12
-        c.drawText(DailySummary.formatKwh(max), x, y + 7, axisLeft)
-        c.drawLine(x, plotTop, x + w, plotTop, paint(0.5f, LINE))
-        c.drawLine(x, plotTop + plotH, x + w, plotTop + plotH, paint(1f, LINE))
-        val slot = w / buckets.size
-        val bar = paint(1f, ACCENT).apply { style = Paint.Style.FILL }
+        val left = x + 38
+        val plotW = w - 38
+        val plotTop = y + 14
+        val plotH = h - 28
+        c.drawText("kWh", x, y + 8, ReportPdf.paint(7f, muted, bold = true))
+        for (i in 0..3) {
+            val v = max * i / 3
+            val gy = plotTop + plotH - (plotH * i / 3)
+            c.drawLine(left, gy, left + plotW, gy, ReportPdf.paint(if (i == 0) 1f else 0.4f, ReportPdf.LINE))
+            c.drawText(EnergyFormat.decimal(locale, if (max < 1) 3 else 2).format(v), left - 4, gy + 2.5f, axisRight)
+        }
+        val slot = plotW / buckets.size
+        val bar = ReportPdf.fill(ReportPdf.ACCENT)
+        val busiest = r.summary.busiest
         val every = when (r.period) { EnergyPeriod.DAY -> 3; EnergyPeriod.MONTH -> 5; EnergyPeriod.YEAR -> 1 }
         buckets.forEachIndexed { i, b ->
             val bh = (b.kwh / max * plotH).toFloat()
-            val left = x + i * slot + slot * 0.15f
-            if (bh > 0) c.drawRoundRect(RectF(left, plotTop + plotH - bh, left + slot * 0.7f, plotTop + plotH), 1.5f, 1.5f, bar)
-            if (i % every == 0) c.drawText(EnergyFormat.axisLabel(r.period, b.start, locale), x + i * slot + slot / 2, plotTop + plotH + 10, axis)
+            val bx = left + i * slot + slot * 0.15f
+            val paint = if (b == busiest) ReportPdf.fill(android.graphics.Color.rgb(0x00, 0x4D, 0x40)) else bar
+            if (bh > 0) c.drawRoundRect(RectF(bx, plotTop + plotH - bh, bx + slot * 0.7f, plotTop + plotH), 1.5f, 1.5f, paint)
+            if (i % every == 0) c.drawText(EnergyFormat.axisLabel(r.period, b.start, locale), left + i * slot + slot / 2, plotTop + plotH + 10, axis)
         }
+        // Ortalama: ölçülen dilimlerin ortalaması, kesikli çizgi.
+        r.summary.avgPerActiveBucket?.let { avg ->
+            val ay = plotTop + plotH - (avg / max * plotH).toFloat()
+            val dash = ReportPdf.paint(0.8f, android.graphics.Color.rgb(0xB2, 0x6A, 0x00)).apply {
+                style = Paint.Style.STROKE; pathEffect = android.graphics.DashPathEffect(floatArrayOf(4f, 3f), 0f)
+            }
+            c.drawLine(left, ay, left + plotW, ay, dash)
+        }
+        // Açıklama (lejant)
+        val legendY = plotTop + plotH + 22
+        val lp = ReportPdf.paint(7f, muted)
+        c.drawRect(left, legendY - 6, left + 8, legendY + 1, bar)
+        c.drawText(context.getString(R.string.chart_legend_bar), left + 12, legendY, lp)
+        val l2 = left + 12 + lp.measureText(context.getString(R.string.chart_legend_bar)) + 16
+        c.drawRect(l2, legendY - 6, l2 + 8, legendY + 1, ReportPdf.fill(android.graphics.Color.rgb(0x00, 0x4D, 0x40)))
+        c.drawText(context.getString(R.string.chart_legend_busiest), l2 + 12, legendY, lp)
+        val l3 = l2 + 12 + lp.measureText(context.getString(R.string.chart_legend_busiest)) + 16
+        c.drawLine(l3, legendY - 2.5f, l3 + 12, legendY - 2.5f, ReportPdf.paint(1f, android.graphics.Color.rgb(0xB2, 0x6A, 0x00)))
+        c.drawText(context.getString(R.string.chart_legend_avg), l3 + 16, legendY, lp)
     }
 
-    private fun table(context: Context, r: Report, pages: Pages) {
+    private fun table(context: Context, r: Report, pages: ReportPdf.Pages) {
         val locale = locale(context)
         val kwh = EnergyFormat.decimal(locale, 3)
         val one = EnergyFormat.decimal(locale, 1)
         val durations = EventLog.durations(context)
-        val withCost = r.price > 0
-        // Sütun genişlikleri (toplam 515): ad, kWh, pay, ort, en yüksek, zamanı, ölçülen, [maliyet]
-        val widths = if (withCost) floatArrayOf(98f, 62f, 42f, 58f, 58f, 62f, 70f, 65f)
-        else floatArrayOf(118f, 72f, 50f, 66f, 66f, 70f, 73f)
+        val withCost = r.withCost
+        val total = r.summary.kwh
         val headers = listOf(
             sliceColumn(r.period), R.string.energy_report_col_kwh, R.string.energy_report_col_share,
             R.string.energy_report_col_avg, R.string.energy_report_col_peak, R.string.energy_report_col_peak_at,
             R.string.energy_report_col_covered,
         ).map(context::getString) + listOfNotNull(context.getString(R.string.energy_report_col_cost).takeIf { withCost })
-        val headPaint = paint(7.5f, MUTED, bold = true)
-        val cell = paint(8f)
-        val cellBold = paint(8f, bold = true)
-
-        fun row(values: List<String>, p: Paint, fill: Int?) {
-            val c = pages.canvas
-            if (c != null) {
-                if (fill != null) c.drawRect(M, pages.y, W - M, pages.y + ROW, paint(1f, fill).apply { style = Paint.Style.FILL })
-                var x = M
-                values.forEachIndexed { i, v ->
-                    val w = widths[i]
-                    val right = i > 0
-                    val pp = Paint(p).apply { textAlign = if (right) Paint.Align.RIGHT else Paint.Align.LEFT }
-                    c.drawText(fit(v, pp, w - 6), if (right) x + w - 3 else x + 3, pages.y + 10.5f, pp)
-                    x += w
-                }
-            }
-            pages.y += ROW
-        }
-
-        fun header() {
-            row(headers, headPaint, null)
-            pages.canvas?.drawLine(M, pages.y, W - M, pages.y, paint(1f, LINE))
-        }
-
-        pages.ensure(ROW * 3)
-        header()
-        val total = r.summary.kwh
-        r.summary.buckets.forEachIndexed { i, b ->
-            if (pages.ensure(ROW)) header()
-            row(
-                listOf(
-                    EnergyFormat.sliceLabel(r.period, b, locale),
-                    kwh.format(b.kwh),
-                    if (total > 0) one.format(b.kwh * 100 / total) else "–",
-                    b.avgWatts?.let(one::format) ?: "–",
-                    b.peakWatts?.let(one::format) ?: "–",
-                    b.peakAt?.let { EnergyFormat.peakTime(r.period, it, locale) } ?: "–",
-                    if (b.coveredMs > 0) DurationText.format(b.coveredMs, durations) else "–",
-                ) + listOfNotNull(EnergyFormat.money(b.kwh * r.price, locale).takeIf { withCost }),
-                cell, if (i % 2 == 1) ZEBRA else null,
-            )
-        }
-        if (pages.ensure(ROW)) header()
-        pages.canvas?.drawLine(M, pages.y, W - M, pages.y, paint(1f, LINE))
-        row(
+        val rows = r.summary.buckets.map { b ->
+            listOf(
+                EnergyFormat.sliceLabel(r.period, b, locale),
+                kwh.format(b.kwh),
+                if (total > 0) one.format(b.kwh * 100 / total) else "–",
+                b.avgWatts?.let(one::format) ?: "–",
+                b.peakWatts?.let(one::format) ?: "–",
+                b.peakAt?.let { EnergyFormat.peakTime(r.period, it, locale) } ?: "–",
+                if (b.coveredMs > 0) DurationText.format(b.coveredMs, durations) else "–",
+            ) + listOfNotNull(EnergyFormat.money(b.cost, locale).takeIf { withCost })
+        } + listOf(
             listOf(
                 context.getString(R.string.energy_total), kwh.format(total), if (total > 0) one.format(100.0) else "–",
                 r.summary.avgWatts?.let(one::format) ?: "–", r.summary.peak?.peakWatts?.let(one::format) ?: "–", "",
                 DurationText.format(r.summary.coveredMs, durations),
-            ) + listOfNotNull(EnergyFormat.money(total * r.price, locale).takeIf { withCost }),
-            cellBold, null,
+            ) + listOfNotNull(EnergyFormat.money(r.summary.cost, locale).takeIf { withCost }),
         )
-    }
-
-    /** Sığmayan metni "…" ile kısaltır. */
-    private fun fit(text: String, p: Paint, width: Float): String {
-        if (p.measureText(text) <= width) return text
-        var end = text.length
-        while (end > 0 && p.measureText(text, 0, end) + p.measureText("…") > width) end--
-        return text.substring(0, end) + "…"
-    }
-
-    private fun wrap(text: String, p: Paint, width: Float): List<String> {
-        val lines = mutableListOf<String>()
-        var line = ""
-        text.split(' ').forEach { word ->
-            val next = if (line.isEmpty()) word else "$line $word"
-            if (p.measureText(next) > width && line.isNotEmpty()) { lines += line; line = word } else line = next
-        }
-        if (line.isNotEmpty()) lines += line
-        return lines
+        ReportPdf.table(pages, ReportTable(headers, rows, context.getString(R.string.table_note)))
     }
 }

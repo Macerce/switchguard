@@ -4,6 +4,7 @@
     <color name="widget_text">#FFE0EAE9</color>
     <color name="widget_text_secondary">#FFB8C7C6</color>
     <color name="widget_icon">#FF80D5D4</color>
+    <color name="widget_on">#FF00897B</color>
     <color name="widget_alarm">#FF8C1D18</color>
     <color name="widget_problem">#FF6B4100</color>
 </resources>

@@ -206,6 +206,37 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var energyPrice: Double
         get() = str("energyPrice").toDoubleOrNull() ?: 0.0
         set(v) = put { putString("energyPrice", v.coerceAtLeast(0.0).toString()) }
+    /** Cihaza özel kWh fiyatları (cihaz → fiyat); olmayan cihaz [energyPrice]'ı kullanır. */
+    var devicePrices: Map<String, Double>
+        get() = parsed.get("devicePrices", prefs.getString("devicePrices", null)) { json ->
+            runCatching { org.json.JSONObject(json ?: "{}").let { o -> o.keys().asSequence().associateWith { o.getDouble(it) } } }.getOrDefault(emptyMap())
+        }
+        set(v) = put { putString("devicePrices", org.json.JSONObject(v.filterValues { it > 0 }).toString()) }
+    /** Cihazın kWh fiyatı: kendi fiyatı, yoksa varsayılan; 0 = maliyet hesaplanmaz. */
+    fun priceFor(deviceId: String): Double = devicePrices[deviceId] ?: energyPrice
+    /** Varsayılan tarife üç zamanlı mı (gündüz/puant/gece); değilse [energyPrice] tek fiyat. */
+    var threeZone: Boolean
+        get() = prefs.getBoolean("threeZone", false)
+        set(v) = put { putBoolean("threeZone", v) }
+    var priceDay: Double
+        get() = str("priceDay").toDoubleOrNull() ?: 0.0
+        set(v) = put { putString("priceDay", v.coerceAtLeast(0.0).toString()) }
+    var pricePeak: Double
+        get() = str("pricePeak").toDoubleOrNull() ?: 0.0
+        set(v) = put { putString("pricePeak", v.coerceAtLeast(0.0).toString()) }
+    var priceNight: Double
+        get() = str("priceNight").toDoubleOrNull() ?: 0.0
+        set(v) = put { putString("priceNight", v.coerceAtLeast(0.0).toString()) }
+    /** Cihazın tarifesi: kendi fiyatı varsa tek fiyat, yoksa varsayılan (tek ya da üç zamanlı). */
+    fun tariffFor(deviceId: String): com.macerce.switchguard.core.Tariff = devicePrices[deviceId]?.let { com.macerce.switchguard.core.Tariff.Flat(it) }
+        ?: if (threeZone) com.macerce.switchguard.core.Tariff.ThreeZone(priceDay, pricePeak, priceNight)
+        else com.macerce.switchguard.core.Tariff.Flat(energyPrice)
+    /** Hiçbir cihaz için fiyat yok: maliyet hesaplanamaz. */
+    val hasAnyPrice get() = energyPrice > 0 || devicePrices.isNotEmpty() || (threeZone && (priceDay > 0 || pricePeak > 0 || priceNight > 0))
+    /** [price] null ya da 0 ise cihazın kendi fiyatı kalkar (varsayılan kullanılır). */
+    fun setDevicePrice(deviceId: String, price: Double?) {
+        devicePrices = if (price == null || price <= 0) devicePrices - deviceId else devicePrices + (deviceId to price)
+    }
     /** WebSocket kullanılamazsa yedek sorgulama aralığı. */
     var pollIntervalSec: Int
         get() = prefs.getInt("pollIntervalSec", 30)
@@ -253,7 +284,91 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     /** Haber verme açık ve gönderilebilir durumda (anahtar ve en az bir kişi var). Şifre çözmeden bakılır. */
     val escalationReady get() = escalateMin > 0 && str("tgToken").isNotEmpty() && telegramRecipients.isNotEmpty()
 
-    fun disableEscalation() = put { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin") }
+    fun disableEscalation() = put { remove("tgToken"); remove("tgBot"); remove("tgChats"); remove("escalateMin"); remove("wdMode") }
+
+    /** Telegram'dan /durum, /ac, /kapat komutları ve "Gördüm" düğmesi. */
+    var telegramCommands: Boolean
+        get() = prefs.getBoolean("tgCommands", true)
+        set(v) = put { putBoolean("tgCommands", v) }
+    /** Telegram'dan cihaz açıp kapatmaya izin (varsayılan kapalı: yalnızca durum sorulabilir). */
+    var telegramControl: Boolean
+        get() = prefs.getBoolean("tgControl", false)
+        set(v) = put { putBoolean("tgControl", v) }
+    /** Elektrik kesintisi, tüketim, bekçi ve haftalık rapor Telegram'a da yazılsın. */
+    var telegramForward: Boolean
+        get() = prefs.getBoolean("tgForward", true)
+        set(v) = put { putBoolean("tgForward", v) }
+    /** Bekçi rolü: [WATCHDOG_OFF], [WATCHDOG_SEND] (bu cihaz sinyal verir) ya da [WATCHDOG_WATCH] (diğerini denetler). */
+    var watchdogMode: Int
+        get() = prefs.getInt("wdMode", WATCHDOG_OFF)
+        set(v) = put { putInt("wdMode", v) }
+    /** Denetleyen: diğer cihaz bu kadar dakika sinyal vermezse alarm. */
+    var watchdogMin: Int
+        get() = prefs.getInt("wdMin", 60)
+        set(v) = put { putInt("wdMin", v.coerceAtLeast(15)) }
+
+    // --- Akıllı uyarılar ---
+    /** İzlenen cihazların hepsi birlikte koparsa tek "elektrik kesildi" olayı. */
+    var outageDetect: Boolean
+        get() = prefs.getBoolean("outageDetect", true)
+        set(v) = put { putBoolean("outageDetect", v) }
+    /** Bir cihaz dün ortalamasından belirgin fazla/az enerji harcadıysa bildir. */
+    var energyAnomaly: Boolean
+        get() = prefs.getBoolean("energyAnomaly", true)
+        set(v) = put { putBoolean("energyAnomaly", v) }
+    /** Aylık tahmini maliyet bunu geçince bildir; 0 = kapalı ([energyPrice] gerekir). */
+    var monthlyBudget: Double
+        get() = str("budget").toDoubleOrNull() ?: 0.0
+        set(v) = put { putString("budget", v.coerceAtLeast(0.0).toString()) }
+    /** Bu cihaz (prize takılı telefon/tablet) şarjdan çıkınca elektrik kesintisi say. Yalnızca bu cihaza ait, aktarıma girmez. */
+    var chargerOutage: Boolean
+        get() = prefs.getBoolean("chargerOutage", false)
+        set(v) = put { putBoolean("chargerOutage", v) }
+
+    /** Evde / Dışarıda modu (true = dışarıda). Tatilde her zaman dışarıda sayılır ([isAway]). */
+    var awayMode: Boolean
+        get() = prefs.getBoolean("away", false)
+        set(v) = put { putBoolean("away", v) }
+    /** Evdeyken kritik olmayan cihazların alarmı bildirime düşer (sessiz saat gibi). */
+    var softenAtHome: Boolean
+        get() = prefs.getBoolean("softenAtHome", false)
+        set(v) = put { putBoolean("softenAtHome", v) }
+    /** Tatil modunun bittiği an (ms); 0 = kapalı. */
+    var vacationUntil: Long
+        get() = prefs.getLong("vacationUntil", 0)
+        set(v) = put { putLong("vacationUntil", v) }
+    fun isAway(now: Long = System.currentTimeMillis()) = com.macerce.switchguard.core.Presence.away(awayMode, vacationUntil, now)
+    fun onVacation(now: Long = System.currentTimeMillis()) = com.macerce.switchguard.core.Presence.vacation(vacationUntil, now)
+
+    /** Kademeli haber: kişi/grup → kaç dakika sonra (yoksa [escalateMin]). */
+    var telegramStages: Map<Long, Int>
+        get() = parsed.get("tgStages", prefs.getString("tgStages", null)) { json ->
+            runCatching { org.json.JSONObject(json ?: "{}").let { o -> o.keys().asSequence().associate { it.toLong() to o.getInt(it) } } }.getOrDefault(emptyMap())
+        }
+        set(v) = put { putString("tgStages", org.json.JSONObject(v.mapKeys { it.key.toString() }).toString()) }
+    fun stageFor(chatId: Long): Int = telegramStages[chatId] ?: escalateMin
+
+    var scenes: List<com.macerce.switchguard.core.Scene>
+        get() = parsed.get("scenes", prefs.getString("scenes", null)) { com.macerce.switchguard.core.Scene.listFromJson(it) }
+        set(v) = put { putString("scenes", com.macerce.switchguard.core.Scene.listToJson(v)) }
+    fun saveScene(s: com.macerce.switchguard.core.Scene) {
+        val list = scenes
+        scenes = if (list.any { it.id == s.id }) list.map { if (it.id == s.id) s else it } else list + s
+    }
+    fun deleteScene(id: String) { scenes = scenes.filterNot { it.id == id } }
+
+    /** Gün doğumu/batımı ve hava sıcaklığı kuralları için konum; null = girilmedi. */
+    var latitude: Double?
+        get() = str("lat").toDoubleOrNull()
+        set(v) = put { putString("lat", v?.toString() ?: "") }
+    var longitude: Double?
+        get() = str("lon").toDoubleOrNull()
+        set(v) = put { putString("lon", v?.toString() ?: "") }
+
+    /** Pazartesi sabahı geçen haftanın raporu. */
+    var weeklyReport: Boolean
+        get() = prefs.getBoolean("weeklyReport", false)
+        set(v) = put { putBoolean("weeklyReport", v) }
 
     /** Üretici "otomatik başlatma" ayarı okunamaz: kullanıcı yaptığını "Yaptım" ile onaylar. */
     var autostartConfirmed: Boolean
@@ -358,6 +473,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken")
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
+        const val WATCHDOG_OFF = 0
+        const val WATCHDOG_SEND = 1
+        const val WATCHDOG_WATCH = 2
 
         @Volatile private var instance: Store? = null
         fun get(context: Context): Store =

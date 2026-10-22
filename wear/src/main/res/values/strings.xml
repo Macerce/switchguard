@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">SwitchGuard</string>
+    <string name="alarm_title">SwitchGuard alarm</string>
+    <string name="channel_alarm">Alarm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="devices">Devices</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="offline">Offline</string>
+    <string name="no_phone">Open SwitchGuard on your phone. The watch shows its alarms and devices.</string>
+    <string name="home">At home</string>
+    <string name="away">Away</string>
+    <string name="vacation">On vacation</string>
+    <string name="scenes">Scenes</string>
+</resources>

@@ -16,7 +16,7 @@ import java.time.Instant
  */
 object Backup {
     /** Telegram ile haber verme de girer: aynı kişinin yeni telefonu aynı kişilere haber versin. */
-    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice")
+    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages")
 
     /** İçerik biçiminin etiketi; Windows sürümünün yedeği aynı zarfı kullanır ama içeriği farklıdır. */
     const val APP = "android"

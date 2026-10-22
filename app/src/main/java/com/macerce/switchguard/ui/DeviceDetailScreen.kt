@@ -93,12 +93,14 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
         }
         Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 24.dp)) {
             ControlHero(device, monitored)
+            ConnectionCard(device)
 
             if (device.cloud == Cloud.DEMO) DemoSection(device)
 
             // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez.
             // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
             if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
+            if (device.hasEnergy && device.cloud != Cloud.DEMO) StandbyCard(device)
 
             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
             if (device.cloud == Cloud.EWELINK) TimersSection(device)

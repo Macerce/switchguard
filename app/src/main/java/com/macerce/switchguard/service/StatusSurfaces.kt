@@ -58,6 +58,8 @@ object StatusSurfaces {
      * sistem tarafındaki bir hata alarmı ve izleme thread'ini asla düşürmemeli.
      */
     fun refresh(context: Context, force: Boolean = false) {
+        // Saat uygulaması: alarm satırları ve cihazlar da değişmiş olabilir; aynıysa gönderilmez.
+        WearBridge.publish(context)
         runCatching {
             val now = current(context)
             if (!force && now == lastShown) return

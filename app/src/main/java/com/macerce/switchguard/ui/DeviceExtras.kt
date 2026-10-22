@@ -49,6 +49,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -190,7 +191,9 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
     var period by rememberSaveable { mutableStateOf(EnergyPeriod.DAY) }
     var anchor by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
     var selected by remember(period, anchor) { mutableStateOf<Int?>(null) }
-    var price by remember { mutableDoubleStateOf(store.energyPrice) }
+    var price by remember { mutableDoubleStateOf(store.priceFor(device.id)) }
+    // Fiyat değişince maliyet yeniden hesaplansın.
+    val tariff = remember(price) { store.tariffFor(device.id) }
     var editPrice by remember { mutableStateOf(false) }
     var chooseReport by remember { mutableStateOf(false) }
 
@@ -199,8 +202,8 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
     val isCurrent = now in start until end
     val first = remember(metricsVersion) { metrics.firstPowerTime(device.id) }
     // Yalnızca içinde bulunulan dönem yeni ölçümle değişir; geçmiş dönemler bir kez hesaplanır.
-    val summary by produceState<EnergySummary?>(null, period, start, if (isCurrent) metricsVersion else -1) {
-        value = withContext(Dispatchers.IO) { metrics.summary(device.id, period, start) }
+    val summary by produceState<EnergySummary?>(null, period, start, if (isCurrent) metricsVersion else -1, tariff) {
+        value = withContext(Dispatchers.IO) { metrics.summary(device.id, period, start, tariff = tariff) }
     }
 
     @Composable
@@ -266,7 +269,7 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
         } else {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Metric(stringResource(R.string.energy_total), DailySummary.formatKwh(s.kwh), big = true)
-                if (price > 0) Metric(stringResource(R.string.energy_cost), EnergyFormat.money(s.kwh * price, locale))
+                if (tariff.hasPrice) Metric(stringResource(R.string.energy_cost), EnergyFormat.money(s.cost, locale))
             }
             PeriodBars(s, selected, locale) { selected = if (selected == it) null else it }
             val sel = selected?.let { s.buckets.getOrNull(it) }
@@ -274,7 +277,7 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
             Text(
                 if (sel != null) EnergyFormat.sliceLabel(period, sel, locale) + ": " + DailySummary.formatKwh(sel.kwh) +
                     (sel.peakWatts?.let { " · $peakText " + formatWatts(it) } ?: "") +
-                    (if (price > 0) " · " + EnergyFormat.money(sel.kwh * price, locale) else "")
+                    (if (tariff.hasPrice) " · " + EnergyFormat.money(sel.cost, locale) else "")
                 else s.peak?.let { p ->
                     "$peakText: " + formatWatts(p.peakWatts!!) + " (" +
                         EnergyFormat.peakTime(if (period == EnergyPeriod.DAY) period else EnergyPeriod.YEAR, p.peakAt!!, locale) + ")"
@@ -301,7 +304,11 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
                 }
             }
             TextButton(onClick = { editPrice = true }, modifier = Modifier.tvFocusRing()) {
-                Text(stringResource(R.string.energy_set_price) + (if (price > 0) ": " + EnergyFormat.money(price, locale) else ""))
+                Text(stringResource(R.string.energy_set_price) + when {
+                    tariff is com.macerce.switchguard.core.Tariff.ThreeZone && tariff.hasPrice -> ": " + stringResource(R.string.tariff_three_short)
+                    price > 0 -> ": " + EnergyFormat.money(price, locale)
+                    else -> ""
+                })
             }
         }
     }
@@ -328,27 +335,47 @@ private fun EnergyHistory(device: DeviceSnapshot, metricsVersion: Int) {
         )
     }
     if (editPrice) {
-        var text by remember { mutableStateOf(if (price > 0) formatPrice(price) else "") }
+        val own = store.devicePrices[device.id]
+        var text by remember { mutableStateOf(own?.let(::formatPrice) ?: "") }
+        var asDefault by remember { mutableStateOf(store.energyPrice <= 0) }
         val symbol = EnergyFormat.currency()?.getSymbol(locale) ?: ""
+        val fallback = store.energyPrice
         AlertDialog(
             onDismissRequest = { editPrice = false },
             title = { Text(stringResource(R.string.energy_price_title)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text(stringResource(R.string.energy_price_desc, symbol))
+                    Text(stringResource(R.string.energy_price_device_desc, device.name, symbol))
                     OutlinedTextField(
                         value = text,
                         onValueChange = { v -> text = v.filter { it.isDigit() || it == ',' || it == '.' }.take(10) },
                         singleLine = true,
                         suffix = { Text("$symbol / kWh") },
+                        placeholder = if (fallback > 0) ({ Text(formatPrice(fallback)) }) else null,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     )
+                    if (fallback > 0) {
+                        Text(
+                            stringResource(R.string.energy_price_default_hint, EnergyFormat.money(fallback, locale)),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                    Row(
+                        Modifier.fillMaxWidth().clickable { asDefault = !asDefault }.tvFocusRing(),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Checkbox(checked = asDefault, onCheckedChange = null)
+                        Text(stringResource(R.string.energy_price_as_default), Modifier.padding(start = 8.dp))
+                    }
                 }
             },
             confirmButton = {
                 TextButton(onClick = {
-                    store.energyPrice = text.replace(',', '.').toDoubleOrNull() ?: 0.0
-                    price = store.energyPrice
+                    val value = text.replace(',', '.').toDoubleOrNull()
+                    store.setDevicePrice(device.id, value)
+                    if (asDefault && value != null) store.energyPrice = value
+                    price = store.priceFor(device.id)
                     editPrice = false
                 }) { Text(stringResource(android.R.string.ok)) }
             },

@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Add
@@ -89,7 +90,7 @@ import kotlinx.coroutines.delay
 
 /** Uyarılar sekmesinin alt sayfası ([id]: cihaz ya da koşullu uyarı kimliği); null = sekmenin kendisi. */
 private data class AlertsRoute(val kind: Kind, val id: String = "") : java.io.Serializable {
-    enum class Kind { DEVICE_RULES, EDITOR, ALARM, QUIET }
+    enum class Kind { DEVICE_RULES, EDITOR, ALARM, QUIET, SMART }
 }
 
 /**
@@ -151,6 +152,7 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
             }
             AlertsRoute.Kind.ALARM -> SettingsSubPage(SettingsPage.ALARM, onBack = back, showDialog = showDialog)
             AlertsRoute.Kind.QUIET -> SettingsSubPage(SettingsPage.QUIET, onBack = back, showDialog = showDialog)
+            AlertsRoute.Kind.SMART -> SettingsSubPage(SettingsPage.SMART, onBack = back, showDialog = showDialog)
         }
     }
 
@@ -209,6 +211,7 @@ private fun AlertsHome(
                 onFix = onOpenPermissions,
                 onTest = { showDialog { TestAlarmDialog(onDismiss = { showDialog(null) }) } },
             )
+            PresenceCard(s)
 
             // ------------------------------------------------ Cihaz uyarıları
             SectionTitle(stringResource(R.string.section_device_alerts), Modifier.padding(top = 8.dp))
@@ -283,6 +286,12 @@ private fun AlertsHome(
                     Icons.AutoMirrored.Rounded.Send, Hue.BLUE, stringResource(R.string.tg_title),
                     onClick = { showDialog { TelegramDialog(store) { showDialog(null) } } },
                     summary = escalationSummary(s),
+                )
+                RowDivider(68.dp)
+                MenuRow(
+                    Icons.Rounded.AutoAwesome, Hue.AMBER, stringResource(R.string.smart_title),
+                    onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.SMART), "smart") }, modifier = focus("smart"),
+                    summary = stringResource(R.string.smart_summary),
                 )
             }
         }

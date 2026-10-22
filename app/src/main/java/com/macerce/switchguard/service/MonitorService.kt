@@ -5,7 +5,10 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
+import android.content.BroadcastReceiver
 import android.content.Intent
+import android.content.IntentFilter
+import android.os.BatteryManager
 import android.content.pm.ServiceInfo
 import android.content.res.Configuration
 import android.net.ConnectivityManager
@@ -22,6 +25,8 @@ import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
+import com.macerce.switchguard.api.WeatherClient
+import com.macerce.switchguard.core.Environment
 import com.macerce.switchguard.api.TelegramClient
 import com.macerce.switchguard.api.TelegramException
 import com.macerce.switchguard.api.TuyaAuthException
@@ -45,9 +50,14 @@ import com.macerce.switchguard.core.DurationText
 import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
+import com.macerce.switchguard.core.EnergyWatch
 import com.macerce.switchguard.core.MonitorGap
 import com.macerce.switchguard.core.OfflineGrace
+import com.macerce.switchguard.core.OutageWatch
+import com.macerce.switchguard.core.TelegramBot
+import com.macerce.switchguard.core.Watchdog
 import com.macerce.switchguard.core.RuleEngine
+import com.macerce.switchguard.core.Scene
 import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.core.TuyaEvent
 import com.macerce.switchguard.core.TuyaParser
@@ -61,7 +71,9 @@ import com.macerce.switchguard.data.LiveState
 import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.ui.Actions
 import com.macerce.switchguard.ui.AlarmActivity
+import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.text.DateFormat
 import java.util.Calendar
@@ -99,6 +111,7 @@ class MonitorService : Service() {
 
     /** Başlarken diskteki kayıttan yüklenir (bkz. [restoreRuntime]). */
     private var grace = OfflineGrace()
+    private var outage = OutageWatch()
     private var running = false
     private var wakeLock: PowerManager.WakeLock? = null
     private var authFailed = false
@@ -168,19 +181,7 @@ class MonitorService : Service() {
                 return START_NOT_STICKY
             }
             ACTION_DISMISS -> {
-                handler.post {
-                    val lines = store.pendingAlarm
-                    if (lines.isNotEmpty()) {
-                        logDismissal(lines.size)
-                        reminders.onDismiss(System.currentTimeMillis())
-                        persistRuntime()
-                    }
-                    store.pendingAlarm = emptyList()
-                    runtime.silentAlarm = false
-                    endEscalation()
-                    notifier.stopAlarm()
-                    StatusSurfaces.refresh(this)
-                }
+                handler.post { dismissAlarm() }
                 // Süreç ölmüş ve servis yalnızca bu kapatma için yeniden doğmuş olabilir: izleme açıksa kapanmak
                 // yerine devam etsin (bildirim düğmesinden gelen başlatmaya Android izin verir).
                 if (!running) {
@@ -245,6 +246,7 @@ class MonitorService : Service() {
         running = true
         notifier.clearMonitoringStopped()
         registerNetworkCallback()
+        registerPowerReceiver()
         handler.post {
             applyWakeMode()
             // Bu çalışma başladı: bundan sonra beklenmedik bir kapanma "kesinti" sayılır.
@@ -257,6 +259,7 @@ class MonitorService : Service() {
             setState(ConnState.CONNECTING)
             runCatching { metrics.prune() }
             SummaryScheduler.schedule(this)
+            WeeklyScheduler.schedule(this)
             sync()
             reconnectNow()
             tuyaTick(SystemClock.elapsedRealtime())
@@ -281,6 +284,9 @@ class MonitorService : Service() {
             endEscalation()
             runtime.clearEngine()
             grace = OfflineGrace()
+            outage = OutageWatch()
+            // Bekçi: diğer cihaz "izleme kapatıldı"yı görsün, sessizlik alarmı vermesin.
+            if (store.watchdogMode == Store.WATCHDOG_SEND) sendBeat(System.currentTimeMillis(), stopped = true)
             automations = AutomationEngine()
             reminders = AlarmReminders()
             notifier.clearBlind()
@@ -298,6 +304,8 @@ class MonitorService : Service() {
         instance = null
         running = false
         networkCallback?.let { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) }
+        powerReceiver?.let { runCatching { unregisterReceiver(it) } }
+        powerReceiver = null
         // İzleme hâlâ açıksa bekçi tick'i kalır: servisi yeniden başlatacak olan odur.
         if (!store.monitoringEnabled) cancelAlarmTick()
         // Kuyruğu boşaltma: stopMonitoring'in temizlik işleri henüz çalışmamış olabilir.
@@ -342,11 +350,17 @@ class MonitorService : Service() {
         val wall = System.currentTimeMillis()
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
-        runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall))
+        checkOutage(wall)
+        runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall, env()))
+        weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
         checkReminders(wall)
         checkEscalation(wall)
+        checkVacation(wall)
+        pollTelegram(wall)
+        watchdogTick(wall)
+        energyTick(wall)
         checkSecrets()
         persistRuntime()
         heartbeat(wall)
@@ -749,9 +763,14 @@ class MonitorService : Service() {
         val previous = store.snapshots.associateBy { it.id }
         store.snapshots = current
         runCatching { metrics.record(previous, current, wall) }
+        // Cihaz düğmesi widget'ları açık/kapalı ve bağlantı değişince tazelenir.
+        if (current.any { d -> previous[d.id]?.let { it.online != d.online || it.switches != d.switches } != false }) {
+            DeviceWidget.updateAll(this)
+            WearBridge.publish(this)
+        }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
-        runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall))
+        runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall, env()))
         persistRuntime()
         heartbeat(wall)
     }
@@ -759,6 +778,7 @@ class MonitorService : Service() {
     /** Önceki süreçten kalan bekleyen işleri yükler; servis oluşurken işçi thread'inin ilk işi olarak çalışır. */
     private fun restoreRuntime() {
         grace = OfflineGrace.fromJson(runtime.grace)
+        outage = OutageWatch.fromJson(runtime.outage)
         automations.restore(runtime.automationState, store.automations)
         reminders = AlarmReminders.fromJson(runtime.reminders)
         // Önceki süreçten kalan "izleyemiyor" uyarısı: yeni süreç o kesintiyi bilmez, düzelince kaldıramazdı.
@@ -828,6 +848,7 @@ class MonitorService : Service() {
     /** Servis beklenmedik şekilde kapanırsa kaldığı yerden devam edebilsin. */
     private fun persistRuntime() {
         runtime.grace = grace.toJson()
+        runtime.outage = outage.toJson()
         runtime.automationState = automations.saveState()
         runtime.reminders = reminders.toJson()
     }
@@ -876,7 +897,7 @@ class MonitorService : Service() {
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
         // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshots.associateBy { it.id }, store.automations) ?: return
+        val due = automations.nextDueAt(store.snapshots.associateBy { it.id }, store.automations, env()) ?: return
         handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
@@ -904,16 +925,26 @@ class MonitorService : Service() {
                     notifier.notifyEvent(failed)
                 }
             }
+            ActionKind.RUN_SCENE -> {
+                val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
+                if (scene == null) {
+                    val args = EventArgs.AutoMissing(a.name)
+                    log.add("", a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+                    return
+                }
+                // Ağ işi: izleme iş parçacığı beklemesin.
+                telegram.execute { runBlocking { Actions.runScene(this@MonitorService, scene, a.name) } }
+            }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
                 val source = store.snapshots.firstOrNull { it.id == a.trigger.deviceId }
                 val args = EventArgs.AutoAlert(a.name, source?.name)
                 val text = args.render(source?.name ?: a.name, strings)
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
-                val allowed = store.isPro || a.trigger.deviceId in store.monitoredIds()
+                val allowed = store.isPro || !a.trigger.kind.usesDevice || a.trigger.deviceId in store.monitoredIds()
                 val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()), critical = rules.critical)
+                    else RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = rules.soundUri
                 when (effective) {
@@ -943,13 +974,46 @@ class MonitorService : Service() {
                 log.add(change.deviceId, change.name, EventKind.SHORT_DROP, strings.shortDrop(change.name), AlertAction.IGNORE.name, EventArgs.ShortDrop)
                 return
             }
+            if (change.to) when (val o = outage.onOnline(change.deviceId, wall)) {
+                // Kesinti kararı beklenirken geri geldi: kopma ve dönüş olağan yoldan.
+                is OutageWatch.Online.Release -> deliver(o.held.change, o.held.action)
+                is OutageWatch.Online.Restored -> {
+                    onPowerRestored(o.from, o.to)
+                    deliverQuietly(change)
+                    return
+                }
+                OutageWatch.Online.Absorbed -> {
+                    deliverQuietly(change)
+                    return
+                }
+                OutageWatch.Online.Pass -> Unit
+            }
         }
         dispatch(change, action)
     }
 
+    /** Kopmalar önce elektrik kesintisi algılamasından geçer (bkz. [OutageWatch]). */
     private fun dispatch(change: Change, action: AlertAction) {
+        if (change is Change.Connection && !change.to) {
+            val wall = System.currentTimeMillis()
+            when (val o = outage.offer(change, action, wall, store.monitoredIds().size, store.outageDetect)) {
+                is OutageWatch.Offer.Hold -> {
+                    handler.postDelayed({ tick() }, (o.dueAt - wall).coerceAtLeast(0) + 50)
+                    return
+                }
+                OutageWatch.Offer.Absorbed -> {
+                    deliverQuietly(change)
+                    return
+                }
+                OutageWatch.Offer.Pass -> Unit
+            }
+        }
+        deliver(change, action)
+    }
+
+    private fun deliver(change: Change, action: AlertAction) {
         val rules = store.rulesFor(change.deviceId)
-        val effective = RuleEngine.effective(action, quiet = store.quietHours.contains(minuteOfDay()), critical = rules.critical)
+        val effective = RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
         val text = change.describe(labels)
         log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
         val sound = rules.soundUri
@@ -977,7 +1041,7 @@ class MonitorService : Service() {
             stillAlarmed = { c -> c.deviceId in monitored && store.rulesFor(c.deviceId).actionFor(c.eventType) == AlertAction.ALARM },
         )
         if (due.isEmpty()) return
-        val quiet = store.quietHours.contains(minuteOfDay())
+        val quiet = quietNow()
         for (r in due) {
             val args = EventArgs.Reminder.of(r)
             val text = args.render(r.change.name, strings)
@@ -1013,78 +1077,81 @@ class MonitorService : Service() {
 
     /** Gönderilemeyen haber vermenin geçmişe yazıldığı alarm: her denemede tekrar yazılmasın. */
     private var escalationFailureLoggedFor = 0L
-    /** Kalıcı hata (anahtar geçersiz, bot engellenmiş, sohbet yok) alınan alarm: yeniden denenmez. */
-    private var escalationGaveUpFor = 0L
     private var escalationRetryAt = 0L
     /** Gönderim sürüyor: bir sonraki tick aynı mesajı ikinci kez göndermesin. */
     private var escalationInFlight = false
 
     /**
-     * Alarm [Store.escalateMin] dakika kapatılmazsa seçilen kişilere Telegram mesajı gider (alarm başına bir kez).
-     * Gönderilemezse (internet yok) dakikada bir yeniden denenir; ilk başarısızlık geçmişe yazılır.
+     * Kademeli haber verme: alarm kişinin bekleme süresi ([Store.stageFor]) içinde kapatılmazsa o kişiye Telegram mesajı
+     * gider (alarm başına kişi başı bir kez). "Gördüm" ya da kapatma sonraki kademeleri iptal eder. Gönderilemezse
+     * (internet yok) dakikada bir yeniden denenir; kalıcı hata alan kişi bu alarm için atlanır.
      * Ağ işi [telegram] iş parçacığında: yavaş bağlantı izlemeyi (cihaz olaylarını) bekletmesin.
      */
     private fun checkEscalation(wall: Long) {
-        if (escalationInFlight || store.pendingAlarm.isEmpty() || !store.escalationReady) return
+        if (escalationInFlight || store.pendingAlarm.isEmpty() || !store.escalationReady || wall < escalationRetryAt) return
         val at = runtime.realAlarmAt
-        if (!Escalation.due(at, runtime.escalatedFor, wall, store.escalateMin * 60_000L)) return
-        if (at == escalationGaveUpFor || wall < escalationRetryAt) return
-        val minutes = ((wall - at) / 60_000L).toInt().coerceAtLeast(store.escalateMin)
-        val text = Escalation.message(
-            header = getString(R.string.tg_alarm_header, minutes),
-            lines = store.pendingAlarm,
-            footer = getString(R.string.tg_footer, deviceName()),
-        )
+        val all = store.telegramRecipients
+        val done = runtime.escalatedChats
+        val due = Escalation.dueRecipients(all, store.telegramStages, store.escalateMin, at, done, wall)
+        if (due.isEmpty()) return
+        val minutes = ((wall - at) / 60_000L).toInt().coerceAtLeast(1)
+        // Önceki kademede haber verilenler mesajda yazılır: kişi tek başına olmadığını bilsin.
+        val earlier = all.filter { it.id in done }.map { it.name }
+        val header = getString(R.string.tg_alarm_header, minutes) +
+            (if (earlier.isNotEmpty()) "\n" + getString(R.string.tg_alarm_earlier, earlier.joinToString(", ")) else "")
+        val text = Escalation.message(header = header, lines = store.pendingAlarm, footer = getString(R.string.tg_footer, deviceName()))
         val token = store.telegramToken
-        val recipients = store.telegramRecipients
+        // "Gördüm" düğmesi: kişi alarmı üstlenir, telefondaki alarm susar.
+        val button = TelegramBot.button(getString(R.string.tg_ack_button), TelegramBot.ackData(runtime.installTag, at))
         escalationInFlight = true
         telegram.execute {
-            var sent = 0
+            val sent = mutableListOf<Long>()
+            val gaveUp = mutableListOf<Long>()
             var error: Exception? = null
-            var permanent = true
-            for (r in recipients) {
+            for (r in due) {
                 try {
-                    TelegramClient.send(token, r.id, text)
-                    sent++
+                    TelegramClient.send(token, r.id, text, markup = button)
+                    sent += r.id
                 } catch (e: Exception) {
                     Log.w(TAG, "telegram send failed", e)
                     error = e
-                    if (!(e is TelegramException && e.code in PERMANENT_TELEGRAM_ERRORS)) permanent = false
+                    if (e is TelegramException && e.code in PERMANENT_TELEGRAM_ERRORS) gaveUp += r.id
                 }
             }
-            handler.post { onEscalationSent(at, minutes, sent, error, permanent, wall) }
+            handler.post { onEscalationSent(at, minutes, sent, gaveUp, due.size, error, wall) }
         }
     }
 
-    private fun onEscalationSent(at: Long, minutes: Int, sent: Int, error: Exception?, permanent: Boolean, wall: Long) {
+    private fun onEscalationSent(at: Long, minutes: Int, sent: List<Long>, gaveUp: List<Long>, tried: Int, error: Exception?, wall: Long) {
         escalationInFlight = false
         val name = getString(R.string.app_name)
-        if (sent > 0) {
-            val args = EventArgs.Escalation(sent, minutes)
+        if (runtime.realAlarmAt == at) runtime.escalatedChats = runtime.escalatedChats + sent + gaveUp
+        if (sent.isNotEmpty()) {
+            val args = EventArgs.Escalation(sent.size, minutes)
             log.add("", name, EventKind.ESCALATION, args.render(name, strings), "", args)
             // Gönderim sürerken alarm kapatıldıysa "kapatıldı" mesajı hemen ardından gider.
-            if (runtime.realAlarmAt == at) runtime.escalatedFor = at else sendDismissed(at)
-            return
+            if (runtime.realAlarmAt == at) runtime.escalatedFor = at else sendDismissed(at, sent.toSet())
         }
-        if (permanent) escalationGaveUpFor = at else escalationRetryAt = wall + ESCALATION_RETRY_MS
-        if (escalationFailureLoggedFor != at) {
+        if (sent.size + gaveUp.size < tried) escalationRetryAt = wall + ESCALATION_RETRY_MS
+        if (sent.isEmpty() && escalationFailureLoggedFor != at) {
             escalationFailureLoggedFor = at
             val args = EventArgs.Escalation(0, minutes, error?.let(::telegramError))
             log.add("", name, EventKind.ESCALATION, args.render(name, strings), "", args)
         }
     }
 
-    /** Alarm bitti: haber verildiyse kişilere kapatıldığı da bildirilir. */
+    /** Alarm bitti: haber verilenlere kapatıldığı da bildirilir. */
     private fun endEscalation() {
         val at = runtime.realAlarmAt
-        if (at != 0L && runtime.escalatedFor == at) sendDismissed(at)
+        if (at != 0L && runtime.escalatedFor == at) sendDismissed(at, runtime.escalatedChats)
         runtime.realAlarmAt = 0
         runtime.escalatedFor = 0
+        runtime.escalatedChats = emptySet()
     }
 
-    /** "Alarm kapatıldı" mesajı; yanıt beklenmez, gönderilemezse önemsizdir. */
-    private fun sendDismissed(at: Long) {
-        if (!store.escalationReady) return
+    /** "Alarm kapatıldı" mesajı (yalnızca haber verilenlere); yanıt beklenmez, gönderilemezse önemsizdir. */
+    private fun sendDismissed(at: Long, chats: Set<Long>) {
+        if (!store.escalationReady || chats.isEmpty()) return
         val now = System.currentTimeMillis()
         val text = getString(
             R.string.tg_dismissed,
@@ -1092,8 +1159,7 @@ class MonitorService : Service() {
             DurationText.format(now - at, EventLog.durations(this)),
         )
         val token = store.telegramToken
-        val recipients = store.telegramRecipients
-        telegram.execute { recipients.forEach { r -> runCatching { TelegramClient.send(token, r.id, text) } } }
+        telegram.execute { chats.forEach { id -> runCatching { TelegramClient.send(token, id, text) } } }
     }
 
     private fun telegramError(e: Exception): String = when {
@@ -1108,6 +1174,528 @@ class MonitorService : Service() {
     private fun deviceName(): String =
         runCatching { android.provider.Settings.Global.getString(contentResolver, "device_name") }.getOrNull()
             ?.takeIf { it.isNotBlank() } ?: Build.MODEL
+
+    /**
+     * Alarmı kapatır (bildirimden, alarm ekranından ya da Telegram'dan). [byTelegram]: Telegram'dan üstlenen kişi; o zaman
+     * kişilere "kapatıldı" yerine üstlenme mesajı gider ve kapatma ayrıca kaydedilmez (üstlenme kaydı yeter).
+     */
+    private fun dismissAlarm(byTelegram: String? = null) {
+        val lines = store.pendingAlarm
+        if (lines.isNotEmpty()) {
+            if (byTelegram == null) logDismissal(lines.size) else runtime.alarmStartedAt = 0
+            reminders.onDismiss(System.currentTimeMillis())
+            persistRuntime()
+        }
+        store.pendingAlarm = emptyList()
+        runtime.silentAlarm = false
+        if (byTelegram != null) runtime.escalatedFor = 0
+        endEscalation()
+        notifier.stopAlarm()
+        StatusSurfaces.refresh(this)
+    }
+
+    // ---------------------------------------------------------------- elektrik kesintisi
+
+    private fun checkOutage(wall: Long) {
+        val monitored = store.monitoredIds()
+        val offline = store.snapshots.filter { it.id in monitored && !it.online }.map { it.id }.toSet()
+        when (val v = outage.due(wall, offline, monitored)) {
+            is OutageWatch.Verdict.Release -> v.held.forEach { deliver(it.change, it.action) }
+            is OutageWatch.Verdict.Outage -> onOutage(v.held, monitored.size)
+            null -> Unit
+        }
+    }
+
+    /** İzlenen cihazların hepsi koptu: tek olay, en güçlü kuralın eylemiyle (kritik cihaz varsa sessiz saati deler). */
+    private fun onOutage(held: List<OutageWatch.Held>, devices: Int) {
+        val wall = System.currentTimeMillis()
+        held.forEach { deliverQuietly(it.change) }
+        val critical = held.any { store.rulesFor(it.change.deviceId).critical }
+        val effective = RuleEngine.effective(OutageWatch.strongest(held), quiet = quietNow(), critical = critical)
+        val app = getString(R.string.app_name)
+        val args = EventArgs.Outage(devices)
+        val text = args.render(app, strings)
+        Log.w(TAG, "power outage: ${held.size} devices dropped together")
+        log.add("", app, EventKind.OUTAGE, text, effective.name, args)
+        val sound = held.firstNotNullOfOrNull { store.rulesFor(it.change.deviceId).soundUri }
+        when (effective) {
+            AlertAction.ALARM -> {
+                addAlarm(text, sound)
+                if (store.reminderMin > 0) held.forEach { reminders.onAlarm(it.change, wall) }
+            }
+            AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
+            AlertAction.IGNORE -> Unit
+        }
+        if (effective != AlertAction.IGNORE) forward("⚡ $text")
+    }
+
+    private fun onPowerRestored(from: Long, to: Long) {
+        val app = getString(R.string.app_name)
+        val args = EventArgs.OutageEnded(from, to)
+        val text = args.render(app, strings)
+        log.add("", app, EventKind.OUTAGE, text, AlertAction.NOTIFY.name, args)
+        notifier.notifyEvent(text)
+        forward("🔌 $text")
+    }
+
+    /** Kesintinin parçası olan değişiklik: alarm/bildirim olmadan yalnızca geçmişe. */
+    private fun deliverQuietly(change: Change) =
+        log.add(change.deviceId, change.name, change.eventType.name, change.describe(labels), AlertAction.IGNORE.name, change.toArgs())
+
+    // ---------------------------------------------------------------- Telegram: bildirim, komutlar, "Gördüm"
+
+    /** Akıllı uyarıları (kesinti, tüketim, bekçi) Telegram'daki kişilere de yazar; yanıt beklenmez. */
+    private fun forward(text: String, always: Boolean = false) {
+        if (!store.escalationReady || !(always || store.telegramForward)) return
+        val token = store.telegramToken
+        val recipients = store.telegramRecipients
+        val footer = getString(R.string.tg_footer, deviceName())
+        telegram.execute { recipients.forEach { r -> runCatching { TelegramClient.send(token, r.id, "$text\n\n$footer") } } }
+    }
+
+    private fun reply(chatId: Long, text: String) {
+        val token = store.telegramToken
+        val footer = "— ${deviceName()}"
+        telegram.execute { runCatching { TelegramClient.send(token, chatId, "$text\n\n$footer") } }
+    }
+
+    private var tgPollAt = 0L
+    private var tgPolling = false
+
+    /**
+     * Telegram'a yazılan komutlar ve "Gördüm" düğmesi kısa aralıklarla yoklanır (sürekli açık bağlantı yok). Komutlar
+     * kapalıysa yalnızca haber verilmiş bir alarm sürerken (düğme için) yoklanır.
+     */
+    private fun pollTelegram(wall: Long) {
+        if (tgPolling || wall < tgPollAt || !store.escalationReady) return
+        val waitingAck = runtime.realAlarmAt != 0L && runtime.escalatedFor == runtime.realAlarmAt
+        if (!store.telegramCommands && !waitingAck) return
+        tgPollAt = wall + TG_POLL_MS
+        tgPolling = true
+        val token = store.telegramToken
+        val offset = runtime.tgOffset
+        telegram.execute {
+            val result = runCatching { TelegramClient.updates(token, offset) }
+            handler.post {
+                tgPolling = false
+                result.onSuccess { onTelegramUpdates(it) }.onFailure { e ->
+                    // Anahtar geçersiz: her 15 sn'de denemenin anlamı yok.
+                    if (e is TelegramException && e.code == 401) tgPollAt = System.currentTimeMillis() + TG_BLOCKED_MS
+                    else Log.w(TAG, "telegram poll failed: ${e.javaClass.simpleName}")
+                }
+            }
+        }
+    }
+
+    private fun onTelegramUpdates(json: String) {
+        val now = System.currentTimeMillis()
+        val updates = runCatching { TelegramBot.parseUpdates(json) }.getOrDefault(emptyList())
+        runtime.tgOffset = TelegramBot.confirmOffset(updates, now, runtime.tgOffset)
+        runCatching { Escalation.chatsFromUpdates(json) }.getOrNull()?.let { seen ->
+            TelegramClient.seenChats = (TelegramClient.seenChats + seen).associateBy { it.id }.values.toList()
+        }
+        val allowed = store.telegramRecipients.map { it.id }.toSet()
+        var handled = runtime.tgHandled
+        for (u in updates.sortedBy { it.id }) {
+            if (u.id <= handled) continue
+            handled = u.id
+            // Yalnızca haber verilecek kişiler (ve gruplar) komut verebilir.
+            if (u.chatId !in allowed) continue
+            if (u.callbackData != null) onTelegramButton(u)
+            else if (store.telegramCommands) u.text?.let(TelegramBot::parseCommand)?.let { onTelegramCommand(u, it, now) }
+        }
+        runtime.tgHandled = handled
+    }
+
+    /** "Gördüm" düğmesi: alarm bu cihazınsa ve hâlâ sürüyorsa üstlenilir, alarm susar. */
+    private fun onTelegramButton(u: TelegramBot.Update) {
+        val (tag, at) = TelegramBot.parseAck(u.callbackData) ?: return
+        // Aynı botu kullanan başka cihazın alarmı: yanıtı o verir.
+        if (tag != runtime.installTag) return
+        val ok = store.pendingAlarm.isNotEmpty() && runtime.realAlarmAt == at
+        if (ok) ackAlarm(u.from)
+        val answer = getString(if (ok) R.string.tg_ack_done else R.string.tg_ack_stale)
+        val token = store.telegramToken
+        telegram.execute {
+            runCatching { TelegramClient.answerCallback(token, u.callbackId.orEmpty(), answer) }
+            runCatching { TelegramClient.removeButtons(token, u.chatId, u.messageId) }
+        }
+    }
+
+    /** Alarmı Telegram'dan üstlenen kişi: alarm kapanır, herkese kimin ilgilendiği yazılır. */
+    private fun ackAlarm(who: String) {
+        val now = System.currentTimeMillis()
+        val app = getString(R.string.app_name)
+        val name = who.ifEmpty { getString(R.string.tg_someone) }
+        val args = EventArgs.TelegramAck(name, now - runtime.realAlarmAt)
+        val text = args.render(app, strings)
+        log.add("", app, EventKind.TELEGRAM, text, "", args)
+        dismissAlarm(byTelegram = name)
+        notifier.notifyEvent(text)
+        forward("✅ $text", always = true)
+    }
+
+    private fun onTelegramCommand(u: TelegramBot.Update, cmd: TelegramBot.Command, now: Long) {
+        val age = now - u.date
+        when (cmd) {
+            TelegramBot.Command.Status -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, statusText())
+            TelegramBot.Command.Help -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, getString(R.string.tg_help))
+            is TelegramBot.Command.SetPresence -> {
+                if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+                Actions.setAway(this, cmd.away, by = u.from.ifEmpty { getString(R.string.tg_someone) })
+                reply(u.chatId, getString(if (cmd.away) R.string.tg_presence_away else R.string.tg_presence_home))
+            }
+            is TelegramBot.Command.RunScene -> {
+                if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
+                if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+                val scenes = store.scenes
+                val scene = Scene.find(cmd.query, scenes)
+                    ?: return reply(u.chatId, getString(R.string.tg_scene_not_found, cmd.query, scenes.joinToString(", ") { it.name }.ifEmpty { "—" }))
+                val who = u.from.ifEmpty { getString(R.string.tg_someone) }
+                telegram.execute {
+                    val (ok, failed) = runBlocking { Actions.runScene(this@MonitorService, scene, "Telegram ($who)") }
+                    handler.post { reply(u.chatId, getString(R.string.tg_scene_done, scene.name, ok, failed)) }
+                }
+            }
+            TelegramBot.Command.Ack -> {
+                if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+                if (store.pendingAlarm.isNotEmpty() && runtime.realAlarmAt != 0L) ackAlarm(u.from)
+                else reply(u.chatId, getString(R.string.tg_no_alarm))
+            }
+            is TelegramBot.Command.Switch -> {
+                if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
+                if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+                if (cmd.query.isBlank()) return reply(u.chatId, getString(if (cmd.on) R.string.tg_usage_on else R.string.tg_usage_off))
+                when (val m = TelegramBot.match(cmd.query, store.snapshots)) {
+                    is TelegramBot.Match.Found -> telegramSwitch(u, m.device, m.channel, cmd.on)
+                    is TelegramBot.Match.NeedChannel -> reply(u.chatId, getString(R.string.tg_need_channel, m.device.name, m.device.switches.size))
+                    is TelegramBot.Match.Ambiguous -> reply(u.chatId, getString(R.string.tg_ambiguous, m.names.joinToString(", ")))
+                    TelegramBot.Match.NotFound -> reply(u.chatId, getString(R.string.tg_not_found, cmd.query))
+                }
+            }
+        }
+    }
+
+    private fun telegramSwitch(u: TelegramBot.Update, device: DeviceSnapshot, channel: Int, on: Boolean) {
+        val who = u.from.ifEmpty { getString(R.string.tg_someone) }
+        val args = EventArgs.TelegramSwitch(who, channel, device.isMultiChannel, on)
+        try {
+            if (!device.online) throw IOException(labels.offline)
+            // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
+            LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+            controlSwitch(device, channel, on)
+            log.add(device.id, device.name, EventKind.TELEGRAM, args.render(device.name, strings), "", args)
+            val label = if (device.isMultiChannel) labels.channel(device.name, channel + 1) else device.name
+            reply(u.chatId, "✅ $label: ${if (on) labels.on else labels.off}")
+        } catch (e: Exception) {
+            val failed = args.copy(error = e.message.orEmpty())
+            log.add(device.id, device.name, EventKind.TELEGRAM, failed.render(device.name, strings), AlertAction.NOTIFY.name, failed)
+            reply(u.chatId, "⚠️ " + failed.render(device.name, strings))
+        }
+    }
+
+    /** /durum yanıtı: izleme ve alarm durumu, cihazlar (açık/kapalı, güç, çevrimdışı). */
+    private fun statusText(): String {
+        val connection = LiveState.connection.value.state
+        val alarm = store.pendingAlarm
+        return buildString {
+            append("📊 ").append(getString(R.string.tg_status_title)).append('\n')
+            append(getString(R.string.tg_status_monitoring, getString(stateTitle(connection)))).append('\n')
+            append(
+                if (alarm.isEmpty()) getString(R.string.tg_status_no_alarm)
+                else resources.getQuantityString(R.plurals.tg_status_alarm, alarm.size, alarm.size)
+            ).append('\n')
+            if (outage.active) {
+                val since = DurationText.format(System.currentTimeMillis() - outage.since, EventLog.durations(this@MonitorService))
+                append("⚡ ").append(getString(R.string.tg_status_outage, since)).append('\n')
+            }
+            append('\n')
+            for (d in store.snapshots.take(MAX_STATUS_DEVICES)) {
+                if (!d.online) {
+                    append("🔴 ").append(d.name).append(": ").append(labels.offline).append('\n')
+                    continue
+                }
+                val switches = d.switches.toSortedMap().entries.joinToString(" · ") { (ch, on) ->
+                    (if (d.isMultiChannel) "${ch + 1}: " else "") + if (on) labels.on else labels.off
+                }
+                append(if (d.switches.values.any { it }) "🟢 " else "⚪ ").append(d.name).append(": ").append(switches)
+                d.power?.let { append(" · ").append(String.format(java.util.Locale.getDefault(), "%.0f W", it)) }
+                append('\n')
+            }
+            if (store.snapshots.isEmpty()) append(getString(R.string.no_devices)).append('\n')
+            if (store.telegramControl) append('\n').append(getString(R.string.tg_status_hint))
+        }.trimEnd().take(MAX_TG_CHARS)
+    }
+
+    private fun stateTitle(state: ConnState): Int = when (state) {
+        ConnState.LIVE -> R.string.tg_state_live
+        ConnState.POLLING -> R.string.tg_state_polling
+        ConnState.CONNECTING -> R.string.state_connecting
+        ConnState.NO_INTERNET -> R.string.state_no_internet
+        ConnState.AUTH_ERROR -> R.string.state_auth_error
+        ConnState.ERROR -> R.string.state_error
+        ConnState.STOPPED -> R.string.state_stopped
+    }
+
+    // ---------------------------------------------------------------- bekçi
+
+    private var beatAt = 0L
+    private var watchCheckAt = 0L
+    private var watchdogBusy = false
+
+    /** Sinyalin yazıldığı sohbet: haber verilecek ilk kişi (grup değil, kişi tercih edilir). */
+    private fun beatChat(): Long? = store.telegramRecipients.let { list -> (list.firstOrNull { it.id > 0 } ?: list.firstOrNull())?.id }
+
+    private fun watchdogTick(wall: Long) {
+        if (watchdogBusy || !store.escalationReady) return
+        when (store.watchdogMode) {
+            Store.WATCHDOG_SEND -> if (wall - beatAt >= Watchdog.BEAT_MS) sendBeat(wall, stopped = false)
+            Store.WATCHDOG_WATCH -> if (wall - watchCheckAt >= Watchdog.CHECK_MS) checkWatched(wall)
+        }
+    }
+
+    /**
+     * Sabit mesajı günceller ("🟢 çalışıyor · son sinyal 14:05"); mesaj yoksa ya da silinmişse yenisini gönderip sabitler.
+     * Gönderim [telegram] iş parçacığında; durum doğrudan [runtime]'a yazılır (izleme durdurulurken de çalışsın).
+     */
+    private fun sendBeat(wall: Long, stopped: Boolean) {
+        if (!store.escalationReady) return
+        val chat = beatChat() ?: return
+        beatAt = wall
+        val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(wall))
+        val head = if (stopped) "${Watchdog.STOPPED} ${getString(R.string.wd_beat_stopped)}" else "${Watchdog.RUNNING} ${getString(R.string.wd_beat_running)}"
+        val text = "$head\n${deviceName()}\n${getString(R.string.wd_beat_at, time)}"
+        val token = store.telegramToken
+        val known = runtime.beatMessage.takeIf { runtime.beatChat == chat } ?: 0L
+        watchdogBusy = !stopped
+        telegram.execute {
+            var id = known
+            if (id != 0L) {
+                try {
+                    TelegramClient.edit(token, chat, id, text)
+                } catch (e: TelegramException) {
+                    // Mesaj silinmiş: yenisi gönderilir. "Değişmedi" hatası önemsiz.
+                    if (e.code == 400 && e.message?.contains("not modified") != true) id = 0
+                } catch (e: Exception) {
+                    Log.w(TAG, "heartbeat edit failed: ${e.javaClass.simpleName}")
+                }
+            }
+            if (id == 0L && !stopped) {
+                runCatching {
+                    id = TelegramClient.send(token, chat, text, silent = true)
+                    TelegramClient.pin(token, chat, id)
+                }.onFailure { Log.w(TAG, "heartbeat send failed: ${it.javaClass.simpleName}") }
+            }
+            if (id != 0L) {
+                runtime.beatChat = chat
+                runtime.beatMessage = id
+            }
+            if (!stopped) handler.post { watchdogBusy = false }
+        }
+    }
+
+    /** Diğer cihazın sabit mesajına bakar; [Store.watchdogMin] dakikadır güncellenmediyse alarm. */
+    private fun checkWatched(wall: Long) {
+        val chat = beatChat() ?: return
+        watchCheckAt = wall
+        watchdogBusy = true
+        val token = store.telegramToken
+        telegram.execute {
+            val seen = runCatching { Watchdog.read(TelegramClient.chat(token, chat)) }
+            handler.post {
+                watchdogBusy = false
+                // Okunamadıysa (internet yok) bir şey söylenemez; kör kalma uyarısı zaten bunu kapsar.
+                seen.onSuccess { onWatchedSeen(it, System.currentTimeMillis()) }
+            }
+        }
+    }
+
+    private fun onWatchedSeen(seen: Watchdog.Seen, now: Long) {
+        val app = getString(R.string.app_name)
+        when (seen) {
+            is Watchdog.Seen.Beat -> {
+                if (Watchdog.silent(seen.at, now, store.watchdogMin * 60_000L)) {
+                    if (!runtime.watchAlarmed) {
+                        runtime.watchAlarmed = true
+                        val args = EventArgs.Watchdog(seen.name, lost = true, silentMs = now - seen.at)
+                        val text = args.render(app, strings)
+                        val effective = RuleEngine.effective(AlertAction.ALARM, quiet = quietNow(), critical = false)
+                        log.add("", app, EventKind.WATCHDOG, text, effective.name, args)
+                        if (effective == AlertAction.ALARM) addAlarm(text) else notifier.notifyEvent(text)
+                        forward("🚨 $text", always = true)
+                    }
+                } else if (runtime.watchAlarmed) {
+                    runtime.watchAlarmed = false
+                    val args = EventArgs.Watchdog(seen.name, lost = false, silentMs = (seen.at - runtime.watchLastBeat).coerceAtLeast(0))
+                    val text = args.render(app, strings)
+                    log.add("", app, EventKind.WATCHDOG, text, AlertAction.NOTIFY.name, args)
+                    notifier.notifyEvent(text)
+                    forward("✅ $text", always = true)
+                }
+                if (!runtime.watchAlarmed) runtime.watchLastBeat = seen.at
+            }
+            // Kullanıcı diğer cihazda izlemeyi kapattı: sessizlik beklenen durum.
+            is Watchdog.Seen.Stopped -> runtime.watchAlarmed = false
+            Watchdog.Seen.None -> Unit
+        }
+    }
+
+    // ---------------------------------------------------------------- tatil
+
+    /** Tatil bitince bir kez: bildirim, geçmiş ve Telegram. */
+    private fun checkVacation(wall: Long) {
+        val until = store.vacationUntil
+        if (until == 0L || wall < until || runtime.vacationEndNotified == until) return
+        runtime.vacationEndNotified = until
+        store.vacationUntil = 0
+        val app = getString(R.string.app_name)
+        val args = EventArgs.Presence(away = store.awayMode, by = null, vacationEnded = true)
+        val text = args.render(app, strings)
+        log.add("", app, EventKind.PRESENCE, text, AlertAction.NOTIFY.name, args)
+        notifier.notifyEvent(text)
+        forward("🏠 $text")
+        WeeklyScheduler.schedule(this)
+    }
+
+    // ---------------------------------------------------------------- hava ve konum
+
+    private var weatherAt = 0L
+    private var weatherBusy = false
+
+    private fun env() = Environment(store.latitude, store.longitude, runtime.outdoorTemp, away = store.isAway())
+
+    /**
+     * Alarmın bildirime düştüğü an: sessiz saatler ya da (seçildiyse) evdeyken. Tatilde ikisi de geçersiz: ev boş,
+     * her alarm çalsın. Kritik cihazlar her durumda çalar ([RuleEngine.effective]).
+     */
+    private fun quietNow(): Boolean {
+        if (store.onVacation()) return false
+        return store.quietHours.contains(minuteOfDay()) || (store.softenAtHome && !store.isAway())
+    }
+
+    /** Sıcaklık kuralı varsa yarım saatte bir dış sıcaklığı okur (Open-Meteo); okunamazsa son değer kalır. */
+    private fun weatherTick(wall: Long) {
+        if (weatherBusy || wall < weatherAt) return
+        val lat = store.latitude ?: return
+        val lon = store.longitude ?: return
+        if (store.automations.none { it.enabled && it.trigger.kind.usesTemp }) return
+        weatherAt = wall + WEATHER_MS
+        weatherBusy = true
+        telegram.execute {
+            val t = runCatching { WeatherClient.temperature(lat, lon) }
+            handler.post {
+                weatherBusy = false
+                t.onSuccess {
+                    runtime.outdoorTemp = it
+                    runAutomations(automations.onTick(store.snapshots.associateBy { d -> d.id }, store.automations, System.currentTimeMillis(), env()))
+                }.onFailure {
+                    Log.w(TAG, "weather failed: ${it.javaClass.simpleName}")
+                    weatherAt = System.currentTimeMillis() + WEATHER_RETRY_MS
+                }
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- şarjdan kesinti
+
+    private var powerReceiver: BroadcastReceiver? = null
+
+    /** Şarj takılıp çıkarılması: telefon/tablet prizdeyse şarjın kesilmesi elektriğin kesildiğini gösterir (internet de gitse). */
+    private fun registerPowerReceiver() {
+        if (powerReceiver != null) return
+        val r = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val connected = intent.action == Intent.ACTION_POWER_CONNECTED
+                handler.post { onPowerChanged(connected) }
+            }
+        }
+        val filter = IntentFilter().apply { addAction(Intent.ACTION_POWER_CONNECTED); addAction(Intent.ACTION_POWER_DISCONNECTED) }
+        if (Build.VERSION.SDK_INT >= 33) registerReceiver(r, filter, RECEIVER_NOT_EXPORTED) else registerReceiver(r, filter)
+        powerReceiver = r
+    }
+
+    private fun isPlugged(): Boolean =
+        (registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))?.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) ?: 0) != 0
+
+    private fun onPowerChanged(connected: Boolean) {
+        val app = getString(R.string.app_name)
+        if (connected) {
+            val lost = runtime.chargerLostAt
+            if (lost == 0L) return
+            runtime.chargerLostAt = 0
+            val args = EventArgs.Charger(lost = false, ms = System.currentTimeMillis() - lost)
+            val text = args.render(app, strings)
+            log.add("", app, EventKind.OUTAGE, text, AlertAction.NOTIFY.name, args)
+            notifier.notifyEvent(text)
+            forward("🔌 $text", always = true)
+            return
+        }
+        if (!store.chargerOutage) return
+        val unpluggedAt = System.currentTimeMillis()
+        // Kullanıcı şarjı kendisi çıkarmış olabilir, kısa dalgalanma da olabilir: bir dakika sonra hâlâ şarjda değilse.
+        handler.postDelayed({
+            if (!running || !store.chargerOutage || runtime.chargerLostAt != 0L || isPlugged()) return@postDelayed
+            runtime.chargerLostAt = unpluggedAt
+            val args = EventArgs.Charger(lost = true, ms = 0)
+            val text = args.render(app, strings)
+            Log.w(TAG, "charger lost: possible power outage")
+            log.add("", app, EventKind.OUTAGE, text, AlertAction.NOTIFY.name, args)
+            notifier.notifyEvent(text)
+            forward("⚡ $text", always = true)
+        }, CHARGER_CONFIRM_MS)
+    }
+
+    // ---------------------------------------------------------------- tüketim
+
+    private var energyCheckAt = 0L
+
+    /** Yarım saatte bir: aylık bütçe; günde bir (gece yarısından sonra): dünkü anormal tüketim. */
+    private fun energyTick(wall: Long) {
+        if (wall < energyCheckAt) return
+        energyCheckAt = wall + ENERGY_CHECK_MS
+        val monitored = store.monitoredIds()
+        val devices = store.snapshots.filter { it.hasEnergy && it.id in monitored }
+        if (devices.isEmpty()) return
+        runCatching { checkBudget(devices, wall) }.onFailure { Log.w(TAG, "budget check failed", it) }
+        runCatching { checkAnomalies(devices, wall) }.onFailure { Log.w(TAG, "energy check failed", it) }
+    }
+
+    private fun checkBudget(devices: List<DeviceSnapshot>, wall: Long) {
+        val budget = store.monthlyBudget
+        val month = EnergyWatch.monthKey(wall)
+        if (budget <= 0 || runtime.budgetWarnedMonth == month) return
+        val from = EnergyWatch.startOfMonth(wall)
+        // Her cihaz kendi fiyatıyla (yoksa varsayılanla); fiyatı olmayan cihaz maliyete girmez.
+        val cost = devices.sumOf { d -> metrics.cost(d.id, from, wall, store.tariffFor(d.id)) }
+        if (!EnergyWatch.budgetExceeded(cost, budget)) return
+        runtime.budgetWarnedMonth = month
+        val app = getString(R.string.app_name)
+        val args = EventArgs.Budget(cost, budget)
+        val text = args.render(app, strings)
+        log.add("", app, EventKind.ENERGY, text, AlertAction.NOTIFY.name, args)
+        notifier.notifyEvent(text)
+        forward("💸 $text")
+    }
+
+    private fun checkAnomalies(devices: List<DeviceSnapshot>, wall: Long) {
+        val today = EnergyWatch.dayStart(wall)
+        if (!store.energyAnomaly || runtime.energyCheckedDay == today || wall - today < ENERGY_DAY_DELAY_MS) return
+        runtime.energyCheckedDay = today
+        val yesterday = EnergyWatch.dayStart(wall, -1)
+        for (d in devices) {
+            // Yalnızca izlemenin günün çoğunda açık olduğu günler karşılaştırılır.
+            val days = (1..EnergyWatch.HISTORY_DAYS + 1).map { i -> EnergyWatch.dayStart(wall, -i) to EnergyWatch.dayStart(wall, -i + 1) }
+                .filter { (from, to) -> metrics.sampleCount(d.id, from, to) >= EnergyWatch.MIN_SAMPLES }
+            val last = days.firstOrNull()?.takeIf { it.first == yesterday } ?: continue
+            val history = days.drop(1).map { (from, to) -> metrics.kwh(d.id, from, to) }
+            val a = EnergyWatch.anomaly(metrics.kwh(d.id, last.first, last.second), history) ?: continue
+            val args = EventArgs.EnergyAnomaly(a.high, a.kwh, a.average)
+            val text = args.render(d.name, strings)
+            log.add(d.id, d.name, EventKind.ENERGY, text, AlertAction.NOTIFY.name, args)
+            notifier.notifyEvent(text)
+            forward("📈 $text")
+        }
+    }
 
     /** Alarmın kapatılması geçmişe yazılır: kaç olay vardı ve ne kadar sürede kapatıldı (tepki süresi). */
     private fun logDismissal(count: Int) {
@@ -1218,6 +1806,16 @@ class MonitorService : Service() {
         /** Anlık bağlantı canlıyken başarısız senkronun yeniden deneme aralıkları (sonuncusu tekrarlanır). */
         private val SYNC_RETRY_MS = longArrayOf(15_000, 30_000, 60_000, 120_000)
         private const val ESCALATION_RETRY_MS = 60_000L
+        private const val TG_POLL_MS = 15_000L
+        private const val CHARGER_CONFIRM_MS = 60_000L
+        private const val WEATHER_MS = 30 * 60_000L
+        private const val WEATHER_RETRY_MS = 5 * 60_000L
+        private const val TG_BLOCKED_MS = 30 * 60_000L
+        private const val MAX_STATUS_DEVICES = 40
+        private const val MAX_TG_CHARS = 3900
+        private const val ENERGY_CHECK_MS = 30 * 60_000L
+        /** Dünkü tüketim gece yarısından bu kadar sonra değerlendirilir (son ölçümler yazılsın). */
+        private const val ENERGY_DAY_DELAY_MS = 30 * 60_000L
         /** Yeniden denemenin işe yaramayacağı Telegram hataları: 400 sohbet yok, 401 anahtar geçersiz, 403 bot engellendi. */
         private val PERMANENT_TELEGRAM_ERRORS = setOf(400, 401, 403)
         private const val CONFIRM_DELAY_MS = 5_000L

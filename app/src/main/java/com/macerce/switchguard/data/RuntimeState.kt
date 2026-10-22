@@ -69,8 +69,66 @@ class RuntimeState private constructor(context: Context) {
         get() = prefs.getLong("stoppedWarnedAt", 0)
         set(v) = put { putLong("stoppedWarnedAt", v) }
 
+    /** Elektrik kesintisi algılamanın durumu ([com.macerce.switchguard.core.OutageWatch.toJson]). */
+    var outage: String?
+        get() = prefs.getString("outage", null)
+        set(v) = put { putString("outage", v) }
+
+    /** Bu kurulumun kısa kimliği: aynı botu kullanan cihazlar "Gördüm" düğmesinin kime ait olduğunu bilsin. Yedeğe girmez. */
+    val installTag: String
+        get() = prefs.getString("installTag", null) ?: java.util.UUID.randomUUID().toString().take(8).also { tag -> put { putString("installTag", tag) } }
+
+    /** Telegram: onaylanan son güncelleme (getUpdates offset) ve işlenen en büyük güncelleme numarası. */
+    var tgOffset: Long
+        get() = prefs.getLong("tgOffset", 0)
+        set(v) = put { putLong("tgOffset", v) }
+    var tgHandled: Long
+        get() = prefs.getLong("tgHandled", 0)
+        set(v) = put { putLong("tgHandled", v) }
+
+    /** Bekçi (gönderen): sabitlenen mesajın sohbeti ve numarası; 0 = henüz yok. */
+    var beatChat: Long
+        get() = prefs.getLong("beatChat", 0)
+        set(v) = put { putLong("beatChat", v) }
+    var beatMessage: Long
+        get() = prefs.getLong("beatMessage", 0)
+        set(v) = put { putLong("beatMessage", v) }
+    /** Bekçi (denetleyen): diğer cihazın son sinyali ve sessizlik alarmı verildi mi. */
+    var watchLastBeat: Long
+        get() = prefs.getLong("watchBeat", 0)
+        set(v) = put { putLong("watchBeat", v) }
+    var watchAlarmed: Boolean
+        get() = prefs.getBoolean("watchAlarmed", false)
+        set(v) = put { putBoolean("watchAlarmed", v) }
+
+    /** Tüketim: anormallik denetiminin yapıldığı gün (gün başlangıcı, ms) ve bütçe uyarısı verilen ay ("2026-10"). */
+    var energyCheckedDay: Long
+        get() = prefs.getLong("energyDay", 0)
+        set(v) = put { putLong("energyDay", v) }
+    var budgetWarnedMonth: String
+        get() = prefs.getString("budgetMonth", "")!!
+        set(v) = put { putString("budgetMonth", v) }
+
+    /** Şarjın kesildiği an (şarjdan kesinti algılama); 0 = şarjda. */
+    var chargerLostAt: Long
+        get() = prefs.getLong("chargerLost", 0)
+        set(v) = put { putLong("chargerLost", v) }
+    /** Son okunan dış sıcaklık (°C): düzenleyicide "şu an 12 °C" için. */
+    var outdoorTemp: Double?
+        get() = prefs.getString("outdoorTemp", null)?.toDoubleOrNull()
+        set(v) = put { putString("outdoorTemp", v?.toString()) }
+
+    /** Kademeli haber: çalan alarm için haber verilen ve vazgeçilen (kalıcı hata) sohbetler. */
+    var escalatedChats: Set<Long>
+        get() = prefs.getString("escalatedChats", "")!!.split(',').mapNotNull { it.toLongOrNull() }.toSet()
+        set(v) = put { putString("escalatedChats", v.joinToString(",")) }
+    /** Tatil modunun bittiği bildirilen tatil (bitiş anı). */
+    var vacationEndNotified: Long
+        get() = prefs.getLong("vacationEnd", 0)
+        set(v) = put { putLong("vacationEnd", v) }
+
     /** Kullanıcı izlemeyi kapatınca bekleyen işler de iptal olur. */
-    fun clearEngine() = put { remove("grace"); remove("automation"); remove("reminders") }
+    fun clearEngine() = put { remove("grace"); remove("automation"); remove("reminders"); remove("outage") }
 
     companion object {
         @Volatile private var instance: RuntimeState? = null

@@ -1,5 +1,24 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.BeachAccess
+import androidx.compose.material.icons.rounded.Stairs
+import androidx.compose.material.icons.rounded.Payments
+import androidx.compose.runtime.key
+import androidx.compose.material.icons.automirrored.rounded.TrendingUp
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.ElectricBolt
+import androidx.compose.material.icons.rounded.Keyboard
+import androidx.compose.material.icons.rounded.MonitorHeart
+import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.Savings
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardType
+import com.macerce.switchguard.core.Watchdog
+import com.macerce.switchguard.service.WeeklyReport
+import com.macerce.switchguard.service.WeeklyScheduler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import android.app.Activity
 import android.content.Intent
 import android.media.RingtoneManager
@@ -147,6 +166,7 @@ internal enum class SettingsPage(val title: Int) {
     ALARM(R.string.section_alarm),
     QUIET(R.string.section_quiet_hours),
     SUMMARY(R.string.section_summary),
+    SMART(R.string.smart_title),
     MONITORING(R.string.section_monitoring),
     PERMISSIONS(R.string.section_permissions),
     BACKUP(R.string.settings_backup),
@@ -424,6 +444,7 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
                 SettingsPage.ALARM -> AlarmPage(showDialog)
                 SettingsPage.QUIET -> QuietPage()
                 SettingsPage.SUMMARY -> SummaryPage()
+                SettingsPage.SMART -> SmartPage(showDialog)
                 SettingsPage.MONITORING -> MonitoringPage(showDialog)
                 SettingsPage.PERMISSIONS -> PermissionsPage()
                 SettingsPage.BACKUP -> BackupPage(showDialog)
@@ -749,8 +770,8 @@ private fun QuietPage() {
 private fun SummaryPage() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    // Önizleme penceresinin satırları; boş liste = henüz kayıt yok. null = pencere kapalı.
-    var preview by remember { mutableStateOf<List<String>?>(null) }
+    // Önizleme penceresindeki rapor; null = pencere kapalı.
+    var preview by remember { mutableStateOf<com.macerce.switchguard.core.ReportDoc?>(null) }
     val time = rememberTimePicker()
     val (store, version) = settingsState()
     val s = remember(version) { store }
@@ -777,32 +798,332 @@ private fun SummaryPage() {
             Divider()
             InfoRow(
                 Icons.Rounded.Visibility, stringResource(R.string.daily_summary_preview), null,
-                Modifier.clickable { scope.launch { preview = Actions.summaryLines(context).orEmpty() } },
+                Modifier.clickable { scope.launch { preview = Actions.dailyDoc(context) } },
             )
         }
     }
-    preview?.let { lines -> SummaryPreviewDialog(lines) { preview = null } }
+    preview?.let { doc -> ReportDialog(doc, onDismiss = { preview = null }) }
 }
 
-/** Bugünün özeti küçük bir pencerede (telefon, tablet ve TV'de aynı). [lines] boşsa "henüz kayıt yok". */
+
+// ---------------------------------------------------------------- Akıllı uyarılar
+
+/**
+ * Akıllı uyarılar: elektrik kesintisi, tüketim (anormal gün, aylık bütçe), haftalık rapor ve Telegram'ın ek işleri
+ * (komutlar, aç/kapa izni, bildirimlerin iletilmesi, bekçi).
+ */
 @Composable
-private fun SummaryPreviewDialog(lines: List<String>, onDismiss: () -> Unit) {
+private fun SmartPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    val locale = resources.configuration.locales[0]
+    val scope = rememberCoroutineScope()
+    val (store, version) = settingsState()
+    val s = remember(version) { store }
+    val close = { showDialog(null) }
+    var preview by remember { mutableStateOf<com.macerce.switchguard.core.ReportDoc?>(null) }
+    val resourcesForToast = LocalResources.current
+    val pdfSaver = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
+        val doc = preview
+        if (uri != null && doc != null) scope.launch {
+            val ok = runCatching { Actions.writeReportPdf(context, uri, doc) }.isSuccess
+            android.widget.Toast.makeText(context, resourcesForToast.getString(if (ok) R.string.energy_report_done else R.string.energy_report_failed), android.widget.Toast.LENGTH_LONG).show()
+        }
+    }
+    PageIntro(stringResource(R.string.smart_desc))
+
+    SectionTitle(stringResource(R.string.smart_outage_section))
+    SectionCard {
+        InfoRow(Icons.Rounded.ElectricBolt, stringResource(R.string.smart_outage), stringResource(R.string.smart_outage_desc)) {
+            Switch(checked = s.outageDetect, onCheckedChange = { store.outageDetect = it })
+        }
+        // Pili olmayan cihazda (TV kutusu) elektrik gidince cihaz da kapanır: seçenek gösterilmez.
+        if (remember { hasBattery(context) }) {
+            Divider()
+            InfoRow(Icons.Rounded.BatteryChargingFull, stringResource(R.string.smart_charger), stringResource(R.string.smart_charger_desc)) {
+                Switch(checked = s.chargerOutage, onCheckedChange = { store.chargerOutage = it })
+            }
+        }
+    }
+
+    SectionTitle(stringResource(R.string.presence_section))
+    SectionCard {
+        InfoRow(Icons.Rounded.Home, stringResource(R.string.presence_soften), stringResource(R.string.presence_soften_desc)) {
+            Switch(checked = s.softenAtHome, onCheckedChange = { store.softenAtHome = it })
+        }
+        Divider()
+        val onVacation = s.onVacation()
+        InfoRow(
+            Icons.Rounded.BeachAccess,
+            stringResource(R.string.vacation_title),
+            if (onVacation) stringResource(R.string.vacation_until, android.text.format.DateUtils.formatDateTime(context, s.vacationUntil - 1,
+                android.text.format.DateUtils.FORMAT_SHOW_DATE or android.text.format.DateUtils.FORMAT_ABBREV_MONTH))
+            else stringResource(R.string.vacation_desc),
+            Modifier.clickable { showDialog { VacationDatePicker(s.vacationUntil, onPick = { store.vacationUntil = it; WeeklyScheduler.schedule(context) }, onDismiss = close) } },
+        ) {
+            if (onVacation) TextButton(modifier = Modifier.tvFocusRing(), onClick = { store.vacationUntil = 0; WeeklyScheduler.schedule(context) }) {
+                Text(stringResource(R.string.vacation_end_now))
+            }
+        }
+    }
+
+    SectionTitle(stringResource(R.string.smart_energy_section))
+    SectionCard {
+        InfoRow(Icons.AutoMirrored.Rounded.TrendingUp, stringResource(R.string.smart_anomaly), stringResource(R.string.smart_anomaly_desc)) {
+            Switch(checked = s.energyAnomaly, onCheckedChange = { store.energyAnomaly = it })
+        }
+        Divider()
+        InfoRow(
+            Icons.Rounded.Payments,
+            stringResource(R.string.tariff_title),
+            if (s.threeZone) stringResource(R.string.tariff_three_short)
+            else if (s.energyPrice > 0) EnergyFormat.money(s.energyPrice, locale) + " / kWh" else stringResource(R.string.tariff_none),
+            Modifier.clickable { showDialog { TariffDialog(store, close) } },
+        )
+        Divider()
+        val budget = s.monthlyBudget
+        InfoRow(
+            Icons.Rounded.Savings,
+            stringResource(R.string.smart_budget),
+            if (budget > 0) stringResource(R.string.smart_budget_on, EnergyFormat.money(budget, locale)) else stringResource(R.string.blind_alert_off),
+            Modifier.clickable { showDialog { BudgetDialog(store, close) } },
+        )
+    }
+
+    SectionTitle(stringResource(R.string.location_title))
+    SectionCard {
+        var locationVersion by remember { mutableStateOf(0) }
+        key(locationVersion) {
+            LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(16.dp))
+        }
+    }
+    PageIntro(stringResource(R.string.location_desc))
+
+    SectionTitle(stringResource(R.string.smart_weekly_section))
+    SectionCard {
+        InfoRow(Icons.Rounded.CalendarMonth, stringResource(R.string.smart_weekly), stringResource(R.string.smart_weekly_desc)) {
+            Switch(checked = s.weeklyReport, onCheckedChange = {
+                store.weeklyReport = it
+                WeeklyScheduler.schedule(context)
+            })
+        }
+        Divider()
+        InfoRow(
+            Icons.Rounded.Visibility, stringResource(R.string.smart_weekly_preview), null,
+            Modifier.clickable { scope.launch { preview = Actions.weeklyDoc(context) } },
+        )
+    }
+
+    SectionTitle(stringResource(R.string.smart_tg_section))
+    if (!s.escalationReady) {
+        SectionCard {
+            InfoRow(
+                Icons.AutoMirrored.Rounded.Send, stringResource(R.string.tg_title), stringResource(R.string.smart_tg_needs_setup),
+                Modifier.clickable { showDialog { TelegramDialog(store, close) } },
+            )
+        }
+    } else {
+        SectionCard {
+            InfoRow(Icons.Rounded.Keyboard, stringResource(R.string.smart_tg_commands), stringResource(R.string.smart_tg_commands_desc)) {
+                Switch(checked = s.telegramCommands, onCheckedChange = { store.telegramCommands = it })
+            }
+            if (s.telegramCommands) {
+                Divider()
+                InfoRow(Icons.Rounded.PowerSettingsNew, stringResource(R.string.smart_tg_control), stringResource(R.string.smart_tg_control_desc)) {
+                    Switch(checked = s.telegramControl, onCheckedChange = { store.telegramControl = it })
+                }
+            }
+            Divider()
+            InfoRow(
+                Icons.Rounded.Stairs, stringResource(R.string.stages_title),
+                stagesSummary(s),
+                Modifier.clickable { showDialog { StagesDialog(store, close) } },
+            )
+            Divider()
+            InfoRow(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.smart_tg_forward), stringResource(R.string.smart_tg_forward_desc)) {
+                Switch(checked = s.telegramForward, onCheckedChange = { store.telegramForward = it })
+            }
+            Divider()
+            val modes = listOf(Store.WATCHDOG_OFF, Store.WATCHDOG_SEND) + Watchdog.WATCH_MINUTES.map { -it }
+            val current = if (s.watchdogMode == Store.WATCHDOG_WATCH) -s.watchdogMin else s.watchdogMode
+            InfoRow(
+                Icons.Rounded.MonitorHeart,
+                stringResource(R.string.smart_wd),
+                watchdogLabel(current),
+                Modifier.clickable {
+                    showDialog {
+                        ChoiceDialog(
+                            stringResource(R.string.smart_wd),
+                            stringResource(R.string.smart_wd_desc),
+                            modes, current, { watchdogLabel(it) },
+                            onPick = {
+                                if (it < 0) {
+                                    store.watchdogMin = -it
+                                    store.watchdogMode = Store.WATCHDOG_WATCH
+                                } else store.watchdogMode = it
+                            },
+                            onDismiss = close,
+                        )
+                    }
+                },
+            )
+        }
+        PageIntro(stringResource(R.string.smart_tg_commands_list))
+    }
+    preview?.let { doc ->
+        ReportDialog(
+            doc, onDismiss = { preview = null },
+            onPdf = { pdfSaver.launch("switchguard-" + doc.title.lowercase().replace(' ', '-') + ".pdf") },
+            onTelegram = if (s.escalationReady) ({
+                scope.launch(Dispatchers.IO) { WeeklyReport.sendTelegram(context, doc) }
+                android.widget.Toast.makeText(context, resourcesForToast.getString(R.string.tg_test_sent), android.widget.Toast.LENGTH_SHORT).show()
+            }) else null,
+        )
+    }
+}
+
+private fun hasBattery(context: android.content.Context): Boolean =
+    context.registerReceiver(null, android.content.IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        ?.getBooleanExtra(android.os.BatteryManager.EXTRA_PRESENT, false) == true
+
+/** "Ahmet 5 dk → Ayşe 15 dk" */
+@Composable
+private fun stagesSummary(s: Store): String {
+    val list = s.telegramRecipients.sortedBy { s.stageFor(it.id) }
+    if (list.isEmpty()) return stringResource(R.string.blind_alert_off)
+    val min = stringResource(R.string.min_short)
+    return list.joinToString(" → ") { "${it.name} ${s.stageFor(it.id)} $min" }
+}
+
+/** Kademeli haber: her kişi/grup için ayrı bekleme süresi. Önce yakındaki kişi, kimse ilgilenmezse sıradaki. */
+@Composable
+private fun StagesDialog(store: Store, onDismiss: () -> Unit) {
+    val recipients = store.telegramRecipients
+    val stages = remember { androidx.compose.runtime.mutableStateMapOf<Long, Int>().apply { recipients.forEach { put(it.id, store.stageFor(it.id)) } } }
+    val options = listOf(1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120)
     AlertDialog(
         onDismissRequest = onDismiss,
-        icon = { Icon(Icons.Rounded.Summarize, contentDescription = null) },
-        title = { Text(stringResource(R.string.summary_title)) },
+        title = { Text(stringResource(R.string.stages_title)) },
         text = {
-            Column(Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (lines.isEmpty()) {
-                    Text(stringResource(R.string.summary_no_data), style = MaterialTheme.typography.bodyMedium)
-                } else {
-                    lines.forEach { Text(it, style = MaterialTheme.typography.bodyMedium) }
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.stages_desc))
+                recipients.forEach { r ->
+                    val value = stages[r.id] ?: store.escalateMin
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(r.name, Modifier.weight(1f), maxLines = 1)
+                        TextButton(modifier = Modifier.tvFocusRing(), enabled = options.any { it < value }, onClick = { stages[r.id] = options.last { it < value } }) { Text("−") }
+                        Text(stringResource(R.string.stages_after, value), style = MaterialTheme.typography.titleSmall)
+                        TextButton(modifier = Modifier.tvFocusRing(), enabled = options.any { it > value }, onClick = { stages[r.id] = options.first { it > value } }) { Text("+") }
+                    }
                 }
             }
         },
         confirmButton = {
-            TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_close)) }
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
+                store.telegramStages = stages.toMap()
+                onDismiss()
+            }) { Text(stringResource(android.R.string.ok)) }
         },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}
+
+/** Varsayılan tarife: tek fiyat ya da üç zamanlı (gündüz 06–17, puant 17–22, gece 22–06). Cihazın kendi fiyatı önce gelir. */
+@Composable
+private fun TariffDialog(store: Store, onDismiss: () -> Unit) {
+    val locale = LocalResources.current.configuration.locales[0]
+    val symbol = EnergyFormat.currency()?.getSymbol(locale) ?: ""
+    fun fmt(v: Double) = if (v > 0) java.math.BigDecimal.valueOf(v).stripTrailingZeros().toPlainString() else ""
+    var three by remember { mutableStateOf(store.threeZone) }
+    var flat by remember { mutableStateOf(fmt(store.energyPrice)) }
+    var day by remember { mutableStateOf(fmt(store.priceDay)) }
+    var peak by remember { mutableStateOf(fmt(store.pricePeak)) }
+    var night by remember { mutableStateOf(fmt(store.priceNight)) }
+    fun num(v: String) = v.replace(',', '.').toDoubleOrNull() ?: 0.0
+    @Composable
+    fun field(label: String, value: String, onChange: (String) -> Unit) = OutlinedTextField(
+        value = value,
+        onValueChange = { v -> onChange(v.filter { it.isDigit() || it == ',' || it == '.' }.take(10)) },
+        label = { Text(label) },
+        singleLine = true,
+        suffix = { Text("$symbol / kWh") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        modifier = Modifier.tvTextField(),
+    )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.tariff_title)) },
+        text = {
+            Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(stringResource(R.string.tariff_desc))
+                Row(Modifier.fillMaxWidth().selectable(selected = !three, onClick = { three = false }).tvFocusRing(), verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = !three, onClick = null)
+                    Text(stringResource(R.string.tariff_single), Modifier.padding(start = 8.dp))
+                }
+                Row(Modifier.fillMaxWidth().selectable(selected = three, onClick = { three = true }).tvFocusRing(), verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(selected = three, onClick = null)
+                    Text(stringResource(R.string.tariff_three), Modifier.padding(start = 8.dp))
+                }
+                if (!three) field(stringResource(R.string.tariff_price), flat) { flat = it }
+                else {
+                    field(stringResource(R.string.tariff_day), day) { day = it }
+                    field(stringResource(R.string.tariff_peak), peak) { peak = it }
+                    field(stringResource(R.string.tariff_night), night) { night = it }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
+                store.threeZone = three
+                store.energyPrice = num(flat)
+                store.priceDay = num(day)
+                store.pricePeak = num(peak)
+                store.priceNight = num(night)
+                onDismiss()
+            }) { Text(stringResource(android.R.string.ok)) }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+    )
+}
+
+/** Bekçi seçeneği: 0 kapalı, 1 sinyal ver, eksi değer = diğerini o kadar dakikayla denetle. */
+@Composable
+private fun watchdogLabel(mode: Int): String = when {
+    mode == Store.WATCHDOG_OFF -> stringResource(R.string.blind_alert_off)
+    mode == Store.WATCHDOG_SEND -> stringResource(R.string.wd_send)
+    else -> stringResource(R.string.wd_watch, -mode)
+}
+
+@Composable
+private fun BudgetDialog(store: Store, onDismiss: () -> Unit) {
+    val locale = LocalResources.current.configuration.locales[0]
+    val symbol = EnergyFormat.currency()?.getSymbol(locale) ?: ""
+    var text by remember { mutableStateOf(store.monthlyBudget.takeIf { it > 0 }?.let { java.math.BigDecimal.valueOf(it).stripTrailingZeros().toPlainString() } ?: "") }
+    val noPrice = !store.hasAnyPrice
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.smart_budget)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Text(stringResource(R.string.smart_budget_desc))
+                if (noPrice) Text(stringResource(R.string.smart_budget_needs_price), color = StatusColors.warning)
+                OutlinedTextField(
+                    value = text,
+                    onValueChange = { v -> text = v.filter { it.isDigit() || it == ',' || it == '.' }.take(10) },
+                    singleLine = true,
+                    suffix = { Text(symbol) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.tvTextField(),
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
+                store.monthlyBudget = text.replace(',', '.').toDoubleOrNull() ?: 0.0
+                onDismiss()
+            }) { Text(stringResource(android.R.string.ok)) }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
     )
 }
 

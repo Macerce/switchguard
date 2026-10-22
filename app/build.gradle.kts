@@ -19,8 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 31
-        versionName = "2.14.0"
+        versionCode = 32
+        versionName = "2.15.0"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
@@ -82,6 +82,8 @@ dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
     // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")
+    // Saat uygulamasıyla (Wear OS) veri alışverişi.
+    implementation("com.google.android.gms:play-services-wearable:20.0.1")
 
     testImplementation("junit:junit:4.13.2")
     // android.jar içindeki org.json JVM testlerinde boş stub; gerçeğini ekliyoruz.

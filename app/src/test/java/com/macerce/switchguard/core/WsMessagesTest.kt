@@ -49,7 +49,9 @@ class WsMessagesTest {
     @Test
     fun `ilgisiz parametreler durumu degistirmez`() {
         val e = WsMessages.parse("""{"action":"update","deviceid":"d1","params":{"rssi":-60}}""") as WsEvent.Update
-        assertEquals(single, WsMessages.apply(single, e))
+        // Sinyaldeki küçük oynama (2 dBm) durumu değiştirmez.
+        val withSignal = single.copy(rssi = -62)
+        assertEquals(withSignal, WsMessages.apply(withSignal, e))
     }
 
     @Test

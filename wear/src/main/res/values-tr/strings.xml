@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm_title">SwitchGuard alarmı</string>
+    <string name="channel_alarm">Alarm</string>
+    <string name="dismiss">Kapat</string>
+    <string name="devices">Cihazlar</string>
+    <string name="on">Açık</string>
+    <string name="off">Kapalı</string>
+    <string name="offline">Çevrimdışı</string>
+    <string name="no_phone">Telefonda SwitchGuard\'ı açın. Saat onun alarmlarını ve cihazlarını gösterir.</string>
+    <string name="home">Evde</string>
+    <string name="away">Dışarıda</string>
+    <string name="vacation">Tatilde</string>
+    <string name="scenes">Sahneler</string>
+</resources>

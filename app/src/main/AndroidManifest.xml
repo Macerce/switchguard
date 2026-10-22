@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Gün doğumu/batımı ve hava sıcaklığı kuralları: yaklaşık konum, yalnızca kullanıcı isteyince bir kez. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -72,6 +74,28 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_status_info" />
         </receiver>
+        <!-- Saat uygulamasından gelen istekler (alarmı kapat, aç/kapa, tazele). -->
+        <service android:name=".service.WearListener" android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/switchguard" />
+            </intent-filter>
+        </service>
+        <!-- Cihaz düğmesi widget'ı: seçilen cihazı/kanalı tek dokunuşla açar/kapatır. -->
+        <receiver android:name=".service.DeviceWidget" android:exported="true" android:label="@string/widget_device_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_device_info" />
+        </receiver>
+        <activity
+            android:name=".ui.DeviceWidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SwitchGuard">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         <!-- Hızlı Ayarlar kutucuğu: izlemeyi aç/kapat. Etkin kutucuk: servis durum değişince tazeler. -->
         <service
             android:name=".service.MonitorTile"
@@ -85,6 +109,7 @@
             <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="true" />
         </service>
         <receiver android:name=".service.SummaryReceiver" android:exported="false" />
+        <receiver android:name=".service.WeeklyReceiver" android:exported="false" />
         <receiver android:name=".service.BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -89,15 +89,62 @@ object Actions {
                     }
                     runCatching { MetricsLog.get(context).record(previous, next) }
                     store.snapshots = next
+                    com.macerce.switchguard.service.DeviceWidget.updateAll(context)
                 }
             }
         }
+
+    /**
+     * Sahneyi çalıştırır: her cihaz/kanal sırayla açılır ya da kapatılır, çevrimdışı ya da bulunamayan atlanır.
+     * Sonuç geçmişe yazılır; (değişen, değişmeyen) sayısı döner. [by]: kim/ne çalıştırdı (otomasyon adı, Telegram, saat).
+     */
+    suspend fun runScene(context: Context, scene: com.macerce.switchguard.core.Scene, by: String? = null): Pair<Int, Int> {
+        var ok = 0
+        var failed = 0
+        for (a in scene.actions) {
+            val device = Store.get(context).snapshots.firstOrNull { it.id == a.deviceId }
+            if (device == null || !device.online) { failed++; continue }
+            if (setSwitch(context, device, a.channel, a.on).isSuccess) ok++ else failed++
+        }
+        val log = com.macerce.switchguard.data.EventLog.get(context)
+        val args = com.macerce.switchguard.core.EventArgs.SceneRun(scene.name, ok, failed, by)
+        val app = context.getString(R.string.app_name)
+        log.add("", app, com.macerce.switchguard.data.EventKind.SCENE, args.render(app, com.macerce.switchguard.data.EventLog.strings(context)), "", args)
+        return ok to failed
+    }
+
+    /** Evde / Dışarıda: değişiklik geçmişe yazılır, widget ve saat tazelenir. */
+    fun setAway(context: Context, away: Boolean, by: String? = null) {
+        val store = Store.get(context)
+        if (store.awayMode == away) return
+        store.awayMode = away
+        val args = com.macerce.switchguard.core.EventArgs.Presence(away, by)
+        val app = context.getString(R.string.app_name)
+        com.macerce.switchguard.data.EventLog.get(context)
+            .add("", app, com.macerce.switchguard.data.EventKind.PRESENCE, args.render(app, com.macerce.switchguard.data.EventLog.strings(context)), "", args)
+        com.macerce.switchguard.service.DeviceWidget.updateAll(context)
+        com.macerce.switchguard.service.StatusSurfaces.refresh(context, force = true)
+    }
 
     /**
      * Bugünün özeti (Ayarlar → Günlük özet → önizleme penceresi); hiç kayıt yoksa null. Bildirim gönderilmez:
      * özet bildirimi sessiz kanalda olduğundan telefonda yalnız simge görünür, TV'de hiç görünmez.
      */
     suspend fun summaryLines(context: Context): List<String>? = withContext(Dispatchers.IO) { DailySummary.build(context) }
+
+    suspend fun dailyDoc(context: Context) = withContext(Dispatchers.IO) { DailySummary.doc(context) }
+
+    suspend fun weeklyDoc(context: Context) = withContext(Dispatchers.IO) { com.macerce.switchguard.service.WeeklyReport.build(context) }
+
+    /** Raporu PDF olarak [uri]'ye yazar. */
+    suspend fun writeReportPdf(context: Context, uri: Uri, doc: com.macerce.switchguard.core.ReportDoc) = withContext(Dispatchers.IO) {
+        val pdf = ReportPdf.render(context, doc, "SwitchGuard · " + doc.title)
+        try {
+            (context.contentResolver.openOutputStream(uri, "wt") ?: error("no output stream")).use { pdf.writeTo(it) }
+        } finally {
+            pdf.close()
+        }
+    }
 
     /** Cihazdaki eWeLink zamanlayıcıları (uygulamanın tanımadıkları da dahil, korunmak üzere). */
     suspend fun loadTimers(context: Context, deviceId: String): Result<List<TimerEntry>> = withContext(Dispatchers.IO) {

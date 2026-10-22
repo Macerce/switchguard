@@ -799,4 +799,431 @@
     <string name="alert_edit">Edit alert</string>
     <string name="alert_delete_title">Delete this alert?</string>
     <string name="automations_empty_desc">Automations switch devices on or off by themselves. For example: turn the fan on when the freezer\'s power rises, or turn a light off after it stays on for 2 hours.</string>
+    <!-- 2.15: akıllı uyarılar -->
+    <plurals name="hours_n">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="automation_hold_short">Lasting at least</string>
+    <string name="automation_power_for">for %s</string>
+    <string name="energy_price_device_desc">Price per kWh (%2$s) for %1$s, used for the estimated cost. Leave empty to use the default price.</string>
+    <string name="energy_price_default_hint">Default price: %s / kWh</string>
+    <string name="energy_price_as_default">Also use as the default for other devices</string>
+
+    <plurals name="event_outage">
+        <item quantity="one">Possible power outage: the monitored device went offline</item>
+        <item quantity="other">Possible power outage: all %d monitored devices went offline together</item>
+    </plurals>
+    <string name="event_outage_ended">Power is back: the outage lasted %1$s (%2$s)</string>
+    <string name="event_energy_high">%1$s used %2$d%% more energy than usual yesterday (%3$s; average %4$s)</string>
+    <string name="event_energy_low">%1$s used %2$d%% less energy than usual yesterday (%3$s; average %4$s) — check that it is working</string>
+    <string name="event_budget">This month\'s estimated electricity cost reached %1$s (budget %2$s)</string>
+    <string name="event_tg_ack">%1$s took over the alarm on Telegram (%2$s after it started)</string>
+    <string name="event_tg_switch">Telegram (%1$s): %2$s → %3$s</string>
+    <string name="event_watchdog_lost">%1$s has sent no signal for %2$s: monitoring there may have stopped</string>
+    <string name="event_watchdog_back">%1$s is sending signals again (silent for %2$s)</string>
+
+    <string name="tg_ack_button">✅ Got it, I\'m on it</string>
+    <string name="tg_ack_done">Alarm silenced. Thank you!</string>
+    <string name="tg_ack_stale">This alarm has already been dismissed.</string>
+    <string name="tg_someone">Someone</string>
+    <string name="tg_help">SwitchGuard commands:
+/status – monitoring, alarm and devices
+/ack – take over the ringing alarm
+/on name [channel] – turn a device on
+/off name [channel] – turn a device off
+/scene name – run a scene
+/home · /away – set at home / away
+
+Turning devices on and off and scenes must be allowed in the app (Alerts → Smart alerts).</string>
+    <string name="tg_no_alarm">No alarm is ringing.</string>
+    <string name="tg_cmd_too_old">This command arrived late, so it was not carried out. Please send it again.</string>
+    <string name="tg_control_off">Turning devices on and off from Telegram is off on this device (Alerts → Smart alerts).</string>
+    <string name="tg_usage_on">Which device? Example: /on Lamp</string>
+    <string name="tg_usage_off">Which device? Example: /off Lamp</string>
+    <string name="tg_need_channel">%1$s has %2$d channels: add the channel number, e.g. /on %1$s 1</string>
+    <string name="tg_ambiguous">More than one device matches: %s. Please write the full name.</string>
+    <string name="tg_not_found">No device named “%s”. Send /status to see the list.</string>
+    <string name="tg_status_title">SwitchGuard status</string>
+    <string name="tg_status_monitoring">Monitoring: %s</string>
+    <string name="tg_status_no_alarm">Alarm: none</string>
+    <plurals name="tg_status_alarm">
+        <item quantity="one">🚨 Alarm ringing (%d event)</item>
+        <item quantity="other">🚨 Alarm ringing (%d events)</item>
+    </plurals>
+    <string name="tg_status_outage">Power outage for %s</string>
+    <string name="tg_status_hint">/on name or /off name switches a device.</string>
+    <string name="tg_state_live">live</string>
+    <string name="tg_state_polling">checking regularly</string>
+    <string name="wd_beat_running">SwitchGuard is running</string>
+    <string name="wd_beat_stopped">SwitchGuard monitoring was turned off</string>
+    <string name="wd_beat_at">Last signal: %s</string>
+
+    <string name="weekly_title">Weekly report</string>
+    <string name="weekly_outage_none">Power outages: none</string>
+    <plurals name="weekly_outages">
+        <item quantity="one">Power outages: %1$d, %2$s in total</item>
+        <item quantity="other">Power outages: %1$d, %2$s in total</item>
+    </plurals>
+    <plurals name="weekly_month_outages">
+        <item quantity="one">This month: %1$d outage, %2$s in total</item>
+        <item quantity="other">This month: %1$d outages, %2$s in total</item>
+    </plurals>
+    <string name="weekly_alarms_none">Alarms: none</string>
+    <plurals name="weekly_alarms">
+        <item quantity="one">Alarms: %1$d (average response %2$s)</item>
+        <item quantity="other">Alarms: %1$d (average response %2$s)</item>
+    </plurals>
+    <plurals name="weekly_escalations">
+        <item quantity="one">Second person notified: %d time</item>
+        <item quantity="other">Second person notified: %d times</item>
+    </plurals>
+    <string name="weekly_drops">Disconnections: %s</string>
+    <string name="weekly_gap">Monitoring was not running for %s</string>
+    <string name="weekly_energy">Consumption: %s</string>
+    <string name="weekly_energy_top">Used the most: %1$s, %2$s</string>
+
+    <string name="smart_title">Smart alerts</string>
+    <string name="smart_summary">Power outage, consumption, weekly report, Telegram</string>
+    <string name="smart_desc">Alerts that look at all your devices together: power outages, unusual consumption and a weekly summary. With Telegram you can also check the status, take over an alarm and switch devices remotely.</string>
+    <string name="smart_outage_section">Power outage</string>
+    <string name="smart_outage">Detect power outages</string>
+    <string name="smart_outage_desc">If all monitored devices go offline together, you get one “power outage” alert instead of one per device, and a message with the duration when power returns.</string>
+    <string name="smart_energy_section">Consumption</string>
+    <string name="smart_anomaly">Unusual consumption</string>
+    <string name="smart_anomaly_desc">Each morning, compares yesterday with the previous two weeks. Much higher use can mean a fault; much lower (a freezer that barely ran) can mean it stopped working.</string>
+    <string name="smart_budget">Monthly budget</string>
+    <string name="smart_budget_on">Alert above %s</string>
+    <string name="smart_budget_desc">You are notified once a month when the estimated cost of the energy-metering devices reaches this amount.</string>
+    <string name="smart_budget_needs_price">Enter the electricity price on a device\'s energy page first: the cost cannot be calculated without it.</string>
+    <string name="smart_weekly_section">Weekly report</string>
+    <string name="smart_weekly">Weekly report</string>
+    <string name="smart_weekly_desc">Every Monday at 09:00: outages, alarms and response time, disconnections and consumption of the past week. Also sent to Telegram if set up.</string>
+    <string name="smart_weekly_preview">Show this week\'s report</string>
+    <string name="smart_tg_section">Telegram</string>
+    <string name="smart_tg_needs_setup">Set up Telegram first to use commands, forwarding and the watchdog.</string>
+    <string name="smart_tg_commands">Commands and “Got it” button</string>
+    <string name="smart_tg_commands_desc">People in your list can send /status and take over a ringing alarm. The alarm message gets a “Got it” button: pressing it silences the phone.</string>
+    <string name="smart_tg_control">Allow turning devices on and off</string>
+    <string name="smart_tg_control_desc">/on and /off commands. Only people in your list can use them.</string>
+    <string name="smart_tg_forward">Send smart alerts to Telegram</string>
+    <string name="smart_tg_forward_desc">Power outages, unusual consumption, the budget alert and the weekly report are also written to Telegram.</string>
+    <string name="smart_wd">Watchdog</string>
+    <string name="smart_wd_desc">Two devices with the same bot watch each other (e.g. the phone and a TV box). The sending device keeps a pinned message in the Telegram chat up to date; the watching device raises an alarm and messages your contacts if it stops. Do not unpin that message.</string>
+    <string name="smart_tg_commands_list">Commands: /status · /ack · /on name · /off name · /scene name · /home · /away · /help</string>
+    <string name="wd_send">This device sends a signal</string>
+    <string name="wd_watch">Watch the other device (%d min)</string>
+    <!-- 2.15: şarj, kurallar, tarife, widget -->
+    <string name="event_charger_lost">This device was unplugged from its charger: possible power outage</string>
+    <string name="event_charger_back">This device is charging again: power was out for %s</string>
+    <string name="smart_charger">Charger as a power sensor</string>
+    <string name="smart_charger_desc">If this phone/tablet stays plugged in at the site, being unplugged for a minute counts as a power outage; it also works when the internet is gone. The message goes out by Telegram over mobile data.</string>
+
+    <string name="widget_device_label">SwitchGuard switch</string>
+    <string name="widget_device_description">Turns one device or channel on and off with a tap</string>
+    <string name="widget_device_sample">Lamp</string>
+    <string name="widget_device_choose">Choose a device</string>
+    <string name="widget_device_tap">Tap to open the app</string>
+    <string name="widget_device_hint">Long-press the widget later to choose another device.</string>
+
+    <string name="trigger_sunrise">at sunrise</string>
+    <string name="trigger_sunset">at sunset</string>
+    <string name="trigger_temp_above">when outside temperature rises above</string>
+    <string name="trigger_temp_below">when outside temperature drops below</string>
+    <string name="evt_sunrise">Sunrise</string>
+    <string name="evt_sunset">Sunset</string>
+    <string name="evt_temp_above">Warmer than</string>
+    <string name="evt_temp_below">Colder than</string>
+    <string name="sun_offset">Shift</string>
+    <string name="sun_exact">Exactly</string>
+    <string name="sun_before">%s before</string>
+    <string name="sun_after">%s after</string>
+    <string name="automation_temp">Outside temperature</string>
+    <string name="automation_current_temp">Now: %s</string>
+    <string name="auto_only">Only when</string>
+    <string name="auto_only_desc">Optional extra limits</string>
+    <string name="window_toggle">Only during these hours</string>
+    <string name="window_start">From</string>
+    <string name="window_end">Until</string>
+    <string name="window_all_day">All day</string>
+    <string name="window_all_day_hint">Same start and end: all day on the selected days.</string>
+    <string-array name="day_short">
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+        <item>Sun</item>
+    </string-array>
+    <string name="cond_toggle">And only if another device…</string>
+    <string name="cond_state">State</string>
+    <string name="cond_clause">if %1$s is %2$s</string>
+    <string name="cond_is_on">on</string>
+    <string name="cond_is_off">off</string>
+    <string name="cond_is_online">online</string>
+    <string name="cond_is_offline">offline</string>
+
+    <string name="location_title">Location</string>
+    <string name="location_desc">Needed for sunrise/sunset and outside temperature rules. It stays on this device; for the temperature it is sent to Open-Meteo rounded to about 100 m.</string>
+    <string name="location_needed">No location yet: sunrise, sunset and temperature rules need one.</string>
+    <string name="location_set">Location: %1$s, %2$s</string>
+    <string name="location_use_phone">Use this device\'s location</string>
+    <string name="location_manual">Enter manually</string>
+    <string name="location_manual_desc">Latitude and longitude in degrees (e.g. 41.0082 and 28.9784 for Istanbul). You can copy them from a map app.</string>
+    <string name="location_lat">Latitude</string>
+    <string name="location_lon">Longitude</string>
+    <string name="location_unavailable">Location could not be read. Turn on location or enter it manually.</string>
+
+    <string name="tariff_title">Electricity tariff</string>
+    <string name="tariff_desc">The default price for devices without their own price. With a three-rate tariff each hour is priced in its own band: day 06–17, peak 17–22, night 22–06.</string>
+    <string name="tariff_single">Single rate</string>
+    <string name="tariff_three">Three-rate (day / peak / night)</string>
+    <string name="tariff_three_short">Three-rate</string>
+    <string name="tariff_none">Not set</string>
+    <string name="tariff_price">Price</string>
+    <string name="tariff_day">Day (06–17)</string>
+    <string name="tariff_peak">Peak (17–22)</string>
+    <string name="tariff_night">Night (22–06)</string>
+    <string name="tariff_three_text">Day %1$s · Peak %2$s · Night %3$s per kWh</string>
+    <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
+    <string name="min_short">min</string>
+    <string name="wear_source">Watch</string>
+
+    <string name="connection_title">Connection</string>
+    <string name="signal_value">Wi-Fi signal: %1$s (%2$d dBm)</string>
+    <string name="signal_unknown">This device does not report its Wi-Fi signal</string>
+    <string name="signal_excellent">excellent</string>
+    <string name="signal_good">good</string>
+    <string name="signal_fair">fair</string>
+    <string name="signal_weak">weak</string>
+    <plurals name="drops_week">
+        <item quantity="one">Disconnected %d time in the last 7 days</item>
+        <item quantity="other">Disconnected %d times in the last 7 days</item>
+    </plurals>
+    <string name="drops_cause_signal">It drops often and the signal is weak: the most likely cause is Wi-Fi. Move the modem or the device closer, or add a Wi-Fi extender.</string>
+    <string name="drops_cause_power">It drops often although the signal is good: the cause is probably the power supply (loose plug, outages) or the modem restarting.</string>
+    <string name="drops_cause_unknown">It drops often. Check the Wi-Fi signal near the device and whether the modem restarts.</string>
+    <string name="signal_weak_hint">The signal is weak: the device may start dropping. Moving it closer to the modem helps.</string>
+    <string name="signal_explain">dBm is signal strength: closer to 0 is better. Above -55 excellent, down to -67 good, down to -75 fair, below that weak.</string>
+
+    <string name="standby_title">Standby consumption</string>
+    <string name="standby_month">%s per month if it continues like this</string>
+    <string name="standby_explain">The lowest hourly average of the last 7 days: the power this device (and anything plugged into it) never goes below, even when "doing nothing". TVs, modems and chargers often draw this in standby.</string>
+
+    <string name="presence_section">At home / Away</string>
+    <string name="presence_home">At home</string>
+    <string name="presence_away">Away</string>
+    <string name="presence_home_desc">Rules marked "only when away" do not run. Switch to Away when you leave (also from the widget, the watch or Telegram /away).</string>
+    <string name="presence_away_desc">You are away: rules marked "only when away" are active.</string>
+    <string name="presence_soften">Softer alerts at home</string>
+    <string name="presence_soften_desc">While at home, alarms of non-critical devices become notifications (like quiet hours). Critical devices always ring.</string>
+    <string name="presence_toggle">Only when at home / away</string>
+    <string name="presence_only_away">only when away</string>
+    <string name="presence_only_home">only when at home</string>
+    <string name="event_presence_away">Mode: away</string>
+    <string name="event_presence_home">Mode: at home</string>
+    <string name="tg_presence_away">🚶 Mode set to away.</string>
+    <string name="tg_presence_home">🏠 Mode set to at home.</string>
+
+    <string name="vacation_title">Vacation mode</string>
+    <string name="vacation_desc">Off. While on vacation you count as away, quiet hours are ignored (every alarm rings) and a report is sent every morning.</string>
+    <string name="vacation_until">On vacation until %s</string>
+    <string name="vacation_effect">You count as away, quiet hours are off and a report arrives every morning at 09:00. It ends by itself.</string>
+    <string name="vacation_pick">Vacation until</string>
+    <string name="vacation_end_now">End</string>
+    <string name="event_vacation_ended">Vacation mode ended</string>
+
+    <string name="stages_title">Staged notification</string>
+    <string name="stages_desc">Each person is messaged after their own wait. For example a neighbour after 5 minutes, a relative after 15, the family group after 30. If someone taps “Got it”, the next people are not messaged.</string>
+    <string name="stages_after">%d min</string>
+    <string name="tg_alarm_earlier">Already notified: %s</string>
+
+    <string name="scenes_title">Scenes</string>
+    <string name="automations_rules_title">Rules</string>
+    <string name="scene_add">Add scene</string>
+    <string name="scene_new">New scene</string>
+    <string name="scene_edit">Edit scene</string>
+    <string name="scene_name">Scene name</string>
+    <string name="scene_name_hint">e.g. Turn everything off</string>
+    <string name="scene_desc">Choose what happens to each device when the scene runs. Devices left on “Skip” are not touched.</string>
+    <string name="scene_skip">Skip</string>
+    <string name="scene_delete_title">Delete this scene?</string>
+    <string name="scene_none_yet">Create a scene first (top of the Automation tab).</string>
+    <plurals name="scene_devices">
+        <item quantity="one">%d device</item>
+        <item quantity="other">%d devices</item>
+    </plurals>
+    <string name="scene_ran">%1$s: %2$d changed, %3$d skipped</string>
+    <string name="act_run_scene">Run scene</string>
+    <string name="auto_action_scene">Run scene “%s”</string>
+    <plurals name="event_scene">
+        <item quantity="one">Scene “%1$s” ran: %2$d device changed</item>
+        <item quantity="other">Scene “%1$s” ran: %2$d devices changed</item>
+    </plurals>
+    <plurals name="event_scene_failed">
+        <item quantity="one">, %d could not be changed (offline)</item>
+        <item quantity="other">, %d could not be changed (offline)</item>
+    </plurals>
+    <string name="tg_scene_done">✅ %1$s: %2$d changed, %3$d not changed</string>
+    <string name="tg_scene_not_found">No scene named “%1$s”. Scenes: %2$s</string>
+
+    <string name="widget_presence_choice">At home / Away</string>
+    <string name="widget_presence_choice_desc">Tap the widget to switch</string>
+    <string name="widget_presence_tap">Tap to switch</string>
+    <string name="widget_scene_tap">Tap to run</string>
+
+    <!-- Raporlar -->
+    <string name="report_what_title">What this report shows</string>
+    <string name="report_actions_title">What to do</string>
+    <string name="report_glossary_title">Terms used</string>
+    <string name="report_what_to_do">What to do: %s</string>
+    <string name="report_what_to_do_short">What to do:</string>
+    <string name="report_save_pdf">Save as PDF</string>
+    <string name="report_send_telegram">Send to Telegram</string>
+    <string name="report_none">None</string>
+    <string name="report_subtitle">%1$s · %2$d devices</string>
+    <string name="report_footnote">Values come from SwitchGuard\'s own measurements. Consumption and cost are estimates and may differ slightly from your bill.</string>
+    <string name="report_vs_last_week">last week</string>
+    <string name="report_vs_yesterday">yesterday</string>
+    <string name="report_vs_last_month">last month</string>
+    <string name="report_vs_last_year">last year</string>
+    <string name="report_trend_up">▲ %2$d%% more than %1$s</string>
+    <string name="report_trend_down">▼ %2$d%% less than %1$s</string>
+    <string name="report_trend_same">About the same as %s</string>
+    <string name="report_trend_new">%1$s: %2$s</string>
+
+    <string name="weekly_intro">A summary of the last 7 days: power outages, alarms and how quickly they were dismissed, which devices disconnected and why, and how much energy was used. Each value is compared with the week before. Green means fine, orange means worth a look; the “What to do” list at the end collects the suggestions.</string>
+    <string name="daily_report_title">Daily report</string>
+    <string name="daily_report_intro">A summary of the last 24 hours while you are on vacation: outages, alarms, disconnections and consumption, compared with the day before.</string>
+    <string name="kpi_outage">Power outages</string>
+    <plurals name="kpi_outage_value">
+        <item quantity="one">%1$d · %2$s</item>
+        <item quantity="other">%1$d · %2$s</item>
+    </plurals>
+    <string name="kpi_outage_caption">Times when all monitored devices went offline together, and their total length.</string>
+    <string name="kpi_alarms">Alarms</string>
+    <string name="kpi_alarms_caption">Alarms that rang and were dismissed (on the phone, the watch or Telegram).</string>
+    <string name="kpi_alarms_today_caption">Alarms dismissed today.</string>
+    <string name="kpi_response">Average response</string>
+    <string name="kpi_response_caption">Time from the alarm starting until someone dismissed it. Shorter is better; above 10 minutes is worth checking.</string>
+    <string name="kpi_uptime">Monitoring coverage</string>
+    <string name="kpi_uptime_caption">Share of the period monitoring was running. It drops when the phone was off or the system stopped the app.</string>
+    <string name="kpi_energy">Consumption</string>
+    <string name="kpi_energy_caption">Total of the energy-metering devices.</string>
+    <string name="kpi_energy_today_caption">Since midnight, energy-metering devices.</string>
+    <string name="kpi_cost">Estimated cost</string>
+    <string name="kpi_cost_caption_week">From your tariff. At this rate about %s per month.</string>
+    <string name="kpi_cost_caption_day">From your tariff. At this rate about %s per month.</string>
+    <string name="kpi_cost_today_caption">From your tariff, since midnight.</string>
+    <string name="kpi_drops">Disconnections</string>
+    <string name="kpi_drops_caption">How many times a device lost its internet connection today.</string>
+
+    <string name="rep_sec_events">Outages and alarms</string>
+    <string name="rep_sec_events_explain">Power outages and alarms during the period, and how quickly the alarms were handled.</string>
+    <string name="rep_outage_item">Power outage: %1$s, lasted %2$s</string>
+    <string name="rep_no_outage">No power outage this period.</string>
+    <plurals name="rep_month_outages">
+        <item quantity="one">This month so far: %1$d outage, %2$s in total.</item>
+        <item quantity="other">This month so far: %1$d outages, %2$s in total.</item>
+    </plurals>
+    <string name="rep_no_alarms">No alarm rang this period.</string>
+    <string name="rep_slow_response">Alarms were dismissed after %s on average: an alarm may go unnoticed for a long time.</string>
+    <string name="rep_good_response">Alarms were dismissed after %s on average.</string>
+    <plurals name="rep_escalations">
+        <item quantity="one">A second person was notified on Telegram %d time.</item>
+        <item quantity="other">A second person was notified on Telegram %d times.</item>
+    </plurals>
+    <string name="act_check_sound">Check that the alarm volume is high and the phone is not in another room at night; staged Telegram notification helps too.</string>
+    <string name="act_add_second_person">Add a second person on Telegram (Alerts → Notify a second person) so someone hears it when you do not.</string>
+
+    <string name="rep_sec_conn">Connection</string>
+    <string name="rep_sec_conn_explain">How often each device lost its internet connection and how strong its Wi-Fi signal is. Frequent drops mean missed events.</string>
+    <string name="rep_col_device">Device</string>
+    <string name="rep_col_drops">Drops</string>
+    <string name="rep_col_signal">Signal</string>
+    <string name="rep_signal_cell">%1$s (%2$d dBm)</string>
+    <string name="rep_drops_signal">%1$s dropped %2$d times and its signal is weak (%3$d dBm).</string>
+    <string name="rep_drops_power">%1$s dropped %2$d times although its signal is good.</string>
+    <string name="rep_drops_unknown">%1$s dropped %2$d times.</string>
+    <string name="rep_weak_no_drops">%1$s has a weak signal (%2$d dBm) but did not drop yet.</string>
+    <string name="rep_conn_ok">No device dropped often.</string>
+    <string name="rep_conn_note">Signal: closer to 0 is better (above -67 dBm is good). Devices that do not report a signal show “—”.</string>
+    <string name="act_move_closer">Move the device or the modem closer, or add a Wi-Fi extender.</string>
+    <string name="act_check_power">Check the device\'s plug and power, and whether the modem restarts by itself.</string>
+    <string name="act_check_wifi">Check the Wi-Fi signal near the device.</string>
+
+    <string name="rep_sec_energy">Consumption</string>
+    <string name="rep_sec_energy_explain">How much energy each metering device used, its share of the total and the estimated cost, next to the previous period.</string>
+    <string name="rep_col_kwh">kWh</string>
+    <string name="rep_col_share">Share</string>
+    <string name="rep_col_cost">Cost</string>
+    <string name="rep_col_last_week">Last week</string>
+    <string name="rep_col_yesterday">Yesterday</string>
+    <string name="rep_energy_note">kWh: energy used. Share: part of the total. Cost: estimated from your tariff.</string>
+    <string name="rep_standby">%1$s never goes below %2$s: about %3$s per month in standby</string>
+    <string name="rep_top_consumer">%1$s used the most: %2$d%% of the total.</string>
+    <string name="act_standby">If it is not needed all the time, switch it off at night with an automation (e.g. off at 00:00, on at 07:00).</string>
+    <string name="act_check_high">Check %s: a door left open, a blocked filter or a fault can raise consumption.</string>
+    <string name="act_check_low">Check %s urgently: very low consumption can mean it stopped working (e.g. a freezer that does not cool).</string>
+
+    <string name="rep_sec_monitor">Monitoring</string>
+    <string name="rep_sec_monitor_explain">Whether SwitchGuard was watching the whole time. Events during a gap may have been missed.</string>
+    <string name="rep_gap">Monitoring was not running for %s in total.</string>
+    <string name="rep_no_gap">Monitoring ran without interruption.</string>
+    <string name="act_battery">Turn off battery optimization for SwitchGuard and allow autostart (Settings → Permissions).</string>
+
+    <string name="gl_kwh">kWh</string>
+    <string name="gl_kwh_def">Kilowatt-hour, the unit on your electricity bill. A 1000 W heater running for one hour uses 1 kWh.</string>
+    <string name="gl_w">W (watt)</string>
+    <string name="gl_w_def">The power drawn at a given moment. A lamp ~10 W, a fridge ~100–150 W while running, a kettle ~2000 W.</string>
+    <string name="gl_outage">Power outage</string>
+    <string name="gl_outage_def">All monitored devices going offline within 90 seconds of each other, or this phone being unplugged for a minute (if enabled).</string>
+    <string name="gl_response">Response time</string>
+    <string name="gl_response_def">Time from the first event of an alarm until it was dismissed.</string>
+    <string name="gl_uptime">Monitoring coverage</string>
+    <string name="gl_uptime_def">The share of time SwitchGuard was running and connected. Events in the remaining time may have been missed.</string>
+    <string name="gl_dbm">dBm (signal)</string>
+    <string name="gl_dbm_def">Wi-Fi signal strength. Closer to 0 is stronger: -50 excellent, -70 fair, -80 weak.</string>
+    <string name="gl_standby">Standby consumption</string>
+    <string name="gl_standby_def">The lowest power the device never goes below; what it draws even when it seems off or idle.</string>
+    <string name="gl_peak">Peak power</string>
+    <string name="gl_peak_def">The highest power measured in the period. Short peaks (a motor starting) are normal.</string>
+    <string name="gl_coverage">Measurement coverage</string>
+    <string name="gl_coverage_def">How much of the period was actually measured. While monitoring was off nothing is recorded, so real consumption may be a little higher.</string>
+    <string name="gl_tariff">Tariff</string>
+    <string name="gl_tariff_def">The price per kWh used for the estimate. With a three-rate tariff every hour uses its own band\'s price.</string>
+
+    <string name="energy_report_subtitle">%1$s · %2$s · created %3$s</string>
+    <string name="energy_report_intro">How much electricity %1$s used in %2$s. The cards at the top are the summary; the chart shows consumption slice by slice (the darker bar is the highest, the dashed line the average); the table at the end has the details. The “Highlights” section explains what stands out.</string>
+    <string name="kpi_total_caption">Energy used in the period (the unit on your bill).</string>
+    <string name="kpi_avg_power_caption">Average power drawn while measured.</string>
+    <string name="kpi_peak_caption">Highest moment: %s</string>
+    <string name="kpi_bucket_avg_caption">Average of the measured slices.</string>
+    <string name="kpi_coverage_caption">%1$s of %2$s measured. Lower coverage means part of the use is not in these numbers.</string>
+    <string name="ins_title">Highlights</string>
+    <string name="ins_explain">What stands out in this period, in plain words.</string>
+    <string name="ins_busiest">The most energy was used in %1$s: %2$d%% of the total.</string>
+    <string name="ins_more">%1$d%% more than %2$s.</string>
+    <string name="ins_less">%1$d%% less than %2$s.</string>
+    <string name="ins_coverage">Only %d%% of the period was measured: actual consumption is higher than shown.</string>
+    <string name="ins_projection">At this rate the month will end at about %s.</string>
+    <string name="ins_standby">It never goes below %1$s: about %2$s per month just in standby.</string>
+    <string name="ins_nothing">Nothing unusual in this period.</string>
+    <string name="usage_explain">How many times each switch was turned on and how long it stayed on.</string>
+    <string name="chart_title">Consumption per %s</string>
+    <string name="chart_explain">Each bar is one slice of the period. The darker bar is the highest, the dashed line the average of the measured slices.</string>
+    <string name="chart_legend_bar">Consumption (kWh)</string>
+    <string name="chart_legend_busiest">Highest</string>
+    <string name="chart_legend_avg">Average</string>
+    <string name="table_explain">The numbers behind the chart, slice by slice.</string>
+    <string name="table_note">kWh: energy used · Share: part of the total (%) · Avg./Peak: power in W · Measured: time actually measured · –: no measurement.</string>
+
+    <string name="daily_intro">What each device did today: how many times it was turned on, how long it stayed on and how much energy it used.</string>
+    <string name="daily_devices">Devices</string>
+    <string name="daily_devices_explain">Only devices with activity today are listed.</string>
+    <string name="daily_col_on">Turned on</string>
+    <string name="daily_col_time">Time on</string>
+    <string name="daily_table_note">Turned on: how many times it was switched on today. Time on: total time it stayed on.</string>
+    <string name="daily_longest">%1$s stayed on the longest today: %2$s.</string>
 </resources>

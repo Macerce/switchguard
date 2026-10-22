@@ -14,6 +14,7 @@ class BootReceiver : BroadcastReceiver() {
         ) return
         // Alarmlar yeniden başlatmada silinir.
         SummaryScheduler.schedule(context)
+        WeeklyScheduler.schedule(context)
         if (Store.get(context).monitoringEnabled) {
             MonitorService.send(context, MonitorService.ACTION_START)
         }

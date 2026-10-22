@@ -162,6 +162,15 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 **TR:**
 > Yeni görünüm: cihazlar artık hızlı güç düğmeli kutucuklar; çok kanallı cihazlarda her kanalın kendi düğmesi var ve en üstteki koruma kartı canlı durumu ve toplam gücü gösteriyor. Cihaz sayfasında büyük bir güç düğmesi var. Ayarlar, her biri kendi sayfasında açılan kısa bir kategori listesi oldu. Otomasyon düzenleyici açılır listeler yerine cihaz kartları ve düğmelerle çalışıyor, "Eğer / O zaman" özeti gösteriyor.
 
+## 4f3. 2.15.0 sürüm notları (Play, ≤500 karakter; 2.13–2.15)
+**EN:**
+> Smart alerts: one alert for a power outage, unusual consumption, monthly budget and a weekly report. At home / Away and vacation mode. Telegram commands, an "I've seen it" button, staged notification and a watchdog. Scenes. New automation triggers: sunrise, sunset, outside temperature, sustained power, with hour and day limits. kWh price per device, three-rate tariff, standby consumption. Redesigned reports. Device widget.
+
+**TR:**
+> Akıllı uyarılar: elektrik kesintisinde tek uyarı, anormal tüketim, aylık bütçe ve haftalık rapor. Evde / Dışarıda ve tatil modu. Telegram komutları, "Gördüm" düğmesi, kademeli haber ve bekçi. Sahneler. Yeni otomasyon tetikleyicileri: gün doğumu, gün batımı, dış sıcaklık, süreli güç; saat ve gün sınırı. Cihaz başına kWh fiyatı, üç zamanlı tarife, bekleme tüketimi. Raporlar yenilendi. Cihaz widget'ı.
+
+Wear OS saat uygulaması Play'e yüklenmedi (Wear form faktörü + ayrı kanal + saat ekran görüntüleri gerekir); APK'sı GitHub sürümünde.
+
 ## 4g. Android TV (Play Console → Test ve yayınla → Ayarlar → Gelişmiş ayarlar → Form faktörleri → Ekle → Android TV)
 - Manifest hazır: `android.software.leanback` ve `android.hardware.touchscreen` `required="false"`, `LEANBACK_LAUNCHER` + `android:banner`.
 - TV kanalı ayrı değil: TV sürümü aynı AAB'den, kapalı test (Alpha) kanalıyla gelir. Formda "TV'yi kapalı test kanalına dahil et" seçilir.

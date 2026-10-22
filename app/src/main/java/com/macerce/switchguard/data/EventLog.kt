@@ -28,6 +28,12 @@ object EventKind {
     const val DISMISSED = "DISMISSED" // Alarm kapatıldı (tepki süresiyle)
     const val REMINDER = "REMINDER" // Alarm kapatıldı ama durum sürüyor
     const val ESCALATION = "ESCALATION" // Alarm kapatılmadı, ikinci kişiye haber verildi
+    const val OUTAGE = "OUTAGE" // Elektrik kesintisi başladı / bitti
+    const val ENERGY = "ENERGY" // Anormal tüketim, aylık bütçe
+    const val TELEGRAM = "TELEGRAM" // Telegram'dan gelen işlem (alarmı üstlenme, aç/kapa)
+    const val WATCHDOG = "WATCHDOG" // Bekçi: diğer cihaz sinyal vermiyor / yeniden veriyor
+    const val SCENE = "SCENE" // Sahne çalıştırıldı
+    const val PRESENCE = "PRESENCE" // Evde / dışarıda değişti, tatil bitti
 }
 
 data class LoggedEvent(
@@ -130,6 +136,11 @@ class EventLog private constructor(context: Context) :
         }
     }
 
+    /** [deviceId] için [since]'den beri [kind] türündeki kayıt sayısı (ör. haftalık kopma). */
+    fun count(deviceId: String, kind: String, since: Long): Int = readableDatabase.rawQuery(
+        "SELECT COUNT(*) FROM events WHERE device_id = ? AND kind = ? AND ts >= ?", arrayOf(deviceId, kind, since.toString()),
+    ).use { c -> if (c.moveToFirst()) c.getInt(0) else 0 }
+
     /** En son kaydın kimliği; kayıt yoksa 0. */
     fun latestId(): Long =
         readableDatabase.rawQuery("SELECT COALESCE(MAX(_id), 0) FROM events", null).use { c -> if (c.moveToFirst()) c.getLong(0) else 0 }
@@ -175,6 +186,44 @@ class EventLog private constructor(context: Context) :
             },
             alarmDismissed = { n, ms ->
                 context.resources.getQuantityString(R.plurals.event_alarm_dismissed, n, n, DurationText.format(ms, durations(context)))
+            },
+            outage = { n -> context.resources.getQuantityString(R.plurals.event_outage, n, n) },
+            outageEnded = { from, to ->
+                context.getString(R.string.event_outage_ended, DurationText.format(to - from, durations(context)), timeRange(context, from, to))
+            },
+            energyAnomaly = { name, high, kwh, avg ->
+                val pct = kotlin.math.abs(((kwh / avg - 1) * 100).toInt())
+                context.getString(
+                    if (high) R.string.event_energy_high else R.string.event_energy_low,
+                    name, pct, com.macerce.switchguard.service.DailySummary.formatKwh(kwh), com.macerce.switchguard.service.DailySummary.formatKwh(avg),
+                )
+            },
+            budget = { cost, budget ->
+                val locale = context.resources.configuration.locales[0]
+                context.getString(R.string.event_budget, com.macerce.switchguard.ui.EnergyFormat.money(cost, locale), com.macerce.switchguard.ui.EnergyFormat.money(budget, locale))
+            },
+            telegramAck = { who, ms -> context.getString(R.string.event_tg_ack, who, DurationText.format(ms, durations(context))) },
+            telegramSwitch = { who, label, on, err ->
+                val text = context.getString(R.string.event_tg_switch, who, label, context.getString(if (on) R.string.label_on else R.string.label_off))
+                if (err != null) context.getString(R.string.automation_failed, text, err) else text
+            },
+            charger = { lost, ms ->
+                if (lost) context.getString(R.string.event_charger_lost)
+                else context.getString(R.string.event_charger_back, DurationText.format(ms, durations(context)))
+            },
+            scene = { name, ok, failed, by ->
+                val base = context.resources.getQuantityString(R.plurals.event_scene, ok, name, ok)
+                val fail = if (failed > 0) context.resources.getQuantityString(R.plurals.event_scene_failed, failed, failed) else ""
+                base + fail + (by?.let { " · $it" } ?: "")
+            },
+            presence = { away, by, ended ->
+                when {
+                    ended -> context.getString(R.string.event_vacation_ended)
+                    else -> context.getString(if (away) R.string.event_presence_away else R.string.event_presence_home) + (by?.let { " · $it" } ?: "")
+                }
+            },
+            watchdog = { name, lost, ms ->
+                context.getString(if (lost) R.string.event_watchdog_lost else R.string.event_watchdog_back, name, DurationText.format(ms, durations(context)))
             },
         )
 

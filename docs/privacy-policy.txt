@@ -1,6 +1,6 @@
 SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-Last updated / Son güncelleme: 14 October 2026 / 14 Ekim 2026
+Last updated / Son güncelleme: 22 October 2026 / 22 Ekim 2026
 
 English
 
@@ -13,15 +13,21 @@ What the app stores (only on your device):
 - The names and on/off/online states of your devices, energy readings of power-metering devices, your alert rules, automations and settings (including the alarm sounds you pick).
 - A history of device events (at most 2,000 entries).
 
-Who the app talks to: only the official servers of the platforms you connect — eWeLink (*.coolkit.cc / *.coolkit.cn) and Tuya (openapi.tuya*.com, message service mqe.tuya*.com) — to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. If you turn on "Tell someone else", it also talks to Telegram (api.telegram.org). The app has no server of its own, and contains no analytics, advertising or tracking SDKs. No data is sold or shared with third parties.
+Who the app talks to: only the official servers of the platforms you connect — eWeLink (*.coolkit.cc / *.coolkit.cn) and Tuya (openapi.tuya*.com, message service mqe.tuya*.com) — to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. If you turn on "Tell someone else", it also talks to Telegram (api.telegram.org); if you use temperature rules, it asks Open-Meteo (api.open-meteo.com) for the outside temperature. The app has no server of its own, and contains no analytics, advertising or tracking SDKs. No data is sold or shared with third parties.
 
 Purchases: the optional Pro upgrade is sold through Google Play. Payment is handled entirely by Google; the app only asks Google Play whether Pro was purchased.
 
 Your password is entered on eWeLink's own sign-in page; the app never sees or stores it.
 
-Transfer to your other devices (coming soon): if you use "Send to another device", the app sends your Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 6-digit code shown on that device. Nothing passes through any server; eWeLink API keys and the eWeLink session (sign-in) are never transferred.
+Transfer to your other devices: if you use "Send to another device", the app sends your Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 6-digit code shown on that device. Nothing passes through any server; eWeLink API keys and the eWeLink session (sign-in) are never transferred.
 
-Telling someone else (Telegram): this is off unless you turn it on. If an alarm isn't dismissed within the time you choose, the app sends the alarm's text (time, device name and what happened) and your phone's name to the people or groups you picked, through a Telegram bot that you create and own; it sends one more message when the alarm is dismissed. The bot token and the chosen chats are stored only on your device. Telegram's own privacy policy applies to these messages.
+Telling someone else (Telegram): this is off unless you turn it on. If an alarm isn't dismissed within the time you choose, the app sends the alarm's text (time, device name and what happened) and your phone's name to the people or groups you picked, through a Telegram bot that you create and own; it sends one more message when the alarm is dismissed. If you turn them on, the same bot also carries power-outage messages, the daily summary and weekly report (device names, events and energy figures), and a pinned "watchdog" message that shows the app is running. The bot only accepts commands (status, take over an alarm, switch a device, run a scene, home/away) from the chats you picked; other chats are ignored. The bot token and the chosen chats are stored only on your device. Telegram's own privacy policy applies to these messages.
+
+Location and weather (optional): sunrise/sunset and outside-temperature rules need a location. You type it in, or tap "Use this device's location" (approximate location permission, read only when you tap). It is stored only on your device. For temperature rules the app asks Open-Meteo (api.open-meteo.com, no account) for the current temperature, sending the location rounded to about 100 m and nothing else.
+
+Watch (Wear OS): if you install the SwitchGuard watch app, the phone sends device names, states and alarms to your own watch over the Wear OS connection, and the watch sends back your taps (dismiss, switch, scene, home/away).
+
+Charger as a power sensor (optional): the app reads whether this phone or tablet is charging, only on the device.
 
 Entering keys from your phone (TV): on a TV, "Enter from phone" shows a QR code that opens a page served by the TV itself on your home network. What you type there is encrypted in your phone's browser with a one-time key from the QR code and goes straight to the TV; it never leaves your home network.
 
@@ -44,15 +50,21 @@ Uygulamanın sakladıkları (yalnızca cihazınızda):
 - Cihazlarınızın adları, açık/kapalı/çevrimiçi durumları, enerji ölçen cihazların ölçümleri, alarm kurallarınız, otomasyonlarınız ve ayarlarınız (seçtiğiniz alarm sesleri dahil).
 - Cihaz olaylarının geçmişi (en fazla 2.000 kayıt).
 
-Uygulamanın iletişim kurduğu yerler: yalnızca bağladığınız platformların resmi sunucuları: eWeLink (*.coolkit.cc / *.coolkit.cn) ve Tuya (openapi.tuya*.com, mesaj servisi mqe.tuya*.com). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. "İkinci kişiye haber ver" özelliğini açarsanız Telegram'a (api.telegram.org) da bağlanır. Uygulamanın kendi sunucusu yoktur; analiz, reklam veya izleme kütüphanesi içermez. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.
+Uygulamanın iletişim kurduğu yerler: yalnızca bağladığınız platformların resmi sunucuları: eWeLink (*.coolkit.cc / *.coolkit.cn) ve Tuya (openapi.tuya*.com, mesaj servisi mqe.tuya*.com). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. "İkinci kişiye haber ver" özelliğini açarsanız Telegram'a (api.telegram.org), sıcaklık kuralı kullanırsanız dış sıcaklık için Open-Meteo'ya (api.open-meteo.com) da bağlanır. Uygulamanın kendi sunucusu yoktur; analiz, reklam veya izleme kütüphanesi içermez. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.
 
 Satın almalar: İsteğe bağlı Pro yükseltmesi Google Play üzerinden satılır. Ödeme tamamen Google tarafından işlenir; uygulama yalnızca Google Play'e Pro'nun satın alınıp alınmadığını sorar.
 
 Şifreniz eWeLink'in kendi giriş sayfasına girilir; uygulama şifrenizi hiçbir zaman görmez ve saklamaz.
 
-Diğer cihazlarınıza aktarma (yakında): "Başka cihaza aktar" özelliğini kullanırsanız uygulama Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 6 haneli kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink API anahtarları ve eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
+Diğer cihazlarınıza aktarma: "Başka cihaza aktar" özelliğini kullanırsanız uygulama Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 6 haneli kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink API anahtarları ve eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
 
-İkinci kişiye haber ver (Telegram): siz açmadıkça kapalıdır. Alarm seçtiğiniz süre içinde kapatılmazsa uygulama, alarmın metnini (saat, cihaz adı ve ne olduğu) ve telefonunuzun adını seçtiğiniz kişi ya da gruplara, sizin oluşturduğunuz ve size ait bir Telegram botu üzerinden gönderir; alarm kapatılınca bir mesaj daha gönderir. Bot anahtarı ve seçilen sohbetler yalnızca cihazınızda saklanır. Bu mesajlar için Telegram'ın kendi gizlilik politikası geçerlidir.
+İkinci kişiye haber ver (Telegram): siz açmadıkça kapalıdır. Alarm seçtiğiniz süre içinde kapatılmazsa uygulama, alarmın metnini (saat, cihaz adı ve ne olduğu) ve telefonunuzun adını seçtiğiniz kişi ya da gruplara, sizin oluşturduğunuz ve size ait bir Telegram botu üzerinden gönderir; alarm kapatılınca bir mesaj daha gönderir. Açarsanız aynı bot elektrik kesintisi mesajlarını, günlük özeti ve haftalık raporu (cihaz adları, olaylar ve enerji rakamları) ve uygulamanın çalıştığını gösteren sabitlenmiş bir "bekçi" mesajını da iletir. Bot komutları (durum, alarmı üstlenme, cihaz açıp kapatma, sahne çalıştırma, evde/dışarıda) yalnızca seçtiğiniz sohbetlerden kabul eder; diğer sohbetler yok sayılır. Bot anahtarı ve seçilen sohbetler yalnızca cihazınızda saklanır. Bu mesajlar için Telegram'ın kendi gizlilik politikası geçerlidir.
+
+Konum ve hava durumu (isteğe bağlı): gün doğumu/batımı ve dış sıcaklık kuralları bir konuma ihtiyaç duyar. Konumu siz yazarsınız ya da "Bu cihazın konumunu kullan"a dokunursunuz (yaklaşık konum izni; yalnızca dokunduğunuzda okunur). Yalnızca cihazınızda saklanır. Sıcaklık kuralları için uygulama Open-Meteo'ya (api.open-meteo.com, hesap gerekmez) yalnızca yaklaşık 100 m'ye yuvarlanmış konumu göndererek o anki sıcaklığı sorar.
+
+Saat (Wear OS): SwitchGuard saat uygulamasını kurarsanız telefon cihaz adlarını, durumlarını ve alarmları Wear OS bağlantısı üzerinden kendi saatinize gönderir; saat de dokunuşlarınızı (alarmı kapatma, açıp kapatma, sahne, evde/dışarıda) geri gönderir.
+
+Şarjı elektrik algılayıcısı olarak kullanma (isteğe bağlı): uygulama bu telefonun ya da tabletin şarj olup olmadığını yalnızca cihazda okur.
 
 Anahtarları telefondan girme (TV): TV'de "Telefondan gir", TV'nin ev ağınızda kendisinin sunduğu bir sayfayı açan QR kodu gösterir. Oraya yazdıklarınız telefonunuzun tarayıcısında QR koddaki tek seferlik anahtarla şifrelenir ve doğrudan TV'ye gider; ev ağınızdan çıkmaz.
 

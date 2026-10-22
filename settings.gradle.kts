@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ewelink-alarm"
 include(":app")
+include(":wear")

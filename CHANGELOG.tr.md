@@ -6,6 +6,33 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.15.0 — 22 Ekim 2026
+**Akıllı uyarılar** (Uyarılar → Uyarı ayarları → Akıllı uyarılar)
+- Elektrik kesintisi: izlenen cihazların hepsi aynı anda çevrimdışı olursa cihaz başına ayrı ayrı değil, tek bir "elektrik kesildi" uyarısı gelir; elektrik gelince süresiyle birlikte haber verilir. Yerinde prize takılı bırakılan bir telefon ya da tablet de elektrik algılayıcısı olabilir: bir dakika şarjdan çıkarsa kesinti sayılır, internet yokken bile (mesaj Telegram ile mobil veriden gider).
+- Evde / Dışarıda ve tatil modu: evdeyken kritik olmayan cihazların alarmı bildirime döner; kurallar yalnızca dışarıdayken çalışabilir; tatilde her alarm çalar ve her sabah rapor gelir. Uyarılar sekmesinden, widget'tan, saatten ya da Telegram'dan değiştirilir.
+- Anormal tüketim: her sabah dün, önceki iki haftayla karşılaştırılır; çok yüksek (arıza) ya da çok düşük (neredeyse hiç çalışmamış dondurucu) tüketim bildirilir. İsteğe bağlı aylık bütçe.
+- Her pazartesi 09:00'da haftalık rapor: kesintiler, alarmlar ve tepki süresi, bağlantı kopmaları ve tüketim, önceki haftayla karşılaştırmalı.
+
+**Telegram**
+- Komutlar: /durum, /gordum, /ac ad, /kapat ad, /sahne ad, /evde, /disarida. Alarm mesajındaki "Gördüm" düğmesi alarmı üstlenir.
+- Kademeli haber: N dakika sonra bir kişiye, hâlâ kimse ilgilenmediyse M dakika sonra başka birine.
+- Bekçi: sabitlenmiş bir mesaj SwitchGuard'ın çalıştığını gösterir; telefon durursa karşı taraf bunu anlar.
+
+**Otomasyon**
+- Yeni tetikleyiciler: gün doğumu ve gün batımı (kaydırmalı), şundan sıcak / şundan soğuk (dış sıcaklık Open-Meteo'dan) ve gücün en az N dakika eşiğin üstünde/altında kalması.
+- Sınırlar: yalnızca belirli saat ve günlerde, yalnızca evde ya da dışarıdayken ve "başka bir cihaz açık/kapalıysa".
+- Sahneler: tek dokunuşla birden çok cihazı aç/kapat (widget, saat ve Telegram'dan da).
+
+**Enerji**
+- Cihaz başına kWh fiyatı; tek zamanlı ya da üç zamanlı (gündüz / puant / gece) tarife.
+- Bekleme tüketimi: cihazın hiç altına inmediği güç ve aylık maliyeti.
+- Raporlar yenilendi: günlük özet, haftalık rapor ve enerji raporu uygulamada, PDF'te ve Telegram'da aynı düzende — özet kartları, grafik, sade dille öne çıkanlar, "ne yapmalı", ayrıntılar ve terimler.
+- Haftalık raporda her cihazın Wi-Fi sinyali ve neden koptuğu.
+
+**Yeni**
+- Cihaz widget'ı: bir cihazı ya da kanalı tek dokunuşla açıp kapatır.
+- Wear OS saat uygulaması: alarm bilekte, kapatma, cihaz açıp kapatma ve sahne çalıştırma.
+
 ## 2.14.0 — 21 Ekim 2026
 **Enerji geçmişi ve rapor**
 - Enerji ölçen cihazların sayfasında Gün · Ay · Yıl seçilerek geçmiş tüketim görülür; oklarla önceki günlere, aylara, yıllara gidilir. Grafik günde saat saat, ayda gün gün, yılda ay ay gösterir; bir çubuğa dokununca o dilimin tüketimi, en yüksek gücü ve maliyeti yazılır.
