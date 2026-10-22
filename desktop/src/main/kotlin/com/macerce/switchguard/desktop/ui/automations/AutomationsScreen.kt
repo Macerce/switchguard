@@ -131,10 +131,16 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
 
     Box(modifier.fillMaxSize()) {
         Column(Modifier.align(Alignment.TopCenter).readableWidth().fillMaxSize()) {
-            PageHeader(strings["tab_automations"])
+            PageHeader(strings["tab_automations"], actions = {
+                com.macerce.switchguard.desktop.ui.Button(onClick = { editing = NEW }, modifier = Modifier.testTag("add-automation")) {
+                    Icon(Icons.Rounded.Add, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(strings["automation_add"])
+                }
+            })
             LazyColumn(
                 Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 96.dp),
+                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 if (!monitoring && automations.isNotEmpty()) {
@@ -172,12 +178,6 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                 }
             }
         }
-        ExtendedFloatingActionButton(
-            onClick = { editing = NEW },
-            icon = { Icon(Icons.Rounded.Add, contentDescription = null) },
-            text = { Text(strings["automation_add"]) },
-            modifier = Modifier.align(Alignment.BottomEnd).padding(24.dp).testTag("add-automation"),
-        )
         SnackbarHost(snackbar, Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp))
     }
 }
@@ -211,7 +211,7 @@ internal fun AutomationCard(
     a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit, scenes: List<Scene> = emptyList(),
 ) {
     val (whenText, thenText) = describe(a, devices, strings, scenes)
-    val shape = RoundedCornerShape(24.dp)
+    val shape = RoundedCornerShape(10.dp)
     Row(
         Modifier.fillMaxWidth()
             .clip(shape)

@@ -2,7 +2,7 @@
 
 Telefon uygulamasıyla masaüstü uygulamasının senkronizasyon dosyası: kopyalanan `core/`, `api/` ve `data/` dosyaları ile masaüstüne yeniden yazılan / taşınan dosyalar (`Store`, `MonitorService`, `Notifier` + `AlarmActivity`).
 
-Kaynak: `master` `4bbc24d` (telefon 2.13.0; 2026-10-17). İlk kopya `tv-tablet` `132e7fe`'den alınmıştı.
+Kaynak: `master` `6770907` (telefon 2.15.1; 2026-10-23). Önceki: `4bbc24d` (2.13.0). İlk kopya `tv-tablet` `132e7fe`'den alınmıştı.
 
 ## Kopyalanan Dosyalar (core/)
 
@@ -108,3 +108,8 @@ dosyalarda yapılan bir mantık değişikliği, aşağıdaki farklar dışında 
 ## Senkronizasyon Kuralı
 
 Telefon uygulamasında `core/`, `api/`, `data/` veya `service/` klasörlerinde ya da alarm ekranının davranışında (`ui/AlarmActivity.kt`) yapılan herhangi bir değişiklik, aynı değişikliğin masaüstü versiyonuna taşınması gerekir (karşılıkları yukarıdaki tablolarda; "Yeniden Yazılan / Taşınan Dosyalar"daki farklar korunur). Masaüstünde yapılan her uyarlama bu dosyadaki "uyarlama" ya da "farklar" sütununa yazılır (uyarlama yoksa "yok"); her senkronizasyonda yukarıdaki "Kaynak" commit satırı da güncellenir.
+
+## 0.6.0 eşitlemesi (telefon 2.14–2.15)
+
+Olduğu gibi kopyalanan: core/ EnergyReport, EnergyWatch, EwelinkRegion, Outage, ReportDoc, ReportText, Scene, Signal, Standby, Sun, Tariff, TelegramBot, WeeklyStats, AlertsView (+ güncellenen Automation, DeviceParser, DeviceSnapshot, EnergyParser, Escalation, EventText, WsMessages); api/ TelegramClient, WeatherClient; strings.xml (EN/TR); core testleri.
+Masaüstüne uyarlanan: MonitorService 2.15 eklemeleri → MonitorEngine (kesinti, Telegram komutları/Gördüm, bekçi, tatil, hava, tüketim; şarj yerine AC gücü `PowerSource`, haftalık rapor zamanlaması tick'te); WeeklyReport + DailySummary.doc → engine/Reports.kt; ReportPdf + EnergyExport → desktop/report (android.graphics yerine Gfx.kt: Graphics2D + PDFBox); ReportView → ui/report (ayrı pencere); konum: GPS yerine şehir arama (Open-Meteo geocoding).

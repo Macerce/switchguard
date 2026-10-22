@@ -28,13 +28,13 @@ import androidx.compose.material.icons.rounded.RemoveModerator
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.WifiOff
-import androidx.compose.material3.Button
+import com.macerce.switchguard.desktop.ui.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import com.macerce.switchguard.desktop.ui.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -73,7 +73,7 @@ import kotlinx.coroutines.delay
 fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.errorContainer,
             contentColor = MaterialTheme.colorScheme.onErrorContainer,
@@ -147,59 +147,54 @@ fun GuardCard(
     val content = if (branded) Brand.onActive else MaterialTheme.colorScheme.onSurface
     val muted = if (branded) Brand.onActive.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
 
-    Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp).testTag("guard-card"),
+    // Masaüstü: tek satır — durum (simge, başlık, açıklama), sayılar, sağda başlat/durdur.
+    Row(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(background).padding(horizontal = 20.dp, vertical = 16.dp)
+            .testTag("guard-card"),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Box(
-                Modifier.size(52.dp).background(
-                    if (branded) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh,
-                    CircleShape,
-                ),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    when {
-                        problem -> Icons.Rounded.GppMaybe
-                        branded -> Icons.Rounded.Shield
-                        else -> Icons.Rounded.RemoveModerator
-                    },
-                    contentDescription = null,
-                    tint = if (branded) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(30.dp),
-                )
+        Box(
+            Modifier.size(44.dp).background(
+                if (branded) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHighest,
+                RoundedCornerShape(8.dp),
+            ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                when {
+                    problem -> Icons.Rounded.GppMaybe
+                    branded -> Icons.Rounded.Shield
+                    else -> Icons.Rounded.RemoveModerator
+                },
+                contentDescription = null,
+                tint = if (branded) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(26.dp),
+            )
+        }
+        Spacer(Modifier.width(14.dp))
+        Column(Modifier.weight(1f)) {
+            Text(str(connTitle(shown)), style = MaterialTheme.typography.titleLarge, color = content)
+            val sub = when {
+                !monitoring -> str("monitoring_off_hint")
+                detail.isNotEmpty() -> detail
+                // "now" 30 sn'de bir tazelenir; arada gelen senkron onu geçerse "… sonra" yazmasın.
+                lastSync > 0 -> str("last_update", relativeAgo(maxOf(now, lastSync) - lastSync, strings))
+                devices.isEmpty() -> plural("device_count", devices.size, devices.size)
+                else -> str("guard_ready")
             }
-            Spacer(Modifier.width(16.dp))
-            Column(Modifier.weight(1f)) {
-                Text(str(connTitle(shown)), style = MaterialTheme.typography.titleLarge, color = content)
-                val sub = when {
-                    !monitoring -> str("monitoring_off_hint")
-                    detail.isNotEmpty() -> detail
-                    // "now" 30 sn'de bir tazelenir; arada gelen senkron onu geçerse "… sonra" yazmasın.
-                    lastSync > 0 -> str("last_update", relativeAgo(maxOf(now, lastSync) - lastSync, strings))
-                    devices.isEmpty() -> plural("device_count", devices.size, devices.size)
-                    else -> str("guard_ready")
-                }
-                Text(sub, style = MaterialTheme.typography.bodyMedium, color = muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
-            }
+            Text(sub, style = MaterialTheme.typography.bodyMedium, color = muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
         }
         if (devices.isNotEmpty()) {
-            Spacer(Modifier.height(18.dp))
             val on = devices.count { d -> d.online && d.switches.values.any { it } }
             val offline = devices.count { !it.online }
             val power = devices.filter { it.online && it.hasEnergy }.sumOf { it.power ?: 0.0 }
-            // Geniş pencerede sayılar kartın bir ucundan öbürüne dağılmasın.
-            Row(Modifier.widthIn(max = 640.dp).fillMaxWidth()) {
-                Stat(devices.size.toString(), str("stat_devices"), content, muted, Modifier.weight(1f))
-                Stat(on.toString(), str("stat_on"), content, muted, Modifier.weight(1f))
-                Stat(
-                    offline.toString(), str("stat_offline"),
-                    if (offline > 0 && !branded) StatusColors.offline else content, muted, Modifier.weight(1f),
-                )
-                if (devices.any { it.hasEnergy }) Stat(watts(power), str("stat_power"), content, muted, Modifier.weight(1.3f))
+            Row(horizontalArrangement = Arrangement.spacedBy(28.dp), modifier = Modifier.padding(horizontal = 20.dp)) {
+                Stat(devices.size.toString(), str("stat_devices"), content, muted)
+                Stat(on.toString(), str("stat_on"), content, muted)
+                Stat(offline.toString(), str("stat_offline"), if (offline > 0 && !branded) StatusColors.offline else content, muted)
+                if (devices.any { it.hasEnergy }) Stat(watts(power), str("stat_power"), content, muted)
             }
         }
-        Spacer(Modifier.height(16.dp))
         if (monitoring) {
             OutlinedButton(
                 onClick = onStop,
@@ -207,15 +202,15 @@ fun GuardCard(
                 border = BorderStroke(1.dp, if (branded) Color.White.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outline),
                 modifier = Modifier.testTag("monitoring-stop"),
             ) {
-                Icon(Icons.Rounded.Stop, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
+                Icon(Icons.Rounded.Stop, null, Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
                 Text(str("action_stop_monitoring"))
             }
         } else {
-            Button(onClick = onStart, modifier = Modifier.widthIn(max = 480.dp).fillMaxWidth().height(52.dp).testTag("monitoring-start")) {
-                Icon(Icons.Rounded.PlayArrow, null)
-                Spacer(Modifier.width(8.dp))
-                Text(str("action_start_monitoring"), style = MaterialTheme.typography.titleSmall)
+            Button(onClick = onStart, modifier = Modifier.testTag("monitoring-start")) {
+                Icon(Icons.Rounded.PlayArrow, null, Modifier.size(16.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(str("action_start_monitoring"))
             }
         }
     }
@@ -223,7 +218,7 @@ fun GuardCard(
 
 @Composable
 private fun Stat(value: String, label: String, color: Color, muted: Color, modifier: Modifier = Modifier) {
-    Column(modifier) {
+    Column(modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(value, style = MaterialTheme.typography.titleLarge, color = color, maxLines = 1)
         Text(label, style = MaterialTheme.typography.labelMedium, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
@@ -267,7 +262,7 @@ fun WarningCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(containerColor = tileColor()),
     ) {
         Column(Modifier.padding(20.dp)) {

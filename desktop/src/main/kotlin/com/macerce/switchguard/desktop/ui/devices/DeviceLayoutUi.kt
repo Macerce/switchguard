@@ -40,7 +40,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -82,7 +82,7 @@ fun sectionTitle(section: DeviceSection): String = when (section.kind) {
 @Composable
 fun LayoutSectionHeader(title: String, count: Int, collapsed: Boolean, onToggle: () -> Unit) {
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(6.dp))
             .clickable(onClick = onToggle).padding(start = 4.dp, end = 4.dp, top = 10.dp, bottom = 2.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -105,7 +105,7 @@ fun LayoutSectionHeader(title: String, count: Int, collapsed: Boolean, onToggle:
 fun LayoutEditHint(onCategories: () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
     ) {
         Column(Modifier.padding(16.dp)) {

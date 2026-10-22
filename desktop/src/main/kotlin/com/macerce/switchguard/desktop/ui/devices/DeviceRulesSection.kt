@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.devices
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -186,7 +187,7 @@ private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertActio
                 SegmentedButton(
                     selected = current == action,
                     onClick = { onChange(action) },
-                    shape = SegmentedButtonDefaults.itemShape(i, AlertAction.entries.size),
+                    shape = SegmentedButtonDefaults.itemShape(i, AlertAction.entries.size, baseShape = RoundedCornerShape(4.dp)),
                     modifier = Modifier.testTag("rule-${type.name}-${action.name}"),
                 ) {
                     Text(str(action.titleKey()), fontWeight = if (current == action) FontWeight.SemiBold else null)

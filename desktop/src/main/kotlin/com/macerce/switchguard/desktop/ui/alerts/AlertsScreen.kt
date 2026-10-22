@@ -35,12 +35,12 @@ import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.RemoveModerator
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Warning
-import androidx.compose.material3.Button
+import com.macerce.switchguard.desktop.ui.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FilledTonalButton
+import com.macerce.switchguard.desktop.ui.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import com.macerce.switchguard.desktop.ui.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -319,7 +319,7 @@ private fun PresenceCard(graph: AppGraph, strings: Strings) {
                         SegmentedButton(
                             selected = away == a,
                             onClick = { graph.engine.setAway(a) },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
+                            shape = SegmentedButtonDefaults.itemShape(i, 2, baseShape = RoundedCornerShape(4.dp)),
                             icon = { Icon(if (a) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home, null, Modifier.size(18.dp)) },
                             modifier = Modifier.testTag("presence-$a"),
                         ) { Text(str(if (a) "presence_away" else "presence_home")) }
@@ -375,13 +375,13 @@ private fun StatusCard(
 
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp)
+            .clip(RoundedCornerShape(12.dp)).background(background).padding(20.dp)
             .testTag("alerts-status-" + readiness.name.lowercase()),
     ) {
         val warning = readiness == AlertReadiness.WARNING
         Row(
             Modifier.fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(8.dp))
                 .then(if (warning) Modifier.clickable(role = Role.Button, onClick = onFixWindows) else Modifier),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -421,7 +421,7 @@ private fun StatusCard(
         if (readiness == AlertReadiness.MONITORING_OFF && issues.isNotEmpty()) {
             Spacer(Modifier.height(12.dp))
             Row(
-                Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(raisedOnTile())
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(8.dp)).background(raisedOnTile())
                     .clickable(role = Role.Button, onClick = onFixWindows).padding(horizontal = 14.dp, vertical = 10.dp)
                     .testTag("alerts-windows-warning"),
                 verticalAlignment = Alignment.CenterVertically,
@@ -437,13 +437,13 @@ private fun StatusCard(
         FlowRow(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (readiness == AlertReadiness.MONITORING_OFF) {
                 if (hasAccount) {
-                    Button(onClick = onStart, modifier = Modifier.height(48.dp).testTag("alerts-start")) {
+                    Button(onClick = onStart, modifier = Modifier.height(34.dp).testTag("alerts-start")) {
                         Icon(Icons.Rounded.PlayArrow, null)
                         Spacer(Modifier.width(8.dp))
                         Text(str("action_start_monitoring"))
                     }
                 } else {
-                    Button(onClick = onAddAccount, modifier = Modifier.height(48.dp).testTag("alerts-add-account")) {
+                    Button(onClick = onAddAccount, modifier = Modifier.height(34.dp).testTag("alerts-add-account")) {
                         Text(str("desktop_add_account"))
                     }
                 }
@@ -452,7 +452,7 @@ private fun StatusCard(
                 onClick = { dialog = true },
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = if (ready) Color.White else scheme.primary),
                 border = BorderStroke(1.dp, if (ready) Color.White.copy(alpha = 0.6f) else scheme.outline),
-                modifier = Modifier.height(48.dp).testTag("alerts-test"),
+                modifier = Modifier.height(34.dp).testTag("alerts-test"),
             ) {
                 Icon(Icons.Rounded.NotificationsActive, null, Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
@@ -570,7 +570,7 @@ private fun RulesPage(graph: AppGraph, deviceId: String) {
     val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud) { DeviceKinds.of(device) }
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(24.dp)).background(tileColor()).padding(16.dp),
+            .clip(RoundedCornerShape(10.dp)).background(tileColor()).padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconBadge(kind.icon(), MaterialTheme.colorScheme.onPrimaryContainer, MaterialTheme.colorScheme.primaryContainer, size = 44.dp)

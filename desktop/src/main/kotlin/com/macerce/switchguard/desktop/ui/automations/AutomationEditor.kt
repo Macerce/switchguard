@@ -42,12 +42,12 @@ import androidx.compose.material.icons.rounded.Sensors
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.TimerOff
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import com.macerce.switchguard.desktop.ui.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -320,7 +320,7 @@ internal fun AutomationEditor(
                     val (whenText, thenText) = describe(f.build(initial?.id.orEmpty(), initial?.enabled ?: true), devices, strings, scenes)
                     Column(
                         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-                            .clip(RoundedCornerShape(20.dp))
+                            .clip(RoundedCornerShape(8.dp))
                             .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
                             .padding(16.dp)
                             .testTag("automation-summary"),
@@ -339,12 +339,12 @@ internal fun AutomationEditor(
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                 )
 
-                val saveShape = RoundedCornerShape(18.dp)
+                val saveShape = RoundedCornerShape(8.dp)
                 Button(
                     enabled = f.isValid(devices, scenes),
                     onClick = { onSave(f.build(initial?.id ?: UUID.randomUUID().toString(), initial?.enabled ?: true)) },
                     shape = saveShape,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(56.dp).testTag("save-automation"),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).height(36.dp).testTag("save-automation"),
                 ) {
                     Icon(Icons.Rounded.Check, null)
                     Spacer(Modifier.width(8.dp))
@@ -390,7 +390,7 @@ private fun NameField(value: String, strings: Strings, onChange: (String) -> Uni
         label = { Text(strings["automation_name"]) },
         placeholder = { Text(strings["automation_name_hint"]) },
         singleLine = true,
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = tileColor(),
             unfocusedContainerColor = tileColor(),
@@ -406,7 +406,7 @@ private fun NameField(value: String, strings: Strings, onChange: (String) -> Uni
 private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(24.dp)).background(tileColor()).padding(16.dp),
+            .clip(RoundedCornerShape(10.dp)).background(tileColor()).padding(16.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             HueIcon(icon, hue, size = 40.dp)
@@ -440,7 +440,7 @@ private fun DeviceChooser(devices: List<DeviceSnapshot>, selectedId: String, tag
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         devices.forEach { d ->
             val selected = d.id == selectedId
-            val shape = RoundedCornerShape(18.dp)
+            val shape = RoundedCornerShape(8.dp)
             Column(
                 Modifier.width(120.dp)
                     .clip(shape)
@@ -478,7 +478,7 @@ private fun ChannelChooser(device: DeviceSnapshot, selected: Int, tag: String, o
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         device.switches.keys.sorted().forEach { ch ->
             val on = ch == selected
-            val shape = RoundedCornerShape(14.dp)
+            val shape = RoundedCornerShape(6.dp)
             Box(
                 Modifier.size(52.dp)
                     .clip(shape)
@@ -516,7 +516,7 @@ private fun <T> OptionGrid(
                 Row(Modifier.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     row.forEach { o ->
                         val on = o == selected
-                        val shape = RoundedCornerShape(16.dp)
+                        val shape = RoundedCornerShape(8.dp)
                         Row(
                             Modifier.weight(1f).fillMaxHeight().heightIn(min = 56.dp)
                                 .clip(shape)
@@ -558,7 +558,7 @@ private fun Stepper(
     val lower = Steps.lower(value, steps)
     val higher = Steps.higher(value, steps)
     Row(
-        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(16.dp)).background(raisedOnTile())
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(8.dp)).background(raisedOnTile())
             .padding(horizontal = 8.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -592,7 +592,7 @@ private fun NumberField(value: String, label: String, suffix: String, tag: Strin
         label = { Text(label) },
         suffix = { Text(suffix) },
         singleLine = true,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = raisedOnTile(),
@@ -608,7 +608,7 @@ private fun NumberField(value: String, label: String, suffix: String, tag: Strin
 @Composable
 private fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (Boolean) -> Unit) {
     Row(
-        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(12.dp)).background(raisedOnTile())
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(6.dp)).background(raisedOnTile())
             .selectable(selected = checked, onClick = { onChange(!checked) }, role = Role.Switch)
             .padding(horizontal = 16.dp, vertical = 8.dp).testTag("toggle-$tag"),
         verticalAlignment = Alignment.CenterVertically,
@@ -620,7 +620,7 @@ private fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (B
 
 @Composable
 private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
-    val shape = RoundedCornerShape(12.dp)
+    val shape = RoundedCornerShape(6.dp)
     Column(
         modifier.clip(shape).background(raisedOnTile())
             .selectable(selected = false, onClick = onClick, role = Role.Button)

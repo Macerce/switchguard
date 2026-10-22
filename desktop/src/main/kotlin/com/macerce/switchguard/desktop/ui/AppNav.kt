@@ -37,6 +37,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.desktop.AppGraph
+import com.macerce.switchguard.data.LiveState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import com.macerce.switchguard.desktop.AppState.Tab
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.ui.alerts.AlertsScreen
@@ -45,25 +48,8 @@ import com.macerce.switchguard.desktop.ui.settings.SettingsScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-/** Sol menüdeki sekmelerin adı (metin anahtarı) ve simgesi; telefondaki App.kt'nin Tab'ı (2.13). */
-private fun Tab.label(): String = when (this) {
-    Tab.DEVICES -> "tab_devices"
-    Tab.ALERTS -> "tab_alerts"
-    Tab.AUTOMATIONS -> "tab_automations"
-    Tab.HISTORY -> "tab_history"
-    Tab.SETTINGS -> "tab_settings"
-}
-
-private fun Tab.icon(): ImageVector = when (this) {
-    Tab.DEVICES -> Icons.Rounded.Devices
-    Tab.ALERTS -> Icons.Rounded.NotificationsActive
-    Tab.AUTOMATIONS -> Icons.Rounded.AutoMode
-    Tab.HISTORY -> Icons.Rounded.History
-    Tab.SETTINGS -> Icons.Rounded.Settings
-}
-
 /** Okunabilir genişlik: geniş pencerede içerik ortada en çok [max] genişlikte (telefondaki readableWidth). */
-fun Modifier.readableWidth(max: Dp = 840.dp): Modifier = this.widthIn(max = max)
+fun Modifier.readableWidth(max: Dp = 1000.dp): Modifier = this.widthIn(max = max)
 
 /**
  * Sol menü (Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar) ve seçili ekran; telefondaki App.kt'nin geniş ekran düzeni.
@@ -92,28 +78,24 @@ fun AppNav(graph: AppGraph, strings: Strings) {
         }
     }
 
+    val status by state.status.collectAsState()
+    val connection by LiveState.connection.collectAsState()
+    val monitoring = remember(version) { graph.store.monitoringEnabled }
+    val deviceCount = remember(version) { graph.store.snapshots.size }
+
     Row(Modifier.fillMaxSize()) {
-        NavigationRail(Modifier.fillMaxHeight(), containerColor = MaterialTheme.colorScheme.background) {
-            Spacer(Modifier.weight(1f))
-            Tab.entries.forEach { t ->
-                NavigationRailItem(
-                    selected = tab == t,
-                    onClick = { state.select(t) },
-                    icon = {
-                        if (t == Tab.HISTORY && unseen > 0) {
-                            BadgedBox(badge = { Badge { Text(if (unseen > 99) "99+" else unseen.toString()) } }) {
-                                Icon(t.icon(), contentDescription = null)
-                            }
-                        } else {
-                            Icon(t.icon(), contentDescription = null)
-                        }
-                    },
-                    label = { Text(strings[t.label()]) },
-                )
-            }
-            Spacer(Modifier.weight(1f))
-        }
-        Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
+        Sidebar(
+            tab = tab,
+            unseen = unseen,
+            strings = strings,
+            onSelect = state::select,
+            state = status.first,
+            statusText = status.second,
+            monitoring = monitoring,
+            onToggleMonitoring = { if (monitoring) graph.engine.stop() else graph.engine.start() },
+        )
+        Column(Modifier.weight(1f).fillMaxHeight()) {
+        Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
             AnimatedContent(
                 targetState = if (tab == Tab.DEVICES) openDevice else null,
                 transitionSpec = { fadeIn() togetherWith fadeOut() },
@@ -129,6 +111,8 @@ fun AppNav(graph: AppGraph, strings: Strings) {
                     Tab.SETTINGS -> SettingsScreen(graph, strings)
                 }
             }
+        }
+        StatusBar(status.first, status.second, deviceCount, connection.lastSync, strings)
         }
     }
 }

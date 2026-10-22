@@ -227,13 +227,13 @@ private fun AppCard() {
     val dark = LocalDarkTheme.current
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(24.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(tileColor())
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            Modifier.size(56.dp).clip(RoundedCornerShape(18.dp)).background(Brand.guard(dark)),
+            Modifier.size(56.dp).clip(RoundedCornerShape(8.dp)).background(Brand.guard(dark)),
             contentAlignment = Alignment.Center,
         ) {
             Icon(Icons.Rounded.Shield, null, tint = Color.White, modifier = Modifier.size(32.dp))

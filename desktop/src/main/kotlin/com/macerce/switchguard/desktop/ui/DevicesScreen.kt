@@ -28,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -130,7 +129,7 @@ fun DevicesScreen(
         Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             Column(Modifier.readableWidth(1200.dp).fillMaxSize()) {
                 PageHeader(
-                    str(if (editMode) "action_edit_layout" else "app_name"),
+                    str(if (editMode) "action_edit_layout" else "tab_devices"),
                     actions = {
                         if (editMode) {
                             TextButton(onClick = { editMode = false }, modifier = Modifier.testTag("edit-done")) { Text(str("action_done")) }
@@ -262,7 +261,7 @@ fun DevicesScreen(
                                                     scaleX = scale
                                                     scaleY = scale
                                                     shadowElevation = 16.dp.toPx() * lift
-                                                    shape = RoundedCornerShape(24.dp)
+                                                    shape = RoundedCornerShape(10.dp)
                                                     clip = false
                                                 }
                                                 .longPressDraggableHandle(

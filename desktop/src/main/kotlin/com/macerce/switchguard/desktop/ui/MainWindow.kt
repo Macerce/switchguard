@@ -6,10 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.isCtrlPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindow
 import androidx.compose.ui.window.LocalWindowExceptionHandlerFactory
@@ -54,7 +56,7 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
     val version by graph.store.version.collectAsState()
     val strings = remember(version) { graph.strings() }
     val theme = remember(version) { graph.store.theme }
-    val windowState = rememberWindowState(size = DpSize(1000.dp, 700.dp))
+    val windowState = rememberWindowState(size = DpSize(1200.dp, 780.dp))
     // Hata olunca pencere yeni kuşakla baştan kurulur (eski pencerenin bileşimi bozulmuş olabilir).
     var failed by remember { mutableStateOf(false) }
     var generation by remember { mutableIntStateOf(0) }
@@ -76,8 +78,13 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
                 visible = visible,
                 title = strings["app_name"],
                 icon = TrayIcons.app,
+                onPreviewKeyEvent = { e -> shortcut(e, graph) },
             ) {
-                LaunchedEffect(Unit) { window.minimumSize = Dimension(900, 600) }
+                LaunchedEffect(Unit) { window.minimumSize = Dimension(960, 640) }
+                // Başlık çubuğu temayla aynı renkte (beyaz çubuk altında koyu uygulama durmasın).
+                val systemDark = androidx.compose.foundation.isSystemInDarkTheme()
+                val dark = when (theme) { "dark" -> true; "light" -> false; else -> systemDark }
+                LaunchedEffect(dark) { com.macerce.switchguard.desktop.platform.TitleBar.forTheme(window, dark) }
                 LaunchedEffect(raise) {
                     if (raise == 0) return@LaunchedEffect
                     if (windowState.isMinimized) windowState.isMinimized = false
@@ -100,6 +107,32 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
             }
         }
     }
+}
+
+/**
+ * Klavye kısayolları (masaüstü uygulamalarının alışılmışı): Ctrl+1 … Ctrl+5 sekmeler, Ctrl+, Ayarlar, F5 bulutu
+ * hemen kontrol et. Yazı alanındayken de çalışır (Ctrl'li olduklarından yazıyı bozmaz).
+ */
+private fun shortcut(e: androidx.compose.ui.input.key.KeyEvent, graph: AppGraph): Boolean {
+    if (e.type != androidx.compose.ui.input.key.KeyEventType.KeyDown) return false
+    val tabs = com.macerce.switchguard.desktop.AppState.Tab.entries
+    val k = e.key
+    if (e.isCtrlPressed) {
+        val index = listOf(Key.One, Key.Two, Key.Three, Key.Four, Key.Five).indexOf(k)
+        if (index >= 0) {
+            graph.appState.select(tabs[index])
+            return true
+        }
+        if (k == Key.Comma) {
+            graph.appState.select(com.macerce.switchguard.desktop.AppState.Tab.SETTINGS)
+            return true
+        }
+    }
+    if (k == Key.F5) {
+        graph.engine.syncNow()
+        return true
+    }
+    return false
 }
 
 /** Ana penceredeki ekran hata verdi: açıklama ve ekranı yeniden deneme düğmesi. */

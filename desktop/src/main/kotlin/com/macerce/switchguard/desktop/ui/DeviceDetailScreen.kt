@@ -176,7 +176,7 @@ private fun ControlHero(device: DeviceSnapshot, monitored: Boolean) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+            .clip(RoundedCornerShape(12.dp)).background(background).padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {

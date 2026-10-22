@@ -25,17 +25,17 @@ import androidx.compose.material.icons.rounded.Wifi
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
+import com.macerce.switchguard.desktop.ui.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import com.macerce.switchguard.desktop.ui.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -138,7 +138,7 @@ fun EnergyHistory(device: DeviceSnapshot, metrics: MetricsLog, store: Store, mes
                     SegmentedButton(
                         selected = period == p,
                         onClick = { period = p },
-                        shape = SegmentedButtonDefaults.itemShape(i, periods.size),
+                        shape = SegmentedButtonDefaults.itemShape(i, periods.size, baseShape = RoundedCornerShape(4.dp)),
                         modifier = Modifier.testTag("period-${p.name}"),
                     ) {
                         Text(strings[when (p) { EnergyPeriod.DAY -> "energy_period_day"; EnergyPeriod.MONTH -> "energy_period_month"; EnergyPeriod.YEAR -> "energy_period_year" }])

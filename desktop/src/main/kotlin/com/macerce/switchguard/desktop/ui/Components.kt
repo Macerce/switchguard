@@ -71,7 +71,7 @@ fun PageHeader(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
-        modifier.fillMaxWidth().padding(start = if (onBack != null) 8.dp else 24.dp, end = 12.dp, top = 16.dp, bottom = 8.dp),
+        modifier.fillMaxWidth().padding(start = if (onBack != null) 12.dp else 28.dp, end = 16.dp, top = 22.dp, bottom = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (onBack != null) {
@@ -105,8 +105,9 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 fun SectionCard(modifier: Modifier = Modifier, horizontalPadding: Dp = 16.dp, content: @Composable () -> Unit) {
     Card(
         modifier = modifier.fillMaxWidth().padding(horizontal = horizontalPadding),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = tileColor()),
+        border = androidx.compose.foundation.BorderStroke(1.dp, cardStroke()),
     ) {
         Column { content() }
     }

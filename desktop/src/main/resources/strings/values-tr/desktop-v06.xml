@@ -11,4 +11,9 @@
     <string name="desktop_smart_ac">Bilgisayar pile geçince elektrik kesildi say</string>
     <string name="desktop_smart_ac_desc">Evde prize takılı bırakılan dizüstü için: bir dakika pille çalışırsa kesinti sayılır, internet olmasa da (Telegram mesajı bağlantı gelince gider).</string>
     <string name="desktop_location_desc">Gün doğumu/batımı ve dış sıcaklık kuralları için gerekir. Yalnızca bu bilgisayarda tutulur; sıcaklık için Open-Meteo\'ya ≈100 m\'ye yuvarlanarak gönderilir.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
+    <string name="desktop_status_synced">Son kontrol %s</string>
 </resources>

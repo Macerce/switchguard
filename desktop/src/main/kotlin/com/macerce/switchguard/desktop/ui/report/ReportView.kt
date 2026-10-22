@@ -29,7 +29,7 @@ import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.WarningAmber
-import androidx.compose.material3.FilledTonalButton
+import com.macerce.switchguard.desktop.ui.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -85,6 +85,8 @@ fun ReportWindow(doc: ReportDoc, onDismiss: () -> Unit, onPdf: (() -> Unit)? = n
             if (it.type == androidx.compose.ui.input.key.KeyEventType.KeyDown && it.key == androidx.compose.ui.input.key.Key.Escape) { onDismiss(); true } else false
         },
     ) {
+        val dark = com.macerce.switchguard.desktop.ui.LocalDarkTheme.current
+        androidx.compose.runtime.LaunchedEffect(dark) { com.macerce.switchguard.desktop.platform.TitleBar.forTheme(window, dark) }
         Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
             Column(Modifier.fillMaxSize()) {
                 Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(top = 12.dp, bottom = 16.dp)) {
@@ -94,13 +96,13 @@ fun ReportWindow(doc: ReportDoc, onDismiss: () -> Unit, onPdf: (() -> Unit)? = n
                     androidx.compose.material3.HorizontalDivider()
                     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)) {
                         if (onTelegram != null) {
-                            androidx.compose.material3.OutlinedButton(onClick = onTelegram, modifier = Modifier.testTag("report-telegram")) {
+                            com.macerce.switchguard.desktop.ui.OutlinedButton(onClick = onTelegram, modifier = Modifier.testTag("report-telegram")) {
                                 Icon(Icons.AutoMirrored.Rounded.Send, null, Modifier.size(18.dp))
                                 Text(str("report_send_telegram"), Modifier.padding(start = 8.dp))
                             }
                         }
                         if (onPdf != null) {
-                            androidx.compose.material3.Button(onClick = onPdf, modifier = Modifier.testTag("report-pdf")) {
+                            com.macerce.switchguard.desktop.ui.Button(onClick = onPdf, modifier = Modifier.testTag("report-pdf")) {
                                 Icon(Icons.Rounded.Description, null, Modifier.size(18.dp))
                                 Text(str("report_save_pdf"), Modifier.padding(start = 8.dp))
                             }
@@ -125,7 +127,7 @@ fun ReportBody(doc: ReportDoc) {
     val scheme = MaterialTheme.colorScheme
     // Başlık kartı
     Column(
-        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).clip(RoundedCornerShape(12.dp))
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).clip(RoundedCornerShape(6.dp))
             .background(scheme.primary).padding(20.dp),
     ) {
         Text(doc.title, style = MaterialTheme.typography.headlineSmall, color = scheme.onPrimary, fontWeight = FontWeight.SemiBold)
@@ -223,7 +225,7 @@ fun FindingRow(f: Finding) {
 @Composable
 private fun TableBlock(t: ReportTable) {
     val scheme = MaterialTheme.colorScheme
-    Column(Modifier.clip(RoundedCornerShape(12.dp))) {
+    Column(Modifier.clip(RoundedCornerShape(6.dp))) {
         TableRow(t.headers, header = true, zebra = false)
         t.rows.forEachIndexed { i, r -> TableRow(r, header = false, zebra = i % 2 == 1) }
     }

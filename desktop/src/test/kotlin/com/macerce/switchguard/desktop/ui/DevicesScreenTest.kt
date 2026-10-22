@@ -9,6 +9,8 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
@@ -144,7 +146,8 @@ class DevicesScreenTest {
         show()
         compose.onNodeWithTag("monitoring-start").assertExists()
         compose.onNodeWithTag("monitoring-stop").assertDoesNotExist()
-        compose.onNodeWithText("Devices").assertExists()
+        // Sayfa başlığı ve koruma kartındaki sayı etiketi.
+        compose.onAllNodesWithText("Devices").assertCountEquals(2)
 
         // Motor başlatılmadan yalnızca ayar: kart "durdur" düğmesine geçer.
         graph.store.monitoringEnabled = true

@@ -26,7 +26,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import com.macerce.switchguard.desktop.ui.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,7 +34,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -79,7 +79,7 @@ internal const val NEW_SCENE = "new-scene"
 fun ScenesStrip(scenes: List<Scene>, strings: Strings, onRun: (Scene) -> Unit, onEdit: (String) -> Unit) {
     FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         scenes.forEach { s ->
-            val shape = RoundedCornerShape(12.dp)
+            val shape = RoundedCornerShape(6.dp)
             Column(
                 Modifier.width(180.dp).clip(shape).background(tileColor())
                     .clickable { onRun(s) }
@@ -100,7 +100,7 @@ fun ScenesStrip(scenes: List<Scene>, strings: Strings, onRun: (Scene) -> Unit, o
                 )
             }
         }
-        val shape = RoundedCornerShape(12.dp)
+        val shape = RoundedCornerShape(6.dp)
         Box(
             Modifier.width(140.dp).heightIn(min = 92.dp).clip(shape).background(tileColor())
                 .clickable { onEdit(NEW_SCENE) }.testTag("add-scene"),
@@ -149,7 +149,7 @@ fun SceneEditor(
                     label = { Text(strings["scene_name"]) },
                     placeholder = { Text(strings["scene_name_hint"]) },
                     singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
+                    shape = RoundedCornerShape(6.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = tileColor(), unfocusedContainerColor = tileColor(),
                         focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent,
@@ -178,7 +178,7 @@ fun SceneEditor(
                                     SegmentedButton(
                                         selected = choice[key] == o,
                                         onClick = { if (o == null) choice.remove(key) else choice[key] = o },
-                                        shape = SegmentedButtonDefaults.itemShape(idx, options.size),
+                                        shape = SegmentedButtonDefaults.itemShape(idx, options.size, baseShape = RoundedCornerShape(4.dp)),
                                         modifier = Modifier.testTag("scene-$key-$idx"),
                                     ) {
                                         Text(strings[when (o) { null -> "scene_skip"; true -> "auto_action_turn_on"; false -> "auto_action_turn_off" }], maxLines = 1)
@@ -195,7 +195,7 @@ fun SceneEditor(
                         onSave(Scene(initial?.id ?: UUID.randomUUID().toString(), name.trim(), actions))
                     },
                     shape = RoundedCornerShape(10.dp),
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).height(44.dp).testTag("save-scene"),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp).height(36.dp).testTag("save-scene"),
                 ) {
                     Icon(Icons.Rounded.Check, null)
                     Spacer(Modifier.size(8.dp))

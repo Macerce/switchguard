@@ -13,7 +13,11 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.platform.SystemFont
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.data.ConnState
 
@@ -37,19 +41,19 @@ private val Light = lightColorScheme(
     onError = Color.White,
     errorContainer = Color(0xFFFFDAD6),
     onErrorContainer = Color(0xFF410002),
-    background = Color(0xFFF2F5F4),
-    onBackground = Color(0xFF161D1B),
-    surface = Color(0xFFF2F5F4),
-    onSurface = Color(0xFF161D1B),
+    background = Color(0xFFF3F3F3),
+    onBackground = Color(0xFF1B1B1B),
+    surface = Color(0xFFF3F3F3),
+    onSurface = Color(0xFF1B1B1B),
     surfaceContainerLowest = Color(0xFFFFFFFF),
-    surfaceContainerLow = Color(0xFFF7FAF9),
-    surfaceContainer = Color(0xFFEAEFED),
-    surfaceContainerHigh = Color(0xFFE4E9E7),
-    surfaceContainerHighest = Color(0xFFDEE4E2),
-    surfaceVariant = Color(0xFFDAE5E1),
-    onSurfaceVariant = Color(0xFF3F4946),
-    outline = Color(0xFF6F7976),
-    outlineVariant = Color(0xFFBEC9C5),
+    surfaceContainerLow = Color(0xFFF9F9F9),
+    surfaceContainer = Color(0xFFEDEDED),
+    surfaceContainerHigh = Color(0xFFEAEAEA),
+    surfaceContainerHighest = Color(0xFFE2E2E2),
+    surfaceVariant = Color(0xFFE6E6E6),
+    onSurfaceVariant = Color(0xFF5C5C5C),
+    outline = Color(0xFF8A8A8A),
+    outlineVariant = Color(0xFFE0E0E0),
     inverseSurface = Color(0xFF2B3230),
     inverseOnSurface = Color(0xFFECF2EF),
     inversePrimary = Color(0xFF5FDBC1),
@@ -72,19 +76,19 @@ private val Dark = darkColorScheme(
     onError = Color(0xFF690005),
     errorContainer = Color(0xFF93000A),
     onErrorContainer = Color(0xFFFFDAD6),
-    background = Color(0xFF0D1412),
-    onBackground = Color(0xFFDDE4E1),
-    surface = Color(0xFF0D1412),
-    onSurface = Color(0xFFDDE4E1),
-    surfaceContainerLowest = Color(0xFF080E0D),
-    surfaceContainerLow = Color(0xFF151C1A),
-    surfaceContainer = Color(0xFF19201E),
-    surfaceContainerHigh = Color(0xFF232A28),
-    surfaceContainerHighest = Color(0xFF2E3533),
-    surfaceVariant = Color(0xFF3F4946),
-    onSurfaceVariant = Color(0xFFBEC9C5),
-    outline = Color(0xFF899390),
-    outlineVariant = Color(0xFF3F4946),
+    background = Color(0xFF202020),
+    onBackground = Color(0xFFE6E6E6),
+    surface = Color(0xFF202020),
+    onSurface = Color(0xFFE6E6E6),
+    surfaceContainerLowest = Color(0xFF1A1A1A),
+    surfaceContainerLow = Color(0xFF272727),
+    surfaceContainer = Color(0xFF2B2B2B),
+    surfaceContainerHigh = Color(0xFF2D2D2D),
+    surfaceContainerHighest = Color(0xFF383838),
+    surfaceVariant = Color(0xFF3A3A3A),
+    onSurfaceVariant = Color(0xFFB4B4B4),
+    outline = Color(0xFF7A7A7A),
+    outlineVariant = Color(0xFF353535),
     inverseSurface = Color(0xFFDDE4E1),
     inverseOnSurface = Color(0xFF2B3230),
     inversePrimary = Color(0xFF00796B),
@@ -135,11 +139,21 @@ object Brand {
     val deep = Color(0xFF00796B)
 }
 
-/** Kartların ve kutucukların zemini: açık temada beyaz, koyu temada zeminden bir ton açık. */
+/** Kartların ve kutucukların zemini: açık temada beyaz, koyu temada zeminden bir ton açık (Windows 11 kart rengi). */
 @Composable
 @ReadOnlyComposable
 fun tileColor(): Color =
     if (LocalDarkTheme.current) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainerLowest
+
+/** Kartın ince kenarlığı (Fluent "card stroke"). */
+@Composable
+@ReadOnlyComposable
+fun cardStroke(): Color = if (LocalDarkTheme.current) Color(0x14FFFFFF) else Color(0x0F000000)
+
+/** Kenar çubuğunun zemini: pencere zemininden bir ton koyu/açık (Windows Ayarlar uygulaması gibi). */
+@Composable
+@ReadOnlyComposable
+fun sidebarColor(): Color = if (LocalDarkTheme.current) Color(0xFF1C1C1C) else Color(0xFFEBEBEB)
 
 /** Kutucuğun üstündeki yükseltilmiş öğelerin (simge zemini, kapalı kanal düğmesi) tonu. */
 @Composable
@@ -147,22 +161,44 @@ fun tileColor(): Color =
 fun raisedOnTile(): Color =
     if (LocalDarkTheme.current) MaterialTheme.colorScheme.surfaceContainerHighest else MaterialTheme.colorScheme.surfaceContainerHigh
 
+// Masaüstü (Windows 11 / Fluent): küçük köşeler, Segoe UI, telefondan bir boy küçük yazı ölçeği (fare ve 100–150 %
+// ölçekli ekran için; telefonun 16 sp gövdesi masaüstünde iri durur).
 private val AppShapes = Shapes(
-    extraSmall = RoundedCornerShape(12.dp),
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(28.dp),
+    extraSmall = RoundedCornerShape(4.dp),
+    small = RoundedCornerShape(4.dp),
+    medium = RoundedCornerShape(8.dp),
+    large = RoundedCornerShape(8.dp),
+    extraLarge = RoundedCornerShape(6.dp),
+)
+
+/** Windows'un arayüz yazı tipi; yoksa Skia benzerini seçer. */
+@OptIn(androidx.compose.ui.text.ExperimentalTextApi::class)
+val UiFont = FontFamily(
+    SystemFont("Segoe UI", FontWeight.Normal),
+    SystemFont("Segoe UI Semibold", FontWeight.SemiBold),
+    SystemFont("Segoe UI", FontWeight.Bold),
+    SystemFont("Segoe UI Semilight", FontWeight.Light),
 )
 
 private val AppTypography = Typography().run {
+    fun TextStyle.ui(size: Int, line: Int, weight: FontWeight = FontWeight.Normal) =
+        copy(fontFamily = UiFont, fontSize = size.sp, lineHeight = line.sp, fontWeight = weight, letterSpacing = 0.sp)
     copy(
-        headlineMedium = headlineMedium.copy(fontWeight = FontWeight.Bold),
-        headlineSmall = headlineSmall.copy(fontWeight = FontWeight.Bold),
-        titleLarge = titleLarge.copy(fontWeight = FontWeight.SemiBold),
-        titleMedium = titleMedium.copy(fontWeight = FontWeight.SemiBold),
-        titleSmall = titleSmall.copy(fontWeight = FontWeight.SemiBold),
-        labelLarge = labelLarge.copy(fontWeight = FontWeight.SemiBold),
+        displayLarge = displayLarge.ui(48, 56, FontWeight.SemiBold),
+        displayMedium = displayMedium.ui(40, 48, FontWeight.SemiBold),
+        displaySmall = displaySmall.ui(34, 40, FontWeight.SemiBold),
+        headlineLarge = headlineLarge.ui(28, 36, FontWeight.SemiBold),
+        headlineMedium = headlineMedium.ui(26, 32, FontWeight.SemiBold),
+        headlineSmall = headlineSmall.ui(24, 30, FontWeight.SemiBold),
+        titleLarge = titleLarge.ui(18, 24, FontWeight.SemiBold),
+        titleMedium = titleMedium.ui(15, 20, FontWeight.SemiBold),
+        titleSmall = titleSmall.ui(14, 20, FontWeight.SemiBold),
+        bodyLarge = bodyLarge.ui(14, 20),
+        bodyMedium = bodyMedium.ui(13, 18),
+        bodySmall = bodySmall.ui(12, 16),
+        labelLarge = labelLarge.ui(13, 18, FontWeight.SemiBold),
+        labelMedium = labelMedium.ui(12, 16),
+        labelSmall = labelSmall.ui(11, 14),
     )
 }
 

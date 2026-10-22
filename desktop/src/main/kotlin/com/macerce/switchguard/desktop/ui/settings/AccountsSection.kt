@@ -5,9 +5,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Hub
 import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
+import com.macerce.switchguard.desktop.ui.Button
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue

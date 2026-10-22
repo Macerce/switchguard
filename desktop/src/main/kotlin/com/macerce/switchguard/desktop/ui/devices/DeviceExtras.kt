@@ -30,14 +30,14 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
+import com.macerce.switchguard.desktop.ui.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -360,7 +360,7 @@ private fun TimerDialog(
                         SegmentedButton(
                             selected = t.on == on,
                             onClick = { t = t.copy(on = on) },
-                            shape = SegmentedButtonDefaults.itemShape(i, 2),
+                            shape = SegmentedButtonDefaults.itemShape(i, 2, baseShape = RoundedCornerShape(4.dp)),
                         ) { Text(str(if (on) "auto_action_turn_on" else "auto_action_turn_off")) }
                     }
                 }

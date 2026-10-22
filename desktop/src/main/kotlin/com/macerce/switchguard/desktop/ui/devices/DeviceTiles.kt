@@ -78,7 +78,7 @@ fun DeviceTile(
     val anyOn = device.switches.values.any { it }
     // Çok kanallıda kanal düğmeleri kendi durumunu gösterir; kutucuğun kendisi renklenmez.
     val active = anyOn && device.online && !device.isMultiChannel && editBar == null
-    val shape = RoundedCornerShape(24.dp)
+    val shape = RoundedCornerShape(10.dp)
     val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
     val controls = editBar == null
 
@@ -255,7 +255,7 @@ private fun ChannelButton(device: DeviceSnapshot, channel: Int, on: Boolean, mod
     val scheme = MaterialTheme.colorScheme
     val shown = control.shown
     val enabled = device.online
-    val shape = RoundedCornerShape(18.dp)
+    val shape = RoundedCornerShape(8.dp)
     val bg = when {
         !enabled -> Color.Transparent
         shown -> scheme.primary

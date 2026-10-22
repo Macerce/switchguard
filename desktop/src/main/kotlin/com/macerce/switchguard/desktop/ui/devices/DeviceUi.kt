@@ -1,5 +1,11 @@
 package com.macerce.switchguard.desktop.ui.devices
 
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Box
+import com.macerce.switchguard.desktop.ui.TextButton
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.TooltipArea
 import androidx.compose.foundation.TooltipPlacement
@@ -104,8 +110,16 @@ fun HintIconButton(
         delayMillis = 500,
         tooltipPlacement = TooltipPlacement.CursorPoint(offset = DpOffset(0.dp, 16.dp)),
     ) {
-        IconButton(onClick = onClick, enabled = enabled, modifier = modifier) {
-            if (content != null) content() else Icon(icon, label)
+        // Masaüstü komut çubuğu düğmesi: simge + etiket (Fluent CommandBar), yalnız simge değil.
+        TextButton(
+            onClick = onClick, enabled = enabled, modifier = modifier,
+            colors = androidx.compose.material3.ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurface),
+        ) {
+            Box(Modifier.size(18.dp), contentAlignment = Alignment.Center) {
+                if (content != null) content() else Icon(icon, null, Modifier.size(18.dp))
+            }
+            Spacer(Modifier.width(8.dp))
+            Text(label, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
