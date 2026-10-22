@@ -162,7 +162,7 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 **TR:**
 > Yeni görünüm: cihazlar artık hızlı güç düğmeli kutucuklar; çok kanallı cihazlarda her kanalın kendi düğmesi var ve en üstteki koruma kartı canlı durumu ve toplam gücü gösteriyor. Cihaz sayfasında büyük bir güç düğmesi var. Ayarlar, her biri kendi sayfasında açılan kısa bir kategori listesi oldu. Otomasyon düzenleyici açılır listeler yerine cihaz kartları ve düğmelerle çalışıyor, "Eğer / O zaman" özeti gösteriyor.
 
-## 4f3. 2.15.0 sürüm notları (Play, ≤500 karakter; 2.13–2.15)
+## 4f3. 2.15.1 sürüm notları (Play, ≤500 karakter; 2.13–2.15)
 **EN:**
 > Smart alerts: one alert for a power outage, unusual consumption, monthly budget and a weekly report. At home / Away and vacation mode. Telegram commands, an "I've seen it" button, staged notification and a watchdog. Scenes. New automation triggers: sunrise, sunset, outside temperature, sustained power, with hour and day limits. kWh price per device, three-rate tariff, standby consumption. Redesigned reports. Device widget.
 

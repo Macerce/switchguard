@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.15.1 — 22 Ekim 2026
+**Düzeltmeler**
+- Konum donanımı olmayan cihazlara (bazı Android TV'ler ve tabletler) SwitchGuard yeniden kurulabiliyor. Konum yalnızca, isteğe bağlı olarak, gün doğumu/batımı ve sıcaklık kuralları için kullanılır.
+
 ## 2.15.0 — 22 Ekim 2026
 **Akıllı uyarılar** (Uyarılar → Uyarı ayarları → Akıllı uyarılar)
 - Elektrik kesintisi: izlenen cihazların hepsi aynı anda çevrimdışı olursa cihaz başına ayrı ayrı değil, tek bir "elektrik kesildi" uyarısı gelir; elektrik gelince süresiyle birlikte haber verilir. Yerinde prize takılı bırakılan bir telefon ya da tablet de elektrik algılayıcısı olabilir: bir dakika şarjdan çıkarsa kesinti sayılır, internet yokken bile (mesaj Telegram ile mobil veriden gider).

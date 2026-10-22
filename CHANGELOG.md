@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.15.1 — 2026-10-22
+**Fixes**
+- Devices without location hardware (some Android TVs and tablets) can install SwitchGuard again. Location is only used, optionally, for sunrise/sunset and temperature rules.
+
 ## 2.15.0 — 2026-10-22
 **Smart alerts** (Alerts → Alert settings → Smart alerts)
 - Power outage: if all monitored devices go offline together you get one "power outage" alert instead of one per device, and a message with the duration when power returns. A phone or tablet left plugged in at the site can also act as a power sensor: unplugged for a minute counts as an outage, even without internet (sent by Telegram over mobile data).
