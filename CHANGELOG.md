@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.16.0 — 2026-10-23
+**New**
+- App shortcuts: touch and hold the SwitchGuard icon to switch At home / Away or run one of your first three scenes without opening the app. The result shows as a short message and is recorded in the history as "App shortcut".
+- After a week of use SwitchGuard may ask once for a Google Play rating (only when monitoring is on and no alarm is ringing; never on TV or on copies installed from GitHub).
+
 ## 2.15.2 — 2026-10-23
 **Fixes**
 - Single-relay devices such as the SONOFF MINIR3 (and some Micro, M5 and T5 models) no longer appear with four channels: the cloud reports four entries for them, only the real channels are shown now. Switching them on and off works as before.

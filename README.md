@@ -24,7 +24,7 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - Energy history by day, month and year with cost (single or three-rate tariff), standby consumption and PDF/CSV reports
 - Smart alerts: one alert for a power outage (all devices offline together, or the phone unplugged), unusual consumption, monthly budget, weekly report
 - At home / Away and vacation mode; scenes; automations on sunrise, sunset, outside temperature, sustained power, with hour/day and "and if" limits
-- Daily summary and full event history; device widget; Wear OS watch app
+- Daily summary and full event history; device widget; app shortcuts (long-press the icon: At home / Away, scenes); Wear OS watch app
 - Loud warning when the eWeLink session is lost (e.g. same account signed in on another phone)
 - Telegram: tell the people you choose (in stages) if an alarm isn't dismissed in time, commands (/status, /on, /off, /scene, /away …), an "I've seen it" button and a watchdog message
 - Free for 1 device; a one-time Pro purchase on Google Play monitors all devices
