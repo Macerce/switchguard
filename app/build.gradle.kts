@@ -82,6 +82,8 @@ dependencies {
     implementation("com.android.billingclient:billing:9.1.0")
     // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")
+    // Uygulama içinden Play değerlendirme penceresi (bir kez, uygun anda).
+    implementation("com.google.android.play:review:2.0.2")
     // Saat uygulamasıyla (Wear OS) veri alışverişi.
     implementation("com.google.android.gms:play-services-wearable:20.0.1")
 

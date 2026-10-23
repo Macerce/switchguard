@@ -124,6 +124,7 @@ object Actions {
             .add("", app, com.macerce.switchguard.data.EventKind.PRESENCE, args.render(app, com.macerce.switchguard.data.EventLog.strings(context)), "", args)
         com.macerce.switchguard.service.DeviceWidget.updateAll(context)
         com.macerce.switchguard.service.StatusSurfaces.refresh(context, force = true)
+        com.macerce.switchguard.service.AppShortcuts.update(context)
     }
 
     /**

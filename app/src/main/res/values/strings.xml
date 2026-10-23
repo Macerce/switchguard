@@ -1072,6 +1072,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="widget_presence_choice_desc">Tap the widget to switch</string>
     <string name="widget_presence_tap">Tap to switch</string>
     <string name="widget_scene_tap">Tap to run</string>
+    <string name="shortcut_source">App shortcut</string>
 
     <!-- Raporlar -->
     <string name="report_what_title">What this report shows</string>

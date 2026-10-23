@@ -18,10 +18,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.billing.Billing
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.AppShortcuts
 import com.macerce.switchguard.service.MonitorService
 import com.macerce.switchguard.service.Notifier
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
@@ -67,11 +69,18 @@ class MainActivity : ComponentActivity() {
         if (Store.get(this).monitoringEnabled && MonitorService.instance == null) {
             MonitorService.send(this, MonitorService.ACTION_START)
         }
+        AppShortcuts.update(this)
+        // Açılır açılmaz değil, ekran yerleştikten sonra; bu arada başka ekrana geçildiyse sorulmaz.
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) ReviewAsk.onOpen(this)
+        }, 3000)
     }
 
     override fun onPause() {
         super.onPause()
         AlarmActivity.appInFront = false
+        // Sahneler uygulamada eklenip silinmiş olabilir.
+        AppShortcuts.update(this)
         val app = applicationContext
         Handler(Looper.getMainLooper()).postDelayed({ AlarmActivity.ensureShown(app) }, 1500)
     }
