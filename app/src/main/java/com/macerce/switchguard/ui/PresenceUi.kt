@@ -22,11 +22,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
 import java.util.Calendar
@@ -36,7 +39,10 @@ import java.util.TimeZone
 @Composable
 fun PresenceCard(store: Store) {
     val context = LocalContext.current
-    val vacation = store.onVacation()
+    // Store hep aynı nesne: Compose kartı atlamasın diye değişiklikleri burada da dinle.
+    val version by store.version.collectAsStateWithLifecycle()
+    val vacation = remember(version) { store.onVacation() }
+    val awayMode = remember(version) { store.awayMode }
     SectionCard(Modifier.padding(top = 8.dp)) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             if (vacation) {
@@ -48,7 +54,7 @@ fun PresenceCard(store: Store) {
                     )
                 }
             } else {
-                val away = store.awayMode
+                val away = awayMode
                 SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
                     listOf(false, true).forEachIndexed { i, a ->
                         SegmentedButton(
@@ -62,7 +68,7 @@ fun PresenceCard(store: Store) {
                 }
             }
             Text(
-                stringResource(if (vacation) R.string.vacation_effect else if (store.awayMode) R.string.presence_away_desc else R.string.presence_home_desc),
+                stringResource(if (vacation) R.string.vacation_effect else if (awayMode) R.string.presence_away_desc else R.string.presence_home_desc),
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }

@@ -11,6 +11,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 - Uygulama kısayolları: SwitchGuard simgesine basılı tutarak uygulamayı açmadan Evdeyim / Dışarıdayım arasında geçebilir ya da ilk üç sahnenizden birini çalıştırabilirsiniz. Sonuç kısa bir mesajla gösterilir ve geçmişe "Uygulama kısayolu" olarak yazılır.
 - Bir haftalık kullanımdan sonra SwitchGuard bir kez Google Play puanı isteyebilir (yalnızca izleme açıkken ve alarm çalmıyorken; TV'de ve GitHub'dan kurulan kopyalarda hiç sorulmaz).
 
+**Düzeltmeler**
+- Uyarılar sekmesinde Evdeyim / Dışarıdayım'a basınca seçim kaydediliyor ama düğmeler ekranda değişmiyordu.
+
 ## 2.15.2 — 23 Ekim 2026
 **Düzeltmeler**
 - SONOFF MINIR3 gibi tek röleli cihazlar (ve bazı Micro, M5, T5 modelleri) artık 4 kanallı görünmüyor: bulut bunlar için 4 kanal bildiriyor, artık yalnızca gerçek kanallar gösteriliyor. Açıp kapatma eskisi gibi çalışıyor.
