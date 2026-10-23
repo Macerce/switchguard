@@ -5,6 +5,21 @@ import org.junit.Test
 
 class DeviceParserTest {
 
+    @Test
+    fun singleRelayWithFourSwitchEntriesHasOneChannel() {
+        val body = """{"data":{"thingList":[{"itemData":{"deviceid":"r1","name":"Rogar","online":true,
+            "extra":{"uiid":138},"params":{"switches":[{"switch":"on","outlet":0},{"switch":"off","outlet":1},
+            {"switch":"off","outlet":2},{"switch":"off","outlet":3}]}}}]}}"""
+        val d = DeviceParser.parseThingList(body).single()
+        assertEquals(mapOf(0 to true), d.switches)
+        assertEquals(false, d.isMultiChannel)
+        assertEquals(true, d.usesSwitchArray)
+        // Önbellekteki eski 4 kanallı kayıt da düzelir.
+        val old = d.copy(switches = mapOf(0 to true, 1 to false, 2 to false, 3 to false))
+        assertEquals(mapOf(0 to true), DeviceParser.snapshotsFromJson(DeviceParser.snapshotsToJson(listOf(old))).single().switches)
+    }
+
+
     private val json = """
     {"error":0,"msg":"","data":{"thingList":[
       {"itemType":1,"itemData":{"deviceid":"1000aa","name":"Salon","online":true,

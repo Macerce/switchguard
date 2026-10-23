@@ -164,7 +164,7 @@ object Actions {
                 val client = EwelinkClient(Store.get(context))
                 val offset = utcOffsetMinutes()
                 val fresh = DeviceTimers.parse(client.getDeviceParams(device.id).optJSONArray("timers"), offset)
-                val timers = DeviceTimers.rebuild(fresh, id, timer, device.isMultiChannel, offset)
+                val timers = DeviceTimers.rebuild(fresh, id, timer, device.usesSwitchArray, offset)
                 client.setTimers(device.id, timers)
                 DeviceTimers.parse(timers, offset)
             }
