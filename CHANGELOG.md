@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.15.2 — 2026-10-23
+**Fixes**
+- Single-relay devices such as the SONOFF MINIR3 (and some Micro, M5 and T5 models) no longer appear with four channels: the cloud reports four entries for them, only the real channels are shown now. Switching them on and off works as before.
+
 ## 2.15.1 — 2026-10-22
 **Fixes**
 - Devices without location hardware (some Android TVs and tablets) can install SwitchGuard again. Location is only used, optionally, for sunrise/sunset and temperature rules.

@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.15.2 — 23 Ekim 2026
+**Düzeltmeler**
+- SONOFF MINIR3 gibi tek röleli cihazlar (ve bazı Micro, M5, T5 modelleri) artık 4 kanallı görünmüyor: bulut bunlar için 4 kanal bildiriyor, artık yalnızca gerçek kanallar gösteriliyor. Açıp kapatma eskisi gibi çalışıyor.
+
 ## 2.15.1 — 22 Ekim 2026
 **Düzeltmeler**
 - Konum donanımı olmayan cihazlara (bazı Android TV'ler ve tabletler) SwitchGuard yeniden kurulabiliyor. Konum yalnızca, isteğe bağlı olarak, gün doğumu/batımı ve sıcaklık kuralları için kullanılır.
