@@ -51,7 +51,7 @@ object WsMessages {
         return snapshot.copy(
             online = update.online ?: snapshot.online,
             switches = if (update.switches.isEmpty()) snapshot.switches
-            else (snapshot.switches + update.switches).toSortedMap(),
+            else DeviceSnapshot.limitChannels(snapshot.uiid, (snapshot.switches + update.switches).toSortedMap()),
             power = energy?.power ?: snapshot.power,
             voltage = energy?.voltage ?: snapshot.voltage,
             current = energy?.current ?: snapshot.current,

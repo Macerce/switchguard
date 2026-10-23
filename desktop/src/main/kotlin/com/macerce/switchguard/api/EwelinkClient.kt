@@ -78,7 +78,7 @@ class EwelinkClient(private val store: Store) {
     /** Cihazı açar/kapatır. Çok kanallı cihazlarda [channel] 0'dan başlar. */
     fun setSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
         val value = if (on) "on" else "off"
-        val params = if (device.isMultiChannel) {
+        val params = if (device.usesSwitchArray) {
             JSONObject().put("switches", JSONArray().put(JSONObject().put("switch", value).put("outlet", channel)))
         } else {
             JSONObject().put("switch", value)
