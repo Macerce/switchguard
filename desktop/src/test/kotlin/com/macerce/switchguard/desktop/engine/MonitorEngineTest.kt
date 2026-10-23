@@ -359,6 +359,28 @@ class MonitorEngineTest {
     }
 
     @Test
+    fun samePowerOnMainsRaisesOfflineAlarmWithoutHold() {
+        store.logout()
+        store.enableDemo(strings.demoNames())
+        store.samePower = true
+        val sched = ManualScheduler(clock)
+        val sources = Sources(ewelink, { FakeEwelinkLive().attach(it) }, tuya, { FakeTuyaLive().attach(it) }, fakeTelegram { _, _ -> })
+        val e = MonitorEngine(
+            store, log, metrics, RuntimeState(tmp.root.toPath().resolve("runtime.json")), { strings }, host, sources, clock, sched,
+            telegramRunner = { it() }, onAcPower = { true },
+        )
+        e.start()
+        sched.advance(0)
+
+        e.demo(MonitorEngine.DEMO_ONLINE, Demo.FREEZER, 0)
+        sched.advance(0)
+
+        // Bilgisayar prizde ve cihazlarla aynı elektrikte: elektrik var, kesinti için bekletilmez.
+        assertEquals(1, host.alarms.size)
+        e.stop()
+    }
+
+    @Test
     fun demoPowerDropRaisesTheDemoAutomationAlarmAfterItsDuration() {
         startDemo()
 

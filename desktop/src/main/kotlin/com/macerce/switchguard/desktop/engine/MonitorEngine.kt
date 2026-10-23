@@ -1121,11 +1121,18 @@ class MonitorEngine(
         dispatch(change, action)
     }
 
+    /**
+     * Kopmalar kesinti algılaması için bekletilsin mi. Bilgisayar cihazlarla aynı elektrikte ve prizdeyse elektrik
+     * vardır: bekletmeden hemen alarm (90 sn gecikme olmaz).
+     */
+    private fun outageDetectNow(): Boolean =
+        store.outageDetect && !(store.samePower && onAcPower() == true)
+
     /** Kopmalar önce elektrik kesintisi algılamasından geçer (bkz. [OutageWatch]). */
     private fun dispatch(change: Change, action: AlertAction) {
         if (change is Change.Connection && !change.to) {
             val wall = clock.wall()
-            when (val o = outage.offer(change, action, wall, store.monitoredIds().size, store.outageDetect)) {
+            when (val o = outage.offer(change, action, wall, store.monitoredIds().size, outageDetectNow())) {
                 is OutageWatch.Offer.Hold -> {
                     scheduler.postDelayed((o.dueAt - wall).coerceAtLeast(0) + 50) { tick() }
                     return

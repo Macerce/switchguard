@@ -16,4 +16,6 @@
         <item quantity="other">%d cihaz</item>
     </plurals>
     <string name="desktop_status_synced">Son kontrol %s</string>
+    <string name="desktop_smart_same_power">Bu bilgisayar cihazlarla aynı elektrikte</string>
+    <string name="desktop_smart_same_power_desc">Bilgisayar prizden çalıştıkça elektrik var demektir: kopan cihaz 90 saniyeye kadar beklemeden hemen bildirilir.</string>
 </resources>

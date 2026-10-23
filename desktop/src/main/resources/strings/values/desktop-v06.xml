@@ -16,4 +16,6 @@
         <item quantity="other">%d devices</item>
     </plurals>
     <string name="desktop_status_synced">Last check %s</string>
+    <string name="desktop_smart_same_power">This computer is on the same power as the devices</string>
+    <string name="desktop_smart_same_power_desc">While it runs on mains power there is no power cut, so a device that drops is reported right away instead of after up to 90 seconds.</string>
 </resources>

@@ -445,6 +445,13 @@ class Store internal constructor(
     var chargerOutage: Boolean
         get() = bool("chargerOutage", false)
         set(v) = edit { put("chargerOutage", v) }
+    /**
+     * Bu bilgisayar cihazlarla aynı evde, aynı elektrikte. Prizdeyken elektrik var demektir: tek tek kopmalar kesinti
+     * algılaması için bekletilmeden hemen verilir.
+     */
+    var samePower: Boolean
+        get() = bool("samePower", false)
+        set(v) = edit { put("samePower", v) }
 
     /** Evde / Dışarıda modu (true = dışarıda). Tatilde her zaman dışarıda sayılır ([isAway]). */
     var awayMode: Boolean

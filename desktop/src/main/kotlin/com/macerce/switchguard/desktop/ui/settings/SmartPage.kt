@@ -93,6 +93,10 @@ fun SmartPage(graph: AppGraph, strings: Strings, snackbar: SnackbarHostState? = 
     SectionTitle(str("smart_outage_section"))
     SectionCard {
         SwitchInfoRow(Icons.Rounded.ElectricBolt, str("smart_outage"), str("smart_outage_desc"), checked = s.outageDetect) { store.outageDetect = it }
+        RowDivider()
+        SwitchInfoRow(Icons.Rounded.Home, str("desktop_smart_same_power"), str("desktop_smart_same_power_desc"), checked = s.samePower) {
+            store.samePower = it
+        }
         if (remember { PowerSource.hasBattery }) {
             RowDivider()
             SwitchInfoRow(Icons.Rounded.BatteryChargingFull, str("desktop_smart_ac"), str("desktop_smart_ac_desc"), checked = s.chargerOutage) {

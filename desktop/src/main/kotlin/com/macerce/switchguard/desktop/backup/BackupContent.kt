@@ -46,7 +46,7 @@ object BackupContent {
         // telefon 2.14–2.15: enerji fiyatları, akıllı uyarılar, sahneler, konum, Telegram ek işleri
         "energyPrice", "devicePrices", "threeZone", "priceDay", "pricePeak", "priceNight", "budget",
         "outageDetect", "energyAnomaly", "weeklyReport", "softenAtHome", "scenes", "lat", "lon",
-        "tgCommands", "tgControl", "tgForward", "tgStages", "wdMode", "wdMin", "chargerOutage",
+        "tgCommands", "tgControl", "tgForward", "tgStages", "wdMode", "wdMin", "chargerOutage", "samePower",
     )
 
     val CLEARED: Set<String> = setOf(
