@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import com.macerce.switchguard.R
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.Actions
@@ -39,7 +40,8 @@ class DeviceWidget : AppWidgetProvider() {
                     }
                     else -> {
                         val (deviceId, channel) = binding(context, id) ?: return@Thread
-                        val device = store.snapshots.firstOrNull { it.id == deviceId }
+                        // Gruplar da cihaz gibi: Actions.setSwitch bütün üyelere dağıtır.
+                        val device = store.snapshotsWithGroups.firstOrNull { it.id == deviceId }
                         if (device != null && device.online) {
                             val on = device.switches[channel] != true
                             runBlocking { Actions.setSwitch(context, device, channel, on) }
@@ -84,7 +86,7 @@ class DeviceWidget : AppWidgetProvider() {
                 val manager = AppWidgetManager.getInstance(context) ?: return
                 val ids = manager.getAppWidgetIds(ComponentName(context, DeviceWidget::class.java))
                 if (ids.isEmpty()) return
-                val devices = Store.get(context).snapshots.associateBy { it.id }
+                val devices = Store.get(context).snapshotsWithGroups.associateBy { it.id }
                 ids.forEach { manager.updateAppWidget(it, views(context, it, devices)) }
             }
         }
@@ -116,6 +118,7 @@ class DeviceWidget : AppWidgetProvider() {
             views.setTextColor(R.id.widget_title, fg)
             views.setTextColor(R.id.widget_status, if (on && device.online) 0xFFFFFFFF.toInt() else context.getColor(R.color.widget_text_secondary))
             views.setInt(R.id.widget_icon, "setColorFilter", if (on && device.online) 0xFFFFFFFF.toInt() else context.getColor(R.color.widget_icon))
+            if (DeviceGroup.isGroup(device.id)) views.setImageViewResource(R.id.widget_icon, R.drawable.ic_widget_group)
             setToggle(context, widgetId, views)
             return views
         }

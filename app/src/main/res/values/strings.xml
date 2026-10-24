@@ -831,8 +831,8 @@
     <string name="tg_help">SwitchGuard commands:
 /status – monitoring, alarm and devices
 /ack – take over the ringing alarm
-/on name [channel] – turn a device on
-/off name [channel] – turn a device off
+/on name [channel] – turn a device or group on
+/off name [channel] – turn a device or group off
 /scene name – run a scene
 /home · /away – set at home / away
 
@@ -1043,6 +1043,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="scenes_title">Scenes</string>
     <string name="automations_rules_title">Rules</string>
     <string name="groups_title">Groups</string>
+    <string name="tg_group_done">✅ %1$s: %2$s (%3$d devices)</string>
     <string name="group_add">Add group</string>
     <string name="group_new">New group</string>
     <string name="group_edit">Edit group</string>

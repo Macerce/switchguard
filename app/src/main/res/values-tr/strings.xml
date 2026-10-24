@@ -827,8 +827,8 @@
     <string name="tg_help">SwitchGuard komutları:
 /durum – izleme, alarm ve cihazlar
 /gordum – çalan alarmı üstlen
-/ac ad [kanal] – cihazı aç
-/kapat ad [kanal] – cihazı kapat
+/ac ad [kanal] – cihazı ya da grubu aç
+/kapat ad [kanal] – cihazı ya da grubu kapat
 /sahne ad – sahneyi çalıştır
 /evde · /disarida – evde / dışarıda
 
@@ -1039,6 +1039,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="scenes_title">Sahneler</string>
     <string name="automations_rules_title">Kurallar</string>
     <string name="groups_title">Gruplar</string>
+    <string name="tg_group_done">✅ %1$s: %2$s (%3$d cihaz)</string>
     <string name="group_add">Grup ekle</string>
     <string name="group_new">Yeni grup</string>
     <string name="group_edit">Grubu düzenle</string>

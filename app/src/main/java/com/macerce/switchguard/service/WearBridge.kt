@@ -47,7 +47,8 @@ object WearBridge {
     private fun statusJson(context: Context): String {
         val store = Store.get(context)
         val (kind, text) = StatusSurfaces.current(context)
-        val devices = store.deviceLayout.sections(store.snapshots).flatMap { it.devices }.take(MAX_DEVICES)
+        // Gruplar saatte tek kanallı cihaz gibi görünür; açma/kapama isteği telefonda bütün üyelere dağıtılır.
+        val devices = store.deviceLayout.sections(store.snapshotsWithGroups).flatMap { it.devices }.take(MAX_DEVICES)
         return JSONObject()
             .put("kind", kind.name)
             .put("state", text)
@@ -89,7 +90,7 @@ class WearListener : WearableListenerService() {
                 val id = parts.getOrNull(0) ?: return
                 val channel = parts.getOrNull(1)?.toIntOrNull() ?: return
                 val on = parts.getOrNull(2) == "1"
-                val device = Store.get(this).snapshots.firstOrNull { it.id == id } ?: return
+                val device = Store.get(this).snapshotsWithGroups.firstOrNull { it.id == id } ?: return
                 runCatching { runBlocking { Actions.setSwitch(this@WearListener, device, channel, on) } }
                 WearBridge.publish(this)
             }

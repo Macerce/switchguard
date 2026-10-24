@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.Workspaces
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -70,6 +71,13 @@ class DeviceWidgetConfigActivity : ComponentActivity() {
                                 InfoRow(
                                     Icons.Rounded.PlayArrow, scene.name, stringResource(R.string.scenes_title),
                                     Modifier.clickable { chooseRaw(widgetId, DeviceWidget.SCENE + scene.id) },
+                                )
+                            }
+                            // Grup: cihaz gibi bağlanır ("group:id|0"); dokununca bütün üyeler açılır/kapanır.
+                            items(store.groups, key = { "group/" + it.id }) { g ->
+                                InfoRow(
+                                    Icons.Rounded.Workspaces, g.name, stringResource(R.string.groups_title),
+                                    Modifier.clickable { choose(widgetId, g.deviceId, 0) },
                                 )
                             }
                             items(choices, key = { "${it.first.id}/${it.second}" }) { (d, ch) ->

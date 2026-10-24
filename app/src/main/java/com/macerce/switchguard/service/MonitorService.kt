@@ -1403,8 +1403,11 @@ class MonitorService : Service() {
                 if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
                 if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
                 if (cmd.query.isBlank()) return reply(u.chatId, getString(if (cmd.on) R.string.tg_usage_on else R.string.tg_usage_off))
-                when (val m = TelegramBot.match(cmd.query, store.snapshots)) {
-                    is TelegramBot.Match.Found -> telegramSwitch(u, m.device, m.channel, cmd.on)
+                // Gruplar da adıyla bulunur ("/ac bahçe").
+                when (val m = TelegramBot.match(cmd.query, store.snapshotsWithGroups)) {
+                    is TelegramBot.Match.Found ->
+                        if (DeviceGroup.isGroup(m.device.id)) telegramGroupSwitch(u, m.device, cmd.on)
+                        else telegramSwitch(u, m.device, m.channel, cmd.on)
                     is TelegramBot.Match.NeedChannel -> reply(u.chatId, getString(R.string.tg_need_channel, m.device.name, m.device.switches.size))
                     is TelegramBot.Match.Ambiguous -> reply(u.chatId, getString(R.string.tg_ambiguous, m.names.joinToString(", ")))
                     TelegramBot.Match.NotFound -> reply(u.chatId, getString(R.string.tg_not_found, cmd.query))
@@ -1428,6 +1431,28 @@ class MonitorService : Service() {
             val failed = args.copy(error = e.message.orEmpty())
             log.add(device.id, device.name, EventKind.TELEGRAM, failed.render(device.name, strings), AlertAction.NOTIFY.name, failed)
             reply(u.chatId, "⚠️ " + failed.render(device.name, strings))
+        }
+    }
+
+    /** Telegram'dan grup aç/kapa: değişmesi gereken her üyeye komut gider; geçmişe grup adıyla tek satır yazılır. */
+    private fun telegramGroupSwitch(u: TelegramBot.Update, groupDevice: DeviceSnapshot, on: Boolean) {
+        val who = u.from.ifEmpty { getString(R.string.tg_someone) }
+        val args = EventArgs.TelegramSwitch(who, 0, false, on)
+        val group = store.groups.firstOrNull { it.deviceId == groupDevice.id } ?: return reply(u.chatId, getString(R.string.group_missing))
+        try {
+            if (!groupDevice.online) throw IOException(labels.offline)
+            val targets = group.targets(store.snapshots.associateBy { it.id }, on)
+            for ((device, channel) in targets) {
+                // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
+                LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+                controlSwitch(device, channel, on)
+            }
+            log.add(group.deviceId, group.name, EventKind.TELEGRAM, args.render(group.name, strings), "", args)
+            reply(u.chatId, getString(R.string.tg_group_done, group.name, if (on) labels.on else labels.off, targets.size))
+        } catch (e: Exception) {
+            val failed = args.copy(error = e.message.orEmpty())
+            log.add(group.deviceId, group.name, EventKind.TELEGRAM, failed.render(group.name, strings), AlertAction.NOTIFY.name, failed)
+            reply(u.chatId, "⚠️ " + failed.render(group.name, strings))
         }
     }
 
@@ -1460,6 +1485,14 @@ class MonitorService : Service() {
                 append('\n')
             }
             if (store.snapshots.isEmpty()) append(getString(R.string.no_devices)).append('\n')
+            val byId = store.snapshots.associateBy { it.id }
+            val groups = store.groups
+            if (groups.isNotEmpty()) append('\n').append(getString(R.string.groups_title)).append('\n')
+            for (g in groups) {
+                val (onCount, total) = g.counts(byId)
+                append(if (onCount > 0) "🟢 " else "⚪ ").append(g.name).append(": ")
+                    .append(getString(R.string.channels_on_short, onCount, total)).append('\n')
+            }
             if (store.telegramControl) append('\n').append(getString(R.string.tg_status_hint))
         }.trimEnd().take(MAX_TG_CHARS)
     }
