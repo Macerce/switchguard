@@ -86,11 +86,14 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
     val store = graph.store
     val version by store.version.collectAsState()
     val automations = remember(version) { store.automations.inMode(AutomationMode.AUTOMATION) }
-    val devices = remember(version) { store.snapshots }
+    // Gruplar otomasyonda cihaz gibi seçilir.
+    val devices = remember(version) { store.snapshotsWithGroups }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by remember { mutableStateOf<String?>(null) }
     var editingScene by remember { mutableStateOf<String?>(null) }
+    var editingGroup by remember { mutableStateOf<String?>(null) }
     val scenes = remember(version) { store.scenes }
+    val groups = remember(version) { store.groups }
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
@@ -103,6 +106,19 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
             onSave = { graph.engine.saveScene(it); editingScene = null },
             onDelete = { graph.engine.deleteScene(id); editingScene = null },
             onBack = { editingScene = null },
+        )
+        return
+    }
+
+    editingGroup?.let { id ->
+        GroupEditor(
+            initial = groups.firstOrNull { it.id == id },
+            devices = remember(version) { store.deviceLayout.sections(store.snapshots).flatMap { it.devices } },
+            strings = strings,
+            modifier = modifier,
+            onSave = { graph.engine.saveGroup(it); editingGroup = null },
+            onDelete = { graph.engine.deleteGroup(id); editingGroup = null },
+            onBack = { editingGroup = null },
         )
         return
     }
@@ -162,6 +178,9 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                                 scope.launch { snackbar.showSnackbar(strings.format("scene_ran", sc.name, ok, failed)) }
                             }
                         }) { editingScene = it }
+                        Text(strings["groups_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                        GroupsStrip(groups, devices, strings) { editingGroup = it }
                         Text(strings["automations_rules_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }

@@ -129,3 +129,4 @@ rounded/WarningAmber
 rounded/WaterDrop
 rounded/WifiOff
 rounded/WorkspacePremium
+rounded/Workspaces

@@ -25,6 +25,7 @@ Kaynak: `master` `6770907` (telefon 2.15.1; 2026-10-23). Önceki: `4bbc24d` (2.1
 | Signer.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | Tuya.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | WsMessages.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
+| DeviceGroup.kt | app/src/main/java/com/macerce/switchguard/core/ | yok (agp-9 ad3b6ca, gruplar) |
 | AlarmReminders.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | BlindWatch.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | Csv.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |

@@ -28,6 +28,7 @@ import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Power
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.WaterDrop
+import androidx.compose.material.icons.rounded.Workspaces
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -260,6 +261,7 @@ fun DeviceKind.icon(): ImageVector = when (this) {
     DeviceKind.PLUG -> Icons.Rounded.Power
     DeviceKind.RELAYS -> Icons.Rounded.ElectricalServices
     DeviceKind.SWITCH -> Icons.Rounded.PowerSettingsNew
+    DeviceKind.GROUP -> Icons.Rounded.Workspaces
 }
 
 /**

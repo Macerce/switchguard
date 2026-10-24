@@ -43,6 +43,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.macerce.switchguard.core.DeviceGroup
+import com.macerce.switchguard.desktop.ui.automations.GroupEditor
+import com.macerce.switchguard.desktop.ui.automations.NEW_GROUP
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
 import com.macerce.switchguard.data.LiveState
@@ -102,18 +105,39 @@ fun DevicesScreen(
     val monitoredIds = remember(version) { store.monitoredIds() }
     val layout = remember(version) { store.deviceLayout }
     val saveLayout: (DeviceLayout) -> Unit = { store.deviceLayout = it }
+    // Gruplar ızgarada cihaz gibi durur (sıralanır, kategoriye girer); düğmeleri bütün üyeleri açıp kapatır.
+    val groups = remember(version) { store.groups }
+    val shown = remember(version) { store.snapshotsWithGroups }
+    val groupCounts = remember(version) {
+        val byId = devices.associateBy { it.id }
+        groups.associate { it.deviceId to it.counts(byId) }
+    }
+    var editingGroup by remember { mutableStateOf<String?>(null) }
     var editMode by remember { mutableStateOf(false) }
     var showCategories by remember { mutableStateOf(false) }
     if (showCategories) CategoriesDialog(layout, saveLayout) { showCategories = false }
 
     // Sürükle-bırak: sürüklerken bölümler bellekteki sıradan kurulur, bırakınca sıra bir kez yazılır.
-    val sortedIds = remember(version) { layout.sorted(devices).map { it.id } }
+    val sortedIds = remember(version) { layout.sorted(shown).map { it.id } }
     val order = remember { DragOrder() }
     LaunchedEffect(sortedIds) { order.show(sortedIds) }
     val shownLayout = if (order.dragging) layout.copy(order = order.ids) else layout
-    val sections = remember(shownLayout, devices) { shownLayout.sections(devices) }
+    val sections = remember(shownLayout, shown) { shownLayout.sections(shown) }
     val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
     val currentSectionOf by rememberUpdatedState(sectionOf)
+
+    editingGroup?.let { id ->
+        GroupEditor(
+            initial = groups.firstOrNull { it.id == id },
+            devices = remember(version) { layout.sections(devices).flatMap { it.devices } },
+            strings = strings,
+            modifier = modifier,
+            onSave = { engine.saveGroup(it); editingGroup = null },
+            onDelete = { engine.deleteGroup(id); editingGroup = null },
+            onBack = { editingGroup = null },
+        )
+        return
+    }
 
     val snackbar = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -202,7 +226,11 @@ fun DevicesScreen(
                         if (hasAccount && devices.isEmpty()) {
                             item(key = "empty", span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }
                         }
-                        if (editMode) item(key = "edit-hint", span = full) { LayoutEditHint { showCategories = true } }
+                        if (editMode) {
+                            item(key = "edit-hint", span = full) {
+                                LayoutEditHint(onCategories = { showCategories = true }, onAddGroup = { editingGroup = NEW_GROUP })
+                            }
+                        }
                         for (section in sections) {
                             // Düzenleme dışında boş kategori başlığı gösterilmez.
                             if (section.devices.isEmpty() && !editMode) continue
@@ -245,11 +273,18 @@ fun DevicesScreen(
                                             large = editMode || layout.isLarge(device),
                                             monitored = device.id in monitoredIds,
                                             priority = device.id in layout.priority,
-                                            onClick = { if (!editMode) graph.appState.openDevice.value = device.id },
+                                            // Grubun sayfası düzenleyicisidir.
+                                            onClick = {
+                                                if (!editMode) {
+                                                    if (DeviceGroup.isGroup(device.id)) editingGroup = device.id.removePrefix(DeviceGroup.PREFIX)
+                                                    else graph.appState.openDevice.value = device.id
+                                                }
+                                            },
+                                            groupCounts = groupCounts[device.id],
                                             editBar = if (editMode) {
                                                 {
                                                     LayoutEditBar(
-                                                        device, layout, devices,
+                                                        device, layout, shown,
                                                         canUp = i > 0, canDown = i < section.devices.lastIndex,
                                                         dragHandle = drag, onChange = saveLayout,
                                                     )

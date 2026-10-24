@@ -3,6 +3,7 @@ package com.macerce.switchguard.data
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
@@ -476,6 +477,20 @@ class Store internal constructor(
         scenes = if (list.any { it.id == s.id }) list.map { if (it.id == s.id) s else it } else list + s
     }
     fun deleteScene(id: String): Unit = synchronized(lock) { scenes = scenes.filterNot { it.id == id } }
+
+    /** Gruplar: tek düğmeyle açılıp kapanan cihaz kümeleri (bkz. [DeviceGroup]). */
+    var groups: List<DeviceGroup>
+        get() = DeviceGroup.listFromJson(strOrNull("groups"))
+        set(v) = edit { put("groups", DeviceGroup.listToJson(v)) }
+    fun saveGroup(g: DeviceGroup): Unit = synchronized(lock) {
+        val list = groups
+        groups = if (list.any { it.id == g.id }) list.map { if (it.id == g.id) g else it } else list + g
+    }
+    fun deleteGroup(id: String): Unit = synchronized(lock) { groups = groups.filterNot { it.id == id } }
+
+    /** Gerçek cihazlar + grupların sanal cihazları (otomasyon, Cihazlar ekranı, Telegram). */
+    val snapshotsWithGroups: List<DeviceSnapshot>
+        get() = DeviceGroup.withGroups(snapshots, groups)
 
     /** Gün doğumu/batımı ve hava sıcaklığı kuralları için konum; null = girilmedi. */
     var latitude: Double?

@@ -251,7 +251,7 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 alerts.forEach { a ->
                     AutomationCard(
-                        a, store.snapshots, strings,
+                        a, store.snapshotsWithGroups, strings,
                         onClick = { open(AlertsPage.Editor(a.id)) },
                         onToggle = { on -> graph.engine.saveAutomation(a.copy(enabled = on)) },
                     )
@@ -590,7 +590,8 @@ private fun ConditionalAlertEditor(graph: AppGraph, strings: Strings, automation
     val version by graph.store.version.collectAsState()
     // Düzenleyici açıkken kayıt değişse de form açıldığı haliyle kalır.
     val initial = remember(automationId) { automationId?.let { id -> graph.store.automations.firstOrNull { it.id == id } } }
-    val devices = remember(version) { graph.store.snapshots }
+    // Gruplar da cihaz gibi seçilir.
+    val devices = remember(version) { graph.store.snapshotsWithGroups }
     AutomationEditor(
         initial = initial,
         devices = devices,

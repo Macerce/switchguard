@@ -73,6 +73,8 @@ fun DeviceTile(
     onClick: () -> Unit,
     editBar: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
+    /** Grup kartı: (açık, toplam) üye sayısı; normal cihazda null. */
+    groupCounts: Pair<Int, Int>? = null,
 ) {
     val dark = LocalDarkTheme.current
     val anyOn = device.switches.values.any { it }
@@ -99,8 +101,8 @@ fun DeviceTile(
                         .clickable(onClick = onClick, role = Role.Button),
                 )
             }
-            if (large) LargeTileContent(device, active, monitored, priority, controls)
-            else SmallTileContent(device, active, monitored, priority, controls)
+            if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts)
+            else SmallTileContent(device, active, monitored, priority, controls, groupCounts)
         }
         editBar?.invoke()
     }
@@ -124,7 +126,7 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Dp = 42.dp) {
 
 /** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı"; sağda izleme zili. */
 @Composable
-private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean) {
+private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (!device.online) {
@@ -134,6 +136,7 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
         val onCount = device.switches.values.count { it }
         val state = when {
             !device.online -> str("label_offline_title")
+            groupCounts != null -> str("channels_on_short", groupCounts.first, groupCounts.second)
             device.isMultiChannel -> str("channels_on_short", onCount, device.switches.size)
             onCount > 0 -> str("state_on_title")
             else -> str("state_off_title")
@@ -147,6 +150,8 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
+        // Grup izlenmez (üyeleri izlenir): zil simgesi yok.
+        if (groupCounts != null) return@Row
         Spacer(Modifier.width(6.dp))
         Icon(
             if (monitored) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
@@ -184,7 +189,7 @@ private fun TileName(device: DeviceSnapshot, active: Boolean, priority: Boolean,
 }
 
 @Composable
-private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
     // En az yükseklik: aynı satırdaki kutucuklar (bir ad tek, biri iki satır) aynı boyda görünsün.
     Column(
         Modifier.fillMaxWidth().heightIn(min = 148.dp).padding(14.dp),
@@ -202,13 +207,13 @@ private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored:
         Column(Modifier.padding(top = 14.dp)) {
             TileName(device, active, priority, large = false)
             Spacer(Modifier.height(2.dp))
-            TileStatus(device, active, monitored)
+            TileStatus(device, active, monitored, groupCounts)
         }
     }
 }
 
 @Composable
-private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             DeviceGlyph(device, active, size = 46.dp)
@@ -216,7 +221,7 @@ private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored:
             Column(Modifier.weight(1f)) {
                 TileName(device, active, priority, large = true)
                 Spacer(Modifier.height(2.dp))
-                TileStatus(device, active, monitored)
+                TileStatus(device, active, monitored, groupCounts)
             }
             if (controls && !device.isMultiChannel && device.switches.size == 1) {
                 Spacer(Modifier.width(12.dp))
