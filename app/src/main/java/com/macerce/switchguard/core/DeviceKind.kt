@@ -5,7 +5,9 @@ package com.macerce.switchguard.core
  * (eWeLink uiid'i röle kartını, Tuya kategorisi prizi söyler; ikisi de "ne bağlı" demez) önce kullanıcının
  * verdiği addan tahmin edilir, ad bir şey söylemiyorsa cihazın özelliklerine bakılır.
  */
-enum class DeviceKind { LIGHT, WATER, COLD, AIR, HEAT, DOOR, PLUG, RELAYS, SWITCH }
+enum class DeviceKind { LIGHT, WATER, COLD, AIR, HEAT, DOOR, PLUG, RELAYS, SWITCH,
+    /** Sanal cihaz: [DeviceGroup]. */
+    GROUP }
 
 object DeviceKinds {
     /** Ad içindeki kelimenin başına bakılır: Türkçe ekler ("rögarı", "pompası") eşleşmeyi bozmasın. */
@@ -26,6 +28,7 @@ object DeviceKinds {
     )
 
     fun of(device: DeviceSnapshot): DeviceKind {
+        if (DeviceGroup.isGroup(device.id)) return DeviceKind.GROUP
         for (word in words(device.name)) {
             exact[word]?.let { return it }
             for ((kind, list) in prefixes) if (list.any { word.startsWith(it) }) return kind

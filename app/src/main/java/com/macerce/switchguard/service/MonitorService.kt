@@ -58,6 +58,7 @@ import com.macerce.switchguard.core.TelegramBot
 import com.macerce.switchguard.core.Watchdog
 import com.macerce.switchguard.core.RuleEngine
 import com.macerce.switchguard.core.Scene
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.core.TuyaEvent
 import com.macerce.switchguard.core.TuyaParser
@@ -351,7 +352,7 @@ class MonitorService : Service() {
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
-        runAutomations(automations.onTick(store.snapshots.associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.automations, wall, env()))
         weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
@@ -761,6 +762,9 @@ class MonitorService : Service() {
         // tick gecikti) sıra "koptu → geldi" olur, uzun kopma "kısa kopma" sayılıp yutulmaz.
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         val previous = store.snapshots.associateBy { it.id }
+        // Otomasyonlar grupları da cihaz sayar: grubun durumu üyelerinden türetilir.
+        val groups = store.groups
+        val previousAuto = if (groups.isEmpty()) previous else DeviceGroup.withGroups(store.snapshots, groups).associateBy { it.id }
         store.snapshots = current
         runCatching { metrics.record(previous, current, wall) }
         // Cihaz düğmesi widget'ları açık/kapalı ve bağlantı değişince tazelenir.
@@ -770,7 +774,7 @@ class MonitorService : Service() {
         }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
-        runAutomations(automations.onStates(previous, current.associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.automations, wall, env()))
         persistRuntime()
         heartbeat(wall)
     }
@@ -897,7 +901,7 @@ class MonitorService : Service() {
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
         // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshots.associateBy { it.id }, store.automations, env()) ?: return
+        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.automations, env()) ?: return
         handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
@@ -905,6 +909,7 @@ class MonitorService : Service() {
         when (a.action.kind) {
             ActionKind.TURN_ON, ActionKind.TURN_OFF -> {
                 val on = a.action.kind == ActionKind.TURN_ON
+                if (DeviceGroup.isGroup(a.action.deviceId)) return executeGroup(a, on)
                 val target = store.snapshots.firstOrNull { it.id == a.action.deviceId }
                 if (target == null) {
                     val args = EventArgs.AutoMissing(a.name)
@@ -936,12 +941,15 @@ class MonitorService : Service() {
                 telegram.execute { runBlocking { Actions.runScene(this@MonitorService, scene, a.name) } }
             }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
-                val source = store.snapshots.firstOrNull { it.id == a.trigger.deviceId }
+                val source = store.snapshotsWithGroups.firstOrNull { it.id == a.trigger.deviceId }
                 val args = EventArgs.AutoAlert(a.name, source?.name)
                 val text = args.render(source?.name ?: a.name, strings)
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
-                val allowed = store.isPro || !a.trigger.kind.usesDevice || a.trigger.deviceId in store.monitoredIds()
+                val allowed = store.isPro || !a.trigger.kind.usesDevice || store.monitoredIds().let { ids ->
+                    a.trigger.deviceId in ids ||
+                        store.groups.firstOrNull { it.deviceId == a.trigger.deviceId }?.members?.all { it.deviceId in ids } == true
+                }
                 val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = if (!allowed) AlertAction.IGNORE
                     else RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
@@ -953,6 +961,35 @@ class MonitorService : Service() {
                     AlertAction.IGNORE -> Unit
                 }
             }
+        }
+    }
+
+    /** Otomasyonun grup eylemi: değişmesi gereken her üyeye komut gider; sonuç grup adıyla tek satır yazılır. */
+    private fun executeGroup(a: Automation, on: Boolean) {
+        val group = store.groups.firstOrNull { it.deviceId == a.action.deviceId }
+        if (group == null) {
+            val args = EventArgs.AutoMissing(a.name)
+            log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+            return
+        }
+        val args = EventArgs.AutoSwitch(a.name, 0, false, on)
+        var error: Exception? = null
+        for ((device, channel) in group.targets(store.snapshots.associateBy { it.id }, on)) {
+            try {
+                // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
+                LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+                controlSwitch(device, channel, on)
+            } catch (e: Exception) {
+                error = e
+            }
+        }
+        if (error == null) {
+            log.add(group.deviceId, group.name, EventKind.AUTOMATION, args.render(group.name, strings), "", args)
+        } else {
+            val failedArgs = args.copy(error = error.message.orEmpty())
+            val failed = failedArgs.render(group.name, strings)
+            log.add(group.deviceId, group.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
+            notifier.notifyEvent(failed)
         }
     }
 
@@ -1587,7 +1624,7 @@ class MonitorService : Service() {
                 weatherBusy = false
                 t.onSuccess {
                     runtime.outdoorTemp = it
-                    runAutomations(automations.onTick(store.snapshots.associateBy { d -> d.id }, store.automations, System.currentTimeMillis(), env()))
+                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.automations, System.currentTimeMillis(), env()))
                 }.onFailure {
                     Log.w(TAG, "weather failed: ${it.javaClass.simpleName}")
                     weatherAt = System.currentTimeMillis() + WEATHER_RETRY_MS

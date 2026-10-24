@@ -116,6 +116,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
@@ -167,12 +168,20 @@ fun DevicesScreen(
     var showPro by remember { mutableStateOf(false) }
     if (showPro) ProDialog(onDismiss = { showPro = false })
     val layout = remember(version) { store.deviceLayout }
+    // Gruplar ızgarada cihaz gibi durur (sıralanır, kategoriye girer); düğmeleri bütün üyeleri açıp kapatır.
+    val groups = remember(version) { store.groups }
+    val shown = remember(version) { store.snapshotsWithGroups }
+    val groupCounts = remember(version) {
+        val byId = devices.associateBy { it.id }
+        groups.associate { it.deviceId to it.counts(byId) }
+    }
+    var editingGroup by rememberSaveable { mutableStateOf<String?>(null) }
     // Sürükle-bırak (masaüstündeki gibi): sürüklerken bölümler bellekteki sıradan kurulur, bırakınca sıra bir kez yazılır.
-    val sortedIds = remember(version) { layout.sorted(devices).map { it.id } }
+    val sortedIds = remember(version) { layout.sorted(shown).map { it.id } }
     val order = remember { DragOrder() }
     LaunchedEffect(sortedIds) { order.show(sortedIds) }
     val shownLayout = if (order.dragging) layout.copy(order = order.ids) else layout
-    val sections = remember(shownLayout, devices) { shownLayout.sections(devices) }
+    val sections = remember(shownLayout, shown) { shownLayout.sections(shown) }
     val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
     val currentSectionOf by rememberUpdatedState(sectionOf)
     val haptic = LocalHapticFeedback.current
@@ -181,6 +190,20 @@ fun DevicesScreen(
     // TV: uzun basılan kart taşıma modunda; yön tuşları kartı kaydırır, OK ya da Geri bitirir.
     var movingId by rememberSaveable { mutableStateOf<String?>(null) }
     BackHandler(enabled = movingId != null) { movingId = null }
+
+    editingGroup?.let { id ->
+        BackHandler { editingGroup = null }
+        Box(modifier) {
+            GroupEditor(
+                initial = groups.firstOrNull { it.id == id },
+                devices = remember(version) { layout.sections(devices).flatMap { it.devices } },
+                onSave = { store.saveGroup(it); editingGroup = null },
+                onDelete = { store.deleteGroup(id); editingGroup = null },
+                onBack = { editingGroup = null },
+            )
+        }
+        return
+    }
     var showCategories by remember { mutableStateOf(false) }
     val saveLayout: (DeviceLayout) -> Unit = { store.deviceLayout = it }
     if (showCategories) CategoriesDialog(layout, saveLayout) { showCategories = false }
@@ -279,7 +302,11 @@ fun DevicesScreen(
                 if (loggedIn && !isPro && !editMode && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
                     item(span = full) { ProHintCard { showPro = true } }
                 }
-                if (editMode) item(key = "edit-hint", span = full) { LayoutEditHint { showCategories = true } }
+                if (editMode) {
+                    item(key = "edit-hint", span = full) {
+                        LayoutEditHint(onCategories = { showCategories = true }, onAddGroup = { editingGroup = NEW_AUTOMATION })
+                    }
+                }
                 for (section in sections) {
                     // Düzenleme dışında boş kategori başlığı gösterilmez.
                     if (section.devices.isEmpty() && !editMode) continue
@@ -321,17 +348,23 @@ fun DevicesScreen(
                                     large = editMode || layout.isLarge(device),
                                     monitored = device.id in monitoredIds,
                                     priority = device.id in layout.priority,
-                                    // Uzun basıp bırakınca (sürüklemeden) dokunuş detayı açmasın.
-                                    onClick = { if (!editMode && !order.dragging && movingId == null) onOpenDevice(device.id) },
+                                    // Uzun basıp bırakınca (sürüklemeden) dokunuş detayı açmasın. Grubun detayı düzenleyicisidir.
+                                    onClick = {
+                                        if (!editMode && !order.dragging && movingId == null) {
+                                            if (DeviceGroup.isGroup(device.id)) editingGroup = device.id.removePrefix(DeviceGroup.PREFIX)
+                                            else onOpenDevice(device.id)
+                                        }
+                                    },
                                     // Dokunmatikte uzun basma sürüklemeyi başlatır (aşağıda); TV'de taşıma modunu açar.
                                     onLongClick = if (tv) ({
                                         movingId = device.id
                                         Toast.makeText(context, R.string.layout_move_hint, Toast.LENGTH_SHORT).show()
                                     }) else null,
                                     focusRequester = if (device.id == restoreFocusTo) restoreFocus else null,
+                                    groupCounts = groupCounts[device.id],
                                     moveArrows = targets?.let { t -> MoveArrows(t.left != null, t.right != null, t.up != null, t.down != null) },
                                     editBar = if (editMode) {
-                                        { LayoutEditBar(device, layout, devices, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
+                                        { LayoutEditBar(device, layout, shown, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
                                     } else null,
                                     modifier = Modifier
                                         .bringIntoViewRequester(bringIntoView)
@@ -363,7 +396,7 @@ fun DevicesScreen(
                                                             else -> return@onPreviewKeyEvent false
                                                         }
                                                         // Kenarda (ok yoksa) tuş yutulur: odak karttan kaçmasın.
-                                                        if (down && target != null) saveLayout(layout.move(device.id, target - i, devices))
+                                                        if (down && target != null) saveLayout(layout.move(device.id, target - i, shown))
                                                         true
                                                     }
                                             } else {
@@ -636,9 +669,11 @@ private fun DeviceTile(
     onClick: () -> Unit,
     onLongClick: (() -> Unit)?,
     editBar: (@Composable () -> Unit)?,
-    focusRequester: FocusRequester? = null,
-    moveArrows: MoveArrows? = null,
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester? = null,
+    /** Grup kartı: (açık, toplam) üye sayısı; normal cihazda null. */
+    groupCounts: Pair<Int, Int>? = null,
+    moveArrows: MoveArrows? = null,
 ) {
     val tv = LocalIsTv.current
     val dark = LocalDarkTheme.current
@@ -666,8 +701,8 @@ private fun DeviceTile(
                         .combinedClickable(onClick = onClick, onLongClick = onLongClick),
                 )
             }
-            if (large) LargeTileContent(device, active, monitored, priority, controls)
-            else SmallTileContent(device, active, monitored, priority, controls)
+            if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts)
+            else SmallTileContent(device, active, monitored, priority, controls, groupCounts)
             if (moveArrows != null) MoveArrowsOverlay(moveArrows, shape)
         }
         editBar?.invoke()
@@ -692,7 +727,7 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
 
 /** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı". */
 @Composable
-private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean) {
+private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (!device.online) {
@@ -704,6 +739,7 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
             append(
                 when {
                     !device.online -> stringResource(R.string.label_offline_title)
+                    groupCounts != null -> stringResource(R.string.channels_on_short, groupCounts.first, groupCounts.second)
                     device.isMultiChannel -> stringResource(R.string.channels_on_short, onCount, device.switches.size)
                     onCount > 0 -> stringResource(R.string.state_on_title)
                     else -> stringResource(R.string.state_off_title)
@@ -719,6 +755,8 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),
         )
+        // Grup izlenmez (üyeleri izlenir): zil simgesi yok.
+        if (groupCounts != null) return@Row
         Spacer(Modifier.width(6.dp))
         Icon(
             if (monitored) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
@@ -756,7 +794,7 @@ private fun TileName(device: DeviceSnapshot, active: Boolean, priority: Boolean,
 }
 
 @Composable
-private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
     // En az yükseklik: aynı satırdaki kutucuklar (bir ad tek, biri iki satır) aynı boyda görünsün.
     Column(
         Modifier.fillMaxWidth().heightIn(min = 148.dp).padding(14.dp),
@@ -774,13 +812,13 @@ private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored:
         Column(Modifier.padding(top = 14.dp)) {
             TileName(device, active, priority, large = false)
             Spacer(Modifier.height(2.dp))
-            TileStatus(device, active, monitored)
+            TileStatus(device, active, monitored, groupCounts)
         }
     }
 }
 
 @Composable
-private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean) {
+private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             DeviceGlyph(device, active, size = 46)
@@ -788,7 +826,7 @@ private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored:
             Column(Modifier.weight(1f)) {
                 TileName(device, active, priority, large = true)
                 Spacer(Modifier.height(2.dp))
-                TileStatus(device, active, monitored)
+                TileStatus(device, active, monitored, groupCounts)
             }
             if (controls && !device.isMultiChannel && device.switches.size == 1) {
                 Spacer(Modifier.width(12.dp))

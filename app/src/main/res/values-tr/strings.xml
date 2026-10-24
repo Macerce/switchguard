@@ -1038,6 +1038,15 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
 
     <string name="scenes_title">Sahneler</string>
     <string name="automations_rules_title">Kurallar</string>
+    <string name="groups_title">Gruplar</string>
+    <string name="group_add">Grup ekle</string>
+    <string name="group_new">Yeni grup</string>
+    <string name="group_edit">Grubu düzenle</string>
+    <string name="group_name">Grup adı</string>
+    <string name="group_name_hint">ör. Bahçe ışıkları</string>
+    <string name="group_desc">Gruptaki cihazları seçin. Grup, Cihazlar ekranında bir cihaz gibi görünür: düğmesi hepsini birlikte açar ya da kapatır; otomasyonlarda da seçilebilir.</string>
+    <string name="group_delete_title">Bu grup silinsin mi?</string>
+    <string name="group_missing">Grup bulunamadı</string>
     <string name="scene_add">Sahne ekle</string>
     <string name="scene_new">Yeni sahne</string>
     <string name="scene_edit">Sahneyi düzenle</string>

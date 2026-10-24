@@ -143,7 +143,7 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
                 AutomationEditor(
                     tab = AutomationTab.ALERTS,
                     initial = initial,
-                    devices = remember(version) { store.snapshots },
+                    devices = remember(version) { store.snapshotsWithGroups },
                     modifier = Modifier,
                     onSave = { store.saveAutomation(it); back() },
                     onDelete = { store.deleteAutomation(target.id); back() },
@@ -183,7 +183,7 @@ private fun AlertsHome(
     val monitoredIds = remember(version) { store.monitoredIds() }
     val rules = remember(version) { store.rules }
     val alerts = remember(version) { AutomationTab.ALERTS.of(store.automations) }
-    val allDevices = remember(version) { store.snapshots }
+    val allDevices = remember(version) { store.snapshotsWithGroups }
 
     val requesters = remember { mutableMapOf<String, FocusRequester>() }
     fun focus(key: String) = Modifier.focusRequester(requesters.getOrPut(key) { FocusRequester() })

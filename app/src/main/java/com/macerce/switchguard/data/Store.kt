@@ -357,6 +357,20 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     }
     fun deleteScene(id: String) { scenes = scenes.filterNot { it.id == id } }
 
+    /** Gruplar: tek düğmeyle açılıp kapanan cihaz kümeleri (bkz. [com.macerce.switchguard.core.DeviceGroup]). */
+    var groups: List<com.macerce.switchguard.core.DeviceGroup>
+        get() = parsed.get("groups", prefs.getString("groups", null)) { com.macerce.switchguard.core.DeviceGroup.listFromJson(it) }
+        set(v) = put { putString("groups", com.macerce.switchguard.core.DeviceGroup.listToJson(v)) }
+    fun saveGroup(g: com.macerce.switchguard.core.DeviceGroup) {
+        val list = groups
+        groups = if (list.any { it.id == g.id }) list.map { if (it.id == g.id) g else it } else list + g
+    }
+    fun deleteGroup(id: String) { groups = groups.filterNot { it.id == id } }
+
+    /** Gerçek cihazlar + grupların sanal cihazları. */
+    val snapshotsWithGroups: List<DeviceSnapshot>
+        get() = com.macerce.switchguard.core.DeviceGroup.withGroups(snapshots, groups)
+
     /** Gün doğumu/batımı ve hava sıcaklığı kuralları için konum; null = girilmedi. */
     var latitude: Double?
         get() = str("lat").toDoubleOrNull()

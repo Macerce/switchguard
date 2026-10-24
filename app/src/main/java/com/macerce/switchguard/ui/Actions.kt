@@ -16,6 +16,7 @@ import android.provider.Settings
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DeviceTimers
@@ -68,7 +69,8 @@ object Actions {
 
     /** Cihazı uygulamadan açar/kapatır. Bu değişiklik alarm çaldırmaz, geçmişe "uygulamadan" diye yazılır. */
     suspend fun setSwitch(context: Context, device: DeviceSnapshot, channel: Int, on: Boolean): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        if (DeviceGroup.isGroup(device.id)) setGroup(context, device.id, on)
+        else withContext(Dispatchers.IO) {
             runCatching {
                 val store = Store.get(context)
                 LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
@@ -93,6 +95,18 @@ object Actions {
                 }
             }
         }
+
+    /**
+     * Grubun bütün üyelerini açar ya da kapatır (zaten öyle olan ve çevrimdışı üyeler atlanır). Hiçbiri
+     * değiştirilemediyse ilk hata döner; biri bile değiştiyse başarılı sayılır.
+     */
+    suspend fun setGroup(context: Context, groupDeviceId: String, on: Boolean): Result<Unit> {
+        val store = Store.get(context)
+        val group = store.groups.firstOrNull { it.deviceId == groupDeviceId }
+            ?: return Result.failure(IllegalStateException(context.getString(R.string.group_missing)))
+        val results = group.targets(store.snapshots.associateBy { it.id }, on).map { (d, ch) -> setSwitch(context, d, ch, on) }
+        return if (results.isEmpty() || results.any { it.isSuccess }) Result.success(Unit) else results.first()
+    }
 
     /**
      * Sahneyi çalıştırır: her cihaz/kanal sırayla açılır ya da kapatılır, çevrimdışı ya da bulunamayan atlanır.

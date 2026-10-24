@@ -133,11 +133,28 @@ fun AutomationsScreen(modifier: Modifier) {
     val store = remember { Store.get(context) }
     val version by store.version.collectAsStateWithLifecycle()
     val automations = remember(version) { AutomationTab.AUTOMATIONS.of(store.automations) }
-    val devices = remember(version) { store.snapshots }
+    // Gruplar otomasyonda cihaz gibi seçilir.
+    val devices = remember(version) { store.snapshotsWithGroups }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
     var editingScene by rememberSaveable { mutableStateOf<String?>(null) }
+    var editingGroup by rememberSaveable { mutableStateOf<String?>(null) }
     val scenes = remember(version) { store.scenes }
+    val groups = remember(version) { store.groups }
+
+    editingGroup?.let { id ->
+        BackHandler { editingGroup = null }
+        Box(modifier) {
+            GroupEditor(
+                initial = groups.firstOrNull { it.id == id },
+                devices = remember(version) { store.deviceLayout.sections(store.snapshots).flatMap { it.devices } },
+                onSave = { store.saveGroup(it); editingGroup = null },
+                onDelete = { store.deleteGroup(id); editingGroup = null },
+                onBack = { editingGroup = null },
+            )
+        }
+        return
+    }
 
     editingScene?.let { id ->
         BackHandler { editingScene = null }
@@ -189,6 +206,9 @@ fun AutomationsScreen(modifier: Modifier) {
                         Text(stringResource(R.string.scenes_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 4.dp))
                         ScenesStrip(scenes) { editingScene = it }
+                        Text(stringResource(R.string.groups_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                        GroupsStrip(groups, devices) { editingGroup = it }
                         Text(stringResource(R.string.automations_rules_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }

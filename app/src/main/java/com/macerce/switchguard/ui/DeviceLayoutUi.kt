@@ -25,6 +25,7 @@ import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Workspaces
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
@@ -92,7 +93,7 @@ fun LayoutSectionHeader(title: String, count: Int, collapsed: Boolean, onToggle:
 
 /** Düzenleme modunda ekranın üstündeki açıklama ve kategori yönetimi girişi. */
 @Composable
-fun LayoutEditHint(onCategories: () -> Unit) {
+fun LayoutEditHint(onCategories: () -> Unit, onAddGroup: (() -> Unit)? = null) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -104,6 +105,13 @@ fun LayoutEditHint(onCategories: () -> Unit) {
                 Icon(Icons.AutoMirrored.Rounded.Label, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.categories_manage))
+            }
+            if (onAddGroup != null) {
+                TextButton(onClick = onAddGroup, modifier = Modifier.tvFocusRing()) {
+                    Icon(Icons.Rounded.Workspaces, null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.group_add))
+                }
             }
         }
     }
