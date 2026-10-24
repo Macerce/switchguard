@@ -3,6 +3,7 @@ package com.macerce.switchguard.ui
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
@@ -14,6 +15,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,7 +31,11 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -38,6 +44,10 @@ import androidx.compose.material.icons.rounded.AlarmOff
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.GppMaybe
 import androidx.compose.material.icons.rounded.Key
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
+import androidx.compose.material.icons.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.NotificationsOff
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -67,6 +77,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -75,10 +86,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -111,7 +132,11 @@ import com.macerce.switchguard.ui.theme.raisedOnTile
 import com.macerce.switchguard.ui.theme.tileColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import sh.calvin.reorderable.ReorderableItem
+import sh.calvin.reorderable.rememberReorderableLazyGridState
+import kotlin.math.abs
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DevicesScreen(
     modifier: Modifier,
@@ -142,8 +167,20 @@ fun DevicesScreen(
     var showPro by remember { mutableStateOf(false) }
     if (showPro) ProDialog(onDismiss = { showPro = false })
     val layout = remember(version) { store.deviceLayout }
-    val sections = remember(version) { layout.sections(devices) }
+    // Sürükle-bırak (masaüstündeki gibi): sürüklerken bölümler bellekteki sıradan kurulur, bırakınca sıra bir kez yazılır.
+    val sortedIds = remember(version) { layout.sorted(devices).map { it.id } }
+    val order = remember { DragOrder() }
+    LaunchedEffect(sortedIds) { order.show(sortedIds) }
+    val shownLayout = if (order.dragging) layout.copy(order = order.ids) else layout
+    val sections = remember(shownLayout, devices) { shownLayout.sections(devices) }
+    val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
+    val currentSectionOf by rememberUpdatedState(sectionOf)
+    val haptic = LocalHapticFeedback.current
+    val gridState = rememberLazyGridState()
     var editMode by rememberSaveable { mutableStateOf(false) }
+    // TV: uzun basılan kart taşıma modunda; yön tuşları kartı kaydırır, OK ya da Geri bitirir.
+    var movingId by rememberSaveable { mutableStateOf<String?>(null) }
+    BackHandler(enabled = movingId != null) { movingId = null }
     var showCategories by remember { mutableStateOf(false) }
     val saveLayout: (DeviceLayout) -> Unit = { store.deviceLayout = it }
     if (showCategories) CategoriesDialog(layout, saveLayout) { showCategories = false }
@@ -201,7 +238,16 @@ fun DevicesScreen(
             // Akıllı ev uygulamaları gibi kutucuk ızgarası: telefonda iki sütun, geniş ekranda ekrana sığdığı kadar.
             // Büyük kartlar ve bilgi kartları tam satır.
             val full: (LazyGridItemSpanScope.() -> GridItemSpan) = { GridItemSpan(maxLineSpan) }
+            val reorder = rememberReorderableLazyGridState(gridState) { from, to ->
+                val a = from.key as? String
+                val b = to.key as? String
+                // Bölümler arası taşıma yok: öncelik ve kategori kendi araçlarıyla değişir.
+                if (a != null && b != null && currentSectionOf[a] != null && currentSectionOf[a] == currentSectionOf[b]) {
+                    order.move(a, b)
+                }
+            }
             LazyVerticalGrid(
+                state = gridState,
                 columns = GridCells.Adaptive(minSize = if (wide) 220.dp else 150.dp),
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -263,18 +309,81 @@ fun DevicesScreen(
                             // Düzenlemede her kart tam satır: düzen araçları sığsın.
                             span = { _, d -> if (editMode || layout.isLarge(d)) GridItemSpan(maxLineSpan) else GridItemSpan(1) },
                         ) { i, device ->
-                            DeviceTile(
-                                device,
-                                large = editMode || layout.isLarge(device),
-                                monitored = device.id in monitoredIds,
-                                priority = device.id in layout.priority,
-                                onClick = { if (!editMode) onOpenDevice(device.id) },
-                                onLongClick = { editMode = true },
-                                focusRequester = if (device.id == restoreFocusTo) restoreFocus else null,
-                                editBar = if (editMode) {
-                                    { LayoutEditBar(device, layout, devices, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
-                                } else null,
-                            )
+                            ReorderableItem(reorder, key = device.id) { isDragging ->
+                                // Kalkan kart: hafif büyür ve gölgelenir; yalnızca çizim katmanı değişir.
+                                val lift by animateFloatAsState(if (isDragging) 1f else 0f, label = "lift")
+                                val moving = tv && movingId == device.id && !editMode
+                                val targets = if (moving) moveTargets(gridState, section.devices.map { it.id }, i) else null
+                                val bringIntoView = remember { BringIntoViewRequester() }
+                                LaunchedEffect(moving, i) { if (moving) runCatching { bringIntoView.bringIntoView() } }
+                                DeviceTile(
+                                    device,
+                                    large = editMode || layout.isLarge(device),
+                                    monitored = device.id in monitoredIds,
+                                    priority = device.id in layout.priority,
+                                    // Uzun basıp bırakınca (sürüklemeden) dokunuş detayı açmasın.
+                                    onClick = { if (!editMode && !order.dragging && movingId == null) onOpenDevice(device.id) },
+                                    // Dokunmatikte uzun basma sürüklemeyi başlatır (aşağıda); TV'de taşıma modunu açar.
+                                    onLongClick = if (tv) ({
+                                        movingId = device.id
+                                        Toast.makeText(context, R.string.layout_move_hint, Toast.LENGTH_SHORT).show()
+                                    }) else null,
+                                    focusRequester = if (device.id == restoreFocusTo) restoreFocus else null,
+                                    moveArrows = targets?.let { t -> MoveArrows(t.left != null, t.right != null, t.up != null, t.down != null) },
+                                    editBar = if (editMode) {
+                                        { LayoutEditBar(device, layout, devices, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
+                                    } else null,
+                                    modifier = Modifier
+                                        .bringIntoViewRequester(bringIntoView)
+                                        .graphicsLayer {
+                                            val scale = 1f + 0.03f * lift
+                                            scaleX = scale
+                                            scaleY = scale
+                                            shadowElevation = 16.dp.toPx() * lift
+                                            shape = RoundedCornerShape(24.dp)
+                                            clip = false
+                                        }
+                                        .then(
+                                            if (tv) {
+                                                Modifier
+                                                    .onFocusChanged { if (moving && !it.hasFocus) movingId = null }
+                                                    .onPreviewKeyEvent { e ->
+                                                        if (!moving || targets == null) return@onPreviewKeyEvent false
+                                                        val down = e.type == KeyEventType.KeyDown
+                                                        val target = when (e.key) {
+                                                            Key.DirectionLeft -> targets.left
+                                                            Key.DirectionRight -> targets.right
+                                                            Key.DirectionUp -> targets.up
+                                                            Key.DirectionDown -> targets.down
+                                                            Key.DirectionCenter, Key.Enter, Key.NumPadEnter -> {
+                                                                // Taşımayı açan uzun basışın tekrarları bitirmesin; yeni basış bitirir.
+                                                                if (down && e.nativeKeyEvent.repeatCount == 0) movingId = null
+                                                                return@onPreviewKeyEvent true
+                                                            }
+                                                            else -> return@onPreviewKeyEvent false
+                                                        }
+                                                        // Kenarda (ok yoksa) tuş yutulur: odak karttan kaçmasın.
+                                                        if (down && target != null) saveLayout(layout.move(device.id, target - i, devices))
+                                                        true
+                                                    }
+                                            } else {
+                                                Modifier.longPressDraggableHandle(
+                                                    onDragStarted = {
+                                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                        order.begin(sortedIds)
+                                                    },
+                                                    onDragStopped = {
+                                                        // Yeni sıra bırakınca bir kez kaydedilir; kart yerinden oynamadıysa
+                                                        // eskisi gibi uzun basma düzenleme modunu açar.
+                                                        val ids = order.end()
+                                                        if (ids != null) store.deviceLayout = store.deviceLayout.copy(order = ids)
+                                                        else if (!editMode) editMode = true
+                                                    },
+                                                )
+                                            },
+                                        ),
+                                )
+                            }
                         }
                     }
                 }
@@ -525,9 +634,11 @@ private fun DeviceTile(
     monitored: Boolean,
     priority: Boolean,
     onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    onLongClick: (() -> Unit)?,
     editBar: (@Composable () -> Unit)?,
     focusRequester: FocusRequester? = null,
+    moveArrows: MoveArrows? = null,
+    modifier: Modifier = Modifier,
 ) {
     val tv = LocalIsTv.current
     val dark = LocalDarkTheme.current
@@ -539,7 +650,7 @@ private fun DeviceTile(
     val controls = editBar == null
 
     Column(
-        Modifier
+        modifier
             .fillMaxWidth()
             .then(if (tv && controls) Modifier.tvFocusRing(shape).focusGroup() else Modifier)
             .clip(shape)
@@ -557,6 +668,7 @@ private fun DeviceTile(
             }
             if (large) LargeTileContent(device, active, monitored, priority, controls)
             else SmallTileContent(device, active, monitored, priority, controls)
+            if (moveArrows != null) MoveArrowsOverlay(moveArrows, shape)
         }
         editBar?.invoke()
     }
@@ -776,4 +888,55 @@ fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): Sw
             pending = null
         }
     }
+}
+
+/** TV taşıma modunda kartın gidebileceği yönler; gidilemeyen yönün oku çizilmez. */
+private data class MoveArrows(val left: Boolean, val right: Boolean, val up: Boolean, val down: Boolean)
+
+/** Taşıma hedefleri: bölüm içindeki sıra numaraları (gidilemeyen yön null). */
+private data class MoveTargets(val left: Int?, val right: Int?, val up: Int?, val down: Int?)
+
+/**
+ * Bölümdeki [i]. kart için yön tuşlarının hedefleri. Sağ/sol bir komşu; yukarı/aşağı ekrandaki bir üst/alt satırın
+ * en yakın sütunundaki kart (büyük kartlar tam satır olduğundan sütun sayısıyla hesap yanılır). Komşu satır ekranda
+ * değilse sütun sayısı kadar atlanır.
+ */
+private fun moveTargets(grid: LazyGridState, ids: List<String>, i: Int): MoveTargets {
+    val info = grid.layoutInfo
+    val pos = info.visibleItemsInfo.associateBy { it.key }
+    fun vertical(down: Boolean): Int? {
+        val me = pos[ids[i]] ?: return null
+        val rows = ids.indices.mapNotNull { j -> pos[ids[j]]?.let { j to it } }
+            .filter { (_, it) -> if (down) it.row > me.row else it.row < me.row }
+        if (rows.isEmpty()) {
+            val j = i + if (down) info.maxSpan else -info.maxSpan
+            return j.takeIf { it in ids.indices && pos[ids[it]] == null }
+        }
+        val row = if (down) rows.minOf { it.second.row } else rows.maxOf { it.second.row }
+        return rows.filter { it.second.row == row }.minBy { abs(it.second.column - me.column) }.first
+    }
+    return MoveTargets(
+        left = (i - 1).takeIf { it >= 0 },
+        right = (i + 1).takeIf { it <= ids.lastIndex },
+        up = vertical(down = false),
+        down = vertical(down = true),
+    )
+}
+
+/** Taşınan kartın çerçevesi ve kenarlarındaki yön okları. */
+@Composable
+private fun BoxScope.MoveArrowsOverlay(arrows: MoveArrows, shape: RoundedCornerShape) {
+    val scheme = MaterialTheme.colorScheme
+    Box(Modifier.matchParentSize().border(BorderStroke(3.dp, scheme.primary), shape))
+    @Composable
+    fun Arrow(icon: ImageVector, align: Alignment) {
+        Box(
+            Modifier.align(align).padding(4.dp).size(28.dp).clip(CircleShape).background(scheme.primary),
+            contentAlignment = Alignment.Center,
+        ) { Icon(icon, null, tint = scheme.onPrimary, modifier = Modifier.size(22.dp)) }
+    }
+    if (arrows.left) Arrow(Icons.Rounded.KeyboardArrowLeft, Alignment.CenterStart)
+    if (arrows.right) Arrow(Icons.Rounded.KeyboardArrowRight, Alignment.CenterEnd)
+    if (arrows.up) Arrow(Icons.Rounded.KeyboardArrowUp, Alignment.TopCenter)
+    if (arrows.down) Arrow(Icons.Rounded.KeyboardArrowDown, Alignment.BottomCenter)
 }

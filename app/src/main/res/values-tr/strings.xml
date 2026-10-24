@@ -173,6 +173,7 @@
     <string name="action_enter_keys">Access ID ve Secret gir</string>
     <string name="action_change">Değiştir</string>
     <string name="action_edit_layout">Cihazları düzenle</string>
+    <string name="layout_move_hint">Kartı yön tuşlarıyla taşıyın, bitirmek için OK</string>
     <string name="action_close">Kapat</string>
     <string name="action_done">Bitti</string>
     <string name="action_rename">Yeniden adlandır</string>

@@ -79,6 +79,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     // TV'de telefondan anahtar girme için QR kodu (yalnızca üretme).
     implementation("com.google.zxing:core:3.5.4")
+    // Cihaz kartlarını basılı tutup sürükleyerek sıralama (masaüstüyle aynı kütüphane).
+    implementation("sh.calvin.reorderable:reorderable:3.1.0")
     implementation("com.android.billingclient:billing:9.1.0")
     // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")
