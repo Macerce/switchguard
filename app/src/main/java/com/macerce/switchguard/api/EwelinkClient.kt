@@ -78,12 +78,15 @@ class EwelinkClient(private val store: Store) {
     /** Cihazı açar/kapatır. Çok kanallı cihazlarda [channel] 0'dan başlar. */
     fun setSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
         val value = if (on) "on" else "off"
-        val params = if (device.usesSwitchArray) {
-            JSONObject().put("switches", JSONArray().put(JSONObject().put("switch", value).put("outlet", channel)))
-        } else {
-            JSONObject().put("switch", value)
+        val array = JSONObject().put("switches", JSONArray().put(JSONObject().put("switch", value).put("outlet", channel)))
+        if (device.usesSwitchArray) return setParams(device.id, array)
+        try {
+            setParams(device.id, JSONObject().put("switch", value))
+        } catch (e: ApiException) {
+            // Bilinmeyen tek röleli bir model düz `switch`i reddetti (4002): diziyle tekrar denenir.
+            if (e.code != PARAMS_REJECTED) throw e
+            setParams(device.id, array)
         }
-        setParams(device.id, params)
     }
 
     /** Cihaza parametre yazar (durum, zamanlayıcı vb.). */
@@ -193,6 +196,8 @@ class EwelinkClient(private val store: Store) {
     companion object {
         const val OAUTH_PAGE = "https://c2ccdn.coolkit.cc/oauth/index.html"
         private val TOKEN_ERRORS = setOf(401, 402)
+        /** Cihaz gönderilen parametre biçimini kabul etmedi. */
+        private const val PARAMS_REJECTED = 4002
         /** Uygulama genelinde tek: farklı EwelinkClient örnekleri de aynı kilidi kullanır. */
         private val tokens = TokenRefresh()
         /** Bu thread'in son isteğinde kullanılan access token (bkz. withTokenRetry). */
