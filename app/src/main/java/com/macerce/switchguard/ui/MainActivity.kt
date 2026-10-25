@@ -72,7 +72,10 @@ class MainActivity : ComponentActivity() {
         AppShortcuts.update(this)
         // Açılır açılmaz değil, ekran yerleştikten sonra; bu arada başka ekrana geçildiyse sorulmaz.
         Handler(Looper.getMainLooper()).postDelayed({
-            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) ReviewAsk.onOpen(this)
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+                ReviewAsk.onOpen(this)
+                AppUpdate.onOpen(this)
+            }
         }, 3000)
     }
 

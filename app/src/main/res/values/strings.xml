@@ -1238,4 +1238,8 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="daily_col_time">Time on</string>
     <string name="daily_table_note">Turned on: how many times it was switched on today. Time on: total time it stayed on.</string>
     <string name="daily_longest">%1$s stayed on the longest today: %2$s.</string>
+    <string name="update_title">SwitchGuard %1$s is available</string>
+    <string name="update_body">You have version %1$s. Download the new version from GitHub and install it over this one; your settings stay.</string>
+    <string name="update_download">Download</string>
+    <string name="update_later">Later</string>
 </resources>

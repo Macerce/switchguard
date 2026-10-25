@@ -86,6 +86,7 @@ dependencies {
     implementation("androidx.fragment:fragment:1.9.1")
     // Uygulama içinden Play değerlendirme penceresi (bir kez, uygun anda).
     implementation("com.google.android.play:review:2.0.2")
+    implementation("com.google.android.play:app-update:2.1.0")
     // Saat uygulamasıyla (Wear OS) veri alışverişi.
     implementation("com.google.android.gms:play-services-wearable:20.0.1")
 
