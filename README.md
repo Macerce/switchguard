@@ -12,8 +12,18 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 </p>
 
 ## Download / İndir
+
+### Android (phone, tablet, TV)
 - **Google Play** (closed test): https://play.google.com/apps/testing/com.macerce.switchguard
-- **APK**: [Releases](https://github.com/Macerce/switchguard/releases) — download `SwitchGuard-x.y.z.apk` and open it on the phone. If SwitchGuard is already installed from Google Play, uninstall it first (different signature).
+- **APK**: [latest Android release](https://github.com/Macerce/switchguard/releases/latest) — download `SwitchGuard-x.y.z.apk` and open it on the phone. If SwitchGuard is already installed from Google Play, uninstall it first (different signature). The GitHub version tells you when a newer one is out.
+
+*Türkçe: Google Play'den ya da [son Android sürümünden](https://github.com/Macerce/switchguard/releases/latest) `SwitchGuard-x.y.z.apk` dosyasını indirip telefonda açın. Play'den kuruluysa önce onu kaldırın (imza farklı).*
+
+### Windows 10 / 11
+- **Installer**: [Windows releases](https://github.com/Macerce/switchguard/releases?q=desktop-v&expanded=true) — download `SwitchGuard-x.y.z-Kurulum.exe` from the newest one and run it. The app checks for new versions and updates itself with one click; settings are kept.
+- Without a license one device is monitored; a **Pro license key** (Settings → plan card) monitors all of them. For a key contact **switchguardapp@gmail.com**.
+
+*Türkçe: [Windows sürümlerinden](https://github.com/Macerce/switchguard/releases?q=desktop-v&expanded=true) en yenisinin `SwitchGuard-x.y.z-Kurulum.exe` dosyasını indirip çalıştırın. Uygulama yeni sürümleri kendisi bulur ve tek tıkla günceller; ayarlar korunur. Lisanssız 1 cihaz izlenir; tümü için **Pro lisans anahtarı** gerekir (Ayarlar → plan kartı) — **switchguardapp@gmail.com**.*
 
 ## Features
 - Smart-home style home screen: device tiles with quick power buttons, one button per channel on multi-channel devices, live status and power
