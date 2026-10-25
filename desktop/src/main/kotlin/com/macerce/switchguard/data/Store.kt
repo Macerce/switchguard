@@ -5,6 +5,7 @@ import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceLayout
+import com.macerce.switchguard.core.License
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -572,8 +573,8 @@ class Store internal constructor(
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
     fun setRules(deviceId: String, r: DeviceRules): Unit = synchronized(lock) { rules = rules + (deviceId to r) }
     /**
-     * Gerçekten izlenen cihazlar: kuralı açık olanlar. Masaüstü sürümü her zaman Pro olduğundan ücretsiz
-     * sürümün tek cihaz sınırı uygulanmaz (bkz. [Entitlement]); demo cihazları da sınıra sayılmaz.
+     * Gerçekten izlenen cihazlar: kuralı açık olanlar, lisans yoksa ücretsiz sürümün tek cihaz sınırıyla
+     * (bkz. [Entitlement]); demo cihazları sınıra sayılmaz.
      */
     fun monitoredIds(): Set<String> {
         val all = rules
@@ -583,8 +584,22 @@ class Store internal constructor(
     }
 
     // --- Pro ---
-    /** Masaüstü sürümünde her zaman açık. */
-    val isPro: Boolean get() = true
+    /** Girilen lisans anahtarı (bkz. [License]); geçersizse saklanmaz. */
+    var licenseKey: String?
+        get() = strOrNull("licenseKey")
+        set(v) = edit { if (v == null) remove("licenseKey") else put("licenseKey", v) }
+
+    /** Geçerli lisans; anahtar değişmedikçe imza yeniden doğrulanmaz. */
+    val license: License?
+        get() {
+            val key = licenseKey
+            cachedLicense.let { if (it.first == key) return it.second }
+            return License.parse(key).also { cachedLicense = key to it }
+        }
+    @Volatile private var cachedLicense: Pair<String?, License?> = Pair("", null)
+
+    /** Masaüstünde Pro, geçerli bir lisans anahtarıyla açılır. */
+    val isPro: Boolean get() = license != null
 
     /** Geçmiş sekmesinde görülen son olayın kimliği; sonrakiler "görülmemiş" sayılır. Hiç ayarlanmadıysa null. */
     var historySeenId: Long?

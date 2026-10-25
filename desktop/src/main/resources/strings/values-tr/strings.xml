@@ -1232,4 +1232,13 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="daily_col_time">Açık kalma</string>
     <string name="daily_table_note">Açılma: bugün kaç kez açıldığı. Açık kalma: toplam açık kaldığı süre.</string>
     <string name="daily_longest">Bugün en uzun %1$s açık kaldı: %2$s.</string>
+    <string name="license_title">Pro'yu etkinleştir</string>
+    <string name="license_title_active">Pro lisansı</string>
+    <string name="license_body">Lisans olmadan uygulama %1$d cihazı izler. Tüm cihazlarınızı izlemek için lisans anahtarınızı girin.</string>
+    <string name="license_key">Lisans anahtarı</string>
+    <string name="license_invalid">Bu lisans anahtarı geçerli değil. Tamamını kopyaladığınızdan emin olun.</string>
+    <string name="license_activate">Etkinleştir</string>
+    <string name="license_remove">Lisansı kaldır</string>
+    <string name="license_owner">Lisans sahibi: %1$s · %2$s</string>
+    <string name="license_enter">Lisans anahtarı gir</string>
 </resources>

@@ -9,6 +9,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.LocalScrollbarStyle
 import androidx.compose.foundation.VerticalScrollbar
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -54,7 +55,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.isBackPressed
 import androidx.compose.ui.input.pointer.onPointerEvent
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
@@ -68,6 +71,7 @@ import com.macerce.switchguard.desktop.ui.RowDivider
 import com.macerce.switchguard.desktop.ui.SectionCard
 import com.macerce.switchguard.desktop.ui.SectionTitle
 import com.macerce.switchguard.desktop.ui.readableWidth
+import com.macerce.switchguard.desktop.ui.plural
 import com.macerce.switchguard.desktop.ui.str
 import com.macerce.switchguard.desktop.ui.tileColor
 
@@ -182,7 +186,7 @@ private fun SettingsHome(graph: AppGraph, strings: Strings, onOpen: (SettingsPag
     val s = remember(version, strings) { HomeSummaries(store, strings) }
 
     SettingsPageFrame(str("tab_settings"), onBack = null) {
-        AppCard()
+        AppCard(store)
 
         SectionTitle(str("settings_group_connections"))
         SectionCard {
@@ -219,16 +223,21 @@ private fun SettingsHome(graph: AppGraph, strings: Strings, onOpen: (SettingsPag
 }
 
 /**
- * Ayarların başındaki uygulama kartı (telefondaki PlanCard): logo, ad ve plan. Masaüstünde Pro her zaman açık;
- * satın alma yok, kart tıklanmaz.
+ * Ayarların başındaki uygulama kartı (telefondaki PlanCard): logo, ad ve plan. Tıklanınca lisans penceresi açılır:
+ * Pro, satın alma yerine lisans anahtarıyla açılır (bkz. [LicenseDialog]).
  */
 @Composable
-private fun AppCard() {
+private fun AppCard(store: Store) {
     val dark = LocalDarkTheme.current
+    val isPro = store.isPro
+    var licensing by remember { mutableStateOf(false) }
+    if (licensing) LicenseDialog(store) { licensing = false }
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(tileColor())
+            .clickable { licensing = true }
+            .testTag("plan-card")
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -241,9 +250,13 @@ private fun AppCard() {
         Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
             Text(str("app_name"), style = MaterialTheme.typography.titleLarge)
-            Text(str("plan_pro"), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(
+                if (isPro) str("plan_pro") else plural("plan_free", Entitlement.FREE_DEVICES, Entitlement.FREE_DEVICES),
+                style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (!isPro) Text(str("license_enter"), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
         }
-        Icon(Icons.Rounded.WorkspacePremium, null, tint = MaterialTheme.colorScheme.primary)
+        Icon(Icons.Rounded.WorkspacePremium, null, tint = if (isPro) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline)
     }
 }
 

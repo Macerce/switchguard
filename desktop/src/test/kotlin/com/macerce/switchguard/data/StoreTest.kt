@@ -8,6 +8,7 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.QuietHours
+import com.macerce.switchguard.core.TEST_LICENSE_KEY
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.Log
@@ -75,7 +76,7 @@ class StoreTest {
         assertFalse(s.tuyaLive)
         assertEquals("https://127.0.0.1", s.redirectUrl)
         assertEquals(1f, s.alarmVolume)
-        assertTrue(s.isPro)
+        assertFalse(s.isPro)
         assertEquals("", s.language)
         assertEquals("system", s.theme)
         assertEquals(QuietHours(false, 23 * 60, 7 * 60), s.quietHours)
@@ -428,7 +429,7 @@ class StoreTest {
     }
 
     @Test
-    fun monitoredIdsIsNeverLimitedByTheFreeTier() {
+    fun monitoredIdsIsLimitedWithoutALicense() {
         val s = store()
         s.snapshots = listOf(
             DeviceSnapshot("a", "A", true, mapOf(0 to true)),
@@ -436,7 +437,16 @@ class StoreTest {
         )
         s.setRules("a", s.rulesFor("a").copy(monitored = true))
         s.setRules("b", s.rulesFor("b").copy(monitored = true))
+        assertEquals(setOf("a"), s.monitoredIds())
+        s.freeDeviceId = "b"
+        assertEquals(setOf("b"), s.monitoredIds())
+        s.licenseKey = "SG1.bozuk.anahtar"
+        assertFalse(s.isPro)
+        s.licenseKey = TEST_LICENSE_KEY
+        assertEquals("Test Lisansı", s.license?.owner)
         assertEquals(setOf("a", "b"), s.monitoredIds())
+        // Ayar dosyasından yeniden okunduğunda lisans kalıcı.
+        assertTrue(store().isPro)
     }
 
     @Test

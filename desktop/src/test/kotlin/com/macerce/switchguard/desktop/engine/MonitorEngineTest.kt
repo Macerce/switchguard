@@ -2,6 +2,7 @@ package com.macerce.switchguard.desktop.engine
 
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.TEST_LICENSE_KEY
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.Cloud
@@ -66,6 +67,7 @@ class MonitorEngineTest {
     fun setUp() {
         val dir = tmp.root.toPath()
         store = Store(dir.resolve("settings.json"), PlainCodec)
+        store.licenseKey = TEST_LICENSE_KEY
         log = EventLog(dir.resolve("events.db"))
         metrics = MetricsLog(dir.resolve("metrics.db"))
         // eWeLink'e girilmiş, WebSocket için apikey hazır.

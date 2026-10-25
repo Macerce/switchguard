@@ -1236,4 +1236,13 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="daily_col_time">Time on</string>
     <string name="daily_table_note">Turned on: how many times it was switched on today. Time on: total time it stayed on.</string>
     <string name="daily_longest">%1$s stayed on the longest today: %2$s.</string>
+    <string name="license_title">Activate Pro</string>
+    <string name="license_title_active">Pro license</string>
+    <string name="license_body">Without a license the app monitors %1$d device. Enter your license key to monitor all your devices.</string>
+    <string name="license_key">License key</string>
+    <string name="license_invalid">This license key is not valid. Check that you copied all of it.</string>
+    <string name="license_activate">Activate</string>
+    <string name="license_remove">Remove license</string>
+    <string name="license_owner">Licensed to %1$s · %2$s</string>
+    <string name="license_enter">Enter license key</string>
 </resources>

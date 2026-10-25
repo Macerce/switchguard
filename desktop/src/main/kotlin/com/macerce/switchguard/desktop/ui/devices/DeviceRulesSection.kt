@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.NotificationImportant
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,6 +28,7 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,7 +43,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceRules
+import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.platform.Sounds
@@ -58,7 +62,7 @@ import com.macerce.switchguard.desktop.ui.str
  * Bir cihazın ekranda görünen kuralları ve değiştirme işlevi. Değişiklik motora gider (`MonitorEngine.updateRules`);
  * motor meşgulken de ekran beklemesin diye seçim hemen gösterilir, motor yazınca ayardaki değerle birleşir.
  */
-class DeviceRulesState(val rules: DeviceRules, val change: ((DeviceRules) -> DeviceRules) -> Unit)
+class DeviceRulesState(val deviceId: String, val rules: DeviceRules, val change: ((DeviceRules) -> DeviceRules) -> Unit)
 
 /** [deviceId]'nin kuralları: ayardaki değer, üstünde motora gönderilmiş ama henüz yazılmamış değişiklik. */
 @Composable
@@ -70,7 +74,7 @@ fun rememberDeviceRules(graph: AppGraph, deviceId: String): DeviceRulesState {
     var pending by remember(deviceId) { mutableStateOf<DeviceRules?>(null) }
     LaunchedEffect(stored) { if (pending == stored) pending = null }
     val rules = pending ?: stored
-    return DeviceRulesState(rules) { f ->
+    return DeviceRulesState(deviceId, rules) { f ->
         pending = f(rules)
         graph.engine.updateRules(deviceId, f)
     }
@@ -101,6 +105,7 @@ fun DeviceRulesSection(graph: AppGraph, state: DeviceRulesState) {
                 modifier = Modifier.testTag("monitor-switch"),
             )
         }
+        if (rules.monitored) FreeLimitRow(graph, state.deviceId)
     }
 
     if (rules.monitored) {
@@ -193,6 +198,31 @@ private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertActio
                     Text(str(action.titleKey()), fontWeight = if (current == action) FontWeight.SemiBold else null)
                 }
             }
+        }
+    }
+}
+
+/**
+ * Lisans yokken izlenmek istenen ama ücretsiz sürümün tek cihaz sınırına takılan cihaz: hangi cihazın izlendiği
+ * söylenir ve izlenen cihaz bununla değiştirilebilir (telefondaki pro_limit penceresi).
+ */
+@Composable
+private fun FreeLimitRow(graph: AppGraph, deviceId: String) {
+    val store = graph.store
+    val version by store.version.collectAsState()
+    val other = remember(version, deviceId) {
+        if (store.isPro || Demo.isDemo(deviceId) || deviceId in store.monitoredIds()) return@remember null
+        val ids = store.monitoredIds()
+        store.snapshots.firstOrNull { it.id in ids && !Demo.isDemo(it.id) }?.name ?: ""
+    } ?: return
+    RowDivider()
+    InfoRow(
+        Icons.Rounded.WorkspacePremium,
+        str("pro_limit_title"),
+        if (other.isEmpty()) str("pro_limit_detail", Entitlement.FREE_DEVICES) else str("pro_limit_body", Entitlement.FREE_DEVICES, other),
+    ) {
+        TextButton(onClick = { store.freeDeviceId = deviceId }, modifier = Modifier.testTag("free-switch")) {
+            Text(str("pro_limit_switch"))
         }
     }
 }
