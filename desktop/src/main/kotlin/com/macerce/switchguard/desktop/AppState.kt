@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.update
  * arayüz sayaç her değiştiğinde pencereyi öne alır (iş parçacığı geçişi gerekmez).
  */
 class AppState {
+    /** Güncelleme kurulumu başlatıldı: uygulama onay sormadan kapanmalı (açık dosyalar kurulumu engeller). */
+    val exitForUpdate = MutableStateFlow(false)
+
     private val _alarmLines = MutableStateFlow<List<String>>(emptyList())
 
     /** Kapatılmamış alarmın satırları; boşsa alarm penceresi yok. */

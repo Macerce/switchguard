@@ -130,3 +130,4 @@ rounded/WaterDrop
 rounded/WifiOff
 rounded/WorkspacePremium
 rounded/Workspaces
+rounded/SystemUpdateAlt

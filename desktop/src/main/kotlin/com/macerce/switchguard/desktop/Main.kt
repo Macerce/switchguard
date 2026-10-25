@@ -8,6 +8,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ApplicationScope
 import androidx.compose.ui.window.LocalWindowExceptionHandlerFactory
@@ -136,6 +139,9 @@ private fun failStartup(dataDir: Path, e: Throwable): Nothing {
     exitProcess(1)
 }
 
+private const val UPDATE_FIRST_CHECK_MS = 30_000L
+private const val UPDATE_INTERVAL_MS = 12 * 60 * 60 * 1000L
+
 /** Windows tepsi ipucu 127 karakterle sınırlıdır. */
 private fun trayTooltip(appName: String, status: String): String = "$appName — $status".take(120)
 
@@ -204,6 +210,17 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
             }
         }
     }
+
+    // Yeni sürüm denetimi: açılıştan biraz sonra, sonra 12 saatte bir (bkz. Updater).
+    LaunchedEffect(Unit) {
+        delay(UPDATE_FIRST_CHECK_MS)
+        while (true) {
+            withContext(Dispatchers.IO) { graph.updater.check() }
+            delay(UPDATE_INTERVAL_MS)
+        }
+    }
+    val exitForUpdate by appState.exitForUpdate.collectAsState()
+    LaunchedEffect(exitForUpdate) { if (exitForUpdate) exit() }
 
     // Pencerelerdeki hatalar (Compose varsayılanı: hata penceresi + pencereyi kapat + yeniden fırlat) günlüğe yazılır,
     // asla yeniden fırlatılmaz; ana pencere ve alarm penceresi ayrıca kendilerini yeniden kurar (bkz. WindowErrors).

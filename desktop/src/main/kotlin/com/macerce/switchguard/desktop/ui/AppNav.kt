@@ -95,6 +95,7 @@ fun AppNav(graph: AppGraph, strings: Strings) {
             onToggleMonitoring = { if (monitoring) graph.engine.stop() else graph.engine.start() },
         )
         Column(Modifier.weight(1f).fillMaxHeight()) {
+        UpdateBanner(graph)
         Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.TopCenter) {
             AnimatedContent(
                 targetState = if (tab == Tab.DEVICES) openDevice else null,

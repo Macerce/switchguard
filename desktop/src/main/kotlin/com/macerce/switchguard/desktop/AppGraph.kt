@@ -14,6 +14,7 @@ import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.DesktopHost
 import com.macerce.switchguard.desktop.platform.NotificationQueue
 import com.macerce.switchguard.desktop.platform.SoundPlayer
+import com.macerce.switchguard.desktop.platform.Updater
 import java.io.IOException
 import java.nio.file.FileAlreadyExistsException
 import java.nio.file.Files
@@ -42,6 +43,10 @@ class AppGraph(val dataDir: Path) {
     val soundsDir: Path = dataDir.resolve("sounds")
     val sounds = SoundPlayer(soundsDir)
     val appState = AppState()
+    val updater = Updater(
+        System.getProperty("jpackage.app-version")?.takeIf { it.isNotBlank() },
+        Path.of(System.getProperty("java.io.tmpdir")),
+    )
     val tray = TrayState()
 
     /** Tepsi bildirimleri için sınırsız kuyruk; arayüzdeki tek pompa bunları [tray]'e aralıklı iletir. */
