@@ -13,7 +13,8 @@ import java.nio.file.StandardCopyOption
 
 /**
  * GitHub'daki masaüstü yayınlarını (`desktop-v*`) denetler; yenisi varsa kurulum dosyasını indirip çalıştırır.
- * Kurulum aynı yükseltme kimliğiyle (upgradeUuid) eskisinin üstüne kurar, ayarlar %APPDATA%'da kalır.
+ * jpackage'ın kullanıcıya özel MSI'ı aynı yükseltme kimliğindeki (upgradeUuid) eski sürümü kaldırmıyor, iki kayıt
+ * kalıyor: bu yüzden önce eski kurulumlar sessizce kaldırılır, sonra yenisi kurulur. Ayarlar %APPDATA%'da kalır.
  * Kurulum bitince uygulama yeniden açılır.
  */
 class Updater(private val currentVersion: String?, private val tempDir: Path) {
@@ -51,10 +52,14 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
             conn.inputStream.use { Files.copy(it, exe, StandardCopyOption.REPLACE_EXISTING) }
             val app = Path.of(System.getenv("LOCALAPPDATA") ?: "", "SwitchGuard", "SwitchGuard.exe")
             val script = tempDir.resolve("switchguard-update.cmd")
-            // Uygulamanın kapanmasını bekle, kur, kurulum başarılıysa yeniden aç.
+            // Uygulamanın kapanmasını bekle, eski kurulumları kaldır, kur, kurulum başarılıysa yeniden aç.
+            val uninstall = "\$i = New-Object -ComObject WindowsInstaller.Installer; " +
+                "\$i.RelatedProducts('{$UPGRADE_CODE}') | ForEach-Object { Start-Process msiexec -ArgumentList '/x',\$_,'/qn' -Wait }"
             Files.writeString(
                 script,
-                "@echo off\r\ntimeout /t 3 /nobreak >nul\r\n\"$exe\"\r\nif %errorlevel%==0 start \"\" \"$app\"\r\n",
+                "@echo off\r\ntimeout /t 3 /nobreak >nul\r\n" +
+                    "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$uninstall\"\r\n" +
+                    "\"$exe\"\r\nif %errorlevel%==0 start \"\" \"$app\"\r\n",
             )
             ProcessBuilder("cmd", "/c", "start", "\"\"", "/min", script.toString()).start()
             Log.i(TAG, "update ${release.version} downloaded, installer started")
@@ -74,7 +79,11 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
         setRequestProperty("User-Agent", "SwitchGuard-Desktop")
     }
 
-    private companion object { const val TAG = "Updater" }
+    private companion object {
+        const val TAG = "Updater"
+        /** build.gradle.kts'teki `upgradeUuid` ile aynı olmalı. */
+        const val UPGRADE_CODE = "0ADB2F78-FB6A-4DF0-9106-404091D283C8"
+    }
 
     private fun get(url: String): String = open(url).inputStream.use { it.readBytes().toString(Charsets.UTF_8) }
 }
