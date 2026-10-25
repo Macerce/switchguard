@@ -20,6 +20,15 @@ class DeviceParserTest {
     }
 
 
+    @Test
+    fun powr316SendsSwitchArrayDespiteOneChannel() {
+        val body = """{"data":{"thingList":[{"itemData":{"deviceid":"p1","name":"POWR316","online":true,
+            "extra":{"uiid":190},"params":{"switches":[{"switch":"off","outlet":0}]}}}]}}"""
+        val d = DeviceParser.parseThingList(body).single()
+        assertEquals(false, d.isMultiChannel)
+        assertEquals(true, d.usesSwitchArray)
+    }
+
     private val json = """
     {"error":0,"msg":"","data":{"thingList":[
       {"itemType":1,"itemData":{"deviceid":"1000aa","name":"Salon","online":true,

@@ -28,7 +28,7 @@ data class DeviceSnapshot(
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     /** Komutlar `switches` dizisiyle gider (tek kanallı olsa da diziyle çalışan modeller dahil). */
-    val usesSwitchArray: Boolean get() = isMultiChannel || uiid in CHANNEL_LIMITS
+    val usesSwitchArray: Boolean get() = isMultiChannel || uiid in CHANNEL_LIMITS || uiid in SWITCH_ARRAY_UIIDS
     val hasEnergy: Boolean get() = power != null
     /**
      * Kanalın gücü ölçülebiliyor mu: kanal başına ölçen cihazlar (veri geldiyse ya da SPM/DualR3 gibi
@@ -50,6 +50,9 @@ data class DeviceSnapshot(
          * sayısı: Micro (77), MINIR3 (138), M5-1C (160), T5-1C (209), M5-2C (161), T5-2C (210), M5-3C (162), T5-3C (211).
          */
         val CHANNEL_LIMITS = mapOf(77 to 1, 138 to 1, 160 to 1, 209 to 1, 161 to 2, 210 to 2, 162 to 3, 211 to 3)
+
+        /** Tek rölesi olduğu hâlde düz `switch` komutunu reddedip (4002) yalnızca `switches` dizisini kabul eden modeller: POWR316/POWR320D (190). */
+        val SWITCH_ARRAY_UIIDS = setOf(190)
 
         /** Modelin gerçek kanal sayısından fazlasını atar (bkz. [CHANNEL_LIMITS]). */
         fun limitChannels(uiid: Int, switches: Map<Int, Boolean>): Map<Int, Boolean> {
