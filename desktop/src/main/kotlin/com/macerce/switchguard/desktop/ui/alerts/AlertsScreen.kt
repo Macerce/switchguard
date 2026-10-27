@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.GppMaybe
@@ -68,6 +69,7 @@ import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.desktop.ui.Brand
 import com.macerce.switchguard.desktop.ui.Hue
 import com.macerce.switchguard.desktop.ui.IconBadge
@@ -124,6 +126,9 @@ sealed interface AlertsPage {
 
     /** Akıllı uyarılar (telefon 2.15). */
     data object Smart : AlertsPage
+
+    /** Uyarı kategorileri: sessiz saat seçimi. */
+    data object Categories : AlertsPage
 }
 
 /**
@@ -181,6 +186,7 @@ fun AlertsScreen(
                 AlertsPage.Smart -> SettingsPageFrame(str("smart_title"), onBack = back) {
                     SmartPage(graph, strings, onTelegram = { open(AlertsPage.Telegram) })
                 }
+                AlertsPage.Categories -> SettingsPageFrame(str("categories_title"), onBack = back) { CategoriesPage(graph, strings) }
             }
         }
     }
@@ -195,6 +201,9 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
     val issues = remember(version) { windowsIssues(store.autostart, store.alwaysAwake) }
     val devices = remember(version) { store.deviceLayout.sorted(store.snapshots) }
     val rows = remember(version, strings) { devices.map { DeviceAlertRowData(it, store.rulesFor(it.id), strings) } }
+    val counts = remember(version) { categoryCounts(graph) }
+    var filter by remember { mutableStateOf<DeviceCategory?>(null) }
+    val shown = rows.filter { filter == null || it.category == filter }
     val alerts = remember(version) { store.automations.inMode(AutomationMode.ALERT) }
     val summaries = remember(version, strings) { AlertSettingsSummaries(store, strings) }
 
@@ -213,11 +222,14 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
         // ------------------------------------------------ Cihaz uyarıları
         SectionTitle(str("section_device_alerts"))
         SectionHint(str("section_device_alerts_desc"))
+        if (rows.isNotEmpty()) CategoryFilter(counts, filter) { filter = it }
         SectionCard {
             if (rows.isEmpty()) {
                 Text(str("no_devices"), Modifier.padding(20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else if (shown.isEmpty()) {
+                Text(str("category_empty"), Modifier.padding(20.dp), color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            rows.forEachIndexed { i, row ->
+            shown.forEachIndexed { i, row ->
                 if (i > 0) RowDivider(72.dp)
                 DeviceAlertRow(row) { open(AlertsPage.Rules(row.device.id)) }
             }
@@ -251,7 +263,7 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
             Column(Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 alerts.forEach { a ->
                     AutomationCard(
-                        a, store.snapshotsWithGroups, strings,
+                        a, automationDevices(store.snapshotsWithGroups, strings), strings,
                         onClick = { open(AlertsPage.Editor(a.id)) },
                         onToggle = { on -> graph.engine.saveAutomation(a.copy(enabled = on)) },
                     )
@@ -265,6 +277,15 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
             MenuRow(
                 Icons.Rounded.NotificationsActive, Hue.RED, str("section_alarm"),
                 onClick = { open(AlertsPage.Alarm) }, summary = summaries.alarm, modifier = Modifier.testTag("alert-settings-alarm"),
+            )
+            RowDivider(68.dp)
+            MenuRow(
+                Icons.AutoMirrored.Rounded.Label, Hue.ORANGE, str("categories_title"),
+                onClick = { open(AlertsPage.Categories) },
+                summary = strings.format(
+                    "categories_summary", counts[DeviceCategory.CRITICAL] ?: 0, counts[DeviceCategory.IMPORTANT] ?: 0, counts[DeviceCategory.NORMAL] ?: 0,
+                ),
+                modifier = Modifier.testTag("alert-settings-categories"),
             )
             RowDivider(68.dp)
             MenuRow(
@@ -483,7 +504,7 @@ private fun StatusCard(
 /** Cihaz uyarıları satırının verisi; `store.version` değişince bir kez kurulur. */
 private class DeviceAlertRowData(val device: DeviceSnapshot, rules: DeviceRules, strings: Strings) {
     val monitored = rules.monitored
-    val critical = rules.monitored && rules.critical
+    val category = rules.effectiveCategory
     val customSound = rules.monitored && rules.soundUri != null
     val lines = deviceAlertLines(rules, strings)
     val kind = DeviceKinds.of(device)
@@ -521,16 +542,9 @@ private fun DeviceAlertRow(row: DeviceAlertRowData, onClick: () -> Unit) {
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.weight(1f, fill = false),
                 )
-                if (row.critical) {
+                if (row.category.hue() != null) {
                     Spacer(Modifier.width(8.dp))
-                    Text(
-                        str("device_critical"),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = scheme.onErrorContainer,
-                        maxLines = 1,
-                        modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(scheme.errorContainer)
-                            .padding(horizontal = 6.dp, vertical = 2.dp),
-                    )
+                    CategoryBadge(row.category, Modifier.testTag("category-badge-${row.device.id}"))
                 }
                 if (row.customSound) {
                     Spacer(Modifier.width(6.dp))
@@ -590,8 +604,8 @@ private fun ConditionalAlertEditor(graph: AppGraph, strings: Strings, automation
     val version by graph.store.version.collectAsState()
     // Düzenleyici açıkken kayıt değişse de form açıldığı haliyle kalır.
     val initial = remember(automationId) { automationId?.let { id -> graph.store.automations.firstOrNull { it.id == id } } }
-    // Gruplar da cihaz gibi seçilir.
-    val devices = remember(version) { graph.store.snapshotsWithGroups }
+    // Gruplar ve kategoriler de cihaz gibi seçilir.
+    val devices = remember(version, strings) { automationDevices(graph.store.snapshotsWithGroups, strings) }
     AutomationEditor(
         initial = initial,
         devices = devices,

@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui
 
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -94,7 +95,7 @@ class DeviceDetailSnapshotTest {
     fun ewelinkPlugWithTimers() {
         val plug = DeviceSnapshot("1000abc", "Akıllı priz", online = true, switches = mapOf(0 to false), uiid = 1, cloud = Cloud.EWELINK)
         graph.store.snapshots = graph.store.snapshots + plug
-        graph.engine.updateRules(plug.id) { it.copy(critical = true, soundUri = "builtin:alarm_beep") }
+        graph.engine.updateRules(plug.id) { it.copy(category = DeviceCategory.CRITICAL, soundUri = "builtin:alarm_beep") }
         val timers = JSONArray()
             .put(JSONObject("""{"mId":"a","type":"repeat","coolkit_timer_type":"repeat","enabled":1,"at":"30 4 * * 1,2,3,4,5","do":{"switch":"on"}}"""))
             .put(JSONObject("""{"mId":"b","type":"repeat","coolkit_timer_type":"repeat","enabled":0,"at":"0 20 * * 0,6","do":{"switch":"off"}}"""))

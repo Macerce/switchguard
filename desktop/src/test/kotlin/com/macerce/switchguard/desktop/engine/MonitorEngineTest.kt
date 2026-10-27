@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.engine
 
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.TEST_LICENSE_KEY
@@ -544,6 +545,43 @@ class MonitorEngineTest {
     }
 
     @Test
+    fun categoryTriggerFiresForDevicesInThatCategory() {
+        // Anahtar olayı sessiz, çevrimdışı varsayılan alarm: cihaz kendiliğinden kritik.
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.IGNORE))
+        assertEquals(DeviceCategory.CRITICAL, store.categoryOf(id))
+        val critical = Automation(
+            id = "cat-1", name = "Kritik kapandı", enabled = true,
+            trigger = Trigger(TriggerKind.TURNED_OFF, DeviceCategory.CRITICAL.deviceId),
+            action = AutoAction(ActionKind.ALARM),
+        )
+        val important = critical.copy(id = "cat-2", trigger = Trigger(TriggerKind.TURNED_OFF, DeviceCategory.IMPORTANT.deviceId))
+        engine.saveAutomation(critical)
+        engine.saveAutomation(important)
+        scheduler.advance(0)
+
+        cloudUpdate(switches = mapOf(0 to false))
+
+        assertEquals(1, host.alarms.size)
+        assertTrue(host.alarms.single().lines.any { "Pump" in it })
+    }
+
+    @Test
+    fun quietHoursFollowTheCategorySetting() {
+        clock.wallMs = wallAt(3, 0)
+        store.quietHours = QuietHours(enabled = true, startMinute = 23 * 60, endMinute = 7 * 60)
+        startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        // Sessiz saatleri açık, elle kritik işaretli cihaz yok: alarm seçilen cihaz kritik olsa da gece susar.
+        assertEquals(emptySet<DeviceCategory>(), store.quietBypass)
+        cloudUpdate(switches = mapOf(0 to false))
+        assertEquals(0, host.alarms.size)
+
+        // Kritik "sessiz saatlerde de çal" seçilince açılma (varsayılan kural alarm) gece de çalar.
+        store.quietBypass = setOf(DeviceCategory.CRITICAL)
+        cloudUpdate(switches = mapOf(0 to true))
+        assertEquals(1, host.alarms.size)
+    }
+
+    @Test
     fun turningDemoOffWithoutAccountsStopsMonitoring() {
         startDemo()
 
@@ -606,7 +644,7 @@ class MonitorEngineTest {
         clock.wallMs = wallAt(3, 0)
         store.quietHours = QuietHours(enabled = true, startMinute = 23 * 60, endMinute = 7 * 60)
         startWith(pump(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
-        engine.updateRules(id) { it.copy(critical = true) }
+        engine.updateRules(id) { it.copy(category = DeviceCategory.CRITICAL) }
         scheduler.advance(0)
 
         cloudUpdate(switches = mapOf(0 to false))

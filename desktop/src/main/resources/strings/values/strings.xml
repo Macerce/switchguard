@@ -729,7 +729,7 @@
     <string name="settings_sound">Sound</string>
     <string name="settings_when_alarm">While an alarm is ringing</string>
     <string name="settings_monitoring_intro">How SwitchGuard keeps watch over your devices in the background.</string>
-    <string name="settings_quiet_critical">Devices marked as critical still ring during quiet hours.</string>
+    <string name="settings_quiet_critical">Devices in alert categories set to ring during quiet hours (Critical by default) still ring.</string>
     <string name="settings_permissions_intro">Without these, Android may keep the alarm from reaching you.</string>
     <string name="settings_other_devices">Other devices</string>
     <string name="settings_help">Help</string>
@@ -1250,4 +1250,27 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="update_failed">The update could not be downloaded. Check your internet connection and try again.</string>
     <string name="update_install">Update</string>
     <string name="update_later">Later</string>
+    <!-- Alert categories -->
+    <string name="alert_category">Alert category</string>
+    <string name="alert_category_desc">When automatic: Critical if any event rings an alarm, Important if events only notify</string>
+    <string name="category_auto">Auto</string>
+    <string name="category_auto_now">Auto · currently %s</string>
+    <string name="category_critical">Critical</string>
+    <string name="category_important">Important</string>
+    <string name="category_normal">Normal</string>
+    <string name="category_all">All</string>
+    <string name="category_any_critical">Any critical device</string>
+    <string name="category_any_important">Any important device</string>
+    <string name="category_any_normal">Any normal device</string>
+    <string name="categories_title">Alert categories</string>
+    <string name="categories_summary">%1$d critical · %2$d important · %3$d normal</string>
+    <string name="categories_intro">Every device has an alert category. Unless you pick one it is set automatically: a monitored device with any event set to Alarm is Critical, one that only sends notifications is Important, the rest are Normal. Conditional alerts and automations can use a category as their trigger (e.g. “ring the alarm when any critical device goes offline”).</string>
+    <string name="category_quiet">Ring during quiet hours too</string>
+    <string name="category_quiet_on">Alarms ring during quiet hours too</string>
+    <string name="category_quiet_off">During quiet hours alarms become notifications</string>
+    <string name="category_empty">No devices in this category</string>
+    <plurals name="category_devices_n">
+        <item quantity="one">%d device</item>
+        <item quantity="other">%d devices</item>
+    </plurals>
 </resources>

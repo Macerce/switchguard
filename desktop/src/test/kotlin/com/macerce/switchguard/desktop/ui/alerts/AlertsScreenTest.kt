@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.alerts
 
+import com.macerce.switchguard.core.DeviceCategory
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -120,13 +121,14 @@ class AlertsScreenTest {
         compose.onNodeWithText("Alert rules").assertExists()
         compose.onNodeWithTag("rule-TURNED_ON-IGNORE").performScrollTo().performClick()
         compose.waitUntil(5_000) { graph.store.rulesFor(Demo.PUMPS).actionFor(EventType.TURNED_ON) == AlertAction.IGNORE }
-        compose.onNodeWithTag("critical-switch").performScrollTo().performClick()
-        compose.waitUntil(5_000) { graph.store.rulesFor(Demo.PUMPS).critical }
+        compose.onNodeWithTag("category-IMPORTANT").performScrollTo().performClick()
+        compose.waitUntil(5_000) { graph.store.rulesFor(Demo.PUMPS).category == DeviceCategory.IMPORTANT }
 
         compose.onNodeWithContentDescription("Back").performClick()
         compose.waitForIdle()
         compose.onNodeWithText("Alarm: Turns off, Goes offline", useUnmergedTree = true).performScrollTo()
-        compose.onNodeWithText("Critical device", useUnmergedTree = true).assertExists()
+        compose.onNodeWithTag("category-badge-${Demo.PUMPS}", useUnmergedTree = true).assertExists()
+        compose.onNodeWithText("Important", useUnmergedTree = true).assertExists()
     }
 
     @Test

@@ -475,7 +475,7 @@ class MonitorEngine(
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
-        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         weatherTick(wall)
         // Uykuda süresi dolan bekletmeler ve süreli otomasyonlar yukarıda, uyumadan önceki son bilinen durumla
         // değerlendirildi (telefondaki sıra); taze durum ancak şimdi okunur. Önce okunsaydı uyku boyunca çevrimdışı
@@ -896,7 +896,7 @@ class MonitorEngine(
         runCatching { metrics.record(previous, current, wall) }.onFailure { Log.w(TAG, "metrics write failed; continuing", it) }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
-        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.engineAutomations(current), wall, env()))
         persistRuntime()
         heartbeat(wall)
     }
@@ -910,7 +910,7 @@ class MonitorEngine(
     private fun restoreRuntime() {
         grace = OfflineGrace.fromJson(runtime.grace)
         outage = OutageWatch.fromJson(runtime.outage)
-        automations.restore(runtime.automationState, store.automations)
+        automations.restore(runtime.automationState, store.engineAutomations())
         reminders = AlarmReminders.fromJson(runtime.reminders)
         if (store.monitoringEnabled) reportGap(clock.wall())
     }
@@ -1049,7 +1049,7 @@ class MonitorEngine(
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
         // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.automations, env(), clock.wall()) ?: return
+        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env(), clock.wall()) ?: return
         scheduler.postDelayed((due - clock.wall()).coerceAtLeast(0) + 50) { tick() }
     }
 
@@ -1099,7 +1099,7 @@ class MonitorEngine(
                 }
                 val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
+                    else RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
                 val sound = rules.soundUri
                 // Masaüstü: önce uyarı, sonra geçmiş (bkz. [record]).
                 when (effective) {
@@ -1205,7 +1205,7 @@ class MonitorEngine(
 
     private fun deliver(change: Change, action: AlertAction) {
         val rules = store.rulesFor(change.deviceId)
-        val effective = RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
+        val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(change.deviceId))
         val text = change.describe(labels)
         val sound = rules.soundUri
         // Masaüstü: önce uyarı, sonra geçmiş (bkz. [record]).
@@ -1239,7 +1239,7 @@ class MonitorEngine(
             val args = EventArgs.Reminder.of(r)
             val text = args.render(r.change.name, eventStrings)
             val rules = store.rulesFor(r.change.deviceId)
-            val effective = RuleEngine.effective(AlertAction.ALARM, quiet, rules.critical)
+            val effective = RuleEngine.effective(AlertAction.ALARM, quiet, store.bypassesQuiet(r.change.deviceId))
             if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri) else host.notify(text, rules.soundUri)
             record(r.change.deviceId, r.change.name, EventKind.REMINDER, text, effective.name, args)
         }
@@ -1454,7 +1454,7 @@ class MonitorEngine(
     private fun onOutage(held: List<OutageWatch.Held>, devices: Int) {
         val wall = clock.wall()
         held.forEach { deliverQuietly(it.change) }
-        val critical = held.any { store.rulesFor(it.change.deviceId).critical }
+        val critical = held.any { store.bypassesQuiet(it.change.deviceId) }
         val effective = RuleEngine.effective(OutageWatch.strongest(held), quiet = quietNow(), critical = critical)
         val app = strings()["app_name"]
         val args = EventArgs.Outage(devices)
@@ -1865,7 +1865,7 @@ class MonitorEngine(
                 weatherBusy = false
                 t.onSuccess {
                     runtime.outdoorTemp = it
-                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.automations, clock.wall(), env()))
+                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.engineAutomations(), clock.wall(), env()))
                 }.onFailure {
                     Log.w(TAG, "weather failed: ${it.javaClass.simpleName}")
                     weatherAt = clock.wall() + WEATHER_RETRY_MS

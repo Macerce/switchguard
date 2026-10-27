@@ -89,6 +89,7 @@ import androidx.compose.material.icons.rounded.WbTwilight
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material3.Switch
 import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.TriggerKind
@@ -135,6 +136,8 @@ internal fun AutomationEditor(
     var form by remember { mutableStateOf(AutomationForm.from(initial, devices, mode)) }
     var confirmDelete by remember { mutableStateOf(false) }
     val f = form.normalized(devices).inMode(mode)
+    // Kategoriler yalnız tetikleyicide seçilir; koşul ve hedef gerçek cihaz (ya da grup) ister.
+    val targets = remember(devices) { devices.filterNot { DeviceCategory.isCategory(it.id) } }
     val src = devices.firstOrNull { it.id == f.triggerDevice }
     val dst = devices.firstOrNull { it.id == f.actionDevice }
 
@@ -160,7 +163,7 @@ internal fun AutomationEditor(
                     }
                 },
             )
-            if (devices.isEmpty()) {
+            if (targets.isEmpty()) {
                 Text(strings["no_devices"], Modifier.padding(24.dp))
                 return@Column
             }
@@ -270,7 +273,7 @@ internal fun AutomationEditor(
                     if (f.condOn) {
                         val condSrc = devices.firstOrNull { it.id == f.condDevice }
                         FieldLabel(strings["automation_device"])
-                        DeviceChooser(devices, f.condDevice, "cond-device") { form = f.copy(condDevice = it.id, condChannel = 0) }
+                        DeviceChooser(targets, f.condDevice, "cond-device") { form = f.copy(condDevice = it.id, condChannel = 0) }
                         if (f.condKind.usesChannel && condSrc?.isMultiChannel == true) {
                             FieldLabel(strings["automation_channel"])
                             ChannelChooser(condSrc, f.condChannel, "cond-channel") { form = f.copy(condChannel = it) }
@@ -303,7 +306,7 @@ internal fun AutomationEditor(
                     }
                     if (f.actionKind.usesDevice) {
                         FieldLabel(strings["automation_device"])
-                        DeviceChooser(devices, f.actionDevice, "action-device") { form = f.copy(actionDevice = it.id, actionChannel = 0) }
+                        DeviceChooser(targets, f.actionDevice, "action-device") { form = f.copy(actionDevice = it.id, actionChannel = 0) }
                         if (dst?.isMultiChannel == true) {
                             FieldLabel(strings["automation_channel"])
                             ChannelChooser(dst, f.actionChannel, "action-channel") { form = f.copy(actionChannel = it) }

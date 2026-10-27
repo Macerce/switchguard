@@ -64,6 +64,7 @@ import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.ui.alerts.automationDevices
 import com.macerce.switchguard.desktop.ui.Hue
 import com.macerce.switchguard.desktop.ui.HueIcon
 import com.macerce.switchguard.desktop.ui.PageHeader
@@ -86,8 +87,8 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
     val store = graph.store
     val version by store.version.collectAsState()
     val automations = remember(version) { store.automations.inMode(AutomationMode.AUTOMATION) }
-    // Gruplar otomasyonda cihaz gibi seçilir.
-    val devices = remember(version) { store.snapshotsWithGroups }
+    // Gruplar ve uyarı kategorileri otomasyonda cihaz gibi seçilir.
+    val devices = remember(version, strings) { automationDevices(store.snapshotsWithGroups, strings) }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by remember { mutableStateOf<String?>(null) }
     var editingScene by remember { mutableStateOf<String?>(null) }
@@ -180,7 +181,7 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                         }) { editingScene = it }
                         Text(strings["groups_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
-                        GroupsStrip(groups, devices, strings) { editingGroup = it }
+                        GroupsStrip(groups, store.snapshotsWithGroups, strings) { editingGroup = it }
                         Text(strings["automations_rules_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }

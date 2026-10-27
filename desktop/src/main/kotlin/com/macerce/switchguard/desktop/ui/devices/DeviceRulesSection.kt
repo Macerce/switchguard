@@ -10,11 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.CloudQueue
 import androidx.compose.material.icons.rounded.MusicNote
-import androidx.compose.material.icons.rounded.NotificationImportant
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
@@ -54,6 +55,7 @@ import com.macerce.switchguard.desktop.ui.LocalStrings
 import com.macerce.switchguard.desktop.ui.RowDivider
 import com.macerce.switchguard.desktop.ui.SectionCard
 import com.macerce.switchguard.desktop.ui.SectionTitle
+import com.macerce.switchguard.desktop.ui.alerts.titleKey
 import com.macerce.switchguard.desktop.ui.history.titleKey
 import com.macerce.switchguard.desktop.ui.settings.SoundPickerDialog
 import com.macerce.switchguard.desktop.ui.str
@@ -82,7 +84,7 @@ fun rememberDeviceRules(graph: AppGraph, deviceId: String): DeviceRulesState {
 
 /**
  * Cihazın uyarı kuralları (telefondaki cihaz sayfasının kurallar bölümü): izleme anahtarı; izleniyorsa olay başına
- * Alarm / Bildirim / Yok, açıklama, cihaz sesi ve kritik cihaz. Cihaz sayfası ve Uyarılar sekmesindeki "Uyarı
+ * Alarm / Bildirim / Yok, açıklama, cihaz sesi ve uyarı kategorisi. Cihaz sayfası ve Uyarılar sekmesindeki "Uyarı
  * kuralları" sayfası aynı bölümü gösterir. Ses seçim penceresi de burada açılır.
  */
 @Composable
@@ -137,17 +139,7 @@ fun DeviceRulesSection(graph: AppGraph, state: DeviceRulesState) {
                 }
             }
             RowDivider()
-            InfoRow(
-                Icons.Rounded.NotificationImportant,
-                str("device_critical"),
-                str("device_critical_desc"),
-            ) {
-                Switch(
-                    checked = rules.critical,
-                    onCheckedChange = { on -> change { it.copy(critical = on) } },
-                    modifier = Modifier.testTag("critical-switch"),
-                )
-            }
+            CategoryRow(rules) { c -> change { it.copy(category = c) } }
         }
     }
 
@@ -160,6 +152,45 @@ fun DeviceRulesSection(graph: AppGraph, state: DeviceRulesState) {
             onPick = { id -> change { it.copy(soundUri = id) } },
             onDismiss = { pickSound = false },
         )
+    }
+}
+
+/**
+ * Uyarı kategorisi: Otomatik (kurallardan; şu anki sonucu yazar) ya da elle Kritik / Önemli / Normal.
+ * Kategori sessiz saatleri ve kategori tetikleyicili otomasyonları belirler.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CategoryRow(rules: DeviceRules, onChange: (DeviceCategory?) -> Unit) {
+    val auto = DeviceCategory.auto(rules)
+    Column(Modifier.padding(16.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.AutoMirrored.Rounded.Label, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.width(12.dp))
+            Column {
+                Text(str("alert_category"), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                Text(
+                    if (rules.category == null) str("category_auto_now", str(auto.titleKey())) else str("alert_category_desc"),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        Spacer(Modifier.height(10.dp))
+        val options = listOf<DeviceCategory?>(null) + DeviceCategory.entries
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            options.forEachIndexed { i, c ->
+                val selected = rules.category == c
+                SegmentedButton(
+                    selected = selected,
+                    onClick = { onChange(c) },
+                    shape = SegmentedButtonDefaults.itemShape(i, options.size, baseShape = RoundedCornerShape(4.dp)),
+                    modifier = Modifier.testTag("category-${c?.name ?: "AUTO"}"),
+                ) {
+                    Text(str(c?.titleKey() ?: "category_auto"), fontWeight = if (selected) FontWeight.SemiBold else null)
+                }
+            }
+        }
     }
 }
 

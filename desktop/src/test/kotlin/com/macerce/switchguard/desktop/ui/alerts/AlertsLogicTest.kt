@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.alerts
 
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AutoAction
@@ -92,7 +93,7 @@ class AlertsLogicTest {
     @Test
     fun notMonitoredAndNothingToSayAreSingleLines() {
         assertEquals(DeviceAlertSummary.NotMonitored, deviceAlertSummary(DeviceRules(monitored = false)))
-        assertEquals(listOf(DeviceAlertLine("İzlenmiyor", null)), deviceAlertLines(DeviceRules(monitored = false, critical = true), tr))
+        assertEquals(listOf(DeviceAlertLine("İzlenmiyor", null)), deviceAlertLines(DeviceRules(monitored = false, category = DeviceCategory.CRITICAL), tr))
 
         val silent = EventType.entries.fold(DeviceRules()) { r, t -> r.with(t, AlertAction.IGNORE) }
         assertEquals(DeviceAlertSummary.Monitored(emptyList(), emptyList()), deviceAlertSummary(silent))

@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.alerts
 
+import com.macerce.switchguard.core.DeviceCategory
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.macerce.switchguard.core.ActionKind
@@ -43,7 +44,7 @@ class AlertsSnapshotTest {
             language = "tr"
             enableDemo(tr.demoNames())
             // Satırlar farklı görünsün: pompa paneli kritik ve kendi sesiyle, ışık yalnızca bildirim, dondurucu izlenmiyor.
-            setRules(Demo.PUMPS, rulesFor(Demo.PUMPS).copy(critical = true, soundUri = "builtin:alarm_beep"))
+            setRules(Demo.PUMPS, rulesFor(Demo.PUMPS).copy(category = DeviceCategory.CRITICAL, soundUri = "builtin:alarm_beep"))
             setRules(
                 Demo.LIGHT,
                 rulesFor(Demo.LIGHT).with(EventType.TURNED_ON, AlertAction.NOTIFY).with(EventType.TURNED_OFF, AlertAction.IGNORE)

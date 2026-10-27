@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.AcUnit
@@ -262,6 +263,7 @@ fun DeviceKind.icon(): ImageVector = when (this) {
     DeviceKind.RELAYS -> Icons.Rounded.ElectricalServices
     DeviceKind.SWITCH -> Icons.Rounded.PowerSettingsNew
     DeviceKind.GROUP -> Icons.Rounded.Workspaces
+    DeviceKind.CATEGORY -> Icons.AutoMirrored.Rounded.Label
 }
 
 /**

@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui
 
+import com.macerce.switchguard.core.DeviceCategory
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -86,10 +87,10 @@ class DeviceDetailScreenTest {
     }
 
     @Test
-    fun criticalSwitchIsSaved() {
+    fun categoryIsSaved() {
         show(Demo.LIGHT)
-        compose.onNodeWithTag("critical-switch").performScrollTo().performClick()
-        compose.waitUntil(5_000) { rules(Demo.LIGHT).critical }
+        compose.onNodeWithTag("category-IMPORTANT").performScrollTo().performClick()
+        compose.waitUntil(5_000) { rules(Demo.LIGHT).category == DeviceCategory.IMPORTANT }
     }
 
     @Test

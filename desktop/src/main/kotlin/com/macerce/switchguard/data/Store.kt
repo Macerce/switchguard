@@ -3,6 +3,7 @@ package com.macerce.switchguard.data
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.License
@@ -571,6 +572,24 @@ class Store internal constructor(
         set(v) = edit { put("rules", DeviceRules.mapToJson(v)) }
 
     fun rulesFor(deviceId: String) = rules[deviceId] ?: DeviceRules()
+
+    /** Cihazın uyarı kategorisi (seçilen ya da kurallardan çıkan). */
+    fun categoryOf(deviceId: String): DeviceCategory = rulesFor(deviceId).effectiveCategory
+
+    /** Sessiz saatlerde de alarm çalan uyarı kategorileri (Uyarılar → Kategoriler); seçilmemişse eski davranışa uyan varsayılan. */
+    var quietBypass: Set<DeviceCategory>
+        get() = strOrNull("quietBypass")?.let { DeviceCategory.setFromString(it) }
+            ?: DeviceCategory.quietDefault(quietHours.enabled, rules.values.any { it.category == DeviceCategory.CRITICAL })
+        set(v) = edit { put("quietBypass", DeviceCategory.setToString(v)) }
+
+    /** Cihazın alarmı sessiz saatlerde de çalar mı (kategorisine göre). */
+    fun bypassesQuiet(deviceId: String): Boolean = categoryOf(deviceId) in quietBypass
+
+    /** Motorun değerlendirdiği otomasyonlar: kategori tetikleyicileri cihazlara açılmış (bkz. [DeviceCategory.expand]). */
+    fun engineAutomations(devices: List<DeviceSnapshot> = snapshots): List<Automation> {
+        val all = rules
+        return DeviceCategory.expand(automations, devices) { id -> (all[id] ?: DeviceRules()).effectiveCategory }
+    }
     fun setRules(deviceId: String, r: DeviceRules): Unit = synchronized(lock) { rules = rules + (deviceId to r) }
     /**
      * Gerçekten izlenen cihazlar: kuralı açık olanlar, lisans yoksa ücretsiz sürümün tek cihaz sınırıyla

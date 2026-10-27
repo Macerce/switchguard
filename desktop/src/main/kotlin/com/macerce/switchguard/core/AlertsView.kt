@@ -33,7 +33,7 @@ data class DeviceAlertSummary(
     val monitored: Boolean,
     val alarm: List<EventType>,
     val notify: List<EventType>,
-    val critical: Boolean,
+    val category: DeviceCategory,
     /** Cihaza özel ses seçilmiş. */
     val customSound: Boolean,
 ) {
@@ -64,7 +64,7 @@ data class DeviceAlertSummary(
             monitored = monitored,
             alarm = EventType.entries.filter { rules.actionFor(it) == AlertAction.ALARM },
             notify = EventType.entries.filter { rules.actionFor(it) == AlertAction.NOTIFY },
-            critical = rules.critical,
+            category = rules.effectiveCategory,
             customSound = rules.soundUri != null,
         )
     }

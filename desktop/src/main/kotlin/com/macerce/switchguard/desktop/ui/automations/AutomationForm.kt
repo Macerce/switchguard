@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.automations
 
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.ActiveWindow
 import com.macerce.switchguard.core.Condition
@@ -66,12 +67,12 @@ data class AutomationForm(
         val graceValue = grace.toIntOrNull()
         return name.isNotBlank() && (!triggerKind.usesDevice || (src != null && triggerKind in kindsFor(src))) &&
             (!triggerKind.usesTemp || tempValue() != null) &&
-            (!condOn || devices.any { it.id == condDevice }) &&
+            (!condOn || (devices.any { it.id == condDevice } && !DeviceCategory.isCategory(condDevice))) &&
             (actionKind != ActionKind.RUN_SCENE || scenes.any { it.id == sceneId }) &&
             (!triggerKind.usesChannelPower || (lowValue != null && lowValue >= 0 && graceValue != null && graceValue >= 0)) &&
             (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
             (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
-            (!actionKind.usesDevice || devices.any { it.id == actionDevice }) &&
+            (!actionKind.usesDevice || (devices.any { it.id == actionDevice } && !DeviceCategory.isCategory(actionDevice))) &&
             delayValue != null && delayValue >= 0
     }
 
@@ -160,6 +161,8 @@ data class AutomationForm(
         /** Güç olayları yalnızca enerji ölçen, kanal gücü olayı kanal başına ölçen cihazlarda sunulur. */
         fun kindsFor(device: DeviceSnapshot?): List<TriggerKind> = TriggerKind.entries.filter {
             when {
+                // Kategori: yalnız anahtar ve bağlantı olayları (gün doğumu/sıcaklık cihazsız, yine sunulur).
+                device != null && DeviceCategory.isCategory(device.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
                 it.usesChannelPower -> device?.hasChannelPower == true
                 it.usesWatts -> device?.hasEnergy == true
                 else -> true

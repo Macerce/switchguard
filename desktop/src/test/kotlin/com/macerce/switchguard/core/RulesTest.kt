@@ -52,9 +52,10 @@ class RulesTest {
     }
 
     @Test
-    fun `kritik varsayilan olarak kapali`() {
-        assertFalse(DeviceRules().critical)
-        assertFalse(DeviceRules.mapFromJson("""{"a":{"monitored":true,"actions":{}}}""").getValue("a").critical)
+    fun `kategori varsayilan olarak otomatik, eski kritik isareti kritik kategori olur`() {
+        assertEquals(null, DeviceRules().category)
+        assertEquals(null, DeviceRules.mapFromJson("""{"a":{"monitored":true,"actions":{}}}""").getValue("a").category)
+        assertEquals(DeviceCategory.CRITICAL, DeviceRules.mapFromJson("""{"a":{"monitored":true,"critical":true}}""").getValue("a").category)
     }
 
     @Test
@@ -63,7 +64,8 @@ class RulesTest {
             "a" to DeviceRules(monitored = false, actions = mapOf(EventType.TURNED_ON to AlertAction.IGNORE)),
             "b" to DeviceRules(),
             "c" to DeviceRules(soundUri = "content://media/internal/audio/media/42"),
-            "d" to DeviceRules(critical = true),
+            "d" to DeviceRules(category = DeviceCategory.CRITICAL),
+            "e" to DeviceRules(category = DeviceCategory.NORMAL),
         )
         assertEquals(rules, DeviceRules.mapFromJson(DeviceRules.mapToJson(rules)))
     }
