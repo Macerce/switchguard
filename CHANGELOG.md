@@ -6,6 +6,17 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.17.0 — 2026-10-27
+**New**
+- Alert categories: every device is Critical, Important or Normal. Pick one on the device page or leave it on Auto — a device with any event set to Alarm becomes Critical, one that only sends notifications Important. The Alerts tab filters devices by category and shows a badge; Alerts → Alert settings → Alert categories chooses per category whether alarms still ring during quiet hours (devices marked critical before keep ringing).
+- Automations and conditional alerts can trigger on a category: "when any critical device goes offline, ring the alarm".
+- Groups: one button switches several devices or channels on or off. Groups appear among the devices, can be used in automations and work on the widget, the watch and Telegram (/on, /off, /status).
+- Reorder device cards by touching and holding a card and dragging it; on TV, hold OK and move it with the arrow keys.
+- Copies installed from GitHub tell you when a newer version is out; Google Play copies use Play's in-app update.
+
+**Fixes**
+- SONOFF POWR316 (and devices like it) can be switched on and off again.
+
 ## 2.16.0 — 2026-10-23
 **New**
 - App shortcuts: touch and hold the SwitchGuard icon to switch At home / Away or run one of your first three scenes without opening the app. The result shows as a short message and is recorded in the history as "App shortcut".

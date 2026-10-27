@@ -6,6 +6,17 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.17.0 — 27 Ekim 2026
+**Yenilikler**
+- Uyarı kategorileri: her cihaz Kritik, Önemli ya da Normal'dir. Cihaz sayfasından seçebilir ya da Otomatik bırakabilirsiniz — bir olayında Alarm seçili cihaz Kritik, yalnız bildirim gönderen Önemli olur. Uyarılar sekmesi cihazları kategoriye göre süzer ve rozet gösterir; Uyarılar → Uyarı ayarları → Uyarı kategorileri'nden her kategori için alarmın sessiz saatlerde de çalıp çalmayacağı seçilir (önceden kritik işaretlenen cihazlar çalmaya devam eder).
+- Otomasyonlar ve koşullu uyarılar bir kategoriyle tetiklenebilir: "kritik cihazlardan biri çevrimdışı olunca alarm çal".
+- Gruplar: tek düğmeyle birden çok cihazı ya da kanalı açıp kapatın. Gruplar cihazların arasında görünür, otomasyonlarda kullanılabilir; widget, saat ve Telegram'da da (/on, /off, /status) çalışır.
+- Cihaz kartlarını basılı tutup sürükleyerek sıralayın; TV'de OK'a basılı tutup yön tuşlarıyla taşıyın.
+- GitHub'dan kurulan kopyalar yeni sürüm çıkınca haber verir; Google Play kopyaları Play'in uygulama içi güncellemesini kullanır.
+
+**Düzeltmeler**
+- SONOFF POWR316 (ve benzeri cihazlar) yeniden açılıp kapatılabiliyor.
+
 ## 2.16.0 — 23 Ekim 2026
 **Yenilikler**
 - Uygulama kısayolları: SwitchGuard simgesine basılı tutarak uygulamayı açmadan Evdeyim / Dışarıdayım arasında geçebilir ya da ilk üç sahnenizden birini çalıştırabilirsiniz. Sonuç kısa bir mesajla gösterilir ve geçmişe "Uygulama kısayolu" olarak yazılır.
