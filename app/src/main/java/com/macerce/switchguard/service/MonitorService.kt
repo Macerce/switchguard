@@ -352,7 +352,7 @@ class MonitorService : Service() {
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
-        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
@@ -774,7 +774,7 @@ class MonitorService : Service() {
         }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
-        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.automations, wall, env()))
+        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.engineAutomations(current), wall, env()))
         persistRuntime()
         heartbeat(wall)
     }
@@ -783,7 +783,7 @@ class MonitorService : Service() {
     private fun restoreRuntime() {
         grace = OfflineGrace.fromJson(runtime.grace)
         outage = OutageWatch.fromJson(runtime.outage)
-        automations.restore(runtime.automationState, store.automations)
+        automations.restore(runtime.automationState, store.engineAutomations())
         reminders = AlarmReminders.fromJson(runtime.reminders)
         // Önceki süreçten kalan "izleyemiyor" uyarısı: yeni süreç o kesintiyi bilmez, düzelince kaldıramazdı.
         notifier.clearBlind()
@@ -901,7 +901,7 @@ class MonitorService : Service() {
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
         // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.automations, env()) ?: return
+        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()) ?: return
         handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
@@ -952,7 +952,7 @@ class MonitorService : Service() {
                 }
                 val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
+                    else RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = rules.soundUri
                 when (effective) {
@@ -1050,7 +1050,7 @@ class MonitorService : Service() {
 
     private fun deliver(change: Change, action: AlertAction) {
         val rules = store.rulesFor(change.deviceId)
-        val effective = RuleEngine.effective(action, quiet = quietNow(), critical = rules.critical)
+        val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(change.deviceId))
         val text = change.describe(labels)
         log.add(change.deviceId, change.name, change.eventType.name, text, effective.name, change.toArgs())
         val sound = rules.soundUri
@@ -1083,7 +1083,7 @@ class MonitorService : Service() {
             val args = EventArgs.Reminder.of(r)
             val text = args.render(r.change.name, strings)
             val rules = store.rulesFor(r.change.deviceId)
-            val effective = RuleEngine.effective(AlertAction.ALARM, quiet, rules.critical)
+            val effective = RuleEngine.effective(AlertAction.ALARM, quiet, store.bypassesQuiet(r.change.deviceId))
             log.add(r.change.deviceId, r.change.name, EventKind.REMINDER, text, effective.name, args)
             if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri) else notifier.notifyEvent(text, rules.soundUri)
         }
@@ -1247,7 +1247,7 @@ class MonitorService : Service() {
     private fun onOutage(held: List<OutageWatch.Held>, devices: Int) {
         val wall = System.currentTimeMillis()
         held.forEach { deliverQuietly(it.change) }
-        val critical = held.any { store.rulesFor(it.change.deviceId).critical }
+        val critical = held.any { store.bypassesQuiet(it.change.deviceId) }
         val effective = RuleEngine.effective(OutageWatch.strongest(held), quiet = quietNow(), critical = critical)
         val app = getString(R.string.app_name)
         val args = EventArgs.Outage(devices)
@@ -1657,7 +1657,7 @@ class MonitorService : Service() {
                 weatherBusy = false
                 t.onSuccess {
                     runtime.outdoorTemp = it
-                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.automations, System.currentTimeMillis(), env()))
+                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.engineAutomations(), System.currentTimeMillis(), env()))
                 }.onFailure {
                     Log.w(TAG, "weather failed: ${it.javaClass.simpleName}")
                     weatherAt = System.currentTimeMillis() + WEATHER_RETRY_MS

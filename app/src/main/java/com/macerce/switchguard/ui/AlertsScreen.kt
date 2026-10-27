@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.rounded.Send
@@ -76,6 +77,7 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AutomationTab
 import com.macerce.switchguard.core.DeviceAlertSummary
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -90,7 +92,7 @@ import kotlinx.coroutines.delay
 
 /** Uyarılar sekmesinin alt sayfası ([id]: cihaz ya da koşullu uyarı kimliği); null = sekmenin kendisi. */
 private data class AlertsRoute(val kind: Kind, val id: String = "") : java.io.Serializable {
-    enum class Kind { DEVICE_RULES, EDITOR, ALARM, QUIET, SMART }
+    enum class Kind { DEVICE_RULES, EDITOR, ALARM, QUIET, SMART, CATEGORIES }
 }
 
 /**
@@ -143,7 +145,8 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
                 AutomationEditor(
                     tab = AutomationTab.ALERTS,
                     initial = initial,
-                    devices = remember(version) { store.snapshotsWithGroups },
+                    // Gruplar ve uyarı kategorileri de cihaz gibi seçilir.
+                    devices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) },
                     modifier = Modifier,
                     onSave = { store.saveAutomation(it); back() },
                     onDelete = { store.deleteAutomation(target.id); back() },
@@ -153,6 +156,7 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
             AlertsRoute.Kind.ALARM -> SettingsSubPage(SettingsPage.ALARM, onBack = back, showDialog = showDialog)
             AlertsRoute.Kind.QUIET -> SettingsSubPage(SettingsPage.QUIET, onBack = back, showDialog = showDialog)
             AlertsRoute.Kind.SMART -> SettingsSubPage(SettingsPage.SMART, onBack = back, showDialog = showDialog)
+            AlertsRoute.Kind.CATEGORIES -> CategoriesPage(onBack = back)
         }
     }
 
@@ -183,7 +187,11 @@ private fun AlertsHome(
     val monitoredIds = remember(version) { store.monitoredIds() }
     val rules = remember(version) { store.rules }
     val alerts = remember(version) { AutomationTab.ALERTS.of(store.automations) }
-    val allDevices = remember(version) { store.snapshotsWithGroups }
+    val allDevices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) }
+    val categoryOf = remember(version) { { id: String -> (rules[id] ?: DeviceRules()).effectiveCategory } }
+    val counts = remember(version) { categoryCounts(store.snapshots, categoryOf) }
+    var filter by rememberSaveable { mutableStateOf<DeviceCategory?>(null) }
+    val shown = devices.filter { filter == null || categoryOf(it.id) == filter }
 
     val requesters = remember { mutableMapOf<String, FocusRequester>() }
     fun focus(key: String) = Modifier.focusRequester(requesters.getOrPut(key) { FocusRequester() })
@@ -216,16 +224,17 @@ private fun AlertsHome(
             // ------------------------------------------------ Cihaz uyarıları
             SectionTitle(stringResource(R.string.section_device_alerts), Modifier.padding(top = 8.dp))
             SectionDescription(stringResource(R.string.section_device_alerts_desc))
+            if (devices.isNotEmpty()) CategoryFilter(counts, filter) { filter = it }
             SectionCard {
-                if (devices.isEmpty()) {
+                if (devices.isEmpty() || shown.isEmpty()) {
                     Text(
-                        stringResource(R.string.no_devices),
+                        stringResource(if (devices.isEmpty()) R.string.no_devices else R.string.category_empty),
                         Modifier.padding(20.dp),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
-                devices.forEachIndexed { i, d ->
+                shown.forEachIndexed { i, d ->
                     if (i > 0) RowDivider(68.dp)
                     val summary = DeviceAlertSummary.of(rules[d.id] ?: DeviceRules(), d.id in monitoredIds)
                     val key = "dev:" + d.id
@@ -274,6 +283,15 @@ private fun AlertsHome(
                     Icons.Rounded.NotificationsActive, Hue.RED, stringResource(R.string.section_alarm),
                     onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.ALARM), "alarm") }, modifier = focus("alarm"),
                     summary = alarmSummary(s),
+                )
+                RowDivider(68.dp)
+                MenuRow(
+                    Icons.AutoMirrored.Rounded.Label, Hue.ORANGE, stringResource(R.string.categories_title),
+                    onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.CATEGORIES), "categories") }, modifier = focus("categories"),
+                    summary = stringResource(
+                        R.string.categories_summary,
+                        counts[DeviceCategory.CRITICAL] ?: 0, counts[DeviceCategory.IMPORTANT] ?: 0, counts[DeviceCategory.NORMAL] ?: 0,
+                    ),
                 )
                 RowDivider(68.dp)
                 MenuRow(
@@ -467,15 +485,9 @@ private fun DeviceAlertRow(device: DeviceSnapshot, summary: DeviceAlertSummary, 
                     Spacer(Modifier.width(6.dp))
                     Icon(Icons.Rounded.MusicNote, stringResource(R.string.device_sound), Modifier.size(16.dp), tint = scheme.onSurfaceVariant)
                 }
-                if (summary.monitored && summary.critical) {
+                if (summary.category.hue() != null) {
                     Spacer(Modifier.width(8.dp))
-                    Text(
-                        stringResource(R.string.device_critical),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = scheme.onErrorContainer,
-                        maxLines = 1,
-                        modifier = Modifier.clip(CircleShape).background(scheme.errorContainer).padding(horizontal = 8.dp, vertical = 2.dp),
-                    )
+                    CategoryBadge(summary.category)
                 }
             }
             summary.lines(texts).forEach { line ->
@@ -493,6 +505,22 @@ private fun EventType.shortTitle(): Int = when (this) {
     EventType.TURNED_ON -> R.string.evt_turned_on
     EventType.WENT_OFFLINE -> R.string.evt_went_offline
     EventType.CAME_ONLINE -> R.string.evt_came_online
+}
+
+/** Uyarı kategorileri sayfası: kategori başına sessiz saat seçimi. */
+@Composable
+private fun CategoriesPage(onBack: () -> Unit) {
+    val context = LocalContext.current
+    val store = remember { Store.get(context) }
+    val version by store.version.collectAsStateWithLifecycle()
+    val bypass = remember(version) { store.quietBypass }
+    val counts = remember(version) { categoryCounts(store.snapshots, store::categoryOf) }
+    Column(Modifier.fillMaxSize()) {
+        AppTopBar(stringResource(R.string.categories_title), navigationIcon = { BackButton(onBack) }, small = true)
+        Column(Modifier.focusGroup().verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
+            CategoriesContent(counts, bypass) { store.quietBypass = it }
+        }
+    }
 }
 
 /** Bir cihazın uyarı kuralları sayfası (Uyarılar › Cihaz uyarıları'ndan): cihaz sayfasındaki bölümün aynısı. */

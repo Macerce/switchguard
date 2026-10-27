@@ -116,6 +116,7 @@ import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationTab
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
@@ -133,8 +134,8 @@ fun AutomationsScreen(modifier: Modifier) {
     val store = remember { Store.get(context) }
     val version by store.version.collectAsStateWithLifecycle()
     val automations = remember(version) { AutomationTab.AUTOMATIONS.of(store.automations) }
-    // Gruplar otomasyonda cihaz gibi seçilir.
-    val devices = remember(version) { store.snapshotsWithGroups }
+    // Gruplar ve uyarı kategorileri otomasyonda cihaz gibi seçilir.
+    val devices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
     var editingScene by rememberSaveable { mutableStateOf<String?>(null) }
@@ -208,7 +209,7 @@ fun AutomationsScreen(modifier: Modifier) {
                         ScenesStrip(scenes) { editingScene = it }
                         Text(stringResource(R.string.groups_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
-                        GroupsStrip(groups, devices) { editingGroup = it }
+                        GroupsStrip(groups, store.snapshotsWithGroups) { editingGroup = it }
                         Text(stringResource(R.string.automations_rules_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }
@@ -494,6 +495,8 @@ fun AutomationEditor(
     // Güç tetikleyicileri yalnızca enerji ölçen, kanal gücü tetikleyicisi kanal başına ölçen cihazlarda sunulur.
     val kinds = TriggerKind.entries.filter {
         when {
+            // Kategori: yalnız anahtar ve bağlantı olayları (gün doğumu/sıcaklık cihazsız, yine sunulur).
+            src != null && DeviceCategory.isCategory(src.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
             it.usesChannelPower -> src?.hasChannelPower == true
             it.usesWatts -> src?.hasEnergy == true
             else -> true
@@ -503,12 +506,14 @@ fun AutomationEditor(
 
     val wattsValue = watts.replace(',', '.').toDoubleOrNull()
     val tempValue = temp.replace(',', '.').toDoubleOrNull()
-    val condSrc = devices.firstOrNull { it.id == condDevice }
+    // Kategoriler yalnız tetikleyicide seçilir; koşul ve hedef gerçek cihaz (ya da grup) ister.
+    val targets = remember(devices) { devices.filterNot { DeviceCategory.isCategory(it.id) } }
+    val condSrc = targets.firstOrNull { it.id == condDevice }
     val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
         (!triggerKind.usesTemp || tempValue != null) &&
         (!condOn || condSrc != null) &&
-        (!actionKind.usesDevice || dst != null) &&
+        (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id))) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId })
 
     // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
@@ -562,7 +567,7 @@ fun AutomationEditor(
                 }
             },
         )
-        if (devices.isEmpty()) {
+        if (targets.isEmpty()) {
             Text(stringResource(R.string.no_devices), Modifier.padding(24.dp))
             return
         }
@@ -671,7 +676,7 @@ fun AutomationEditor(
                 ToggleLine(stringResource(R.string.cond_toggle), condOn) { condOn = it }
                 if (condOn) {
                     FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(devices, condDevice) { condDevice = it.id; condChannel = 0 }
+                    DeviceChooser(targets, condDevice) { condDevice = it.id; condChannel = 0 }
                     val needsChannel = condKind == ConditionKind.IS_ON || condKind == ConditionKind.IS_OFF
                     if (needsChannel && condSrc?.isMultiChannel == true) {
                         FieldLabel(stringResource(R.string.automation_channel))
@@ -696,7 +701,7 @@ fun AutomationEditor(
                 }
                 if (actionKind.usesDevice) {
                     FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(devices, actionDevice) { actionDevice = it.id; actionChannel = 0 }
+                    DeviceChooser(targets, actionDevice) { actionDevice = it.id; actionChannel = 0 }
                     if (dst?.isMultiChannel == true) {
                         FieldLabel(stringResource(R.string.automation_channel))
                         ChannelChooser(dst, actionChannel) { actionChannel = it }

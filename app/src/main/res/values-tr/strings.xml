@@ -726,7 +726,7 @@
     <string name="settings_sound">Ses</string>
     <string name="settings_when_alarm">Alarm çalarken</string>
     <string name="settings_monitoring_intro">SwitchGuard\'ın cihazlarınızı arka planda nasıl izlediği.</string>
-    <string name="settings_quiet_critical">Kritik olarak işaretlenen cihazlar sessiz saatlerde de çalar.</string>
+    <string name="settings_quiet_critical">Sessiz saatlerde de çalmasını seçtiğiniz uyarı kategorilerindeki cihazlar (varsayılan: Kritik) sessiz saatlerde de çalar.</string>
     <string name="settings_permissions_intro">Bunlar olmadan Android alarmın size ulaşmasını engelleyebilir.</string>
     <string name="settings_other_devices">Diğer cihazlar</string>
     <string name="settings_help">Yardım</string>
@@ -1238,4 +1238,27 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="update_body">Sizdeki sürüm %1$s. Yeni sürümü GitHub\'dan indirip bunun üzerine kurun; ayarlarınız korunur.</string>
     <string name="update_download">İndir</string>
     <string name="update_later">Sonra</string>
+    <!-- Uyarı kategorileri -->
+    <string name="alert_category">Uyarı kategorisi</string>
+    <string name="alert_category_desc">Otomatik seçimde alarm seçili olay varsa Kritik, yalnız bildirim varsa Önemli olur</string>
+    <string name="category_auto">Otomatik</string>
+    <string name="category_auto_now">Otomatik · şu an %s</string>
+    <string name="category_critical">Kritik</string>
+    <string name="category_important">Önemli</string>
+    <string name="category_normal">Normal</string>
+    <string name="category_all">Tümü</string>
+    <string name="category_any_critical">Kritik cihazlardan biri</string>
+    <string name="category_any_important">Önemli cihazlardan biri</string>
+    <string name="category_any_normal">Normal cihazlardan biri</string>
+    <string name="categories_title">Uyarı kategorileri</string>
+    <string name="categories_summary">%1$d kritik · %2$d önemli · %3$d normal</string>
+    <string name="categories_intro">Her cihazın bir uyarı kategorisi vardır. Siz seçmezseniz kendiliğinden belirlenir: bir olayında Alarm seçili olan izlenen cihaz Kritik, yalnız Bildirim seçili olan Önemli, diğerleri Normal. Koşullu uyarılarda ve otomasyonlarda tetikleyici olarak bir kategori seçebilirsiniz (ör. “Kritik cihazlardan biri çevrimdışı olunca alarm çal”).</string>
+    <string name="category_quiet">Sessiz saatlerde de alarm çal</string>
+    <string name="category_quiet_on">Sessiz saatlerde de alarm çalar</string>
+    <string name="category_quiet_off">Sessiz saatlerde alarm bildirime düşer</string>
+    <string name="category_empty">Bu kategoride cihaz yok</string>
+    <plurals name="category_devices_n">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
 </resources>

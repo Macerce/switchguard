@@ -22,7 +22,7 @@ class BackupReadTest {
 
     @Test
     fun `yedek ozeti ve ayarlari okunur, oturum tokeni alinmaz`() {
-        val rules = DeviceRules.mapToJson(mapOf("a" to DeviceRules(), "b" to DeviceRules(critical = true)))
+        val rules = DeviceRules.mapToJson(mapOf("a" to DeviceRules(), "b" to DeviceRules(category = com.macerce.switchguard.core.DeviceCategory.CRITICAL)))
         val settings = JSONObject()
             .put("appId", typed("app-1")).put("tuyaId", typed("t-1")).put("rules", typed(rules))
             .put("pollIntervalSec", typed(30)).put("at", typed("gizli-token"))

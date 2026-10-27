@@ -68,7 +68,7 @@ class AlertsViewTest {
         assertEquals(listOf(EventType.TURNED_OFF, EventType.TURNED_ON, EventType.WENT_OFFLINE), s.alarm)
         assertEquals(listOf(EventType.CAME_ONLINE), s.notify)
         assertEquals(listOf("Alarm: off, on, offline", "Notification: online"), s.lines(texts))
-        assertFalse(s.critical)
+        assertEquals(DeviceCategory.CRITICAL, s.category)
         assertFalse(s.customSound)
     }
 
@@ -102,8 +102,8 @@ class AlertsViewTest {
 
     @Test
     fun `kritik ve ozel ses ozete tasinir`() {
-        val s = DeviceAlertSummary.of(DeviceRules(critical = true, soundUri = "content://ses"), monitored = true)
-        assertTrue(s.critical)
+        val s = DeviceAlertSummary.of(DeviceRules(category = DeviceCategory.IMPORTANT, soundUri = "content://ses"), monitored = true)
+        assertEquals(DeviceCategory.IMPORTANT, s.category)
         assertTrue(s.customSound)
     }
 }

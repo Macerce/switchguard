@@ -12,9 +12,12 @@ data class DeviceRules(
     val actions: Map<EventType, AlertAction> = emptyMap(),
     /** Bu cihazın alarm/bildirim sesi; null ise genel ayardaki ses. */
     val soundUri: String? = null,
-    /** Kritik cihaz (ör. taşma, donmuş depo): alarmları sessiz saatlerde de alarm olarak çalar. */
-    val critical: Boolean = false,
+    /** Kullanıcının seçtiği kategori; null = otomatik (bkz. [DeviceCategory.auto]). */
+    val category: DeviceCategory? = null,
 ) {
+    /** Etkin kategori: seçilen, yoksa kurallardan çıkan. */
+    val effectiveCategory: DeviceCategory get() = DeviceCategory.of(this)
+
     fun actionFor(type: EventType): AlertAction = actions[type] ?: DEFAULTS.getValue(type)
 
     fun with(type: EventType, action: AlertAction) = copy(actions = actions + (type to action))
@@ -35,7 +38,9 @@ data class DeviceRules(
                 r.actions.forEach { (t, a) -> actions.put(t.name, a.name) }
                 val o = JSONObject().put("monitored", r.monitored).put("actions", actions)
                 r.soundUri?.let { o.put("sound", it) }
-                if (r.critical) o.put("critical", true)
+                r.category?.let { o.put("category", it.name) }
+                // Eski sürümler (yedek/aktarım) kategoriyi bilmez; kritik işaretini okusunlar.
+                if (r.category == DeviceCategory.CRITICAL) o.put("critical", true)
                 root.put(id, o)
             }
             return root.toString()
@@ -54,7 +59,8 @@ data class DeviceRules(
                         if (type != null && action != null) type to action else null
                     }.toMap(),
                     soundUri = o.optString("sound").ifEmpty { null },
-                    critical = o.optBoolean("critical", false),
+                    category = DeviceCategory.entries.firstOrNull { it.name == o.optString("category") }
+                        ?: DeviceCategory.CRITICAL.takeIf { o.optBoolean("critical", false) },
                 )
             }
         }
@@ -73,7 +79,7 @@ data class QuietHours(val enabled: Boolean, val startMinute: Int, val endMinute:
 object RuleEngine {
     /**
      * Sessiz saatlerde alarm, bildirime düşürülür; olay yine de kaydedilir.
-     * [critical] cihazlar sessiz saatleri yok sayar: gece taşma alarmı tam da gece duyulmalı.
+     * [critical]: cihazın kategorisi sessiz saatleri deliyor (bkz. Store.bypassesQuiet); gece taşma alarmı tam da gece duyulmalı.
      */
     fun effective(action: AlertAction, quiet: Boolean, critical: Boolean = false): AlertAction =
         if (quiet && !critical && action == AlertAction.ALARM) AlertAction.NOTIFY else action

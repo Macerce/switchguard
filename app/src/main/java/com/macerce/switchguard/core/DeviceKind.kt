@@ -7,7 +7,9 @@ package com.macerce.switchguard.core
  */
 enum class DeviceKind { LIGHT, WATER, COLD, AIR, HEAT, DOOR, PLUG, RELAYS, SWITCH,
     /** Sanal cihaz: [DeviceGroup]. */
-    GROUP }
+    GROUP,
+    /** Otomasyon tetikleyicisindeki sanal cihaz: [DeviceCategory]. */
+    CATEGORY }
 
 object DeviceKinds {
     /** Ad içindeki kelimenin başına bakılır: Türkçe ekler ("rögarı", "pompası") eşleşmeyi bozmasın. */
@@ -29,6 +31,7 @@ object DeviceKinds {
 
     fun of(device: DeviceSnapshot): DeviceKind {
         if (DeviceGroup.isGroup(device.id)) return DeviceKind.GROUP
+        if (DeviceCategory.isCategory(device.id)) return DeviceKind.CATEGORY
         for (word in words(device.name)) {
             exact[word]?.let { return it }
             for ((kind, list) in prefixes) if (list.any { word.startsWith(it) }) return kind
