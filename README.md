@@ -30,6 +30,8 @@ Android app that watches the smart plugs and switches in your own **eWeLink / SO
 - Alarm that keeps ringing until dismissed, even in silent mode, full screen on the lock screen; a different sound per device
 - Live updates over the eWeLink WebSocket, with HTTP resync and polling fallback
 - Per-device rules (alarm / notification / ignore) for off, on, offline and online
+- Alert categories (Critical / Important / Normal): set by hand or automatically from the rules (a device with an alarm rule becomes Critical); filter the Alerts tab by category, choose per category whether it rings during quiet hours, and trigger automations or conditional alerts on a whole category ("any critical device goes offline")
+- Groups: switch several devices or channels with one button and use the group in automations; drag tiles to reorder
 - Offline grace period, quiet hours, remote on/off, eWeLink device timers, automations
 - Energy history by day, month and year with cost (single or three-rate tariff), standby consumption and PDF/CSV reports
 - Smart alerts: one alert for a power outage (all devices offline together, or the phone unplugged), unusual consumption, monthly budget, weekly report
