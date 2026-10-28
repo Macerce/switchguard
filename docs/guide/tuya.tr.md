@@ -6,11 +6,11 @@ Bu rehber, **Smart Life** ya da **Tuya Smart** uygulamasıyla kontrol ettiğiniz
 
 SwitchGuard cihazlarınıza Tuya'nın resmi bulut API'si üzerinden, **size ait ücretsiz bir Tuya Cloud projesiyle** bağlanır. Bu yüzden önce bir proje açıp Smart Life hesabınızı ona bağlayacaksınız.
 
-## Videolu anlatım (1 dk)
+## Videolu anlatım (3 dk)
 
-Tüm adımları kısa bir videoda izleyin: [YouTube'da aç](https://youtu.be/sCdvMs7CSic)
+Tüm adımları sesli anlatımlı bir videoda izleyin: [YouTube'da aç](https://youtu.be/8vPjJMoMaMU)
 
-[![SwitchGuard – Tuya / Smart Life hesabını bağlama](https://img.youtube.com/vi/sCdvMs7CSic/hqdefault.jpg)](https://youtu.be/sCdvMs7CSic)
+[![SwitchGuard – Tuya / Smart Life hesabını bağlama](https://img.youtube.com/vi/8vPjJMoMaMU/hqdefault.jpg)](https://youtu.be/8vPjJMoMaMU)
 
 > **İhtiyacınız olanlar:** bir bilgisayar (Tuya sitesi telefonda zor kullanılır), Smart Life / Tuya Smart uygulaması yüklü telefon, SwitchGuard.
 

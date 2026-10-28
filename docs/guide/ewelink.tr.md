@@ -6,11 +6,11 @@ Bu rehber, **eWeLink** uygulamasıyla kontrol ettiğiniz SONOFF ve diğer eWeLin
 
 SwitchGuard cihazlarınıza eWeLink'in resmi API'si üzerinden bağlanır. Bunun için eWeLink geliştirici sitesinde **size ait ücretsiz bir uygulama** (App ID + App Secret) oluşturacaksınız. Girişinizi eWeLink'in kendi sayfasında yaparsınız; SwitchGuard şifrenizi hiçbir zaman görmez.
 
-## Videolu anlatım (50 sn)
+## Videolu anlatım (3 dk)
 
-Tüm adımları kısa bir videoda izleyin: [YouTube'da aç](https://youtu.be/jK_KcG2OPao)
+Tüm adımları sesli anlatımlı bir videoda izleyin: [YouTube'da aç](https://youtu.be/G5vQ_7CXTcM)
 
-[![SwitchGuard – eWeLink hesabını bağlama](https://img.youtube.com/vi/jK_KcG2OPao/hqdefault.jpg)](https://youtu.be/jK_KcG2OPao)
+[![SwitchGuard – eWeLink hesabını bağlama](https://img.youtube.com/vi/G5vQ_7CXTcM/hqdefault.jpg)](https://youtu.be/G5vQ_7CXTcM)
 
 > **İhtiyacınız olanlar:** cihazlarınızın bulunduğu eWeLink hesabı, SwitchGuard. Geliştirici sitesi için bilgisayar daha rahattır ama telefonla da yapılabilir.
 
@@ -92,7 +92,7 @@ Yeni açılan eWeLink hesapları **geliştirici olarak kayıtlı gelmez**. Üst 
 
 Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi kopyala** da `https://127.0.0.1`'i panoya kopyalar.
 
-**İleri** → **API bilgilerinizi girin**:
+**İleri** → **API bilgilerinizi girin** (altındaki **Her cihaz için ayrı bir eWeLink hesabı gereklidir** uyarısına dikkat edin, bkz. [Birden fazla cihazda kullanım](#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)):
 
 1. **App ID:** 3. adımda kopyaladığınız APPID'yi yapıştırın.
 2. **App Secret:** App Secret'ı yapıştırın.
@@ -115,7 +115,7 @@ Bu adımdaki **dev.ewelink.cc'yi aç** düğmesi siteyi açar, **Redirect URL'yi
 ## Birden fazla cihazda kullanım (telefon, tablet, Android TV)
 
 - **Her cihaz için ayrı bir eWeLink hesabı gerekir. O hesapta geliştirici özelliği açılmalı (eWeLink onayı) ve o cihaza, o hesabın kendi API anahtarları (App ID ve App Secret) girilmelidir.** Cihaza girilen API anahtarları, o cihazda giriş yapılan eWeLink hesabına ait olmalıdır.
-- eWeLink, aynı hesapla yalnızca **bir** cihazda oturum açılmasına izin verir. Aynı hesapla ikinci bir cihazda giriş yaparsanız ilk cihazın oturumu kapanır (SwitchGuard bunu yüksek sesli bir uyarıyla bildirir).
+- **Aynı API bilgileriyle (App ID / App Secret) yalnızca bir cihazdan giriş yapılabilir.** eWeLink her hesap için tek oturuma izin verir: **en son hangi cihaza API bilgileri girilip giriş yapıldıysa oturum o cihazda aktif kalır**, diğer cihazın oturumu kapanır (SwitchGuard bunu yüksek sesli bir uyarıyla bildirir).
 - Her ek cihaz için: 1) **eWeLink uygulamasından** yeni bir hesap açın (eWeLink'in giriş sayfasında kayıt seçeneği yoktur), 2) cihazlarınızı eWeLink uygulamasında **cihaz → Paylaş** ile o hesapla paylaşın, 3) o hesapla dev.ewelink.cc'de [geliştirici başvurusu](#hesabınız-henüz-geliştirici-değilse-yeni-hesaplar) yapıp onay bekleyin, 4) onaydan sonra o hesapta uygulama oluşturup App ID ve App Secret'ı alın ve o cihaza girin.
 - **Kurulumu aktarma:** Telefonda **Ayarlar → Yedekleme ve aktarım → Başka cihaza aktar**, TV/tablette kurulum sırasında **Başka bir cihazdan aktar** ya da **Ayarlar → Yedekleme ve aktarım → Başka cihazdan al**. İki cihaz aynı Wi-Fi'da olmalı; TV'de görünen 6 haneli kodu telefona girersiniz. Tuya bilgileri, kurallar, otomasyonlar ve ayarlar ev ağınız içinde, kodla şifrelenerek aktarılır. eWeLink API anahtarları ve oturumu aktarılmaz — her cihaz kendi hesabının anahtarlarını kullanır.
 - **TV'de giriş:** en kolayı, eWeLink giriş sayfasının altındaki **Login by QR code** seçeneğidir — QR kodu, o cihaz için açtığınız hesapla giriş yapılmış eWeLink uygulamasıyla okutun. Kumandayla da giriş yapılabilir; telefonunuzdaki Google TV uygulamasının klavyesiyle yazmak daha kolaydır.

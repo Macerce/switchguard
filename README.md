@@ -69,8 +69,8 @@ Release builds need a `keystore.properties` + keystore in the project root (not 
 - New in 2.12 – a tour of the app (EN): https://youtube.com/shorts/jvm0hx0gATk
 - 2.12 yenilikleri – uygulama turu (TR): https://youtube.com/shorts/2KeUgJrCCEU
 - First setup in one minute / İlk kurulum (1 dk): https://youtube.com/shorts/jarBmMg2kYA
-- Connecting eWeLink / eWeLink'i bağlama: https://youtu.be/jK_KcG2OPao
-- Connecting Tuya / Smart Life / Tuya'yı bağlama: https://youtu.be/sCdvMs7CSic
+- **Getting eWeLink API keys / eWeLink API anahtarlarını alma (TR, sesli):** https://youtu.be/G5vQ_7CXTcM
+- **Getting Tuya API keys / Tuya API anahtarlarını alma (TR, sesli):** https://youtu.be/8vPjJMoMaMU
 
 ## Changelog / Sürüm geçmişi
 [English](CHANGELOG.md) · [Türkçe](CHANGELOG.tr.md) · [Releases](https://github.com/Macerce/switchguard/releases)

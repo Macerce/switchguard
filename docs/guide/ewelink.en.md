@@ -6,11 +6,11 @@ This guide connects the SONOFF and other eWeLink-compatible devices you control 
 
 SwitchGuard talks to your devices through eWeLink's official API. For that you create **your own free app** (App ID + App Secret) on the eWeLink developer site. You sign in on eWeLink's own page; SwitchGuard never sees your password.
 
-## Video walkthrough (50 s)
+## Video walkthrough (3 min)
 
-Watch every step in a short video (on-screen captions in Turkish): [open on YouTube](https://youtu.be/jK_KcG2OPao)
+Watch every step in a short video (Turkish narration and captions): [open on YouTube](https://youtu.be/G5vQ_7CXTcM)
 
-[![SwitchGuard – connecting eWeLink](https://img.youtube.com/vi/jK_KcG2OPao/hqdefault.jpg)](https://youtu.be/jK_KcG2OPao)
+[![SwitchGuard – connecting eWeLink](https://img.youtube.com/vi/G5vQ_7CXTcM/hqdefault.jpg)](https://youtu.be/G5vQ_7CXTcM)
 
 > **You need:** the eWeLink account your devices are in, and SwitchGuard. A computer is easier for the developer site, but a phone works too.
 
@@ -92,7 +92,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 
 **Open dev.ewelink.cc** opens the site; **Copy Redirect URL** copies `https://127.0.0.1`.
 
-**Next** → **Enter your API credentials**:
+**Next** → **Enter your API credentials** (note the **Each device needs its own eWeLink account** warning below the fields, see [Using several devices](#using-several-devices-phone-tablet-android-tv)):
 
 1. **App ID:** paste the APPID from step 3.
 2. **App Secret:** paste the App Secret.
@@ -115,7 +115,7 @@ New eWeLink accounts **are not registered as developers**. On **My center → Ac
 ## Using several devices (phone, tablet, Android TV)
 
 - **Each device needs its own eWeLink account. That account must have the developer feature enabled (approved by eWeLink), and the device gets that account's own API keys (App ID and App Secret).** The API keys entered on a device must belong to the eWeLink account signed in on that device.
-- eWeLink allows a signed-in session on only **one** device per account. Signing in on a second device with the same account signs the first one out (SwitchGuard warns you loudly when that happens).
+- **The same API credentials (App ID / App Secret) can be signed in on only one device.** eWeLink allows one session per account: **the session stays active on the device where the credentials were entered and signed in most recently**, and the other device is signed out (SwitchGuard warns you loudly when that happens).
 - For each extra device: 1) create a new account **in the eWeLink app** (eWeLink's sign-in page has no sign-up), 2) share your devices with it in the eWeLink app (**device → Share**), 3) with that account, [apply as a developer](#if-your-account-isnt-a-developer-yet-new-accounts) on dev.ewelink.cc and wait for approval, 4) after approval create an app in that account and enter its App ID and App Secret on that device.
 - **Transferring the setup:** on the phone **Settings → Backup & transfer → Send to another device**, on the TV/tablet **Transfer from another device** (during setup) or **Settings → Backup & transfer → Receive from another device**. Both must be on the same Wi-Fi; enter the 6-digit code shown on the TV. Tuya keys, rules, automations and settings are sent inside your home network, encrypted with the code. eWeLink API keys and the session are not transferred — each device uses its own account's keys.
 - **Signing in on a TV:** easiest is **Login by QR code** at the bottom of eWeLink's sign-in page — scan it with the eWeLink app signed in to the account you created for that device. The remote works too; the keyboard in the Google TV app on your phone is easier.
