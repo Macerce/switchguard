@@ -4,6 +4,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Gün doğumu/batımı ve hava sıcaklığı kuralları: yaklaşık konum, yalnızca kullanıcı isteyince bir kez. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Bölge otomasyonları (alana girince/çıkınca): yalnızca kullanıcı bir bölge kuralı kurup izin verirse. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -23,6 +26,7 @@
     <!-- Konum yalnızca gün doğumu/batımı ve sıcaklık kuralları için, isteğe bağlı: GPS'siz TV ve tabletler dışarıda kalmasın. -->
     <uses-feature android:name="android.hardware.location" android:required="false" />
     <uses-feature android:name="android.hardware.location.network" android:required="false" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
     <application
         android:name=".SwitchGuardApp"
@@ -121,6 +125,8 @@
             android:theme="@android:style/Theme.NoDisplay" />
         <receiver android:name=".service.SummaryReceiver" android:exported="false" />
         <receiver android:name=".service.WeeklyReceiver" android:exported="false" />
+        <!-- Bölgeye giriş/çıkış (Google Play hizmetleri konum bildirimi). -->
+        <receiver android:name=".service.ZoneReceiver" android:exported="false" />
         <receiver android:name=".service.BootReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -220,6 +220,18 @@ class MonitorService : Service() {
                 if (running) handler.post { sync() }
                 return START_STICKY
             }
+            ACTION_ZONE -> {
+                val zoneId = intent.getStringExtra(EXTRA_ZONE).orEmpty()
+                val entered = intent.getBooleanExtra(EXTRA_ENTERED, true)
+                // İzleme kapatıldıysa bölge kuralları da çalışmaz (öteki otomasyonlar gibi).
+                if (!running && !store.monitoringEnabled) {
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
+                startMonitoring()
+                handler.post { onZone(zoneId, entered) }
+                return START_STICKY
+            }
             ACTION_RESTART -> handler.post {
                 authFailed = false
                 wsUnsupported = false
@@ -263,6 +275,7 @@ class MonitorService : Service() {
             runCatching { metrics.prune() }
             SummaryScheduler.schedule(this)
             WeeklyScheduler.schedule(this)
+            ZoneWatcher.sync(this)
             sync()
             reconnectNow()
             tuyaTick(SystemClock.elapsedRealtime())
@@ -1708,6 +1721,13 @@ class MonitorService : Service() {
         due.forEach { runTemplate(it.id) }
     }
 
+    /** Telefon bir bölgeye girdi/çıktı: o bölgenin kuralları. */
+    private fun onZone(zoneId: String, entered: Boolean) {
+        if (store.zones.none { it.id == zoneId }) return
+        val now = System.currentTimeMillis()
+        runAutomations(automations.onZone(zoneId, entered, store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), now, env()))
+    }
+
     /** Şablonun mesajını sohbetteki gibi yürütür; sonuç geçmişe yazılır, yanlışsa bildirilir. */
     private fun runTemplate(id: String) {
         val t = store.chatTemplates.orEmpty().firstOrNull { it.id == id } ?: return
@@ -1934,6 +1954,10 @@ class MonitorService : Service() {
         const val ACTION_RESTART = "restart"
         /** Demo simülasyonu: [EXTRA_DEMO_OP] = [DEMO_TOGGLE] / [DEMO_ONLINE] / [DEMO_POWER]. */
         const val ACTION_DEMO = "demo"
+        /** Bölgeye giriş/çıkış ([ZoneReceiver]): [EXTRA_ZONE] bölge kimliği, [EXTRA_ENTERED] girdi mi. */
+        const val ACTION_ZONE = "zone"
+        const val EXTRA_ZONE = "zoneId"
+        const val EXTRA_ENTERED = "entered"
         const val EXTRA_DEMO_OP = "op"
         const val EXTRA_DEVICE = "device"
         const val EXTRA_CHANNEL = "channel"
@@ -2018,6 +2042,15 @@ class MonitorService : Service() {
                 Intent(context, MonitorService::class.java).setAction(ACTION_TEST)
                     .putExtra(EXTRA_SILENT, silent).putExtra(EXTRA_DELAY_MS, delayMs)
             )
+        }
+
+        /** Bölge olayı servise iletilir; servis yoksa ön planda başlatılır (bölge bildirimi bu başlatmaya izin verir). */
+        fun zone(context: Context, zoneId: String, entered: Boolean) {
+            val intent = Intent(context, MonitorService::class.java).setAction(ACTION_ZONE)
+                .putExtra(EXTRA_ZONE, zoneId).putExtra(EXTRA_ENTERED, entered)
+            if (instance?.isMonitoring == true) context.startService(intent)
+            else if (Store.get(context).monitoringEnabled) runCatching { context.startForegroundService(intent) }
+                .onFailure { Log.w(TAG, "zone: could not start service", it) }
         }
 
         fun demo(context: Context, op: String, deviceId: String, channel: Int = 0) {

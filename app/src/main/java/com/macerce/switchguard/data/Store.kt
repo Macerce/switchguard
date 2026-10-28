@@ -384,6 +384,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("lon").toDoubleOrNull()
         set(v) = put { putString("lon", v?.toString() ?: "") }
 
+    /** Bölgeler: girince/çıkınca otomasyon çalıştıran haritada seçilmiş alanlar (bkz. [com.macerce.switchguard.core.Zone]). */
+    var zones: List<com.macerce.switchguard.core.Zone>
+        get() = parsed.get("zones", prefs.getString("zones", null)) { com.macerce.switchguard.core.Zone.listFromJson(it) }
+        set(v) = put { putString("zones", com.macerce.switchguard.core.Zone.listToJson(v)) }
+
     /** Pazartesi sabahı geçen haftanın raporu. */
     var weeklyReport: Boolean
         get() = prefs.getBoolean("weeklyReport", false)

@@ -28,8 +28,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.DeleteSweep
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,9 +50,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -65,11 +69,25 @@ import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.ChatRunner
 import com.macerce.switchguard.ui.theme.raisedOnTile
 import com.macerce.switchguard.ui.theme.tileColor
+import java.util.Locale
 import java.util.UUID
 import kotlinx.coroutines.launch
 
+/** Yanıtın altında gösterilen düğme. */
+private enum class ChatAction { SET_LOCATION }
+
 /** Sohbet satırı: kullanıcının yazdığı ya da uygulamanın yanıtı. */
-private data class ChatLine(val mine: Boolean, val text: String)
+private data class ChatLine(
+    val mine: Boolean,
+    val text: String,
+    val at: Long = System.currentTimeMillis(),
+    val action: ChatAction? = null,
+    /** [action] tamamlanınca yeniden gönderilecek komut (ör. konum seçilince "Kaç derece?"). */
+    val retry: String? = null,
+)
+
+/** Mesaj cümle gibi görünsün: "kaç derece" → "Kaç derece" (Türkçede i → İ). */
+private fun sentence(text: String, locale: Locale): String = text.replaceFirstChar { it.titlecase(locale) }
 
 /** Ekran kapanıp açılınca konuşma kaybolmasın (uygulama açık kaldıkça). */
 private val lines = mutableStateListOf<ChatLine>()
@@ -89,21 +107,27 @@ fun ChatScreen(onBack: () -> Unit) {
     val listState = rememberLazyListState()
     val notUnderstood = stringResource(R.string.chat_not_understood)
     val chatTitle = stringResource(R.string.chat_title)
+    val locale = LocalConfiguration.current.locales[0]
+    var locationFor by remember { mutableStateOf<String?>(null) }
 
     fun send(text: String) {
         val t = text.trim()
         if (t.isEmpty() || busy) return
-        lines += ChatLine(true, t)
+        lines += ChatLine(true, sentence(t, locale))
         input = ""
         busy = true
         scope.launch {
+            val intent = ChatCommand.parse(t)
             val answer = runCatching { ChatRunner.answer(context, t, chatTitle) }
                 .getOrElse { "⚠️ " + it.message.orEmpty() } ?: notUnderstood
-            lines += ChatLine(false, answer)
+            // Konum yoksa sıcaklık yanıtının altında doğrudan konum seçme düğmesi.
+            val needsLocation = intent == ChatCommand.Intent.Temperature && (store.latitude == null || store.longitude == null)
+            lines += ChatLine(false, answer, action = if (needsLocation) ChatAction.SET_LOCATION else null, retry = if (needsLocation) t else null)
             busy = false
         }
     }
-    LaunchedEffect(lines.size) { if (lines.isNotEmpty()) listState.animateScrollToItem(lines.size) }
+    // Sona kaydır: hoş geldin + satırlar + (varsa) "yanıt hazırlanıyor".
+    LaunchedEffect(lines.size, busy) { listState.animateScrollToItem(lines.size + if (busy) 1 else 0) }
 
     Column(Modifier.fillMaxSize().imePadding()) {
         AppTopBar(
@@ -126,8 +150,12 @@ fun ChatScreen(onBack: () -> Unit) {
             contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            item { Bubble(ChatLine(false, stringResource(R.string.chat_welcome))) }
-            items(lines) { Bubble(it) }
+            item {
+                val welcome = stringResource(R.string.chat_welcome)
+                Bubble(remember(welcome) { ChatLine(false, welcome) })
+            }
+            items(lines) { line -> Bubble(line, onAction = { locationFor = line.retry ?: "" }) }
+            if (busy) item { Typing() }
         }
         Text(
             stringResource(R.string.chat_templates),
@@ -176,13 +204,34 @@ fun ChatScreen(onBack: () -> Unit) {
                 placeholder = { Text(stringResource(R.string.chat_hint)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
+                shape = RoundedCornerShape(24.dp),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { send(input) }),
             )
             IconButton(modifier = Modifier.tvFocusRing(), onClick = { send(input) }, enabled = input.isNotBlank() && !busy) {
                 Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send), tint = MaterialTheme.colorScheme.primary)
             }
         }
+    }
+
+    locationFor?.let { retry ->
+        AlertDialog(
+            onDismissRequest = { locationFor = null },
+            title = { Text(stringResource(R.string.location_title)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.location_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    LocationSetup(store, onChanged = {
+                        locationFor = null
+                        // Konum seçildi: soru kendiliğinden yeniden sorulur.
+                        if (retry.isNotBlank()) send(retry)
+                    })
+                }
+            },
+            confirmButton = {
+                TextButton(modifier = Modifier.tvFocusRing(), onClick = { locationFor = null }) { Text(stringResource(R.string.action_cancel)) }
+            },
+        )
     }
 
     editing?.let { t ->
@@ -204,17 +253,51 @@ fun ChatScreen(onBack: () -> Unit) {
     }
 }
 
+/** Mesaj balonu: üstte gönderen ve saat, gönderen tarafın köşesi sivri; yanıtta varsa düğme. */
 @Composable
-private fun Bubble(line: ChatLine) {
+private fun Bubble(line: ChatLine, onAction: () -> Unit = {}) {
     val scheme = MaterialTheme.colorScheme
-    Box(Modifier.fillMaxWidth(), contentAlignment = if (line.mine) Alignment.CenterEnd else Alignment.CenterStart) {
+    val context = LocalContext.current
+    val shape = if (line.mine) RoundedCornerShape(18.dp, 18.dp, 4.dp, 18.dp) else RoundedCornerShape(18.dp, 18.dp, 18.dp, 4.dp)
+    Column(Modifier.fillMaxWidth(), horizontalAlignment = if (line.mine) Alignment.End else Alignment.Start) {
         Text(
-            line.text,
-            color = if (line.mine) scheme.onPrimary else scheme.onSurface,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.widthIn(max = 320.dp)
-                .background(if (line.mine) scheme.primary else tileColor(), RoundedCornerShape(16.dp))
+            (if (line.mine) stringResource(R.string.chat_you) else stringResource(R.string.app_name)) +
+                " · " + android.text.format.DateFormat.getTimeFormat(context).format(java.util.Date(line.at)),
+            style = MaterialTheme.typography.labelSmall,
+            color = scheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+        )
+        Column(
+            Modifier.widthIn(max = 340.dp)
+                .background(if (line.mine) scheme.primary else tileColor(), shape)
                 .padding(horizontal = 14.dp, vertical = 10.dp),
+        ) {
+            Text(
+                line.text,
+                color = if (line.mine) scheme.onPrimary else scheme.onSurface,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            if (line.action == ChatAction.SET_LOCATION) {
+                FilledTonalButton(onClick = onAction, modifier = Modifier.padding(top = 8.dp).tvFocusRing()) {
+                    Icon(Icons.Rounded.Place, null, Modifier.size(18.dp))
+                    Spacer(Modifier.size(8.dp))
+                    Text(stringResource(R.string.chat_set_location))
+                }
+            }
+        }
+    }
+}
+
+/** Yanıt beklenirken: "Yanıt hazırlanıyor…". */
+@Composable
+private fun Typing() {
+    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterStart) {
+        Text(
+            stringResource(R.string.chat_typing),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.background(tileColor(), RoundedCornerShape(18.dp, 18.dp, 18.dp, 4.dp))
+                .padding(horizontal = 14.dp, vertical = 8.dp),
         )
     }
 }
@@ -307,7 +390,7 @@ private fun TemplateDialog(
                         DayChips(days) { days = it }
                     }
                     When.EVENT -> {
-                        Picker(stringResource(R.string.chat_tpl_event), EVENT_KINDS, kind, text = { stringResource(it.title()) }, onPick = { kind = it })
+                        Picker(stringResource(R.string.chat_tpl_event), EVENT_KINDS, kind, text = { stringResource(it.shortTitle()) }, onPick = { kind = it })
                         if (kind.usesDevice) {
                             val byId = devices.associateBy { it.id }
                             Picker(

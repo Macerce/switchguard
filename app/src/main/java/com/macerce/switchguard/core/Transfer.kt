@@ -37,7 +37,7 @@ object Transfer {
         "alarmVolume", "vibrate", "quietEnabled", "quietStart", "quietEnd",
         "offlineGraceSec", "pollIntervalSec", "summaryEnabled", "summaryMinute",
         "blindAlertMin", "alarmBoost", "reminderMin",
-        "outageDetect", "energyAnomaly", "budget", "weeklyReport", "devicePrices", "lat", "lon", "threeZone", "priceDay", "pricePeak", "priceNight", "scenes", "groups", "softenAtHome", "quietBypass",
+        "outageDetect", "energyAnomaly", "budget", "weeklyReport", "devicePrices", "lat", "lon", "threeZone", "priceDay", "pricePeak", "priceNight", "scenes", "groups", "zones", "softenAtHome", "quietBypass",
     )
 
     private const val PBKDF2_ITER = 100_000

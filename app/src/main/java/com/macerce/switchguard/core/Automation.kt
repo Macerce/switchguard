@@ -23,7 +23,9 @@ enum class TriggerKind {
     /** Gün doğumu / batımı; [Trigger.minutes] = kayma (eksi: önce). Konum gerekir, cihaz yok. */
     SUNRISE, SUNSET,
     /** Dış sıcaklık [Trigger.watts] °C'nin üstüne çıktı / altına indi (internetten, yarım saatte bir). Konum gerekir. */
-    TEMP_ABOVE, TEMP_BELOW;
+    TEMP_ABOVE, TEMP_BELOW,
+    /** Telefon haritada seçilen bölgeye girdi / bölgeden çıktı; [Trigger.deviceId] = bölge kimliği ([Zone]). */
+    ZONE_ENTER, ZONE_EXIT;
 
     val usesChannel get() = this in setOf(TURNED_ON, TURNED_OFF, STAYED_ON, STAYED_OFF, CHANNEL_POWER_LOW)
     /** Açık/kapalı kalma süresi tetikleyicileri. */
@@ -35,8 +37,9 @@ enum class TriggerKind {
     val allowsHold get() = this == POWER_ABOVE || this == POWER_BELOW
     val isSun get() = this == SUNRISE || this == SUNSET
     val usesTemp get() = this == TEMP_ABOVE || this == TEMP_BELOW
-    /** Bir cihaza bağlı tetikleyici (gün doğumu ve sıcaklık değil). */
-    val usesDevice get() = !isSun && !usesTemp
+    val usesZone get() = this == ZONE_ENTER || this == ZONE_EXIT
+    /** Bir cihaza bağlı tetikleyici (gün doğumu, sıcaklık ve bölge değil). */
+    val usesDevice get() = !isSun && !usesTemp && !usesZone
 }
 
 data class Trigger(
@@ -209,6 +212,7 @@ class AutomationEngine {
                 TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> t.minutes <= 0 && powerHit(a, after.power)
                 TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF, TriggerKind.CHANNEL_POWER_LOW,
                 TriggerKind.SUNRISE, TriggerKind.SUNSET, TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> false // tick'te bakılır
+                TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> false // [onZone]
             }
             if (hit) fire(a, now, fired, current)
         }
@@ -381,6 +385,26 @@ class AutomationEngine {
                 fire(a, now, fired, current)
             } else if (rearm) tempArmed[a.id] = true
         }
+        return fired
+    }
+
+    /**
+     * Telefon [zoneId] bölgesine girdi ([entered]) ya da çıktı: o bölgenin uyan kuralları. Aynı geçiş art arda
+     * bildirilirse (konum servisi tekrarlayabilir) [fire]'ın 10 sn sınırı ikinciyi yutar.
+     */
+    fun onZone(
+        zoneId: String,
+        entered: Boolean,
+        current: Map<String, DeviceSnapshot>,
+        automations: List<Automation>,
+        now: Long,
+        env: Environment = Environment(),
+    ): List<Automation> {
+        this.env = env
+        val kind = if (entered) TriggerKind.ZONE_ENTER else TriggerKind.ZONE_EXIT
+        val fired = mutableListOf<Automation>()
+        automations.filter { it.enabled && it.trigger.kind == kind && it.trigger.deviceId == zoneId }
+            .forEach { fire(it, now, fired, current) }
         return fired
     }
 

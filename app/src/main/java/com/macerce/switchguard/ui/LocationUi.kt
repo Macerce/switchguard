@@ -114,14 +114,20 @@ private fun ManualLocationDialog(store: Store, onDismiss: () -> Unit, onSaved: (
 
 fun formatCoord(v: Double): String = String.format(Locale.US, "%.4f", v)
 
-/** Yaklaşık konum: Android 11+ anlık konum (en çok ≈30 sn), yoksa son bilinen konum. */
+/**
+ * Konum: [maxAgeMs]'den yeni son bilinen konum, yoksa Android 11+ anlık konum (en çok ≈30 sn), o da yoksa son bilinen.
+ * Hassas konum izni varsa GPS de denenir (bölge seçimi); yalnız yaklaşık izinde ağ konumu.
+ */
 @SuppressLint("MissingPermission") // Çağırmadan önce izin denetleniyor.
-private suspend fun currentLocation(context: Context): Location? {
+internal suspend fun currentLocation(context: Context, maxAgeMs: Long = 7 * 86_400_000L): Location? {
     val lm = context.getSystemService(LocationManager::class.java) ?: return null
-    val providers = listOf(LocationManager.NETWORK_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.GPS_PROVIDER, LocationManager.PASSIVE_PROVIDER)
+    val fine = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    val providers = (if (fine) listOf(LocationManager.FUSED_PROVIDER, LocationManager.GPS_PROVIDER, LocationManager.NETWORK_PROVIDER)
+        else listOf(LocationManager.NETWORK_PROVIDER, LocationManager.FUSED_PROVIDER, LocationManager.GPS_PROVIDER))
+        .plus(LocationManager.PASSIVE_PROVIDER)
         .filter { runCatching { lm.isProviderEnabled(it) }.getOrDefault(false) }
     val last = providers.mapNotNull { runCatching { lm.getLastKnownLocation(it) }.getOrNull() }.maxByOrNull { it.time }
-    if (last != null && System.currentTimeMillis() - last.time < 7 * 86_400_000L) return last
+    if (last != null && System.currentTimeMillis() - last.time < maxAgeMs) return last
     if (Build.VERSION.SDK_INT >= 30) {
         val provider = providers.firstOrNull { it != LocationManager.PASSIVE_PROVIDER } ?: return last
         return suspendCancellableCoroutine { cont ->

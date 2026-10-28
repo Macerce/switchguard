@@ -19,8 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 37
-        versionName = "2.18.0"
+        versionCode = 38
+        versionName = "2.19.0"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
@@ -89,6 +89,8 @@ dependencies {
     implementation("com.google.android.play:app-update:2.1.0")
     // Saat uygulamasıyla (Wear OS) veri alışverişi.
     implementation("com.google.android.gms:play-services-wearable:20.0.1")
+    // Bölge otomasyonları: alana giriş/çıkış bildirimi (pil dostu, sistem izler).
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 
     testImplementation("junit:junit:4.13.2")
     // android.jar içindeki org.json JVM testlerinde boş stub; gerçeğini ekliyoruz.

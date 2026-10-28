@@ -91,6 +91,7 @@ import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Snooze
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.SyncAlt
@@ -167,6 +168,7 @@ internal enum class SettingsPage(val title: Int) {
     QUIET(R.string.section_quiet_hours),
     SUMMARY(R.string.section_summary),
     SMART(R.string.smart_title),
+    LOCATION(R.string.settings_location),
     MONITORING(R.string.section_monitoring),
     PERMISSIONS(R.string.section_permissions),
     BACKUP(R.string.settings_backup),
@@ -296,6 +298,12 @@ private fun SettingsHome(
                     onClick = { onOpen(SettingsPage.PERMISSIONS) }, modifier = row(SettingsPage.PERMISSIONS),
                     summary = stringResource(R.string.perm_all_ok),
                     warning = if (missing > 0) pluralStringResource(R.plurals.perm_missing_n, missing, missing) else null,
+                )
+                Divider(68.dp)
+                MenuRow(
+                    Icons.Rounded.Place, Hue.BLUE, stringResource(R.string.settings_location),
+                    onClick = { onOpen(SettingsPage.LOCATION) }, modifier = row(SettingsPage.LOCATION),
+                    summary = stringResource(R.string.settings_location_desc),
                 )
                 Divider(68.dp)
                 MenuRow(
@@ -445,6 +453,7 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
                 SettingsPage.QUIET -> QuietPage()
                 SettingsPage.SUMMARY -> SummaryPage()
                 SettingsPage.SMART -> SmartPage(showDialog)
+                SettingsPage.LOCATION -> LocationPage()
                 SettingsPage.MONITORING -> MonitoringPage(showDialog)
                 SettingsPage.PERMISSIONS -> PermissionsPage()
                 SettingsPage.BACKUP -> BackupPage(showDialog)
@@ -812,6 +821,26 @@ private fun SummaryPage() {
  * Akıllı uyarılar: elektrik kesintisi, tüketim (anormal gün, aylık bütçe), haftalık rapor ve Telegram'ın ek işleri
  * (komutlar, aç/kapa izni, bildirimlerin iletilmesi, bekçi).
  */
+/** Konum (gün doğumu/batımı, dış sıcaklık) ve bölgeler (giriş/çıkış otomasyonları). */
+@Composable
+private fun LocationPage() {
+    val (store, version) = settingsState()
+    SectionTitle(stringResource(R.string.location_title))
+    SectionCard {
+        var locationVersion by remember { mutableStateOf(0) }
+        key(locationVersion) {
+            LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(16.dp))
+        }
+    }
+    PageIntro(stringResource(R.string.location_desc))
+    // Bölgeler telefonun konumuyla çalışır; TV'de sunulmaz.
+    if (!LocalIsTv.current) {
+        SectionTitle(stringResource(R.string.zone_title))
+        ZonesSection(store, version)
+        PageIntro(stringResource(R.string.zone_desc))
+    }
+}
+
 @Composable
 private fun SmartPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
     val context = LocalContext.current
@@ -889,15 +918,6 @@ private fun SmartPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
             Modifier.clickable { showDialog { BudgetDialog(store, close) } },
         )
     }
-
-    SectionTitle(stringResource(R.string.location_title))
-    SectionCard {
-        var locationVersion by remember { mutableStateOf(0) }
-        key(locationVersion) {
-            LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(16.dp))
-        }
-    }
-    PageIntro(stringResource(R.string.location_desc))
 
     SectionTitle(stringResource(R.string.smart_weekly_section))
     SectionCard {

@@ -1,6 +1,9 @@
 package com.macerce.switchguard.ui
 
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Place
+import androidx.compose.material.icons.automirrored.rounded.Login
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
 import com.macerce.switchguard.core.PresenceRule
@@ -90,6 +93,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.foundation.focusGroup
 import androidx.compose.runtime.Composable
@@ -311,7 +315,10 @@ private fun Clause(label: String, text: String) {
 private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String, String> {
     val t = a.trigger
     val src = devices.firstOrNull { it.id == t.deviceId }
+    val zoneContext = LocalContext.current
     val srcName = when {
+        t.kind.usesZone -> remember(t.deviceId) { Store.get(zoneContext).zones.firstOrNull { it.id == t.deviceId }?.name }
+            ?: stringResource(R.string.device_missing)
         !t.kind.usesDevice -> null
         else -> src?.let { channelLabel(it, t.channel, t.kind.usesChannel) } ?: stringResource(R.string.device_missing)
     }
@@ -418,6 +425,8 @@ fun TriggerKind.title(): Int = when (this) {
     TriggerKind.SUNSET -> R.string.trigger_sunset
     TriggerKind.TEMP_ABOVE -> R.string.trigger_temp_above
     TriggerKind.TEMP_BELOW -> R.string.trigger_temp_below
+    TriggerKind.ZONE_ENTER -> R.string.trigger_zone_enter
+    TriggerKind.ZONE_EXIT -> R.string.trigger_zone_exit
 }
 
 fun ActionKind.title(): Int = when (this) {
@@ -466,6 +475,12 @@ fun AutomationEditor(
     var condDevice by rememberSaveable { mutableStateOf(initial?.condition?.deviceId ?: first?.id.orEmpty()) }
     var condChannel by rememberSaveable { mutableStateOf(initial?.condition?.channel ?: 0) }
     var locationVersion by remember { mutableStateOf(0) }
+    var zoneId by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesZone }?.deviceId ?: "") }
+    var zonesVersion by remember { mutableStateOf(0) }
+    var zoneEditor by remember { mutableStateOf(false) }
+    val zoneContext = LocalContext.current
+    val zones = remember(zonesVersion) { Store.get(zoneContext).zones }
+    if (zoneId.isEmpty() && zones.size == 1) zoneId = zones[0].id
     val timePicker = rememberTimePicker()
     var holdMinutes by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.allowsHold }?.minutes ?: 0) }
     var lowMinutes by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesChannelPower }?.minutes ?: 1) }
@@ -496,6 +511,8 @@ fun AutomationEditor(
     val kinds = TriggerKind.entries.filter {
         when {
             // Kategori: yalnız anahtar ve bağlantı olayları (gün doğumu/sıcaklık cihazsız, yine sunulur).
+            // Bölge telefonun konumuyla çalışır; TV'de konum yok.
+            it.usesZone -> !tv
             src != null && DeviceCategory.isCategory(src.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
             it.usesChannelPower -> src?.hasChannelPower == true
             it.usesWatts -> src?.hasEnergy == true
@@ -512,6 +529,7 @@ fun AutomationEditor(
     val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
         (!triggerKind.usesTemp || tempValue != null) &&
+        (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
         (!condOn || condSrc != null) &&
         (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id))) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId })
@@ -522,7 +540,12 @@ fun AutomationEditor(
         name = name.trim(),
         enabled = initial?.enabled ?: true,
         trigger = Trigger(
-            triggerKind, if (triggerKind.usesDevice) triggerDevice else "",
+            triggerKind,
+            when {
+                triggerKind.usesDevice -> triggerDevice
+                triggerKind.usesZone -> zoneId
+                else -> ""
+            },
             channel = if (triggerKind.usesChannel) triggerChannel else 0,
             minutes = when {
                 triggerKind.usesMinutes -> minutes
@@ -622,6 +645,20 @@ fun AutomationEditor(
                     key(locationVersion) {
                         LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
                     }
+                }
+                if (triggerKind.usesZone) {
+                    FieldLabel(stringResource(R.string.zone_choose))
+                    if (zones.isEmpty()) {
+                        Text(stringResource(R.string.zone_none), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    } else {
+                        OptionGrid(zones.map { it.id }, zoneId, { Icons.Rounded.Place }, { id -> zones.first { it.id == id }.name }) { zoneId = it }
+                    }
+                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = { zoneEditor = true }) {
+                        Icon(Icons.Rounded.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.zone_add))
+                    }
+                    ZonePermissionCard(Modifier.padding(top = 8.dp))
                 }
                 if (triggerKind.usesMinutes) {
                     Stepper(stringResource(R.string.automation_minutes_short), minutes, MINUTE_STEPS.filter { it > 0 }) { minutes = it }
@@ -749,6 +786,13 @@ fun AutomationEditor(
         }
     }
 
+    if (zoneEditor) {
+        ZoneEditorDialog(
+            initial = null,
+            onSaved = { zoneId = it.id; zonesVersion++; zoneEditor = false },
+            onDismiss = { zoneEditor = false },
+        )
+    }
     if (confirmDelete) {
         ConfirmDialog(
             title = stringResource(if (alert) R.string.alert_delete_title else R.string.automation_delete_title),
@@ -1048,10 +1092,12 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.SUNSET -> Icons.Rounded.NightsStay
     TriggerKind.TEMP_ABOVE -> Icons.Rounded.WbSunny
     TriggerKind.TEMP_BELOW -> Icons.Rounded.AcUnit
+    TriggerKind.ZONE_ENTER -> Icons.AutoMirrored.Rounded.Login
+    TriggerKind.ZONE_EXIT -> Icons.AutoMirrored.Rounded.Logout
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
-private fun TriggerKind.shortTitle(): Int = when (this) {
+fun TriggerKind.shortTitle(): Int = when (this) {
     TriggerKind.TURNED_ON -> R.string.evt_turned_on
     TriggerKind.TURNED_OFF -> R.string.evt_turned_off
     TriggerKind.STAYED_ON -> R.string.evt_stayed_on
@@ -1065,6 +1111,8 @@ private fun TriggerKind.shortTitle(): Int = when (this) {
     TriggerKind.SUNSET -> R.string.evt_sunset
     TriggerKind.TEMP_ABOVE -> R.string.evt_temp_above
     TriggerKind.TEMP_BELOW -> R.string.evt_temp_below
+    TriggerKind.ZONE_ENTER -> R.string.evt_zone_enter
+    TriggerKind.ZONE_EXIT -> R.string.evt_zone_exit
 }
 
 private fun ActionKind.icon(): ImageVector = when (this) {

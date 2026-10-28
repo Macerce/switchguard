@@ -61,7 +61,7 @@ object WearBridge {
                 devices.forEach { d ->
                     put(JSONObject().put("id", d.id).put("name", d.name).put("online", d.online)
                         .put("sw", JSONObject().apply { d.switches.toSortedMap().forEach { (ch, on) -> put(ch.toString(), on) } })
-                        .apply { d.power?.let { put("w", it) } })
+                        .apply { d.power?.takeIf { d.online }?.let { put("w", it) } })
                 }
             })
             .toString()

@@ -23,4 +23,26 @@ object WeatherClient {
             return json.getJSONObject("current").getDouble("temperature_2m")
         }
     }
+
+    /** Arama sonucu: "Kadıköy, İstanbul, Türkiye". */
+    data class Place(val name: String, val latitude: Double, val longitude: Double)
+
+    /** Şehir/yer adına göre en çok 5 sonuç (Open-Meteo geocoding; adres değil, yerleşim düzeyinde). */
+    fun search(query: String, language: String): List<Place> {
+        val url = "https://geocoding-api.open-meteo.com/v1/search".toHttpUrl().newBuilder()
+            .addQueryParameter("name", query.trim())
+            .addQueryParameter("count", "5")
+            .addQueryParameter("language", language)
+            .build()
+        EwelinkClient.http.newCall(Request.Builder().url(url).build()).execute().use { r ->
+            if (!r.isSuccessful) throw IOException("HTTP ${r.code}")
+            val results = JSONObject(r.body?.string().orEmpty()).optJSONArray("results") ?: return emptyList()
+            return (0 until results.length()).map { i ->
+                val o = results.getJSONObject(i)
+                val label = listOf(o.optString("name"), o.optString("admin1"), o.optString("country"))
+                    .filter { it.isNotBlank() }.distinct().joinToString(", ")
+                Place(label, o.getDouble("latitude"), o.getDouble("longitude"))
+            }
+        }
+    }
 }

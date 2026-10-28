@@ -115,6 +115,9 @@ fun App() {
         }
     }
 
+    // Bölge kuralı/bölge eklenince, değişince ya da yedekten dönünce sistemdeki bölge kayıtları eşitlenir.
+    LaunchedEffect(version) { com.macerce.switchguard.service.ZoneWatcher.syncIfChanged(context) }
+
     val wide = isWideScreen()
     val tabIcon: @Composable (Tab) -> Unit = { t ->
         if (t == Tab.HISTORY && unseen > 0) {

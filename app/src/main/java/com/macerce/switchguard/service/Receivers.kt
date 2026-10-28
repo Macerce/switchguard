@@ -15,6 +15,8 @@ class BootReceiver : BroadcastReceiver() {
         // Alarmlar yeniden başlatmada silinir.
         SummaryScheduler.schedule(context)
         WeeklyScheduler.schedule(context)
+        // Bölge kayıtları da yeniden başlatmada silinir.
+        ZoneWatcher.sync(context)
         if (Store.get(context).monitoringEnabled) {
             MonitorService.send(context, MonitorService.ACTION_START)
         }

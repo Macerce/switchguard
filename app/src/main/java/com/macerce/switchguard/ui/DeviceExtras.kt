@@ -125,11 +125,13 @@ fun EnergySection(device: DeviceSnapshot) {
     SectionTitle(stringResource(R.string.section_energy))
     SectionCard {
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Metric(stringResource(R.string.energy_power), device.power?.let(::formatWatts) ?: "–", big = true)
-            Metric(stringResource(R.string.energy_voltage), device.voltage?.let { String.format(Locale.getDefault(), "%.0f V", it) } ?: "–")
-            Metric(stringResource(R.string.energy_current), device.current?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–")
+            // Çevrimdışıyken son ölçüm anlık değer gibi gösterilmez.
+            val live = device.online
+            Metric(stringResource(R.string.energy_power), device.power?.takeIf { live }?.let(::formatWatts) ?: "–", big = true)
+            Metric(stringResource(R.string.energy_voltage), device.voltage?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.0f V", it) } ?: "–")
+            Metric(stringResource(R.string.energy_current), device.current?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–")
         }
-        if (device.channelPower.isNotEmpty()) {
+        if (device.online && device.channelPower.isNotEmpty()) {
             RowDivider(inset = 0.dp)
             Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 device.channelPower.toSortedMap().forEach { (ch, w) ->
