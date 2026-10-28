@@ -62,8 +62,10 @@ Release builds need a `keystore.properties` + keystore in the project root (not 
 - Tuya / Smart Life: [English](docs/guide/tuya.en.md) · [Türkçe](docs/guide/tuya.tr.md)
 
 ## Videos / Videolar
-- **New in 2.15 – smart alerts, scenes, energy reports (EN):** https://youtube.com/shorts/bOtFBjHoefE
-- **2.15 yenilikleri – akıllı uyarılar, sahneler, enerji raporu (TR):** https://youtube.com/shorts/y3QRZvVoeK4
+- **New in 2.17 – alert categories, critical alerts, groups (EN):** https://youtube.com/shorts/iVM3zEiBt8A
+- **2.17 yenilikleri – uyarı kategorileri, kritik uyarılar, gruplar (TR):** https://youtube.com/shorts/Qha83ziwylI
+- New in 2.15 – smart alerts, scenes, energy reports (EN): https://youtube.com/shorts/bOtFBjHoefE
+- 2.15 yenilikleri – akıllı uyarılar, sahneler, enerji raporu (TR): https://youtube.com/shorts/y3QRZvVoeK4
 - New in 2.12 – a tour of the app (EN): https://youtube.com/shorts/jvm0hx0gATk
 - 2.12 yenilikleri – uygulama turu (TR): https://youtube.com/shorts/2KeUgJrCCEU
 - First setup in one minute / İlk kurulum (1 dk): https://youtube.com/shorts/jarBmMg2kYA
