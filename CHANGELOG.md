@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.18.0 — 2026-10-29
+**New**
+- Chat commands: write to your devices in plain words, in Telegram or in the new in-app chat (Devices → chat icon). “turn off living room and kitchen”, “turn off all lights”, “is the pump on”, “heater watts” (power now, today and the usual draw learned from the last 7 days), “temperature”, “evening scene”, “home” / “away”. Telegram also gets /watt and /temp, and /on and /off accept several devices separated by commas.
+- Chat templates: ready-made messages under the chat box, sent with one tap. Add your own and edit or delete them by holding a template. A template can also run by itself every day at a set time (on chosen days) or when something happens: a device turns on/off or goes offline, power goes above/below a value, outdoor temperature, sunrise or sunset.
+
 ## 2.17.0 — 2026-10-27
 **New**
 - Alert categories: every device is Critical, Important or Normal. Pick one on the device page or leave it on Auto — a device with any event set to Alarm becomes Critical, one that only sends notifications Important. The Alerts tab filters devices by category and shows a badge; Alerts → Alert settings → Alert categories chooses per category whether alarms still ring during quiet hours (devices marked critical before keep ringing).

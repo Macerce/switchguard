@@ -84,6 +84,7 @@ fun App() {
     // Uyarılar'daki durum kartından Ayarlar › İzinler'e geçiş; Ayarlar o sayfayla açılınca söner.
     var openPermissions by rememberSaveable { mutableStateOf(false) }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
+    var chatOpen by rememberSaveable { mutableStateOf(false) }
     // Detaydan dönünce kumandanın odağı açılan karta geri verilir (yoksa yan menüye düşer).
     var returnFocusTo by remember { mutableStateOf<String?>(null) }
     val closeDevice = {
@@ -97,6 +98,7 @@ fun App() {
     // Sıra önemli: sonra kaydedilen BackHandler önce çalışır.
     BackHandler(enabled = tab != Tab.DEVICES) { tab = Tab.DEVICES }
     BackHandler(enabled = openDeviceId != null) { closeDevice() }
+    BackHandler(enabled = chatOpen) { chatOpen = false }
 
     // Geçmiş rozeti: son bakıştan beri alarm/bildirim üretmiş olay sayısı. Geçmiş açıkken yeni olaylar da görülmüş sayılır.
     val log = remember { EventLog.get(context) }
@@ -131,6 +133,7 @@ fun App() {
                 Tab.DEVICES -> DevicesScreen(
                     mod,
                     onOpenDevice = { openDeviceId = it },
+                    onOpenChat = { chatOpen = true },
                     restoreFocusTo = returnFocusTo,
                     onFocusRestored = { returnFocusTo = null },
                 )
@@ -145,6 +148,13 @@ fun App() {
                 )
             }
         }
+    }
+
+    if (chatOpen) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
+            Box(Modifier.readableWidth()) { ChatScreen(onBack = { chatOpen = false }) }
+        }
+        return
     }
 
     AnimatedContent(

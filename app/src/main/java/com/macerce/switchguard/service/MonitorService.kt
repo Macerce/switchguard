@@ -55,6 +55,8 @@ import com.macerce.switchguard.core.MonitorGap
 import com.macerce.switchguard.core.OfflineGrace
 import com.macerce.switchguard.core.OutageWatch
 import com.macerce.switchguard.core.TelegramBot
+import com.macerce.switchguard.core.ChatCommand
+import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.Watchdog
 import com.macerce.switchguard.core.RuleEngine
 import com.macerce.switchguard.core.Scene
@@ -352,6 +354,7 @@ class MonitorService : Service() {
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
+        templateTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         weatherTick(wall)
         tuyaTick(now)
@@ -900,8 +903,11 @@ class MonitorService : Service() {
 
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
-        // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()) ?: return
+        // Süre dolumu, gecikmeli eylem ya da saatli şablon varsa tam vaktinde uyan.
+        val due = listOfNotNull(
+            automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()),
+            ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, System.currentTimeMillis()),
+        ).minOrNull() ?: return
         handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
@@ -931,6 +937,7 @@ class MonitorService : Service() {
                 }
             }
             ActionKind.RUN_SCENE -> {
+                if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
                 val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
                 if (scene == null) {
                     val args = EventArgs.AutoMissing(a.name)
@@ -1339,7 +1346,7 @@ class MonitorService : Service() {
             // Yalnızca haber verilecek kişiler (ve gruplar) komut verebilir.
             if (u.chatId !in allowed) continue
             if (u.callbackData != null) onTelegramButton(u)
-            else if (store.telegramCommands) u.text?.let(TelegramBot::parseCommand)?.let { onTelegramCommand(u, it, now) }
+            else if (store.telegramCommands) u.text?.let { onTelegramText(u, it, now) }
         }
         runtime.tgHandled = handled
     }
@@ -1370,6 +1377,55 @@ class MonitorService : Service() {
         dismissAlarm(byTelegram = name)
         notifier.notifyEvent(text)
         forward("✅ $text", always = true)
+    }
+
+    /**
+     * Telegram mesajı: "/" komutları ve serbest yazı ("salon ve mutfağı kapat", "klima kaç watt", "kaç derece").
+     * Anlaşılmayan serbest yazıya yalnızca özel sohbette yanıt verilir (grupta herkesin konuşması yanıtlanmasın).
+     */
+    private fun onTelegramText(u: TelegramBot.Update, text: String, now: Long) {
+        val age = now - u.date
+        val intent = ChatCommand.parse(text)
+        if (intent == null) {
+            if (u.chatId > 0 && age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, getString(R.string.chat_not_understood))
+            return
+        }
+        when (intent) {
+            is ChatCommand.Intent.Status -> if (intent.query.isBlank()) return onTelegramCommand(u, TelegramBot.Command.Status, now)
+            ChatCommand.Intent.Help -> return onTelegramCommand(u, TelegramBot.Command.Help, now)
+            ChatCommand.Intent.Ack -> return onTelegramCommand(u, TelegramBot.Command.Ack, now)
+            is ChatCommand.Intent.SetPresence -> return onTelegramCommand(u, TelegramBot.Command.SetPresence(intent.away), now)
+            is ChatCommand.Intent.RunScene -> return onTelegramCommand(u, TelegramBot.Command.RunScene(intent.query), now)
+            is ChatCommand.Intent.Switch -> return onTelegramSwitch(u, intent, age)
+            else -> Unit
+        }
+        // Durum/güç/sıcaklık soruları: ölçüm geçmişi okunur, iş parçacığında.
+        if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+        telegram.execute {
+            val answer = runCatching { runBlocking { ChatRunner.run(this@MonitorService, intent, u.from, store.telegramControl) } }.getOrNull()
+            answer?.let { handler.post { reply(u.chatId, it) } }
+        }
+    }
+
+    /** Birden çok hedefli aç/kapat ("/ac salon, mutfak", "bütün ışıkları kapat"); her cihaz kendi yanıtını verir. */
+    private fun onTelegramSwitch(u: TelegramBot.Update, intent: ChatCommand.Intent.Switch, age: Long) {
+        if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
+        if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+        if (intent.targets.all { it.isBlank() }) return reply(u.chatId, getString(if (intent.on) R.string.tg_usage_on else R.string.tg_usage_off))
+        val devices = store.snapshotsWithGroups
+        fun one(d: DeviceSnapshot, ch: Int) =
+            if (DeviceGroup.isGroup(d.id)) telegramGroupSwitch(u, d, intent.on) else telegramSwitch(u, d, ch, intent.on)
+        for (target in intent.targets) {
+            when (val t = ChatCommand.resolve(target, devices)) {
+                is ChatCommand.Target.One -> one(t.device, t.channel)
+                is ChatCommand.Target.Many -> t.devices.forEach { d ->
+                    if (DeviceGroup.isGroup(d.id)) one(d, 0) else d.switches.keys.sorted().forEach { ch -> one(d, ch) }
+                }
+                is ChatCommand.Target.NeedChannel -> reply(u.chatId, getString(R.string.tg_need_channel, t.device.name, t.device.switches.size))
+                is ChatCommand.Target.Ambiguous -> reply(u.chatId, getString(R.string.tg_ambiguous, t.names.joinToString(", ")))
+                ChatCommand.Target.NotFound -> reply(u.chatId, getString(R.string.tg_not_found, target))
+            }
+        }
     }
 
     private fun onTelegramCommand(u: TelegramBot.Update, cmd: TelegramBot.Command, now: Long) {
@@ -1644,6 +1700,29 @@ class MonitorService : Service() {
     }
 
     /** Sıcaklık kuralı varsa yarım saatte bir dış sıcaklığı okur (Open-Meteo); okunamazsa son değer kalır. */
+    /** Saati gelen sohbet şablonları. */
+    private fun templateTick(wall: Long) {
+        val list = store.chatTemplates ?: return
+        val (due, runs) = ChatTemplate.due(list, runtime.templateRuns, wall)
+        if (runs != runtime.templateRuns) runtime.templateRuns = runs
+        due.forEach { runTemplate(it.id) }
+    }
+
+    /** Şablonun mesajını sohbetteki gibi yürütür; sonuç geçmişe yazılır, yanlışsa bildirilir. */
+    private fun runTemplate(id: String) {
+        val t = store.chatTemplates.orEmpty().firstOrNull { it.id == id } ?: return
+        telegram.execute {
+            val answer = runCatching { runBlocking { ChatRunner.answer(this@MonitorService, t.text, t.name) } }
+                .getOrElse { "⚠️ " + it.message.orEmpty() } ?: getString(R.string.chat_not_understood)
+            val text = getString(R.string.chat_template_ran, t.name, answer)
+            handler.post {
+                val failed = "⚠️" in answer || answer == getString(R.string.chat_not_understood)
+                log.add("", t.name, EventKind.AUTOMATION, text, if (failed) AlertAction.NOTIFY.name else "")
+                if (failed) notifier.notifyEvent(text)
+            }
+        }
+    }
+
     private fun weatherTick(wall: Long) {
         if (weatherBusy || wall < weatherAt) return
         val lat = store.latitude ?: return

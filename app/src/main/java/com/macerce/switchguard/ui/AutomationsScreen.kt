@@ -1004,7 +1004,7 @@ private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: 
 
 /** Haftanın günleri (Pzt…Paz); en az bir gün seçili kalır. */
 @Composable
-private fun DayChips(days: Int, onChange: (Int) -> Unit) {
+internal fun DayChips(days: Int, onChange: (Int) -> Unit) {
     val names = stringArrayResource(R.array.day_short)
     val scheme = MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {

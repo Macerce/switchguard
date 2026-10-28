@@ -831,10 +831,14 @@
     <string name="tg_help">SwitchGuard commands:
 /status – monitoring, alarm and devices
 /ack – take over the ringing alarm
-/on name [channel] – turn a device or group on
+/on name [channel] – turn a device or group on (several: /on kitchen, garden)
 /off name [channel] – turn a device or group off
+/watt [name] – power now, today and usual draw
+/temp – outdoor temperature
 /scene name – run a scene
 /home · /away – set at home / away
+
+You can also write freely: “turn off kitchen and garden”, “heater watts”, “is the pump on”.
 
 Turning devices on and off and scenes must be allowed in the app (Alerts → Smart alerts).</string>
     <string name="tg_no_alarm">No alarm is ringing.</string>
@@ -1265,4 +1269,57 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="one">%d device</item>
         <item quantity="other">%d devices</item>
     </plurals>
+    <string name="chat_not_understood">I didn\'t understand. Examples: “turn off living room and kitchen”, “heater how many watts”, “temperature”, “status”. Send help for the full list.</string>
+    <string name="chat_help">You can write freely:\n• turn on living room · turn off kitchen, garden\n• turn off all lights (every device whose name matches)\n• living room status · status\n• heater watts · power (now, today, usual draw)\n• temperature (outdoor)\n• evening scene · home · away\nMulti-channel devices: add the channel number, e.g. “turn on pump 2”.</string>
+    <string name="chat_ack_app">Alarms are silenced from the alarm screen in the app; “ack” works in Telegram.</string>
+    <string name="chat_switch_usage">Which device? e.g. “turn on living room”.</string>
+    <string name="chat_need_channel">%1$s has %2$d channels: add the channel number, e.g. “%1$s 1”.</string>
+    <string name="chat_not_found">No device named “%s”.</string>
+    <string name="chat_no_devices">No devices yet.</string>
+    <string name="chat_power_none">No device measures power.</string>
+    <string name="chat_no_power">%s does not measure power.</string>
+    <string name="chat_power_today">today %s kWh</string>
+    <string name="chat_power_typical">usually %s W while running (last 7 days)</string>
+    <string name="chat_power_learning">usual draw is still being learned</string>
+    <string name="chat_power_total">Total now: %s W</string>
+    <string name="chat_temp">🌡️ Outdoor temperature: %s °C</string>
+    <string name="chat_temp_unknown">Outdoor temperature is not known yet (set a location in Settings).</string>
+    <string name="chat_template_ran">Template “%1$s”: %2$s</string>
+    <string name="chat_tpl_status">Status</string>
+    <string name="chat_tpl_status_text">status</string>
+    <string name="chat_tpl_power">Power</string>
+    <string name="chat_tpl_power_text">power</string>
+    <string name="chat_tpl_temp">Temperature</string>
+    <string name="chat_tpl_temp_text">temperature</string>
+    <string name="chat_tpl_home">I\'m home</string>
+    <string name="chat_tpl_home_text">home</string>
+    <string name="chat_tpl_away">I\'m out</string>
+    <string name="chat_tpl_away_text">away</string>
+    <string name="chat_tpl_help">Help</string>
+    <string name="chat_tpl_help_text">help</string>
+    <string name="chat_title">Chat</string>
+    <string name="chat_open">Chat commands</string>
+    <string name="chat_hint">Write a command… (e.g. turn off kitchen)</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_welcome">Write to your devices: turn them on/off, ask their status, power or the temperature. Tap a template below to send it; hold it to edit.</string>
+    <string name="chat_templates">Templates</string>
+    <string name="chat_add_template">New template</string>
+    <string name="chat_edit_template">Edit template</string>
+    <string name="chat_tpl_name">Name</string>
+    <string name="chat_tpl_message">Message to send</string>
+    <string name="chat_tpl_message_help">Written as in the chat, e.g. “turn off garden, pool”.</string>
+    <string name="chat_tpl_when">Run automatically</string>
+    <string name="chat_when_manual">Only when tapped</string>
+    <string name="chat_when_time">Every day at a time</string>
+    <string name="chat_when_event">When something happens</string>
+    <string name="chat_tpl_time">Time</string>
+    <string name="chat_tpl_event">Event</string>
+    <string name="chat_tpl_device">Device</string>
+    <string name="chat_tpl_watts">Power (W)</string>
+    <string name="chat_tpl_degrees">Temperature (°C)</string>
+    <string name="chat_tpl_enabled">Automatic run on</string>
+    <string name="chat_tpl_auto">auto</string>
+    <string name="chat_tpl_try">Try</string>
+    <string name="chat_tpl_invalid">The message is not understood; try it in the chat first.</string>
+    <string name="chat_clear">Clear chat</string>
 </resources>

@@ -58,6 +58,7 @@ import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -142,6 +143,7 @@ import kotlin.math.abs
 fun DevicesScreen(
     modifier: Modifier,
     onOpenDevice: (String) -> Unit,
+    onOpenChat: () -> Unit = {},
     restoreFocusTo: String? = null,
     onFocusRestored: () -> Unit = {},
 ) {
@@ -233,6 +235,11 @@ fun DevicesScreen(
                     if (devices.isNotEmpty()) {
                         IconButton(modifier = Modifier.tvFocusRing(), onClick = { editMode = true }) {
                             Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
+                        }
+                    }
+                    if (devices.isNotEmpty()) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = onOpenChat) {
+                            Icon(Icons.Rounded.Forum, stringResource(R.string.chat_open))
                         }
                     }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = doRefresh, enabled = loggedIn) {

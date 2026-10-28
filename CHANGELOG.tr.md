@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.18.0 — 2026-10-29
+**Yeni**
+- Sohbetle komut: cihazlarınıza düz cümleyle yazın; Telegram'da ya da uygulamadaki yeni sohbet ekranında (Cihazlar → sohbet simgesi). “salon ve mutfağı kapat”, “tüm ışıkları kapat”, “pompa açık mı”, “klima kaç watt” (şimdiki, bugünkü ve son 7 günden öğrenilen olağan tüketim), “kaç derece”, “akşam sahnesi”, “evdeyim” / “dışarıdayım”. Telegram'a /watt ve /sicaklik eklendi; /ac ve /kapat virgülle ayrılmış birden çok cihaz alır.
+- Sohbet şablonları: yazı kutusunun altında tek dokunuşla gönderilen hazır mesajlar. Kendi şablonunuzu ekleyin, basılı tutarak düzenleyin ya da silin. Şablon kendiliğinden de çalışabilir: her gün belli saatte (seçilen günlerde) ya da bir olay olunca — cihaz açılınca/kapanınca, çevrimdışı olunca, güç bir değerin üstüne/altına çıkınca, dış sıcaklık, gün doğumu ya da batımı.
+
 ## 2.17.0 — 27 Ekim 2026
 **Yenilikler**
 - Uyarı kategorileri: her cihaz Kritik, Önemli ya da Normal'dir. Cihaz sayfasından seçebilir ya da Otomatik bırakabilirsiniz — bir olayında Alarm seçili cihaz Kritik, yalnız bildirim gönderen Önemli olur. Uyarılar sekmesi cihazları kategoriye göre süzer ve rozet gösterir; Uyarılar → Uyarı ayarları → Uyarı kategorileri'nden her kategori için alarmın sessiz saatlerde de çalıp çalmayacağı seçilir (önceden kritik işaretlenen cihazlar çalmaya devam eder).

@@ -113,6 +113,10 @@ class RuntimeState private constructor(context: Context) {
     var chargerLostAt: Long
         get() = prefs.getLong("chargerLost", 0)
         set(v) = put { putLong("chargerLost", v) }
+    /** Saatli sohbet şablonlarının son çalıştığı an (şablon kimliği → zaman). */
+    var templateRuns: Map<String, Long>
+        get() = runCatching { org.json.JSONObject(prefs.getString("templateRuns", "{}")!!).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())
+        set(v) = put { putString("templateRuns", org.json.JSONObject(v).toString()) }
     /** Son okunan dış sıcaklık (°C): düzenleyicide "şu an 12 °C" için. */
     var outdoorTemp: Double?
         get() = prefs.getString("outdoorTemp", null)?.toDoubleOrNull()

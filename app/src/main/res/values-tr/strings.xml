@@ -827,10 +827,14 @@
     <string name="tg_help">SwitchGuard komutları:
 /durum – izleme, alarm ve cihazlar
 /gordum – çalan alarmı üstlen
-/ac ad [kanal] – cihazı ya da grubu aç
+/ac ad [kanal] – cihazı ya da grubu aç (birden çok: /ac mutfak, bahçe)
 /kapat ad [kanal] – cihazı ya da grubu kapat
+/watt [ad] – şimdiki, bugünkü ve olağan güç
+/sicaklik – dış sıcaklık
 /sahne ad – sahneyi çalıştır
 /evde · /disarida – evde / dışarıda
+
+Serbest de yazabilirsiniz: “mutfak ve bahçeyi kapat”, “klima kaç watt”, “pompa açık mı”.
 
 Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarılar).</string>
     <string name="tg_no_alarm">Çalan alarm yok.</string>
@@ -1261,4 +1265,57 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item quantity="one">%d cihaz</item>
         <item quantity="other">%d cihaz</item>
     </plurals>
+    <string name="chat_not_understood">Anlamadım. Örnekler: “salon ve mutfağı kapat”, “klima kaç watt”, “kaç derece”, “durum”. Tüm liste için yardım yazın.</string>
+    <string name="chat_help">Serbestçe yazabilirsiniz:\n• salonu aç · mutfak, bahçe kapat\n• tüm ışıkları kapat (adı eşleşen bütün cihazlar)\n• salon açık mı · durum\n• klima kaç watt · güç (şimdi, bugün, olağan tüketim)\n• kaç derece (dış sıcaklık)\n• akşam sahnesi · evdeyim · dışarıdayım\nÇok kanallı cihazda kanal numarasını ekleyin, ör. “pompa 2 aç”.</string>
+    <string name="chat_ack_app">Alarm uygulamada alarm ekranından susturulur; “gördüm” Telegram\'da çalışır.</string>
+    <string name="chat_switch_usage">Hangi cihaz? ör. “salonu aç”.</string>
+    <string name="chat_need_channel">%1$s %2$d kanallı: kanal numarasını ekleyin, ör. “%1$s 1”.</string>
+    <string name="chat_not_found">“%s” adlı cihaz yok.</string>
+    <string name="chat_no_devices">Henüz cihaz yok.</string>
+    <string name="chat_power_none">Güç ölçen cihaz yok.</string>
+    <string name="chat_no_power">%s güç ölçmüyor.</string>
+    <string name="chat_power_today">bugün %s kWh</string>
+    <string name="chat_power_typical">çalışırken genelde %s W (son 7 gün)</string>
+    <string name="chat_power_learning">olağan tüketimi henüz öğreniliyor</string>
+    <string name="chat_power_total">Şu an toplam: %s W</string>
+    <string name="chat_temp">🌡️ Dış sıcaklık: %s °C</string>
+    <string name="chat_temp_unknown">Dış sıcaklık henüz bilinmiyor (Ayarlar\'dan konum seçin).</string>
+    <string name="chat_template_ran">“%1$s” şablonu: %2$s</string>
+    <string name="chat_tpl_status">Durum</string>
+    <string name="chat_tpl_status_text">durum</string>
+    <string name="chat_tpl_power">Güç</string>
+    <string name="chat_tpl_power_text">güç</string>
+    <string name="chat_tpl_temp">Sıcaklık</string>
+    <string name="chat_tpl_temp_text">kaç derece</string>
+    <string name="chat_tpl_home">Evdeyim</string>
+    <string name="chat_tpl_home_text">evdeyim</string>
+    <string name="chat_tpl_away">Dışarıdayım</string>
+    <string name="chat_tpl_away_text">dışarıdayım</string>
+    <string name="chat_tpl_help">Yardım</string>
+    <string name="chat_tpl_help_text">yardım</string>
+    <string name="chat_title">Sohbet</string>
+    <string name="chat_open">Sohbetle komut</string>
+    <string name="chat_hint">Komut yazın… (ör. mutfağı kapat)</string>
+    <string name="chat_send">Gönder</string>
+    <string name="chat_welcome">Cihazlarınıza yazın: açıp kapatın, durumunu, gücünü ya da sıcaklığı sorun. Aşağıdaki şablona dokununca gönderilir; düzenlemek için basılı tutun.</string>
+    <string name="chat_templates">Şablonlar</string>
+    <string name="chat_add_template">Yeni şablon</string>
+    <string name="chat_edit_template">Şablonu düzenle</string>
+    <string name="chat_tpl_name">Ad</string>
+    <string name="chat_tpl_message">Gönderilecek mesaj</string>
+    <string name="chat_tpl_message_help">Sohbetteki gibi yazılır, ör. “bahçe, havuz kapat”.</string>
+    <string name="chat_tpl_when">Kendiliğinden çalışsın</string>
+    <string name="chat_when_manual">Yalnız dokununca</string>
+    <string name="chat_when_time">Her gün belli saatte</string>
+    <string name="chat_when_event">Bir olay olunca</string>
+    <string name="chat_tpl_time">Saat</string>
+    <string name="chat_tpl_event">Olay</string>
+    <string name="chat_tpl_device">Cihaz</string>
+    <string name="chat_tpl_watts">Güç (W)</string>
+    <string name="chat_tpl_degrees">Sıcaklık (°C)</string>
+    <string name="chat_tpl_enabled">Kendiliğinden çalışma açık</string>
+    <string name="chat_tpl_auto">otomatik</string>
+    <string name="chat_tpl_try">Dene</string>
+    <string name="chat_tpl_invalid">Mesaj anlaşılmıyor; önce sohbette deneyin.</string>
+    <string name="chat_clear">Sohbeti temizle</string>
 </resources>
