@@ -15,6 +15,8 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- Kritik alarmda seçilen kişiyi telefonla arama (Ayarlar → Kritik alarmda ara). -->
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- Arama sırasında hoparlörü açıp alarmı okumak için. -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <!-- Telefon kilitliyken/ekran kapalıyken alarm, tam ekran alarm ekranıyla açılır (Android 14+ kullanıcı izni). -->

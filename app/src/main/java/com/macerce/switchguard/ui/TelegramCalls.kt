@@ -1,7 +1,6 @@
 package com.macerce.switchguard.ui
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,34 +34,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.R
-import com.macerce.switchguard.api.CallMeBotClient
 import com.macerce.switchguard.core.CallMode
 import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.Recipient
 import com.macerce.switchguard.data.Store
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.macerce.switchguard.service.CallAnnouncer
 
-/** "Ahmet: Telegram · Ayşe: telefon" ya da "Kapalı". */
+/** "Ahmet · Ayşe" (aranacaklar) ya da "Kapalı". */
 @Composable
 fun callsSummary(s: Store): String {
     val list = s.telegramRecipients.filter { it.calls }
     if (list.isEmpty()) return stringResource(R.string.blind_alert_off)
-    val tg = stringResource(R.string.calls_telegram)
-    val phone = stringResource(R.string.calls_phone)
-    return list.joinToString(" · ") { "${it.name}: ${if (it.call == CallMode.TELEGRAM) tg else phone}" }
+    return list.joinToString(" · ") { it.name }
 }
 
 /**
- * Kritik alarmda arama: her kişi için yok / Telegram araması (CallMeBot) / telefon araması. Kişi, kendi kademe süresi
- * dolunca mesajla birlikte aranır. Gruplar aranamaz.
+ * Kritik alarmda arama: her kişi için yok / telefon araması. Kişi, kendi kademe süresi dolunca mesajla birlikte bu
+ * cihazın hattından aranır ve görüşmede alarm metni okunur. Gruplar aranamaz.
  */
 @Composable
 fun CallsDialog(store: Store, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val resources = LocalResources.current
-    val scope = rememberCoroutineScope()
     val people = store.telegramRecipients.filter { it.id > 0 }
     val modes = remember { mutableStateMapOf<Long, CallMode>().apply { people.forEach { put(it.id, it.call) } } }
     val targets = remember { mutableStateMapOf<Long, String>().apply { people.forEach { put(it.id, it.callTo) } } }
@@ -77,14 +69,6 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
         val mode = modes[r.id] ?: return
         val to = targets[r.id].orEmpty().trim()
         when (mode) {
-            CallMode.TELEGRAM -> {
-                message = resources.getString(R.string.calls_testing)
-                scope.launch {
-                    val turkish = resources.configuration.locales[0].language == "tr"
-                    message = runCatching { withContext(Dispatchers.IO) { CallMeBotClient.call(to, resources.getString(R.string.call_test_text), turkish) } }
-                        .fold({ resources.getString(R.string.calls_test_sent) }, { e -> resources.getString(R.string.call_failed, r.name, e.message.orEmpty()) })
-                }
-            }
             // Gerçek alarmdaki gibi doğrudan arar (Telecom); izin yoksa önce istenir.
             CallMode.PHONE -> {
                 if (context.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -94,6 +78,7 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                 message = runCatching {
                     context.getSystemService(android.telecom.TelecomManager::class.java)!!
                         .placeCall(Uri.fromParts("tel", to.replace(" ", ""), null), android.os.Bundle())
+                    CallAnnouncer.start(context, resources.getString(R.string.call_test_text))
                     resources.getString(R.string.calls_test_sent)
                 }.getOrElse { e -> resources.getString(R.string.call_failed, r.name, e.message.orEmpty()) }
             }
@@ -113,7 +98,6 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         listOfNotNull(
                             CallMode.NONE to R.string.calls_none,
-                            CallMode.TELEGRAM to R.string.calls_telegram,
                             (CallMode.PHONE to R.string.calls_phone).takeIf { hasPhone || mode == CallMode.PHONE },
                         ).forEach { (m, label) ->
                             FilterChip(
@@ -134,19 +118,12 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                         OutlinedTextField(
                             value = targets[r.id].orEmpty(),
                             onValueChange = { targets[r.id] = it.take(40) },
-                            label = { Text(stringResource(if (mode == CallMode.TELEGRAM) R.string.calls_tg_target else R.string.calls_phone_target)) },
+                            label = { Text(stringResource(R.string.calls_phone_target)) },
                             singleLine = true,
                             isError = !ok && targets[r.id].orEmpty().isNotBlank(),
-                            keyboardOptions = KeyboardOptions(keyboardType = if (mode == CallMode.PHONE) KeyboardType.Phone else KeyboardType.Text),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
                             modifier = Modifier.fillMaxWidth().tvTextField(),
                         )
-                        if (mode == CallMode.TELEGRAM) {
-                            Text(stringResource(R.string.calls_tg_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                            // Telegram'da CallMeBot sohbetini açar; kişi "Başlat"a basınca izin verilmiş olur.
-                            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
-                                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/CallMeBot_txtbot"))) }
-                            }) { Text(stringResource(R.string.calls_tg_allow)) }
-                        }
                         TextButton(enabled = ok && targets[r.id].orEmpty().isNotBlank(), modifier = Modifier.tvFocusRing(), onClick = { test(r) }) {
                             Text(stringResource(R.string.calls_test))
                         }

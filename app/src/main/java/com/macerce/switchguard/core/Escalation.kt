@@ -4,11 +4,11 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /** Kritik alarmda kişinin nasıl aranacağı. */
-enum class CallMode { NONE, TELEGRAM, PHONE }
+enum class CallMode { NONE, PHONE }
 
 /**
  * Telegram'da haber verilecek kişi ya da grup. Gruplarda [id] eksi sayıdır.
- * [call]/[callTo]: kritik alarmda arama; TELEGRAM için "@kullanıcıadı" ya da "+90…", PHONE için telefon numarası.
+ * [call]/[callTo]: kritik alarmda telefonla arama ve numara.
  */
 data class Recipient(val id: Long, val name: String, val call: CallMode = CallMode.NONE, val callTo: String = "") {
     /** Arama ayarlı ve hedefi geçerli. */
@@ -28,7 +28,7 @@ data class Recipient(val id: Long, val name: String, val call: CallMode = CallMo
                 (0 until a.length()).map {
                     a.getJSONObject(it).let { o ->
                         val call = runCatching { CallMode.valueOf(o.optString("call")) }.getOrDefault(CallMode.NONE)
-                        Recipient(o.getLong("id"), o.optString("name"), call, o.optString("callTo"))
+                        Recipient(o.getLong("id"), o.optString("name"), call, if (call == CallMode.NONE) "" else o.optString("callTo"))
                     }
                 }
             }.getOrDefault(emptyList())
@@ -91,18 +91,16 @@ object Escalation {
     fun firstDelay(recipients: List<Recipient>, stages: Map<Long, Int>, default: Int): Int? =
         recipients.minOfOrNull { stages[it.id] ?: default }
 
-    /** Arama hedefi: Telegram'da "@ad" ya da "+" ile başlayan numara; telefonda numara. */
+    /** Arama hedefi: telefon numarası. */
     fun isCallTarget(mode: CallMode, to: String): Boolean {
         val t = to.trim()
         val phone = PHONE.matches(t.replace(" ", ""))
         return when (mode) {
             CallMode.NONE -> false
-            CallMode.TELEGRAM -> USERNAME.matches(t) || (phone && t.startsWith("+"))
             CallMode.PHONE -> phone
         }
     }
 
-    private val USERNAME = Regex("""^@[A-Za-z][A-Za-z0-9_]{4,31}$""")
     private val PHONE = Regex("""^\+?[0-9]{3,15}$""")
 
     /** Bot anahtarı biçimi: "123456789:AA…" (BotFather'ın verdiği). */

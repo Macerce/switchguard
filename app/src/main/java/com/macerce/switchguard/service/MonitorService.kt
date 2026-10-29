@@ -22,7 +22,6 @@ import android.os.SystemClock
 import android.util.Log
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.ApiException
-import com.macerce.switchguard.api.CallMeBotClient
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
@@ -1217,9 +1216,8 @@ class MonitorService : Service() {
     private var lastPhoneCallAt = 0L
 
     /**
-     * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler aranır; Telegram'dan bir kez,
-     * telefonla alarm sürdükçe [PHONE_CALL_GAP_MS] arayla en çok [PHONE_CALL_TRIES] kez.
-     * Telegram araması CallMeBot ile ([calls] iş parçacığında), telefon araması bu cihazın hattından.
+     * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler bu cihazın hattından aranır;
+     * alarm sürdükçe [PHONE_CALL_GAP_MS] arayla en çok [PHONE_CALL_TRIES] kez. Görüşmede alarm metni okunur ([CallAnnouncer]).
      * Aranamayan kişi bildirimle haber verilir, yeniden denenmez (arama tekrarı gece herkesi uyandırmasın).
      */
     private fun checkCalls(wall: Long) {
@@ -1230,18 +1228,9 @@ class MonitorService : Service() {
             .filter { it.calls }
         if (due.isEmpty()) return
         val text = getString(R.string.call_text, store.pendingAlarm.last().substringAfter("  "))
-        val turkish = resources.configuration.locales[0].language == "tr"
         val marked = mutableSetOf<Long>()
         for (r in due) {
             when (r.call) {
-                CallMode.TELEGRAM -> {
-                    marked += r.id
-                    calls.execute {
-                        runCatching { CallMeBotClient.call(r.callTo, text, turkish) }
-                            .onSuccess { Log.i(TAG, "callmebot call started") }
-                            .onFailure { e -> Log.w(TAG, "callmebot call failed", e); handler.post { callFailed(r, e.message) } }
-                    }
-                }
                 CallMode.PHONE -> {
                     // Açıp açmadığı bilinemez: alarm kapatılana ya da "Gördüm" denene dek aralıkla yeniden aranır.
                     val (count, lastAt) = runtime.phoneCalls[r.id] ?: (0 to 0L)
@@ -1252,6 +1241,7 @@ class MonitorService : Service() {
                         marked += r.id
                         callFailed(r, error)
                     } else {
+                        CallAnnouncer.start(this, text)
                         runtime.phoneCalls = runtime.phoneCalls + (r.id to (count + 1 to wall))
                         if (count + 1 >= PHONE_CALL_TRIES) marked += r.id
                     }
@@ -2100,8 +2090,6 @@ class MonitorService : Service() {
          * kuyruğa giren "alarm kapatıldı" mesajı da gidebilsin.
          */
         private val telegram = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "telegram").apply { isDaemon = true } }
-        /** CallMeBot yanıtı arama başlayana dek sürebilir: Telegram komutlarını bekletmesin. */
-        private val calls = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "calls").apply { isDaemon = true } }
 
         private fun tickPendingIntent(context: Context) = PendingIntent.getBroadcast(
             context, 0, Intent(context, TickReceiver::class.java),

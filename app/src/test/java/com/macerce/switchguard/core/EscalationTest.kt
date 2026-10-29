@@ -72,20 +72,17 @@ class EscalationTest {
 
     @Test
     fun `arama ayari kaydedilir, eski kayit aramasiz okunur`() {
-        val list = listOf(Recipient(1, "Ayşe", CallMode.TELEGRAM, "@ayse_k"), Recipient(2, "Ali", CallMode.PHONE, "+90 555 111 2233"))
+        val list = listOf(Recipient(1, "Ayşe", CallMode.PHONE, "05551112233"), Recipient(2, "Ali", CallMode.PHONE, "+90 555 111 2233"))
         assertEquals(list, Recipient.listFromJson(Recipient.listToJson(list)))
         assertEquals(listOf(Recipient(1, "Ayşe")), Recipient.listFromJson("""[{"id":1,"name":"Ayşe"}]"""))
         assertTrue(list.all { it.calls })
-        assertFalse(Recipient(3, "Veli", CallMode.TELEGRAM, "").calls)
+        assertFalse(Recipient(3, "Veli", CallMode.PHONE, "").calls)
+        // Kaldırılan Telegram araması (2.20 denemesi) aramasız okunur.
+        assertEquals(listOf(Recipient(1, "Ayşe")), Recipient.listFromJson("""[{"id":1,"name":"Ayşe","call":"TELEGRAM","callTo":"@ayse_k"}]"""))
     }
 
     @Test
     fun `arama hedefi bicimi`() {
-        assertTrue(Escalation.isCallTarget(CallMode.TELEGRAM, "@ayse_k"))
-        assertTrue(Escalation.isCallTarget(CallMode.TELEGRAM, "+905551112233"))
-        // Telegram numarası uluslararası olmalı; kullanıcı adı "@" ile ve en az 5 karakter.
-        assertFalse(Escalation.isCallTarget(CallMode.TELEGRAM, "05551112233"))
-        assertFalse(Escalation.isCallTarget(CallMode.TELEGRAM, "@abc"))
         assertTrue(Escalation.isCallTarget(CallMode.PHONE, "0555 111 22 33"))
         assertTrue(Escalation.isCallTarget(CallMode.PHONE, "112"))
         assertFalse(Escalation.isCallTarget(CallMode.PHONE, "@ayse_k"))
