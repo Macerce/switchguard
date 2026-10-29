@@ -2,6 +2,7 @@ package com.macerce.switchguard.desktop.engine
 
 import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.TEST_LICENSE_KEY
 import com.macerce.switchguard.core.AutoAction
@@ -63,6 +64,8 @@ class MonitorEngineTest {
     /** Gönderilen Telegram mesajları (sohbet, metin); [telegramError] doluysa gönderim o hatayla düşer. */
     private val telegramSent = mutableListOf<Pair<Long, String>>()
     private var telegramError: Exception? = null
+    /** Sahte Telegram yoklamasının döndürdüğü güncellemeler. */
+    private var telegramUpdates = "{\"ok\":true,\"result\":[]}"
 
     @Before
     fun setUp() {
@@ -1028,7 +1031,112 @@ class MonitorEngineTest {
         assertEquals("usage follows the re-created device", if (fresh) 60 * 60_000L else 0L, usage.onMillis)
     }
 
+    // ---------------------------------------------------------------- sohbet ve şablonlar (telefon 2.18)
+
+    @Test
+    fun chatSwitchesSeveralDevicesAndAnswersForEach() {
+        startWith(pump(on = true), light(on = true), rules = mapOf(EventType.TURNED_OFF to AlertAction.ALARM))
+        var answer: String? = null
+
+        engine.chat("turn off pump and light", "Chat") { answer = it }
+        scheduler.advance(10_000)
+
+        assertEquals(setOf(Triple(id, 0, false), Triple(lightId, 0, false)), ewelink.switched.toSet())
+        assertTrue(answer!!, answer!!.contains("✅ Pump") && answer!!.contains("✅ Light"))
+        assertTrue("chat control never alarms", host.alarms.isEmpty())
+    }
+
+    @Test
+    fun chatAnswersStatusAndNullForNonsense() {
+        startWith(pump(on = true), rules = emptyMap())
+        var status: String? = null
+        var nonsense: String? = "not called"
+
+        engine.chat("is the pump on", "Chat") { status = it }
+        engine.chat("hello there", "Chat") { nonsense = it }
+        scheduler.advance(0)
+
+        assertTrue(status!!, status!!.contains("Pump"))
+        assertNull(nonsense)
+        assertTrue(ewelink.switched.isEmpty())
+    }
+
+    @Test
+    fun chatTemperatureWithoutLocationSaysWhereToSetIt() {
+        startWith(pump(), rules = emptyMap())
+        var answer: String? = null
+
+        engine.chat("temperature", "Chat") { answer = it }
+        scheduler.advance(0)
+
+        assertEquals(strings["desktop_chat_temp_unknown"], answer)
+    }
+
+    @Test
+    fun telegramFreeTextSwitchesEveryNamedDevice() {
+        readyTelegram(minutes = 5)
+        store.telegramCommands = true
+        store.telegramControl = true
+        startWith(pump(on = true), light(on = true), rules = emptyMap())
+        telegramUpdates = telegramMessage("turn off pump and light")
+
+        scheduler.advance(16_000)
+
+        assertEquals(setOf(Triple(id, 0, false), Triple(lightId, 0, false)), ewelink.switched.toSet())
+        assertEquals(2, telegramSent.count { it.first == 42L && it.second.startsWith("✅") })
+    }
+
+    @Test
+    fun telegramNonsenseGetsAHintInAPrivateChat() {
+        readyTelegram(minutes = 5)
+        store.telegramCommands = true
+        startWith(pump(), rules = emptyMap())
+        telegramUpdates = telegramMessage("good morning everyone")
+
+        scheduler.advance(16_000)
+
+        assertEquals(1, telegramSent.count { it.second.startsWith(strings["chat_not_understood"]) })
+        assertTrue(ewelink.switched.isEmpty())
+    }
+
+    @Test
+    fun timedTemplateRunsOnceAtItsTimeAndIsLogged() {
+        store.chatTemplates = listOf(ChatTemplate("t1", "Evening", "turn off pump", atMinute = 13 * 60)) // saat 12:00'de başlıyoruz
+        startWith(pump(on = true), rules = emptyMap())
+
+        scheduler.advance(59 * 60_000L)
+        assertTrue(ewelink.switched.isEmpty())
+        scheduler.advance(2 * 60_000L)
+        assertEquals(listOf(Triple(id, 0, false)), ewelink.switched)
+        assertTrue(log.recent().any { it.kind == EventKind.AUTOMATION && it.deviceName == "Evening" })
+
+        scheduler.advance(3 * 60 * 60_000L)
+        assertEquals("once a day", 1, ewelink.switched.size)
+    }
+
+    @Test
+    fun eventTemplateRunsWhenItsTriggerFires() {
+        store.chatTemplates = listOf(
+            ChatTemplate("t2", "Pump on", "turn off light", trigger = Trigger(TriggerKind.TURNED_ON, id, 0)),
+        )
+        startWith(pump(on = false), light(on = true), rules = emptyMap())
+
+        cloudUpdate(switches = mapOf(0 to true))
+        scheduler.advance(10_000)
+
+        assertTrue(ewelink.switched.contains(Triple(lightId, 0, false)))
+    }
+
     // ---------------------------------------------------------------- yardımcılar
+
+    private val lightId = "light-" + UUID.randomUUID()
+
+    private fun light(on: Boolean = true) = DeviceSnapshot(lightId, "Light", online = true, switches = mapOf(0 to on))
+
+    /** Kişi 42'nin özel sohbetten az önce yazdığı mesaj. */
+    private fun telegramMessage(text: String) =
+        "{\"ok\":true,\"result\":[{\"update_id\":7,\"message\":{\"message_id\":3,\"from\":{\"first_name\":\"Ali\"}," +
+            "\"chat\":{\"id\":42,\"type\":\"private\"},\"date\":${clock.wall() / 1000},\"text\":\"$text\"}}]}"
 
     /** Yalnızca gönderimi kaydeden sahte Telegram; yoklama boş döner. */
     private fun fakeTelegram(onSend: (Long, String) -> Unit) = object : TelegramApi {
@@ -1036,7 +1144,7 @@ class MonitorEngineTest {
             onSend(chatId, text)
             return 1
         }
-        override fun updates(token: String, offset: Long) = "{\"ok\":true,\"result\":[]}"
+        override fun updates(token: String, offset: Long) = telegramUpdates
         override fun answerCallback(token: String, callbackId: String, text: String) = Unit
         override fun removeButtons(token: String, chatId: Long, messageId: Long) = Unit
         override fun edit(token: String, chatId: Long, messageId: Long, text: String) = Unit

@@ -47,6 +47,8 @@ object BackupContent {
         "energyPrice", "devicePrices", "threeZone", "priceDay", "pricePeak", "priceNight", "budget",
         "outageDetect", "energyAnomaly", "weeklyReport", "softenAtHome", "scenes", "groups", "lat", "lon",
         "tgCommands", "tgControl", "tgForward", "tgStages", "wdMode", "wdMin", "chargerOutage", "samePower",
+        // telefon 2.18: sohbet şablonları
+        "chatTemplates",
     )
 
     val CLEARED: Set<String> = setOf(

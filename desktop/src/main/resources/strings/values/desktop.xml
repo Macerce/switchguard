@@ -151,4 +151,7 @@
     <!-- Motorun uyarıları -->
     <string name="desktop_secrets_unreadable">Saved keys can\'t be read on this computer (for example, the settings were copied from another computer). Enter your eWeLink and Tuya details again in Settings.</string>
     <string name="desktop_blind_hint">Check the internet connection and that the computer isn\'t asleep.</string>
+    <!-- Chat (phone 2.18) -->
+    <string name="desktop_chat_temp_unknown">I need a location to show the outdoor temperature. Set it in the desktop app under Alerts → Smart alerts → Location.</string>
+    <string name="desktop_chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Ready-made templates are below; click one to send it, right-click to edit.</string>
 </resources>

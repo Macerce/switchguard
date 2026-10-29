@@ -52,7 +52,7 @@ import kotlinx.coroutines.withContext
 fun Modifier.readableWidth(max: Dp = 1000.dp): Modifier = this.widthIn(max = max)
 
 /**
- * Sol menü (Cihazlar · Uyarılar · Otomasyon · Geçmiş · Ayarlar) ve seçili ekran; telefondaki App.kt'nin geniş ekran düzeni.
+ * Sol menü (Cihazlar · Uyarılar · Otomasyon · Geçmiş · Sohbet · Ayarlar) ve seçili ekran; telefondaki App.kt'nin geniş ekran düzeni.
  * Seçim ve açık cihaz [com.macerce.switchguard.desktop.AppState]'te: pencere yeniden kurulsa da korunur. Geçmiş rozeti:
  * son bakıştan beri alarm/bildirim üretmiş olay sayısı; Geçmiş açıkken yeni olaylar da görülmüş sayılır.
  */
@@ -109,6 +109,7 @@ fun AppNav(graph: AppGraph, strings: Strings) {
                     Tab.ALERTS -> AlertsScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.AUTOMATIONS -> AutomationsScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.HISTORY -> HistoryScreen(graph, Modifier.fillMaxSize())
+                    Tab.CHAT -> com.macerce.switchguard.desktop.ui.chat.ChatScreen(graph, strings, Modifier.fillMaxSize())
                     Tab.SETTINGS -> SettingsScreen(graph, strings)
                 }
             }

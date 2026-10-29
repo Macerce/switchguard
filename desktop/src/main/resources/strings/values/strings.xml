@@ -177,6 +177,7 @@
     <string name="action_enter_keys">Enter Access ID and Secret</string>
     <string name="action_change">Change</string>
     <string name="action_edit_layout">Arrange devices</string>
+    <string name="layout_move_hint">Use the arrow keys to move the card, OK to finish</string>
     <string name="action_close">Close</string>
     <string name="action_done">Done</string>
     <string name="action_rename">Rename</string>
@@ -830,10 +831,14 @@
     <string name="tg_help">SwitchGuard commands:
 /status – monitoring, alarm and devices
 /ack – take over the ringing alarm
-/on name [channel] – turn a device or group on
+/on name [channel] – turn a device or group on (several: /on kitchen, garden)
 /off name [channel] – turn a device or group off
+/watt [name] – power now, today and usual draw
+/temp – outdoor temperature
 /scene name – run a scene
 /home · /away – set at home / away
+
+You can also write freely: “turn off kitchen and garden”, “heater watts”, “is the pump on”.
 
 Turning devices on and off and scenes must be allowed in the app (Alerts → Smart alerts).</string>
     <string name="tg_no_alarm">No alarm is ringing.</string>
@@ -934,6 +939,40 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="evt_sunset">Sunset</string>
     <string name="evt_temp_above">Warmer than</string>
     <string name="evt_temp_below">Colder than</string>
+    <string name="trigger_zone_enter">on arrival</string>
+    <string name="trigger_zone_exit">on leaving</string>
+    <string name="evt_zone_enter">Arrive in zone</string>
+    <string name="evt_zone_exit">Leave zone</string>
+    <string name="zone_title">Zones</string>
+    <string name="zone_desc">Pick an area on the map; automations run when your phone enters or leaves it (e.g. turn on the garden light when you get home, turn everything off when you leave). Map images are downloaded from OpenStreetMap; your location is only used on this phone.</string>
+    <string name="zone_none">No zones yet.</string>
+    <string name="zone_add">New zone</string>
+    <string name="zone_edit">Edit zone</string>
+    <string name="zone_name">Zone name</string>
+    <string name="zone_name_hint">e.g. Home</string>
+    <string name="zone_radius">Radius</string>
+    <string name="zone_map_hint">Drag the map to center the area; pinch or use +/− to zoom.</string>
+    <string name="zone_search">Search a city or place</string>
+    <string name="zone_search_none">No results.</string>
+    <string name="zone_here">My current location</string>
+    <string name="zone_zoom_in">Zoom in</string>
+    <string name="zone_zoom_out">Zoom out</string>
+    <string name="zone_summary">%1$s · %2$s radius</string>
+    <string name="zone_in_use">This zone is used by %d rules; delete those rules or point them to another zone first.</string>
+    <string name="zone_delete_confirm">Delete the zone “%s”?</string>
+    <string name="zone_choose">Zone</string>
+    <string name="zone_perm_title">Background location permission needed</string>
+    <string name="zone_perm_desc">For zone rules, SwitchGuard uses your location even when the app is closed or not in use, only to detect when you cross the border of the zones you picked. Your location stays on the phone and is never sent to any server.</string>
+    <string name="zone_perm_background">One more step: on the permission page, choose “Allow all the time” for location.</string>
+    <string name="zone_perm_grant">Allow</string>
+    <string name="zone_perm_ok">Zone monitoring is on. Arrivals and departures may be detected a few minutes late.</string>
+    <string name="map_attribution">© OpenStreetMap contributors</string>
+    <string name="settings_location">Location and zones</string>
+    <string name="settings_location_desc">Sunrise, outdoor temperature and zone rules</string>
+    <string name="chat_set_location">Set location</string>
+    <string name="chat_temp_failed">The outdoor temperature could not be fetched right now. Check your internet connection and try again.</string>
+    <string name="chat_you">You</string>
+    <string name="chat_typing">Preparing reply…</string>
     <string name="sun_offset">Shift</string>
     <string name="sun_exact">Exactly</string>
     <string name="sun_before">%s before</string>
@@ -1082,6 +1121,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="widget_presence_choice_desc">Tap the widget to switch</string>
     <string name="widget_presence_tap">Tap to switch</string>
     <string name="widget_scene_tap">Tap to run</string>
+    <string name="shortcut_source">App shortcut</string>
 
     <!-- Raporlar -->
     <string name="report_what_title">What this report shows</string>
@@ -1236,19 +1276,9 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="daily_col_time">Time on</string>
     <string name="daily_table_note">Turned on: how many times it was switched on today. Time on: total time it stayed on.</string>
     <string name="daily_longest">%1$s stayed on the longest today: %2$s.</string>
-    <string name="license_title">Activate Pro</string>
-    <string name="license_title_active">Pro license</string>
-    <string name="license_body">Without a license the app monitors %1$d device. Enter your license key to monitor all your devices.</string>
-    <string name="license_key">License key</string>
-    <string name="license_invalid">This license key is not valid. Check that you copied all of it.</string>
-    <string name="license_activate">Activate</string>
-    <string name="license_remove">Remove license</string>
-    <string name="license_owner">Licensed to %1$s · %2$s</string>
-    <string name="license_enter">Enter license key</string>
-    <string name="update_available">SwitchGuard %1$s is available. It installs over this version; your settings and license stay.</string>
-    <string name="update_downloading">Downloading SwitchGuard %1$s… The app will close, update and reopen.</string>
-    <string name="update_failed">The update could not be downloaded. Check your internet connection and try again.</string>
-    <string name="update_install">Update</string>
+    <string name="update_title">SwitchGuard %1$s is available</string>
+    <string name="update_body">You have version %1$s. Download the new version from GitHub and install it over this one; your settings stay.</string>
+    <string name="update_download">Download</string>
     <string name="update_later">Later</string>
     <!-- Alert categories -->
     <string name="alert_category">Alert category</string>
@@ -1273,4 +1303,58 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="one">%d device</item>
         <item quantity="other">%d devices</item>
     </plurals>
+    <string name="chat_not_understood">I couldn\'t understand that command. For example, write “Turn off living room and kitchen”, “Heater watts?”, “Temperature?” or “Status”. Send “Help” for all commands.</string>
+    <string name="chat_help">Write your commands freely. Examples:\n• Turn on living room · Turn off kitchen and garden\n• Turn off all lights (every device whose name matches)\n• Is the living room on? · Status\n• Heater watts? · Power (now, today and usual draw)\n• Temperature? (outdoor)\n• Evening scene · Home · Away\nFor multi-channel devices add the channel number, e.g. “Turn on pump 2”.</string>
+    <string name="chat_ack_app">Alarms are silenced from the alarm screen in the app; the “Ack” command works in Telegram.</string>
+    <string name="chat_switch_usage">Which device? For example, write “Turn on living room”.</string>
+    <string name="chat_need_channel">%1$s has %2$d channels; add the channel number, e.g. “Turn on %1$s 1”.</string>
+    <string name="chat_not_found">No device named “%s” was found.</string>
+    <string name="chat_no_devices">No devices have been added yet.</string>
+    <string name="chat_power_none">No device measures power.</string>
+    <string name="chat_power_offline">%s: offline, current power unknown</string>
+    <string name="chat_no_power">%s does not measure power.</string>
+    <string name="chat_power_today">Today %s kWh</string>
+    <string name="chat_power_typical">Usually %s W while running (last 7 days)</string>
+    <string name="chat_power_learning">Usual draw is still being learned</string>
+    <string name="chat_power_total">Total now: %s W</string>
+    <string name="chat_temp">🌡️ Outdoor temperature: %s °C</string>
+    <string name="chat_temp_unknown">I need a location to show the outdoor temperature. You can set it in the app under Settings → Location and zones.</string>
+    <string name="chat_template_ran">Template “%1$s”: %2$s</string>
+    <string name="chat_tpl_status">Status</string>
+    <string name="chat_tpl_status_text">Status</string>
+    <string name="chat_tpl_power">Power</string>
+    <string name="chat_tpl_power_text">Power</string>
+    <string name="chat_tpl_temp">Temperature</string>
+    <string name="chat_tpl_temp_text">Temperature?</string>
+    <string name="chat_tpl_home">I\'m home</string>
+    <string name="chat_tpl_home_text">Home</string>
+    <string name="chat_tpl_away">I\'m out</string>
+    <string name="chat_tpl_away_text">Away</string>
+    <string name="chat_tpl_help">Help</string>
+    <string name="chat_tpl_help_text">Help</string>
+    <string name="chat_title">Chat</string>
+    <string name="chat_open">Chat commands</string>
+    <string name="chat_hint">Write a command, e.g. Turn off kitchen</string>
+    <string name="chat_send">Send</string>
+    <string name="chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Ready-made templates are below; tap one to send it, hold it to edit.</string>
+    <string name="chat_templates">Templates</string>
+    <string name="chat_add_template">New template</string>
+    <string name="chat_edit_template">Edit template</string>
+    <string name="chat_tpl_name">Name</string>
+    <string name="chat_tpl_message">Message to send</string>
+    <string name="chat_tpl_message_help">Written as in the chat, e.g. “Turn off garden and pool”.</string>
+    <string name="chat_tpl_when">Run automatically</string>
+    <string name="chat_when_manual">Only when tapped</string>
+    <string name="chat_when_time">Every day at a time</string>
+    <string name="chat_when_event">When something happens</string>
+    <string name="chat_tpl_time">Time</string>
+    <string name="chat_tpl_event">Event</string>
+    <string name="chat_tpl_device">Device</string>
+    <string name="chat_tpl_watts">Power (W)</string>
+    <string name="chat_tpl_degrees">Temperature (°C)</string>
+    <string name="chat_tpl_enabled">Automatic run on</string>
+    <string name="chat_tpl_auto">Auto</string>
+    <string name="chat_tpl_try">Try</string>
+    <string name="chat_tpl_invalid">The message is not understood; try it in the chat first.</string>
+    <string name="chat_clear">Clear chat</string>
 </resources>

@@ -110,7 +110,7 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
 }
 
 /**
- * Klavye kısayolları (masaüstü uygulamalarının alışılmışı): Ctrl+1 … Ctrl+5 sekmeler, Ctrl+, Ayarlar, F5 bulutu
+ * Klavye kısayolları (masaüstü uygulamalarının alışılmışı): Ctrl+1 … Ctrl+6 sekmeler, Ctrl+, Ayarlar, F5 bulutu
  * hemen kontrol et. Yazı alanındayken de çalışır (Ctrl'li olduklarından yazıyı bozmaz).
  */
 private fun shortcut(e: androidx.compose.ui.input.key.KeyEvent, graph: AppGraph): Boolean {
@@ -118,7 +118,7 @@ private fun shortcut(e: androidx.compose.ui.input.key.KeyEvent, graph: AppGraph)
     val tabs = com.macerce.switchguard.desktop.AppState.Tab.entries
     val k = e.key
     if (e.isCtrlPressed) {
-        val index = listOf(Key.One, Key.Two, Key.Three, Key.Four, Key.Five).indexOf(k)
+        val index = listOf(Key.One, Key.Two, Key.Three, Key.Four, Key.Five, Key.Six).indexOf(k)
         if (index >= 0) {
             graph.appState.select(tabs[index])
             return true

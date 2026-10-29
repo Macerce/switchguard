@@ -1,6 +1,7 @@
 package com.macerce.switchguard.data
 
 import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceCategory
@@ -481,6 +482,11 @@ class Store internal constructor(
     fun deleteScene(id: String): Unit = synchronized(lock) { scenes = scenes.filterNot { it.id == id } }
 
     /** Gruplar: tek düğmeyle açılıp kapanan cihaz kümeleri (bkz. [DeviceGroup]). */
+    /** Sohbet şablonları; hiç kaydedilmediyse null (hazır şablonlar gösterilir, bkz. ChatRunner.defaults). */
+    var chatTemplates: List<ChatTemplate>?
+        get() = ChatTemplate.listFromJson(strOrNull("chatTemplates"))
+        set(v) = edit { if (v == null) remove("chatTemplates") else put("chatTemplates", ChatTemplate.listToJson(v)) }
+
     var groups: List<DeviceGroup>
         get() = DeviceGroup.listFromJson(strOrNull("groups"))
         set(v) = edit { put("groups", DeviceGroup.listToJson(v)) }
@@ -588,7 +594,8 @@ class Store internal constructor(
     /** Motorun değerlendirdiği otomasyonlar: kategori tetikleyicileri cihazlara açılmış (bkz. [DeviceCategory.expand]). */
     fun engineAutomations(devices: List<DeviceSnapshot> = snapshots): List<Automation> {
         val all = rules
-        return DeviceCategory.expand(automations, devices) { id -> (all[id] ?: DeviceRules()).effectiveCategory }
+        return DeviceCategory.expand(automations, devices) { id -> (all[id] ?: DeviceRules()).effectiveCategory } +
+            ChatTemplate.automations(chatTemplates.orEmpty())
     }
     fun setRules(deviceId: String, r: DeviceRules): Unit = synchronized(lock) { rules = rules + (deviceId to r) }
     /**

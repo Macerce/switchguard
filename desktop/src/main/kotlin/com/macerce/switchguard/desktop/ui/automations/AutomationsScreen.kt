@@ -366,6 +366,8 @@ internal fun TriggerKind.titleKey(): String = when (this) {
     TriggerKind.SUNSET -> "trigger_sunset"
     TriggerKind.TEMP_ABOVE -> "trigger_temp_above"
     TriggerKind.TEMP_BELOW -> "trigger_temp_below"
+    TriggerKind.ZONE_ENTER -> "trigger_zone_enter"
+    TriggerKind.ZONE_EXIT -> "trigger_zone_exit"
 }
 
 /** İşlemin kısa adı ("Aç", "Alarm çal"); kartta ve özette. */

@@ -81,6 +81,7 @@ import com.macerce.switchguard.desktop.ui.settings.TimeDialog
 import com.macerce.switchguard.desktop.ui.settings.formatMinute
 import androidx.compose.material.icons.automirrored.rounded.DirectionsWalk
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.AcUnit
@@ -636,7 +637,7 @@ private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: 
 
 /** Haftanın günleri (Pzt…Paz); en az bir gün seçili kalır. */
 @Composable
-private fun DayChips(days: Int, strings: Strings, onChange: (Int) -> Unit) {
+internal fun DayChips(days: Int, strings: Strings, onChange: (Int) -> Unit) {
     val names = strings.array("day_short")
     val scheme = MaterialTheme.colorScheme
     Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -679,10 +680,11 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.SUNSET -> Icons.Rounded.WbTwilight
     TriggerKind.TEMP_ABOVE -> Icons.Rounded.LocalFireDepartment
     TriggerKind.TEMP_BELOW -> Icons.Rounded.AcUnit
+    TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> Icons.Rounded.Place
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
-private fun TriggerKind.shortTitleKey(): String = when (this) {
+internal fun TriggerKind.shortTitleKey(): String = when (this) {
     TriggerKind.TURNED_ON -> "evt_turned_on"
     TriggerKind.TURNED_OFF -> "evt_turned_off"
     TriggerKind.STAYED_ON -> "evt_stayed_on"
@@ -696,6 +698,9 @@ private fun TriggerKind.shortTitleKey(): String = when (this) {
     TriggerKind.SUNSET -> "evt_sunset"
     TriggerKind.TEMP_ABOVE -> "evt_temp_above"
     TriggerKind.TEMP_BELOW -> "evt_temp_below"
+    // Bölgeler yalnız telefonda (konum); masaüstü düzenleyicisinde seçilmez, telefondan gelen kayıt adıyla görünür.
+    TriggerKind.ZONE_ENTER -> "evt_zone_enter"
+    TriggerKind.ZONE_EXIT -> "evt_zone_exit"
 }
 
 /** İşlem kutucuklarındaki adlar: cihaz işlemleri "Cihazı aç / kapat" (kartta kısa "Aç / Kapat"). */

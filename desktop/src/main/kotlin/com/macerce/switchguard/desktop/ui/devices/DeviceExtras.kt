@@ -137,11 +137,13 @@ fun EnergySection(device: DeviceSnapshot, metrics: MetricsLog, store: com.macerc
     SectionTitle(str("section_energy"))
     SectionCard {
         Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Metric(str("energy_power"), device.power?.let { formatWatts(it, locale) } ?: "–", big = true)
-            Metric(str("energy_voltage"), device.voltage?.let { String.format(locale, "%.0f V", it) } ?: "–")
-            Metric(str("energy_current"), device.current?.let { String.format(locale, "%.2f A", it) } ?: "–")
+            // Çevrimdışıyken son ölçüm anlık değer gibi gösterilmez.
+            val live = device.online
+            Metric(str("energy_power"), device.power?.takeIf { live }?.let { formatWatts(it, locale) } ?: "–", big = true)
+            Metric(str("energy_voltage"), device.voltage?.takeIf { live }?.let { String.format(locale, "%.0f V", it) } ?: "–")
+            Metric(str("energy_current"), device.current?.takeIf { live }?.let { String.format(locale, "%.2f A", it) } ?: "–")
         }
-        if (device.channelPower.isNotEmpty()) {
+        if (device.online && device.channelPower.isNotEmpty()) {
             RowDivider(inset = 0.dp)
             Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                 device.channelPower.toSortedMap().forEach { (ch, w) ->

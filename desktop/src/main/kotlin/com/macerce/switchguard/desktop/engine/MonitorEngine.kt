@@ -16,6 +16,8 @@ import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.BlindWatch
 import com.macerce.switchguard.core.Change
 import com.macerce.switchguard.core.ChangeDetector
+import com.macerce.switchguard.core.ChatCommand
+import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.ChangeLabels
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
@@ -94,6 +96,12 @@ class MonitorEngine(
     private val eventStrings: EventStrings get() = strings().eventStrings()
     private val labels: ChangeLabels get() = eventStrings.labels
     private var automations = AutomationEngine()
+    private val chatRunner = ChatRunner(
+        store, metrics, runtime, strings, clock::wall,
+        switchNow = { d, ch, on -> if (DeviceGroup.isGroup(d.id)) controlGroupNow(d.id, on) else controlNow(d, ch, on) },
+        sceneNow = ::sceneNow,
+        awayNow = ::awayNow,
+    )
 
     private val blindWatch = BlindWatch()
     /** Kapatılan ama sürmekte olan alarmların hatırlatmaları (bkz. [checkReminders]). */
@@ -246,6 +254,20 @@ class MonitorEngine(
     /** Grupların listesi değişince motor iş parçacığında yazılır. */
     fun saveGroup(group: DeviceGroup) = scheduler.post { store.saveGroup(group) }
     fun deleteGroup(id: String) = scheduler.post { store.deleteGroup(id) }
+
+    /**
+     * Uygulama içi sohbet (telefondaki `ChatRunner.answer`): mesaj komuta çevrilip yürütülür, yanıt [onResult]'a
+     * motor iş parçacığında verilir; anlaşılmadıysa null.
+     */
+    fun chat(text: String, by: String?, onResult: (String?) -> Unit) {
+        scheduler.post {
+            val intent = ChatCommand.parse(text) ?: return@post onResult(null)
+            chatNow(intent, by, control = true, onResult)
+        }
+    }
+
+    /** Sohbet şablonlarının listesi değişince motor iş parçacığında yazılır. */
+    fun saveChatTemplates(list: List<ChatTemplate>) = scheduler.post { store.chatTemplates = list }
 
     /** Evde / Dışarıda (telefondaki `Actions.setAway`): değişiklik geçmişe yazılır. */
     fun setAway(away: Boolean, by: String? = null) = scheduler.post { awayNow(away, by) }
@@ -475,6 +497,7 @@ class MonitorEngine(
 
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
+        templateTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         weatherTick(wall)
         // Uykuda süresi dolan bekletmeler ve süreli otomasyonlar yukarıda, uyumadan önceki son bilinen durumla
@@ -1048,8 +1071,11 @@ class MonitorEngine(
 
     private fun runAutomations(fired: List<Automation>) {
         fired.forEach(::execute)
-        // Süre dolumu ya da gecikmeli eylem varsa tam vaktinde uyan.
-        val due = automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env(), clock.wall()) ?: return
+        // Süre dolumu, gecikmeli eylem ya da saatli şablon varsa tam vaktinde uyan.
+        val due = listOfNotNull(
+            automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env(), clock.wall()),
+            ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, clock.wall()),
+        ).minOrNull() ?: return
         scheduler.postDelayed((due - clock.wall()).coerceAtLeast(0) + 50) { tick() }
     }
 
@@ -1079,6 +1105,7 @@ class MonitorEngine(
                 }
             }
             ActionKind.RUN_SCENE -> {
+                if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
                 val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
                 if (scene == null) {
                     val args = EventArgs.AutoMissing(a.name)
@@ -1546,7 +1573,7 @@ class MonitorEngine(
             // Yalnızca haber verilecek kişiler (ve gruplar) komut verebilir.
             if (u.chatId !in allowed) continue
             if (u.callbackData != null) onTelegramButton(u)
-            else if (store.telegramCommands) u.text?.let(TelegramBot::parseCommand)?.let { onTelegramCommand(u, it, now) }
+            else if (store.telegramCommands) u.text?.let { onTelegramText(u, it, now) }
         }
         runtime.tgHandled = handled
     }
@@ -1578,6 +1605,53 @@ class MonitorEngine(
         dismissByTelegram()
         host.notify(text, null)
         forward("✅ $text", always = true)
+    }
+
+    /**
+     * Telegram mesajı: "/" komutları ve serbest yazı ("salon ve mutfağı kapat", "klima kaç watt", "kaç derece").
+     * Anlaşılmayan serbest yazıya yalnızca özel sohbette yanıt verilir (grupta herkesin konuşması yanıtlanmasın).
+     */
+    private fun onTelegramText(u: TelegramBot.Update, text: String, now: Long) {
+        val age = now - u.date
+        val intent = ChatCommand.parse(text)
+        if (intent == null) {
+            if (u.chatId > 0 && age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, strings()["chat_not_understood"])
+            return
+        }
+        when (intent) {
+            is ChatCommand.Intent.Status -> if (intent.query.isBlank()) return onTelegramCommand(u, TelegramBot.Command.Status, now)
+            ChatCommand.Intent.Help -> return onTelegramCommand(u, TelegramBot.Command.Help, now)
+            ChatCommand.Intent.Ack -> return onTelegramCommand(u, TelegramBot.Command.Ack, now)
+            is ChatCommand.Intent.SetPresence -> return onTelegramCommand(u, TelegramBot.Command.SetPresence(intent.away), now)
+            is ChatCommand.Intent.RunScene -> return onTelegramCommand(u, TelegramBot.Command.RunScene(intent.query), now)
+            is ChatCommand.Intent.Switch -> return onTelegramSwitch(u, intent, age)
+            else -> Unit
+        }
+        // Durum/güç/sıcaklık soruları.
+        if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+        chatNow(intent, u.from, store.telegramControl) { reply(u.chatId, it) }
+    }
+
+    /** Birden çok hedefli aç/kapat ("/ac salon, mutfak", "bütün ışıkları kapat"); her cihaz kendi yanıtını verir. */
+    private fun onTelegramSwitch(u: TelegramBot.Update, intent: ChatCommand.Intent.Switch, age: Long) {
+        val s = strings()
+        if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, s["tg_cmd_too_old"])
+        if (!store.telegramControl) return reply(u.chatId, s["tg_control_off"])
+        if (intent.targets.all { it.isBlank() }) return reply(u.chatId, s[if (intent.on) "tg_usage_on" else "tg_usage_off"])
+        val devices = store.snapshotsWithGroups
+        fun one(d: DeviceSnapshot, ch: Int) =
+            if (DeviceGroup.isGroup(d.id)) telegramGroupSwitch(u, d, intent.on) else telegramSwitch(u, d, ch, intent.on)
+        for (target in intent.targets) {
+            when (val t = ChatCommand.resolve(target, devices)) {
+                is ChatCommand.Target.One -> one(t.device, t.channel)
+                is ChatCommand.Target.Many -> t.devices.forEach { d ->
+                    if (DeviceGroup.isGroup(d.id)) one(d, 0) else d.switches.keys.sorted().forEach { ch -> one(d, ch) }
+                }
+                is ChatCommand.Target.NeedChannel -> reply(u.chatId, s.format("tg_need_channel", t.device.name, t.device.switches.size))
+                is ChatCommand.Target.Ambiguous -> reply(u.chatId, s.format("tg_ambiguous", t.names.joinToString(", ")))
+                ChatCommand.Target.NotFound -> reply(u.chatId, s.format("tg_not_found", target))
+            }
+        }
     }
 
     private fun onTelegramCommand(u: TelegramBot.Update, cmd: TelegramBot.Command, now: Long) {
@@ -1851,12 +1925,54 @@ class MonitorEngine(
         return store.quietHours.contains(minuteOfDay()) || (store.softenAtHome && !store.isAway(wall))
     }
 
+    // ---------------------------------------------------------------- sohbet ve şablonlar
+
+    /**
+     * Sohbet komutunu yürütür; yanıt [onResult]'a motor iş parçacığında. Dış sıcaklık ağdan [telegramRunner]'da
+     * okunur (telefonda sohbet her soruda anlık okur), motor beklemez.
+     */
+    private fun chatNow(intent: ChatCommand.Intent, by: String?, control: Boolean, onResult: (String) -> Unit) {
+        if (intent != ChatCommand.Intent.Temperature) return onResult(chatRunner.run(intent, by, control))
+        val lat = store.latitude
+        val lon = store.longitude
+        if (lat == null || lon == null) return onResult(chatRunner.temperature(null))
+        telegramRunner {
+            val fresh = runCatching { sources.weather(lat, lon) }.getOrNull()
+            scheduler.post {
+                if (fresh != null) runtime.outdoorTemp = fresh
+                onResult(chatRunner.temperature(fresh))
+            }
+        }
+    }
+
+    /** Saati gelen sohbet şablonları. */
+    private fun templateTick(wall: Long) {
+        val list = store.chatTemplates ?: return
+        val (due, runs) = ChatTemplate.due(list, runtime.templateRuns, wall)
+        if (runs != runtime.templateRuns) runtime.templateRuns = runs
+        due.forEach { runTemplate(it.id) }
+    }
+
+    /** Şablonun mesajını sohbetteki gibi yürütür; sonuç geçmişe yazılır, yanlışsa bildirilir. */
+    private fun runTemplate(id: String) {
+        val t = store.chatTemplates.orEmpty().firstOrNull { it.id == id } ?: return
+        val s = strings()
+        fun done(answer: String) {
+            val text = s.format("chat_template_ran", t.name, answer)
+            val failed = "⚠️" in answer || answer == s["chat_not_understood"]
+            if (failed) host.notify(text, null)
+            record("", t.name, EventKind.AUTOMATION, text, if (failed) AlertAction.NOTIFY.name else "")
+        }
+        val intent = ChatCommand.parse(t.text) ?: return done(s["chat_not_understood"])
+        runCatching { chatNow(intent, t.name, control = true, ::done) }.onFailure { done("⚠️ " + it.message.orEmpty()) }
+    }
+
     /** Sıcaklık kuralı varsa yarım saatte bir dış sıcaklığı okur (Open-Meteo); okunamazsa son değer kalır. */
     private fun weatherTick(wall: Long) {
         if (weatherBusy || wall < weatherAt) return
         val lat = store.latitude ?: return
         val lon = store.longitude ?: return
-        if (store.automations.none { it.enabled && it.trigger.kind.usesTemp }) return
+        if (store.engineAutomations().none { it.enabled && it.trigger.kind.usesTemp }) return
         weatherAt = wall + WEATHER_MS
         weatherBusy = true
         telegramRunner {

@@ -162,6 +162,10 @@ class RuntimeState(private val file: Path) {
     var chargerLostAt: Long
         get() = long("chargerLost")
         set(v) = set("chargerLost", v)
+    /** Saatli sohbet şablonlarının son çalıştığı an (şablon kimliği → zaman). */
+    var templateRuns: Map<String, Long>
+        get() = runCatching { JSONObject(str("templateRuns") ?: "{}").let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())
+        set(v) = set("templateRuns", JSONObject(v).toString())
     /** Son okunan dış sıcaklık (°C): düzenleyicide "şu an 12 °C" için. */
     var outdoorTemp: Double?
         get() = str("outdoorTemp")?.toDoubleOrNull()

@@ -173,6 +173,7 @@
     <string name="action_enter_keys">Access ID ve Secret gir</string>
     <string name="action_change">Değiştir</string>
     <string name="action_edit_layout">Cihazları düzenle</string>
+    <string name="layout_move_hint">Kartı yön tuşlarıyla taşıyın, bitirmek için OK</string>
     <string name="action_close">Kapat</string>
     <string name="action_done">Bitti</string>
     <string name="action_rename">Yeniden adlandır</string>
@@ -826,10 +827,14 @@
     <string name="tg_help">SwitchGuard komutları:
 /durum – izleme, alarm ve cihazlar
 /gordum – çalan alarmı üstlen
-/ac ad [kanal] – cihazı ya da grubu aç
+/ac ad [kanal] – cihazı ya da grubu aç (birden çok: /ac mutfak, bahçe)
 /kapat ad [kanal] – cihazı ya da grubu kapat
+/watt [ad] – şimdiki, bugünkü ve olağan güç
+/sicaklik – dış sıcaklık
 /sahne ad – sahneyi çalıştır
 /evde · /disarida – evde / dışarıda
+
+Serbest de yazabilirsiniz: “mutfak ve bahçeyi kapat”, “klima kaç watt”, “pompa açık mı”.
 
 Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarılar).</string>
     <string name="tg_no_alarm">Çalan alarm yok.</string>
@@ -930,6 +935,40 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="evt_sunset">Gün batımı</string>
     <string name="evt_temp_above">Sıcaklık üstünde</string>
     <string name="evt_temp_below">Sıcaklık altında</string>
+    <string name="trigger_zone_enter">bölgesine girince</string>
+    <string name="trigger_zone_exit">bölgesinden çıkınca</string>
+    <string name="evt_zone_enter">Bölgeye giriş</string>
+    <string name="evt_zone_exit">Bölgeden çıkış</string>
+    <string name="zone_title">Bölgeler</string>
+    <string name="zone_desc">Haritada bir alan seçin; telefonunuz bu alana girince ya da çıkınca otomasyon çalışsın (ör. eve yaklaşınca bahçe ışığını aç, evden çıkınca tüm cihazları kapat). Harita görüntüleri OpenStreetMap\'ten indirilir; konumunuz yalnızca bu telefonda kullanılır.</string>
+    <string name="zone_none">Henüz bölge yok.</string>
+    <string name="zone_add">Yeni bölge</string>
+    <string name="zone_edit">Bölgeyi düzenle</string>
+    <string name="zone_name">Bölge adı</string>
+    <string name="zone_name_hint">ör. Ev</string>
+    <string name="zone_radius">Yarıçap</string>
+    <string name="zone_map_hint">Haritayı sürükleyerek alanı ortalayın; iki parmakla ya da +/− ile yakınlaştırın.</string>
+    <string name="zone_search">Şehir ya da yer ara</string>
+    <string name="zone_search_none">Sonuç bulunamadı.</string>
+    <string name="zone_here">Şu anki konumum</string>
+    <string name="zone_zoom_in">Yakınlaştır</string>
+    <string name="zone_zoom_out">Uzaklaştır</string>
+    <string name="zone_summary">%1$s · %2$s yarıçap</string>
+    <string name="zone_in_use">Bu bölge %d kuralda kullanılıyor; silmeden önce o kuralları silin ya da başka bölgeye bağlayın.</string>
+    <string name="zone_delete_confirm">“%s” bölgesi silinsin mi?</string>
+    <string name="zone_choose">Bölge</string>
+    <string name="zone_perm_title">Arka planda konum izni gerekli</string>
+    <string name="zone_perm_desc">Bölge kuralları için SwitchGuard, uygulama kapalıyken ya da kullanılmıyorken de konumunuzu kullanır; yalnızca seçtiğiniz bölgelerin sınırını geçtiğinizi anlamak için. Konumunuz telefonda kalır, hiçbir sunucuya gönderilmez.</string>
+    <string name="zone_perm_background">Bir adım kaldı: açılan izin sayfasında konum için “Her zaman izin ver”i seçin.</string>
+    <string name="zone_perm_grant">İzin ver</string>
+    <string name="zone_perm_ok">Bölge izleme açık. Giriş ve çıkış birkaç dakika gecikmeyle algılanabilir.</string>
+    <string name="map_attribution">© OpenStreetMap katkıcıları</string>
+    <string name="settings_location">Konum ve bölgeler</string>
+    <string name="settings_location_desc">Gün doğumu, dış sıcaklık ve bölge kuralları</string>
+    <string name="chat_set_location">Konumu ayarla</string>
+    <string name="chat_temp_failed">Dış sıcaklık şu anda alınamadı. İnternet bağlantınızı kontrol edip yeniden deneyin.</string>
+    <string name="chat_you">Siz</string>
+    <string name="chat_typing">Yanıt hazırlanıyor…</string>
     <string name="sun_offset">Kaydır</string>
     <string name="sun_exact">Tam vaktinde</string>
     <string name="sun_before">%s önce</string>
@@ -1078,6 +1117,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="widget_presence_choice_desc">Değiştirmek için widget\'a dokunun</string>
     <string name="widget_presence_tap">Değiştirmek için dokunun</string>
     <string name="widget_scene_tap">Çalıştırmak için dokunun</string>
+    <string name="shortcut_source">Uygulama kısayolu</string>
 
     <!-- Raporlar -->
     <string name="report_what_title">Bu rapor neyi gösterir</string>
@@ -1232,19 +1272,9 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="daily_col_time">Açık kalma</string>
     <string name="daily_table_note">Açılma: bugün kaç kez açıldığı. Açık kalma: toplam açık kaldığı süre.</string>
     <string name="daily_longest">Bugün en uzun %1$s açık kaldı: %2$s.</string>
-    <string name="license_title">Pro\'yu etkinleştir</string>
-    <string name="license_title_active">Pro lisansı</string>
-    <string name="license_body">Lisans olmadan uygulama %1$d cihazı izler. Tüm cihazlarınızı izlemek için lisans anahtarınızı girin.</string>
-    <string name="license_key">Lisans anahtarı</string>
-    <string name="license_invalid">Bu lisans anahtarı geçerli değil. Tamamını kopyaladığınızdan emin olun.</string>
-    <string name="license_activate">Etkinleştir</string>
-    <string name="license_remove">Lisansı kaldır</string>
-    <string name="license_owner">Lisans sahibi: %1$s · %2$s</string>
-    <string name="license_enter">Lisans anahtarı gir</string>
-    <string name="update_available">SwitchGuard %1$s çıktı. Bu sürümün üstüne kurulur; ayarlarınız ve lisansınız korunur.</string>
-    <string name="update_downloading">SwitchGuard %1$s indiriliyor… Uygulama kapanıp güncellenecek ve yeniden açılacak.</string>
-    <string name="update_failed">Güncelleme indirilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
-    <string name="update_install">Güncelle</string>
+    <string name="update_title">SwitchGuard %1$s çıktı</string>
+    <string name="update_body">Sizdeki sürüm %1$s. Yeni sürümü GitHub\'dan indirip bunun üzerine kurun; ayarlarınız korunur.</string>
+    <string name="update_download">İndir</string>
     <string name="update_later">Sonra</string>
     <!-- Uyarı kategorileri -->
     <string name="alert_category">Uyarı kategorisi</string>
@@ -1269,4 +1299,58 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item quantity="one">%d cihaz</item>
         <item quantity="other">%d cihaz</item>
     </plurals>
+    <string name="chat_not_understood">Bu komutu anlayamadım. Örneğin “Salon ve mutfağı kapat”, “Klima kaç watt?”, “Kaç derece?” ya da “Durum” yazabilirsiniz. Tüm komutlar için “Yardım” yazın.</string>
+    <string name="chat_help">Komutlarınızı serbestçe yazabilirsiniz. Örnekler:\n• Salonu aç · Mutfak ve bahçeyi kapat\n• Tüm ışıkları kapat (adı eşleşen bütün cihazlar)\n• Salon açık mı? · Durum\n• Klima kaç watt? · Güç (anlık, bugün ve olağan tüketim)\n• Kaç derece? (dış sıcaklık)\n• Akşam sahnesi · Evdeyim · Dışarıdayım\nÇok kanallı cihazlarda kanal numarasını ekleyin, ör. “Pompa 2 aç”.</string>
+    <string name="chat_ack_app">Alarm, uygulamadaki alarm ekranından susturulur; “Gördüm” komutu Telegram\'da çalışır.</string>
+    <string name="chat_switch_usage">Hangi cihaz? Örneğin “Salonu aç” yazabilirsiniz.</string>
+    <string name="chat_need_channel">%1$s %2$d kanallı; kanal numarasını da yazın, ör. “%1$s 1 aç”.</string>
+    <string name="chat_not_found">“%s” adında bir cihaz bulunamadı.</string>
+    <string name="chat_no_devices">Henüz cihaz eklenmemiş.</string>
+    <string name="chat_power_none">Güç ölçen bir cihaz bulunmuyor.</string>
+    <string name="chat_power_offline">%s: çevrimdışı, anlık güç bilinmiyor</string>
+    <string name="chat_no_power">%s güç ölçümü yapmıyor.</string>
+    <string name="chat_power_today">Bugün %s kWh</string>
+    <string name="chat_power_typical">Çalışırken genellikle %s W (son 7 gün)</string>
+    <string name="chat_power_learning">Olağan tüketim henüz öğreniliyor</string>
+    <string name="chat_power_total">Şu anki toplam: %s W</string>
+    <string name="chat_temp">🌡️ Dış sıcaklık: %s °C</string>
+    <string name="chat_temp_unknown">Dış sıcaklığı gösterebilmem için konum gerekli. Konumu uygulamada Ayarlar → Konum ve bölgeler bölümünden ayarlayabilirsiniz.</string>
+    <string name="chat_template_ran">“%1$s” şablonu: %2$s</string>
+    <string name="chat_tpl_status">Durum</string>
+    <string name="chat_tpl_status_text">Durum</string>
+    <string name="chat_tpl_power">Güç</string>
+    <string name="chat_tpl_power_text">Güç</string>
+    <string name="chat_tpl_temp">Sıcaklık</string>
+    <string name="chat_tpl_temp_text">Kaç derece?</string>
+    <string name="chat_tpl_home">Evdeyim</string>
+    <string name="chat_tpl_home_text">Evdeyim</string>
+    <string name="chat_tpl_away">Dışarıdayım</string>
+    <string name="chat_tpl_away_text">Dışarıdayım</string>
+    <string name="chat_tpl_help">Yardım</string>
+    <string name="chat_tpl_help_text">Yardım</string>
+    <string name="chat_title">Sohbet</string>
+    <string name="chat_open">Sohbetle komut</string>
+    <string name="chat_hint">Bir komut yazın, ör. Mutfağı kapat</string>
+    <string name="chat_send">Gönder</string>
+    <string name="chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Hazır şablonlar aşağıdadır; şablona dokunduğunuzda gönderilir, düzenlemek için basılı tutun.</string>
+    <string name="chat_templates">Şablonlar</string>
+    <string name="chat_add_template">Yeni şablon</string>
+    <string name="chat_edit_template">Şablonu düzenle</string>
+    <string name="chat_tpl_name">Ad</string>
+    <string name="chat_tpl_message">Gönderilecek mesaj</string>
+    <string name="chat_tpl_message_help">Sohbette yazdığınız gibi, ör. “Bahçe ve havuzu kapat”.</string>
+    <string name="chat_tpl_when">Kendiliğinden çalışsın</string>
+    <string name="chat_when_manual">Yalnız dokununca</string>
+    <string name="chat_when_time">Her gün belli saatte</string>
+    <string name="chat_when_event">Bir olay olunca</string>
+    <string name="chat_tpl_time">Saat</string>
+    <string name="chat_tpl_event">Olay</string>
+    <string name="chat_tpl_device">Cihaz</string>
+    <string name="chat_tpl_watts">Güç (W)</string>
+    <string name="chat_tpl_degrees">Sıcaklık (°C)</string>
+    <string name="chat_tpl_enabled">Kendiliğinden çalışma açık</string>
+    <string name="chat_tpl_auto">Otomatik</string>
+    <string name="chat_tpl_try">Dene</string>
+    <string name="chat_tpl_invalid">Mesaj anlaşılmıyor; önce sohbette deneyin.</string>
+    <string name="chat_clear">Sohbeti temizle</string>
 </resources>

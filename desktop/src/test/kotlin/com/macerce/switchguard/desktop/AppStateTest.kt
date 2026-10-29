@@ -39,8 +39,9 @@ class AppStateTest {
 
     @Test
     fun tabsFollowThePhoneOrder() {
+        // Sohbet masaüstünde ayrı sekme (telefonda Cihazlar'ın üst çubuğundan açılır).
         assertEquals(
-            listOf(AppState.Tab.DEVICES, AppState.Tab.ALERTS, AppState.Tab.AUTOMATIONS, AppState.Tab.HISTORY, AppState.Tab.SETTINGS),
+            listOf(AppState.Tab.DEVICES, AppState.Tab.ALERTS, AppState.Tab.AUTOMATIONS, AppState.Tab.HISTORY, AppState.Tab.CHAT, AppState.Tab.SETTINGS),
             AppState.Tab.entries,
         )
     }

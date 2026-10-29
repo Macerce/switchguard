@@ -131,3 +131,5 @@ rounded/WifiOff
 rounded/WorkspacePremium
 rounded/Workspaces
 rounded/SystemUpdateAlt
+rounded/Forum
+automirrored/rounded/Send

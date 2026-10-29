@@ -151,4 +151,7 @@
     <!-- Motorun uyarıları -->
     <string name="desktop_secrets_unreadable">Kayıtlı anahtarlar bu bilgisayarda okunamıyor (ör. ayarlar başka bir bilgisayardan kopyalandı). eWeLink ve Tuya bilgilerini Ayarlar\'dan yeniden girin.</string>
     <string name="desktop_blind_hint">İnternet bağlantısını ve bilgisayarın uykuda olmadığını kontrol edin.</string>
+    <!-- Sohbet (telefon 2.18) -->
+    <string name="desktop_chat_temp_unknown">Dış sıcaklığı gösterebilmem için konum gerekli. Konumu bilgisayardaki uygulamada Uyarılar → Akıllı uyarılar → Konum bölümünden ayarlayabilirsiniz.</string>
+    <string name="desktop_chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Hazır şablonlar aşağıdadır; şablona tıkladığınızda gönderilir, düzenlemek için sağ tıklayın.</string>
 </resources>

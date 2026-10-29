@@ -28,6 +28,7 @@ Kaynak: `master` `6770907` (telefon 2.15.1; 2026-10-23). Önceki: `4bbc24d` (2.1
 | DeviceGroup.kt | app/src/main/java/com/macerce/switchguard/core/ | yok (agp-9 ad3b6ca, gruplar) |
 | DeviceCategory.kt | app/src/main/java/com/macerce/switchguard/core/ | yok (uyarı kategorileri; önce masaüstünde yazıldı, 0.8.0) |
 | UpdateCheck.kt | app/src/main/java/com/macerce/switchguard/core/ | yok (sürüm denetimi; etiketler v* / desktop-v*) |
+| ChatCommand.kt, ChatTemplate.kt | app/src/main/java/com/macerce/switchguard/core/ | yok (sohbet komutları ve şablonları; agp-9 88caaf7, 0.9.0) |
 | AlarmReminders.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | BlindWatch.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | Csv.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
@@ -116,3 +117,10 @@ Telefon uygulamasında `core/`, `api/`, `data/` veya `service/` klasörlerinde y
 
 Olduğu gibi kopyalanan: core/ EnergyReport, EnergyWatch, EwelinkRegion, Outage, ReportDoc, ReportText, Scene, Signal, Standby, Sun, Tariff, TelegramBot, WeeklyStats, AlertsView (+ güncellenen Automation, DeviceParser, DeviceSnapshot, EnergyParser, Escalation, EventText, WsMessages); api/ TelegramClient, WeatherClient; strings.xml (EN/TR); core testleri.
 Masaüstüne uyarlanan: MonitorService 2.15 eklemeleri → MonitorEngine (kesinti, Telegram komutları/Gördüm, bekçi, tatil, hava, tüketim; şarj yerine AC gücü `PowerSource`, haftalık rapor zamanlaması tick'te); WeeklyReport + DailySummary.doc → engine/Reports.kt; ReportPdf + EnergyExport → desktop/report (android.graphics yerine Gfx.kt: Graphics2D + PDFBox); ReportView → ui/report (ayrı pencere); konum: GPS yerine şehir arama (Open-Meteo geocoding).
+
+## 0.9.0 eşitlemesi (telefon 2.18–2.19, agp-9 `88caaf7`)
+
+Olduğu gibi kopyalanan: core/ ChatCommand, ChatTemplate, Automation (ZONE_ENTER/EXIT + `onZone`), api/ WeatherClient (`search`), strings.xml (EN/TR), ChatCommandTest.
+Masaüstüne uyarlanan: `service/ChatRunner.kt` → `desktop/engine/ChatRunner.kt` (motor iş parçacığında; aç/kapat, sahne, evde/dışarıda motorun `controlNow`/`controlGroupNow`/`sceneNow`/`awayNow` işlevleriyle; dış sıcaklığı motor `telegramRunner`da okuyup verir, motor beklemez); MonitorService 2.18 eklemeleri → MonitorEngine (`onTelegramText`, `onTelegramSwitch`, `templateTick`, `runTemplate`, `chatNow`, şablonlu `RUN_SCENE`, `runAutomations` saatli şablon uyanması; `engine.chat()` + `saveChatTemplates()` arayüz için); Store `chatTemplates` (+ `engineAutomations` şablon kuralları), RuntimeState `templateRuns`, yedeğe `chatTemplates`; `ui/ChatScreen.kt` → `desktop/ui/chat/ChatScreen.kt` (kenar çubuğunda ayrı Sohbet sekmesi, Ctrl+5; şablonlar satıra sığmayınca alta iner, sağ tıkla düzenlenir, Enter gönderir, yanıt seçilebilir); çevrimdışı cihazın eski gücü enerji kartında gösterilmez (telefon DeviceExtras).
+Farklar: konum yokken sıcaklık yanıtı `desktop_chat_temp_unknown` (Uyarılar → Akıllı uyarılar → Konum; telefondaki "Ayarlar → Konum ve bölgeler" masaüstünde yok), karşılama `desktop_chat_welcome` (dokun/basılı tut yerine tıkla/sağ tıkla); `weatherTick` şablonların sıcaklık tetikleyicilerine de bakar (`store.engineAutomations()`; telefonda yalnız `store.automations`).
+Taşınmayan: bölgeler (Zone.kt, ZoneWatcher, ZoneUi, Konum ve bölgeler sayfası) — bilgisayarda GPS/geofence yok; düzenleyici ve kartlarda ZONE_* yalnızca ad/simge alır, seçilemez. Wear (WearBridge) masaüstünde yok.

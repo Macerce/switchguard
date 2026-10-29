@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Devices
+import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -51,12 +52,13 @@ import com.macerce.switchguard.desktop.AppState.Tab
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.ui.settings.appVersion
 
-/** Sekmenin adı (metin anahtarı), simgesi ve klavye kısayolu (Ctrl+1 … Ctrl+5). */
+/** Sekmenin adı (metin anahtarı), simgesi ve klavye kısayolu (Ctrl+1 … Ctrl+6). */
 internal fun Tab.label(): String = when (this) {
     Tab.DEVICES -> "tab_devices"
     Tab.ALERTS -> "tab_alerts"
     Tab.AUTOMATIONS -> "tab_automations"
     Tab.HISTORY -> "tab_history"
+    Tab.CHAT -> "chat_title"
     Tab.SETTINGS -> "tab_settings"
 }
 
@@ -65,6 +67,7 @@ internal fun Tab.icon(): ImageVector = when (this) {
     Tab.ALERTS -> Icons.Rounded.NotificationsActive
     Tab.AUTOMATIONS -> Icons.Rounded.AutoMode
     Tab.HISTORY -> Icons.Rounded.History
+    Tab.CHAT -> Icons.Rounded.Forum
     Tab.SETTINGS -> Icons.Rounded.Settings
 }
 
