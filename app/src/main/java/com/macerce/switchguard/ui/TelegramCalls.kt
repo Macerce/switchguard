@@ -132,6 +132,10 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                         )
                         if (mode == CallMode.TELEGRAM) {
                             Text(stringResource(R.string.calls_tg_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            // Telegram'da CallMeBot sohbetini açar; kişi "Başlat"a basınca izin verilmiş olur.
+                            TextButton(modifier = Modifier.tvFocusRing(), onClick = {
+                                runCatching { context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/CallMeBot_txtbot"))) }
+                            }) { Text(stringResource(R.string.calls_tg_allow)) }
                         }
                         TextButton(enabled = ok && targets[r.id].orEmpty().isNotBlank(), modifier = Modifier.tvFocusRing(), onClick = { test(r) }) {
                             Text(stringResource(R.string.calls_test))

@@ -31,10 +31,12 @@ object CallMeBotClient {
             val body = response.body?.string().orEmpty()
             if (!response.isSuccessful) throw IOException("HTTP ${response.code}")
             // Hata da 200 ile döner; metinden anlaşılır (izin verilmemiş, arama kapalı vb.).
-            val plain = body.replace(Regex("<[^>]*>"), " ").replace(Regex("\\s+"), " ").trim()
-            if (Regex("not (been )?authori[sz]ed|error|invalid|not allowed", RegexOption.IGNORE_CASE).containsMatchIn(plain)) {
-                throw IOException(plain.take(160))
-            }
+            // Sayfadaki betikler (Google Analytics) metne karışmasın; hata "ERROR: …" ile başlar.
+            val plain = body.replace(Regex("(?is)<(script|style)[^>]*>.*?</\\1>"), " ")
+                .replace(Regex("<[^>]*>"), " ").replace(Regex("\\s+"), " ").trim()
+            val error = Regex("(?i)error:?").find(plain)?.let { plain.substring(it.range.last + 1).trim() }
+                ?: plain.takeIf { Regex("not (been )?authori[sz]ed|invalid|not allowed", RegexOption.IGNORE_CASE).containsMatchIn(it) }
+            if (error != null) throw IOException(error.take(200))
         }
     }
 }

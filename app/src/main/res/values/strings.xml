@@ -1093,6 +1093,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="calls_tg_target">Telegram @username or +phone number</string>
     <string name="calls_phone_target">Phone number</string>
     <string name="calls_tg_hint">Telegram calls are placed by the free CallMeBot service, which reads the alarm aloud. The person must send /start to @CallMeBot_txtbot on Telegram once to allow it, and calls must be allowed in Telegram\'s privacy settings. The alarm text is sent to CallMeBot.</string>
+    <string name="calls_tg_allow">Allow CallMeBot in Telegram</string>
     <string name="calls_test">Test call</string>
     <string name="calls_testing">Calling…</string>
     <string name="calls_test_sent">Call requested. It may take a few seconds to ring.</string>

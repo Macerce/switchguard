@@ -1089,6 +1089,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="calls_tg_target">Telegram @kullanıcıadı ya da +telefon numarası</string>
     <string name="calls_phone_target">Telefon numarası</string>
     <string name="calls_tg_hint">Telegram aramasını ücretsiz CallMeBot servisi yapar ve alarmı sesli okur. Kişinin bir kez Telegram\'da @CallMeBot_txtbot\'a /start yazıp izin vermesi, Telegram gizlilik ayarlarında aramalara izin vermesi gerekir. Alarm metni CallMeBot\'a gönderilir.</string>
+    <string name="calls_tg_allow">Telegram\'da CallMeBot\'a izin ver</string>
     <string name="calls_test">Deneme araması</string>
     <string name="calls_testing">Aranıyor…</string>
     <string name="calls_test_sent">Arama istendi. Çalması birkaç saniye sürebilir.</string>
