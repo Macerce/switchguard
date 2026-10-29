@@ -1085,7 +1085,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="stages_after">%d min</string>
     <string name="stages_now">Now</string>
     <string name="calls_title">Call on critical alarm</string>
-    <string name="calls_desc">When a device in the Critical category sounds the alarm, the person is also called when their wait in staged alerts is up. Each person is called once per alarm. Groups can\'t be called.</string>
+    <string name="calls_desc">When a device in the Critical category sounds the alarm, the person is also called when their wait in staged alerts is up. Phone calls repeat every 2 minutes, up to 3 times, until the alarm is dismissed or someone taps “Got it” in Telegram; Telegram calls are made once. Groups can\'t be called.</string>
     <string name="calls_no_people">Add a person (not a group) in Telegram setup first.</string>
     <string name="calls_none">Don\'t call</string>
     <string name="calls_telegram">Telegram call</string>

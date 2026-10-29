@@ -1217,7 +1217,8 @@ class MonitorService : Service() {
     private var lastPhoneCallAt = 0L
 
     /**
-     * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler alarm başına bir kez aranır.
+     * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler aranır; Telegram'dan bir kez,
+     * telefonla alarm sürdükçe [PHONE_CALL_GAP_MS] arayla en çok [PHONE_CALL_TRIES] kez.
      * Telegram araması CallMeBot ile ([calls] iş parçacığında), telefon araması bu cihazın hattından.
      * Aranamayan kişi bildirimle haber verilir, yeniden denenmez (arama tekrarı gece herkesi uyandırmasın).
      */
@@ -1242,11 +1243,18 @@ class MonitorService : Service() {
                     }
                 }
                 CallMode.PHONE -> {
-                    if (wall - lastPhoneCallAt < PHONE_CALL_GAP_MS) continue
+                    // Açıp açmadığı bilinemez: alarm kapatılana ya da "Gördüm" denene dek aralıkla yeniden aranır.
+                    val (count, lastAt) = runtime.phoneCalls[r.id] ?: (0 to 0L)
+                    if (wall - lastPhoneCallAt < PHONE_CALL_GAP_MS || wall - lastAt < PHONE_CALL_GAP_MS) continue
                     lastPhoneCallAt = wall
-                    marked += r.id
                     val error = placePhoneCall(r.callTo)
-                    if (error != null) callFailed(r, error)
+                    if (error != null) {
+                        marked += r.id
+                        callFailed(r, error)
+                    } else {
+                        runtime.phoneCalls = runtime.phoneCalls + (r.id to (count + 1 to wall))
+                        if (count + 1 >= PHONE_CALL_TRIES) marked += r.id
+                    }
                 }
                 CallMode.NONE -> Unit
             }
@@ -1279,6 +1287,7 @@ class MonitorService : Service() {
         runtime.escalatedChats = emptySet()
         runtime.criticalAlarmFor = 0
         runtime.calledChats = emptySet()
+        runtime.phoneCalls = emptyMap()
     }
 
     /** "Alarm kapatıldı" mesajı (yalnızca haber verilenlere); yanıt beklenmez, gönderilemezse önemsizdir. */
@@ -2055,6 +2064,8 @@ class MonitorService : Service() {
         private val SYNC_RETRY_MS = longArrayOf(15_000, 30_000, 60_000, 120_000)
         private const val ESCALATION_RETRY_MS = 60_000L
         private const val PHONE_CALL_GAP_MS = 120_000L
+        /** Telefonla arama: kişi başına en çok bu kadar (alarm sürdükçe). */
+        private const val PHONE_CALL_TRIES = 3
         private const val TG_POLL_MS = 15_000L
         private const val CHARGER_CONFIRM_MS = 60_000L
         private const val WEATHER_MS = 30 * 60_000L

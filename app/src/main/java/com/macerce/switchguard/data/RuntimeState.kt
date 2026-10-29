@@ -130,10 +130,16 @@ class RuntimeState private constructor(context: Context) {
     var criticalAlarmFor: Long
         get() = prefs.getLong("criticalAlarmFor", 0)
         set(v) = put { putLong("criticalAlarmFor", v) }
-    /** Kritik alarm için aranan (ya da aranamayan) kişiler. */
+    /** Kritik alarm için aranmayı bitiren kişiler (deneme hakkı doldu ya da aranamadı). */
     var calledChats: Set<Long>
         get() = prefs.getString("calledChats", "")!!.split(',').mapNotNull { it.toLongOrNull() }.toSet()
         set(v) = put { putString("calledChats", v.joinToString(",")) }
+    /** Telefonla aranan kişiler: kişi → (kaçıncı arama, son arama anı). */
+    var phoneCalls: Map<Long, Pair<Int, Long>>
+        get() = prefs.getString("phoneCalls", "")!!.split(',').mapNotNull { e ->
+            e.split(':').takeIf { it.size == 3 }?.let { (id, n, at) -> id.toLongOrNull()?.let { it to (n.toInt() to at.toLong()) } }
+        }.toMap()
+        set(v) = put { putString("phoneCalls", v.entries.joinToString(",") { (id, p) -> "$id:${p.first}:${p.second}" }) }
     /** Tatil modunun bittiği bildirilen tatil (bitiş anı). */
     var vacationEndNotified: Long
         get() = prefs.getLong("vacationEnd", 0)

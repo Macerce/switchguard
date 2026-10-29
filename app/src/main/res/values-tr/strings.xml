@@ -1081,7 +1081,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="stages_after">%d dk</string>
     <string name="stages_now">Hemen</string>
     <string name="calls_title">Kritik alarmda ara</string>
-    <string name="calls_desc">Kritik kategorideki bir cihaz alarm çaldırınca kişi, kademeli haberdeki bekleme süresi dolduğunda ayrıca aranır. Her alarmda kişi başına bir kez aranır. Gruplar aranamaz.</string>
+    <string name="calls_desc">Kritik kategorideki bir cihaz alarm çaldırınca kişi, kademeli haberdeki bekleme süresi dolduğunda ayrıca aranır. Telefonla arama, alarm kapatılana ya da Telegram\'dan "Gördüm" denene dek 2 dakika arayla en çok 3 kez yapılır; Telegram araması bir kez. Gruplar aranamaz.</string>
     <string name="calls_no_people">Önce Telegram kurulumunda bir kişi (grup değil) ekleyin.</string>
     <string name="calls_none">Arama yok</string>
     <string name="calls_telegram">Telegram araması</string>
