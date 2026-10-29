@@ -14,6 +14,7 @@ import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Savings
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
+import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.Watchdog
 import com.macerce.switchguard.service.WeeklyReport
 import com.macerce.switchguard.service.WeeklyScheduler
@@ -68,6 +69,7 @@ import androidx.compose.material.icons.rounded.BatteryChargingFull
 import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.BugReport
+import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.Campaign
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.DeleteOutline
@@ -91,7 +93,8 @@ import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Snooze
-import androidx.compose.material.icons.rounded.Place
+import androidx.compose.material.icons.rounded.Place
+
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
 import androidx.compose.material.icons.rounded.SyncAlt
@@ -960,6 +963,11 @@ private fun SmartPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
                 Modifier.clickable { showDialog { StagesDialog(store, close) } },
             )
             Divider()
+            InfoRow(
+                Icons.Rounded.Call, stringResource(R.string.calls_title), callsSummary(s),
+                Modifier.clickable { showDialog { CallsDialog(store, close) } },
+            )
+            Divider()
             InfoRow(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.smart_tg_forward), stringResource(R.string.smart_tg_forward_desc)) {
                 Switch(checked = s.telegramForward, onCheckedChange = { store.telegramForward = it })
             }
@@ -1012,7 +1020,8 @@ private fun stagesSummary(s: Store): String {
     val list = s.telegramRecipients.sortedBy { s.stageFor(it.id) }
     if (list.isEmpty()) return stringResource(R.string.blind_alert_off)
     val min = stringResource(R.string.min_short)
-    return list.joinToString(" → ") { "${it.name} ${s.stageFor(it.id)} $min" }
+    val now = stringResource(R.string.stages_now)
+    return list.joinToString(" → ") { s.stageFor(it.id).let { m -> "${it.name} ${if (m == Escalation.NOW) now else "$m $min"}" } }
 }
 
 /** Kademeli haber: her kişi/grup için ayrı bekleme süresi. Önce yakındaki kişi, kimse ilgilenmezse sıradaki. */
@@ -1020,7 +1029,7 @@ private fun stagesSummary(s: Store): String {
 private fun StagesDialog(store: Store, onDismiss: () -> Unit) {
     val recipients = store.telegramRecipients
     val stages = remember { androidx.compose.runtime.mutableStateMapOf<Long, Int>().apply { recipients.forEach { put(it.id, store.stageFor(it.id)) } } }
-    val options = listOf(1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120)
+    val options = listOf(Escalation.NOW, 1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.stages_title)) },
@@ -1032,7 +1041,10 @@ private fun StagesDialog(store: Store, onDismiss: () -> Unit) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(r.name, Modifier.weight(1f), maxLines = 1)
                         TextButton(modifier = Modifier.tvFocusRing(), enabled = options.any { it < value }, onClick = { stages[r.id] = options.last { it < value } }) { Text("−") }
-                        Text(stringResource(R.string.stages_after, value), style = MaterialTheme.typography.titleSmall)
+                        Text(
+                            if (value == Escalation.NOW) stringResource(R.string.stages_now) else stringResource(R.string.stages_after, value),
+                            style = MaterialTheme.typography.titleSmall,
+                        )
                         TextButton(modifier = Modifier.tvFocusRing(), enabled = options.any { it > value }, onClick = { stages[r.id] = options.first { it > value } }) { Text("+") }
                     }
                 }

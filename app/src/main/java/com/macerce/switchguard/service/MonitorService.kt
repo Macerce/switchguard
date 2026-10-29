@@ -22,6 +22,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.ApiException
+import com.macerce.switchguard.api.CallMeBotClient
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
@@ -47,7 +48,10 @@ import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DurationText
+import com.macerce.switchguard.core.CallMode
+import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.Escalation
+import com.macerce.switchguard.core.Recipient
 import com.macerce.switchguard.core.EventArgs
 import com.macerce.switchguard.core.EventStrings
 import com.macerce.switchguard.core.EnergyWatch
@@ -374,6 +378,7 @@ class MonitorService : Service() {
         demoTick(wall)
         checkReminders(wall)
         checkEscalation(wall)
+        checkCalls(wall)
         checkVacation(wall)
         pollTelegram(wall)
         watchdogTick(wall)
@@ -976,7 +981,7 @@ class MonitorService : Service() {
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = rules.soundUri
                 when (effective) {
-                    AlertAction.ALARM -> addAlarm(text, sound)
+                    AlertAction.ALARM -> addAlarm(text, sound, critical = isCritical(a.trigger.deviceId))
                     AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
                     AlertAction.IGNORE -> Unit
                 }
@@ -1076,7 +1081,7 @@ class MonitorService : Service() {
         val sound = rules.soundUri
         when (effective) {
             AlertAction.ALARM -> {
-                addAlarm(text, sound)
+                addAlarm(text, sound, critical = isCritical(change.deviceId))
                 // Hatırlatma kapalıyken kayıt tutulmaz: sonradan açılınca eski olaylar birden çalmasın.
                 if (store.reminderMin > 0) reminders.onAlarm(change, System.currentTimeMillis())
             }
@@ -1105,7 +1110,8 @@ class MonitorService : Service() {
             val rules = store.rulesFor(r.change.deviceId)
             val effective = RuleEngine.effective(AlertAction.ALARM, quiet, store.bypassesQuiet(r.change.deviceId))
             log.add(r.change.deviceId, r.change.name, EventKind.REMINDER, text, effective.name, args)
-            if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri) else notifier.notifyEvent(text, rules.soundUri)
+            if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri, critical = isCritical(r.change.deviceId))
+            else notifier.notifyEvent(text, rules.soundUri)
         }
         // Hiç alarm çalmadıysa (hepsi bildirime düştü) kapatılacak bir şey yok: hatırlatmalar yeniden kurulur.
         if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall)
@@ -1114,8 +1120,9 @@ class MonitorService : Service() {
     /**
      * [sound]: olayın cihazına özel ses (yoksa genel ses). [silent]: sessiz test alarmı. Alarm ancak yalnızca sessiz
      * testlerden oluşuyorsa sessiz kalır: gerçek bir olay gelince ses başlar, çalan alarma eklenen sessiz test onu susturmaz.
+     * [critical]: olay Kritik kategoride; haber verilen kişilerden aranacak olanlar aranır.
      */
-    private fun addAlarm(text: String, sound: String? = null, silent: Boolean = false, test: Boolean = false) {
+    private fun addAlarm(text: String, sound: String? = null, silent: Boolean = false, test: Boolean = false, critical: Boolean = false) {
         val now = System.currentTimeMillis()
         if (store.pendingAlarm.isEmpty()) {
             runtime.alarmStartedAt = now
@@ -1124,13 +1131,21 @@ class MonitorService : Service() {
         // İkinci kişiye haber verme ilk gerçek olaydan sayılır; test alarmı kimseye mesaj göndermez.
         if (!test && runtime.realAlarmAt == 0L) {
             runtime.realAlarmAt = now
-            if (store.escalationReady) handler.postDelayed({ tick() }, store.escalateMin * 60_000L + 50)
+            val first = Escalation.firstDelay(store.telegramRecipients, store.telegramStages, store.escalateMin)
+            if (store.escalationReady && first != null) handler.postDelayed({ tick() }, first * 60_000L + 50)
+        }
+        if (!test && critical && runtime.criticalAlarmFor != runtime.realAlarmAt) {
+            runtime.criticalAlarmFor = runtime.realAlarmAt
+            // Vakti çoktan gelmiş kişiler (mesajı almış olanlar) beklemeden aransın.
+            if (store.escalationReady) handler.postDelayed({ tick() }, 50)
         }
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         notifier.showAlarm(store.pendingAlarm, sound, silent = runtime.silentAlarm)
         StatusSurfaces.refresh(this)
     }
+
+    private fun isCritical(deviceId: String) = store.categoryOf(deviceId) == DeviceCategory.CRITICAL
 
     /** Gönderilemeyen haber vermenin geçmişe yazıldığı alarm: her denemede tekrar yazılmasın. */
     private var escalationFailureLoggedFor = 0L
@@ -1154,7 +1169,8 @@ class MonitorService : Service() {
         val minutes = ((wall - at) / 60_000L).toInt().coerceAtLeast(1)
         // Önceki kademede haber verilenler mesajda yazılır: kişi tek başına olmadığını bilsin.
         val earlier = all.filter { it.id in done }.map { it.name }
-        val header = getString(R.string.tg_alarm_header, minutes) +
+        // İlk dakikada (hemen haber verilecek kişiler) "1 dakikadır" yerine "çalıyor" yazılır.
+        val header = (if (wall - at < 60_000L) getString(R.string.tg_alarm_header_now) else getString(R.string.tg_alarm_header, minutes)) +
             (if (earlier.isNotEmpty()) "\n" + getString(R.string.tg_alarm_earlier, earlier.joinToString(", ")) else "")
         val text = Escalation.message(header = header, lines = store.pendingAlarm, footer = getString(R.string.tg_footer, deviceName()))
         val token = store.telegramToken
@@ -1197,6 +1213,63 @@ class MonitorService : Service() {
         }
     }
 
+    /** Son telefon araması: aynı anda tek arama yapılabilir, sıradaki kişi [PHONE_CALL_GAP_MS] sonra aranır. */
+    private var lastPhoneCallAt = 0L
+
+    /**
+     * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler alarm başına bir kez aranır.
+     * Telegram araması CallMeBot ile ([calls] iş parçacığında), telefon araması bu cihazın hattından.
+     * Aranamayan kişi bildirimle haber verilir, yeniden denenmez (arama tekrarı gece herkesi uyandırmasın).
+     */
+    private fun checkCalls(wall: Long) {
+        val at = runtime.realAlarmAt
+        if (at == 0L || runtime.criticalAlarmFor != at || store.pendingAlarm.isEmpty() || !store.escalationReady) return
+        val called = runtime.calledChats
+        val due = Escalation.dueRecipients(store.telegramRecipients, store.telegramStages, store.escalateMin, at, called, wall)
+            .filter { it.calls }
+        if (due.isEmpty()) return
+        val text = getString(R.string.call_text, store.pendingAlarm.last().substringAfter("  "))
+        val turkish = resources.configuration.locales[0].language == "tr"
+        val marked = mutableSetOf<Long>()
+        for (r in due) {
+            when (r.call) {
+                CallMode.TELEGRAM -> {
+                    marked += r.id
+                    calls.execute {
+                        runCatching { CallMeBotClient.call(r.callTo, text, turkish) }
+                            .onSuccess { Log.i(TAG, "callmebot call started") }
+                            .onFailure { e -> Log.w(TAG, "callmebot call failed", e); handler.post { callFailed(r, e.message) } }
+                    }
+                }
+                CallMode.PHONE -> {
+                    if (wall - lastPhoneCallAt < PHONE_CALL_GAP_MS) continue
+                    lastPhoneCallAt = wall
+                    marked += r.id
+                    val error = placePhoneCall(r.callTo)
+                    if (error != null) callFailed(r, error)
+                }
+                CallMode.NONE -> Unit
+            }
+        }
+        if (marked.isNotEmpty()) runtime.calledChats = runtime.calledChats + marked
+    }
+
+    /** Hata metni döner; arama başladıysa null. Arka planda etkinlik açmadan (Telecom) arar. */
+    private fun placePhoneCall(number: String): String? {
+        if (checkSelfPermission(android.Manifest.permission.CALL_PHONE) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            return getString(R.string.call_err_permission)
+        }
+        val telecom = getSystemService(android.telecom.TelecomManager::class.java) ?: return getString(R.string.call_err_no_phone)
+        return runCatching {
+            telecom.placeCall(android.net.Uri.fromParts("tel", number.replace(" ", ""), null), android.os.Bundle())
+            null
+        }.getOrElse { e -> Log.w(TAG, "phone call failed", e); e.message ?: getString(R.string.call_err_no_phone) }
+    }
+
+    private fun callFailed(r: Recipient, error: String?) {
+        notifier.notifyEvent(getString(R.string.call_failed, r.name, error.orEmpty()).trimEnd(' ', ':'))
+    }
+
     /** Alarm bitti: haber verilenlere kapatıldığı da bildirilir. */
     private fun endEscalation() {
         val at = runtime.realAlarmAt
@@ -1204,6 +1277,8 @@ class MonitorService : Service() {
         runtime.realAlarmAt = 0
         runtime.escalatedFor = 0
         runtime.escalatedChats = emptySet()
+        runtime.criticalAlarmFor = 0
+        runtime.calledChats = emptySet()
     }
 
     /** "Alarm kapatıldı" mesajı (yalnızca haber verilenlere); yanıt beklenmez, gönderilemezse önemsizdir. */
@@ -1277,7 +1352,7 @@ class MonitorService : Service() {
         val sound = held.firstNotNullOfOrNull { store.rulesFor(it.change.deviceId).soundUri }
         when (effective) {
             AlertAction.ALARM -> {
-                addAlarm(text, sound)
+                addAlarm(text, sound, critical = held.any { isCritical(it.change.deviceId) })
                 if (store.reminderMin > 0) held.forEach { reminders.onAlarm(it.change, wall) }
             }
             AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
@@ -1979,6 +2054,7 @@ class MonitorService : Service() {
         /** Anlık bağlantı canlıyken başarısız senkronun yeniden deneme aralıkları (sonuncusu tekrarlanır). */
         private val SYNC_RETRY_MS = longArrayOf(15_000, 30_000, 60_000, 120_000)
         private const val ESCALATION_RETRY_MS = 60_000L
+        private const val PHONE_CALL_GAP_MS = 120_000L
         private const val TG_POLL_MS = 15_000L
         private const val CHARGER_CONFIRM_MS = 60_000L
         private const val WEATHER_MS = 30 * 60_000L
@@ -2013,6 +2089,8 @@ class MonitorService : Service() {
          * kuyruğa giren "alarm kapatıldı" mesajı da gidebilsin.
          */
         private val telegram = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "telegram").apply { isDaemon = true } }
+        /** CallMeBot yanıtı arama başlayana dek sürebilir: Telegram komutlarını bekletmesin. */
+        private val calls = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "calls").apply { isDaemon = true } }
 
         private fun tickPendingIntent(context: Context) = PendingIntent.getBroadcast(
             context, 0, Intent(context, TickReceiver::class.java),

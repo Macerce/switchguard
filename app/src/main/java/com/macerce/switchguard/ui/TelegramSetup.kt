@@ -62,7 +62,12 @@ fun TelegramDialog(store: Store, onDismiss: () -> Unit) {
     var bot by remember { mutableStateOf(store.telegramBot.ifEmpty { null }) }
     var found by remember { mutableStateOf(store.telegramRecipients) }
     var selected by remember { mutableStateOf(store.telegramRecipients.map { it.id }.toSet()) }
-    var delay by remember { mutableStateOf(store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY) }
+    // Herkes "hemen" ayarlıysa (kademeli haberden ya da burada seçildiyse) seçili gelir.
+    var delay by remember {
+        val people = store.telegramRecipients
+        val now = people.isNotEmpty() && people.all { store.telegramStages[it.id] == Escalation.NOW }
+        mutableStateOf(if (now) Escalation.NOW else store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY)
+    }
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var error by remember { mutableStateOf(false) }
@@ -192,19 +197,20 @@ fun TelegramDialog(store: Store, onDismiss: () -> Unit) {
                     Escalation.DELAYS.forEach { m ->
                         FilterChip(
                             selected = delay == m, onClick = { delay = m },
-                            label = { Text(stringResource(R.string.dur_minutes, m)) },
+                            label = { Text(if (m == Escalation.NOW) stringResource(R.string.stages_now) else stringResource(R.string.dur_minutes, m)) },
                             modifier = Modifier.tvFocusRing(RoundedCornerShape(8.dp)),
                         )
                     }
                 }
-                Text(stringResource(R.string.tg_when_desc, delay), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
+                Text(if (delay == Escalation.NOW) stringResource(R.string.tg_when_desc_now) else stringResource(R.string.tg_when_desc, delay), style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 4.dp))
 
                 OutlinedButton(
                     enabled = !busy && bot != null && selected.isNotEmpty(),
                     modifier = Modifier.padding(top = 12.dp).tvFocusRing(),
                     onClick = {
                         launchTask(Section.TEST) {
-                            val text = resources.getString(R.string.tg_test_message, delay)
+                            val text = if (delay == Escalation.NOW) resources.getString(R.string.tg_test_message_now)
+                                else resources.getString(R.string.tg_test_message, delay)
                             withContext(Dispatchers.IO) { found.filter { it.id in selected }.forEach { TelegramClient.send(token, it.id, text) } }
                             resources.getString(R.string.tg_test_sent)
                         }
@@ -220,8 +226,14 @@ fun TelegramDialog(store: Store, onDismiss: () -> Unit) {
                 onClick = {
                     store.telegramToken = token
                     store.telegramBot = bot.orEmpty()
-                    store.telegramRecipients = found.filter { it.id in selected }
-                    store.escalateMin = delay
+                    // Kişinin arama ayarı korunur (bulunan kişiler yeni nesne).
+                    val old = store.telegramRecipients.associateBy { it.id }
+                    val people = found.filter { it.id in selected }.map { r -> old[r.id]?.copy(name = r.name) ?: r }
+                    store.telegramRecipients = people
+                    // "Hemen": kişilerin kademesi 0; süre seçilince eskiden "hemen" olanlar seçilen süreye döner.
+                    store.telegramStages = if (delay == Escalation.NOW) store.telegramStages + people.associate { it.id to Escalation.NOW }
+                        else store.telegramStages.filterNot { (id, m) -> m == Escalation.NOW && people.any { it.id == id } }
+                    store.escalateMin = if (delay == Escalation.NOW) store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY else delay
                     onDismiss()
                 },
             ) { Text(stringResource(R.string.action_save)) }
@@ -271,5 +283,6 @@ private const val DEFAULT_DELAY = 5
 fun escalationSummary(store: Store): String {
     val n = store.telegramRecipients.size
     return if (!store.escalationReady) stringResource(R.string.blind_alert_off)
+    else if (store.telegramRecipients.all { store.stageFor(it.id) == Escalation.NOW }) androidx.compose.ui.res.pluralStringResource(R.plurals.tg_summary_now, n, n)
     else androidx.compose.ui.res.pluralStringResource(R.plurals.tg_summary, n, store.escalateMin, n)
 }

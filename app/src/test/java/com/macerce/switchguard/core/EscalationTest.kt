@@ -69,4 +69,38 @@ class EscalationTest {
         assertEquals(emptyList<Recipient>(), Recipient.listFromJson("bozuk"))
         assertEquals(emptyList<Recipient>(), Recipient.listFromJson(null))
     }
+
+    @Test
+    fun `arama ayari kaydedilir, eski kayit aramasiz okunur`() {
+        val list = listOf(Recipient(1, "Ayşe", CallMode.TELEGRAM, "@ayse_k"), Recipient(2, "Ali", CallMode.PHONE, "+90 555 111 2233"))
+        assertEquals(list, Recipient.listFromJson(Recipient.listToJson(list)))
+        assertEquals(listOf(Recipient(1, "Ayşe")), Recipient.listFromJson("""[{"id":1,"name":"Ayşe"}]"""))
+        assertTrue(list.all { it.calls })
+        assertFalse(Recipient(3, "Veli", CallMode.TELEGRAM, "").calls)
+    }
+
+    @Test
+    fun `arama hedefi bicimi`() {
+        assertTrue(Escalation.isCallTarget(CallMode.TELEGRAM, "@ayse_k"))
+        assertTrue(Escalation.isCallTarget(CallMode.TELEGRAM, "+905551112233"))
+        // Telegram numarası uluslararası olmalı; kullanıcı adı "@" ile ve en az 5 karakter.
+        assertFalse(Escalation.isCallTarget(CallMode.TELEGRAM, "05551112233"))
+        assertFalse(Escalation.isCallTarget(CallMode.TELEGRAM, "@abc"))
+        assertTrue(Escalation.isCallTarget(CallMode.PHONE, "0555 111 22 33"))
+        assertTrue(Escalation.isCallTarget(CallMode.PHONE, "112"))
+        assertFalse(Escalation.isCallTarget(CallMode.PHONE, "@ayse_k"))
+        assertFalse(Escalation.isCallTarget(CallMode.NONE, "+905551112233"))
+    }
+
+    @Test
+    fun `hemen kademesi alarm aninda gelir`() {
+        val ayse = Recipient(1, "Ayşe")
+        val ali = Recipient(2, "Ali")
+        val stages = mapOf(1L to Escalation.NOW)
+        assertEquals(listOf(ayse), Escalation.dueRecipients(listOf(ayse, ali), stages, 5, 1_000, emptySet(), 1_000))
+        assertEquals(listOf(ali), Escalation.dueRecipients(listOf(ayse, ali), stages, 5, 1_000, setOf(1L), 1_000 + min5))
+        assertEquals(Escalation.NOW, Escalation.firstDelay(listOf(ayse, ali), stages, 5))
+        assertEquals(5, Escalation.firstDelay(listOf(ali), stages, 5))
+        assertNull(Escalation.firstDelay(emptyList(), stages, 5))
+    }
 }

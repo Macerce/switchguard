@@ -642,6 +642,7 @@
 
     <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
     <string name="tg_alarm_header">🚨 SwitchGuard alarmı %d dakikadır kapatılmadı</string>
+    <string name="tg_alarm_header_now">🚨 SwitchGuard alarmı çalıyor</string>
     <string name="tg_footer">Gönderen: %s</string>
     <string name="tg_dismissed">✅ SwitchGuard alarmı kapatıldı: %1$s (başladıktan %2$s sonra)</string>
     <string name="tg_err_token">Bot anahtarı geçersiz</string>
@@ -666,8 +667,10 @@
     <string name="tg_group">grup</string>
     <string name="tg_step_when">3. Ne zaman</string>
     <string name="tg_when_desc">Alarm %d dakika içinde kapatılmazsa haber verilir.</string>
+    <string name="tg_when_desc_now">Alarm çalar çalmaz haber verilir.</string>
     <string name="tg_test">Deneme mesajı gönder</string>
     <string name="tg_test_message">👋 SwitchGuard deneme mesajı: alarm %d dakika içinde kapatılmazsa size buradan haber verilecek.</string>
+    <string name="tg_test_message_now">👋 SwitchGuard deneme mesajı: alarm çalınca size hemen buradan haber verilecek.</string>
     <string name="tg_test_sent">Deneme mesajı gönderildi</string>
     <string name="tg_turn_off">Kapat</string>
     <string name="phone_entry_button">Telefondan gir</string>
@@ -700,6 +703,10 @@
     <plurals name="tg_summary">
         <item quantity="one">%1$d dk kapatılmazsa · %2$d kişi</item>
         <item quantity="other">%1$d dk kapatılmazsa · %2$d kişi</item>
+    </plurals>
+    <plurals name="tg_summary_now">
+        <item quantity="one">Çalar çalmaz · %d kişi</item>
+        <item quantity="other">Çalar çalmaz · %d kişi</item>
     </plurals>
 
     <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
@@ -1072,6 +1079,24 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="stages_title">Kademeli haber</string>
     <string name="stages_desc">Her kişiye kendi bekleme süresi dolunca yazılır. Örneğin komşuya 5, akrabaya 15, aile grubuna 30 dakika sonra. Biri "Gördüm" derse sıradakilere yazılmaz.</string>
     <string name="stages_after">%d dk</string>
+    <string name="stages_now">Hemen</string>
+    <string name="calls_title">Kritik alarmda ara</string>
+    <string name="calls_desc">Kritik kategorideki bir cihaz alarm çaldırınca kişi, kademeli haberdeki bekleme süresi dolduğunda ayrıca aranır. Her alarmda kişi başına bir kez aranır. Gruplar aranamaz.</string>
+    <string name="calls_no_people">Önce Telegram kurulumunda bir kişi (grup değil) ekleyin.</string>
+    <string name="calls_none">Arama yok</string>
+    <string name="calls_telegram">Telegram araması</string>
+    <string name="calls_phone">Telefon araması</string>
+    <string name="calls_tg_target">Telegram @kullanıcıadı ya da +telefon numarası</string>
+    <string name="calls_phone_target">Telefon numarası</string>
+    <string name="calls_tg_hint">Telegram aramasını ücretsiz CallMeBot servisi yapar ve alarmı sesli okur. Kişinin bir kez Telegram\'da @CallMeBot_txtbot\'a /start yazıp izin vermesi, Telegram gizlilik ayarlarında aramalara izin vermesi gerekir. Alarm metni CallMeBot\'a gönderilir.</string>
+    <string name="calls_test">Deneme araması</string>
+    <string name="calls_testing">Aranıyor…</string>
+    <string name="calls_test_sent">Arama istendi. Çalması birkaç saniye sürebilir.</string>
+    <string name="call_text">SwitchGuard kritik alarm. %s</string>
+    <string name="call_test_text">Bu bir SwitchGuard deneme aramasıdır. Kritik alarmda bu şekilde aranacaksınız.</string>
+    <string name="call_failed">%1$s aranamadı: %2$s</string>
+    <string name="call_err_permission">Telefon araması izni verilmedi</string>
+    <string name="call_err_no_phone">bu cihaz telefon araması yapamıyor</string>
     <string name="tg_alarm_earlier">Daha önce haber verilenler: %s</string>
 
     <string name="scenes_title">Sahneler</string>
