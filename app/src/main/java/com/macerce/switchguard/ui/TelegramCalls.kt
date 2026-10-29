@@ -85,8 +85,18 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                         .fold({ resources.getString(R.string.calls_test_sent) }, { e -> resources.getString(R.string.call_failed, r.name, e.message.orEmpty()) })
                 }
             }
-            // Deneme aramasında telefonun kendi arama ekranı açılır (kullanıcı gerekirse hemen kapatır).
-            CallMode.PHONE -> runCatching { context.startActivity(Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", to.replace(" ", ""), null))) }
+            // Gerçek alarmdaki gibi doğrudan arar (Telecom); izin yoksa önce istenir.
+            CallMode.PHONE -> {
+                if (context.checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    permission.launch(Manifest.permission.CALL_PHONE)
+                    return
+                }
+                message = runCatching {
+                    context.getSystemService(android.telecom.TelecomManager::class.java)!!
+                        .placeCall(Uri.fromParts("tel", to.replace(" ", ""), null), android.os.Bundle())
+                    resources.getString(R.string.calls_test_sent)
+                }.getOrElse { e -> resources.getString(R.string.call_failed, r.name, e.message.orEmpty()) }
+            }
             CallMode.NONE -> Unit
         }
     }
