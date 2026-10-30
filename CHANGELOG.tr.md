@@ -6,6 +6,16 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.21.1 — 30 Ekim 2026
+**Yenilikler**
+- Bölgeler: haritada bir alan çizin (eviniz, atölye); oraya varınca ya da ayrılınca otomasyon çalışsın — eve dönerken şofbeni açın, çıkınca her şeyi kapatın. Android'in bölge izlemesini kullanır; konumunuz telefonda kalır. Ayarlar → Konum ve bölgeler'den kurulur (konum eskiden Akıllı uyarılar'ın içindeydi).
+- Kritik alarmda ara (Ayarlar): Kritik bir cihaz alarm çaldırınca seçtiğiniz kişiler bu telefonun hattından da aranır; alarm kapatılana ya da Telegram'dan “Gördüm” denene dek 2 dakika arayla en çok 3 kez. Arama uyandırmak içindir; ne olduğu aynı anda giden Telegram mesajında yazar.
+- Kademeli haberde kişiye “Hemen”, yani alarm çalar çalmaz haber verilebilir.
+- Sohbet: mesajlarda gönderen ve saat, yazıyor göstergesi, anlık dış sıcaklık; konum ayarlı değilse Konum ayarla düğmesi.
+
+**Düzeltmeler**
+- Çevrimdışı cihazın son güç değeri artık şimdiki değermiş gibi gösterilmiyor (sohbet, cihaz enerji kartı, saat).
+
 ## 2.18.0 — 2026-10-29
 **Yeni**
 - Sohbetle komut: cihazlarınıza düz cümleyle yazın; Telegram'da ya da uygulamadaki yeni sohbet ekranında (Cihazlar → sohbet simgesi). “salon ve mutfağı kapat”, “tüm ışıkları kapat”, “pompa açık mı”, “klima kaç watt” (şimdiki, bugünkü ve son 7 günden öğrenilen olağan tüketim), “kaç derece”, “akşam sahnesi”, “evdeyim” / “dışarıdayım”. Telegram'a /watt ve /sicaklik eklendi; /ac ve /kapat virgülle ayrılmış birden çok cihaz alır.

@@ -6,6 +6,16 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.21.1 — 2026-10-30
+**New**
+- Zones: draw an area on the map (your home, the workshop) and let automations run when you arrive or leave — turn on the water heater on the way home, switch everything off when you leave. Uses Android geofencing; your location stays on the phone. Set up under Settings → Location and zones (location was hidden under Smart alerts before).
+- Call on critical alarm (Settings): when a Critical device sounds the alarm, chosen people are also phoned from this phone's line, every 2 minutes up to 3 times, until the alarm is dismissed or someone taps “Got it” in Telegram. The call is a wake-up; what happened is in the Telegram message sent at the same time.
+- Staged alerts can tell a person “Now”, as soon as the alarm sounds.
+- Chat: messages show who sent them and when, a typing indicator, the live outdoor temperature and a Set location button when none is set.
+
+**Fixes**
+- An offline device no longer shows its last power reading as if it were current (chat, device energy card, watch).
+
 ## 2.18.0 — 2026-10-29
 **New**
 - Chat commands: write to your devices in plain words, in Telegram or in the new in-app chat (Devices → chat icon). “turn off living room and kitchen”, “turn off all lights”, “is the pump on”, “heater watts” (power now, today and the usual draw learned from the last 7 days), “temperature”, “evening scene”, “home” / “away”. Telegram also gets /watt and /temp, and /on and /off accept several devices separated by commas.
