@@ -6,11 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## 2.23.0 — yayınlanmadı
+## 2.23.1 — yayınlanmadı
 **Yenilikler**
 - Sesle sohbet: Sohbet'te mikrofona dokunup komutu söyleyin — “Mutfağı kapat”, “Bahçe açık mı?”, “Kaç watt?”. Yazılmış mesaj gibi çalışır, yanıt sesli okunur (üst çubuktaki hoparlör düğmesi sesli yanıtı kapatır). Android'in konuşma tanımasını kullanır; uygulama mikrofon izni istemez.
 - Sesli komut widget'ı: ana ekranda tek kutucuk — dokunun, komutu söyleyin, uygulansın; genişletince son komut ve yanıt görünür.
 - Grup widget'ı (büyük): bir grup seçin, içindeki her cihaz ayrı kutuda tek dokunuşla açılıp kapansın; üstte Hepsini aç / Hepsini kapat.
+- Widget'lar güç ölçen cihazların anlık watt değerini gösterir (“Açık · 125 W”); grup widget'ında grubun toplamı da yazar.
 
 **Düzeltmeler**
 - Bölgeler: konum ya da Google Konum Doğruluğu kapalıyken Android bölgeleri izleyemiyor, varışlar sessizce kaçıyordu. Ayarlar → Konum ve bölgeler (ve bölge otomasyonu düzenleyicisi) artık bunu söylüyor; Aç düğmesi tek dokunuşla açtırıyor.

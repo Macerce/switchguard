@@ -40,6 +40,12 @@ data class DeviceGroup(val id: String, val name: String, val members: List<Group
             (d to m.channel).takeIf { d.online && state != on }
         }
 
+    /** Güç ölçen çevrimiçi üyelerin anlık toplamı (W); ölçen üye yoksa null. */
+    fun watts(byId: Map<String, DeviceSnapshot>): Double? {
+        val values = members.mapNotNull { m -> byId[m.deviceId]?.takeIf { it.online }?.channelPowerOf(m.channel) }
+        return if (values.isEmpty()) null else values.sum()
+    }
+
     private class State(val online: Boolean, val on: Boolean)
 
     private fun states(byId: Map<String, DeviceSnapshot>): List<State> = members.mapNotNull { m ->

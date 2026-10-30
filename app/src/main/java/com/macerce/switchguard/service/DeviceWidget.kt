@@ -12,6 +12,7 @@ import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.Actions
+import com.macerce.switchguard.ui.formatWatts
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -111,7 +112,7 @@ class DeviceWidget : AppWidgetProvider() {
                 !device.online -> context.getString(R.string.label_offline)
                 on -> context.getString(R.string.label_on)
                 else -> context.getString(R.string.label_off)
-            }
+            } + wattsSuffix(context, device, channel, devices)
             views.setTextViewText(R.id.widget_title, title)
             views.setTextViewText(R.id.widget_status, state)
             views.setInt(R.id.widget_root, "setBackgroundResource", if (on && device.online) R.drawable.widget_bg_on else R.drawable.widget_bg)
@@ -122,6 +123,17 @@ class DeviceWidget : AppWidgetProvider() {
             if (DeviceGroup.isGroup(device.id)) views.setImageViewResource(R.id.widget_icon, R.drawable.ic_widget_group)
             setToggle(context, widgetId, views)
             return views
+        }
+
+        /**
+         * Güç ölçen cihazda anlık watt ("Açık · 125 W"); grupta güç ölçen üyelerin toplamı. Çevrimdışıyken eski
+         * değer gösterilmez.
+         */
+        fun wattsSuffix(context: Context, device: DeviceSnapshot, channel: Int, devices: Map<String, DeviceSnapshot>): String {
+            if (!device.online) return ""
+            val w = if (DeviceGroup.isGroup(device.id)) Store.get(context).groups.firstOrNull { it.deviceId == device.id }?.watts(devices)
+            else device.channelPowerOf(channel)
+            return w?.let { " · " + formatWatts(it) } ?: ""
         }
 
         private fun setToggle(context: Context, widgetId: Int, views: RemoteViews) {

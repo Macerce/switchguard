@@ -14,6 +14,7 @@ import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.Actions
+import com.macerce.switchguard.ui.formatWatts
 import kotlinx.coroutines.runBlocking
 
 /**
@@ -96,7 +97,10 @@ class GroupWidget : AppWidgetProvider() {
             val (onCount, total) = group.counts(byId)
             val anyOn = onCount > 0
             views.setTextViewText(R.id.widget_title, group.name)
-            views.setTextViewText(R.id.widget_status, context.getString(R.string.widget_group_counts, onCount, total))
+            views.setTextViewText(
+                R.id.widget_status,
+                context.getString(R.string.widget_group_counts, onCount, total) + (group.watts(byId)?.let { " · " + formatWatts(it) } ?: ""),
+            )
             views.setViewVisibility(R.id.widget_all, View.VISIBLE)
             views.setTextViewText(R.id.widget_all, context.getString(if (anyOn) R.string.widget_group_all_off else R.string.widget_group_all_on))
             views.setOnClickPendingIntent(R.id.widget_all, broadcast(context, widgetId, ACTION_ALL, "all", null))
@@ -133,7 +137,7 @@ class GroupWidget : AppWidgetProvider() {
                     !d.online -> R.string.label_offline
                     on -> R.string.label_on
                     else -> R.string.label_off
-                }),
+                }) + DeviceWidget.wattsSuffix(context, d, channel, emptyMap()),
             )
             val white = 0xFFFFFFFF.toInt()
             cell.setInt(R.id.cell_root, "setBackgroundResource", if (on) R.drawable.widget_bg_on else R.drawable.widget_cell_bg)

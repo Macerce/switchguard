@@ -6,11 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.23.0 — unreleased
+## 2.23.1 — unreleased
 **New**
 - Chat by voice: tap the microphone in Chat and say the command — “Turn off kitchen”, “Is the garden on?”, “How many watts?”. It runs like a typed message and the reply is read aloud (speaker button in the top bar turns spoken replies off). Uses Android's speech recognition; the app asks for no microphone permission.
 - Voice command widget: a single tile on the home screen — tap it, say the command, it runs; widen it to see the last command and reply.
 - Group widget (large): pick a group and every device in it gets its own tile to switch on or off, plus an All on / All off button.
+- Widgets show the live watts of power-metering devices (“On · 125 W”); the group widget also shows the group total.
 
 **Fixes**
 - Zones: if location or Google Location Accuracy is off, Android can't watch zones and arrivals went unnoticed. Settings → Location and zones (and the zone automation editor) now say so, with a Turn on button that switches it on in one tap.

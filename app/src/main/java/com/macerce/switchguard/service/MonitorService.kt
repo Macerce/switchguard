@@ -776,6 +776,9 @@ class MonitorService : Service() {
         setTuyaState(ConnState.LIVE, synced = true)
     }
 
+    /** Widget'lar güç değişimiyle en son ne zaman tazelendi. */
+    private var lastWidgetPower = 0L
+
     private fun process(current: List<DeviceSnapshot>) {
         val wall = System.currentTimeMillis()
         // Bekleme süresi dolmuş kopmalar önce verilir: cihaz bu arada geri geldiyse (servis kapalıydı,
@@ -791,6 +794,13 @@ class MonitorService : Service() {
         if (current.any { d -> previous[d.id]?.let { it.online != d.online || it.switches != d.switches } != false }) {
             DeviceWidget.updateAll(this)
             WearBridge.publish(this)
+            lastWidgetPower = wall
+        } else if (wall - lastWidgetPower >= WIDGET_POWER_EVERY_MS &&
+            current.any { d -> previous[d.id]?.let { it.power != d.power || it.channelPower != d.channelPower } == true }
+        ) {
+            // Widget'lardaki anlık watt da güncel kalsın; sık gelen güç ölçümlerinde en çok 15 sn'de bir.
+            DeviceWidget.updateAll(this)
+            lastWidgetPower = wall
         }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
@@ -2013,6 +2023,7 @@ class MonitorService : Service() {
     private fun minuteOfDay(): Int = Calendar.getInstance().run { get(Calendar.HOUR_OF_DAY) * 60 + get(Calendar.MINUTE) }
 
     companion object {
+        private const val WIDGET_POWER_EVERY_MS = 15_000L
         const val ACTION_START = "start"
         const val ACTION_STOP = "stop"
         const val ACTION_DISMISS = "dismiss"
