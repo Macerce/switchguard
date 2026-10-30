@@ -1085,15 +1085,13 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="stages_after">%d min</string>
     <string name="stages_now">Now</string>
     <string name="calls_title">Call on critical alarm</string>
-    <string name="calls_desc">When a device in the Critical category sounds the alarm, the person is also called from this phone\'s line when their wait in staged alerts is up. The call is put on speaker and the alarm is read aloud, so keep the phone somewhere quiet. Calls repeat every 2 minutes, up to 3 times, until the alarm is dismissed or someone taps “Got it” in Telegram. Groups can\'t be called.</string>
+    <string name="calls_desc">When a device in the Critical category sounds the alarm, the person is also called from this phone\'s line when their wait in staged alerts is up. The call only wakes them up: what happened is in the Telegram message sent at the same time (Android doesn\'t let apps play sound into a phone call). Ask them to save this number as “SwitchGuard alarm”. Calls repeat every 2 minutes, up to 3 times, until the alarm is dismissed or someone taps “Got it” in Telegram. Groups can\'t be called.</string>
     <string name="calls_no_people">Add a person (not a group) in Telegram setup first.</string>
     <string name="calls_none">Don\'t call</string>
     <string name="calls_phone">Phone call</string>
     <string name="calls_phone_target">Phone number</string>
     <string name="calls_test">Test call</string>
     <string name="calls_test_sent">Call requested. It may take a few seconds to ring.</string>
-    <string name="call_text">SwitchGuard critical alarm. %s</string>
-    <string name="call_test_text">This is a SwitchGuard test call. You will be called like this on a critical alarm.</string>
     <string name="call_failed">Couldn\'t call %1$s: %2$s</string>
     <string name="call_err_permission">Phone call permission is not granted</string>
     <string name="call_err_no_phone">this device can\'t make phone calls</string>

@@ -38,7 +38,6 @@ import com.macerce.switchguard.core.CallMode
 import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.Recipient
 import com.macerce.switchguard.data.Store
-import com.macerce.switchguard.service.CallAnnouncer
 
 /** "Ahmet · Ayşe" (aranacaklar) ya da "Kapalı". */
 @Composable
@@ -78,7 +77,6 @@ fun CallsDialog(store: Store, onDismiss: () -> Unit) {
                 message = runCatching {
                     context.getSystemService(android.telecom.TelecomManager::class.java)!!
                         .placeCall(Uri.fromParts("tel", to.replace(" ", ""), null), android.os.Bundle())
-                    CallAnnouncer.start(context, resources.getString(R.string.call_test_text))
                     resources.getString(R.string.calls_test_sent)
                 }.getOrElse { e -> resources.getString(R.string.call_failed, r.name, e.message.orEmpty()) }
             }

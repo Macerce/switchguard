@@ -1081,15 +1081,13 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="stages_after">%d dk</string>
     <string name="stages_now">Hemen</string>
     <string name="calls_title">Kritik alarmda ara</string>
-    <string name="calls_desc">Kritik kategorideki bir cihaz alarm çaldırınca kişi, kademeli haberdeki bekleme süresi dolduğunda bu telefonun hattından ayrıca aranır. Görüşme hoparlöre alınır ve alarm sesli okunur, bu yüzden telefon sessiz bir yerde olmalı. Alarm kapatılana ya da Telegram\'dan "Gördüm" denene dek 2 dakika arayla en çok 3 kez aranır. Gruplar aranamaz.</string>
+    <string name="calls_desc">Kritik kategorideki bir cihaz alarm çaldırınca kişi, kademeli haberdeki bekleme süresi dolduğunda bu telefonun hattından ayrıca aranır. Arama yalnız uyandırmak içindir: ne olduğu aynı anda giden Telegram mesajında yazar (Android, uygulamaların telefon görüşmesine ses vermesine izin vermez). Kişiden bu numarayı “SwitchGuard alarm” adıyla rehbere kaydetmesini isteyin. Alarm kapatılana ya da Telegram\'dan "Gördüm" denene dek 2 dakika arayla en çok 3 kez aranır. Gruplar aranamaz.</string>
     <string name="calls_no_people">Önce Telegram kurulumunda bir kişi (grup değil) ekleyin.</string>
     <string name="calls_none">Arama yok</string>
     <string name="calls_phone">Telefon araması</string>
     <string name="calls_phone_target">Telefon numarası</string>
     <string name="calls_test">Deneme araması</string>
     <string name="calls_test_sent">Arama istendi. Çalması birkaç saniye sürebilir.</string>
-    <string name="call_text">SwitchGuard kritik alarm. %s</string>
-    <string name="call_test_text">Bu bir SwitchGuard deneme aramasıdır. Kritik alarmda bu şekilde aranacaksınız.</string>
     <string name="call_failed">%1$s aranamadı: %2$s</string>
     <string name="call_err_permission">Telefon araması izni verilmedi</string>
     <string name="call_err_no_phone">bu cihaz telefon araması yapamıyor</string>

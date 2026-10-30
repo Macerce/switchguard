@@ -1217,7 +1217,8 @@ class MonitorService : Service() {
 
     /**
      * Kritik alarmda arama: vakti gelen (kendi bekleme süresi dolan) ve arama ayarlı kişiler bu cihazın hattından aranır;
-     * alarm sürdükçe [PHONE_CALL_GAP_MS] arayla en çok [PHONE_CALL_TRIES] kez. Görüşmede alarm metni okunur ([CallAnnouncer]).
+     * alarm sürdükçe [PHONE_CALL_GAP_MS] arayla en çok [PHONE_CALL_TRIES] kez. Arama yalnız haber verir; ne
+     * olduğu aynı anda giden Telegram mesajındadır (Android uygulamaların görüşmeye ses vermesine izin vermez).
      * Aranamayan kişi bildirimle haber verilir, yeniden denenmez (arama tekrarı gece herkesi uyandırmasın).
      */
     private fun checkCalls(wall: Long) {
@@ -1227,7 +1228,6 @@ class MonitorService : Service() {
         val due = Escalation.dueRecipients(store.telegramRecipients, store.telegramStages, store.escalateMin, at, called, wall)
             .filter { it.calls }
         if (due.isEmpty()) return
-        val text = getString(R.string.call_text, store.pendingAlarm.last().substringAfter("  "))
         val marked = mutableSetOf<Long>()
         for (r in due) {
             when (r.call) {
@@ -1241,7 +1241,6 @@ class MonitorService : Service() {
                         marked += r.id
                         callFailed(r, error)
                     } else {
-                        CallAnnouncer.start(this, text)
                         runtime.phoneCalls = runtime.phoneCalls + (r.id to (count + 1 to wall))
                         if (count + 1 >= PHONE_CALL_TRIES) marked += r.id
                     }
