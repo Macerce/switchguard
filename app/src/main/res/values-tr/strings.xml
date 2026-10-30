@@ -927,6 +927,26 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="smart_charger">Şarjı elektrik algılayıcısı olarak kullan</string>
     <string name="smart_charger_desc">Bu telefon/tablet yerinde prize takılı duruyorsa, şarjın bir dakika kesik kalması elektrik kesintisi sayılır; internet gitse de çalışır. Haber Telegram\'a mobil veriyle gider.</string>
 
+    <string name="widget_voice_label">SwitchGuard sesli komut</string>
+    <string name="widget_voice_description">Tek kutucuk: dokunun, söyleyin (“Mutfağı kapat”), komut uygulansın</string>
+    <string name="widget_voice_title">Sesli komut</string>
+    <string name="widget_voice_tap">Dokunun ve söyleyin</string>
+    <string name="widget_group_label">SwitchGuard grubu</string>
+    <string name="widget_group_description">Büyük kutucuk: gruptaki her cihazı ayrı ayrı açıp kapatın</string>
+    <string name="widget_group_sample">Bahçe ışıkları</string>
+    <string name="widget_group_sample_counts">2/4 açık</string>
+    <string name="widget_group_choose">Grup seçin</string>
+    <string name="widget_group_none">Henüz grup yok. Cihazlar ekranından grup oluşturun.</string>
+    <string name="widget_group_reconfigure">Grup bulunamadı; seçmek için widget\'a uzun basın</string>
+    <string name="widget_group_counts">%1$d/%2$d açık</string>
+    <string name="widget_group_all_on">Hepsini aç</string>
+    <string name="widget_group_all_off">Hepsini kapat</string>
+    <string name="widget_group_empty">Grupta cihaz yok</string>
+    <string name="widget_group_more">+%d cihaz daha, uygulamada</string>
+    <plurals name="widget_group_members">
+        <item quantity="one">%d cihaz</item>
+        <item quantity="other">%d cihaz</item>
+    </plurals>
     <string name="widget_device_label">SwitchGuard düğmesi</string>
     <string name="widget_device_description">Bir cihazı ya da kanalı tek dokunuşla açıp kapatır</string>
     <string name="widget_device_sample">Lamba</string>

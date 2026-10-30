@@ -931,6 +931,26 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="smart_charger">Charger as a power sensor</string>
     <string name="smart_charger_desc">If this phone/tablet stays plugged in at the site, being unplugged for a minute counts as a power outage; it also works when the internet is gone. The message goes out by Telegram over mobile data.</string>
 
+    <string name="widget_voice_label">SwitchGuard voice command</string>
+    <string name="widget_voice_description">One tile: tap, say it (“Turn off kitchen”), and it runs</string>
+    <string name="widget_voice_title">Voice command</string>
+    <string name="widget_voice_tap">Tap and speak</string>
+    <string name="widget_group_label">SwitchGuard group</string>
+    <string name="widget_group_description">Large tile: switch each device in a group on or off on its own</string>
+    <string name="widget_group_sample">Garden lights</string>
+    <string name="widget_group_sample_counts">2/4 on</string>
+    <string name="widget_group_choose">Choose a group</string>
+    <string name="widget_group_none">No groups yet. Create one on the Devices screen.</string>
+    <string name="widget_group_reconfigure">Group not found; long-press the widget to choose one</string>
+    <string name="widget_group_counts">%1$d/%2$d on</string>
+    <string name="widget_group_all_on">All on</string>
+    <string name="widget_group_all_off">All off</string>
+    <string name="widget_group_empty">No devices in this group</string>
+    <string name="widget_group_more">+%d more in the app</string>
+    <plurals name="widget_group_members">
+        <item quantity="one">%d device</item>
+        <item quantity="other">%d devices</item>
+    </plurals>
     <string name="widget_device_label">SwitchGuard switch</string>
     <string name="widget_device_description">Turns one device or channel on and off with a tap</string>
     <string name="widget_device_sample">Lamp</string>

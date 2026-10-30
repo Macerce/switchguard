@@ -107,6 +107,35 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        <!-- Grup widget'ı (büyük): gruptaki her cihazı ayrı ayrı açıp kapatır. -->
+        <receiver android:name=".service.GroupWidget" android:exported="true" android:label="@string/widget_group_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_group_info" />
+        </receiver>
+        <activity
+            android:name=".ui.GroupWidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SwitchGuard">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <!-- Sesli komut widget'ı: tek kutucuk, dokununca konuşma tanıma açılır, komut uygulanır. -->
+        <receiver android:name=".service.VoiceWidget" android:exported="true" android:label="@string/widget_voice_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_voice_info" />
+        </receiver>
+        <activity
+            android:name=".service.VoiceCommandActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:noHistory="false"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <!-- Hızlı Ayarlar kutucuğu: izlemeyi aç/kapat. Etkin kutucuk: servis durum değişince tazeler. -->
         <service
             android:name=".service.MonitorTile"

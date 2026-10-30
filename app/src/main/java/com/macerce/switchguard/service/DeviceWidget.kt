@@ -82,6 +82,7 @@ class DeviceWidget : AppWidgetProvider() {
 
         /** Durumlar değişince çağrılır; widget yoksa hiçbir şey yapmaz. */
         fun updateAll(context: Context) {
+            GroupWidget.updateAll(context)
             runCatching {
                 val manager = AppWidgetManager.getInstance(context) ?: return
                 val ids = manager.getAppWidgetIds(ComponentName(context, DeviceWidget::class.java))

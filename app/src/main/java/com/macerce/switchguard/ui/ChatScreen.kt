@@ -101,10 +101,6 @@ private data class ChatLine(
 /** Mesaj cümle gibi görünsün: "kaç derece" → "Kaç derece" (Türkçede i → İ). */
 private fun sentence(text: String, locale: Locale): String = text.replaceFirstChar { it.titlecase(locale) }
 
-/** Sesli okumada emoji ve simgeler atlanır ("⚠️" "uyarı işareti" diye okunmasın). */
-private fun speakable(text: String): String =
-    text.replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\uFE0F\\u200D•·]"), " ").replace(Regex("\\s+"), " ").trim()
-
 /** Ekran kapanıp açılınca konuşma kaybolmasın (uygulama açık kaldıkça). */
 private val lines = mutableStateListOf<ChatLine>()
 
@@ -131,7 +127,7 @@ fun ChatScreen(onBack: () -> Unit) {
     DisposableEffect(Unit) { onDispose { tts?.shutdown() } }
 
     fun say(text: String) {
-        val clean = speakable(text)
+        val clean = com.macerce.switchguard.service.Speaker.speakable(text)
         if (clean.isEmpty()) return
         tts?.let { it.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "chat"); return }
         var engine: TextToSpeech? = null
