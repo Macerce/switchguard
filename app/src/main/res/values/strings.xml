@@ -972,6 +972,9 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="zone_perm_desc">For zone rules, SwitchGuard uses your location even when the app is closed or not in use, only to detect when you cross the border of the zones you picked. Your location stays on the phone and is never sent to any server.</string>
     <string name="zone_perm_background">One more step: on the permission page, choose “Allow all the time” for location.</string>
     <string name="zone_perm_grant">Allow</string>
+    <string name="zone_unavailable_title">Zones aren\'t being watched</string>
+    <string name="zone_unavailable_desc">Location or Google Location Accuracy is off on this phone, so Android can\'t tell when you arrive or leave. Turn it on and zone automations work again.</string>
+    <string name="zone_unavailable_fix">Turn on</string>
     <string name="zone_perm_ok">Zone monitoring is on. Arrivals and departures may be detected a few minutes late.</string>
     <string name="map_attribution">© OpenStreetMap contributors</string>
     <string name="settings_location">Location and zones</string>

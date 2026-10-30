@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.21.2 — unreleased
+**Fixes**
+- Zones: if location or Google Location Accuracy is off, Android can't watch zones and arrivals went unnoticed. Settings → Location and zones (and the zone automation editor) now say so, with a Turn on button that switches it on in one tap.
+
 ## 2.21.1 — 2026-10-30
 **New**
 - Zones: draw an area on the map (your home, the workshop) and let automations run when you arrive or leave — turn on the water heater on the way home, switch everything off when you leave. Uses Android geofencing; your location stays on the phone. Set up under Settings → Location and zones (location was hidden under Smart alerts before).

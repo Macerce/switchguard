@@ -968,6 +968,9 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="zone_perm_desc">Bölge kuralları için SwitchGuard, uygulama kapalıyken ya da kullanılmıyorken de konumunuzu kullanır; yalnızca seçtiğiniz bölgelerin sınırını geçtiğinizi anlamak için. Konumunuz telefonda kalır, hiçbir sunucuya gönderilmez.</string>
     <string name="zone_perm_background">Bir adım kaldı: açılan izin sayfasında konum için “Her zaman izin ver”i seçin.</string>
     <string name="zone_perm_grant">İzin ver</string>
+    <string name="zone_unavailable_title">Bölgeler izlenmiyor</string>
+    <string name="zone_unavailable_desc">Bu telefonda konum ya da Google Konum Doğruluğu kapalı, bu yüzden Android varıp ayrıldığınızı anlayamıyor. Açarsanız bölge otomasyonları yeniden çalışır.</string>
+    <string name="zone_unavailable_fix">Aç</string>
     <string name="zone_perm_ok">Bölge izleme açık. Giriş ve çıkış birkaç dakika gecikmeyle algılanabilir.</string>
     <string name="map_attribution">© OpenStreetMap katkıcıları</string>
     <string name="settings_location">Konum ve bölgeler</string>

@@ -9,11 +9,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 import com.google.android.gms.location.GeofencingRequest
 import com.google.android.gms.location.LocationServices
 import com.macerce.switchguard.data.Store
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Bölge otomasyonları: açık bir giriş/çıkış kuralı olan bölgeleri sisteme (Google Play hizmetleri) kaydeder;
@@ -41,6 +45,14 @@ object ZoneWatcher {
         store.automations.any { it.enabled && it.trigger.kind.usesZone && it.trigger.deviceId == z.id }
     }
 
+    private val _unavailable = MutableStateFlow(false)
+
+    /**
+     * Sistem bölgeleri izleyemiyor (GEOFENCE_NOT_AVAILABLE): konum ya da Google Konum Doğruluğu kapalı. Kayıt sessizce
+     * başarısız olduğundan arayüz bunu gösterip açtırır; başarılı kayıtta yeniden false olur.
+     */
+    val unavailable: StateFlow<Boolean> = _unavailable
+
     /** Son kaydedilen bölge kümesinin imzası (izin dahil); değişmediyse yeniden kayıt yapılmaz. */
     @Volatile private var lastSignature: String? = null
 
@@ -63,7 +75,10 @@ object ZoneWatcher {
         val zones = activeZones(Store.get(app))
         lastSignature = signature(app)
         client.removeGeofences(pending).addOnCompleteListener {
-            if (zones.isEmpty() || !hasPermission(app)) return@addOnCompleteListener
+            if (zones.isEmpty() || !hasPermission(app)) {
+                _unavailable.value = false
+                return@addOnCompleteListener
+            }
             val fences = zones.map { z ->
                 Geofence.Builder()
                     .setRequestId(z.id)
@@ -77,7 +92,13 @@ object ZoneWatcher {
             // Başlangıç tetiklemesi yok: kural kurulurken "zaten içindesin" diye cihazlar oynamasın.
             val request = GeofencingRequest.Builder().setInitialTrigger(0).addGeofences(fences).build()
             runCatching { client.addGeofences(request, pending) }
-                .onSuccess { task -> task.addOnFailureListener { Log.w(TAG, "addGeofences failed: ${it.message}") } }
+                .onSuccess { task ->
+                    task.addOnSuccessListener { _unavailable.value = false }
+                    task.addOnFailureListener {
+                        Log.w(TAG, "addGeofences failed: ${it.message}")
+                        _unavailable.value = (it as? ApiException)?.statusCode == GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE
+                    }
+                }
                 .onFailure { Log.w(TAG, "addGeofences threw", it) }
         }
     }

@@ -1,10 +1,13 @@
 package com.macerce.switchguard.ui
 
 import android.Manifest
+import android.content.Intent
+import android.provider.Settings
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -79,7 +82,13 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.Priority
 import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkClient
@@ -150,7 +159,8 @@ fun ZonesSection(store: Store, version: Int) {
 
 /**
  * Arka planda konum izni: önce açıklama (Play kuralı: izin istenmeden önce neden gerektiği gösterilir), sonra
- * hassas konum, ardından ayrı adımda "Her zaman izin ver". İzin tamamsa kısa bir durum satırı.
+ * hassas konum, ardından ayrı adımda "Her zaman izin ver". İzin tamamsa kısa bir durum satırı; sistem bölgeleri
+ * izleyemiyorsa (konum ya da Google Konum Doğruluğu kapalı) uyarı ve açma düğmesi.
  */
 @Composable
 fun ZonePermissionCard(modifier: Modifier = Modifier) {
@@ -160,10 +170,39 @@ fun ZonePermissionCard(modifier: Modifier = Modifier) {
     var refresh by remember { mutableIntStateOf(0) }
     val ok = remember(resumed, refresh) { ZoneWatcher.hasPermission(context) }
     val needsBackground = remember(resumed, refresh) { ZoneWatcher.needsBackground(context) }
-    LaunchedEffect(ok) { if (ok) ZoneWatcher.sync(context) }
+    val unavailable by ZoneWatcher.unavailable.collectAsStateWithLifecycle()
+    // Ayarlardan dönünce yeniden kaydet: konum açıldıysa uyarı kalkar.
+    LaunchedEffect(ok, resumed) { if (ok && resumed) ZoneWatcher.sync(context) }
+    val resolve = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { ZoneWatcher.sync(context) }
+    fun turnOnLocation() {
+        // Play hizmetlerinin tek dokunuşluk "konum doğruluğunu aç" penceresi; olmazsa sistem konum ayarları.
+        val request = LocationSettingsRequest.Builder()
+            .addLocationRequest(LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 60_000).build())
+            .build()
+        val openSettings = {
+            runCatching { context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+        }
+        LocationServices.getSettingsClient(context).checkLocationSettings(request)
+            .addOnSuccessListener { ZoneWatcher.sync(context) }
+            .addOnFailureListener { e ->
+                if (e is ResolvableApiException) {
+                    runCatching { resolve.launch(IntentSenderRequest.Builder(e.resolution).build()) }.onFailure { openSettings() }
+                } else openSettings()
+            }
+    }
     val background = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { refresh++ }
     val fine = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refresh++ }
     val scheme = MaterialTheme.colorScheme
+    if (ok && unavailable) {
+        Surface(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), color = scheme.errorContainer) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(stringResource(R.string.zone_unavailable_title), style = MaterialTheme.typography.titleSmall, color = scheme.onErrorContainer)
+                Text(stringResource(R.string.zone_unavailable_desc), style = MaterialTheme.typography.bodyMedium, color = scheme.onErrorContainer)
+                Button(modifier = Modifier.tvFocusRing(), onClick = ::turnOnLocation) { Text(stringResource(R.string.zone_unavailable_fix)) }
+            }
+        }
+        return
+    }
     Surface(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), color = if (ok) scheme.secondaryContainer else scheme.tertiaryContainer) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             if (ok) {

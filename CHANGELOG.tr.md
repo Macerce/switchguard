@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.21.2 — yayınlanmadı
+**Düzeltmeler**
+- Bölgeler: konum ya da Google Konum Doğruluğu kapalıyken Android bölgeleri izleyemiyor, varışlar sessizce kaçıyordu. Ayarlar → Konum ve bölgeler (ve bölge otomasyonu düzenleyicisi) artık bunu söylüyor; Aç düğmesi tek dokunuşla açtırıyor.
+
 ## 2.21.1 — 30 Ekim 2026
 **Yenilikler**
 - Bölgeler: haritada bir alan çizin (eviniz, atölye); oraya varınca ya da ayrılınca otomasyon çalışsın — eve dönerken şofbeni açın, çıkınca her şeyi kapatın. Android'in bölge izlemesini kullanır; konumunuz telefonda kalır. Ayarlar → Konum ve bölgeler'den kurulur (konum eskiden Akıllı uyarılar'ın içindeydi).
