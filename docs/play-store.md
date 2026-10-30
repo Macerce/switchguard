@@ -122,7 +122,7 @@ Uygulama giriş gerektirdiği için "Tüm işlevler veya bazı işlevler kısıt
 - [x] Kapalı test: 2.8.0 (17), "Testers" e-posta listesi (15 kişi), geri bildirim switchguardapp@gmail.com — 3 Ekim 2026'da incelemeye gönderildi
 - [x] Google onayı: kapalı test 3 Ekim 2026'da yayına girdi; testçiler katılım linkinden katılıyor (https://play.google.com/apps/testing/com.macerce.switchguard)
 - [x] Alpha sürümleri: 2.10.1 (23) 13 Ekim, 2.11.0 (25) + Android TV 14 Ekim yayında; 2.12.0 (26) 15 Ekim 2026'da incelemeye gönderildi
-- [ ] Üretim erişimi başvurusu → üretim sürümü
+- [x] Üretim erişimi (23 Ekim) → üretim 2.16.0 (35) yayında; 2.21.1 (41) 30 Ekim 2026 incelemeye gönderildi
 
 ## 4c. Uygulama içi ürün (Pro)
 - Play Console → **Para kazanma → Ürünler → Uygulama içi ürünler** → Ürün oluştur
@@ -168,6 +168,17 @@ Play, telefonu Türkçe olan kullanıcıya Türkçe girişi, diğer herkese İng
 
 **TR:**
 > Akıllı uyarılar: elektrik kesintisinde tek uyarı, anormal tüketim, aylık bütçe ve haftalık rapor. Evde / Dışarıda ve tatil modu. Telegram komutları, "Gördüm" düğmesi, kademeli haber ve bekçi. Sahneler. Yeni otomasyon tetikleyicileri: gün doğumu, gün batımı, dış sıcaklık, süreli güç; saat ve gün sınırı. Cihaz başına kWh fiyatı, üç zamanlı tarife, bekleme tüketimi. Raporlar yenilendi. Cihaz widget'ı.
+
+## 4f4. 2.21.1 sürüm notları (Play üretim, 41; 2.17–2.21 birlikte, 30 Ekim 2026)
+**EN:**
+> New: alert categories (Critical / Important / Normal) and groups. Chat with your devices in plain words, here or in Telegram, with one-tap templates. Zones: automations run when you arrive or leave an area. A critical alarm can also phone chosen people, and staged alerts can tell them at once. Reorder device cards by dragging. Fixes: SONOFF POWR316 switching; offline devices no longer show old power readings.
+
+**TR:**
+> Yeni: uyarı kategorileri (Kritik / Önemli / Normal) ve gruplar. Cihazlarınıza düz cümleyle yazın; uygulamada ya da Telegram'da, tek dokunuşla şablonlar. Bölgeler: bir alana varınca ya da ayrılınca otomasyon çalışır. Kritik alarmda seçtiğiniz kişiler telefonla da aranır, kademeli haber hemen gidebilir. Cihaz kartlarını sürükleyerek sıralayın. Düzeltmeler: SONOFF POWR316 açma/kapama; çevrimdışı cihaz eski gücü göstermiyor.
+
+**Arka planda konum beyanı (Uygulama içeriği → Konum izinleri):** amaç = kullanıcının kendi eWeLink/Tuya prizlerini izleme, alarm ve otomasyonlar; özellik = bölge otomasyonları (Arrive in zone / Leave zone, Play hizmetleri geofencing); video https://youtu.be/a0lUYpwMbOs (46 sn, liste dışı; uzun hali https://youtu.be/O_qgq0PA5tM). Emülatörde kaydedildi: açıklama kartı → hassas konum → "Her zaman izin ver" → otomasyon.
+
+**Veri güvenliği (30 Ekim 2026'dan beri):** Evet, veri toplanıyor: yalnız *Yaklaşık konum* (sıcaklık kuralları için Open-Meteo'ya ~100 m yuvarlanmış konum) — toplandı, paylaşılmadı, kısa süreli işleniyor, isteğe bağlı, amaç Uygulama işlevselliği; aktarım şifreli; hesap oluşturma yok, giriş dışarıda oluşturulan hesaplarla (eWeLink/Tuya, "Diğer"). Kısa süreli olduğu için mağazada "veri toplanmıyor" görünür. CALL_PHONE kısıtlı izin değildir, beyan gerekmez.
 
 Wear OS saat uygulaması Play'e yüklenmedi (Wear form faktörü + ayrı kanal + saat ekran görüntüleri gerekir); APK'sı GitHub sürümünde.
 
