@@ -1336,6 +1336,8 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="chat_open">Chat commands</string>
     <string name="chat_hint">Write a command, e.g. Turn off kitchen</string>
     <string name="chat_send">Send</string>
+    <string name="chat_speak_on">Spoken replies on</string>
+    <string name="chat_speak_off">Spoken replies off</string>
     <string name="chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Ready-made templates are below; tap one to send it, hold it to edit.</string>
     <string name="chat_templates">Templates</string>
     <string name="chat_add_template">New template</string>

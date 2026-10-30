@@ -487,6 +487,11 @@ class Store internal constructor(
         get() = ChatTemplate.listFromJson(strOrNull("chatTemplates"))
         set(v) = edit { if (v == null) remove("chatTemplates") else put("chatTemplates", ChatTemplate.listToJson(v)) }
 
+    /** Sohbette sesle verilen komutun yanıtı sesli okunsun. */
+    var chatSpeak: Boolean
+        get() = bool("chatSpeak", true)
+        set(v) = edit { put("chatSpeak", v) }
+
     var groups: List<DeviceGroup>
         get() = DeviceGroup.listFromJson(strOrNull("groups"))
         set(v) = edit { put("groups", DeviceGroup.listToJson(v)) }

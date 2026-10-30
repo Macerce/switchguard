@@ -153,5 +153,7 @@
     <string name="desktop_blind_hint">İnternet bağlantısını ve bilgisayarın uykuda olmadığını kontrol edin.</string>
     <!-- Sohbet (telefon 2.18) -->
     <string name="desktop_chat_temp_unknown">Dış sıcaklığı gösterebilmem için konum gerekli. Konumu bilgisayardaki uygulamada Uyarılar → Akıllı uyarılar → Konum bölümünden ayarlayabilirsiniz.</string>
-    <string name="desktop_chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Hazır şablonlar aşağıdadır; şablona tıkladığınızda gönderilir, düzenlemek için sağ tıklayın.</string>
+    <string name="desktop_chat_voice">Sesle komut (Windows sesle yazma)</string>
+    <string name="desktop_chat_listening">Konuşun… bitince kendiliğinden gönderilir</string>
+    <string name="desktop_chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Yazmak yerine mikrofona tıklayıp söyleyebilirsiniz (“Mutfağı kapat”); Windows sesle yazma açılır, yanıt sesli okunur. Hazır şablonlar aşağıdadır; şablona tıkladığınızda gönderilir, düzenlemek için sağ tıklayın.</string>
 </resources>

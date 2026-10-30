@@ -29,9 +29,12 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.automirrored.rounded.VolumeOff
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.DeleteSweep
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
@@ -75,6 +78,7 @@ import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.engine.ChatRunner
 import com.macerce.switchguard.desktop.i18n.Strings
+import com.macerce.switchguard.desktop.platform.Speech
 import com.macerce.switchguard.desktop.ui.Button
 import com.macerce.switchguard.desktop.ui.FilledTonalButton
 import com.macerce.switchguard.desktop.ui.PageHeader
@@ -87,6 +91,7 @@ import com.macerce.switchguard.desktop.ui.readableWidth
 import com.macerce.switchguard.desktop.ui.settings.TimeDialog
 import com.macerce.switchguard.desktop.ui.settings.formatMinute
 import com.macerce.switchguard.desktop.ui.tileColor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 import java.util.UUID
@@ -129,8 +134,11 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
     var locationFor by remember { mutableStateOf<String?>(null) }
     val listState = rememberLazyListState()
     val inputFocus = remember { FocusRequester() }
+    var speak by remember { mutableStateOf(store.chatSpeak) }
+    // Sesle yazma açıkken: Windows yazı kutusuna yazar, söz bitince (yazı 2 sn değişmeyince) kendiliğinden gönderilir.
+    var listening by remember { mutableStateOf(false) }
 
-    fun send(text: String) {
+    fun send(text: String, spoken: Boolean = false) {
         val t = text.trim()
         if (t.isEmpty() || busy) return
         lines += ChatLine(true, sentence(t, strings.locale))
@@ -146,16 +154,39 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                     action = if (needsLocation) ChatAction.SET_LOCATION else null, retry = if (needsLocation) t else null,
                 )
                 busy = false
+                if (spoken && speak) Speech.say(answer ?: strings["chat_not_understood"], strings.locale)
             }
         }
     }
     // Sona kaydır: hoş geldin + satırlar + (varsa) "yanıt hazırlanıyor".
     LaunchedEffect(lines.size, busy) { listState.animateScrollToItem(lines.size + if (busy) 1 else 0) }
     LaunchedEffect(Unit) { runCatching { inputFocus.requestFocus() } }
+    LaunchedEffect(listening, input) {
+        if (!listening) return@LaunchedEffect
+        if (input.isBlank()) {
+            // Hiç konuşulmazsa dinleme göstergesi kendiliğinden kalksın.
+            delay(15_000)
+            listening = false
+        } else {
+            delay(2_000)
+            listening = false
+            send(input, spoken = true)
+        }
+    }
 
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Column(Modifier.readableWidth(860.dp).fillMaxSize()) {
             PageHeader(strings["chat_title"], actions = {
+                IconButton(onClick = {
+                    speak = !speak
+                    store.chatSpeak = speak
+                    if (!speak) Speech.stop()
+                }, modifier = Modifier.testTag("chat-speak")) {
+                    Icon(
+                        if (speak) Icons.AutoMirrored.Rounded.VolumeUp else Icons.AutoMirrored.Rounded.VolumeOff,
+                        strings[if (speak) "chat_speak_on" else "chat_speak_off"],
+                    )
+                }
                 if (lines.isNotEmpty()) IconButton(onClick = { lines.clear() }, modifier = Modifier.testTag("chat-clear")) {
                     Icon(Icons.Rounded.DeleteSweep, strings["chat_clear"])
                 }
@@ -218,9 +249,10 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                 OutlinedTextField(
                     value = input,
                     onValueChange = { input = it },
-                    placeholder = { Text(strings["chat_hint"]) },
+                    placeholder = { Text(strings[if (listening) "desktop_chat_listening" else "chat_hint"]) },
                     modifier = Modifier.weight(1f).focusRequester(inputFocus).testTag("chat-input").onPreviewKeyEvent {
                         if (it.type == KeyEventType.KeyDown && (it.key == Key.Enter || it.key == Key.NumPadEnter) && !it.isShiftPressed) {
+                            listening = false
                             send(input)
                             true
                         } else {
@@ -230,8 +262,22 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                     singleLine = true,
                     shape = RoundedCornerShape(24.dp),
                 )
-                IconButton(onClick = { send(input) }, enabled = input.isNotBlank() && !busy, modifier = Modifier.testTag("chat-send")) {
-                    Icon(Icons.AutoMirrored.Rounded.Send, strings["chat_send"], tint = MaterialTheme.colorScheme.primary)
+                // Yazı yokken mikrofon (Windows sesle yazma), yazı varken gönder.
+                if (input.isBlank() && !listening) {
+                    IconButton(onClick = {
+                        Speech.stop()
+                        runCatching { inputFocus.requestFocus() }
+                        scope.launch {
+                            delay(150) // odak yazı kutusuna geçsin, sesle yazma oraya yazsın
+                            listening = Speech.startDictation()
+                        }
+                    }, enabled = !busy, modifier = Modifier.testTag("chat-mic")) {
+                        Icon(Icons.Rounded.Mic, strings["desktop_chat_voice"], tint = MaterialTheme.colorScheme.primary)
+                    }
+                } else {
+                    IconButton(onClick = { listening = false; send(input) }, enabled = input.isNotBlank() && !busy, modifier = Modifier.testTag("chat-send")) {
+                        Icon(Icons.AutoMirrored.Rounded.Send, strings["chat_send"], tint = MaterialTheme.colorScheme.primary)
+                    }
                 }
             }
         }

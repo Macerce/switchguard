@@ -133,3 +133,4 @@ rounded/Workspaces
 rounded/SystemUpdateAlt
 rounded/Forum
 automirrored/rounded/Send
+rounded/Mic
