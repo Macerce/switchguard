@@ -15,6 +15,9 @@ import java.util.Locale
  * Arama sırasında alarm metnini karşı tarafa dinletir. Android uygulamaların görüşmeye doğrudan ses vermesine izin
  * vermez; bu yüzden görüşme hoparlöre alınır ve metin yüksek sesle okunur, mikrofon karşıya iletir. Açılıp açılmadığı
  * bilinemediğinden metin görüşme bitene dek (en çok [MAX_MS]) aralıkla tekrarlanır.
+ *
+ * Metin medya sesinden çalınır: görüşme sesinden (USAGE_VOICE_COMMUNICATION) çalınınca yankı engelleyici onu hoparlör
+ * yankısı sayıp mikrofondan siliyor, arayan duyuyor ama karşı taraf duymuyordu.
  */
 object CallAnnouncer {
     private const val TAG = "CallAnnouncer"
@@ -27,6 +30,8 @@ object CallAnnouncer {
     private val handler = Handler(Looper.getMainLooper())
     private var tts: TextToSpeech? = null
     private var session = 0
+    /** Yükseltilmeden önceki ses düzeyleri (akış → düzey); [stop] geri yükler. */
+    private val savedVolumes = mutableMapOf<Int, Int>()
 
     /** [text]'i görüşme boyunca okur; önceki okuma varsa durdurulur. Ana iş parçacığından çağrılmalı. */
     fun start(context: Context, text: String) {
@@ -41,8 +46,10 @@ object CallAnnouncer {
             if (status != TextToSpeech.SUCCESS || id != session) return@TextToSpeech
             val engine = tts ?: return@TextToSpeech
             engine.language = Locale.getDefault()
+            // Telefon hattı sesi bozar; biraz yavaş okunca anlaşılır.
+            engine.setSpeechRate(0.9f)
             engine.setAudioAttributes(
-                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).build(),
             )
             engine.setOnUtteranceProgressListener(object : android.speech.tts.UtteranceProgressListener() {
@@ -85,7 +92,12 @@ object CallAnnouncer {
         context.applicationContext.getSystemService(AudioManager::class.java)?.let { speaker(it, false) }
     }
 
-    /** Görüşmeyi hoparlöre alır ya da geri bırakır; ses de en yükseğe çekilir ki mikrofon net duysun. */
+    private fun raise(audio: AudioManager, stream: Int) {
+        if (stream !in savedVolumes) savedVolumes[stream] = audio.getStreamVolume(stream)
+        audio.setStreamVolume(stream, audio.getStreamMaxVolume(stream), 0)
+    }
+
+    /** Görüşmeyi hoparlöre alır ya da geri bırakır; okuma ve görüşme sesi en yükseğe çekilir ki mikrofon net duysun. */
     private fun speaker(audio: AudioManager, on: Boolean) {
         runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -97,7 +109,13 @@ object CallAnnouncer {
                 @Suppress("DEPRECATION")
                 audio.isSpeakerphoneOn = on
             }
-            if (on) audio.setStreamVolume(AudioManager.STREAM_VOICE_CALL, audio.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL), 0)
+            if (on) {
+                raise(audio, AudioManager.STREAM_MUSIC)
+                raise(audio, AudioManager.STREAM_VOICE_CALL)
+            } else {
+                savedVolumes.forEach { (stream, level) -> audio.setStreamVolume(stream, level, 0) }
+                savedVolumes.clear()
+            }
         }.onFailure { Log.w(TAG, "speaker", it) }
     }
 }
