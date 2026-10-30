@@ -1354,7 +1354,12 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="chat_open">Sohbetle komut</string>
     <string name="chat_hint">Bir komut yazın, ör. Mutfağı kapat</string>
     <string name="chat_send">Gönder</string>
-    <string name="chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Hazır şablonlar aşağıdadır; şablona dokunduğunuzda gönderilir, düzenlemek için basılı tutun.</string>
+    <string name="chat_voice">Sesle komut</string>
+    <string name="chat_voice_prompt">Söyleyin, ör. “Mutfağı kapat”</string>
+    <string name="chat_voice_unavailable">Bu cihazda konuşma tanıma yok. Google uygulamasını ya da sesle yazmayı açın.</string>
+    <string name="chat_speak_on">Sesli yanıt açık</string>
+    <string name="chat_speak_off">Sesli yanıt kapalı</string>
+    <string name="chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Yazmak yerine mikrofona dokunup söyleyebilirsiniz (“Mutfağı kapat”); yanıt sesli okunur. Hazır şablonlar aşağıdadır; şablona dokunduğunuzda gönderilir, düzenlemek için basılı tutun.</string>
     <string name="chat_templates">Şablonlar</string>
     <string name="chat_add_template">Yeni şablon</string>
     <string name="chat_edit_template">Şablonu düzenle</string>

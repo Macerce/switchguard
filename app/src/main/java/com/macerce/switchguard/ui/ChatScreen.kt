@@ -1,5 +1,13 @@
 package com.macerce.switchguard.ui
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -26,8 +34,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.automirrored.rounded.VolumeOff
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.DeleteSweep
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
@@ -40,6 +51,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -89,6 +101,10 @@ private data class ChatLine(
 /** Mesaj cümle gibi görünsün: "kaç derece" → "Kaç derece" (Türkçede i → İ). */
 private fun sentence(text: String, locale: Locale): String = text.replaceFirstChar { it.titlecase(locale) }
 
+/** Sesli okumada emoji ve simgeler atlanır ("⚠️" "uyarı işareti" diye okunmasın). */
+private fun speakable(text: String): String =
+    text.replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\uFE0F\\u200D•·]"), " ").replace(Regex("\\s+"), " ").trim()
+
 /** Ekran kapanıp açılınca konuşma kaybolmasın (uygulama açık kaldıkça). */
 private val lines = mutableStateListOf<ChatLine>()
 
@@ -109,8 +125,27 @@ fun ChatScreen(onBack: () -> Unit) {
     val chatTitle = stringResource(R.string.chat_title)
     val locale = LocalConfiguration.current.locales[0]
     var locationFor by remember { mutableStateOf<String?>(null) }
+    var speak by remember { mutableStateOf(store.chatSpeak) }
+    // Sesli yanıt için okuyucu; ilk sesli komutta kurulur, ekrandan çıkınca kapatılır.
+    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
+    DisposableEffect(Unit) { onDispose { tts?.shutdown() } }
 
-    fun send(text: String) {
+    fun say(text: String) {
+        val clean = speakable(text)
+        if (clean.isEmpty()) return
+        tts?.let { it.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "chat"); return }
+        var engine: TextToSpeech? = null
+        engine = TextToSpeech(context.applicationContext) { status ->
+            val e = engine ?: return@TextToSpeech
+            if (status == TextToSpeech.SUCCESS) {
+                e.language = locale
+                e.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "chat")
+            }
+        }
+        tts = engine
+    }
+
+    fun send(text: String, spoken: Boolean = false) {
         val t = text.trim()
         if (t.isEmpty() || busy) return
         lines += ChatLine(true, sentence(t, locale))
@@ -124,6 +159,29 @@ fun ChatScreen(onBack: () -> Unit) {
             val needsLocation = intent == ChatCommand.Intent.Temperature && (store.latitude == null || store.longitude == null)
             lines += ChatLine(false, answer, action = if (needsLocation) ChatAction.SET_LOCATION else null, retry = if (needsLocation) t else null)
             busy = false
+            if (spoken && speak) say(answer)
+        }
+    }
+
+    // Sesle komut: Android'in konuşma tanıma penceresi (uygulama mikrofon izni istemez); söylenen cümle doğrudan gönderilir.
+    val voicePrompt = stringResource(R.string.chat_voice_prompt)
+    val noVoice = stringResource(R.string.chat_voice_unavailable)
+    val voice = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
+        val heard = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull { it.isNotBlank() }
+        if (heard != null) send(heard, spoken = true)
+    }
+    fun listen() {
+        tts?.stop()
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale.toLanguageTag())
+            .putExtra(RecognizerIntent.EXTRA_PROMPT, voicePrompt)
+            .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+        try {
+            voice.launch(intent)
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(context, noVoice, Toast.LENGTH_LONG).show()
         }
     }
     // Sona kaydır: hoş geldin + satırlar + (varsa) "yanıt hazırlanıyor".
@@ -139,6 +197,16 @@ fun ChatScreen(onBack: () -> Unit) {
                 }
             },
             actions = {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = {
+                    speak = !speak
+                    store.chatSpeak = speak
+                    if (!speak) tts?.stop()
+                }) {
+                    Icon(
+                        if (speak) Icons.AutoMirrored.Rounded.VolumeUp else Icons.AutoMirrored.Rounded.VolumeOff,
+                        stringResource(if (speak) R.string.chat_speak_on else R.string.chat_speak_off),
+                    )
+                }
                 if (lines.isNotEmpty()) IconButton(modifier = Modifier.tvFocusRing(), onClick = { lines.clear() }) {
                     Icon(Icons.Rounded.DeleteSweep, stringResource(R.string.chat_clear))
                 }
@@ -208,8 +276,15 @@ fun ChatScreen(onBack: () -> Unit) {
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { send(input) }),
             )
-            IconButton(modifier = Modifier.tvFocusRing(), onClick = { send(input) }, enabled = input.isNotBlank() && !busy) {
-                Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send), tint = MaterialTheme.colorScheme.primary)
+            // Yazı yokken mikrofon, yazı varken gönder.
+            if (input.isBlank()) {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { listen() }, enabled = !busy) {
+                    Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice), tint = MaterialTheme.colorScheme.primary)
+                }
+            } else {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { send(input) }, enabled = !busy) {
+                    Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send), tint = MaterialTheme.colorScheme.primary)
+                }
             }
         }
     }

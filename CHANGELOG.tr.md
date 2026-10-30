@@ -6,7 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## 2.21.2 — yayınlanmadı
+## 2.22.0 — yayınlanmadı
+**Yenilikler**
+- Sesle sohbet: Sohbet'te mikrofona dokunup komutu söyleyin — “Mutfağı kapat”, “Bahçe açık mı?”, “Kaç watt?”. Yazılmış mesaj gibi çalışır, yanıt sesli okunur (üst çubuktaki hoparlör düğmesi sesli yanıtı kapatır). Android'in konuşma tanımasını kullanır; uygulama mikrofon izni istemez.
+
 **Düzeltmeler**
 - Bölgeler: konum ya da Google Konum Doğruluğu kapalıyken Android bölgeleri izleyemiyor, varışlar sessizce kaçıyordu. Ayarlar → Konum ve bölgeler (ve bölge otomasyonu düzenleyicisi) artık bunu söylüyor; Aç düğmesi tek dokunuşla açtırıyor.
 

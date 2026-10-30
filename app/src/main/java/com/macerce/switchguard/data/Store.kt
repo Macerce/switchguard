@@ -361,6 +361,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var chatTemplates: List<com.macerce.switchguard.core.ChatTemplate>?
         get() = parsed.get("chatTemplates", prefs.getString("chatTemplates", null)) { com.macerce.switchguard.core.ChatTemplate.listFromJson(it) }
         set(v) = put { if (v == null) remove("chatTemplates") else putString("chatTemplates", com.macerce.switchguard.core.ChatTemplate.listToJson(v)) }
+    /** Sohbette sesle verilen komutun yanıtı sesli okunsun. */
+    var chatSpeak: Boolean
+        get() = prefs.getBoolean("chatSpeak", true)
+        set(v) = put { putBoolean("chatSpeak", v) }
 
     /** Gruplar: tek düğmeyle açılıp kapanan cihaz kümeleri (bkz. [com.macerce.switchguard.core.DeviceGroup]). */
     var groups: List<com.macerce.switchguard.core.DeviceGroup>

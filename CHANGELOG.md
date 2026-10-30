@@ -6,7 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.21.2 — unreleased
+## 2.22.0 — unreleased
+**New**
+- Chat by voice: tap the microphone in Chat and say the command — “Turn off kitchen”, “Is the garden on?”, “How many watts?”. It runs like a typed message and the reply is read aloud (speaker button in the top bar turns spoken replies off). Uses Android's speech recognition; the app asks for no microphone permission.
+
 **Fixes**
 - Zones: if location or Google Location Accuracy is off, Android can't watch zones and arrivals went unnoticed. Settings → Location and zones (and the zone automation editor) now say so, with a Turn on button that switches it on in one tap.
 
