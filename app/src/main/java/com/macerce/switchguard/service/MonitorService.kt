@@ -37,6 +37,7 @@ import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.AlarmReminders
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
+import com.macerce.switchguard.core.AutoRetry
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.BlindWatch
@@ -118,6 +119,8 @@ class MonitorService : Service() {
     /** Başlarken diskteki kayıttan yüklenir (bkz. [restoreRuntime]). */
     private var grace = OfflineGrace()
     private var outage = OutageWatch()
+    private val retries = AutoRetry()
+    private val retryRunnable = Runnable { retryTick(System.currentTimeMillis()) }
     private var running = false
     private var wakeLock: PowerManager.WakeLock? = null
     private var authFailed = false
@@ -372,6 +375,7 @@ class MonitorService : Service() {
         checkOutage(wall)
         templateTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
+        retryTick(wall)
         weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
@@ -949,19 +953,7 @@ class MonitorService : Service() {
                     log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
                     return
                 }
-                val args = EventArgs.AutoSwitch(a.name, a.action.channel, target.isMultiChannel, on)
-                val text = args.render(target.name, strings)
-                try {
-                    // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
-                    LiveState.expected.expect(target.id, a.action.channel, on, System.currentTimeMillis())
-                    controlSwitch(target, a.action.channel, on)
-                    log.add(target.id, target.name, EventKind.AUTOMATION, text, "", args)
-                } catch (e: Exception) {
-                    val failedArgs = args.copy(error = e.message.orEmpty())
-                    val failed = failedArgs.render(target.name, strings)
-                    log.add(target.id, target.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
-                    notifier.notifyEvent(failed)
-                }
+                sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true)
             }
             ActionKind.RUN_SCENE -> {
                 if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
@@ -998,7 +990,10 @@ class MonitorService : Service() {
         }
     }
 
-    /** Otomasyonun grup eylemi: değişmesi gereken her üyeye komut gider; sonuç grup adıyla tek satır yazılır. */
+    /**
+     * Otomasyonun grup eylemi: değişmesi gereken her üyeye komut gider. Hepsi giderse grup adıyla
+     * tek satır yazılır; gidemeyen her üye kendi adıyla ayrı kayda düşer ve yeniden denenir.
+     */
     private fun executeGroup(a: Automation, on: Boolean) {
         val group = store.groups.firstOrNull { it.deviceId == a.action.deviceId }
         if (group == null) {
@@ -1006,29 +1001,68 @@ class MonitorService : Service() {
             log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
             return
         }
-        val args = EventArgs.AutoSwitch(a.name, 0, false, on)
-        var error: Exception? = null
+        var allSent = true
         for ((device, channel) in group.targets(store.snapshots.associateBy { it.id }, on)) {
-            try {
-                // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
-                LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-                controlSwitch(device, channel, on)
-            } catch (e: Exception) {
-                error = e
-            }
+            if (!sendAutomationSwitch(a.name, device, channel, on, attempt = 1, logSuccess = false)) allSent = false
         }
-        if (error == null) {
+        if (allSent) {
+            val args = EventArgs.AutoSwitch(a.name, 0, false, on)
             log.add(group.deviceId, group.name, EventKind.AUTOMATION, args.render(group.name, strings), "", args)
-        } else {
-            val failedArgs = args.copy(error = error.message.orEmpty())
-            val failed = failedArgs.render(group.name, strings)
-            log.add(group.deviceId, group.name, EventKind.AUTOMATION, failed, AlertAction.NOTIFY.name, failedArgs)
-            notifier.notifyEvent(failed)
         }
+    }
+
+    /**
+     * Otomasyonun tek cihaz/kanal komutu. Gidemezse cihazın kendi adıyla kayda düşer ve [AutoRetry]
+     * ile yeniden denenir; denemeler bitince "açılmadı/kapanmadı" bildirimi verilir.
+     */
+    private fun sendAutomationSwitch(
+        automation: String, device: DeviceSnapshot, channel: Int, on: Boolean, attempt: Int, logSuccess: Boolean,
+    ): Boolean {
+        retries.cancel(device.id, channel)
+        val args = EventArgs.AutoSwitch(automation, channel, device.isMultiChannel, on, attempt = attempt)
+        return try {
+            // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
+            LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+            controlSwitch(device, channel, on)
+            if (logSuccess || attempt > 1) log.add(device.id, device.name, EventKind.AUTOMATION, args.render(device.name, strings), "", args)
+            true
+        } catch (e: Exception) {
+            val error = e.message.orEmpty()
+            Log.w(TAG, "automation \"$automation\": ${device.name} (${device.id}) ch$channel -> ${if (on) "ON" else "OFF"} " +
+                "attempt $attempt failed, online=${device.online}: $error", e)
+            val retrying = retries.failed(automation, device.id, channel, on, attempt, System.currentTimeMillis())
+            val failedArgs = args.copy(error = error, retrying = retrying)
+            val text = failedArgs.render(device.name, strings)
+            log.add(device.id, device.name, EventKind.AUTOMATION, text, if (retrying) "" else AlertAction.NOTIFY.name, failedArgs)
+            if (retrying) scheduleRetry() else notifier.notifyEvent(text)
+            false
+        }
+    }
+
+    /** Vakti gelen otomasyon yeniden denemeleri; cihaz bu arada istenen duruma geldiyse deneme bırakılır. */
+    private fun retryTick(wall: Long) {
+        if (!running) return
+        for (p in retries.due(wall)) {
+            val device = store.snapshots.firstOrNull { it.id == p.deviceId } ?: continue
+            if (device.switches[p.channel] == p.on) continue
+            sendAutomationSwitch(p.automation, device, p.channel, p.on, p.attempt, logSuccess = true)
+        }
+        scheduleRetry()
+    }
+
+    private fun scheduleRetry() {
+        handler.removeCallbacks(retryRunnable)
+        val due = retries.nextDueAt() ?: return
+        handler.postDelayed(retryRunnable, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
     private fun handle(change: Change) {
         val wall = System.currentTimeMillis()
+        // Komutu gidemeyen cihaz geri geldi: beklemeden yeniden dene.
+        if (change is Change.Connection && change.to && retries.cameOnline(change.deviceId, wall)) {
+            handler.removeCallbacks(retryRunnable)
+            handler.post(retryRunnable)
+        }
         if (LiveState.expected.consume(change, wall)) {
             log.add(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
             return

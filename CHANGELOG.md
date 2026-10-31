@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.23.2 — unreleased
+**Fixes**
+- When an automation can't switch a device (e.g. eWeLink 4002 because the device briefly dropped off the cloud), the command is retried after 30 s, 1, 2 and 3 min, and right away when the device reconnects. If every try fails you get a “did NOT turn on / off” notification.
+- In group automations the failing device is logged under its own name in History, not the group's.
+
 ## 2.23.1 — unreleased
 **New**
 - Chat by voice: tap the microphone in Chat and say the command — “Turn off kitchen”, “Is the garden on?”, “How many watts?”. It runs like a typed message and the reply is read aloud (speaker button in the top bar turns spoken replies off). Uses Android's speech recognition; the app asks for no microphone permission.

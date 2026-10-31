@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.23.2 — yayınlanmadı
+**Düzeltmeler**
+- Otomasyon bir cihazı açamaz ya da kapatamazsa (ör. cihaz o an buluttan kısa süre koptuğunda eWeLink 4002) komut 30 sn, 1, 2 ve 3 dk sonra yeniden denenir; cihaz yeniden bağlanınca beklemeden denenir. Hepsi başarısız olursa “AÇILMADI / KAPANMADI” bildirimi gelir.
+- Grup otomasyonunda hata veren cihaz Geçmiş'e grup adıyla değil kendi adıyla yazılır.
+
 ## 2.23.1 — yayınlanmadı
 **Yenilikler**
 - Sesle sohbet: Sohbet'te mikrofona dokunup komutu söyleyin — “Mutfağı kapat”, “Bahçe açık mı?”, “Kaç watt?”. Yazılmış mesaj gibi çalışır, yanıt sesli okunur (üst çubuktaki hoparlör düğmesi sesli yanıtı kapatır). Android'in konuşma tanımasını kullanır; uygulama mikrofon izni istemez.

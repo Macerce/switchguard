@@ -173,6 +173,11 @@ class EventLog private constructor(context: Context) :
             automationFired = { context.getString(R.string.automation_fired, it) },
             deviceMissing = context.getString(R.string.device_missing),
             automationFailed = { t, e -> context.getString(R.string.automation_failed, t, e) },
+            automationRetrying = { t, e -> context.getString(R.string.automation_retrying, t, e) },
+            automationGaveUp = { t, e, n, on ->
+                context.getString(if (on) R.string.automation_gave_up_on else R.string.automation_gave_up_off, t, e, n)
+            },
+            automationRetried = { t, n -> context.getString(R.string.automation_retried, t, n) },
             powerStale = { context.getString(R.string.power_data_stale, it) },
             monitorGap = { from, to ->
                 context.getString(R.string.event_monitor_gap, timeRange(context, from, to), DurationText.format(to - from, durations(context)))

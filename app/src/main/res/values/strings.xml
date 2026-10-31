@@ -404,6 +404,10 @@
     <string name="automation_delete_title">Delete automation?</string>
     <string name="automation_fired">Automation “%s”</string>
     <string name="automation_failed">%1$s — failed: %2$s</string>
+    <string name="automation_retrying">%1$s — failed: %2$s · retrying</string>
+    <string name="automation_gave_up_on">%1$s — did NOT turn on (%3$d tries): %2$s</string>
+    <string name="automation_gave_up_off">%1$s — did NOT turn off (%3$d tries): %2$s</string>
+    <string name="automation_retried">%1$s (on try %2$d)</string>
     <string name="automations_empty">No automations yet</string>
     <string name="automations_examples">Examples:\n• When the sump level channel turns on, turn on the lights\n• If the pump stays on for 30 minutes, turn it off and ring the alarm\n• If power goes above 2000 W, notify me</string>
     <string name="automations_need_monitoring">Monitoring is off — automations will not run until you start it.</string>

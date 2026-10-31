@@ -400,6 +400,10 @@
     <string name="automation_delete_title">Otomasyon silinsin mi?</string>
     <string name="automation_fired">Otomasyon “%s”</string>
     <string name="automation_failed">%1$s — başarısız: %2$s</string>
+    <string name="automation_retrying">%1$s — başarısız: %2$s · yeniden denenecek</string>
+    <string name="automation_gave_up_on">%1$s — AÇILMADI (%3$d deneme): %2$s</string>
+    <string name="automation_gave_up_off">%1$s — KAPANMADI (%3$d deneme): %2$s</string>
+    <string name="automation_retried">%1$s (%2$d. denemede)</string>
     <string name="automations_empty">Henüz otomasyon yok</string>
     <string name="automations_examples">Örnekler:\n• Rögar seviye kanalı açılınca aydınlatmayı aç\n• Pompa 30 dakikadan uzun açık kalırsa kapat ve alarm çal\n• Güç 2000 W\'ı geçerse bildirim gönder</string>
     <string name="automations_need_monitoring">İzleme kapalı — başlatana kadar otomasyonlar çalışmaz.</string>
