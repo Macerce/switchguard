@@ -216,6 +216,21 @@ class StringsTest {
         }
     }
 
+    /**
+     * Arayüzdeki her `str("…")` anahtarı tabloda olmalı: telefonun strings.xml'i kopyalanırken masaüstüne özgü
+     * satırlar düşerse (0.9.0'da lisans ve güncelleme yazıları böyle gitti) ekranda anahtar adı görünür.
+     */
+    @Test
+    fun everyUiKeyExists() {
+        val en = Strings.load("en")
+        val missing = java.io.File("src/main/kotlin/com/macerce/switchguard/desktop/ui").walk()
+            .filter { it.extension == "kt" }
+            .flatMap { f -> Regex("""(?<![\w.`])str\(\s*"([a-z][a-z0-9_]*)"""").findAll(f.readText()).map { it.groupValues[1] } }
+            .toSortedSet()
+            .filter { en[it] == it }
+        assertEquals(emptyList<String>(), missing)
+    }
+
     /** Biçim belirteçleri: "konum:dönüşüm" kümesi (`%%` ve `%n` hariç; konumsuzlar sırayla numaralanır). */
     private fun specifiers(text: String): Set<String> {
         var next = 0

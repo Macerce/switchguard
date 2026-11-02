@@ -156,4 +156,19 @@
     <string name="desktop_chat_voice">Voice command (Windows voice typing)</string>
     <string name="desktop_chat_listening">Speak… it is sent when you stop</string>
     <string name="desktop_chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Click the microphone to say it instead (“Turn off kitchen”); Windows voice typing opens and the reply is read aloud. Ready-made templates are below; click one to send it, right-click to edit.</string>
+    <!-- Masaüstüne özgü: lisans ve güncelleme (0.9.0 telefon kopyasında strings.xml'den düşmüştü) -->
+    <string name="license_title">Activate Pro</string>
+    <string name="license_title_active">Pro license</string>
+    <string name="license_body">Without a license the app monitors %1$d device. Enter your license key to monitor all your devices.</string>
+    <string name="license_key">License key</string>
+    <string name="license_invalid">This license key is not valid. Check that you copied all of it.</string>
+    <string name="license_activate">Activate</string>
+    <string name="license_remove">Remove license</string>
+    <string name="license_owner">Licensed to %1$s · %2$s</string>
+    <string name="license_enter">Enter license key</string>
+    <string name="update_available">SwitchGuard %1$s is available. It installs over this version; your settings and license stay.</string>
+    <string name="update_downloading">Downloading SwitchGuard %1$s… The app will close, update and reopen.</string>
+    <string name="update_failed">The update could not be downloaded. Check your internet connection and try again.</string>
+    <string name="update_install">Update</string>
+    <string name="energy_last_7_days">Last 7 days</string>
 </resources>
