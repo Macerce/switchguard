@@ -170,5 +170,7 @@
     <string name="update_downloading">SwitchGuard %1$s indiriliyor… Uygulama kapanıp güncellenecek ve yeniden açılacak.</string>
     <string name="update_failed">Güncelleme indirilemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="update_install">Güncelle</string>
+    <string name="update_progress">%1$s / %2$s MB · %3$s MB/sn · %%%4$d</string>
+    <string name="update_progress_unknown">%1$s MB · %2$s MB/sn</string>
     <string name="energy_last_7_days">Son 7 gün</string>
 </resources>

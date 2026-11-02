@@ -27,6 +27,12 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
     private val _phase = MutableStateFlow(Phase.IDLE)
     val phase: StateFlow<Phase> = _phase.asStateFlow()
 
+    /** İndirme durumu: [bytes] inen, [total] toplam (sunucu bildirmezse null), [bytesPerSec] anlık hız. */
+    data class Progress(val bytes: Long, val total: Long?, val bytesPerSec: Double)
+
+    private val _progress = MutableStateFlow<Progress?>(null)
+    val progress: StateFlow<Progress?> = _progress.asStateFlow()
+
     /** Ağdan denetler (çağıran iş parçacığında). Geliştirme çalıştırmasında (sürüm yok) hiçbir şey yapmaz. */
     fun check() {
         val current = currentVersion ?: return
@@ -45,11 +51,12 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
      */
     fun downloadAndLaunch(): Boolean {
         val release = _available.value ?: return false
+        _progress.value = null
         _phase.value = Phase.DOWNLOADING
         return runCatching {
             val exe = tempDir.resolve("SwitchGuard-${release.version}-Kurulum.exe")
             val conn = open(release.assetUrl!!)
-            conn.inputStream.use { Files.copy(it, exe, StandardCopyOption.REPLACE_EXISTING) }
+            download(conn, exe)
             val app = Path.of(System.getenv("LOCALAPPDATA") ?: "", "SwitchGuard", "SwitchGuard.exe")
             val script = tempDir.resolve("switchguard-update.cmd")
             // Uygulamanın kapanmasını bekle, eski kurulumları kaldır, kur, kurulum başarılıysa yeniden aç.
@@ -69,6 +76,39 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
             _phase.value = Phase.FAILED
             false
         }
+    }
+
+    /** [conn]'u [target]'a yazar; yarım saniyede bir [progress]'i tazeler (hız son aralıktan, yumuşatılmış). */
+    private fun download(conn: HttpURLConnection, target: Path) {
+        val total = conn.contentLengthLong.takeIf { it > 0 }
+        val part = target.resolveSibling(target.fileName.toString() + ".part")
+        var bytes = 0L
+        var speed = 0.0
+        var lastAt = System.nanoTime()
+        var lastBytes = 0L
+        _progress.value = Progress(0, total, 0.0)
+        conn.inputStream.use { input ->
+            Files.newOutputStream(part).use { output ->
+                val buffer = ByteArray(64 * 1024)
+                while (true) {
+                    val n = input.read(buffer)
+                    if (n < 0) break
+                    output.write(buffer, 0, n)
+                    bytes += n
+                    val now = System.nanoTime()
+                    if (now - lastAt >= 500_000_000L) {
+                        val current = (bytes - lastBytes) * 1e9 / (now - lastAt)
+                        speed = if (speed == 0.0) current else speed * 0.6 + current * 0.4
+                        lastAt = now
+                        lastBytes = bytes
+                        _progress.value = Progress(bytes, total, speed)
+                    }
+                }
+            }
+        }
+        if (total != null && bytes != total) throw java.io.IOException("download incomplete: $bytes of $total bytes")
+        _progress.value = Progress(bytes, total, speed)
+        Files.move(part, target, StandardCopyOption.REPLACE_EXISTING)
     }
 
     private fun open(url: String): HttpURLConnection = (URL(url).openConnection() as HttpURLConnection).apply {
