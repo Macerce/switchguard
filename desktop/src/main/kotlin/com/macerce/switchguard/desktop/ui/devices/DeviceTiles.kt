@@ -75,6 +75,8 @@ fun DeviceTile(
     modifier: Modifier = Modifier,
     /** Grup kartı: (açık, toplam) üye sayısı; normal cihazda null. */
     groupCounts: Pair<Int, Int>? = null,
+    /** Grup kartı: güç ölçen çevrimiçi üyelerin toplamı (W); ölçen üye yoksa null. */
+    groupWatts: Double? = null,
 ) {
     val dark = LocalDarkTheme.current
     val anyOn = device.switches.values.any { it }
@@ -101,8 +103,8 @@ fun DeviceTile(
                         .clickable(onClick = onClick, role = Role.Button),
                 )
             }
-            if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts)
-            else SmallTileContent(device, active, monitored, priority, controls, groupCounts)
+            if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts, groupWatts)
+            else SmallTileContent(device, active, monitored, priority, controls, groupCounts, groupWatts)
         }
         editBar?.invoke()
     }
@@ -126,7 +128,10 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Dp = 42.dp) {
 
 /** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı"; sağda izleme zili. */
 @Composable
-private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
+private fun TileStatus(
+    device: DeviceSnapshot, active: Boolean, monitored: Boolean,
+    groupCounts: Pair<Int, Int>? = null, groupWatts: Double? = null,
+) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Row(verticalAlignment = Alignment.CenterVertically) {
         if (!device.online) {
@@ -141,7 +146,12 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
             onCount > 0 -> str("state_on_title")
             else -> str("state_off_title")
         }
-        val text = if (device.online && device.hasEnergy) state + " · " + watts(device.power ?: 0.0) else state
+        val text = when {
+            !device.online -> state
+            groupWatts != null -> state + " · " + watts(groupWatts)
+            device.hasEnergy -> state + " · " + watts(device.power ?: 0.0)
+            else -> state
+        }
         Text(
             text,
             style = MaterialTheme.typography.bodyMedium,
@@ -189,7 +199,7 @@ private fun TileName(device: DeviceSnapshot, active: Boolean, priority: Boolean,
 }
 
 @Composable
-private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
+private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?, groupWatts: Double?) {
     // En az yükseklik: aynı satırdaki kutucuklar (bir ad tek, biri iki satır) aynı boyda görünsün.
     Column(
         Modifier.fillMaxWidth().heightIn(min = 148.dp).padding(14.dp),
@@ -207,13 +217,13 @@ private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored:
         Column(Modifier.padding(top = 14.dp)) {
             TileName(device, active, priority, large = false)
             Spacer(Modifier.height(2.dp))
-            TileStatus(device, active, monitored, groupCounts)
+            TileStatus(device, active, monitored, groupCounts, groupWatts)
         }
     }
 }
 
 @Composable
-private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?) {
+private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored: Boolean, priority: Boolean, controls: Boolean, groupCounts: Pair<Int, Int>?, groupWatts: Double?) {
     Column(Modifier.fillMaxWidth().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             DeviceGlyph(device, active, size = 46.dp)
@@ -221,7 +231,7 @@ private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored:
             Column(Modifier.weight(1f)) {
                 TileName(device, active, priority, large = true)
                 Spacer(Modifier.height(2.dp))
-                TileStatus(device, active, monitored, groupCounts)
+                TileStatus(device, active, monitored, groupCounts, groupWatts)
             }
             if (controls && !device.isMultiChannel && device.switches.size == 1) {
                 Spacer(Modifier.width(12.dp))

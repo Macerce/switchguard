@@ -49,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.macerce.switchguard.core.Escalation
 import com.macerce.switchguard.core.ReportDoc
 import com.macerce.switchguard.core.Watchdog
 import com.macerce.switchguard.data.Store
@@ -224,7 +225,8 @@ private fun stagesSummary(s: Store, strings: Strings): String {
     val list = s.telegramRecipients.sortedBy { s.stageFor(it.id) }
     if (list.isEmpty()) return strings["blind_alert_off"]
     val min = strings["min_short"]
-    return list.joinToString(" → ") { "${it.name} ${s.stageFor(it.id)} $min" }
+    val now = strings["stages_now"]
+    return list.joinToString(" → ") { s.stageFor(it.id).let { m -> "${it.name} ${if (m == Escalation.NOW) now else "$m $min"}" } }
 }
 
 /** Bekçi seçeneği: 0 kapalı, 1 sinyal ver, eksi değer = diğerini o kadar dakikayla denetle. */
@@ -239,7 +241,7 @@ private fun watchdogLabel(mode: Int, strings: Strings): String = when {
 private fun StagesDialog(store: Store, strings: Strings, onDismiss: () -> Unit) {
     val recipients = store.telegramRecipients
     val stages = remember { mutableStateMapOf<Long, Int>().apply { recipients.forEach { put(it.id, store.stageFor(it.id)) } } }
-    val options = listOf(1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120)
+    val options = listOf(Escalation.NOW, 1, 2, 5, 10, 15, 20, 30, 45, 60, 90, 120)
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(strings["stages_title"]) },
@@ -251,7 +253,7 @@ private fun StagesDialog(store: Store, strings: Strings, onDismiss: () -> Unit) 
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(r.name, Modifier.weight(1f), maxLines = 1)
                         TextButton(enabled = options.any { it < value }, onClick = { stages[r.id] = options.last { it < value } }) { Text("−") }
-                        Text(strings.format("stages_after", value), style = MaterialTheme.typography.titleSmall)
+                        Text(if (value == Escalation.NOW) strings["stages_now"] else strings.format("stages_after", value), style = MaterialTheme.typography.titleSmall)
                         TextButton(enabled = options.any { it > value }, onClick = { stages[r.id] = options.first { it > value } }) { Text("+") }
                     }
                 }

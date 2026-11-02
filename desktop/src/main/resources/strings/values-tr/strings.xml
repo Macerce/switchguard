@@ -400,6 +400,10 @@
     <string name="automation_delete_title">Otomasyon silinsin mi?</string>
     <string name="automation_fired">Otomasyon “%s”</string>
     <string name="automation_failed">%1$s — başarısız: %2$s</string>
+    <string name="automation_retrying">%1$s — başarısız: %2$s · yeniden denenecek</string>
+    <string name="automation_gave_up_on">%1$s — AÇILMADI (%3$d deneme): %2$s</string>
+    <string name="automation_gave_up_off">%1$s — KAPANMADI (%3$d deneme): %2$s</string>
+    <string name="automation_retried">%1$s (%2$d. denemede)</string>
     <string name="automations_empty">Henüz otomasyon yok</string>
     <string name="automations_examples">Örnekler:\n• Rögar seviye kanalı açılınca aydınlatmayı aç\n• Pompa 30 dakikadan uzun açık kalırsa kapat ve alarm çal\n• Güç 2000 W\'ı geçerse bildirim gönder</string>
     <string name="automations_need_monitoring">İzleme kapalı — başlatana kadar otomasyonlar çalışmaz.</string>
@@ -642,6 +646,7 @@
 
     <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
     <string name="tg_alarm_header">🚨 SwitchGuard alarmı %d dakikadır kapatılmadı</string>
+    <string name="tg_alarm_header_now">🚨 SwitchGuard alarmı çalıyor</string>
     <string name="tg_footer">Gönderen: %s</string>
     <string name="tg_dismissed">✅ SwitchGuard alarmı kapatıldı: %1$s (başladıktan %2$s sonra)</string>
     <string name="tg_err_token">Bot anahtarı geçersiz</string>
@@ -666,8 +671,10 @@
     <string name="tg_group">grup</string>
     <string name="tg_step_when">3. Ne zaman</string>
     <string name="tg_when_desc">Alarm %d dakika içinde kapatılmazsa haber verilir.</string>
+    <string name="tg_when_desc_now">Alarm çalar çalmaz haber verilir.</string>
     <string name="tg_test">Deneme mesajı gönder</string>
     <string name="tg_test_message">👋 SwitchGuard deneme mesajı: alarm %d dakika içinde kapatılmazsa size buradan haber verilecek.</string>
+    <string name="tg_test_message_now">👋 SwitchGuard deneme mesajı: alarm çalınca size hemen buradan haber verilecek.</string>
     <string name="tg_test_sent">Deneme mesajı gönderildi</string>
     <string name="tg_turn_off">Kapat</string>
     <string name="phone_entry_button">Telefondan gir</string>
@@ -700,6 +707,10 @@
     <plurals name="tg_summary">
         <item quantity="one">%1$d dk kapatılmazsa · %2$d kişi</item>
         <item quantity="other">%1$d dk kapatılmazsa · %2$d kişi</item>
+    </plurals>
+    <plurals name="tg_summary_now">
+        <item quantity="one">Çalar çalmaz · %d kişi</item>
+        <item quantity="other">Çalar çalmaz · %d kişi</item>
     </plurals>
 
     <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
@@ -1072,6 +1083,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="stages_title">Kademeli haber</string>
     <string name="stages_desc">Her kişiye kendi bekleme süresi dolunca yazılır. Örneğin komşuya 5, akrabaya 15, aile grubuna 30 dakika sonra. Biri "Gördüm" derse sıradakilere yazılmaz.</string>
     <string name="stages_after">%d dk</string>
+    <string name="stages_now">Hemen</string>
     <string name="tg_alarm_earlier">Daha önce haber verilenler: %s</string>
 
     <string name="scenes_title">Sahneler</string>

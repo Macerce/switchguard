@@ -404,6 +404,10 @@
     <string name="automation_delete_title">Delete automation?</string>
     <string name="automation_fired">Automation “%s”</string>
     <string name="automation_failed">%1$s — failed: %2$s</string>
+    <string name="automation_retrying">%1$s — failed: %2$s · retrying</string>
+    <string name="automation_gave_up_on">%1$s — did NOT turn on (%3$d tries): %2$s</string>
+    <string name="automation_gave_up_off">%1$s — did NOT turn off (%3$d tries): %2$s</string>
+    <string name="automation_retried">%1$s (on try %2$d)</string>
     <string name="automations_empty">No automations yet</string>
     <string name="automations_examples">Examples:\n• When the sump level channel turns on, turn on the lights\n• If the pump stays on for 30 minutes, turn it off and ring the alarm\n• If power goes above 2000 W, notify me</string>
     <string name="automations_need_monitoring">Monitoring is off — automations will not run until you start it.</string>
@@ -646,6 +650,7 @@
 
     <!-- 2.11.0: ikinci kişiye haber ver (Telegram), telefondan gir -->
     <string name="tg_alarm_header">🚨 SwitchGuard alarm not dismissed for %d min</string>
+    <string name="tg_alarm_header_now">🚨 SwitchGuard alarm is sounding</string>
     <string name="tg_footer">From: %s</string>
     <string name="tg_dismissed">✅ SwitchGuard alarm dismissed at %1$s (%2$s after it started)</string>
     <string name="tg_err_token">The bot token is invalid</string>
@@ -670,8 +675,10 @@
     <string name="tg_group">group</string>
     <string name="tg_step_when">3. When</string>
     <string name="tg_when_desc">People are told if the alarm isn\'t dismissed within %d min.</string>
+    <string name="tg_when_desc_now">People are told as soon as the alarm sounds.</string>
     <string name="tg_test">Send a test message</string>
     <string name="tg_test_message">👋 SwitchGuard test message: if an alarm isn\'t dismissed within %d min, you\'ll be told here.</string>
+    <string name="tg_test_message_now">👋 SwitchGuard test message: when an alarm sounds, you\'ll be told here right away.</string>
     <string name="tg_test_sent">Test message sent</string>
     <string name="tg_turn_off">Turn off</string>
     <string name="phone_entry_button">Enter from phone</string>
@@ -704,6 +711,10 @@
     <plurals name="tg_summary">
         <item quantity="one">If not dismissed in %1$d min · %2$d person</item>
         <item quantity="other">If not dismissed in %1$d min · %2$d people</item>
+    </plurals>
+    <plurals name="tg_summary_now">
+        <item quantity="one">As soon as it sounds · %d person</item>
+        <item quantity="other">As soon as it sounds · %d people</item>
     </plurals>
 
     <!-- 2.12.0: akıllı ev görünümü ve kategorili ayarlar -->
@@ -1076,6 +1087,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="stages_title">Staged notification</string>
     <string name="stages_desc">Each person is messaged after their own wait. For example a neighbour after 5 minutes, a relative after 15, the family group after 30. If someone taps “Got it”, the next people are not messaged.</string>
     <string name="stages_after">%d min</string>
+    <string name="stages_now">Now</string>
     <string name="tg_alarm_earlier">Already notified: %s</string>
 
     <string name="scenes_title">Scenes</string>

@@ -43,6 +43,12 @@ class EventStrings(
     val scene: (name: String, ok: Int, failed: Int, by: String?) -> String = { _, _, _, _ -> "" },
     /** Evde/dışarıda değişti ([by] kim) ya da tatil bitti. */
     val presence: (away: Boolean, by: String?, vacationEnded: Boolean) -> String = { _, _, _ -> "" },
+    /** Otomasyon komutu cihaza gidemedi, yeniden denenecek. */
+    val automationRetrying: (text: String, error: String) -> String = automationFailed,
+    /** Otomasyon komutu [attempts] denemede de gidemedi; vazgeçildi. */
+    val automationGaveUp: (text: String, error: String, attempts: Int, on: Boolean) -> String = { t, e, _, _ -> automationFailed(t, e) },
+    /** Otomasyon komutu [attempt]. denemede gitti. */
+    val automationRetried: (text: String, attempt: Int) -> String = { t, _ -> t },
 )
 
 /**
@@ -61,6 +67,10 @@ sealed class EventArgs {
         val automation: String, val channel: Int, val multi: Boolean, val on: Boolean,
         /** Cihaza gönderilemediyse hata mesajı (sunucudan geldiği gibi, çevrilmez). */
         val error: String? = null,
+        /** Hata sonrası yeniden denenecek mi (bkz. [AutoRetry]). */
+        val retrying: Boolean = false,
+        /** Kaçıncı deneme (ilk gönderim 1). */
+        val attempt: Int = 1,
     ) : EventArgs()
     data class AutoAlert(val automation: String, val source: String?) : EventArgs()
     /** İzleme [from]–[to] arasında çalışmadı (servis kapatıldı, telefon kapalıydı). */
@@ -107,7 +117,13 @@ sealed class EventArgs {
         is AutoSwitch -> {
             val label = if (multi) s.labels.channel(deviceName, channel + 1) else deviceName
             val text = "${s.automationFired(automation)}: $label → ${if (on) s.labels.on else s.labels.off}"
-            if (error != null) s.automationFailed(text, error) else text
+            when {
+                error != null && retrying -> s.automationRetrying(text, error)
+                error != null && attempt > 1 -> s.automationGaveUp(text, error, attempt, on)
+                error != null -> s.automationFailed(text, error)
+                attempt > 1 -> s.automationRetried(text, attempt)
+                else -> text
+            }
         }
         is AutoAlert -> s.automationFired(automation).let { if (source != null) "$it ($source)" else it }
         is MonitorGap -> s.monitorGap(from, to)
@@ -146,6 +162,8 @@ sealed class EventArgs {
             is AutoSwitch -> {
                 put("t", "auto_switch"); put("auto", a.automation); put("ch", a.channel); put("multi", a.multi); put("on", a.on)
                 a.error?.let { put("err", it) }
+                if (a.retrying) put("retry", true)
+                if (a.attempt > 1) put("try", a.attempt)
             }
             is AutoAlert -> { put("t", "auto_alert"); put("auto", a.automation); a.source?.let { put("src", it) } }
             is MonitorGap -> { put("t", "gap"); put("from", a.from); put("to", a.to) }
@@ -188,6 +206,7 @@ sealed class EventArgs {
                     "auto_switch" -> AutoSwitch(
                         o.getString("auto"), o.getInt("ch"), o.getBoolean("multi"), o.getBoolean("on"),
                         if (o.has("err")) o.getString("err") else null,
+                        o.optBoolean("retry"), o.optInt("try", 1),
                     )
                     "auto_alert" -> AutoAlert(o.getString("auto"), if (o.has("src")) o.getString("src") else null)
                     "gap" -> MonitorGap(o.getLong("from"), o.getLong("to"))

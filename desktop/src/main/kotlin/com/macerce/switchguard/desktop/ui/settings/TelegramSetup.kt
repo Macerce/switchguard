@@ -93,7 +93,12 @@ fun TelegramPage(store: Store, onDone: () -> Unit, api: TelegramApi = TelegramCl
     var bot by remember { mutableStateOf(store.telegramBot.ifEmpty { null }) }
     var found by remember { mutableStateOf(store.telegramRecipients) }
     var selected by remember { mutableStateOf(store.telegramRecipients.map { it.id }.toSet()) }
-    var delay by remember { mutableStateOf(store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY) }
+    // Herkes "hemen" ayarlıysa (kademeli haberden ya da burada seçildiyse) seçili gelir.
+    var delay by remember {
+        val people = store.telegramRecipients
+        val now = people.isNotEmpty() && people.all { store.telegramStages[it.id] == Escalation.NOW }
+        mutableStateOf(if (now) Escalation.NOW else store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY)
+    }
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var error by remember { mutableStateOf(false) }
@@ -234,15 +239,15 @@ fun TelegramPage(store: Store, onDone: () -> Unit, api: TelegramApi = TelegramCl
     StepCard {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Escalation.DELAYS.forEach { m ->
-                FilterChip(selected = delay == m, onClick = { delay = m }, label = { Text(str("dur_minutes", m)) })
+                FilterChip(selected = delay == m, onClick = { delay = m }, label = { Text(if (m == Escalation.NOW) str("stages_now") else str("dur_minutes", m)) })
             }
         }
-        Text(str("tg_when_desc", delay), style = MaterialTheme.typography.bodyMedium)
+        Text(if (delay == Escalation.NOW) str("tg_when_desc_now") else str("tg_when_desc", delay), style = MaterialTheme.typography.bodyMedium)
         OutlinedButton(
             enabled = !busy && bot != null && selected.isNotEmpty(),
             onClick = {
                 launchTask(Section.TEST) {
-                    val text = strings.format("tg_test_message", delay)
+                    val text = if (delay == Escalation.NOW) strings["tg_test_message_now"] else strings.format("tg_test_message", delay)
                     withContext(Dispatchers.IO) { found.filter { it.id in selected }.forEach { api.send(token, it.id, text) } }
                     strings["tg_test_sent"]
                 }
@@ -270,8 +275,14 @@ fun TelegramPage(store: Store, onDone: () -> Unit, api: TelegramApi = TelegramCl
             onClick = {
                 store.telegramToken = token
                 store.telegramBot = bot.orEmpty()
-                store.telegramRecipients = found.filter { it.id in selected }
-                store.escalateMin = delay
+                // Telefondan gelen kişinin arama ayarı korunur (bulunan kişiler yeni nesne).
+                val old = store.telegramRecipients.associateBy { it.id }
+                val people = found.filter { it.id in selected }.map { r -> old[r.id]?.copy(name = r.name) ?: r }
+                store.telegramRecipients = people
+                // "Hemen": kişilerin kademesi 0; süre seçilince eskiden "hemen" olanlar seçilen süreye döner.
+                store.telegramStages = if (delay == Escalation.NOW) store.telegramStages + people.associate { it.id to Escalation.NOW }
+                    else store.telegramStages.filterNot { (id, m) -> m == Escalation.NOW && people.any { it.id == id } }
+                store.escalateMin = if (delay == Escalation.NOW) store.escalateMin.takeIf { it > 0 } ?: DEFAULT_DELAY else delay
                 onDone()
             },
         ) { Text(str("action_save")) }
@@ -309,5 +320,9 @@ private fun Status(busy: Boolean, message: String?, error: Boolean, here: Boolea
 /** Ayarlar satırındaki özet: "5 dk kapatılmazsa · 2 kişi" ya da "Kapalı". */
 fun escalationSummary(store: Store, strings: Strings): String {
     val n = store.telegramRecipients.size
-    return if (!store.escalationReady) strings["blind_alert_off"] else strings.plural("tg_summary", n, store.escalateMin, n)
+    return when {
+        !store.escalationReady -> strings["blind_alert_off"]
+        store.telegramRecipients.all { store.stageFor(it.id) == Escalation.NOW } -> strings.plural("tg_summary_now", n, n)
+        else -> strings.plural("tg_summary", n, store.escalateMin, n)
+    }
 }

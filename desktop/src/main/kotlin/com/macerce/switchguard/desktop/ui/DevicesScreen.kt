@@ -112,6 +112,11 @@ fun DevicesScreen(
         val byId = devices.associateBy { it.id }
         groups.associate { it.deviceId to it.counts(byId) }
     }
+    // Telefondaki grup widget'ı gibi: güç ölçen çevrimiçi üyelerin anlık toplamı.
+    val groupWatts = remember(version) {
+        val byId = devices.associateBy { it.id }
+        groups.associate { it.deviceId to it.watts(byId) }
+    }
     var editingGroup by remember { mutableStateOf<String?>(null) }
     var editMode by remember { mutableStateOf(false) }
     var showCategories by remember { mutableStateOf(false) }
@@ -281,6 +286,7 @@ fun DevicesScreen(
                                                 }
                                             },
                                             groupCounts = groupCounts[device.id],
+                                            groupWatts = groupWatts[device.id],
                                             editBar = if (editMode) {
                                                 {
                                                     LayoutEditBar(

@@ -129,3 +129,9 @@ Taşınmayan: bölgeler (Zone.kt, ZoneWatcher, ZoneUi, Konum ve bölgeler sayfas
 
 Masaüstüne uyarlanan: sohbette sesle komut. Telefonda RecognizerIntent + TextToSpeech; masaüstünde `platform/Speech.kt`: mikrofon düğmesi yazı kutusunu odaklayıp Windows sesle yazmayı (Win+H) açar, yazı 2 sn değişmeyince kendiliğinden gönderilir; yanıt WinRT SpeechSynthesizer (OneCore sesleri, ör. Microsoft Tolga) ile PowerShell 5.1 üzerinden okunur — eski SAPI Türkçe sesi görmez. Store `chatSpeak`, üst çubukta hoparlör düğmesi. Windows'ta Türkçe çevrimdışı tanıma paketi yok; sesle yazma için Ayarlar → Gizlilik → Konuşma → Çevrimiçi konuşma tanıma açık olmalı.
 Taşınmayan: 2.23 widget'ları (sesli komut, grup, widget'ta watt) — Windows'ta ana ekran widget'ı yok.
+
+## 0.11.0 eşitlemesi (telefon 2.20–2.23.2, agp-9 `cd1ec66`)
+
+Olduğu gibi kopyalanan: core/ AutoRetry (+ test), EventText (yeniden deneme metinleri, + test), DeviceGroup (`watts`), Escalation (`NOW`, `firstDelay`; `Recipient.call/callTo` JSON'da korunur, masaüstünde arama yok) + EscalationTest; strings.xml `automation_retrying/gave_up_on/gave_up_off/retried`, `tg_alarm_header_now`, `tg_when_desc_now`, `tg_test_message_now`, `tg_summary_now`, `stages_now`.
+Masaüstüne uyarlanan: MonitorService 2.23.2 → MonitorEngine `sendAutomationSwitch`/`retryTick`/`scheduleRetry` (handler.removeCallbacks yok: `scheduler.postDelayed` + her tick'te `retryTick`, fazladan uyanma zararsız; önce uyarı sonra geçmiş); bağlanan cihazda `scheduler.post` ile hemen deneme. 2.20 "Hemen" kademesi: ilk tick `Escalation.firstDelay`'den, ilk dakikada `tg_alarm_header_now`; Telegram kurulumu ve kademe penceresinde "Hemen" seçeneği. 2.23.1 widget'taki watt → Cihazlar ekranındaki grup kartında üyelerin toplam watt'ı (Windows'ta widget yok).
+Taşınmayan: telefon araması (2.20–2.21, PC arayamaz), bölge konum uyarısı (2.21.2), widget'lar (2.23.0).

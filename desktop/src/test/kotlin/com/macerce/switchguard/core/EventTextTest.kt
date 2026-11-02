@@ -49,7 +49,8 @@ class EventTextTest {
             EventArgs.Switch(3, true, false, true), EventArgs.Connection(true, false),
             EventArgs.ShortDrop, EventArgs.Test, EventArgs.PowerStale,
             EventArgs.AutoMissing("x"), EventArgs.AutoSwitch("a", 1, true, false, "boom"),
-            EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
+            EventArgs.AutoSwitch("a", 0, false, true), EventArgs.AutoSwitch("a", 0, false, true, "4002", retrying = true, attempt = 2),
+            EventArgs.AutoSwitch("a", 2, true, true, attempt = 3), EventArgs.AutoAlert("a", "src"), EventArgs.AutoAlert("a", null),
             EventArgs.MonitorGap(1_000, 61_000), EventArgs.MonitorBlind(5_000), EventArgs.MonitorRestored(5_000, 9_000),
             EventArgs.AlarmDismissed(3, 130_000),
             EventArgs.Reminder(1, multi = true, connection = false, to = false, durationMs = 60_000),
@@ -57,6 +58,26 @@ class EventTextTest {
         )
         all.forEach { assertEquals(it, EventArgs.parse(it.toJson())) }
         assertNull(EventArgs.parse(null)); assertNull(EventArgs.parse("{bad"))
+    }
+
+    @Test fun automationRetryTexts() {
+        val s = tr.let {
+            EventStrings(
+                it.labels, it.shortDrop, it.test, it.automationFired, it.deviceMissing, it.automationFailed, it.powerStale,
+                it.monitorGap, it.monitorBlind, it.monitorRestored, it.alarmDismissed, it.reminder, it.escalation,
+                automationRetrying = { t, e -> "$t — başarısız: $e · yeniden denenecek" },
+                automationGaveUp = { t, e, n, on -> "$t — ${if (on) "AÇILMADI" else "KAPANMADI"} ($n deneme): $e" },
+                automationRetried = { t, n -> "$t ($n. denemede)" },
+            )
+        }
+        val koridor = "300ler Koridor Aydinlatma"
+        val base = EventArgs.AutoSwitch("Aydınlatma Açıldı", 0, false, true)
+        assertEquals("Otomasyon “Aydınlatma Açıldı”: $koridor → AÇIK — başarısız: 4002 · yeniden denenecek",
+            base.copy(error = "4002", retrying = true).render(koridor, s))
+        assertEquals("Otomasyon “Aydınlatma Açıldı”: $koridor → AÇIK — AÇILMADI (5 deneme): 4002",
+            base.copy(error = "4002", attempt = 5).render(koridor, s))
+        assertEquals("Otomasyon “Aydınlatma Açıldı”: $koridor → AÇIK (2. denemede)", base.copy(attempt = 2).render(koridor, s))
+        assertEquals("Otomasyon “Aydınlatma Açıldı”: $koridor → AÇIK — başarısız: 4002", base.copy(error = "4002").render(koridor, s))
     }
 
     @Test fun legacyTurkishSwitchAndConnection() {
