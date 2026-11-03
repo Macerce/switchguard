@@ -6,6 +6,13 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.24.0 — unreleased
+**New**
+- Cycles & timers (Automations tab), built from presets: **Countdown** (“turn off / on in 30 min”), **On, then off** (turn on, stay on for a duration, turn off), **On/off cycle** (e.g. 15 min on, 45 min off), **One by one** (valves in turn) or **Custom steps** choosing on/off/leave per device in each step. Durations in seconds, minutes or hours; a number of rounds or until stopped.
+- Start: with a button, at a set time on chosen days (e.g. every day at 07:00 turn on, off after 20 min) or during hours (stops when the window ends, may cross midnight). When done: turn all off, on, leave as is or restore the previous state.
+- Advanced: random variation of durations (lived-in look while away), automatic start only when home/away, stop when changed by hand. Cards show a live countdown, step and round; History records start/finish. Works with groups, eWeLink and Tuya devices; failed commands are retried.
+- The automation editor's “If” events and conditions are compact tiles that take less space.
+
 ## 2.23.2 — unreleased
 **Fixes**
 - When an automation can't switch a device (e.g. eWeLink 4002 because the device briefly dropped off the cloud), the command is retried after 30 s, 1, 2 and 3 min, and right away when the device reconnects. If every try fails you get a “did NOT turn on / off” notification.

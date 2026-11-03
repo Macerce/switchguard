@@ -125,6 +125,7 @@ import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.MonitorService
 import java.util.UUID
 
 /** Düzenleyicide yeni kayıt (kimliği kaydederken verilir). */
@@ -144,6 +145,9 @@ fun AutomationsScreen(modifier: Modifier) {
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
     var editingScene by rememberSaveable { mutableStateOf<String?>(null) }
     var editingGroup by rememberSaveable { mutableStateOf<String?>(null) }
+    var editingCycle by rememberSaveable { mutableStateOf<String?>(null) }
+    val cycles = remember(version) { store.cycles }
+    val cycleRuns = remember(version) { store.cycleRuns }
     val scenes = remember(version) { store.scenes }
     val groups = remember(version) { store.groups }
 
@@ -156,6 +160,23 @@ fun AutomationsScreen(modifier: Modifier) {
                 onSave = { store.saveGroup(it); editingGroup = null },
                 onDelete = { store.deleteGroup(id); editingGroup = null },
                 onBack = { editingGroup = null },
+            )
+        }
+        return
+    }
+
+    editingCycle?.let { id ->
+        BackHandler { editingCycle = null }
+        Box(modifier) {
+            CycleEditor(
+                initial = cycles.firstOrNull { it.id == id },
+                devices = remember(version) { devices.filterNot { DeviceCategory.isCategory(it.id) } },
+                onSave = { store.saveCycle(it); editingCycle = null },
+                onDelete = {
+                    if (id in cycleRuns) MonitorService.cycle(context, id, start = false, delete = true) else store.deleteCycle(id)
+                    editingCycle = null
+                },
+                onBack = { editingCycle = null },
             )
         }
         return
@@ -214,6 +235,9 @@ fun AutomationsScreen(modifier: Modifier) {
                         Text(stringResource(R.string.groups_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                         GroupsStrip(groups, store.snapshotsWithGroups) { editingGroup = it }
+                        Text(stringResource(R.string.cycles_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                        CyclesStrip(cycles, cycleRuns) { editingCycle = it }
                         Text(stringResource(R.string.automations_rules_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }
@@ -615,7 +639,7 @@ fun AutomationEditor(
             // ------------------------------------------------ Eğer
             StepCard(Icons.Rounded.Sensors, Hue.BLUE, stringResource(R.string.auto_if), stringResource(R.string.automation_when)) {
                 FieldLabel(stringResource(R.string.automation_event))
-                OptionGrid(kinds, triggerKind, { it.icon() }, { stringResource(it.shortTitle()) }) { triggerKind = it }
+                OptionChips(kinds, triggerKind, { it.icon() }, { stringResource(it.shortTitle()) }) { triggerKind = it }
                 if (triggerKind.usesDevice) {
                     FieldLabel(stringResource(R.string.automation_device))
                     DeviceChooser(devices, triggerDevice) { triggerDevice = it.id; triggerChannel = 0 }
@@ -720,7 +744,7 @@ fun AutomationEditor(
                         ChannelChooser(condSrc, condChannel) { condChannel = it }
                     }
                     FieldLabel(stringResource(R.string.cond_state))
-                    OptionGrid(ConditionKind.entries, condKind, { it.icon() }, { stringResource(it.title()) }) { condKind = it }
+                    OptionChips(ConditionKind.entries, condKind, { it.icon() }, { stringResource(it.title()) }) { condKind = it }
                 }
             }
 
@@ -814,7 +838,7 @@ private val GRACE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
 
 /** Düzenleyicinin bir adımı: renkli simge, büyük başlık (Eğer / O zaman), altında alanlar. */
 @Composable
-private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
+internal fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(24.dp)).background(tileColor()).padding(16.dp),
@@ -832,7 +856,7 @@ private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: Strin
 }
 
 @Composable
-private fun FieldLabel(text: String) {
+internal fun FieldLabel(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.labelLarge,
@@ -843,7 +867,7 @@ private fun FieldLabel(text: String) {
 
 /** Cihaz seçimi: yatay kaydırılan, simgeli kartlar. */
 @Composable
-private fun DeviceChooser(devices: List<DeviceSnapshot>, selectedId: String, onPick: (DeviceSnapshot) -> Unit) {
+internal fun DeviceChooser(devices: List<DeviceSnapshot>, selectedId: String, onPick: (DeviceSnapshot) -> Unit) {
     Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         devices.forEach { d ->
             val selected = d.id == selectedId
@@ -901,9 +925,51 @@ private fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) 
     }
 }
 
+/** Sıkışık seçenek kutucukları: simge + kısa ad yan yana, satıra sığdığı kadar (çok seçenekli "Eğer" listesi için). */
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@Composable
+internal fun <T> OptionChips(
+    options: List<T>,
+    selected: T,
+    icon: (T) -> ImageVector,
+    label: @Composable (T) -> String,
+    onPick: (T) -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    androidx.compose.foundation.layout.FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        options.forEach { o ->
+            val on = o == selected
+            val shape = RoundedCornerShape(12.dp)
+            Row(
+                Modifier.heightIn(min = 38.dp)
+                    .tvFocusRing(shape)
+                    .clip(shape)
+                    .background(if (on) scheme.primaryContainer else raisedOnTile())
+                    .then(if (on) Modifier.border(2.dp, scheme.primary, shape) else Modifier)
+                    .selectable(selected = on, onClick = { onPick(o) }, role = Role.RadioButton)
+                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(icon(o), null, tint = if (on) scheme.primary else scheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(
+                    label(o),
+                    style = MaterialTheme.typography.labelLarge,
+                    fontWeight = if (on) FontWeight.SemiBold else FontWeight.Normal,
+                    color = if (on) scheme.onPrimaryContainer else scheme.onSurface,
+                    maxLines = 1,
+                )
+            }
+        }
+    }
+}
+
 /** Seçenek kutucukları (iki sütun): simge + kısa ad; seçili olan dolu. */
 @Composable
-private fun <T> OptionGrid(
+internal fun <T> OptionGrid(
     options: List<T>,
     selected: T,
     icon: (T) -> ImageVector,
@@ -951,7 +1017,7 @@ private fun <T> OptionGrid(
 
 /** Sayı seçici: etiket, ortada değer, iki yanda − / + (anlamlı adımlarla). */
 @Composable
-private fun Stepper(
+internal fun Stepper(
     label: String,
     value: Int,
     steps: List<Int>,
@@ -1020,7 +1086,7 @@ private fun runtimeTemp(version: Int): Double? {
 
 /** Başlık ve anahtar: "Yalnızca şu saatlerde", "Ve şu koşulda". */
 @Composable
-private fun ToggleLine(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+internal fun ToggleLine(text: String, checked: Boolean, onChange: (Boolean) -> Unit) {
     Row(
         Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(16.dp)).background(raisedOnTile())
             .tvFocusRing(RoundedCornerShape(16.dp))
@@ -1034,7 +1100,7 @@ private fun ToggleLine(text: String, checked: Boolean, onChange: (Boolean) -> Un
 }
 
 @Composable
-private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
+internal fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
     val shape = RoundedCornerShape(16.dp)
     Column(
         modifier.clip(shape).background(raisedOnTile()).tvFocusRing(shape)

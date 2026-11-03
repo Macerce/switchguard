@@ -216,6 +216,14 @@ class EventLog private constructor(context: Context) :
                 if (lost) context.getString(R.string.event_charger_lost)
                 else context.getString(R.string.event_charger_back, DurationText.format(ms, durations(context)))
             },
+            cycle = { name, kind ->
+                context.getString(when (kind) {
+                    "STARTED" -> R.string.event_cycle_started
+                    "FINISHED" -> R.string.event_cycle_finished
+                    "OVERRIDDEN" -> R.string.event_cycle_overridden
+                    else -> R.string.event_cycle_stopped
+                }, name)
+            },
             scene = { name, ok, failed, by ->
                 val base = context.resources.getQuantityString(R.plurals.event_scene, ok, name, ok)
                 val fail = if (failed > 0) context.resources.getQuantityString(R.plurals.event_scene_failed, failed, failed) else ""

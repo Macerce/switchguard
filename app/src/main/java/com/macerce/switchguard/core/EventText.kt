@@ -41,6 +41,8 @@ class EventStrings(
     val charger: (lost: Boolean, ms: Long) -> String = { _, _ -> "" },
     /** Sahne çalıştırıldı: [ok] cihaz değişti, [failed] değişmedi; [by] kim/ne çalıştırdı. */
     val scene: (name: String, ok: Int, failed: Int, by: String?) -> String = { _, _, _, _ -> "" },
+    /** Döngü olayı: [kind] = CycleEventKind adı. */
+    val cycle: (name: String, kind: String) -> String = { n, _ -> n },
     /** Evde/dışarıda değişti ([by] kim) ya da tatil bitti. */
     val presence: (away: Boolean, by: String?, vacationEnded: Boolean) -> String = { _, _, _ -> "" },
     /** Otomasyon komutu cihaza gidemedi, yeniden denenecek. */
@@ -104,6 +106,8 @@ sealed class EventArgs {
     data class Watchdog(val name: String, val lost: Boolean, val silentMs: Long) : EventArgs()
     data class Charger(val lost: Boolean, val ms: Long) : EventArgs()
     data class SceneRun(val name: String, val ok: Int, val failed: Int, val by: String? = null) : EventArgs()
+    /** Döngü başladı / bitti / durduruldu / elle müdahaleyle durdu ([kind] = [CycleEventKind] adı). */
+    data class CycleState(val name: String, val kind: String, val by: String? = null) : EventArgs()
     data class Presence(val away: Boolean, val by: String? = null, val vacationEnded: Boolean = false) : EventArgs()
 
     /** [deviceName]: kayıttaki cihaz adı. */
@@ -148,6 +152,7 @@ sealed class EventArgs {
         is Watchdog -> s.watchdog(name, lost, silentMs)
         is Charger -> s.charger(lost, ms)
         is SceneRun -> s.scene(name, ok, failed, by)
+        is CycleState -> s.cycle(name, kind) + (by?.let { " · $it" } ?: "")
         is Presence -> s.presence(away, by, vacationEnded)
     }
 
@@ -186,6 +191,7 @@ sealed class EventArgs {
             }
             is Watchdog -> { put("t", "watchdog"); put("name", a.name); put("lost", a.lost); put("ms", a.silentMs) }
             is Charger -> { put("t", "charger"); put("lost", a.lost); put("ms", a.ms) }
+            is CycleState -> { put("t", "cycle"); put("name", a.name); put("kind", a.kind); a.by?.let { put("by", it) } }
             is SceneRun -> { put("t", "scene"); put("name", a.name); put("ok", a.ok); put("fail", a.failed); a.by?.let { put("by", it) } }
             is Presence -> { put("t", "presence"); put("away", a.away); a.by?.let { put("by", it) }; put("vacEnd", a.vacationEnded) }
         }
@@ -226,6 +232,7 @@ sealed class EventArgs {
                     )
                     "watchdog" -> Watchdog(o.getString("name"), o.getBoolean("lost"), o.getLong("ms"))
                     "charger" -> Charger(o.getBoolean("lost"), o.getLong("ms"))
+                    "cycle" -> CycleState(o.getString("name"), o.getString("kind"), if (o.has("by")) o.getString("by") else null)
                     "scene" -> SceneRun(o.getString("name"), o.getInt("ok"), o.getInt("fail"), if (o.has("by")) o.getString("by") else null)
                     "presence" -> Presence(o.getBoolean("away"), if (o.has("by")) o.getString("by") else null, o.optBoolean("vacEnd"))
                     else -> null

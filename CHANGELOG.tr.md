@@ -6,6 +6,13 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.24.0 — yayınlanmadı
+**Yenilikler**
+- Döngü ve zamanlayıcılar (Otomasyon sekmesi): hazır kalıplarla kurulur — **Geri sayım** (“30 dk sonra kapat / aç”), **Aç, sonra kapat** (açılsın, süre kadar açık kalsın, kapansın), **Aç/kapa döngüsü** (ör. 15 dk açık, 45 dk kapalı), **Sırayla** (vanalar tek tek) ya da her adımda her cihaz için aç/kapat/dokunma seçilen **Özel adımlar**. Süreler saniye, dakika ya da saat; tekrar sayısı ya da durdurana kadar.
+- Başlama: düğmeyle, seçili günlerde belirli saatte (ör. her gün 07:00'de aç, 20 dk sonra kapat) ya da saat aralığı boyunca (aralık bitince durur, gece yarısını geçebilir). Bitince hepsini kapat, aç, olduğu gibi bırak ya da önceki duruma döndür.
+- Gelişmiş: süreye rastgele sapma (tatilde ışıklar evde biri varmış gibi), yalnız evdeyken/dışarıdayken kendiliğinden başlama, elle değiştirilince durma. Kartta canlı geri sayım, adım ve tur; Geçmiş'e başladı/bitti yazılır. Gruplarla, eWeLink ve Tuya cihazlarıyla çalışır; komut gidemezse yeniden denenir.
+- Otomasyon düzenleyicide “Eğer” olayları ve koşullar küçük kutucuklar halinde, daha az yer kaplıyor.
+
 ## 2.23.2 — yayınlanmadı
 **Düzeltmeler**
 - Otomasyon bir cihazı açamaz ya da kapatamazsa (ör. cihaz o an buluttan kısa süre koptuğunda eWeLink 4002) komut 30 sn, 1, 2 ve 3 dk sonra yeniden denenir; cihaz yeniden bağlanınca beklemeden denenir. Hepsi başarısız olursa “AÇILMADI / KAPANMADI” bildirimi gelir.

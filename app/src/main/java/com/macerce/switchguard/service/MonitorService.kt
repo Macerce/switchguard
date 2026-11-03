@@ -38,6 +38,10 @@ import com.macerce.switchguard.core.AlarmReminders
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.AutoRetry
+import com.macerce.switchguard.core.CycleEngine
+import com.macerce.switchguard.core.CycleResult
+import com.macerce.switchguard.core.CycleRun
+import com.macerce.switchguard.core.CycleTarget
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.BlindWatch
@@ -226,6 +230,18 @@ class MonitorService : Service() {
                 if (running) handler.post { sync() }
                 return START_STICKY
             }
+            ACTION_CYCLE -> {
+                val id = intent.getStringExtra(EXTRA_CYCLE).orEmpty()
+                val start = intent.getBooleanExtra(EXTRA_CYCLE_START, true)
+                startMonitoring()
+                val delete = intent.getBooleanExtra(EXTRA_CYCLE_DELETE, false)
+                handler.post {
+                    cycleButton(id, start)
+                    // Silinecek döngü önce durdurulur ki bitiş eylemi (ör. hepsini kapat) uygulansın.
+                    if (delete) store.deleteCycle(id)
+                }
+                return START_STICKY
+            }
             ACTION_ZONE -> {
                 val zoneId = intent.getStringExtra(EXTRA_ZONE).orEmpty()
                 val entered = intent.getBooleanExtra(EXTRA_ENTERED, true)
@@ -374,6 +390,7 @@ class MonitorService : Service() {
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
         templateTick(wall)
+        cycleTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         retryTick(wall)
         weatherTick(wall)
@@ -1063,6 +1080,7 @@ class MonitorService : Service() {
             handler.removeCallbacks(retryRunnable)
             handler.post(retryRunnable)
         }
+        if (change is Change.Switch) cycleManualCheck(change)
         if (LiveState.expected.consume(change, wall)) {
             log.add(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
             return
@@ -1838,6 +1856,65 @@ class MonitorService : Service() {
         due.forEach { runTemplate(it.id) }
     }
 
+    // ---------------------------------------------------------------- Döngüler
+
+    private val cycleRunnable = Runnable { cycleTick(System.currentTimeMillis()) }
+
+    /** "cihaz/kanal" → açık mı (gruplar dahil). */
+    private fun cycleStates(): Map<String, Boolean> = buildMap {
+        for (d in store.snapshotsWithGroups) for ((ch, on) in d.switches) put("${d.id}/$ch", on)
+    }
+
+    private fun cycleTick(wall: Long) {
+        val cycles = store.cycles
+        val runs = store.cycleRuns
+        if (cycles.isEmpty() && runs.isEmpty()) return
+        applyCycles(CycleEngine.tick(cycles, runs, store.cycleDone, cycleStates(), wall, store.isAway(wall)), runs, null)
+    }
+
+    private fun cycleButton(id: String, start: Boolean) {
+        val c = store.cycles.firstOrNull { it.id == id } ?: return
+        val runs = store.cycleRuns
+        val wall = System.currentTimeMillis()
+        val result = if (start) CycleEngine.start(c, runs, store.cycleDone, cycleStates(), wall)
+            else CycleEngine.stop(c, runs, store.cycleDone)
+        applyCycles(result, runs, getString(R.string.cycle_by_button))
+    }
+
+    private fun cycleManualCheck(change: Change.Switch) {
+        val runs = store.cycleRuns
+        if (runs.isEmpty()) return
+        val groupIds = store.groups.filter { g -> g.members.any { it.deviceId == change.deviceId && it.channel == change.channel } }
+            .map { it.deviceId }.toSet()
+        val result = CycleEngine.manualChange(store.cycles, runs, store.cycleDone,
+            CycleTarget(change.deviceId, change.channel), groupIds, change.to)
+        if (result.runs != runs) applyCycles(result, runs, null)
+    }
+
+    private fun applyCycles(r: CycleResult, before: Map<String, CycleRun>, by: String?) {
+        if (r.runs != before) store.cycleRuns = r.runs
+        if (r.done != store.cycleDone) store.cycleDone = r.done
+        for (e in r.events) {
+            val args = EventArgs.CycleState(e.cycle.name, e.kind.name, by)
+            log.add(CYCLE_LOG_PREFIX + e.cycle.id, e.cycle.name, EventKind.AUTOMATION, args.render(e.cycle.name, strings), "", args)
+        }
+        val byId = store.snapshots.associateBy { it.id }
+        for (cmd in r.commands) {
+            if (DeviceGroup.isGroup(cmd.target.deviceId)) {
+                val group = store.groups.firstOrNull { it.deviceId == cmd.target.deviceId } ?: continue
+                for ((device, channel) in group.targets(byId, cmd.on)) {
+                    sendAutomationSwitch(cmd.cycle.name, device, channel, cmd.on, attempt = 1, logSuccess = false)
+                }
+            } else {
+                val device = byId[cmd.target.deviceId] ?: continue
+                sendAutomationSwitch(cmd.cycle.name, device, cmd.target.channel, cmd.on, attempt = 1, logSuccess = false)
+            }
+        }
+        handler.removeCallbacks(cycleRunnable)
+        val due = CycleEngine.nextDueAt(store.cycles, r.runs, System.currentTimeMillis()) ?: return
+        handler.postDelayed(cycleRunnable, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
+    }
+
     /** Telefon bir bölgeye girdi/çıktı: o bölgenin kuralları. */
     private fun onZone(zoneId: String, entered: Boolean) {
         if (store.zones.none { it.id == zoneId }) return
@@ -2074,6 +2151,13 @@ class MonitorService : Service() {
         const val ACTION_DEMO = "demo"
         /** Bölgeye giriş/çıkış ([ZoneReceiver]): [EXTRA_ZONE] bölge kimliği, [EXTRA_ENTERED] girdi mi. */
         const val ACTION_ZONE = "zone"
+        /** Döngüyü düğmeyle başlat / durdur ([EXTRA_CYCLE], [EXTRA_CYCLE_START]). */
+        const val ACTION_CYCLE = "cycle"
+        /** Geçmişte döngü kayıtlarının cihaz kimliği öneki. */
+        const val CYCLE_LOG_PREFIX = "cycle:"
+        const val EXTRA_CYCLE = "cycle"
+        const val EXTRA_CYCLE_START = "cycleStart"
+        const val EXTRA_CYCLE_DELETE = "cycleDelete"
         const val EXTRA_ZONE = "zoneId"
         const val EXTRA_ENTERED = "entered"
         const val EXTRA_DEMO_OP = "op"
@@ -2163,6 +2247,14 @@ class MonitorService : Service() {
                 Intent(context, MonitorService::class.java).setAction(ACTION_TEST)
                     .putExtra(EXTRA_SILENT, silent).putExtra(EXTRA_DELAY_MS, delayMs)
             )
+        }
+
+        /** Döngüyü başlatır ([start]) ya da durdurur; izleme kapalıysa servis ön planda başlatılır. */
+        fun cycle(context: Context, id: String, start: Boolean, delete: Boolean = false) {
+            val intent = Intent(context, MonitorService::class.java).setAction(ACTION_CYCLE)
+                .putExtra(EXTRA_CYCLE, id).putExtra(EXTRA_CYCLE_START, start).putExtra(EXTRA_CYCLE_DELETE, delete)
+            if (instance?.isMonitoring == true) context.startService(intent)
+            else runCatching { context.startForegroundService(intent) }.onFailure { Log.w(TAG, "cycle: could not start service", it) }
         }
 
         /** Bölge olayı servise iletilir; servis yoksa ön planda başlatılır (bölge bildirimi bu başlatmaya izin verir). */

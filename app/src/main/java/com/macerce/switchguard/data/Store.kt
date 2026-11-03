@@ -376,6 +376,24 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     }
     fun deleteGroup(id: String) { groups = groups.filterNot { it.id == id } }
 
+    /** Döngüler ve zamanlayıcılar (bkz. [com.macerce.switchguard.core.Cycle]). */
+    var cycles: List<com.macerce.switchguard.core.Cycle>
+        get() = parsed.get("cycles", prefs.getString("cycles", null)) { com.macerce.switchguard.core.Cycle.listFromJson(it) }
+        set(v) = put { putString("cycles", com.macerce.switchguard.core.Cycle.listToJson(v)) }
+    fun saveCycle(c: com.macerce.switchguard.core.Cycle) {
+        val list = cycles
+        cycles = if (list.any { it.id == c.id }) list.map { if (it.id == c.id) c else it } else list + c
+    }
+    fun deleteCycle(id: String) { cycles = cycles.filterNot { it.id == id } }
+    /** Süren döngüler (servis yazar, ekran okur; servis yeniden başlasa da kalır). */
+    var cycleRuns: Map<String, com.macerce.switchguard.core.CycleRun>
+        get() = parsed.get("cycleRuns", prefs.getString("cycleRuns", null)) { com.macerce.switchguard.core.CycleRun.mapFromJson(it) }
+        set(v) = put { putString("cycleRuns", com.macerce.switchguard.core.CycleRun.mapToJson(v)) }
+    /** Döngü → kendiliğinden başladığı son fırsat (aynı fırsatta ikinci kez başlamasın). */
+    var cycleDone: Map<String, Long>
+        get() = runCatching { org.json.JSONObject(prefs.getString("cycleDone", "{}")!!).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())
+        set(v) = put { putString("cycleDone", org.json.JSONObject(v).toString()) }
+
     /** Gerçek cihazlar + grupların sanal cihazları. */
     val snapshotsWithGroups: List<DeviceSnapshot>
         get() = com.macerce.switchguard.core.DeviceGroup.withGroups(snapshots, groups)
