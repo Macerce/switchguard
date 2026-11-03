@@ -1491,4 +1491,12 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="event_cycle_finished">Cycle “%s” finished</string>
     <string name="event_cycle_stopped">Cycle “%s” stopped</string>
     <string name="event_cycle_overridden">Cycle “%s” stopped because it was changed by hand</string>
+    <string name="trigger_cycle_started">starts</string>
+    <string name="trigger_cycle_finished">ends or is stopped</string>
+    <string name="evt_cycle_started">Cycle starts</string>
+    <string name="evt_cycle_finished">Cycle ends</string>
+    <string name="act_start_cycle">Start cycle</string>
+    <string name="act_stop_cycle">Stop cycle</string>
+    <string name="cycle_choose">Cycle</string>
+    <string name="cycle_none_yet">Create a cycle first (“Cycles &amp; timers” in the Automation tab).</string>
 </resources>

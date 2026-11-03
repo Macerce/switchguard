@@ -1,6 +1,8 @@
 package com.macerce.switchguard.ui
 
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Stop
+import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.automirrored.rounded.Login
 import androidx.compose.material.icons.automirrored.rounded.Logout
@@ -293,6 +295,8 @@ fun AutomationCard(
         ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew to Hue.GREEN
         ActionKind.TURN_OFF -> Icons.Rounded.PowerOff to Hue.SLATE
         ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow to Hue.PURPLE
+        ActionKind.START_CYCLE -> Icons.Rounded.Repeat to Hue.TEAL
+        ActionKind.STOP_CYCLE -> Icons.Rounded.Stop to Hue.SLATE
     }
     val (whenText, thenText) = describe(a, devices)
     val shape = RoundedCornerShape(24.dp)
@@ -343,6 +347,8 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String,
     val srcName = when {
         t.kind.usesZone -> remember(t.deviceId) { Store.get(zoneContext).zones.firstOrNull { it.id == t.deviceId }?.name }
             ?: stringResource(R.string.device_missing)
+        t.kind.usesCycle -> remember(t.deviceId) { Store.get(zoneContext).cycles.firstOrNull { it.id == t.deviceId }?.name }
+            ?: stringResource(R.string.device_missing)
         !t.kind.usesDevice -> null
         else -> src?.let { channelLabel(it, t.channel, t.kind.usesChannel) } ?: stringResource(R.string.device_missing)
     }
@@ -363,6 +369,10 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String,
             val dst = devices.firstOrNull { it.id == act.deviceId }
             val dstName = dst?.let { channelLabel(it, act.channel, true) } ?: stringResource(R.string.device_missing)
             "$dstName: " + stringResource(act.kind.title())
+        }
+        act.kind.usesCycle -> {
+            val cycle = remember(act.deviceId) { Store.get(zoneContext).cycles.firstOrNull { it.id == act.deviceId } }
+            stringResource(act.kind.title()) + ": " + (cycle?.name ?: stringResource(R.string.device_missing))
         }
         act.kind == ActionKind.RUN_SCENE -> {
             val context = LocalContext.current
@@ -451,6 +461,8 @@ fun TriggerKind.title(): Int = when (this) {
     TriggerKind.TEMP_BELOW -> R.string.trigger_temp_below
     TriggerKind.ZONE_ENTER -> R.string.trigger_zone_enter
     TriggerKind.ZONE_EXIT -> R.string.trigger_zone_exit
+    TriggerKind.CYCLE_STARTED -> R.string.trigger_cycle_started
+    TriggerKind.CYCLE_FINISHED -> R.string.trigger_cycle_finished
 }
 
 fun ActionKind.title(): Int = when (this) {
@@ -459,6 +471,8 @@ fun ActionKind.title(): Int = when (this) {
     ActionKind.ALARM -> R.string.auto_action_alarm
     ActionKind.NOTIFY -> R.string.auto_action_notify
     ActionKind.RUN_SCENE -> R.string.act_run_scene
+    ActionKind.START_CYCLE -> R.string.act_start_cycle
+    ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
 }
 
 // ---------------------------------------------------------------- düzenleyici
@@ -494,6 +508,9 @@ fun AutomationEditor(
     var presenceRule by rememberSaveable { mutableStateOf(initial?.presence) }
     var sceneId by rememberSaveable { mutableStateOf(initial?.action?.takeIf { it.kind == ActionKind.RUN_SCENE }?.deviceId ?: "") }
     val sceneList = Store.get(LocalContext.current).scenes.let { remember(it) { it } }
+    val cycleList = Store.get(LocalContext.current).cycles.let { remember(it) { it } }
+    var triggerCycle by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesCycle }?.deviceId ?: cycleList.firstOrNull()?.id.orEmpty()) }
+    var actionCycle by rememberSaveable { mutableStateOf(initial?.action?.takeIf { it.kind.usesCycle }?.deviceId ?: cycleList.firstOrNull()?.id.orEmpty()) }
     var condOn by rememberSaveable { mutableStateOf(initial?.condition != null) }
     var condKind by rememberSaveable { mutableStateOf(initial?.condition?.kind ?: ConditionKind.IS_ON) }
     var condDevice by rememberSaveable { mutableStateOf(initial?.condition?.deviceId ?: first?.id.orEmpty()) }
@@ -556,7 +573,9 @@ fun AutomationEditor(
         (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
         (!condOn || condSrc != null) &&
         (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id))) &&
-        (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId })
+        (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
+        (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
+        (!actionKind.usesCycle || cycleList.any { it.id == actionCycle })
 
     // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
     val draft = Automation(
@@ -568,6 +587,7 @@ fun AutomationEditor(
             when {
                 triggerKind.usesDevice -> triggerDevice
                 triggerKind.usesZone -> zoneId
+                triggerKind.usesCycle -> triggerCycle
                 else -> ""
             },
             channel = if (triggerKind.usesChannel) triggerChannel else 0,
@@ -588,6 +608,7 @@ fun AutomationEditor(
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
             actionKind == ActionKind.RUN_SCENE -> AutoAction(actionKind, sceneId)
+            actionKind.usesCycle -> AutoAction(actionKind, actionCycle)
             else -> AutoAction(actionKind)
         },
         delayMinutes = delay,
@@ -670,6 +691,7 @@ fun AutomationEditor(
                         LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
                     }
                 }
+                if (triggerKind.usesCycle) CyclePick(cycleList, triggerCycle) { triggerCycle = it }
                 if (triggerKind.usesZone) {
                     FieldLabel(stringResource(R.string.zone_choose))
                     if (zones.isEmpty()) {
@@ -752,6 +774,7 @@ fun AutomationEditor(
             StepCard(Icons.Rounded.Bolt, Hue.ORANGE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
                 FieldLabel(stringResource(R.string.automation_action))
                 OptionGrid(tab.actions, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
+                if (actionKind.usesCycle) CyclePick(cycleList, actionCycle) { actionCycle = it }
                 if (actionKind == ActionKind.RUN_SCENE) {
                     FieldLabel(stringResource(R.string.scenes_title))
                     if (sceneList.isEmpty()) {
@@ -922,6 +945,17 @@ private fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) 
                 Text("${ch + 1}", style = MaterialTheme.typography.titleMedium, color = if (on) scheme.onPrimary else scheme.onSurface)
             }
         }
+    }
+}
+
+/** Otomasyonda döngü seçimi; hiç döngü yoksa nereden ekleneceği söylenir. */
+@Composable
+private fun CyclePick(cycles: List<com.macerce.switchguard.core.Cycle>, selected: String, onPick: (String) -> Unit) {
+    FieldLabel(stringResource(R.string.cycle_choose))
+    if (cycles.isEmpty()) {
+        Text(stringResource(R.string.cycle_none_yet), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    } else {
+        OptionChips(cycles.map { it.id }, selected, { Icons.Rounded.Repeat }, { id -> cycles.first { it.id == id }.name }, onPick)
     }
 }
 
@@ -1160,6 +1194,8 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.TEMP_BELOW -> Icons.Rounded.AcUnit
     TriggerKind.ZONE_ENTER -> Icons.AutoMirrored.Rounded.Login
     TriggerKind.ZONE_EXIT -> Icons.AutoMirrored.Rounded.Logout
+    TriggerKind.CYCLE_STARTED -> Icons.Rounded.Repeat
+    TriggerKind.CYCLE_FINISHED -> Icons.Rounded.Stop
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -1179,6 +1215,8 @@ fun TriggerKind.shortTitle(): Int = when (this) {
     TriggerKind.TEMP_BELOW -> R.string.evt_temp_below
     TriggerKind.ZONE_ENTER -> R.string.evt_zone_enter
     TriggerKind.ZONE_EXIT -> R.string.evt_zone_exit
+    TriggerKind.CYCLE_STARTED -> R.string.evt_cycle_started
+    TriggerKind.CYCLE_FINISHED -> R.string.evt_cycle_finished
 }
 
 private fun ActionKind.icon(): ImageVector = when (this) {
@@ -1187,6 +1225,8 @@ private fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew
     ActionKind.TURN_OFF -> Icons.Rounded.PowerOff
     ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow
+    ActionKind.START_CYCLE -> Icons.Rounded.Repeat
+    ActionKind.STOP_CYCLE -> Icons.Rounded.Stop
 }
 
 private fun ActionKind.hue(): Hue = when (this) {
@@ -1195,6 +1235,8 @@ private fun ActionKind.hue(): Hue = when (this) {
     ActionKind.TURN_ON -> Hue.GREEN
     ActionKind.TURN_OFF -> Hue.SLATE
     ActionKind.RUN_SCENE -> Hue.PURPLE
+    ActionKind.START_CYCLE -> Hue.TEAL
+    ActionKind.STOP_CYCLE -> Hue.SLATE
 }
 
 private fun ActionKind.editorTitle(): Int = when (this) {
@@ -1203,6 +1245,8 @@ private fun ActionKind.editorTitle(): Int = when (this) {
     ActionKind.TURN_ON -> R.string.act_turn_on
     ActionKind.TURN_OFF -> R.string.act_turn_off
     ActionKind.RUN_SCENE -> R.string.act_run_scene
+    ActionKind.START_CYCLE -> R.string.act_start_cycle
+    ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
 }
 
 /** Açılır seçim kutusu. */

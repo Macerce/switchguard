@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.24.1 — unreleased
+**New**
+- Cycles in automations: under “Then” **Start cycle / Stop cycle** (e.g. start the “Garden lights” cycle at sunset, stop watering on arriving home); under “If” **Cycle starts / Cycle ends** (e.g. notify when watering ends or start the next cycle). Alerts can also ring/notify when a cycle ends.
+
 ## 2.24.0 — unreleased
 **New**
 - Cycles & timers (Automations tab), built from presets: **Countdown** (“turn off / on in 30 min”), **On, then off** (turn on, stay on for a duration, turn off), **On/off cycle** (e.g. 15 min on, 45 min off), **One by one** (valves in turn) or **Custom steps** choosing on/off/leave per device in each step. Durations in seconds, minutes or hours; a number of rounds or until stopped.

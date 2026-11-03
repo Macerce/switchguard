@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.24.1 — yayınlanmadı
+**Yenilikler**
+- Döngüler otomasyonda: “O zaman” altında **Döngüyü başlat / Döngüyü durdur** (ör. gün batınca “Bahçe ışıkları” döngüsünü başlat, eve girince sulamayı durdur); “Eğer” altında **Döngü başlayınca / Döngü bitince** (ör. sulama bitince bildirim gönder ya da sıradaki döngüyü başlat). Uyarılar’da da döngü bitince alarm/bildirim kurulabilir.
+
 ## 2.24.0 — yayınlanmadı
 **Yenilikler**
 - Döngü ve zamanlayıcılar (Otomasyon sekmesi): hazır kalıplarla kurulur — **Geri sayım** (“30 dk sonra kapat / aç”), **Aç, sonra kapat** (açılsın, süre kadar açık kalsın, kapansın), **Aç/kapa döngüsü** (ör. 15 dk açık, 45 dk kapalı), **Sırayla** (vanalar tek tek) ya da her adımda her cihaz için aç/kapat/dokunma seçilen **Özel adımlar**. Süreler saniye, dakika ya da saat; tekrar sayısı ya da durdurana kadar.

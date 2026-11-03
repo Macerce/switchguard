@@ -39,6 +39,7 @@ import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.AutoRetry
 import com.macerce.switchguard.core.CycleEngine
+import com.macerce.switchguard.core.CycleEventKind
 import com.macerce.switchguard.core.CycleResult
 import com.macerce.switchguard.core.CycleRun
 import com.macerce.switchguard.core.CycleTarget
@@ -972,6 +973,12 @@ class MonitorService : Service() {
                 }
                 sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true)
             }
+            ActionKind.START_CYCLE, ActionKind.STOP_CYCLE -> {
+                if (!cycleButton(a.action.deviceId, a.action.kind == ActionKind.START_CYCLE, a.name)) {
+                    val args = EventArgs.AutoMissing(a.name)
+                    log.add("", a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+                }
+            }
             ActionKind.RUN_SCENE -> {
                 if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
                 val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
@@ -1872,13 +1879,15 @@ class MonitorService : Service() {
         applyCycles(CycleEngine.tick(cycles, runs, store.cycleDone, cycleStates(), wall, store.isAway(wall)), runs, null)
     }
 
-    private fun cycleButton(id: String, start: Boolean) {
-        val c = store.cycles.firstOrNull { it.id == id } ?: return
+    /** Döngüyü düğmeyle ya da otomasyonla ([by] = otomasyon adı) başlatır / durdurur; döngü yoksa false. */
+    private fun cycleButton(id: String, start: Boolean, by: String? = null): Boolean {
+        val c = store.cycles.firstOrNull { it.id == id } ?: return false
         val runs = store.cycleRuns
         val wall = System.currentTimeMillis()
         val result = if (start) CycleEngine.start(c, runs, store.cycleDone, cycleStates(), wall)
             else CycleEngine.stop(c, runs, store.cycleDone)
-        applyCycles(result, runs, getString(R.string.cycle_by_button))
+        applyCycles(result, runs, by ?: getString(R.string.cycle_by_button))
+        return true
     }
 
     private fun cycleManualCheck(change: Change.Switch) {
@@ -1897,6 +1906,14 @@ class MonitorService : Service() {
         for (e in r.events) {
             val args = EventArgs.CycleState(e.cycle.name, e.kind.name, by)
             log.add(CYCLE_LOG_PREFIX + e.cycle.id, e.cycle.name, EventKind.AUTOMATION, args.render(e.cycle.name, strings), "", args)
+        }
+        // "Döngü başlayınca / bitince" kuralları: bu işlem bitince (iç içe döngü başlatma durumu bozmasın).
+        if (r.events.isNotEmpty()) handler.post {
+            val wall = System.currentTimeMillis()
+            for (e in r.events) {
+                runAutomations(automations.onCycle(e.cycle.id, e.kind == CycleEventKind.STARTED,
+                    store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
+            }
         }
         val byId = store.snapshots.associateBy { it.id }
         for (cmd in r.commands) {

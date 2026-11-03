@@ -166,4 +166,16 @@ class CycleTest {
         assertEquals(emptyList<Cycle>(), Cycle.listFromJson("bozuk"))
         assertNull(CycleEngine.nextStart(c.copy(start = CycleStart.MANUAL), 0, zone))
     }
+
+    @Test fun automationFiresOnCycleStartAndEndAndStartsAnotherCycle() {
+        val onEnd = Automation("x", "Sonra", true, Trigger(TriggerKind.CYCLE_FINISHED, "c"), AutoAction(ActionKind.START_CYCLE, "c2"))
+        val onStart = Automation("y", "Haber", true, Trigger(TriggerKind.CYCLE_STARTED, "c"), AutoAction(ActionKind.NOTIFY))
+        val engine = AutomationEngine()
+        assertEquals(listOf(onStart), engine.onCycle("c", true, emptyMap(), listOf(onEnd, onStart), 0))
+        assertEquals(listOf(onEnd), engine.onCycle("c", false, emptyMap(), listOf(onEnd, onStart), 0))
+        assertTrue(engine.onCycle("other", false, emptyMap(), listOf(onEnd, onStart), 120_000).isEmpty())
+        assertFalse(TriggerKind.CYCLE_FINISHED.usesDevice)
+        assertEquals(AutomationTab.AUTOMATIONS, AutomationTab.tabOf(onEnd))
+        assertEquals(listOf(onEnd), Automation.listFromJson(Automation.listToJson(listOf(onEnd))))
+    }
 }

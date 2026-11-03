@@ -1487,4 +1487,12 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="event_cycle_finished">Döngü “%s” bitti</string>
     <string name="event_cycle_stopped">Döngü “%s” durduruldu</string>
     <string name="event_cycle_overridden">Döngü “%s” elle değiştirildiği için durdu</string>
+    <string name="trigger_cycle_started">başlayınca</string>
+    <string name="trigger_cycle_finished">bitince ya da durunca</string>
+    <string name="evt_cycle_started">Döngü başlayınca</string>
+    <string name="evt_cycle_finished">Döngü bitince</string>
+    <string name="act_start_cycle">Döngüyü başlat</string>
+    <string name="act_stop_cycle">Döngüyü durdur</string>
+    <string name="cycle_choose">Döngü</string>
+    <string name="cycle_none_yet">Önce bir döngü oluşturun (Otomasyon sekmesinde “Döngü ve zamanlayıcılar”).</string>
 </resources>
