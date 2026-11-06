@@ -184,4 +184,13 @@
     <string name="desktop_update_found">SwitchGuard %1$s çıktı: pencerenin üstündeki şeritten “Güncelle”ye basın</string>
     <string name="desktop_update_check_failed">Denetlenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
     <string name="desktop_update_dev">Geliştirme sürümü: güncelleme denetlenmez</string>
+    <string name="desktop_saver">Windows ekran koruyucusu olarak kullan</string>
+    <string name="desktop_saver_desc">Bilgisayar boşta kalınca bekleme ekranı açılır; fareyi oynatmak ya da bir tuşa basmak kapatır</string>
+    <string name="desktop_saver_on">Açık · %1$s boşta kalınca açılır</string>
+    <string name="desktop_saver_failed">Ekran koruyucu ayarı değiştirilemedi (günlüğe bakın)</string>
+    <string name="desktop_saver_unavailable">Kurulu uygulamada kullanılabilir</string>
+    <string name="desktop_saver_wait">Bekleme süresi</string>
+    <string name="desktop_saver_wait_desc">Bekleme ekranı açılmadan önce bilgisayarın ne kadar boşta kalacağı</string>
+    <string name="desktop_saver_windows">Windows ekran koruyucu ayarları</string>
+    <string name="desktop_saver_windows_desc">Ör. “Devam edildiğinde oturum açma ekranını göster”</string>
 </resources>

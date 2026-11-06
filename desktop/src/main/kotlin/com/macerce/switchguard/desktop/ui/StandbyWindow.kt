@@ -72,6 +72,9 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -113,23 +116,42 @@ import kotlin.math.roundToInt
 fun StandbyWindow(graph: AppGraph) {
     val open by graph.appState.standbyOpen.collectAsState()
     if (!open) return
+    val saver by graph.appState.standbySaver.collectAsState()
     val strings = graph.strings()
-    val close = { graph.appState.standbyOpen.value = false }
+    val close = {
+        graph.appState.standbyOpen.value = false
+        graph.appState.standbySaver.value = false
+    }
     val state = rememberWindowState(placement = WindowPlacement.Fullscreen, position = WindowPosition(0.dp, 0.dp))
-    Window(onCloseRequest = close, state = state, title = strings["board_menu"], undecorated = true) {
+    Window(onCloseRequest = close, state = state, title = strings["board_menu"], undecorated = true, alwaysOnTop = saver) {
         LaunchedEffect(Unit) {
             window.toFront()
             while (true) {
-                DisplayWake.keepOn()
+                // Ekran koruyucu modunda Windows ekranı zaten açık tutar; elle açılınca biz tutarız.
+                if (!saver) DisplayWake.keepOn()
                 delay(50_000)
+            }
+        }
+        // Ekran koruyucu: .scr bu dosya durdukça bekler (30 sn'de bir tazelenir; uygulama çökerse eskir ve .scr biter).
+        if (saver) {
+            val marker = remember { graph.dataDir.resolve(com.macerce.switchguard.desktop.platform.ScreenSaver.MARKER) }
+            LaunchedEffect(Unit) {
+                while (true) {
+                    runCatching { java.nio.file.Files.writeString(marker, System.currentTimeMillis().toString()) }
+                    delay(30_000)
+                }
+            }
+            androidx.compose.runtime.DisposableEffect(Unit) {
+                onDispose { runCatching { java.nio.file.Files.deleteIfExists(marker) } }
             }
         }
         val focus = remember { FocusRequester() }
         LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
         Box(
             Modifier.fillMaxSize().focusRequester(focus).focusable().onPreviewKeyEvent {
-                if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) { close(); true } else false
-            },
+                // Ekran koruyucuda her tuş kapatır; elle açılınca yalnız Esc.
+                if (it.type == KeyEventType.KeyDown && (saver || it.key == Key.Escape)) { close(); true } else false
+            }.then(if (saver) Modifier.closeOnMouse(close) else Modifier),
         ) {
             StandbyBoardScreen(
                 graph, strings,
@@ -151,6 +173,21 @@ private val Faint = Color(0xFF26302E)
 private val Teal = Color(0xFF26A69A)
 private val Amber = Color(0xFFFFB300)
 private val Red = Color(0xFFEF5350)
+
+/** Ekran koruyucu: fare biraz oynayınca ya da tıklanınca kapanır (pencere açılırkenki tek olay sayılmaz). */
+private fun Modifier.closeOnMouse(close: () -> Unit): Modifier = pointerInput(Unit) {
+    var origin: Offset? = null
+    awaitPointerEventScope {
+        while (true) {
+            val e = awaitPointerEvent(PointerEventPass.Initial)
+            if (e.type == PointerEventType.Press) { close(); return@awaitPointerEventScope }
+            val p = e.changes.firstOrNull()?.position ?: continue
+            val o = origin
+            if (o == null) origin = p
+            else if ((p - o).getDistance() > 12.dp.toPx()) { close(); return@awaitPointerEventScope }
+        }
+    }
+}
 
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 

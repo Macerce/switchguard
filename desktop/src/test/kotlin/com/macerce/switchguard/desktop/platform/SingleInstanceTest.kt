@@ -38,6 +38,18 @@ class SingleInstanceTest {
     }
 
     @Test
+    fun saverRequestOpensStandbyNotWindow() {
+        val saver = CountDownLatch(1)
+        val a = instance()
+        val b = instance()
+        a.onSaverRequest = { saver.countDown() }
+        assertTrue(a.acquire { throw AssertionError("a screen saver request must not just show the window") })
+        b.request = SingleInstance.SAVER
+        assertFalse(b.acquire { throw AssertionError("the second instance must not become the owner") })
+        assertTrue("the saver callback must run within 2 s", saver.await(2, TimeUnit.SECONDS))
+    }
+
+    @Test
     fun secondAcquireSignalsFirst() {
         val shown = CountDownLatch(1)
         val a = instance()

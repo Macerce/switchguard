@@ -184,4 +184,13 @@
     <string name="desktop_update_found">SwitchGuard %1$s is out: press “Update” in the bar at the top of the window</string>
     <string name="desktop_update_check_failed">Could not check. Check your internet connection and try again.</string>
     <string name="desktop_update_dev">Development build: no update check</string>
+    <string name="desktop_saver">Use as Windows screen saver</string>
+    <string name="desktop_saver_desc">When the computer is idle the standby screen opens; moving the mouse or pressing a key closes it</string>
+    <string name="desktop_saver_on">On · opens after %1$s idle</string>
+    <string name="desktop_saver_failed">Could not change the screen saver setting (see the log)</string>
+    <string name="desktop_saver_unavailable">Available in the installed app</string>
+    <string name="desktop_saver_wait">Wait</string>
+    <string name="desktop_saver_wait_desc">How long the computer must be idle before the standby screen opens</string>
+    <string name="desktop_saver_windows">Windows screen saver settings</string>
+    <string name="desktop_saver_windows_desc">E.g. “On resume, display logon screen”</string>
 </resources>

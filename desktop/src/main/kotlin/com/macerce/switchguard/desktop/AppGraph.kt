@@ -57,6 +57,7 @@ class AppGraph(val dataDir: Path) {
     private var current = Strings.load(loadedLanguage)
 
     val host = DesktopHost(store, sounds, appState, notifications, ::strings)
+    val screenSaver = com.macerce.switchguard.desktop.platform.ScreenSaver(dataDir)
     val runtime = RuntimeState(dataDir.resolve("runtime.json"))
     val engine = MonitorEngine(store, eventLog, metrics, runtime, ::strings, host, Sources.real(store))
 

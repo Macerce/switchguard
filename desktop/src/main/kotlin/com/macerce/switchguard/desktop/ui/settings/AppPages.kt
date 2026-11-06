@@ -140,7 +140,10 @@ fun WindowsPage(
 
 /** Ayarlar → Dil ve görünüm: arayüz dili (telefondaki dil satırı) ve tema (masaüstünde elle de seçilir). */
 @Composable
-fun AppearancePage(store: Store, strings: Strings, onOpenStandby: () -> Unit = {}) {
+fun AppearancePage(
+    store: Store, strings: Strings, onOpenStandby: () -> Unit = {},
+    screenSaver: com.macerce.switchguard.desktop.platform.ScreenSaver? = null,
+) {
     val version by store.version.collectAsState()
     val language = remember(version) { store.language }
     val theme = remember(version) { store.theme }
@@ -164,6 +167,10 @@ fun AppearancePage(store: Store, strings: Strings, onOpenStandby: () -> Unit = {
         InfoRow(Icons.Rounded.Nightlight, str("board_dim"), str("board_dim_desc")) {
             Switch(checked = dim, onCheckedChange = { store.standbyDim = it }, modifier = Modifier.testTag("standby-dim"))
         }
+        if (screenSaver != null) {
+            RowDivider()
+            ScreenSaverRows(screenSaver, strings)
+        }
     }
 
     when (dialog) {
@@ -174,6 +181,54 @@ fun AppearancePage(store: Store, strings: Strings, onOpenStandby: () -> Unit = {
         "theme" -> ChoiceDialog(
             str("desktop_theme"), str("desktop_theme_desc"), listOf("system", "light", "dark"), theme, { themeLabel(strings, it) },
             onPick = { store.theme = it }, onDismiss = close,
+        )
+    }
+}
+
+/**
+ * Windows ekran koruyucusu (telefondaki "ekran koruyucu olarak kullan"): açınca SwitchGuard ekran koruyucu olur,
+ * bilgisayar seçilen süre boşta kalınca bekleme ekranı açılır; fare ya da klavye kapatır.
+ */
+@Composable
+private fun ScreenSaverRows(saver: com.macerce.switchguard.desktop.platform.ScreenSaver, strings: Strings) {
+    var refresh by remember { mutableStateOf(0) }
+    val installed = remember(refresh) { saver.isInstalled() }
+    val minutes = remember(refresh) { saver.timeoutMinutes()?.takeIf { it > 0 } ?: 5 }
+    var failed by remember { mutableStateOf(false) }
+    var pickMinutes by remember { mutableStateOf(false) }
+    val subtitle = when {
+        !saver.available -> str("desktop_saver_unavailable")
+        failed -> str("desktop_saver_failed")
+        installed -> strings.format("desktop_saver_on", strings.plural("minutes_n", minutes, minutes))
+        else -> str("desktop_saver_desc")
+    }
+    InfoRow(Icons.Rounded.Nightlight, str("desktop_saver"), subtitle) {
+        Switch(
+            checked = installed, enabled = saver.available,
+            onCheckedChange = { on ->
+                failed = !(if (on) saver.install(minutes) else saver.uninstall())
+                refresh++
+            },
+            modifier = Modifier.testTag("screen-saver"),
+        )
+    }
+    if (installed) {
+        RowDivider()
+        InfoRow(
+            Icons.Rounded.Nightlight, str("desktop_saver_wait"), strings.plural("minutes_n", minutes, minutes),
+            Modifier.clickable { pickMinutes = true }.testTag("screen-saver-minutes"),
+        )
+        RowDivider()
+        InfoRow(
+            Icons.Rounded.Nightlight, str("desktop_saver_windows"), str("desktop_saver_windows_desc"),
+            Modifier.clickable { saver.openWindowsSettings() },
+        )
+    }
+    if (pickMinutes) {
+        ChoiceDialog(
+            str("desktop_saver_wait"), str("desktop_saver_wait_desc"),
+            com.macerce.switchguard.desktop.platform.ScreenSaver.MINUTES, minutes, { strings.plural("minutes_n", it, it) },
+            onPick = { failed = !saver.install(it); refresh++ }, onDismiss = { pickMinutes = false },
         )
     }
 }

@@ -168,7 +168,7 @@ fun DevicesScreen(
                                 HintIconButton(Icons.Rounded.Tune, str("action_edit_layout"), { editMode = true }, Modifier.testTag("edit-layout"))
                                 HintIconButton(
                                     Icons.Rounded.Nightlight, str("board_menu"),
-                                    { graph.appState.standbyOpen.value = true }, Modifier.testTag("open-standby"),
+                                    { graph.appState.openStandby() }, Modifier.testTag("open-standby"),
                                 )
                             }
                             // Telefondaki çekip yenileme: izleme açıksa motor hemen senkronlar.

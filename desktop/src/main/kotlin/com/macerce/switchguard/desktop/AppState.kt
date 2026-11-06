@@ -60,6 +60,15 @@ class AppState {
     /** Bekleme ekranı ([com.macerce.switchguard.desktop.ui.StandbyWindow]) açık mı. */
     val standbyOpen = MutableStateFlow(false)
 
+    /** Bekleme ekranı Windows ekran koruyucusu olarak açıldı: fare/klavye kapatır, her zaman üstte. */
+    val standbySaver = MutableStateFlow(false)
+
+    /** Bekleme ekranını açar; [saver] ekran koruyucu modu (`.scr` çağırdı). */
+    fun openStandby(saver: Boolean = false) {
+        standbySaver.value = saver
+        standbyOpen.value = true
+    }
+
     /** Ana pencere görünür mü; kapatma düğmesi gizler, tepsi "Aç" yeniden gösterir. */
     val windowVisible = MutableStateFlow(true)
 

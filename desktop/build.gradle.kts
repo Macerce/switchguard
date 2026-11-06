@@ -72,7 +72,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "SwitchGuard"
-            packageVersion = "0.12.0"
+            packageVersion = "0.12.1"
             vendor = "Macerce"
             description = "SwitchGuard"
 
@@ -92,3 +92,19 @@ compose.desktop {
         }
     }
 }
+
+// Windows ekran koruyucusu başlatıcısı (packaging/saver/SwitchGuardSaver.cs → SwitchGuard.scr). Her Windows 10/11'de
+// bulunan .NET Framework derleyicisiyle (csc) derlenir; uygulama kaynağı olarak gömülür, kullanıcı ayarı açınca
+// %APPDATA%\SwitchGuard'a çıkarılır (bkz. platform/ScreenSaver.kt).
+val saverOut = layout.buildDirectory.dir("saver")
+val compileSaver by tasks.registering(Exec::class) {
+    val src = file("packaging/saver/SwitchGuardSaver.cs")
+    val ico = file("packaging/SwitchGuard.ico")
+    val out = saverOut.get().file("saver/SwitchGuard.scr").asFile
+    inputs.files(src, ico)
+    outputs.file(out)
+    doFirst { out.parentFile.mkdirs() }
+    val csc = (System.getenv("WINDIR") ?: "C:/Windows") + "/Microsoft.NET/Framework64/v4.0.30319/csc.exe"
+    commandLine(csc, "/nologo", "/target:winexe", "/optimize+", "/win32icon:${ico.absolutePath}", "/out:${out.absolutePath}", src.absolutePath)
+}
+sourceSets["main"].resources.srcDir(files(saverOut).builtBy(compileSaver))

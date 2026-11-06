@@ -46,6 +46,15 @@ class SingleInstance internal constructor(
     private var lock: FileLock? = null
     private var server: ServerSocket? = null
 
+    /**
+     * İkinci örneğin sahibe göndereceği istek: [SHOW] (pencereyi göster) ya da [SAVER] (Windows ekran koruyucusu
+     * başlatıldı, bekleme ekranını aç). [acquire]'dan önce ayarlanır.
+     */
+    var request: String = SHOW
+
+    /** Sahip tarafı: [SAVER] isteği gelince (dinleyici iş parçacığından); null ise "göster" gibi davranılır. */
+    @Volatile var onSaverRequest: (() -> Unit)? = null
+
     /** Sahip kapanıyor: "göster" isteklerine artık `ok` denmez (bkz. [markExiting]). */
     @Volatile private var exiting = false
 
@@ -149,16 +158,18 @@ class SingleInstance internal constructor(
             try {
                 srv.accept().use { socket ->
                     socket.soTimeout = READ_TIMEOUT_MS
-                    if (readCommand(socket.getInputStream()) == SHOW) {
+                    val command = readCommand(socket.getInputStream())
+                    if (command == SHOW || command == SAVER) {
                         if (exiting) {
                             // Kapanıyoruz: pencereyi göstermek anlamsız; yeni örnek kilidi bekleyip sahip olsun.
                             Log.i(TAG, "another instance asked to show the window while exiting; told it to take over")
                             send(socket, BYE)
                         } else {
                             send(socket, OK)
-                            Log.i(TAG, "another instance asked to show the window")
+                            Log.i(TAG, "another instance asked: $command")
                             try {
-                                onShowRequest()
+                                val saver = onSaverRequest
+                                if (command == SAVER && saver != null) saver() else onShowRequest()
                             } catch (t: Throwable) {
                                 Log.w(TAG, "show request handler failed", t)
                             }
@@ -226,7 +237,7 @@ class SingleInstance internal constructor(
         return socket.use {
             try {
                 it.soTimeout = REPLY_TIMEOUT_MS
-                send(it, SHOW)
+                send(it, request)
                 if (readCommand(it.getInputStream()) == OK) Reply.OK else Reply.DECLINED
             } catch (_: IOException) {
                 Reply.DECLINED // istek gitti ama yanıt gelmedi ya da bağlantı koptu
@@ -256,11 +267,12 @@ class SingleInstance internal constructor(
         }
     }
 
-    private companion object {
+    internal companion object {
         const val TAG = "SingleInstance"
         const val ASFW_ANY = -1
         val IS_WINDOWS = System.getProperty("os.name").startsWith("Windows")
         const val SHOW = "show"
+        const val SAVER = "saver"
         const val OK = "ok"
         const val BYE = "bye"
         const val BACKLOG = 8

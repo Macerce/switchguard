@@ -21,6 +21,7 @@ import com.macerce.switchguard.desktop.data.SqliteNative
 import com.macerce.switchguard.desktop.i18n.Strings
 import com.macerce.switchguard.desktop.platform.Autostart
 import com.macerce.switchguard.desktop.platform.NotificationQueue
+import com.macerce.switchguard.desktop.platform.ScreenSaver
 import com.macerce.switchguard.desktop.platform.SingleInstance
 import com.macerce.switchguard.desktop.platform.TrayIcons
 import com.macerce.switchguard.desktop.ui.AlarmWindow
@@ -50,6 +51,9 @@ fun main(args: Array<String>) {
     // yalnızca ilk örneğe "göster" der ve çıkar. Kilit alınamıyorsa (dizin/dosya hatası) asla başlanmaz.
     val showRelay = ShowRelay()
     val instance = SingleInstance(dataDir)
+    // Windows ekran koruyucusu (.scr) çağırdı: çalışan örnek varsa ona "bekleme ekranını aç" denir.
+    val saver = ScreenSaver.FLAG in args
+    if (saver) instance.request = SingleInstance.SAVER
     val owner = try {
         instance.acquire(showRelay::request)
     } catch (e: Throwable) {
@@ -79,6 +83,13 @@ fun main(args: Array<String>) {
     if (TRAY_FLAG in args && isTraySupported) graph.appState.windowVisible.value = false
     // Gizli başlangıçtan sonra bağlanır: hazırlık sırasında gelen "göster" isteği pencereyi yine açar.
     showRelay.bind(graph.appState::showMainWindow)
+    instance.onSaverRequest = { graph.appState.openStandby(saver = true) }
+    // Ekran koruyucu açılışı: ana pencere gizli kalır, yalnız bekleme ekranı.
+    if (saver) {
+        if (isTraySupported) graph.appState.windowVisible.value = false
+        graph.appState.openStandby(saver = true)
+    }
+    graph.screenSaver.refresh()
 
     syncAutostart(Autostart(), graph.store.autostart)
 
@@ -180,7 +191,7 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
                 for (action in trayActions(alarmPending = alarmLines.isNotEmpty())) when (action) {
                     TrayAction.DISMISS_ALARM -> Item(strings["tray_dismiss_alarm"], onClick = graph::dismissAlarm)
                     TrayAction.OPEN -> Item(strings["tray_open"], onClick = appState::showMainWindow)
-                    TrayAction.STANDBY -> Item(strings["board_menu"], onClick = { appState.standbyOpen.value = true })
+                    TrayAction.STANDBY -> Item(strings["board_menu"], onClick = { appState.openStandby() })
                     TrayAction.MONITORING -> Item(
                         strings[if (monitoring) "tray_stop" else "tray_start"],
                         enabled = monitoring || canMonitor,
