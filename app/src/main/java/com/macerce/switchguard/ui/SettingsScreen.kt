@@ -94,6 +94,9 @@ import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.Place
+import androidx.compose.material.icons.rounded.Nightlight
+import androidx.compose.material.icons.rounded.PlayCircle
+import androidx.compose.material.icons.rounded.Wallpaper
 
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Sync
@@ -172,6 +175,7 @@ internal enum class SettingsPage(val title: Int) {
     SUMMARY(R.string.section_summary),
     SMART(R.string.smart_title),
     LOCATION(R.string.settings_location),
+    STANDBY(R.string.board_menu),
     MONITORING(R.string.section_monitoring),
     PERMISSIONS(R.string.section_permissions),
     BACKUP(R.string.settings_backup),
@@ -307,6 +311,12 @@ private fun SettingsHome(
                     Icons.Rounded.Place, Hue.BLUE, stringResource(R.string.settings_location),
                     onClick = { onOpen(SettingsPage.LOCATION) }, modifier = row(SettingsPage.LOCATION),
                     summary = stringResource(R.string.settings_location_desc),
+                )
+                Divider(68.dp)
+                MenuRow(
+                    Icons.Rounded.Nightlight, Hue.INDIGO, stringResource(R.string.board_menu),
+                    onClick = { onOpen(SettingsPage.STANDBY) }, modifier = row(SettingsPage.STANDBY),
+                    summary = stringResource(R.string.board_menu_desc),
                 )
                 Divider(68.dp)
                 MenuRow(
@@ -457,6 +467,7 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
                 SettingsPage.SUMMARY -> SummaryPage()
                 SettingsPage.SMART -> SmartPage(showDialog)
                 SettingsPage.LOCATION -> LocationPage()
+                SettingsPage.STANDBY -> StandbyPage()
                 SettingsPage.MONITORING -> MonitoringPage(showDialog)
                 SettingsPage.PERMISSIONS -> PermissionsPage()
                 SettingsPage.BACKUP -> BackupPage(showDialog)
@@ -774,6 +785,36 @@ private fun QuietPage() {
         }
     }
     PageIntro(stringResource(R.string.settings_quiet_critical))
+}
+
+// ---------------------------------------------------------------- Bekleme ekranı
+
+@Composable
+private fun StandbyPage() {
+    val context = LocalContext.current
+    val (store, version) = settingsState()
+    val dim = remember(version) { store.standbyDim }
+    PageIntro(stringResource(R.string.board_desc))
+    SectionCard(Modifier.padding(top = 12.dp)) {
+        InfoRow(
+            Icons.Rounded.PlayCircle, stringResource(R.string.board_start), stringResource(R.string.board_start_desc),
+            Modifier.clickable { StandbyActivity.start(context) },
+        )
+        Divider()
+        InfoRow(
+            Icons.Rounded.Wallpaper, stringResource(R.string.board_dream), stringResource(R.string.board_dream_desc),
+            Modifier.clickable {
+                val ok = runCatching {
+                    context.startActivity(Intent(android.provider.Settings.ACTION_DREAM_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                }.isSuccess
+                if (!ok) Toast.makeText(context, R.string.board_dream_missing, Toast.LENGTH_LONG).show()
+            },
+        )
+        Divider()
+        InfoRow(Icons.Rounded.Nightlight, stringResource(R.string.board_dim), stringResource(R.string.board_dim_desc)) {
+            Switch(checked = dim, onCheckedChange = { store.standbyDim = it })
+        }
+    }
 }
 
 // ---------------------------------------------------------------- Günlük özet

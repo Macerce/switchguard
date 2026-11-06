@@ -59,6 +59,7 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.Forum
+import androidx.compose.material.icons.rounded.Nightlight
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -235,6 +236,12 @@ fun DevicesScreen(
                     if (devices.isNotEmpty()) {
                         IconButton(modifier = Modifier.tvFocusRing(), onClick = { editMode = true }) {
                             Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
+                        }
+                    }
+                    if (devices.isNotEmpty()) {
+                        val ctx = LocalContext.current
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { StandbyActivity.start(ctx) }) {
+                            Icon(Icons.Rounded.Nightlight, stringResource(R.string.board_menu))
                         }
                     }
                     if (devices.isNotEmpty()) {

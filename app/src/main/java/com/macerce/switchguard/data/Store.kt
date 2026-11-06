@@ -406,6 +406,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("lon").toDoubleOrNull()
         set(v) = put { putString("lon", v?.toString() ?: "") }
 
+    /** Bekleme ekranı 23:00–07:00 arası soluklaşsın. */
+    var standbyDim: Boolean
+        get() = prefs.getBoolean("standbyDim", true)
+        set(v) = put { putBoolean("standbyDim", v) }
+
     /** Bölgeler: girince/çıkınca otomasyon çalıştıran haritada seçilmiş alanlar (bkz. [com.macerce.switchguard.core.Zone]). */
     var zones: List<com.macerce.switchguard.core.Zone>
         get() = parsed.get("zones", prefs.getString("zones", null)) { com.macerce.switchguard.core.Zone.listFromJson(it) }

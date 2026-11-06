@@ -6,23 +6,28 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.24.1 — unreleased
+## 2.25.0 — 2026-11-06
+**New**
+- **Standby screen**: a full-screen board for a phone or tablet on charge — big clock and date, today's weather (low/high, chance of rain), critical status (alarm, connection, offline devices, home/away), live total power on a half-circle gauge with the last 6 hours and today's kWh, recent activity and what runs in the next 24 hours (sunrise/sunset automations, cycles, timed templates). It also shows over the lock screen, shifts slightly every minute to avoid burn-in and dims at night. Open it from the Devices top bar or Settings → Standby screen.
+- The standby screen can also be picked as the Android **screen saver**, so it replaces the lock screen while charging.
+
+## 2.24.1 — 2026-11-06
 **New**
 - Cycles in automations: under “Then” **Start cycle / Stop cycle** (e.g. start the “Garden lights” cycle at sunset, stop watering on arriving home); under “If” **Cycle starts / Cycle ends** (e.g. notify when watering ends or start the next cycle). Alerts can also ring/notify when a cycle ends.
 
-## 2.24.0 — unreleased
+## 2.24.0 — 2026-11-06
 **New**
 - Cycles & timers (Automations tab), built from presets: **Countdown** (“turn off / on in 30 min”), **On, then off** (turn on, stay on for a duration, turn off), **On/off cycle** (e.g. 15 min on, 45 min off), **One by one** (valves in turn) or **Custom steps** choosing on/off/leave per device in each step. Durations in seconds, minutes or hours; a number of rounds or until stopped.
 - Start: with a button, at a set time on chosen days (e.g. every day at 07:00 turn on, off after 20 min) or during hours (stops when the window ends, may cross midnight). When done: turn all off, on, leave as is or restore the previous state.
 - Advanced: random variation of durations (lived-in look while away), automatic start only when home/away, stop when changed by hand. Cards show a live countdown, step and round; History records start/finish. Works with groups, eWeLink and Tuya devices; failed commands are retried.
 - The automation editor's “If” events and conditions are compact tiles that take less space.
 
-## 2.23.2 — unreleased
+## 2.23.2 — 2026-11-06
 **Fixes**
 - When an automation can't switch a device (e.g. eWeLink 4002 because the device briefly dropped off the cloud), the command is retried after 30 s, 1, 2 and 3 min, and right away when the device reconnects. If every try fails you get a “did NOT turn on / off” notification.
 - In group automations the failing device is logged under its own name in History, not the group's.
 
-## 2.23.1 — unreleased
+## 2.23.1 — 2026-11-06
 **New**
 - Chat by voice: tap the microphone in Chat and say the command — “Turn off kitchen”, “Is the garden on?”, “How many watts?”. It runs like a typed message and the reply is read aloud (speaker button in the top bar turns spoken replies off). Uses Android's speech recognition; the app asks for no microphone permission.
 - Voice command widget: a single tile on the home screen — tap it, say the command, it runs; widen it to see the last command and reply.

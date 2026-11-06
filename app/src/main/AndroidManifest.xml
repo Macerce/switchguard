@@ -64,6 +64,26 @@
             android:taskAffinity=""
             android:turnScreenOn="true" />
         <activity
+            android:name=".ui.StandbyActivity"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:showWhenLocked="true"
+            android:taskAffinity="" />
+
+        <service
+            android:name=".service.StandbyDream"
+            android:exported="true"
+            android:label="@string/board_title"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <activity
             android:name=".ui.LoginActivity"
             android:exported="false"
             android:theme="@style/Theme.SwitchGuard.Login" />

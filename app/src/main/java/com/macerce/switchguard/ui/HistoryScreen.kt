@@ -204,7 +204,7 @@ private fun dayLabel(time: Long): String = when {
     else -> DateFormat.getDateInstance(DateFormat.FULL).format(Date(time))
 }
 
-private fun LoggedEvent.icon(): ImageVector = when (kind) {
+internal fun LoggedEvent.icon(): ImageVector = when (kind) {
     EventType.TURNED_OFF.name -> Icons.Rounded.PowerOff
     EventType.TURNED_ON.name -> Icons.Rounded.PowerSettingsNew
     EventType.WENT_OFFLINE.name -> Icons.Rounded.CloudOff
