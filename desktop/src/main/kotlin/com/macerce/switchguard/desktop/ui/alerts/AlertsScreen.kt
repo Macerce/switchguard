@@ -264,6 +264,7 @@ private fun AlertsHome(graph: AppGraph, strings: Strings, open: (AlertsPage) -> 
                 alerts.forEach { a ->
                     AutomationCard(
                         a, automationDevices(store.snapshotsWithGroups, strings), strings,
+                        cycles = store.cycles,
                         onClick = { open(AlertsPage.Editor(a.id)) },
                         onToggle = { on -> graph.engine.saveAutomation(a.copy(enabled = on)) },
                     )

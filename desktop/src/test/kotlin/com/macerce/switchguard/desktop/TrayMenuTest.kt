@@ -18,7 +18,7 @@ class TrayMenuTest {
 
     @Test
     fun theUsualItemsStayInBothCases() {
-        val usual = listOf(TrayAction.OPEN, TrayAction.MONITORING, TrayAction.TEST_ALARM, TrayAction.EXIT)
+        val usual = listOf(TrayAction.OPEN, TrayAction.STANDBY, TrayAction.MONITORING, TrayAction.TEST_ALARM, TrayAction.EXIT)
         assertEquals(usual, trayActions(alarmPending = false))
         assertEquals(usual, trayActions(alarmPending = true).drop(1))
     }

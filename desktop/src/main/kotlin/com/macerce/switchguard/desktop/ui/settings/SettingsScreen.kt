@@ -297,7 +297,7 @@ private fun SettingsSubPage(graph: AppGraph, strings: Strings, page: SettingsPag
             SettingsPage.MONITORING -> MonitoringPage(graph, strings)
             SettingsPage.WINDOWS -> WindowsPage(graph, strings)
             SettingsPage.BACKUP -> BackupPage(graph, strings)
-            SettingsPage.APPEARANCE -> AppearancePage(graph.store, strings)
+            SettingsPage.APPEARANCE -> AppearancePage(graph.store, strings, onOpenStandby = { graph.appState.standbyOpen.value = true })
             SettingsPage.ABOUT -> AboutPage(graph, strings)
         }
     }

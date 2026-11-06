@@ -19,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.AutoMode
@@ -93,6 +95,9 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
     var editing by remember { mutableStateOf<String?>(null) }
     var editingScene by remember { mutableStateOf<String?>(null) }
     var editingGroup by remember { mutableStateOf<String?>(null) }
+    var editingCycle by remember { mutableStateOf<String?>(null) }
+    val cycles = remember(version) { store.cycles }
+    val cycleRuns = remember(version) { store.cycleRuns }
     val scenes = remember(version) { store.scenes }
     val groups = remember(version) { store.groups }
     val snackbar = remember { SnackbarHostState() }
@@ -107,6 +112,19 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
             onSave = { graph.engine.saveScene(it); editingScene = null },
             onDelete = { graph.engine.deleteScene(id); editingScene = null },
             onBack = { editingScene = null },
+        )
+        return
+    }
+
+    editingCycle?.let { id ->
+        CycleEditor(
+            initial = cycles.firstOrNull { it.id == id },
+            devices = remember(devices) { devices.filterNot { com.macerce.switchguard.core.DeviceCategory.isCategory(it.id) } },
+            strings = strings,
+            modifier = modifier,
+            onSave = { graph.engine.saveCycle(it); editingCycle = null },
+            onDelete = { graph.engine.deleteCycle(id); editingCycle = null },
+            onBack = { editingCycle = null },
         )
         return
     }
@@ -182,6 +200,12 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                         Text(strings["groups_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                         GroupsStrip(groups, store.snapshotsWithGroups, strings) { editingGroup = it }
+                        Text(strings["cycles_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                        CyclesStrip(cycles, cycleRuns, strings, onToggle = { c, start ->
+                            graph.engine.cycleNow(c.id, start)
+                            scope.launch { snackbar.showSnackbar(strings.format(if (start) "cycle_started_toast" else "cycle_stopped_toast", c.name)) }
+                        }) { editingCycle = it }
                         Text(strings["automations_rules_title"], style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }
@@ -191,7 +215,7 @@ fun AutomationsScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Mo
                 }
                 items(automations, key = { it.id }) { a ->
                     AutomationCard(
-                        a, devices, strings, scenes = scenes,
+                        a, devices, strings, scenes = scenes, cycles = cycles,
                         onClick = { editing = a.id },
                         onToggle = { on -> graph.engine.saveAutomation(a.copy(enabled = on)) },
                     )
@@ -229,8 +253,9 @@ private fun EmptyAutomations(strings: Strings) {
 @Composable
 internal fun AutomationCard(
     a: Automation, devices: List<DeviceSnapshot>, strings: Strings, onClick: () -> Unit, onToggle: (Boolean) -> Unit, scenes: List<Scene> = emptyList(),
+    cycles: List<com.macerce.switchguard.core.Cycle> = emptyList(),
 ) {
-    val (whenText, thenText) = describe(a, devices, strings, scenes)
+    val (whenText, thenText) = describe(a, devices, strings, scenes, cycles)
     val shape = RoundedCornerShape(10.dp)
     Row(
         Modifier.fillMaxWidth()
@@ -274,9 +299,13 @@ internal fun Clause(label: String, text: String) {
  * Kartın ve düzenleyici özetinin iki satırı (telefondaki `describe`): ("Rögar · Kanal 1 · açılınca",
  * "Lamba: Aç · (5 dk sonra)").
  */
-internal fun describe(a: Automation, devices: List<DeviceSnapshot>, strings: Strings, scenes: List<Scene> = emptyList()): Pair<String, String> {
+internal fun describe(
+    a: Automation, devices: List<DeviceSnapshot>, strings: Strings, scenes: List<Scene> = emptyList(),
+    cycles: List<com.macerce.switchguard.core.Cycle> = emptyList(),
+): Pair<String, String> {
     val t = a.trigger
-    val srcName = if (!t.kind.usesDevice) null
+    val srcName = if (t.kind.usesCycle) cycles.firstOrNull { it.id == t.deviceId }?.name ?: strings["device_missing"]
+        else if (!t.kind.usesDevice) null
         else devices.firstOrNull { it.id == t.deviceId }?.let { channelLabel(it, t.channel, t.kind.usesChannel, strings) } ?: strings["device_missing"]
     val trigger = when (t.kind) {
         TriggerKind.SUNRISE, TriggerKind.SUNSET -> strings[t.kind.titleKey()] + (if (t.minutes == 0) "" else " · " + offsetLabel(t.minutes, strings))
@@ -295,6 +324,8 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>, strings: Str
             val dstName = devices.firstOrNull { it.id == act.deviceId }?.let { channelLabel(it, act.channel, true, strings) } ?: strings["device_missing"]
             "$dstName: " + strings[act.kind.titleKey()]
         }
+        act.kind.usesCycle ->
+            strings[act.kind.titleKey()] + ": " + (cycles.firstOrNull { it.id == act.deviceId }?.name ?: strings["device_missing"])
         act.kind == ActionKind.RUN_SCENE ->
             strings.format("auto_action_scene", scenes.firstOrNull { it.id == act.deviceId }?.name ?: strings["device_missing"])
         else -> strings[act.kind.titleKey()]
@@ -368,6 +399,8 @@ internal fun TriggerKind.titleKey(): String = when (this) {
     TriggerKind.TEMP_BELOW -> "trigger_temp_below"
     TriggerKind.ZONE_ENTER -> "trigger_zone_enter"
     TriggerKind.ZONE_EXIT -> "trigger_zone_exit"
+    TriggerKind.CYCLE_STARTED -> "trigger_cycle_started"
+    TriggerKind.CYCLE_FINISHED -> "trigger_cycle_finished"
 }
 
 /** İşlemin kısa adı ("Aç", "Alarm çal"); kartta ve özette. */
@@ -377,6 +410,8 @@ internal fun ActionKind.titleKey(): String = when (this) {
     ActionKind.ALARM -> "auto_action_alarm"
     ActionKind.NOTIFY -> "auto_action_notify"
     ActionKind.RUN_SCENE -> "act_run_scene"
+    ActionKind.START_CYCLE -> "act_start_cycle"
+    ActionKind.STOP_CYCLE -> "act_stop_cycle"
 }
 
 /** İşlemin simgesi ve rengi: kartta ve düzenleyicinin işlem kutucuklarında aynı. */
@@ -386,6 +421,8 @@ internal fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew
     ActionKind.TURN_OFF -> Icons.Rounded.PowerOff
     ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow
+    ActionKind.START_CYCLE -> Icons.Rounded.Repeat
+    ActionKind.STOP_CYCLE -> Icons.Rounded.Stop
 }
 
 internal fun ActionKind.hue(): Hue = when (this) {
@@ -394,6 +431,8 @@ internal fun ActionKind.hue(): Hue = when (this) {
     ActionKind.TURN_ON -> Hue.GREEN
     ActionKind.TURN_OFF -> Hue.SLATE
     ActionKind.RUN_SCENE -> Hue.PURPLE
+    ActionKind.START_CYCLE -> Hue.TEAL
+    ActionKind.STOP_CYCLE -> Hue.SLATE
 }
 
 internal fun formatWatts(w: Double): String =

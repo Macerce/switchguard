@@ -49,6 +49,8 @@ object BackupContent {
         "tgCommands", "tgControl", "tgForward", "tgStages", "wdMode", "wdMin", "chargerOutage", "samePower",
         // telefon 2.18: sohbet şablonları
         "chatTemplates",
+        // telefon 2.24–2.25: döngüler, bekleme ekranı
+        "cycles", "standbyDim",
     )
 
     val CLEARED: Set<String> = setOf(

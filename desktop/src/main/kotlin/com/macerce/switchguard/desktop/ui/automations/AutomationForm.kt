@@ -7,6 +7,7 @@ import com.macerce.switchguard.core.Condition
 import com.macerce.switchguard.core.ConditionKind
 import com.macerce.switchguard.core.PresenceRule
 import com.macerce.switchguard.core.Scene
+import com.macerce.switchguard.core.Cycle
 import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -53,12 +54,15 @@ data class AutomationForm(
     val condChannel: Int = 0,
     /** [ActionKind.RUN_SCENE]: çalıştırılacak sahne. */
     val sceneId: String = "",
+    /** Döngü tetikleyicisi / eylemi: seçili döngü. */
+    val triggerCycle: String = "",
+    val actionCycle: String = "",
 ) {
     /** Seçili cihaz bu olayı bildiremiyorsa (ör. güç ölçmüyor) olay "açıldı"ya döner. */
     fun normalized(devices: List<DeviceSnapshot>): AutomationForm =
         if (triggerKind in kindsFor(devices.firstOrNull { it.id == triggerDevice })) this else copy(triggerKind = TriggerKind.TURNED_ON)
 
-    fun isValid(devices: List<DeviceSnapshot>, scenes: List<Scene> = emptyList()): Boolean {
+    fun isValid(devices: List<DeviceSnapshot>, scenes: List<Scene> = emptyList(), cycles: List<Cycle> = emptyList()): Boolean {
         val src = devices.firstOrNull { it.id == triggerDevice }
         val minutesValue = minutes.toIntOrNull()
         val wattsValue = wattsValue()
@@ -69,6 +73,8 @@ data class AutomationForm(
             (!triggerKind.usesTemp || tempValue() != null) &&
             (!condOn || (devices.any { it.id == condDevice } && !DeviceCategory.isCategory(condDevice))) &&
             (actionKind != ActionKind.RUN_SCENE || scenes.any { it.id == sceneId }) &&
+            (!triggerKind.usesCycle || cycles.any { it.id == triggerCycle }) &&
+            (!actionKind.usesCycle || cycles.any { it.id == actionCycle }) &&
             (!triggerKind.usesChannelPower || (lowValue != null && lowValue >= 0 && graceValue != null && graceValue >= 0)) &&
             (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
             (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
@@ -82,7 +88,11 @@ data class AutomationForm(
         name = name.trim(),
         enabled = enabled,
         trigger = Trigger(
-            triggerKind, if (triggerKind.usesDevice) triggerDevice else "",
+            triggerKind, when {
+                triggerKind.usesDevice -> triggerDevice
+                triggerKind.usesCycle -> triggerCycle
+                else -> ""
+            },
             channel = if (triggerKind.usesChannel) triggerChannel else 0,
             minutes = when {
                 triggerKind.usesMinutes -> minutes.toIntOrNull() ?: 0
@@ -101,6 +111,7 @@ data class AutomationForm(
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
             actionKind == ActionKind.RUN_SCENE -> AutoAction(actionKind, sceneId)
+            actionKind.usesCycle -> AutoAction(actionKind, actionCycle)
             else -> AutoAction(actionKind)
         },
         delayMinutes = delay.toIntOrNull() ?: 0,
@@ -155,6 +166,8 @@ data class AutomationForm(
                 condDevice = initial.condition?.deviceId ?: first,
                 condChannel = initial.condition?.channel ?: 0,
                 sceneId = if (initial.action.kind == ActionKind.RUN_SCENE) initial.action.deviceId else "",
+                triggerCycle = if (t.kind.usesCycle) t.deviceId else "",
+                actionCycle = if (initial.action.kind.usesCycle) initial.action.deviceId else "",
             )
         }
 

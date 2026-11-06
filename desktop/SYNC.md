@@ -2,7 +2,7 @@
 
 Telefon uygulamasıyla masaüstü uygulamasının senkronizasyon dosyası: kopyalanan `core/`, `api/` ve `data/` dosyaları ile masaüstüne yeniden yazılan / taşınan dosyalar (`Store`, `MonitorService`, `Notifier` + `AlarmActivity`).
 
-Kaynak: `master` `6770907` (telefon 2.15.1; 2026-10-23). Önceki: `4bbc24d` (2.13.0). İlk kopya `tv-tablet` `132e7fe`'den alınmıştı.
+Kaynak: agp-9 `f848825` (telefon 2.25.0; 2026-11-06). Önceki: `cd1ec66` (2.23.2), `6770907` (2.15.1).
 
 ## Kopyalanan Dosyalar (core/)
 
@@ -135,3 +135,9 @@ Taşınmayan: 2.23 widget'ları (sesli komut, grup, widget'ta watt) — Windows'
 Olduğu gibi kopyalanan: core/ AutoRetry (+ test), EventText (yeniden deneme metinleri, + test), DeviceGroup (`watts`), Escalation (`NOW`, `firstDelay`; `Recipient.call/callTo` JSON'da korunur, masaüstünde arama yok) + EscalationTest; strings.xml `automation_retrying/gave_up_on/gave_up_off/retried`, `tg_alarm_header_now`, `tg_when_desc_now`, `tg_test_message_now`, `tg_summary_now`, `stages_now`.
 Masaüstüne uyarlanan: MonitorService 2.23.2 → MonitorEngine `sendAutomationSwitch`/`retryTick`/`scheduleRetry` (handler.removeCallbacks yok: `scheduler.postDelayed` + her tick'te `retryTick`, fazladan uyanma zararsız; önce uyarı sonra geçmiş); bağlanan cihazda `scheduler.post` ile hemen deneme. 2.20 "Hemen" kademesi: ilk tick `Escalation.firstDelay`'den, ilk dakikada `tg_alarm_header_now`; Telegram kurulumu ve kademe penceresinde "Hemen" seçeneği. 2.23.1 widget'taki watt → Cihazlar ekranındaki grup kartında üyelerin toplam watt'ı (Windows'ta widget yok).
 Taşınmayan: telefon araması (2.20–2.21, PC arayamaz), bölge konum uyarısı (2.21.2), widget'lar (2.23.0).
+
+## 0.12.0 eşitlemesi (telefon 2.24–2.25, agp-9 `5bae2f7` + 2.25.0 bekleme ekranı)
+
+Olduğu gibi kopyalanan: core/ Cycle (+ CycleTest), StandbyBoard (+ StandbyBoardTest), Automation (START_CYCLE/STOP_CYCLE, CYCLE_STARTED/FINISHED, `onCycle`), AlertsView, EventText (`CycleState`); api/ WeatherClient (`today`); strings.xml (EN/TR, LF satır sonlu).
+Masaüstüne uyarlanan: MonitorService 2.24 döngüleri → MonitorEngine `cycleTick`/`cycleButton`/`cycleManualCheck`/`applyCycles` (handler.removeCallbacks yok: `scheduler.postDelayed` ile sıradaki adımda uyanma, fazladan uyanma zararsız; olay önce uyarı sonra geçmiş kuralıyla `record`), otomasyonda döngü başlat/durdur eylemi; arayüz için `saveCycle`/`deleteCycle` (süren döngü önce durdurulur)/`cycleNow`. Store `cycles`, `cycleRuns`, `cycleDone`, `standbyDim`; yedeğe `cycles`, `standbyDim`. `Strings.eventStrings().cycle`. `ui/CyclesUi.kt` → `desktop/ui/automations/CyclesUi.kt` (şerit FlowRow, süre birimi seçici kendi kutuları, özel adımlarda Dokunma/Aç/Kapat kutuları, saat seçimi `TimeDialog`, Esc geri); otomasyon düzenleyicisinde döngü tetikleyicisi/eylemi (`AutomationForm.triggerCycle/actionCycle`). 2.25 bekleme ekranı → `desktop/ui/StandbyWindow.kt`: çerçevesiz tam ekran pencere (`AppState.standbyOpen`), Esc kapatır, tıklayınca Uygulamayı aç/Kapat, açıkken `DisplayWake.keepOn` her 50 sn; açılış: Cihazlar başlığındaki ay simgesi, tepsi menüsü "Bekleme ekranı", Ayarlar → Görünüm.
+Farklar: `desktop_cycle_at_note` (telefon yerine bilgisayar), `desktop_board_no_location` (konum Uyarılar → Akıllı uyarılar → Konum), `desktop_board_start_desc`. Kilit ekranı/ekran koruyucu (DreamService) karşılığı yok.

@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.rememberScrollbarAdapter
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Nightlight
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.CircularProgressIndicator
@@ -165,6 +166,10 @@ fun DevicesScreen(
                         } else {
                             if (devices.isNotEmpty()) {
                                 HintIconButton(Icons.Rounded.Tune, str("action_edit_layout"), { editMode = true }, Modifier.testTag("edit-layout"))
+                                HintIconButton(
+                                    Icons.Rounded.Nightlight, str("board_menu"),
+                                    { graph.appState.standbyOpen.value = true }, Modifier.testTag("open-standby"),
+                                )
                             }
                             // Telefondaki çekip yenileme: izleme açıksa motor hemen senkronlar.
                             HintIconButton(

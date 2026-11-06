@@ -57,6 +57,9 @@ class AppState {
         tab.value = t
     }
 
+    /** Bekleme ekranı ([com.macerce.switchguard.desktop.ui.StandbyWindow]) açık mı. */
+    val standbyOpen = MutableStateFlow(false)
+
     /** Ana pencere görünür mü; kapatma düğmesi gizler, tepsi "Aç" yeniden gösterir. */
     val windowVisible = MutableStateFlow(true)
 

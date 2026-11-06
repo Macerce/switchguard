@@ -501,6 +501,29 @@ class Store internal constructor(
     }
     fun deleteGroup(id: String): Unit = synchronized(lock) { groups = groups.filterNot { it.id == id } }
 
+    /** Döngüler ve zamanlayıcılar (bkz. [com.macerce.switchguard.core.Cycle]). */
+    var cycles: List<com.macerce.switchguard.core.Cycle>
+        get() = com.macerce.switchguard.core.Cycle.listFromJson(strOrNull("cycles"))
+        set(v) = edit { put("cycles", com.macerce.switchguard.core.Cycle.listToJson(v)) }
+    fun saveCycle(c: com.macerce.switchguard.core.Cycle): Unit = synchronized(lock) {
+        val list = cycles
+        cycles = if (list.any { it.id == c.id }) list.map { if (it.id == c.id) c else it } else list + c
+    }
+    fun deleteCycle(id: String): Unit = synchronized(lock) { cycles = cycles.filterNot { it.id == id } }
+    /** Süren döngüler (motor yazar, ekran okur; uygulama yeniden açılsa da kalır). */
+    var cycleRuns: Map<String, com.macerce.switchguard.core.CycleRun>
+        get() = com.macerce.switchguard.core.CycleRun.mapFromJson(strOrNull("cycleRuns"))
+        set(v) = edit { put("cycleRuns", com.macerce.switchguard.core.CycleRun.mapToJson(v)) }
+    /** Döngü → kendiliğinden başladığı son fırsat (aynı fırsatta ikinci kez başlamasın). */
+    var cycleDone: Map<String, Long>
+        get() = runCatching { JSONObject(str("cycleDone", "{}")).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())
+        set(v) = edit { put("cycleDone", JSONObject(v).toString()) }
+
+    /** Bekleme ekranı 23:00–07:00 arası soluklaşsın. */
+    var standbyDim: Boolean
+        get() = bool("standbyDim", true)
+        set(v) = edit { put("standbyDim", v) }
+
     /** Gerçek cihazlar + grupların sanal cihazları (otomasyon, Cihazlar ekranı, Telegram). */
     val snapshotsWithGroups: List<DeviceSnapshot>
         get() = DeviceGroup.withGroups(snapshots, groups)

@@ -1,6 +1,9 @@
 package com.macerce.switchguard.desktop.ui.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.material.icons.rounded.Nightlight
+import androidx.compose.material3.Switch
+import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bolt
@@ -137,7 +140,7 @@ fun WindowsPage(
 
 /** Ayarlar → Dil ve görünüm: arayüz dili (telefondaki dil satırı) ve tema (masaüstünde elle de seçilir). */
 @Composable
-fun AppearancePage(store: Store, strings: Strings) {
+fun AppearancePage(store: Store, strings: Strings, onOpenStandby: () -> Unit = {}) {
     val version by store.version.collectAsState()
     val language = remember(version) { store.language }
     val theme = remember(version) { store.theme }
@@ -148,6 +151,19 @@ fun AppearancePage(store: Store, strings: Strings) {
         InfoRow(Icons.Rounded.Language, str("language"), languageLabel(strings, language), Modifier.clickable { dialog = "language" })
         RowDivider()
         InfoRow(Icons.Rounded.Palette, str("desktop_theme"), themeLabel(strings, theme), Modifier.clickable { dialog = "theme" })
+    }
+
+    // Bekleme ekranı (telefon 2.25): saat, hava, güç ve son hareketler; tam ekran, Esc kapatır.
+    val dim = remember(version) { store.standbyDim }
+    SectionCard(Modifier.padding(top = 12.dp)) {
+        InfoRow(
+            Icons.Rounded.Nightlight, str("board_start"), str("desktop_board_start_desc"),
+            Modifier.clickable(onClick = onOpenStandby).testTag("settings-open-standby"),
+        )
+        RowDivider()
+        InfoRow(Icons.Rounded.Nightlight, str("board_dim"), str("board_dim_desc")) {
+            Switch(checked = dim, onCheckedChange = { store.standbyDim = it }, modifier = Modifier.testTag("standby-dim"))
+        }
     }
 
     when (dialog) {

@@ -33,14 +33,18 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
     private val _progress = MutableStateFlow<Progress?>(null)
     val progress: StateFlow<Progress?> = _progress.asStateFlow()
 
+    /** Elle denetimin sonucu (Ayarlar → Hakkında). */
+    enum class Result { AVAILABLE, UP_TO_DATE, FAILED, DEV }
+
     /** Ağdan denetler (çağıran iş parçacığında). Geliştirme çalıştırmasında (sürüm yok) hiçbir şey yapmaz. */
-    fun check() {
-        val current = currentVersion ?: return
+    fun check(): Result {
+        val current = currentVersion ?: return Result.DEV
         val body = runCatching { get(UpdateCheck.RELEASES_URL) }
-            .onFailure { Log.w(TAG, "update check failed: ${it.javaClass.simpleName}") }.getOrNull() ?: return
+            .onFailure { Log.w(TAG, "update check failed: ${it.javaClass.simpleName}") }.getOrNull() ?: return Result.FAILED
         val release = UpdateCheck.newer(body, UpdateCheck.DESKTOP_TAG, current, ".exe")?.takeIf { it.assetUrl != null }
         if (release != null && release != _available.value) Log.i(TAG, "update available: $current -> ${release.version}")
         _available.value = release
+        return if (release != null) Result.AVAILABLE else Result.UP_TO_DATE
     }
 
     fun dismiss() { _available.value = null }

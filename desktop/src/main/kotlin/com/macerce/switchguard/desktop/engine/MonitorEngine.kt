@@ -9,6 +9,12 @@ import com.macerce.switchguard.api.TuyaExpiredException
 import com.macerce.switchguard.api.TuyaSocket
 import com.macerce.switchguard.api.TelegramClient
 import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.Cycle
+import com.macerce.switchguard.core.CycleEngine
+import com.macerce.switchguard.core.CycleEventKind
+import com.macerce.switchguard.core.CycleResult
+import com.macerce.switchguard.core.CycleRun
+import com.macerce.switchguard.core.CycleTarget
 import com.macerce.switchguard.core.AlarmReminders
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AutoRetry
@@ -252,6 +258,14 @@ class MonitorEngine(
     /** Sahnelerin listesi değişince motor iş parçacığında yazılır. */
     fun saveScene(scene: Scene) = scheduler.post { store.saveScene(scene) }
     fun deleteScene(id: String) = scheduler.post { store.deleteScene(id) }
+
+    /** Döngü kaydı / silme / düğmeyle başlat-durdur (arayüzden); silinen süren döngü önce durdurulur ki bitiş eylemi uygulansın. */
+    fun saveCycle(cycle: Cycle) = scheduler.post { store.saveCycle(cycle) }
+    fun deleteCycle(id: String) = scheduler.post {
+        if (id in store.cycleRuns) cycleButton(id, start = false)
+        store.deleteCycle(id)
+    }
+    fun cycleNow(id: String, start: Boolean) = scheduler.post { cycleButton(id, start) }
 
     /** Grupların listesi değişince motor iş parçacığında yazılır. */
     fun saveGroup(group: DeviceGroup) = scheduler.post { store.saveGroup(group) }
@@ -500,6 +514,7 @@ class MonitorEngine(
         grace.due(wall).forEach { dispatch(it, store.rulesFor(it.deviceId).actionFor(it.eventType)) }
         checkOutage(wall)
         templateTick(wall)
+        cycleTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         retryTick(wall)
         weatherTick(wall)
@@ -1095,6 +1110,12 @@ class MonitorEngine(
                 }
                 sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true)
             }
+            ActionKind.START_CYCLE, ActionKind.STOP_CYCLE -> {
+                if (!cycleButton(a.action.deviceId, a.action.kind == ActionKind.START_CYCLE, a.name)) {
+                    val args = EventArgs.AutoMissing(a.name)
+                    record("", a.name, EventKind.AUTOMATION, args.render(a.name, eventStrings), "", args)
+                }
+            }
             ActionKind.RUN_SCENE -> {
                 if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
                 val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
@@ -1202,6 +1223,7 @@ class MonitorEngine(
         if (change is Change.Connection && change.to && retries.cameOnline(change.deviceId, wall)) {
             scheduler.post { retryTick(clock.wall()) }
         }
+        if (change is Change.Switch) cycleManualCheck(change)
         if (LiveState.expected.consume(change, wall)) {
             record(change.deviceId, change.name, EventKind.USER, change.describe(labels), "", change.toArgs())
             return
@@ -1979,6 +2001,73 @@ class MonitorEngine(
         }
     }
 
+    // ---------------------------------------------------------------- Döngüler
+
+    /** "cihaz/kanal" → açık mı (gruplar dahil). */
+    private fun cycleStates(): Map<String, Boolean> = buildMap {
+        for (d in store.snapshotsWithGroups) for ((ch, on) in d.switches) put("${d.id}/$ch", on)
+    }
+
+    private fun cycleTick(wall: Long) {
+        val cycles = store.cycles
+        val runs = store.cycleRuns
+        if (cycles.isEmpty() && runs.isEmpty()) return
+        applyCycles(CycleEngine.tick(cycles, runs, store.cycleDone, cycleStates(), wall, store.isAway(wall)), runs, null)
+    }
+
+    /** Döngüyü düğmeyle ya da otomasyonla ([by] = otomasyon adı) başlatır / durdurur; döngü yoksa false. */
+    private fun cycleButton(id: String, start: Boolean, by: String? = null): Boolean {
+        val c = store.cycles.firstOrNull { it.id == id } ?: return false
+        val runs = store.cycleRuns
+        val wall = clock.wall()
+        val result = if (start) CycleEngine.start(c, runs, store.cycleDone, cycleStates(), wall)
+            else CycleEngine.stop(c, runs, store.cycleDone)
+        applyCycles(result, runs, by ?: strings()["cycle_by_button"])
+        return true
+    }
+
+    private fun cycleManualCheck(change: Change.Switch) {
+        val runs = store.cycleRuns
+        if (runs.isEmpty()) return
+        val groupIds = store.groups.filter { g -> g.members.any { it.deviceId == change.deviceId && it.channel == change.channel } }
+            .map { it.deviceId }.toSet()
+        val result = CycleEngine.manualChange(store.cycles, runs, store.cycleDone,
+            CycleTarget(change.deviceId, change.channel), groupIds, change.to)
+        if (result.runs != runs) applyCycles(result, runs, null)
+    }
+
+    private fun applyCycles(r: CycleResult, before: Map<String, CycleRun>, by: String?) {
+        if (r.runs != before) store.cycleRuns = r.runs
+        if (r.done != store.cycleDone) store.cycleDone = r.done
+        for (e in r.events) {
+            val args = EventArgs.CycleState(e.cycle.name, e.kind.name, by)
+            record(CYCLE_LOG_PREFIX + e.cycle.id, e.cycle.name, EventKind.AUTOMATION, args.render(e.cycle.name, eventStrings), "", args)
+        }
+        // "Döngü başlayınca / bitince" kuralları: bu işlem bitince (iç içe döngü başlatma durumu bozmasın).
+        if (r.events.isNotEmpty()) scheduler.post {
+            val wall = clock.wall()
+            for (e in r.events) {
+                runAutomations(automations.onCycle(e.cycle.id, e.kind == CycleEventKind.STARTED,
+                    store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
+            }
+        }
+        val byId = store.snapshots.associateBy { it.id }
+        for (cmd in r.commands) {
+            if (DeviceGroup.isGroup(cmd.target.deviceId)) {
+                val group = store.groups.firstOrNull { it.deviceId == cmd.target.deviceId } ?: continue
+                for ((device, channel) in group.targets(byId, cmd.on)) {
+                    sendAutomationSwitch(cmd.cycle.name, device, channel, cmd.on, attempt = 1, logSuccess = false)
+                }
+            } else {
+                val device = byId[cmd.target.deviceId] ?: continue
+                sendAutomationSwitch(cmd.cycle.name, device, cmd.target.channel, cmd.on, attempt = 1, logSuccess = false)
+            }
+        }
+        // Sıradaki adımda uyan (telefonda handler.removeCallbacks; burada fazladan uyanma zararsız).
+        val due = CycleEngine.nextDueAt(store.cycles, r.runs, clock.wall()) ?: return
+        scheduler.postDelayed((due - clock.wall()).coerceAtLeast(0) + 50) { if (running) cycleTick(clock.wall()) }
+    }
+
     /** Saati gelen sohbet şablonları. */
     private fun templateTick(wall: Long) {
         val list = store.chatTemplates ?: return
@@ -2215,6 +2304,8 @@ class MonitorEngine(
         Instant.ofEpochMilli(clock.wall()).atZone(ZoneId.systemDefault()).let { it.hour * 60 + it.minute }
 
     companion object {
+        /** Geçmişte döngü kayıtlarının cihaz kimliği öneki (telefondaki MonitorService.CYCLE_LOG_PREFIX). */
+        const val CYCLE_LOG_PREFIX = "cycle:"
         /** Demo simülasyonu: [demo]'nun `op` değerleri (telefondakilerle aynı). */
         const val DEMO_TOGGLE = "toggle"
         const val DEMO_ONLINE = "online"

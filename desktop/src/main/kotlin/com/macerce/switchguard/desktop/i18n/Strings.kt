@@ -138,6 +138,14 @@ class Strings internal constructor(
         charger = { lost, ms ->
             if (lost) get("desktop_event_ac_lost") else format("desktop_event_ac_back", DurationText.format(ms, durations()))
         },
+        cycle = { name, kind ->
+            format(when (kind) {
+                "STARTED" -> "event_cycle_started"
+                "FINISHED" -> "event_cycle_finished"
+                "OVERRIDDEN" -> "event_cycle_overridden"
+                else -> "event_cycle_stopped"
+            }, name)
+        },
         scene = { name, ok, failed, by ->
             val base = plural("event_scene", ok, name, ok)
             val fail = if (failed > 0) plural("event_scene_failed", failed, failed) else ""

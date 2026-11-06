@@ -28,6 +28,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.TrendingDown
 import androidx.compose.material.icons.automirrored.rounded.TrendingUp
+import androidx.compose.material.icons.rounded.Repeat
+import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.Check
@@ -131,10 +133,16 @@ internal fun AutomationEditor(
     outdoorTemp: Double? = null,
 ) {
     val scenes = store?.scenes.orEmpty()
+    val cycles = remember(store) { store?.cycles.orEmpty() }
     var pickTime by remember { mutableStateOf<Pair<String, Int>?>(null) }
     var locationVersion by remember { mutableStateOf(0) }
     val mode = initial?.let { AutomationMode.of(it) } ?: newMode
-    var form by remember { mutableStateOf(AutomationForm.from(initial, devices, mode)) }
+    var form by remember {
+        val firstCycle = cycles.firstOrNull()?.id.orEmpty()
+        mutableStateOf(AutomationForm.from(initial, devices, mode).let { f0 ->
+            f0.copy(triggerCycle = f0.triggerCycle.ifEmpty { firstCycle }, actionCycle = f0.actionCycle.ifEmpty { firstCycle })
+        })
+    }
     var confirmDelete by remember { mutableStateOf(false) }
     val f = form.normalized(devices).inMode(mode)
     // Kategoriler yalnız tetikleyicide seçilir; koşul ve hedef gerçek cihaz (ya da grup) ister.
@@ -186,6 +194,7 @@ internal fun AutomationEditor(
                             ChannelChooser(src, f.triggerChannel, "trigger-channel") { form = f.copy(triggerChannel = it) }
                         }
                     }
+                    if (f.triggerKind.usesCycle) CyclePick(cycles, f.triggerCycle, strings, "trigger-cycle") { form = f.copy(triggerCycle = it) }
                     if (f.triggerKind.isSun) {
                         // "Gün doğumundan 15 dk önce", "gün batımından 1 sa sonra".
                         Stepper(strings["sun_offset"], f.offset, Steps.OFFSET, strings, "offset", format = { offsetLabel(it, strings) }) {
@@ -294,6 +303,7 @@ internal fun AutomationEditor(
                         mode.actions, f.actionKind, wideColumns = 2,
                         icon = { it.icon() }, label = { strings[it.editorTitleKey()] }, tag = { "action-${it.name}" }, hue = { it.hue() },
                     ) { form = f.copy(actionKind = it) }
+                    if (f.actionKind.usesCycle) CyclePick(cycles, f.actionCycle, strings, "action-cycle") { form = f.copy(actionCycle = it) }
                     if (f.actionKind == ActionKind.RUN_SCENE) {
                         FieldLabel(strings["scenes_title"])
                         if (scenes.isEmpty()) {
@@ -321,7 +331,7 @@ internal fun AutomationEditor(
 
                 // ------------------------------------------------ Özet
                 if (src != null || !f.triggerKind.usesDevice) {
-                    val (whenText, thenText) = describe(f.build(initial?.id.orEmpty(), initial?.enabled ?: true), devices, strings, scenes)
+                    val (whenText, thenText) = describe(f.build(initial?.id.orEmpty(), initial?.enabled ?: true), devices, strings, scenes, cycles)
                     Column(
                         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
                             .clip(RoundedCornerShape(8.dp))
@@ -345,7 +355,7 @@ internal fun AutomationEditor(
 
                 val saveShape = RoundedCornerShape(8.dp)
                 Button(
-                    enabled = f.isValid(devices, scenes),
+                    enabled = f.isValid(devices, scenes, cycles),
                     onClick = { onSave(f.build(initial?.id ?: UUID.randomUUID().toString(), initial?.enabled ?: true)) },
                     shape = saveShape,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp).height(36.dp).testTag("save-automation"),
@@ -385,6 +395,20 @@ internal fun AutomationEditor(
     }
 }
 
+/** Otomasyonda döngü seçimi; hiç döngü yoksa nereden ekleneceği söylenir. */
+@Composable
+private fun CyclePick(cycles: List<com.macerce.switchguard.core.Cycle>, selected: String, strings: Strings, tag: String, onPick: (String) -> Unit) {
+    FieldLabel(strings["cycle_choose"])
+    if (cycles.isEmpty()) {
+        Text(strings["cycle_none_yet"], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    } else {
+        OptionGrid(
+            cycles.map { it.id }, selected, wideColumns = 3,
+            icon = { Icons.Rounded.Repeat }, label = { id -> cycles.first { it.id == id }.name }, tag = { "$tag-$it" },
+        ) { onPick(it) }
+    }
+}
+
 /** Ad alanı: kutucuk renginde, çizgisiz, yuvarlak (telefondaki gibi). */
 @Composable
 private fun NameField(value: String, strings: Strings, onChange: (String) -> Unit) {
@@ -407,7 +431,7 @@ private fun NameField(value: String, strings: Strings, onChange: (String) -> Uni
 
 /** Düzenleyicinin bir adımı: renkli simge, büyük başlık (Eğer / O zaman) ve alt başlık, altında alanlar. */
 @Composable
-private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
+internal fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
             .clip(RoundedCornerShape(10.dp)).background(tileColor()).padding(16.dp),
@@ -425,7 +449,7 @@ private fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: Strin
 }
 
 @Composable
-private fun FieldLabel(text: String) {
+internal fun FieldLabel(text: String) {
     Text(
         text,
         style = MaterialTheme.typography.labelLarge,
@@ -502,7 +526,7 @@ private fun ChannelChooser(device: DeviceSnapshot, selected: Int, tag: String, o
  * [wideColumns] sütun. Bir satırdaki kutucuklar aynı boydadır (ad iki satıra inse de).
  */
 @Composable
-private fun <T> OptionGrid(
+internal fun <T> OptionGrid(
     options: List<T>,
     selected: T,
     wideColumns: Int,
@@ -555,7 +579,7 @@ private fun <T> OptionGrid(
 
 /** Dakika seçici: etiket, ortada değer, iki yanda − / + ([Steps] ile anlamlı adımlar); uçta düğme pasif. */
 @Composable
-private fun Stepper(
+internal fun Stepper(
     label: String, value: Int, steps: List<Int>, strings: Strings, tag: String, zeroLabel: String? = null,
     format: ((Int) -> String)? = null, onChange: (Int) -> Unit,
 ) {
@@ -610,7 +634,7 @@ private fun NumberField(value: String, label: String, suffix: String, tag: Strin
 
 /** Başlık ve anahtar: "Yalnızca şu saatlerde", "Ve şu koşulda". */
 @Composable
-private fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (Boolean) -> Unit) {
+internal fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (Boolean) -> Unit) {
     Row(
         Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(6.dp)).background(raisedOnTile())
             .selectable(selected = checked, onClick = { onChange(!checked) }, role = Role.Switch)
@@ -623,7 +647,7 @@ private fun ToggleLine(text: String, checked: Boolean, tag: String, onChange: (B
 }
 
 @Composable
-private fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
+internal fun TimeChip(label: String, value: String, modifier: Modifier, onClick: () -> Unit) {
     val shape = RoundedCornerShape(6.dp)
     Column(
         modifier.clip(shape).background(raisedOnTile())
@@ -681,6 +705,8 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.TEMP_ABOVE -> Icons.Rounded.LocalFireDepartment
     TriggerKind.TEMP_BELOW -> Icons.Rounded.AcUnit
     TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> Icons.Rounded.Place
+    TriggerKind.CYCLE_STARTED -> Icons.Rounded.Repeat
+    TriggerKind.CYCLE_FINISHED -> Icons.Rounded.Stop
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -701,6 +727,8 @@ internal fun TriggerKind.shortTitleKey(): String = when (this) {
     // Bölgeler yalnız telefonda (konum); masaüstü düzenleyicisinde seçilmez, telefondan gelen kayıt adıyla görünür.
     TriggerKind.ZONE_ENTER -> "evt_zone_enter"
     TriggerKind.ZONE_EXIT -> "evt_zone_exit"
+    TriggerKind.CYCLE_STARTED -> "evt_cycle_started"
+    TriggerKind.CYCLE_FINISHED -> "evt_cycle_finished"
 }
 
 /** İşlem kutucuklarındaki adlar: cihaz işlemleri "Cihazı aç / kapat" (kartta kısa "Aç / Kapat"). */
@@ -710,4 +738,6 @@ private fun ActionKind.editorTitleKey(): String = when (this) {
     ActionKind.TURN_ON -> "act_turn_on"
     ActionKind.TURN_OFF -> "act_turn_off"
     ActionKind.RUN_SCENE -> "act_run_scene"
+    ActionKind.START_CYCLE -> "act_start_cycle"
+    ActionKind.STOP_CYCLE -> "act_stop_cycle"
 }

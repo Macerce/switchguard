@@ -24,6 +24,7 @@ import com.macerce.switchguard.desktop.platform.NotificationQueue
 import com.macerce.switchguard.desktop.platform.SingleInstance
 import com.macerce.switchguard.desktop.platform.TrayIcons
 import com.macerce.switchguard.desktop.ui.AlarmWindow
+import com.macerce.switchguard.desktop.ui.StandbyWindow
 import com.macerce.switchguard.desktop.ui.ExitConfirmDialog
 import com.macerce.switchguard.desktop.ui.MainWindow
 import com.macerce.switchguard.desktop.ui.windowErrorFactory
@@ -179,6 +180,7 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
                 for (action in trayActions(alarmPending = alarmLines.isNotEmpty())) when (action) {
                     TrayAction.DISMISS_ALARM -> Item(strings["tray_dismiss_alarm"], onClick = graph::dismissAlarm)
                     TrayAction.OPEN -> Item(strings["tray_open"], onClick = appState::showMainWindow)
+                    TrayAction.STANDBY -> Item(strings["board_menu"], onClick = { appState.standbyOpen.value = true })
                     TrayAction.MONITORING -> Item(
                         strings[if (monitoring) "tray_stop" else "tray_start"],
                         enabled = monitoring || canMonitor,
@@ -229,6 +231,7 @@ private fun ApplicationScope.SwitchGuardApp(graph: AppGraph, instance: SingleIns
     CompositionLocalProvider(LocalWindowExceptionHandlerFactory provides windowErrors) {
         // Tepsi yoksa pencereyi gizlemenin geri dönüşü olmaz: kapatma çıkış sayılır.
         MainWindow(graph, onCloseRequest = { if (isTraySupported) graph.hideMainWindow() else requestExit() })
+        StandbyWindow(graph)
         AlarmWindow(graph)
         if (confirmExit) {
             CompositionLocalProvider(LocalWindowExceptionHandlerFactory provides dialogErrors) {

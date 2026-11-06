@@ -9,6 +9,16 @@ import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material.icons.rounded.SystemUpdateAlt
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.testTag
+import com.macerce.switchguard.desktop.platform.Updater
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -92,6 +102,40 @@ fun AboutPage(graph: AppGraph, strings: Strings) {
     SectionTitle(str("section_about"))
     SectionCard {
         InfoRow(Icons.Rounded.Info, str("version_x", appVersion()), str("disclaimer"))
+        RowDivider()
+        UpdateCheckRow(graph, strings)
+    }
+}
+
+/**
+ * Elle güncelleme denetimi (otomatik denetim açılıştan 30 sn sonra ve 12 saatte bir zaten yapılır). Yeni sürüm varsa
+ * pencerenin üstündeki güncelleme şeridi görünür; "Güncelle" oradan.
+ */
+@Composable
+private fun UpdateCheckRow(graph: AppGraph, strings: Strings) {
+    val scope = rememberCoroutineScope()
+    var checking by remember { mutableStateOf(false) }
+    var result by remember { mutableStateOf<Updater.Result?>(null) }
+    val available by graph.updater.available.collectAsState()
+    val subtitle = when {
+        checking -> strings["desktop_update_checking"]
+        available != null -> strings.format("desktop_update_found", available!!.version)
+        result == Updater.Result.UP_TO_DATE -> strings["desktop_update_latest"]
+        result == Updater.Result.FAILED -> strings["desktop_update_check_failed"]
+        result == Updater.Result.DEV -> strings["desktop_update_dev"]
+        else -> strings["desktop_update_auto"]
+    }
+    InfoRow(
+        Icons.Rounded.SystemUpdateAlt, str("desktop_update_check"), subtitle,
+        Modifier.clickable(enabled = !checking) {
+            checking = true
+            scope.launch {
+                result = withContext(Dispatchers.IO) { graph.updater.check() }
+                checking = false
+            }
+        }.testTag("check-update"),
+    ) {
+        if (checking) CircularProgressIndicator(Modifier.size(20.dp), strokeWidth = 2.dp)
     }
 }
 

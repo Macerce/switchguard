@@ -25,7 +25,9 @@ enum class TriggerKind {
     /** Dış sıcaklık [Trigger.watts] °C'nin üstüne çıktı / altına indi (internetten, yarım saatte bir). Konum gerekir. */
     TEMP_ABOVE, TEMP_BELOW,
     /** Telefon haritada seçilen bölgeye girdi / bölgeden çıktı; [Trigger.deviceId] = bölge kimliği ([Zone]). */
-    ZONE_ENTER, ZONE_EXIT;
+    ZONE_ENTER, ZONE_EXIT,
+    /** Döngü başladı / bitti ya da durduruldu; [Trigger.deviceId] = döngü kimliği ([Cycle]). */
+    CYCLE_STARTED, CYCLE_FINISHED;
 
     val usesChannel get() = this in setOf(TURNED_ON, TURNED_OFF, STAYED_ON, STAYED_OFF, CHANNEL_POWER_LOW)
     /** Açık/kapalı kalma süresi tetikleyicileri. */
@@ -38,8 +40,9 @@ enum class TriggerKind {
     val isSun get() = this == SUNRISE || this == SUNSET
     val usesTemp get() = this == TEMP_ABOVE || this == TEMP_BELOW
     val usesZone get() = this == ZONE_ENTER || this == ZONE_EXIT
+    val usesCycle get() = this == CYCLE_STARTED || this == CYCLE_FINISHED
     /** Bir cihaza bağlı tetikleyici (gün doğumu, sıcaklık ve bölge değil). */
-    val usesDevice get() = !isSun && !usesTemp && !usesZone
+    val usesDevice get() = !isSun && !usesTemp && !usesZone && !usesCycle
 }
 
 data class Trigger(
@@ -55,9 +58,12 @@ data class Trigger(
 enum class ActionKind {
     TURN_ON, TURN_OFF, ALARM, NOTIFY,
     /** Sahneyi çalıştır: [AutoAction.deviceId] = sahne kimliği. */
-    RUN_SCENE;
+    RUN_SCENE,
+    /** Döngüyü başlat / durdur: [AutoAction.deviceId] = döngü kimliği. */
+    START_CYCLE, STOP_CYCLE;
 
     val usesDevice get() = this == TURN_ON || this == TURN_OFF
+    val usesCycle get() = this == START_CYCLE || this == STOP_CYCLE
 }
 
 /** Kural yalnızca evdeyken ya da dışarıdayken geçerli. */
@@ -213,6 +219,7 @@ class AutomationEngine {
                 TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF, TriggerKind.CHANNEL_POWER_LOW,
                 TriggerKind.SUNRISE, TriggerKind.SUNSET, TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> false // tick'te bakılır
                 TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> false // [onZone]
+                TriggerKind.CYCLE_STARTED, TriggerKind.CYCLE_FINISHED -> false // [onCycle]
             }
             if (hit) fire(a, now, fired, current)
         }
@@ -404,6 +411,23 @@ class AutomationEngine {
         val kind = if (entered) TriggerKind.ZONE_ENTER else TriggerKind.ZONE_EXIT
         val fired = mutableListOf<Automation>()
         automations.filter { it.enabled && it.trigger.kind == kind && it.trigger.deviceId == zoneId }
+            .forEach { fire(it, now, fired, current) }
+        return fired
+    }
+
+    /** Döngü başladı ([started]) ya da bitti/durdu: o döngünün kuralları. */
+    fun onCycle(
+        cycleId: String,
+        started: Boolean,
+        current: Map<String, DeviceSnapshot>,
+        automations: List<Automation>,
+        now: Long,
+        env: Environment = Environment(),
+    ): List<Automation> {
+        this.env = env
+        val kind = if (started) TriggerKind.CYCLE_STARTED else TriggerKind.CYCLE_FINISHED
+        val fired = mutableListOf<Automation>()
+        automations.filter { it.enabled && it.trigger.kind == kind && it.trigger.deviceId == cycleId }
             .forEach { fire(it, now, fired, current) }
         return fired
     }

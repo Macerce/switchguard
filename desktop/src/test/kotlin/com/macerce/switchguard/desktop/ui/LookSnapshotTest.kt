@@ -44,7 +44,35 @@ class LookSnapshotTest {
                 trigger = Trigger(TriggerKind.SUNSET, "", minutes = -15),
                 action = AutoAction(ActionKind.TURN_ON, Demo.LIGHT),
             )
+            val (steps, repeat, end) = com.macerce.switchguard.core.CycleEngine.Presets.blink(
+                listOf(com.macerce.switchguard.core.CycleTarget(Demo.LIGHT, 0)), 600, 300, 3,
+            )
+            cycles = listOf(
+                com.macerce.switchguard.core.Cycle(
+                    "c1", "Bahçe ışıkları", true, listOf(com.macerce.switchguard.core.CycleTarget(Demo.LIGHT, 0)), steps, repeat,
+                    start = com.macerce.switchguard.core.CycleStart.AT_TIME, startMinute = 19 * 60, end = end,
+                    preset = com.macerce.switchguard.core.CyclePreset.BLINK,
+                ),
+            )
         }
+    }
+
+    /** Bekleme ekranı (koyu, tam ekran) ve döngü düzenleyicisi. */
+    @Test
+    fun standbyAndCycles() {
+        val board = Snapshots.render("look-standby", 1280, 800, dark = true) {
+            StandbyBoardScreen(graph, tr, onOpenApp = {}, onClose = {})
+        }
+        assertTrue(Files.size(board) > 1000)
+        graph.appState.select(AppState.Tab.AUTOMATIONS)
+        val strip = Snapshots.render("look-cycles-strip", 1280, 800, dark = false) { AppNav(graph, tr) }
+        assertTrue(Files.size(strip) > 1000)
+        val editor = Snapshots.render("look-cycle-editor", 1280, 1400, dark = false) {
+            com.macerce.switchguard.desktop.ui.automations.CycleEditor(
+                graph.store.cycles.first(), graph.store.snapshots, tr, androidx.compose.ui.Modifier, {}, {}, {},
+            )
+        }
+        assertTrue(Files.size(editor) > 1000)
     }
 
     @After

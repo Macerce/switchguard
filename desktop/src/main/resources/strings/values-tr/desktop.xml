@@ -173,4 +173,15 @@
     <string name="update_progress">%1$s / %2$s MB · %3$s MB/sn · %%%4$d</string>
     <string name="update_progress_unknown">%1$s MB · %2$s MB/sn</string>
     <string name="energy_last_7_days">Son 7 gün</string>
+    <!-- Bekleme ekranı (telefon 2.25) -->
+    <string name="desktop_board_no_location">Hava durumu için Uyarılar → Akıllı uyarılar → Konum’dan yer seçin</string>
+    <string name="desktop_board_start_desc">Tam ekran açılır; Esc kapatır, tıklayınca “Uygulamayı aç” çıkar. Açıkken ekran kapanmaz.</string>
+    <string name="desktop_cycle_at_note">Seçili günlerde bu saatte kendiliğinden başlar. Bilgisayar o an uykudaysa ya da kapalıysa 15 dakikaya kadar gecikmeyle başlar, daha geçse o gün atlanır. Düğmeyle de başlatabilirsiniz.</string>
+    <string name="desktop_update_check">Güncellemeleri denetle</string>
+    <string name="desktop_update_auto">Uygulama açılınca ve 12 saatte bir kendiliğinden de denetlenir</string>
+    <string name="desktop_update_checking">Denetleniyor…</string>
+    <string name="desktop_update_latest">En son sürümü kullanıyorsunuz</string>
+    <string name="desktop_update_found">SwitchGuard %1$s çıktı: pencerenin üstündeki şeritten “Güncelle”ye basın</string>
+    <string name="desktop_update_check_failed">Denetlenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.</string>
+    <string name="desktop_update_dev">Geliştirme sürümü: güncelleme denetlenmez</string>
 </resources>

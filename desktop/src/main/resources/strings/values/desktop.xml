@@ -173,4 +173,15 @@
     <string name="update_progress">%1$s / %2$s MB · %3$s MB/s · %4$d%%</string>
     <string name="update_progress_unknown">%1$s MB · %2$s MB/s</string>
     <string name="energy_last_7_days">Last 7 days</string>
+    <!-- Bekleme ekranı (telefon 2.25) -->
+    <string name="desktop_board_no_location">Pick a place under Alerts → Smart alerts → Location to see the weather</string>
+    <string name="desktop_board_start_desc">Full screen; Esc closes, click for “Open app”. The screen stays on while it is open.</string>
+    <string name="desktop_cycle_at_note">Starts by itself at this time on the selected days. If the computer is asleep or off then it starts up to 15 minutes late; later than that the day is skipped. You can also start it with the button.</string>
+    <string name="desktop_update_check">Check for updates</string>
+    <string name="desktop_update_auto">Also checked automatically when the app opens and every 12 hours</string>
+    <string name="desktop_update_checking">Checking…</string>
+    <string name="desktop_update_latest">You have the latest version</string>
+    <string name="desktop_update_found">SwitchGuard %1$s is out: press “Update” in the bar at the top of the window</string>
+    <string name="desktop_update_check_failed">Could not check. Check your internet connection and try again.</string>
+    <string name="desktop_update_dev">Development build: no update check</string>
 </resources>
