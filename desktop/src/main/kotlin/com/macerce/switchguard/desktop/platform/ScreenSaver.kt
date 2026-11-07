@@ -129,9 +129,6 @@ class ScreenSaver(private val dataDir: Path) {
         /** `.scr`'nin uygulamayı bulduğu dosya (veri klasöründe). */
         const val APP_FILE = "saver-app.txt"
 
-        /** Ekran koruyucu modundaki bekleme ekranı açıkken var olan işaret dosyası (`.scr` kapanmasını bununla bekler). */
-        const val MARKER = "saver.open"
-
         /** Uygulamanın `.scr` tarafından çağrıldığı bayrak. */
         const val FLAG = "--saver"
 

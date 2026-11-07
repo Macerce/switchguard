@@ -132,17 +132,17 @@ fun StandbyWindow(graph: AppGraph) {
                 delay(50_000)
             }
         }
-        // Ekran koruyucu: .scr bu dosya durdukça bekler (30 sn'de bir tazelenir; uygulama çökerse eskir ve .scr biter).
+        // Ekran koruyucu: pencere odak alamasa da (Windows odak çalmayı engeller) herhangi bir tuş ya da fare hareketi
+        // kapatsın — Windows'un son girdi zamanı izlenir. Açılıştaki ilk 1,5 sn (masaüstü dönüşü) sayılmaz.
         if (saver) {
-            val marker = remember { graph.dataDir.resolve(com.macerce.switchguard.desktop.platform.ScreenSaver.MARKER) }
             LaunchedEffect(Unit) {
+                delay(1_500)
+                val start = lastInputTick() ?: return@LaunchedEffect
                 while (true) {
-                    runCatching { java.nio.file.Files.writeString(marker, System.currentTimeMillis().toString()) }
-                    delay(30_000)
+                    delay(200)
+                    val now = lastInputTick() ?: return@LaunchedEffect
+                    if (now != start) { close(); return@LaunchedEffect }
                 }
-            }
-            androidx.compose.runtime.DisposableEffect(Unit) {
-                onDispose { runCatching { java.nio.file.Files.deleteIfExists(marker) } }
             }
         }
         val focus = remember { FocusRequester() }
@@ -173,6 +173,13 @@ private val Faint = Color(0xFF26302E)
 private val Teal = Color(0xFF26A69A)
 private val Amber = Color(0xFFFFB300)
 private val Red = Color(0xFFEF5350)
+
+/** Windows'ta son klavye/fare girdisinin zamanı (GetLastInputInfo); başka sistemde ya da hata olursa null. */
+private fun lastInputTick(): Int? = runCatching {
+    if (!System.getProperty("os.name").startsWith("Windows")) return null
+    val info = com.sun.jna.platform.win32.WinUser.LASTINPUTINFO()
+    if (com.sun.jna.platform.win32.User32.INSTANCE.GetLastInputInfo(info)) info.dwTime else null
+}.getOrNull()
 
 /** Ekran koruyucu: fare biraz oynayınca ya da tıklanınca kapanır (pencere açılırkenki tek olay sayılmaz). */
 private fun Modifier.closeOnMouse(close: () -> Unit): Modifier = pointerInput(Unit) {
