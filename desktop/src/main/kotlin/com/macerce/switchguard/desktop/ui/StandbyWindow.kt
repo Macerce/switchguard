@@ -143,14 +143,14 @@ fun StandbyWindow(graph: AppGraph) {
                 if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) { close(); true } else false
             },
         ) {
-            StandbyBoardScreen(
+            ProvideStrings(strings) { StandbyBoardScreen(
                 graph, strings,
                 onOpenApp = {
                     close()
                     graph.appState.showMainWindow()
                 },
                 onClose = close,
-            )
+            ) }
         }
     }
 }
