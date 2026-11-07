@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Start met Windows · houdt de computer wakker</string>
+    <string name="desktop_settings_windows_no_autostart">Start niet met Windows</string>
+    <string name="desktop_settings_windows_may_sleep">De computer kan in slaapstand gaan</string>
+    <string name="desktop_settings_windows_intro">Zodat SwitchGuard op deze computer zonder onderbreking blijft waken. Staat een van beide uit, dan kunnen alarmen na een herstart of tijdens slaapstand worden gemist.</string>
+    <string name="desktop_settings_appearance">Taal &amp; weergave</string>
+    <string name="desktop_settings_backup_desc">Back-up naar een versleuteld bestand of herstellen uit een bestand</string>
+    <string name="desktop_settings_secrets_warn">Opgeslagen sleutels zijn op deze computer niet leesbaar</string>
+    <string name="desktop_settings_setup">Instelhandleidingen</string>
+    <string name="desktop_theme_desc">Licht, donker of hetzelfde als Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">Gaat af als een echt alarm</string>
+    <string name="desktop_test_alarm_silent_desc">Zonder geluid: controleer \'s nachts het alarmvenster en de melding zonder iemand wakker te maken</string>
+    <string name="desktop_test_alarm_delay_desc">Ga intussen naar een ander venster of vergrendel het scherm om het alarm boven alles te zien verschijnen</string>
+    <string name="desktop_tg_desc">Als een alarm niet op tijd wordt gestopt, krijgen de gekozen mensen een Telegram-bericht, en nog een zodra het gestopt is. Ook als er \'s nachts niemand bij de computer is, hoort iemand thuis of een buur het. De berichten worden verstuurd door een Telegram-bot die je zelf maakt; er komt geen andere server aan te pas.</string>
+    <string name="desktop_tg_step_people_desc">Vraag iedereen om %s in Telegram te openen en op Start te tikken (je kunt de bot ook aan een gezinsgroep toevoegen). Klik daarna op Personen zoeken.</string>
+    <string name="desktop_tg_open_link">De bot openen</string>
+    <string name="desktop_tg_copy_link">Uitnodiging kopiëren</string>
+    <string name="desktop_tg_link_copied">Uitnodiging gekopieerd: plak die in een bericht aan de persoon.</string>
+    <string name="desktop_tg_checking">Controleren…</string>
+    <string name="desktop_time_hint">Gebruik de pijlen, het muiswiel of het toetsenbord: ↑ ↓ wijzigen de waarde, je kunt cijfers typen, Enter slaat op.</string>
+    <string name="desktop_time_hour">Uur</string>
+    <string name="desktop_time_minute">Minuut</string>
+    <string name="desktop_summary_note">De samenvatting komt op het gekozen tijdstip als Windows-melding zolang SwitchGuard draait.</string>
+    <string name="desktop_backup_move_note">Naar een andere computer: maak op de oude een back-up naar bestand, installeer SwitchGuard op de nieuwe en herstel uit het bestand; log daarna opnieuw in bij eWeLink.</string>
+    <string name="desktop_open_logs_desc">Voeg de logbestanden toe als je een probleem meldt</string>
+    <string name="desktop_contact_copied">Er kon geen e-mailapp worden geopend; het adres is naar het klembord gekopieerd.</string>
+    <string name="desktop_secret_show">App Secret tonen</string>
+    <string name="desktop_secret_hide">App Secret verbergen</string>
+</resources>

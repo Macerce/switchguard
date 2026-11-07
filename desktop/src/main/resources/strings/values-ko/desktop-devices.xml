@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">방금</string>
+    <string name="desktop_ago">%1$s 전</string>
+    <string name="desktop_no_account_title">연결된 계정 없음</string>
+    <string name="desktop_no_account_body">기기를 모니터링하려면 설정 › 계정에서 eWeLink 또는 Tuya 계정을 연결하세요. 설정 없이 SwitchGuard를 사용해 보려면 데모 기기를 켜세요.</string>
+    <string name="desktop_add_account">계정 추가</string>
+    <string name="desktop_layout_hint">별 = 위에 고정 · 화살표 또는 핸들 끌기 = 이동(카드를 길게 눌러 끌 수도 있습니다) · 카드 크기 = 작게 또는 크게 · 라벨 = 카테고리.</string>
+    <string name="desktop_drag_handle">끌어서 이동</string>
+    <string name="desktop_click_to_toggle">클릭하여 켜기 또는 끄기</string>
+    <string name="desktop_hour">시간</string>
+    <string name="desktop_minute">분</string>
+</resources>

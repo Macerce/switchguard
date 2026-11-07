@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Gli allarmi possono sfuggire dopo un riavvio o mentre il computer è in sospensione. Fai clic per correggere in Impostazioni › Windows.</string>
+    <string name="desktop_alert_hint">Gli avvisi girano su questo computer finché il monitoraggio è attivo. Non girano se il computer è spento o in sospensione.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">रीस्टार्ट के बाद या कंप्यूटर के स्लीप में रहते अलार्म छूट सकते हैं। सेटिंग › Windows में ठीक करने के लिए क्लिक करें।</string>
+    <string name="desktop_alert_hint">अलर्ट इस कंप्यूटर पर तब तक चलते हैं जब तक निगरानी चालू है। कंप्यूटर बंद या स्लीप में होने पर ये नहीं चलते।</string>
+</resources>

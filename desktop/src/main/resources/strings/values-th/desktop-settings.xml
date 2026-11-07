@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">เริ่มพร้อม Windows · ไม่ให้คอมพิวเตอร์สลีป</string>
+    <string name="desktop_settings_windows_no_autostart">ไม่เริ่มพร้อม Windows</string>
+    <string name="desktop_settings_windows_may_sleep">คอมพิวเตอร์อาจเข้าโหมดสลีป</string>
+    <string name="desktop_settings_windows_intro">เพื่อให้ SwitchGuard เฝ้าดูบนคอมพิวเตอร์เครื่องนี้ได้ต่อเนื่อง หากปิดอย่างใดอย่างหนึ่ง อาจพลาดสัญญาณเตือนหลังรีสตาร์ทหรือขณะคอมพิวเตอร์สลีป</string>
+    <string name="desktop_settings_appearance">ภาษาและรูปลักษณ์</string>
+    <string name="desktop_settings_backup_desc">สำรองเป็นไฟล์ที่เข้ารหัส หรือกู้คืนจากไฟล์</string>
+    <string name="desktop_settings_secrets_warn">อ่านคีย์ที่บันทึกไว้บนคอมพิวเตอร์เครื่องนี้ไม่ได้</string>
+    <string name="desktop_settings_setup">คู่มือการตั้งค่า</string>
+    <string name="desktop_theme_desc">สว่าง มืด หรือเหมือน Windows</string>
+    <string name="desktop_test_alarm_sound_desc">ดังเหมือนสัญญาณเตือนจริง</string>
+    <string name="desktop_test_alarm_silent_desc">ไม่มีเสียง: ตรวจหน้าต่างสัญญาณเตือนและการแจ้งเตือนตอนกลางคืนโดยไม่ปลุกใคร</string>
+    <string name="desktop_test_alarm_delay_desc">ระหว่างนั้นสลับไปหน้าต่างอื่นหรือล็อกหน้าจอ เพื่อดูสัญญาณเตือนขึ้นมาอยู่เหนือทุกอย่าง</string>
+    <string name="desktop_tg_desc">หากสัญญาณเตือนไม่ถูกปิดทันเวลา คนที่คุณเลือกจะได้รับข้อความ Telegram และอีกข้อความเมื่อปิดแล้ว แม้กลางคืนจะไม่มีใครอยู่หน้าคอมพิวเตอร์ คนในบ้านหรือเพื่อนบ้านก็จะรู้ ข้อความส่งโดยบอท Telegram ที่คุณสร้างเอง ไม่มีเซิร์ฟเวอร์อื่นเกี่ยวข้อง</string>
+    <string name="desktop_tg_step_people_desc">ขอให้แต่ละคนเปิด %s ใน Telegram แล้วแตะเริ่ม (จะเพิ่มบอทในกลุ่มครอบครัวก็ได้) จากนั้นคลิกค้นหาคน</string>
+    <string name="desktop_tg_open_link">เปิดบอท</string>
+    <string name="desktop_tg_copy_link">คัดลอกคำเชิญ</string>
+    <string name="desktop_tg_link_copied">คัดลอกคำเชิญแล้ว: วางในข้อความถึงคนนั้น</string>
+    <string name="desktop_tg_checking">กำลังตรวจสอบ…</string>
+    <string name="desktop_time_hint">ใช้ลูกศร ล้อเมาส์ หรือแป้นพิมพ์: ↑ ↓ เปลี่ยนค่า พิมพ์ตัวเลขได้ Enter เพื่อบันทึก</string>
+    <string name="desktop_time_hour">ชั่วโมง</string>
+    <string name="desktop_time_minute">นาที</string>
+    <string name="desktop_summary_note">สรุปจะมาเป็นการแจ้งเตือนของ Windows ตามเวลาที่เลือกขณะที่ SwitchGuard ทำงานอยู่</string>
+    <string name="desktop_backup_move_note">ย้ายไปคอมพิวเตอร์เครื่องอื่น: สำรองเป็นไฟล์บนเครื่องเก่า ติดตั้ง SwitchGuard บนเครื่องใหม่แล้วกู้คืนจากไฟล์ จากนั้นลงชื่อเข้าใช้ eWeLink อีกครั้ง</string>
+    <string name="desktop_open_logs_desc">แนบไฟล์บันทึกเมื่อรายงานปัญหา</string>
+    <string name="desktop_contact_copied">เปิดแอปอีเมลไม่ได้ คัดลอกที่อยู่ไปยังคลิปบอร์ดแล้ว</string>
+    <string name="desktop_secret_show">แสดง App Secret</string>
+    <string name="desktop_secret_hide">ซ่อน App Secret</string>
+</resources>

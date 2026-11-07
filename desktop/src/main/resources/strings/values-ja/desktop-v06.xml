@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">このパソコンはバッテリーで動作中: 停電の可能性があります</string>
+    <string name="desktop_event_ac_back">このパソコンが再び電源に接続されました: %s 停電していました</string>
+    <string name="desktop_location_search">都市を検索</string>
+    <string name="desktop_location_search_desc">市区町村名を入力して一覧から選びます。保存されるのは座標のみで、このパソコン上だけです。</string>
+    <string name="desktop_location_city">都市</string>
+    <string name="desktop_location_find">検索</string>
+    <string name="desktop_location_none">見つかりませんでした。別の表記を試すか、座標を入力してください。</string>
+    <string name="desktop_smart_ac">このパソコンがバッテリーに切り替わったら停電とみなす</string>
+    <string name="desktop_smart_ac_desc">自宅で電源につないだままのノートパソコン向け: 1 分間バッテリーで動作すると、インターネットがなくても停電とみなします (Telegram メッセージは接続が戻ると送信されます)。</string>
+    <string name="desktop_location_desc">日の出/日の入りと外気温のルールに必要です。このパソコンにのみ保存され、気温の取得時は約 100 m 単位に丸めて Open-Meteo に送信されます。</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">%d 台のデバイス</item>
+    </plurals>
+    <string name="desktop_status_synced">最終確認 %s</string>
+    <string name="desktop_smart_same_power">このパソコンはデバイスと同じ電源につながっている</string>
+    <string name="desktop_smart_same_power_desc">商用電源で動作している間は停電がないため、切断したデバイスは最大 90 秒待たずにすぐ通知されます。</string>
+</resources>

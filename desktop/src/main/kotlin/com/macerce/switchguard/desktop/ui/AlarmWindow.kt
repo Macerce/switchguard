@@ -119,7 +119,7 @@ private fun AlarmWindowContent(
             if (windowState.isMinimized) windowState.isMinimized = false
             window.toFront()
         }
-        AlarmScreen(lines, strings, onDismiss = graph::dismissAlarm)
+        ProvideStrings(strings) { AlarmScreen(lines, strings, onDismiss = graph::dismissAlarm) }
     }
 }
 

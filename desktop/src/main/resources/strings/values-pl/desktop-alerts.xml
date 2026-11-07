@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Alarmy mogą zostać pominięte po ponownym uruchomieniu lub podczas uśpienia. Kliknij, aby naprawić to w Ustawienia › Windows.</string>
+    <string name="desktop_alert_hint">Alerty działają na tym komputerze, gdy monitorowanie jest włączone. Nie działają, gdy komputer jest wyłączony lub uśpiony.</string>
+</resources>

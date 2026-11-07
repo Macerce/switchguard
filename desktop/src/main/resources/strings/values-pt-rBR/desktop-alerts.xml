@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Alarmes podem ser perdidos após uma reinicialização ou com o computador em suspensão. Clique para corrigir em Ajustes › Windows.</string>
+    <string name="desktop_alert_hint">Os alertas rodam neste computador enquanto o monitoramento está ativo. Não rodam com o computador desligado ou em suspensão.</string>
+</resources>

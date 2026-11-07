@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">重启后或电脑睡眠期间可能漏掉警报。点击前往设置 › Windows 修复。</string>
+    <string name="desktop_alert_hint">监控开启时，提醒在这台电脑上运行。电脑关机或睡眠时它们不会运行。</string>
+</resources>

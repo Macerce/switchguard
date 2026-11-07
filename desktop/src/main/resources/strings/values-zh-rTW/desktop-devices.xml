@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">剛剛</string>
+    <string name="desktop_ago">%1$s前</string>
+    <string name="desktop_no_account_title">尚未連線任何帳號</string>
+    <string name="desktop_no_account_body">在設定 › 帳號中連結你的 eWeLink 或 Tuya 帳號，即可監控裝置。想不做任何設定就試用 SwitchGuard，請開啟示範裝置。</string>
+    <string name="desktop_add_account">新增帳號</string>
+    <string name="desktop_layout_hint">星號 = 置頂 · 箭頭或拖曳把手 = 移動（也可以長按卡片拖曳）· 卡片大小 = 小或大 · 標籤 = 類別。</string>
+    <string name="desktop_drag_handle">拖曳以移動</string>
+    <string name="desktop_click_to_toggle">按一下以開啟或關閉</string>
+    <string name="desktop_hour">小時</string>
+    <string name="desktop_minute">分鐘</string>
+</resources>

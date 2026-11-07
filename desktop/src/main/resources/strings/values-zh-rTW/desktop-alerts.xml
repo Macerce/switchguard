@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">重新開機後或電腦睡眠期間可能漏掉警報。按一下前往設定 › Windows 修正。</string>
+    <string name="desktop_alert_hint">監控開啟時，警報會在這台電腦上執行。電腦關機或睡眠時不會執行。</string>
+</resources>

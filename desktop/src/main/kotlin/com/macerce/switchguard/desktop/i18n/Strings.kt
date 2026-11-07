@@ -24,11 +24,11 @@ import org.w3c.dom.Element
  * orada da yoksa anahtarın kendisi döner. Çoğul metinler (`<plurals>`) [plural] ile okunur.
  */
 class Strings internal constructor(
-    /** "tr" ya da "en". */
+    /** Dil etiketi: [LANGUAGES]'dan biri ("en", "tr", "de", "pt-BR", "id", "zh-CN" …). */
     val language: String,
     private val table: Map<String, String>,
     private val english: Map<String, String>,
-    /** Anahtar → (miktar → şablon); miktarlar Android'deki gibi "one" / "other". */
+    /** Anahtar → (miktar → şablon); miktarlar Android'deki gibi "zero" / "one" / "two" / "few" / "many" / "other". */
     private val plurals: Map<String, Map<String, String>> = emptyMap(),
     private val englishPlurals: Map<String, Map<String, String>> = emptyMap(),
 ) {
@@ -36,6 +36,9 @@ class Strings internal constructor(
 
     /** Seçili dilin yerel ayarı (saat, tarih ve sayı biçimleri için). */
     val locale: Locale get() = Locale.forLanguageTag(language)
+
+    /** Sağdan sola yazılan dil (Arapça): pencereler `LocalLayoutDirection`'ı buna göre çevirir. */
+    val isRtl: Boolean get() = language == "ar"
 
     operator fun get(key: String): String =
         table[key] ?: english[key] ?: key.also { if (warned.add(key)) Log.w(TAG, "missing string '$key' ($language)") }
@@ -58,11 +61,11 @@ class Strings internal constructor(
     fun str(key: String, vararg args: Any): String = if (args.isEmpty()) get(key) else format(key, *args)
 
     /**
-     * Çoğul metin (telefondaki `getQuantityString`): [count] 1 ise "one", değilse "other" şablonu [args] ile biçimlenir.
-     * İngilizce ve Türkçe yalnızca bu iki biçimi kullanır. [format] gibi asla fırlatmaz.
+     * Çoğul metin (telefondaki `getQuantityString`): dilin CLDR kuralına göre ([quantityOf]) seçilen şablon [args] ile
+     * biçimlenir; o biçim yoksa "other". [format] gibi asla fırlatmaz.
      */
     fun plural(key: String, count: Int, vararg args: Any): String {
-        val quantity = if (count == 1) "one" else "other"
+        val quantity = quantityOf(language, count)
         fun pick(from: Map<String, Map<String, String>>) = from[key]?.let { it[quantity] ?: it["other"] }
         val template = pick(plurals) ?: pick(englishPlurals)
             ?: return key.also { if (warned.add(key)) Log.w(TAG, "missing plural '$key' ($language)") }
@@ -184,21 +187,75 @@ class Strings internal constructor(
          */
         internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml", "desktop-v06.xml")
 
-        /** [language] "tr" ya da "en"; boşsa sistem dili Türkçeyse "tr", değilse "en"; bilinmeyen dil "en" olur. */
-        fun load(language: String): Strings {
-            val lang = when (language.ifEmpty { Locale.getDefault().language }) {
-                "tr" -> "tr"
-                else -> "en"
+        /** Seçilebilen diller (telefondaki `AppLanguage.options`; "" = sistem dili ayrıca). */
+        val LANGUAGES = listOf(
+            "en", "tr", "de", "es", "pt-BR", "fr", "it", "nl", "pl", "ru", "uk",
+            "ar", "hi", "id", "vi", "th", "zh-CN", "zh-TW", "ja", "ko",
+        )
+
+        /**
+         * Dil etiketinin kaynak klasörü. Kaynaklar Compose Resources ile değil bu sınıfla okunur; klasör adları telefondaki
+         * gibidir (Android kalıbı): Endonezce "values-in" (etiket "id"; Java 17+ `Locale` "id", eski JDK "in" verir),
+         * bölgeli diller "values-pt-rBR" / "values-zh-rCN".
+         */
+        internal fun dirOf(tag: String): String = when (tag) {
+            "en" -> "values"
+            "id" -> "values-in"
+            else -> "values-" + tag.replace("-", "-r")
+        }
+
+        /** Yerel ayarın desteklenen dil etiketi (telefondaki `AppLanguage.tagOf`); desteklenmiyorsa "en". */
+        fun tagOf(locale: Locale): String {
+            val tag = when (locale.language) {
+                "pt" -> "pt-BR"
+                "zh" -> if (locale.country in setOf("TW", "HK", "MO") || locale.script == "Hant") "zh-TW" else "zh-CN"
+                "in" -> "id"
+                else -> locale.language
             }
+            return if (tag in LANGUAGES) tag else "en"
+        }
+
+        /** [language] [LANGUAGES]'dan biri; boşsa sistem dili ([tagOf]); bilinmeyen dil "en" olur. */
+        fun load(language: String): Strings {
+            val lang = tagOf(if (language.isEmpty()) Locale.getDefault() else Locale.forLanguageTag(language))
             val english = readTable("values")
-            val turkish = if (lang == "en") null else readTable("values-tr")
+            val own = if (lang == "en") null else readTable(dirOf(lang))
             return Strings(
                 lang,
-                if (turkish == null) english.strings else english.strings + turkish.strings,
+                if (own == null) english.strings else english.strings + own.strings,
                 english.strings,
-                if (turkish == null) english.plurals else english.plurals + turkish.plurals,
+                if (own == null) english.plurals else english.plurals + own.plurals,
                 english.plurals,
             )
+        }
+
+        /** CLDR tam sayı çoğul kuralı (telefonda Android'in `getQuantityString` seçtiği biçim). */
+        internal fun quantityOf(language: String, n: Int): String {
+            val m10 = n % 10
+            val m100 = n % 100
+            return when (language.substringBefore('-')) {
+                "ja", "ko", "zh", "vi", "th", "id" -> "other"
+                "fr", "pt", "hi" -> if (n == 0 || n == 1) "one" else "other"
+                "ru", "uk" -> when {
+                    m10 == 1 && m100 != 11 -> "one"
+                    m10 in 2..4 && m100 !in 12..14 -> "few"
+                    else -> "many"
+                }
+                "pl" -> when {
+                    n == 1 -> "one"
+                    m10 in 2..4 && m100 !in 12..14 -> "few"
+                    else -> "many"
+                }
+                "ar" -> when {
+                    n == 0 -> "zero"
+                    n == 1 -> "one"
+                    n == 2 -> "two"
+                    m100 in 3..10 -> "few"
+                    m100 in 11..99 -> "many"
+                    else -> "other"
+                }
+                else -> if (n == 1) "one" else "other"
+            }
         }
 
         private class Table(val strings: Map<String, String>, val plurals: Map<String, Map<String, String>>)

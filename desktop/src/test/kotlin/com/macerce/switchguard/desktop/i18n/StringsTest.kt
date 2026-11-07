@@ -173,11 +173,77 @@ class StringsTest {
             Locale.setDefault(Locale.forLanguageTag("tr-TR"))
             assertEquals("tr", Strings.load("").language)
             Locale.setDefault(Locale.forLanguageTag("de-DE"))
+            assertEquals("de", Strings.load("").language)
+            Locale.setDefault(Locale.forLanguageTag("zh-HK"))
+            assertEquals("zh-TW", Strings.load("").language)
+            Locale.setDefault(Locale.forLanguageTag("pt-PT"))
+            assertEquals("pt-BR", Strings.load("").language)
+            Locale.setDefault(Locale.forLanguageTag("id-ID"))
+            assertEquals("id", Strings.load("").language)
+            Locale.setDefault(Locale.forLanguageTag("sv-SE"))
             assertEquals("en", Strings.load("").language)
             assertEquals("en", Strings.load("xx").language)
         } finally {
             Locale.setDefault(saved)
         }
+    }
+
+    // ---------------------------------------------------------------- telefondaki 20 dil
+
+    @Test
+    fun everyLanguageHasEveryKeyWithTheSameArguments() {
+        for (tag in Strings.LANGUAGES - "en") {
+            val dir = Strings.dirOf(tag)
+            for (file in Strings.FILES) {
+                val english = Strings.parse(resource("/strings/values/$file"))
+                val own = Strings.parse(resource("/strings/$dir/$file"))
+                val missing = translatableKeys("/strings/values/$file") - own.keys
+                assertTrue("$dir/$file: missing $missing", missing.isEmpty())
+                for ((key, text) in own) {
+                    val en = english[key] ?: continue
+                    assertEquals("$dir/$file $key", specifiers(en), specifiers(text))
+                    assertTrue("$dir/$file $key: $text", !text.contains('\\') && !text.contains("&amp;"))
+                }
+                for ((key, en) in Strings.parsePlurals(resource("/strings/values/$file"))) {
+                    val other = Strings.parsePlurals(resource("/strings/$dir/$file"))[key]?.get("other")
+                    assertTrue("$dir/$file: no plural $key", other != null)
+                    assertEquals("$dir/$file plural $key", specifiers(en.getValue("other")), specifiers(other!!))
+                }
+            }
+        }
+    }
+
+    @Test
+    fun everyLanguageLoadsItsOwnTable() {
+        val english = Strings.load("en")["desktop_keep_awake"]
+        for (tag in Strings.LANGUAGES - "en") {
+            val s = Strings.load(tag)
+            assertEquals(tag, s.language)
+            assertNotEquals(tag, english, s["desktop_keep_awake"])
+            assertNotEquals(tag, Strings.load("en")["tab_alerts"], s["tab_alerts"])
+        }
+        assertEquals("values-in", Strings.dirOf("id"))
+        assertEquals("values-zh-rTW", Strings.dirOf("zh-TW"))
+        assertTrue(Strings.load("ar").isRtl)
+        assertTrue(!Strings.load("de").isRtl)
+    }
+
+    @Test
+    fun pluralRulesFollowTheLanguage() {
+        assertEquals("one", Strings.quantityOf("ru", 21))
+        assertEquals("few", Strings.quantityOf("ru", 3))
+        assertEquals("many", Strings.quantityOf("ru", 11))
+        assertEquals("many", Strings.quantityOf("pl", 5))
+        assertEquals("few", Strings.quantityOf("pl", 22))
+        assertEquals("two", Strings.quantityOf("ar", 2))
+        assertEquals("few", Strings.quantityOf("ar", 4))
+        assertEquals("many", Strings.quantityOf("ar", 15))
+        assertEquals("other", Strings.quantityOf("ja", 1))
+        assertEquals("one", Strings.quantityOf("fr", 0))
+        assertEquals("other", Strings.quantityOf("en", 0))
+        assertEquals("5 устройств", Strings.load("ru").plural("desktop_status_devices", 5, 5))
+        assertEquals("2 устройства", Strings.load("ru").plural("desktop_status_devices", 2, 2))
+        assertEquals("3 urządzenia", Strings.load("pl").plural("desktop_status_devices", 3, 3))
     }
 
     // ---------------------------------------------------------------- bozuk metin şablonu (alarm metni asla düşmesin)

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">قد تفوت الإنذارات بعد إعادة التشغيل أو أثناء سكون الكمبيوتر. انقر لإصلاح ذلك في الإعدادات › Windows.</string>
+    <string name="desktop_alert_hint">تعمل التنبيهات على هذا الكمبيوتر ما دامت المراقبة قيد التشغيل. لا تعمل والكمبيوتر مطفأ أو في وضع السكون.</string>
+</resources>

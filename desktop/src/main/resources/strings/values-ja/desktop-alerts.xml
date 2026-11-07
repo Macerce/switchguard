@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">再起動後やスリープ中にアラームを見逃すことがあります。クリックして 設定 › Windows で修正します。</string>
+    <string name="desktop_alert_hint">アラートは監視がオンの間、このパソコンで動作します。パソコンの電源が切れているかスリープ中は動作しません。</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Windows के साथ शुरू होता है · कंप्यूटर को जगाए रखता है</string>
+    <string name="desktop_settings_windows_no_autostart">Windows के साथ शुरू नहीं होता</string>
+    <string name="desktop_settings_windows_may_sleep">कंप्यूटर स्लीप में जा सकता है</string>
+    <string name="desktop_settings_windows_intro">ताकि SwitchGuard इस कंप्यूटर पर बिना रुकावट निगरानी करे। अगर इनमें से कोई बंद है, तो रीस्टार्ट के बाद या कंप्यूटर के स्लीप में रहते अलार्म छूट सकते हैं।</string>
+    <string name="desktop_settings_appearance">भाषा और रूप</string>
+    <string name="desktop_settings_backup_desc">एन्क्रिप्टेड फ़ाइल में बैकअप लें या उससे रीस्टोर करें</string>
+    <string name="desktop_settings_secrets_warn">सेव की गई कुंजियां इस कंप्यूटर पर पढ़ी नहीं जा सकतीं</string>
+    <string name="desktop_settings_setup">सेटअप गाइड</string>
+    <string name="desktop_theme_desc">लाइट, डार्क या Windows जैसा।</string>
+    <string name="desktop_test_alarm_sound_desc">असली अलार्म की तरह बजता है</string>
+    <string name="desktop_test_alarm_silent_desc">बिना आवाज़: रात में किसी को जगाए बिना अलार्म विंडो और सूचना जांचें</string>
+    <string name="desktop_test_alarm_delay_desc">इस बीच किसी दूसरी विंडो पर जाएं या स्क्रीन लॉक करें, ताकि अलार्म को सबसे ऊपर आते देख सकें</string>
+    <string name="desktop_tg_desc">अगर कोई अलार्म समय पर बंद नहीं होता, तो आपके चुने हुए लोगों को Telegram संदेश मिलता है, और बंद होने पर एक और। रात में कंप्यूटर के पास कोई न हो, तब भी घर में कोई या पड़ोसी जान जाता है। संदेश आपके बनाए Telegram बॉट से भेजे जाते हैं; कोई और सर्वर शामिल नहीं होता।</string>
+    <string name="desktop_tg_step_people_desc">हर व्यक्ति से Telegram में %s खोलने और Start दबाने को कहें (आप बॉट को परिवार के ग्रुप में भी जोड़ सकते हैं)। फिर लोग ढूंढें पर क्लिक करें।</string>
+    <string name="desktop_tg_open_link">बॉट खोलें</string>
+    <string name="desktop_tg_copy_link">आमंत्रण कॉपी करें</string>
+    <string name="desktop_tg_link_copied">आमंत्रण कॉपी हो गया: इसे व्यक्ति को भेजे जाने वाले संदेश में पेस्ट करें।</string>
+    <string name="desktop_tg_checking">जांच हो रही है…</string>
+    <string name="desktop_time_hint">तीर, माउस व्हील या कीबोर्ड इस्तेमाल करें: ↑ ↓ मान बदलते हैं, आप अंक टाइप कर सकते हैं, Enter सेव करता है।</string>
+    <string name="desktop_time_hour">घंटा</string>
+    <string name="desktop_time_minute">मिनट</string>
+    <string name="desktop_summary_note">SwitchGuard चलते रहने पर सारांश चुने हुए समय पर Windows सूचना के रूप में आता है।</string>
+    <string name="desktop_backup_move_note">दूसरे कंप्यूटर पर जाना: पुराने पर फ़ाइल में बैकअप लें, नए पर SwitchGuard इंस्टॉल करें और फ़ाइल से रीस्टोर करें, फिर eWeLink में दोबारा साइन इन करें।</string>
+    <string name="desktop_open_logs_desc">समस्या की रिपोर्ट करते समय लॉग फ़ाइलें जोड़ें</string>
+    <string name="desktop_contact_copied">कोई ईमेल ऐप नहीं खुल सका; पता क्लिपबोर्ड पर कॉपी कर दिया गया।</string>
+    <string name="desktop_secret_show">App Secret दिखाएं</string>
+    <string name="desktop_secret_hide">App Secret छिपाएं</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Des alarmes peuvent être manquées après un redémarrage ou pendant la veille. Cliquez pour corriger cela dans Réglages › Windows.</string>
+    <string name="desktop_alert_hint">Les alertes s\'exécutent sur cet ordinateur tant que la surveillance est active. Elles ne s\'exécutent pas quand l\'ordinateur est éteint ou en veille.</string>
+</resources>

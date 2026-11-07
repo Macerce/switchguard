@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Khởi động cùng Windows · giữ máy tính luôn thức</string>
+    <string name="desktop_settings_windows_no_autostart">Không khởi động cùng Windows</string>
+    <string name="desktop_settings_windows_may_sleep">Máy tính có thể chuyển sang chế độ ngủ</string>
+    <string name="desktop_settings_windows_intro">Để SwitchGuard canh chừng trên máy tính này không gián đoạn. Nếu một trong hai bị tắt, báo động có thể bị bỏ lỡ sau khi khởi động lại hoặc khi máy đang ngủ.</string>
+    <string name="desktop_settings_appearance">Ngôn ngữ &amp; giao diện</string>
+    <string name="desktop_settings_backup_desc">Sao lưu ra tệp mã hóa hoặc khôi phục từ tệp</string>
+    <string name="desktop_settings_secrets_warn">Không đọc được các khóa đã lưu trên máy tính này</string>
+    <string name="desktop_settings_setup">Hướng dẫn thiết lập</string>
+    <string name="desktop_theme_desc">Sáng, tối hoặc giống Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">Kêu như báo động thật</string>
+    <string name="desktop_test_alarm_silent_desc">Không âm thanh: kiểm tra cửa sổ báo động và thông báo vào ban đêm mà không đánh thức ai</string>
+    <string name="desktop_test_alarm_delay_desc">Trong lúc đó, chuyển sang cửa sổ khác hoặc khóa màn hình để xem báo động hiện lên trên mọi thứ</string>
+    <string name="desktop_tg_desc">Nếu báo động không được tắt kịp thời, những người bạn chọn sẽ nhận tin nhắn Telegram, và thêm một tin khi báo động được tắt. Dù ban đêm không ai ngồi trước máy tính, người trong nhà hoặc hàng xóm vẫn biết. Tin nhắn được gửi bởi bot Telegram do bạn tạo; không có máy chủ nào khác tham gia.</string>
+    <string name="desktop_tg_step_people_desc">Nhờ từng người mở %s trong Telegram và nhấn Bắt đầu (bạn cũng có thể thêm bot vào nhóm gia đình). Sau đó nhấp Tìm người.</string>
+    <string name="desktop_tg_open_link">Mở bot</string>
+    <string name="desktop_tg_copy_link">Sao chép lời mời</string>
+    <string name="desktop_tg_link_copied">Đã sao chép lời mời: dán vào tin nhắn gửi cho người đó.</string>
+    <string name="desktop_tg_checking">Đang kiểm tra…</string>
+    <string name="desktop_time_hint">Dùng mũi tên, con lăn chuột hoặc bàn phím: ↑ ↓ thay đổi giá trị, có thể gõ số, Enter để lưu.</string>
+    <string name="desktop_time_hour">Giờ</string>
+    <string name="desktop_time_minute">Phút</string>
+    <string name="desktop_summary_note">Bản tóm tắt đến dưới dạng thông báo Windows vào giờ đã chọn khi SwitchGuard đang chạy.</string>
+    <string name="desktop_backup_move_note">Chuyển sang máy tính khác: sao lưu ra tệp trên máy cũ, cài SwitchGuard trên máy mới và khôi phục từ tệp, rồi đăng nhập lại eWeLink.</string>
+    <string name="desktop_open_logs_desc">Đính kèm tệp nhật ký khi báo cáo sự cố</string>
+    <string name="desktop_contact_copied">Không mở được ứng dụng email nào; địa chỉ đã được sao chép vào bộ nhớ tạm.</string>
+    <string name="desktop_secret_show">Hiện App Secret</string>
+    <string name="desktop_secret_hide">Ẩn App Secret</string>
+</resources>

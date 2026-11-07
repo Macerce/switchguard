@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">다시 시작한 뒤나 절전 중에 알람을 놓칠 수 있습니다. 클릭하여 설정 › Windows에서 해결하세요.</string>
+    <string name="desktop_alert_hint">알림은 모니터링이 켜져 있는 동안 이 컴퓨터에서 실행됩니다. 컴퓨터가 꺼져 있거나 절전 중이면 실행되지 않습니다.</string>
+</resources>

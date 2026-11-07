@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Тривоги можуть бути пропущені після перезавантаження або під час сну комп\'ютера. Натисніть, щоб виправити в Налаштування › Windows.</string>
+    <string name="desktop_alert_hint">Сповіщення працюють на цьому комп\'ютері, поки ввімкнено моніторинг. Коли комп\'ютер вимкнений або спить, вони не працюють.</string>
+</resources>

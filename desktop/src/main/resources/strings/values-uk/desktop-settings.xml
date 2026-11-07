@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Запускається з Windows · не дає комп\'ютеру засинати</string>
+    <string name="desktop_settings_windows_no_autostart">Не запускається з Windows</string>
+    <string name="desktop_settings_windows_may_sleep">Комп\'ютер може перейти в режим сну</string>
+    <string name="desktop_settings_windows_intro">Щоб SwitchGuard стежив на цьому комп\'ютері без перерв. Якщо щось із цього вимкнено, тривоги можуть бути пропущені після перезавантаження або під час сну комп\'ютера.</string>
+    <string name="desktop_settings_appearance">Мова й вигляд</string>
+    <string name="desktop_settings_backup_desc">Копія в зашифрований файл або відновлення з нього</string>
+    <string name="desktop_settings_secrets_warn">Збережені ключі неможливо прочитати на цьому комп\'ютері</string>
+    <string name="desktop_settings_setup">Інструкції з налаштування</string>
+    <string name="desktop_theme_desc">Світла, темна або як у Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">Звучить як справжня тривога</string>
+    <string name="desktop_test_alarm_silent_desc">Без звуку: перевірте вночі вікно тривоги та сповіщення, нікого не розбудивши</string>
+    <string name="desktop_test_alarm_delay_desc">Тим часом перейдіть до іншого вікна або заблокуйте екран, щоб побачити, як тривога з\'являється поверх усього</string>
+    <string name="desktop_tg_desc">Якщо тривогу не вимкнуть вчасно, вибрані люди отримають повідомлення в Telegram, а після вимкнення — ще одне. Навіть якщо вночі біля комп\'ютера нікого немає, дізнається хтось удома або сусід. Повідомлення надсилає створений вами бот Telegram; інші сервери не беруть участі.</string>
+    <string name="desktop_tg_step_people_desc">Попросіть кожного відкрити %s у Telegram і натиснути «Почати» (бота можна додати й до сімейної групи). Потім натисніть «Знайти людей».</string>
+    <string name="desktop_tg_open_link">Відкрити бота</string>
+    <string name="desktop_tg_copy_link">Скопіювати запрошення</string>
+    <string name="desktop_tg_link_copied">Запрошення скопійовано: вставте його в повідомлення цій людині.</string>
+    <string name="desktop_tg_checking">Перевірка…</string>
+    <string name="desktop_time_hint">Стрілки, коліщатко миші або клавіатура: ↑ ↓ змінюють значення, можна вводити цифри, Enter зберігає.</string>
+    <string name="desktop_time_hour">Година</string>
+    <string name="desktop_time_minute">Хвилина</string>
+    <string name="desktop_summary_note">Підсумок приходить сповіщенням Windows у вибраний час, поки SwitchGuard працює.</string>
+    <string name="desktop_backup_move_note">Перехід на інший комп\'ютер: на старому зробіть копію у файл, встановіть SwitchGuard на новому і відновіть із файлу, потім знову увійдіть в eWeLink.</string>
+    <string name="desktop_open_logs_desc">Додайте файли журналів, коли повідомляєте про проблему</string>
+    <string name="desktop_contact_copied">Не вдалося відкрити поштовий застосунок; адресу скопійовано в буфер обміну.</string>
+    <string name="desktop_secret_show">Показати App Secret</string>
+    <string name="desktop_secret_hide">Сховати App Secret</string>
+</resources>

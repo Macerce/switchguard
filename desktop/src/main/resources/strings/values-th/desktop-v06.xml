@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">คอมพิวเตอร์เครื่องนี้ใช้แบตเตอรี่อยู่: อาจไฟดับ</string>
+    <string name="desktop_event_ac_back">คอมพิวเตอร์เครื่องนี้เสียบปลั๊กแล้ว: ไฟดับนาน %s</string>
+    <string name="desktop_location_search">ค้นหาเมือง</string>
+    <string name="desktop_location_search_desc">พิมพ์ชื่อเมืองแล้วเลือกจากรายการ บันทึกเฉพาะพิกัดไว้บนคอมพิวเตอร์เครื่องนี้</string>
+    <string name="desktop_location_city">เมือง</string>
+    <string name="desktop_location_find">ค้นหา</string>
+    <string name="desktop_location_none">ไม่พบผลลัพธ์ ลองสะกดแบบอื่นหรือป้อนพิกัด</string>
+    <string name="desktop_smart_ac">ไฟดับเมื่อคอมพิวเตอร์เครื่องนี้เปลี่ยนไปใช้แบตเตอรี่</string>
+    <string name="desktop_smart_ac_desc">สำหรับแล็ปท็อปที่เสียบปลั๊กไว้ที่บ้าน: ถ้าใช้แบตเตอรี่นานหนึ่งนาที จะนับเป็นไฟดับ แม้ไม่มีอินเทอร์เน็ต (ข้อความ Telegram จะส่งเมื่อการเชื่อมต่อกลับมา)</string>
+    <string name="desktop_location_desc">จำเป็นสำหรับกฎพระอาทิตย์ขึ้น/ตกและอุณหภูมิภายนอก เก็บไว้บนคอมพิวเตอร์เครื่องนี้เท่านั้น สำหรับอุณหภูมิจะส่งไปยัง Open-Meteo โดยปัดเศษประมาณ 100 ม.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">อุปกรณ์ %d เครื่อง</item>
+    </plurals>
+    <string name="desktop_status_synced">ตรวจสอบล่าสุด %s</string>
+    <string name="desktop_smart_same_power">คอมพิวเตอร์เครื่องนี้ใช้ไฟจากแหล่งเดียวกับอุปกรณ์</string>
+    <string name="desktop_smart_same_power_desc">ขณะที่ใช้ไฟบ้านอยู่จะถือว่าไม่มีไฟดับ ดังนั้นอุปกรณ์ที่หลุดจะถูกแจ้งทันที แทนที่จะรอนานสูงสุด 90 วินาที</string>
+</resources>

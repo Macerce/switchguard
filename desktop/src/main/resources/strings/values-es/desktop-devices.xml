@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">justo ahora</string>
+    <string name="desktop_ago">hace %1$s</string>
+    <string name="desktop_no_account_title">Ninguna cuenta conectada</string>
+    <string name="desktop_no_account_body">Conecta tu cuenta de eWeLink o Tuya en Ajustes › Cuentas para monitorear tus dispositivos. Para probar SwitchGuard sin configurar nada, activa los dispositivos de demostración.</string>
+    <string name="desktop_add_account">Añadir una cuenta</string>
+    <string name="desktop_layout_hint">Estrella = mantener arriba · flechas o arrastrar el asa = mover (también puedes mantener pulsada una tarjeta y arrastrarla) · tamaño = pequeña o grande · etiqueta = categoría.</string>
+    <string name="desktop_drag_handle">Arrastra para mover</string>
+    <string name="desktop_click_to_toggle">Haz clic para encender o apagar</string>
+    <string name="desktop_hour">Hora</string>
+    <string name="desktop_minute">Minuto</string>
+</resources>

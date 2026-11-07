@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">เมื่อสักครู่</string>
+    <string name="desktop_ago">%1$s ที่แล้ว</string>
+    <string name="desktop_no_account_title">ยังไม่ได้เชื่อมต่อบัญชี</string>
+    <string name="desktop_no_account_body">เชื่อมต่อบัญชี eWeLink หรือ Tuya ใน การตั้งค่า › บัญชี เพื่อตรวจสอบอุปกรณ์ หากต้องการลองใช้ SwitchGuard โดยไม่ต้องตั้งค่า ให้เปิดอุปกรณ์สาธิต</string>
+    <string name="desktop_add_account">เพิ่มบัญชี</string>
+    <string name="desktop_layout_hint">ดาว = ไว้ด้านบน · ลูกศรหรือลากที่จับ = ย้าย (กดค้างที่การ์ดแล้วลากก็ได้) · ขนาดการ์ด = เล็กหรือใหญ่ · ป้าย = หมวดหมู่</string>
+    <string name="desktop_drag_handle">ลากเพื่อย้าย</string>
+    <string name="desktop_click_to_toggle">คลิกเพื่อเปิดหรือปิด</string>
+    <string name="desktop_hour">ชั่วโมง</string>
+    <string name="desktop_minute">นาที</string>
+</resources>

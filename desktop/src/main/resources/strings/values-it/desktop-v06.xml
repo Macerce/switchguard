@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Questo computer va a batteria: possibile interruzione di corrente</string>
+    <string name="desktop_event_ac_back">Questo computer è di nuovo collegato: la corrente è mancata per %s</string>
+    <string name="desktop_location_search">Cerca una città</string>
+    <string name="desktop_location_search_desc">Scrivi il nome di una città o di un paese e sceglilo dall\'elenco. Vengono salvate solo le coordinate, su questo computer.</string>
+    <string name="desktop_location_city">Città</string>
+    <string name="desktop_location_find">Cerca</string>
+    <string name="desktop_location_none">Nessun risultato. Prova un\'altra grafia o inserisci le coordinate.</string>
+    <string name="desktop_smart_ac">Interruzione di corrente quando questo computer passa a batteria</string>
+    <string name="desktop_smart_ac_desc">Per un portatile lasciato collegato a casa: se va a batteria per un minuto conta come interruzione di corrente, anche senza Internet (il messaggio Telegram parte quando torna la connessione).</string>
+    <string name="desktop_location_desc">Serve per le regole alba/tramonto e temperatura esterna. Resta solo su questo computer; per la temperatura viene inviata a Open-Meteo arrotondata a circa 100 m.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d dispositivo</item>
+        <item quantity="other">%d dispositivi</item>
+    </plurals>
+    <string name="desktop_status_synced">Ultimo controllo %s</string>
+    <string name="desktop_smart_same_power">Questo computer è sulla stessa alimentazione dei dispositivi</string>
+    <string name="desktop_smart_same_power_desc">Finché è collegato alla rete non c\'è interruzione di corrente, quindi un dispositivo che cade viene segnalato subito invece che dopo fino a 90 secondi.</string>
+</resources>

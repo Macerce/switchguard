@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Se pueden perder alarmas tras un reinicio o mientras el ordenador está en suspensión. Haz clic para corregirlo en Ajustes › Windows.</string>
+    <string name="desktop_alert_hint">Las alertas se ejecutan en este ordenador mientras el monitoreo está activo. No se ejecutan con el ordenador apagado o en suspensión.</string>
+</resources>

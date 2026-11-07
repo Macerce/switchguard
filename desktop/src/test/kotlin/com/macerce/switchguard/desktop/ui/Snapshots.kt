@@ -32,7 +32,7 @@ object Snapshots {
         val strings = Strings.load(language)
         val scene = ImageComposeScene(width, height, Density(1f)) {
             SwitchGuardTheme(if (dark) "dark" else "light") {
-                CompositionLocalProvider(LocalStrings provides strings) {
+                ProvideStrings(strings) {
                     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) { content() }
                 }
             }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Цей комп\'ютер працює від батареї: можливе вимкнення електрики</string>
+    <string name="desktop_event_ac_back">Цей комп\'ютер знову підключено до мережі: електрики не було %s</string>
+    <string name="desktop_location_search">Знайти місто</string>
+    <string name="desktop_location_search_desc">Введіть назву міста чи селища і виберіть його зі списку. Зберігаються лише координати, на цьому комп\'ютері.</string>
+    <string name="desktop_location_city">Місто</string>
+    <string name="desktop_location_find">Знайти</string>
+    <string name="desktop_location_none">Нічого не знайдено. Спробуйте інше написання або введіть координати.</string>
+    <string name="desktop_smart_ac">Вимкнення електрики, коли комп\'ютер переходить на батарею</string>
+    <string name="desktop_smart_ac_desc">Для ноутбука, підключеного до мережі вдома: якщо він хвилину працює від батареї, це вважається вимкненням електрики, навіть без інтернету (повідомлення в Telegram піде, коли зв\'язок повернеться).</string>
+    <string name="desktop_location_desc">Потрібне для правил за сходом/заходом сонця і температурою надворі. Зберігається лише на цьому комп\'ютері; для температури надсилається в Open-Meteo з округленням приблизно до 100 м.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d пристрій</item>
+        <item quantity="few">%d пристрої</item>
+        <item quantity="many">%d пристроїв</item>
+        <item quantity="other">%d пристрою</item>
+    </plurals>
+    <string name="desktop_status_synced">Остання перевірка %s</string>
+    <string name="desktop_smart_same_power">Цей комп\'ютер живиться від тієї ж мережі, що й пристрої</string>
+    <string name="desktop_smart_same_power_desc">Поки він працює від мережі, вимкнення електрики немає, тому про пристрій, що відпав, повідомляється одразу, а не через до 90 секунд.</string>
+</resources>

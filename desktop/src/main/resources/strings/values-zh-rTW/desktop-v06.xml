@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">這台電腦正在使用電池：可能停電了</string>
+    <string name="desktop_event_ac_back">這台電腦已重新接上電源：停電了 %s</string>
+    <string name="desktop_location_search">搜尋城市</string>
+    <string name="desktop_location_search_desc">輸入城市或鄉鎮名稱並從清單中選擇。只在這台電腦上儲存座標。</string>
+    <string name="desktop_location_city">城市</string>
+    <string name="desktop_location_find">搜尋</string>
+    <string name="desktop_location_none">找不到結果。請嘗試其他拼寫或輸入座標。</string>
+    <string name="desktop_smart_ac">這台電腦改用電池時視為停電</string>
+    <string name="desktop_smart_ac_desc">適用於在家插著電源的筆記型電腦：如果用電池運作一分鐘，即視為停電，即使沒有網路（連線恢復後會傳送 Telegram 訊息）。</string>
+    <string name="desktop_location_desc">用於日出/日落和室外溫度規則。只儲存在這台電腦上；為取得溫度，會以約 100 公尺精度傳送給 Open-Meteo。</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">%d 台裝置</item>
+    </plurals>
+    <string name="desktop_status_synced">上次檢查 %s</string>
+    <string name="desktop_smart_same_power">這台電腦與裝置使用同一電源</string>
+    <string name="desktop_smart_same_power_desc">只要它使用市電運作，就不存在停電，因此斷線的裝置會立即回報，而不是最多等待 90 秒。</string>
+</resources>

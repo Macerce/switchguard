@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Windows と同時に起動 · パソコンをスリープさせない</string>
+    <string name="desktop_settings_windows_no_autostart">Windows と同時に起動しない</string>
+    <string name="desktop_settings_windows_may_sleep">パソコンがスリープする可能性があります</string>
+    <string name="desktop_settings_windows_intro">SwitchGuard がこのパソコンで途切れなく見守るためです。どちらかがオフだと、再起動後やスリープ中にアラームを見逃すことがあります。</string>
+    <string name="desktop_settings_appearance">言語と外観</string>
+    <string name="desktop_settings_backup_desc">暗号化ファイルにバックアップ、またはファイルから復元</string>
+    <string name="desktop_settings_secrets_warn">保存されたキーをこのパソコンで読み取れません</string>
+    <string name="desktop_settings_setup">設定ガイド</string>
+    <string name="desktop_theme_desc">ライト、ダーク、または Windows と同じ。</string>
+    <string name="desktop_test_alarm_sound_desc">本物のアラームのように鳴ります</string>
+    <string name="desktop_test_alarm_silent_desc">音なし: 夜でも誰も起こさずにアラームウィンドウと通知を確認できます</string>
+    <string name="desktop_test_alarm_delay_desc">その間に別のウィンドウに切り替えるか画面をロックして、アラームがすべての上に表示されるのを確認してください</string>
+    <string name="desktop_tg_desc">アラームが時間内に止められないと、選んだ人に Telegram メッセージが届き、止めたときにもう 1 通届きます。夜にパソコンの前に誰もいなくても、家族や隣人が気づけます。メッセージはあなたが作成した Telegram ボットが送信し、他のサーバーは関与しません。</string>
+    <string name="desktop_tg_step_people_desc">各自に Telegram で %s を開いて「開始」をタップしてもらいます (ボットを家族グループに追加することもできます)。その後「人を探す」をクリックします。</string>
+    <string name="desktop_tg_open_link">ボットを開く</string>
+    <string name="desktop_tg_copy_link">招待をコピー</string>
+    <string name="desktop_tg_link_copied">招待をコピーしました: 相手へのメッセージに貼り付けてください。</string>
+    <string name="desktop_tg_checking">確認中…</string>
+    <string name="desktop_time_hint">矢印、マウスホイール、キーボードを使います: ↑ ↓ で値を変更、数字を入力でき、Enter で保存します。</string>
+    <string name="desktop_time_hour">時間</string>
+    <string name="desktop_time_minute">分</string>
+    <string name="desktop_summary_note">SwitchGuard の実行中、選んだ時刻に要約が Windows の通知で届きます。</string>
+    <string name="desktop_backup_move_note">別のパソコンへの移行: 古いパソコンでファイルにバックアップし、新しいパソコンに SwitchGuard をインストールしてファイルから復元し、eWeLink に再度サインインします。</string>
+    <string name="desktop_open_logs_desc">問題を報告するときはログファイルを添付してください</string>
+    <string name="desktop_contact_copied">メールアプリを開けませんでした。アドレスをクリップボードにコピーしました。</string>
+    <string name="desktop_secret_show">App Secret を表示</string>
+    <string name="desktop_secret_hide">App Secret を隠す</string>
+</resources>

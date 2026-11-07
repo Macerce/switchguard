@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">baru saja</string>
+    <string name="desktop_ago">%1$s lalu</string>
+    <string name="desktop_no_account_title">Tidak ada akun terhubung</string>
+    <string name="desktop_no_account_body">Hubungkan akun eWeLink atau Tuya di Pengaturan › Akun untuk memantau perangkat Anda. Untuk mencoba SwitchGuard tanpa penyiapan, aktifkan perangkat demo.</string>
+    <string name="desktop_add_account">Tambahkan akun</string>
+    <string name="desktop_layout_hint">Bintang = tetap di atas · panah atau seret pegangan = pindahkan (Anda juga bisa menekan lama kartu lalu menyeretnya) · ukuran kartu = kecil atau besar · label = kategori.</string>
+    <string name="desktop_drag_handle">Seret untuk memindahkan</string>
+    <string name="desktop_click_to_toggle">Klik untuk menyalakan atau mematikan</string>
+    <string name="desktop_hour">Jam</string>
+    <string name="desktop_minute">Menit</string>
+</resources>

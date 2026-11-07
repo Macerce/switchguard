@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">अभी-अभी</string>
+    <string name="desktop_ago">%1$s पहले</string>
+    <string name="desktop_no_account_title">कोई अकाउंट कनेक्ट नहीं है</string>
+    <string name="desktop_no_account_body">अपने डिवाइस की निगरानी के लिए सेटिंग › अकाउंट में अपना eWeLink या Tuya अकाउंट कनेक्ट करें। बिना सेटअप के SwitchGuard आज़माने के लिए डेमो डिवाइस चालू करें।</string>
+    <string name="desktop_add_account">अकाउंट जोड़ें</string>
+    <string name="desktop_layout_hint">स्टार = ऊपर रखें · तीर या हैंडल खींचें = खिसकाएं (आप कार्ड दबाकर रखकर भी खींच सकते हैं) · कार्ड का आकार = छोटा या बड़ा · लेबल = श्रेणी।</string>
+    <string name="desktop_drag_handle">खिसकाने के लिए खींचें</string>
+    <string name="desktop_click_to_toggle">चालू या बंद करने के लिए क्लिक करें</string>
+    <string name="desktop_hour">घंटा</string>
+    <string name="desktop_minute">मिनट</string>
+</resources>

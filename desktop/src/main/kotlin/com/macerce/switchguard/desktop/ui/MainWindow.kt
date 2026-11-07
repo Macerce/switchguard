@@ -91,7 +91,7 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
                     window.toFront()
                 }
                 SwitchGuardTheme(theme) {
-                    CompositionLocalProvider(LocalStrings provides strings) {
+                    ProvideStrings(strings) {
                     Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                         if (failed) {
                             WindowErrorPanel(strings, graph.dataDir.resolve("logs").toString()) {
@@ -164,7 +164,7 @@ fun ExitConfirmDialog(graph: AppGraph, onConfirm: () -> Unit, onCancel: () -> Un
         alwaysOnTop = true,
     ) {
         SwitchGuardTheme(theme) {
-            CompositionLocalProvider(LocalStrings provides strings) {
+            ProvideStrings(strings) {
             Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.surface) {
                 Column(Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.SpaceBetween) {
                     Text(strings["tray_exit_confirm"], style = MaterialTheme.typography.bodyLarge)

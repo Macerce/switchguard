@@ -72,7 +72,7 @@ compose.desktop {
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "SwitchGuard"
-            packageVersion = "0.12.1"
+            packageVersion = "0.13.0"
             vendor = "Macerce"
             description = "SwitchGuard"
 

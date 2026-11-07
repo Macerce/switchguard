@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">यह कंप्यूटर बैटरी पर चल रहा है: शायद बिजली गई है</string>
+    <string name="desktop_event_ac_back">यह कंप्यूटर फिर से प्लग इन है: बिजली %s तक गई रही</string>
+    <string name="desktop_location_search">शहर खोजें</string>
+    <string name="desktop_location_search_desc">किसी शहर या कस्बे का नाम लिखें और सूची से चुनें। केवल निर्देशांक सेव होते हैं, इसी कंप्यूटर पर।</string>
+    <string name="desktop_location_city">शहर</string>
+    <string name="desktop_location_find">खोजें</string>
+    <string name="desktop_location_none">कुछ नहीं मिला। दूसरी वर्तनी आज़माएं या निर्देशांक डालें।</string>
+    <string name="desktop_smart_ac">यह कंप्यूटर बैटरी पर जाए तो बिजली कटौती</string>
+    <string name="desktop_smart_ac_desc">घर पर प्लग इन रखे लैपटॉप के लिए: अगर यह एक मिनट बैटरी पर चले, तो इसे बिजली कटौती माना जाता है, इंटरनेट न होने पर भी (कनेक्शन लौटने पर Telegram संदेश जाता है)।</string>
+    <string name="desktop_location_desc">सूर्योदय/सूर्यास्त और बाहर के तापमान वाले नियमों के लिए ज़रूरी। सिर्फ़ इसी कंप्यूटर पर रहती है; तापमान के लिए लगभग 100 मी तक राउंड करके Open-Meteo को भेजी जाती है।</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d डिवाइस</item>
+        <item quantity="other">%d डिवाइस</item>
+    </plurals>
+    <string name="desktop_status_synced">आखिरी जांच %s</string>
+    <string name="desktop_smart_same_power">यह कंप्यूटर डिवाइस वाली ही बिजली पर है</string>
+    <string name="desktop_smart_same_power_desc">जब तक यह मेन बिजली पर चल रहा है, बिजली कटौती नहीं है, इसलिए गिरने वाले डिवाइस की सूचना 90 सेकंड तक इंतज़ार के बजाय तुरंत दी जाती है।</string>
+</resources>

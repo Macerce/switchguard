@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">щойно</string>
+    <string name="desktop_ago">%1$s тому</string>
+    <string name="desktop_no_account_title">Жодного облікового запису не підключено</string>
+    <string name="desktop_no_account_body">Підключіть обліковий запис eWeLink або Tuya в Налаштування › Облікові записи, щоб відстежувати пристрої. Щоб спробувати SwitchGuard без налаштування, увімкніть демопристрої.</string>
+    <string name="desktop_add_account">Додати обліковий запис</string>
+    <string name="desktop_layout_hint">Зірка = тримати вгорі · стрілки або перетягування ручки = перемістити (також можна затиснути картку й перетягнути) · розмір картки = мала або велика · мітка = категорія.</string>
+    <string name="desktop_drag_handle">Перетягніть, щоб перемістити</string>
+    <string name="desktop_click_to_toggle">Клацніть, щоб увімкнути або вимкнути</string>
+    <string name="desktop_hour">Година</string>
+    <string name="desktop_minute">Хвилина</string>
+</resources>

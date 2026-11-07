@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Báo động có thể bị bỏ lỡ sau khi khởi động lại hoặc khi máy đang ngủ. Nhấp để sửa trong Cài đặt › Windows.</string>
+    <string name="desktop_alert_hint">Cảnh báo chạy trên máy tính này khi đang giám sát. Chúng không chạy khi máy tắt hoặc đang ngủ.</string>
+</resources>

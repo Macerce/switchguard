@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Mulai bersama Windows · menjaga komputer tetap aktif</string>
+    <string name="desktop_settings_windows_no_autostart">Tidak mulai bersama Windows</string>
+    <string name="desktop_settings_windows_may_sleep">Komputer bisa masuk mode tidur</string>
+    <string name="desktop_settings_windows_intro">Agar SwitchGuard berjaga di komputer ini tanpa henti. Jika salah satunya nonaktif, alarm bisa terlewat setelah restart atau saat komputer tidur.</string>
+    <string name="desktop_settings_appearance">Bahasa &amp; tampilan</string>
+    <string name="desktop_settings_backup_desc">Cadangkan ke file terenkripsi atau pulihkan dari file</string>
+    <string name="desktop_settings_secrets_warn">Kunci yang tersimpan tidak dapat dibaca di komputer ini</string>
+    <string name="desktop_settings_setup">Panduan penyiapan</string>
+    <string name="desktop_theme_desc">Terang, gelap, atau sama seperti Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">Berbunyi seperti alarm sungguhan</string>
+    <string name="desktop_test_alarm_silent_desc">Tanpa suara: periksa jendela alarm dan notifikasi di malam hari tanpa membangunkan siapa pun</string>
+    <string name="desktop_test_alarm_delay_desc">Sementara itu, pindah ke jendela lain atau kunci layar untuk melihat alarm muncul di atas semuanya</string>
+    <string name="desktop_tg_desc">Jika alarm tidak dihentikan tepat waktu, orang yang Anda pilih menerima pesan Telegram, dan satu lagi setelah alarm dihentikan. Meski tidak ada orang di depan komputer pada malam hari, seseorang di rumah atau tetangga akan tahu. Pesan dikirim oleh bot Telegram yang Anda buat; tidak ada server lain yang terlibat.</string>
+    <string name="desktop_tg_step_people_desc">Minta setiap orang membuka %s di Telegram dan mengetuk Mulai (Anda juga bisa menambahkan bot ke grup keluarga). Lalu klik Cari orang.</string>
+    <string name="desktop_tg_open_link">Buka bot</string>
+    <string name="desktop_tg_copy_link">Salin undangan</string>
+    <string name="desktop_tg_link_copied">Undangan disalin: tempel ke pesan untuk orang tersebut.</string>
+    <string name="desktop_tg_checking">Memeriksa…</string>
+    <string name="desktop_time_hint">Gunakan panah, roda mouse, atau keyboard: ↑ ↓ mengubah nilai, Anda bisa mengetik angka, Enter menyimpan.</string>
+    <string name="desktop_time_hour">Jam</string>
+    <string name="desktop_time_minute">Menit</string>
+    <string name="desktop_summary_note">Ringkasan datang sebagai notifikasi Windows pada jam yang dipilih selama SwitchGuard berjalan.</string>
+    <string name="desktop_backup_move_note">Pindah ke komputer lain: cadangkan ke file di komputer lama, pasang SwitchGuard di komputer baru dan pulihkan dari file, lalu masuk lagi ke eWeLink.</string>
+    <string name="desktop_open_logs_desc">Lampirkan file log saat Anda melaporkan masalah</string>
+    <string name="desktop_contact_copied">Tidak ada aplikasi email yang dapat dibuka; alamat disalin ke papan klip.</string>
+    <string name="desktop_secret_show">Tampilkan App Secret</string>
+    <string name="desktop_secret_hide">Sembunyikan App Secret</string>
+</resources>

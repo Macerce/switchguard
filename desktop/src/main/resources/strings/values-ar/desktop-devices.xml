@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">الآن</string>
+    <string name="desktop_ago">منذ %1$s</string>
+    <string name="desktop_no_account_title">لا يوجد حساب متصل</string>
+    <string name="desktop_no_account_body">اربط حساب eWeLink أو Tuya من الإعدادات › الحسابات لمراقبة أجهزتك. لتجربة SwitchGuard دون أي إعداد، شغّل الأجهزة التجريبية.</string>
+    <string name="desktop_add_account">إضافة حساب</string>
+    <string name="desktop_layout_hint">النجمة = إبقاء في الأعلى · الأسهم أو سحب المقبض = نقل (يمكنك أيضًا الضغط مطولًا على بطاقة وسحبها) · حجم البطاقة = صغيرة أو كبيرة · التسمية = الفئة.</string>
+    <string name="desktop_drag_handle">اسحب للنقل</string>
+    <string name="desktop_click_to_toggle">انقر للتشغيل أو الإيقاف</string>
+    <string name="desktop_hour">الساعة</string>
+    <string name="desktop_minute">الدقيقة</string>
+</resources>

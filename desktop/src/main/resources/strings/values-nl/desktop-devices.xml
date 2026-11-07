@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">zojuist</string>
+    <string name="desktop_ago">%1$s geleden</string>
+    <string name="desktop_no_account_title">Geen account verbonden</string>
+    <string name="desktop_no_account_body">Koppel je eWeLink- of Tuya-account in Instellingen › Accounts om je apparaten te bewaken. Zet de demo-apparaten aan om SwitchGuard zonder instellen te proberen.</string>
+    <string name="desktop_add_account">Een account toevoegen</string>
+    <string name="desktop_layout_hint">Ster = bovenaan houden · pijlen of de greep slepen = verplaatsen (je kunt ook een kaart ingedrukt houden en slepen) · kaartgrootte = klein of groot · label = categorie.</string>
+    <string name="desktop_drag_handle">Slepen om te verplaatsen</string>
+    <string name="desktop_click_to_toggle">Klik om aan of uit te zetten</string>
+    <string name="desktop_hour">Uur</string>
+    <string name="desktop_minute">Minuut</string>
+</resources>

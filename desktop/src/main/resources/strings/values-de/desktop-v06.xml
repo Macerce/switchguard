@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Dieser Computer läuft im Akkubetrieb: möglicher Stromausfall</string>
+    <string name="desktop_event_ac_back">Dieser Computer ist wieder am Netz: Der Strom war %s weg</string>
+    <string name="desktop_location_search">Stadt suchen</string>
+    <string name="desktop_location_search_desc">Gib den Namen einer Stadt oder eines Ortes ein und wähle ihn aus der Liste. Nur die Koordinaten werden gespeichert, auf diesem Computer.</string>
+    <string name="desktop_location_city">Stadt</string>
+    <string name="desktop_location_find">Suchen</string>
+    <string name="desktop_location_none">Nichts gefunden. Versuche eine andere Schreibweise oder gib die Koordinaten ein.</string>
+    <string name="desktop_smart_ac">Stromausfall, wenn dieser Computer auf Akku läuft</string>
+    <string name="desktop_smart_ac_desc">Für einen zu Hause eingesteckten Laptop: Läuft er eine Minute auf Akku, gilt das als Stromausfall, auch ohne Internet (die Telegram-Nachricht geht raus, sobald die Verbindung zurück ist).</string>
+    <string name="desktop_location_desc">Nötig für Sonnenaufgangs-/Sonnenuntergangs- und Außentemperatur-Regeln. Bleibt nur auf diesem Computer; für die Temperatur wird er auf etwa 100 m gerundet an Open-Meteo gesendet.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d Gerät</item>
+        <item quantity="other">%d Geräte</item>
+    </plurals>
+    <string name="desktop_status_synced">Letzte Prüfung %s</string>
+    <string name="desktop_smart_same_power">Dieser Computer hängt am selben Strom wie die Geräte</string>
+    <string name="desktop_smart_same_power_desc">Solange er am Netz läuft, gibt es keinen Stromausfall; ein ausfallendes Gerät wird daher sofort gemeldet statt nach bis zu 90 Sekunden.</string>
+</resources>

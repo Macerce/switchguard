@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Este ordenador funciona con batería: posible corte de luz</string>
+    <string name="desktop_event_ac_back">Este ordenador vuelve a estar enchufado: la luz estuvo cortada %s</string>
+    <string name="desktop_location_search">Buscar una ciudad</string>
+    <string name="desktop_location_search_desc">Escribe el nombre de una ciudad o pueblo y elígelo de la lista. Solo se guardan las coordenadas, en este ordenador.</string>
+    <string name="desktop_location_city">Ciudad</string>
+    <string name="desktop_location_find">Buscar</string>
+    <string name="desktop_location_none">No se encontró nada. Prueba otra grafía o introduce las coordenadas.</string>
+    <string name="desktop_smart_ac">Corte de luz cuando este ordenador pasa a batería</string>
+    <string name="desktop_smart_ac_desc">Para un portátil enchufado en casa: si funciona con batería durante un minuto, cuenta como corte de luz, incluso sin internet (el mensaje de Telegram se envía al volver la conexión).</string>
+    <string name="desktop_location_desc">Necesaria para reglas de amanecer/atardecer y temperatura exterior. Se guarda solo en este ordenador; para la temperatura se envía a Open-Meteo redondeada a unos 100 m.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d dispositivo</item>
+        <item quantity="other">%d dispositivos</item>
+    </plurals>
+    <string name="desktop_status_synced">Última comprobación %s</string>
+    <string name="desktop_smart_same_power">Este ordenador está en la misma red eléctrica que los dispositivos</string>
+    <string name="desktop_smart_same_power_desc">Mientras funciona con la red eléctrica no hay corte de luz, así que un dispositivo que se cae se avisa de inmediato en lugar de tras hasta 90 segundos.</string>
+</resources>

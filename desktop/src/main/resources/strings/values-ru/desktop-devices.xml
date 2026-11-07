@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">только что</string>
+    <string name="desktop_ago">%1$s назад</string>
+    <string name="desktop_no_account_title">Аккаунт не подключён</string>
+    <string name="desktop_no_account_body">Подключите аккаунт eWeLink или Tuya в Настройки › Аккаунты, чтобы отслеживать устройства. Чтобы попробовать SwitchGuard без настройки, включите демо-устройства.</string>
+    <string name="desktop_add_account">Добавить аккаунт</string>
+    <string name="desktop_layout_hint">Звезда = держать сверху · стрелки или перетаскивание ручки = переместить (также можно зажать карточку и перетащить) · размер карточки = маленькая или большая · метка = категория.</string>
+    <string name="desktop_drag_handle">Перетащите, чтобы переместить</string>
+    <string name="desktop_click_to_toggle">Щёлкните, чтобы включить или выключить</string>
+    <string name="desktop_hour">Час</string>
+    <string name="desktop_minute">Минута</string>
+</resources>

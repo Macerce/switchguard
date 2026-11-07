@@ -322,6 +322,24 @@ internal fun windowsWarning(store: Store, strings: Strings): String? =
 internal fun languageLabel(strings: Strings, tag: String): String = when (tag) {
     "en" -> "English"
     "tr" -> "Türkçe"
+    "de" -> "Deutsch"
+    "es" -> "Español"
+    "pt-BR" -> "Português (Brasil)"
+    "fr" -> "Français"
+    "it" -> "Italiano"
+    "nl" -> "Nederlands"
+    "pl" -> "Polski"
+    "ru" -> "Русский"
+    "uk" -> "Українська"
+    "ar" -> "العربية"
+    "hi" -> "हिन्दी"
+    "id" -> "Bahasa Indonesia"
+    "vi" -> "Tiếng Việt"
+    "th" -> "ไทย"
+    "zh-CN" -> "简体中文"
+    "zh-TW" -> "繁體中文"
+    "ja" -> "日本語"
+    "ko" -> "한국어"
     else -> strings["desktop_language_system"]
 }
 

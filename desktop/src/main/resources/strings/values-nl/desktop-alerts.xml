@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Alarmen kunnen na een herstart of tijdens slaapstand worden gemist. Klik om het op te lossen in Instellingen › Windows.</string>
+    <string name="desktop_alert_hint">Waarschuwingen draaien op deze computer zolang de bewaking aan staat. Ze draaien niet als de computer uit staat of slaapt.</string>
+</resources>

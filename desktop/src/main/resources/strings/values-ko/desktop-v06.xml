@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">이 컴퓨터가 배터리로 작동 중: 정전 가능성</string>
+    <string name="desktop_event_ac_back">이 컴퓨터가 다시 전원에 연결됨: %s 동안 정전이었습니다</string>
+    <string name="desktop_location_search">도시 검색</string>
+    <string name="desktop_location_search_desc">도시나 마을 이름을 입력하고 목록에서 선택하세요. 좌표만 이 컴퓨터에 저장됩니다.</string>
+    <string name="desktop_location_city">도시</string>
+    <string name="desktop_location_find">검색</string>
+    <string name="desktop_location_none">찾을 수 없습니다. 다른 철자를 시도하거나 좌표를 입력하세요.</string>
+    <string name="desktop_smart_ac">이 컴퓨터가 배터리로 전환되면 정전으로 간주</string>
+    <string name="desktop_smart_ac_desc">집에서 전원에 연결해 둔 노트북용: 1분 동안 배터리로 작동하면 인터넷이 없어도 정전으로 간주합니다(Telegram 메시지는 연결이 돌아오면 전송됩니다).</string>
+    <string name="desktop_location_desc">일출/일몰 및 바깥 온도 규칙에 필요합니다. 이 컴퓨터에만 보관되며, 온도를 위해 약 100m 단위로 반올림해 Open-Meteo로 전송됩니다.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">기기 %d대</item>
+    </plurals>
+    <string name="desktop_status_synced">마지막 확인 %s</string>
+    <string name="desktop_smart_same_power">이 컴퓨터는 기기와 같은 전원을 사용함</string>
+    <string name="desktop_smart_same_power_desc">상용 전원으로 작동하는 동안은 정전이 아니므로, 끊긴 기기를 최대 90초 기다리지 않고 바로 알립니다.</string>
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Alarm bisa terlewat setelah restart atau saat komputer tidur. Klik untuk memperbaikinya di Pengaturan › Windows.</string>
+    <string name="desktop_alert_hint">Peringatan berjalan di komputer ini selama pemantauan aktif. Tidak berjalan saat komputer mati atau tidur.</string>
+</resources>

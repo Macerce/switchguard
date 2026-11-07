@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">يبدأ مع Windows · يبقي الكمبيوتر مستيقظًا</string>
+    <string name="desktop_settings_windows_no_autostart">لا يبدأ مع Windows</string>
+    <string name="desktop_settings_windows_may_sleep">قد يدخل الكمبيوتر في وضع السكون</string>
+    <string name="desktop_settings_windows_intro">لكي يواصل SwitchGuard الحراسة على هذا الكمبيوتر دون انقطاع. إذا كان أحدهما متوقفًا فقد تفوت الإنذارات بعد إعادة التشغيل أو أثناء سكون الكمبيوتر.</string>
+    <string name="desktop_settings_appearance">اللغة والمظهر</string>
+    <string name="desktop_settings_backup_desc">نسخ احتياطي إلى ملف مشفّر أو استعادة منه</string>
+    <string name="desktop_settings_secrets_warn">لا يمكن قراءة المفاتيح المحفوظة على هذا الكمبيوتر</string>
+    <string name="desktop_settings_setup">أدلة الإعداد</string>
+    <string name="desktop_theme_desc">فاتحة أو داكنة أو مثل Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">يرن مثل إنذار حقيقي</string>
+    <string name="desktop_test_alarm_silent_desc">بلا صوت: تحقق ليلًا من نافذة الإنذار والإشعار دون إيقاظ أحد</string>
+    <string name="desktop_test_alarm_delay_desc">خلال ذلك انتقل إلى نافذة أخرى أو اقفل الشاشة لترى الإنذار يظهر فوق كل شيء</string>
+    <string name="desktop_tg_desc">إذا لم يُوقف الإنذار في الوقت المناسب، يتلقى الأشخاص الذين تختارهم رسالة Telegram، وأخرى عند إيقافه. حتى لو لم يكن أحد أمام الكمبيوتر ليلًا، يعلم شخص في المنزل أو جار. تُرسل الرسائل عبر بوت Telegram تنشئه أنت؛ لا يشارك أي خادم آخر.</string>
+    <string name="desktop_tg_step_people_desc">اطلب من كل شخص فتح %s في Telegram والضغط على ابدأ (يمكنك أيضًا إضافة البوت إلى مجموعة العائلة). ثم انقر البحث عن الأشخاص.</string>
+    <string name="desktop_tg_open_link">فتح البوت</string>
+    <string name="desktop_tg_copy_link">نسخ الدعوة</string>
+    <string name="desktop_tg_link_copied">نُسخت الدعوة: الصقها في رسالة إلى الشخص.</string>
+    <string name="desktop_tg_checking">جارٍ التحقق…</string>
+    <string name="desktop_time_hint">استخدم الأسهم أو عجلة الماوس أو لوحة المفاتيح: ↑ ↓ تغيّر القيمة، ويمكنك كتابة الأرقام، وEnter يحفظ.</string>
+    <string name="desktop_time_hour">الساعة</string>
+    <string name="desktop_time_minute">الدقيقة</string>
+    <string name="desktop_summary_note">يصل الملخص كإشعار Windows في الوقت المحدد ما دام SwitchGuard يعمل.</string>
+    <string name="desktop_backup_move_note">الانتقال إلى كمبيوتر آخر: انسخ احتياطيًا إلى ملف على القديم، وثبّت SwitchGuard على الجديد واستعد من الملف، ثم سجّل الدخول إلى eWeLink مجددًا.</string>
+    <string name="desktop_open_logs_desc">أرفق ملفات السجل عند الإبلاغ عن مشكلة</string>
+    <string name="desktop_contact_copied">تعذّر فتح أي تطبيق بريد؛ نُسخ العنوان إلى الحافظة.</string>
+    <string name="desktop_secret_show">إظهار App Secret</string>
+    <string name="desktop_secret_hide">إخفاء App Secret</string>
+</resources>

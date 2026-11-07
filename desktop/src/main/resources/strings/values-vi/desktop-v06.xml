@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Máy tính này đang chạy bằng pin: có thể mất điện</string>
+    <string name="desktop_event_ac_back">Máy tính này đã cắm điện lại: mất điện trong %s</string>
+    <string name="desktop_location_search">Tìm thành phố</string>
+    <string name="desktop_location_search_desc">Nhập tên thành phố hoặc thị trấn rồi chọn trong danh sách. Chỉ lưu tọa độ, trên máy tính này.</string>
+    <string name="desktop_location_city">Thành phố</string>
+    <string name="desktop_location_find">Tìm</string>
+    <string name="desktop_location_none">Không tìm thấy gì. Thử cách viết khác hoặc nhập tọa độ.</string>
+    <string name="desktop_smart_ac">Mất điện khi máy tính này chuyển sang pin</string>
+    <string name="desktop_smart_ac_desc">Dành cho laptop cắm điện ở nhà: nếu chạy bằng pin một phút, được tính là mất điện, kể cả khi không có internet (tin nhắn Telegram được gửi khi có kết nối lại).</string>
+    <string name="desktop_location_desc">Cần cho các quy tắc bình minh/hoàng hôn và nhiệt độ ngoài trời. Chỉ lưu trên máy tính này; với nhiệt độ, được gửi tới Open-Meteo đã làm tròn khoảng 100 m.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">%d thiết bị</item>
+    </plurals>
+    <string name="desktop_status_synced">Lần kiểm tra cuối %s</string>
+    <string name="desktop_smart_same_power">Máy tính này dùng chung nguồn điện với các thiết bị</string>
+    <string name="desktop_smart_same_power_desc">Khi máy đang chạy bằng điện lưới thì không mất điện, nên thiết bị bị rớt sẽ được báo ngay thay vì sau tối đa 90 giây.</string>
+</resources>

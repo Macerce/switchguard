@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Cet ordinateur fonctionne sur batterie : coupure de courant possible</string>
+    <string name="desktop_event_ac_back">Cet ordinateur est de nouveau branché : le courant a été coupé pendant %s</string>
+    <string name="desktop_location_search">Rechercher une ville</string>
+    <string name="desktop_location_search_desc">Saisissez le nom d\'une ville ou d\'un village et choisissez-le dans la liste. Seules les coordonnées sont enregistrées, sur cet ordinateur.</string>
+    <string name="desktop_location_city">Ville</string>
+    <string name="desktop_location_find">Rechercher</string>
+    <string name="desktop_location_none">Aucun résultat. Essayez une autre orthographe ou saisissez les coordonnées.</string>
+    <string name="desktop_smart_ac">Coupure de courant quand cet ordinateur passe sur batterie</string>
+    <string name="desktop_smart_ac_desc">Pour un portable laissé branché à la maison : s\'il fonctionne sur batterie pendant une minute, cela compte comme une coupure de courant, même sans Internet (le message Telegram part dès le retour de la connexion).</string>
+    <string name="desktop_location_desc">Nécessaire pour les règles lever/coucher du soleil et température extérieure. Conservée uniquement sur cet ordinateur ; pour la température, elle est envoyée à Open-Meteo arrondie à environ 100 m.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="one">%d appareil</item>
+        <item quantity="other">%d appareils</item>
+    </plurals>
+    <string name="desktop_status_synced">Dernière vérification %s</string>
+    <string name="desktop_smart_same_power">Cet ordinateur est sur la même alimentation que les appareils</string>
+    <string name="desktop_smart_same_power_desc">Tant qu\'il est sur secteur, il n\'y a pas de coupure de courant : un appareil qui décroche est donc signalé immédiatement au lieu d\'après jusqu\'à 90 secondes.</string>
+</resources>

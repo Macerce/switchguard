@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">隨 Windows 啟動 · 讓電腦保持喚醒</string>
+    <string name="desktop_settings_windows_no_autostart">不隨 Windows 啟動</string>
+    <string name="desktop_settings_windows_may_sleep">電腦可能會進入睡眠</string>
+    <string name="desktop_settings_windows_intro">讓 SwitchGuard 在這台電腦上不間斷地守護。只要有一項關閉，重新開機後或電腦睡眠期間就可能漏掉警報。</string>
+    <string name="desktop_settings_appearance">語言與外觀</string>
+    <string name="desktop_settings_backup_desc">備份到加密檔案或從檔案還原</string>
+    <string name="desktop_settings_secrets_warn">無法在這台電腦上讀取已儲存的金鑰</string>
+    <string name="desktop_settings_setup">設定指南</string>
+    <string name="desktop_theme_desc">淺色、深色或跟隨 Windows。</string>
+    <string name="desktop_test_alarm_sound_desc">像真正的警報一樣響起</string>
+    <string name="desktop_test_alarm_silent_desc">無聲：夜間檢查警報視窗和通知，不會吵醒任何人</string>
+    <string name="desktop_test_alarm_delay_desc">在此期間切換到其他視窗或鎖定螢幕，看看警報如何顯示在所有內容之上</string>
+    <string name="desktop_tg_desc">如果警報沒有及時關閉，你選擇的人會收到一則 Telegram 訊息，關閉後還會再收到一則。即使夜裡沒人在電腦前，家裡的人或鄰居也能知道。訊息由你建立的 Telegram 機器人傳送；不涉及任何其他伺服器。</string>
+    <string name="desktop_tg_step_people_desc">請每個人在 Telegram 中開啟 %s 並點開始（也可以把機器人加入家庭群組）。然後按尋找聯絡人。</string>
+    <string name="desktop_tg_open_link">開啟機器人</string>
+    <string name="desktop_tg_copy_link">複製邀請</string>
+    <string name="desktop_tg_link_copied">邀請已複製：貼到傳給對方的訊息中。</string>
+    <string name="desktop_tg_checking">正在檢查…</string>
+    <string name="desktop_time_hint">使用方向鍵、滑鼠滾輪或鍵盤：↑ ↓ 變更數值，可以直接輸入數字，Enter 儲存。</string>
+    <string name="desktop_time_hour">小時</string>
+    <string name="desktop_time_minute">分鐘</string>
+    <string name="desktop_summary_note">SwitchGuard 執行期間，摘要會在所選時間以 Windows 通知的形式送達。</string>
+    <string name="desktop_backup_move_note">搬到另一台電腦：在舊電腦上備份到檔案，在新電腦上安裝 SwitchGuard 並從檔案還原，然後重新登入 eWeLink。</string>
+    <string name="desktop_open_logs_desc">回報問題時請附上記錄檔</string>
+    <string name="desktop_contact_copied">無法開啟郵件應用程式；網址已複製到剪貼簿。</string>
+    <string name="desktop_secret_show">顯示 App Secret</string>
+    <string name="desktop_secret_hide">隱藏 App Secret</string>
+</resources>

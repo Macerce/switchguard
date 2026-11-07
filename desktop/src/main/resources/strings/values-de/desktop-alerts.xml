@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">Alarme können nach einem Neustart oder im Ruhezustand verpasst werden. Klicke, um es unter Einstellungen › Windows zu beheben.</string>
+    <string name="desktop_alert_hint">Warnungen laufen auf diesem Computer, solange die Überwachung an ist. Ist der Computer aus oder im Ruhezustand, laufen sie nicht.</string>
+</resources>

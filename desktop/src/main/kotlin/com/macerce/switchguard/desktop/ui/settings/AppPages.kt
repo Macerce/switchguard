@@ -175,7 +175,7 @@ fun AppearancePage(
 
     when (dialog) {
         "language" -> ChoiceDialog(
-            str("language"), str("language_desc"), listOf("", "tr", "en"), language, { languageLabel(strings, it) },
+            str("language"), str("language_desc"), listOf("") + Strings.LANGUAGES, language, { languageLabel(strings, it) },
             onPick = { store.language = it }, onDismiss = close,
         )
         "theme" -> ChoiceDialog(

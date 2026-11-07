@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">Komputer ini berjalan dengan baterai: kemungkinan listrik padam</string>
+    <string name="desktop_event_ac_back">Komputer ini tersambung listrik lagi: listrik padam selama %s</string>
+    <string name="desktop_location_search">Cari kota</string>
+    <string name="desktop_location_search_desc">Ketik nama kota dan pilih dari daftar. Hanya koordinat yang disimpan, di komputer ini.</string>
+    <string name="desktop_location_city">Kota</string>
+    <string name="desktop_location_find">Cari</string>
+    <string name="desktop_location_none">Tidak ditemukan apa pun. Coba ejaan lain atau masukkan koordinat.</string>
+    <string name="desktop_smart_ac">Listrik padam saat komputer ini beralih ke baterai</string>
+    <string name="desktop_smart_ac_desc">Untuk laptop yang dibiarkan tercolok di rumah: jika berjalan dengan baterai selama satu menit, dianggap listrik padam, bahkan tanpa internet (pesan Telegram terkirim setelah koneksi kembali).</string>
+    <string name="desktop_location_desc">Diperlukan untuk aturan matahari terbit/terbenam dan suhu luar. Hanya disimpan di komputer ini; untuk suhu dikirim ke Open-Meteo dengan pembulatan sekitar 100 m.</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">%d perangkat</item>
+    </plurals>
+    <string name="desktop_status_synced">Pemeriksaan terakhir %s</string>
+    <string name="desktop_smart_same_power">Komputer ini memakai listrik yang sama dengan perangkat</string>
+    <string name="desktop_smart_same_power_desc">Selama berjalan dengan listrik dari stopkontak tidak ada pemadaman, jadi perangkat yang terputus langsung dilaporkan, bukan setelah hingga 90 detik.</string>
+</resources>

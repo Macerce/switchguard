@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-settings.xml). -->
+    <string name="desktop_settings_windows">Windows</string>
+    <string name="desktop_settings_windows_ok">Inicia com o Windows · mantém o computador acordado</string>
+    <string name="desktop_settings_windows_no_autostart">Não inicia com o Windows</string>
+    <string name="desktop_settings_windows_may_sleep">O computador pode entrar em suspensão</string>
+    <string name="desktop_settings_windows_intro">Para que o SwitchGuard vigie neste computador sem interrupção. Se algum estiver desligado, alarmes podem ser perdidos após uma reinicialização ou com o computador em suspensão.</string>
+    <string name="desktop_settings_appearance">Idioma e aparência</string>
+    <string name="desktop_settings_backup_desc">Fazer backup em um arquivo criptografado ou restaurar de um</string>
+    <string name="desktop_settings_secrets_warn">As chaves salvas não podem ser lidas neste computador</string>
+    <string name="desktop_settings_setup">Guias de configuração</string>
+    <string name="desktop_theme_desc">Claro, escuro ou igual ao Windows.</string>
+    <string name="desktop_test_alarm_sound_desc">Toca como um alarme real</string>
+    <string name="desktop_test_alarm_silent_desc">Sem som: confira a janela de alarme e a notificação à noite sem acordar ninguém</string>
+    <string name="desktop_test_alarm_delay_desc">Enquanto isso, vá para outra janela ou bloqueie a tela para ver o alarme aparecer sobre tudo</string>
+    <string name="desktop_tg_desc">Se um alarme não for parado a tempo, as pessoas que você escolher recebem uma mensagem no Telegram, e outra quando ele for parado. Mesmo que ninguém esteja no computador à noite, alguém em casa ou um vizinho fica sabendo. As mensagens são enviadas por um bot do Telegram que você cria; nenhum outro servidor participa.</string>
+    <string name="desktop_tg_step_people_desc">Peça a cada pessoa que abra %s no Telegram e toque em Iniciar (você também pode adicionar o bot a um grupo da família). Depois clique em Encontrar pessoas.</string>
+    <string name="desktop_tg_open_link">Abrir o bot</string>
+    <string name="desktop_tg_copy_link">Copiar convite</string>
+    <string name="desktop_tg_link_copied">Convite copiado: cole-o em uma mensagem para a pessoa.</string>
+    <string name="desktop_tg_checking">Verificando…</string>
+    <string name="desktop_time_hint">Use as setas, a roda do mouse ou o teclado: ↑ ↓ mudam o valor, você pode digitar números, Enter salva.</string>
+    <string name="desktop_time_hour">Hora</string>
+    <string name="desktop_time_minute">Minuto</string>
+    <string name="desktop_summary_note">O resumo chega como notificação do Windows no horário escolhido enquanto o SwitchGuard está aberto.</string>
+    <string name="desktop_backup_move_note">Mudar para outro computador: faça backup em um arquivo no antigo, instale o SwitchGuard no novo e restaure do arquivo; depois entre de novo no eWeLink.</string>
+    <string name="desktop_open_logs_desc">Anexe os arquivos de log ao relatar um problema</string>
+    <string name="desktop_contact_copied">Nenhum app de e-mail pôde ser aberto; o endereço foi copiado para a área de transferência.</string>
+    <string name="desktop_secret_show">Mostrar App Secret</string>
+    <string name="desktop_secret_hide">Ocultar App Secret</string>
+</resources>

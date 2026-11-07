@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-alerts.xml). -->
+    <string name="desktop_alerts_windows_desc">อาจพลาดสัญญาณเตือนหลังรีสตาร์ทหรือขณะคอมพิวเตอร์สลีป คลิกเพื่อแก้ไขใน การตั้งค่า › Windows</string>
+    <string name="desktop_alert_hint">การแจ้งเตือนทำงานบนคอมพิวเตอร์เครื่องนี้ขณะเปิดการตรวจสอบ จะไม่ทำงานเมื่อคอมพิวเตอร์ปิดหรืออยู่ในโหมดสลีป</string>
+</resources>

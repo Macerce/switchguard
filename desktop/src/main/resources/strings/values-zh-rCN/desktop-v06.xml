@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-v06.xml). -->
+    <string name="desktop_event_ac_lost">这台电脑正在使用电池：可能停电了</string>
+    <string name="desktop_event_ac_back">这台电脑已重新接通电源：停电了 %s</string>
+    <string name="desktop_location_search">搜索城市</string>
+    <string name="desktop_location_search_desc">输入城市或城镇名称并从列表中选择。只在这台电脑上保存坐标。</string>
+    <string name="desktop_location_city">城市</string>
+    <string name="desktop_location_find">搜索</string>
+    <string name="desktop_location_none">未找到结果。请尝试其他拼写或输入坐标。</string>
+    <string name="desktop_smart_ac">这台电脑改用电池供电时视为停电</string>
+    <string name="desktop_smart_ac_desc">适用于在家插着电源的笔记本电脑：如果用电池运行一分钟，即视为停电，即使没有网络（连接恢复后会发送 Telegram 消息）。</string>
+    <string name="desktop_location_desc">用于日出/日落和室外温度规则。只保存在这台电脑上；为获取温度，会以约 100 米精度发送给 Open-Meteo。</string>
+    <plurals name="desktop_status_devices">
+        <item quantity="other">%d 台设备</item>
+    </plurals>
+    <string name="desktop_status_synced">上次检查 %s</string>
+    <string name="desktop_smart_same_power">这台电脑与设备使用同一电源</string>
+    <string name="desktop_smart_same_power_desc">只要它使用市电运行，就不存在停电，因此掉线的设备会立即报告，而不是最多等待 90 秒。</string>
+</resources>

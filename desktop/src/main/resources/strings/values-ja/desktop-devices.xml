@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Desktop-only strings (translated from values/desktop-devices.xml). -->
+    <string name="desktop_just_now">たった今</string>
+    <string name="desktop_ago">%1$s前</string>
+    <string name="desktop_no_account_title">接続されているアカウントはありません</string>
+    <string name="desktop_no_account_body">デバイスを監視するには、設定 › アカウント で eWeLink または Tuya アカウントを接続してください。設定なしで SwitchGuard を試すには、デモデバイスをオンにします。</string>
+    <string name="desktop_add_account">アカウントを追加</string>
+    <string name="desktop_layout_hint">星 = 上部に固定 · 矢印またはハンドルをドラッグ = 移動 (カードを長押ししてドラッグすることもできます) · カードサイズ = 小または大 · ラベル = カテゴリ。</string>
+    <string name="desktop_drag_handle">ドラッグして移動</string>
+    <string name="desktop_click_to_toggle">クリックでオン/オフ</string>
+    <string name="desktop_hour">時間</string>
+    <string name="desktop_minute">分</string>
+</resources>
