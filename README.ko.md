@@ -16,7 +16,7 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 ## 다운로드
 
 ### Android (휴대폰, 태블릿, TV)
-- **Google Play** (비공개 테스트): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [최신 Android 릴리스](https://github.com/Macerce/switchguard/releases/latest) — `SwitchGuard-x.y.z.apk`를 내려받아 휴대폰에서 여세요. Google Play에서 SwitchGuard를 이미 설치했다면 먼저 삭제하세요(서명이 다름). GitHub 버전은 새 버전이 나오면 알려 줍니다.
 
 ### Windows 10 / 11

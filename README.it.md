@@ -16,7 +16,7 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 ## Download
 
 ### Android (telefono, tablet, TV)
-- **Google Play** (test chiuso): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [ultima versione Android](https://github.com/Macerce/switchguard/releases/latest) — scarica `SwitchGuard-x.y.z.apk` e aprilo sul telefono. Se SwitchGuard è già installato da Google Play, disinstallalo prima (firma diversa). La versione GitHub ti avvisa quando ne esce una nuova.
 
 ### Windows 10 / 11

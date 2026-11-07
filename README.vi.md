@@ -16,7 +16,7 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 ## Tải về
 
 ### Android (điện thoại, máy tính bảng, TV)
-- **Google Play** (thử nghiệm kín): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [bản Android mới nhất](https://github.com/Macerce/switchguard/releases/latest) — tải `SwitchGuard-x.y.z.apk` và mở trên điện thoại. Nếu SwitchGuard đã được cài từ Google Play, hãy gỡ nó trước (chữ ký khác nhau). Bản GitHub sẽ báo cho bạn khi có bản mới hơn.
 
 ### Windows 10 / 11

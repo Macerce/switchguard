@@ -16,7 +16,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 ## Download
 
 ### Android (phone, tablet, TV)
-- **Google Play** (closed test): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [latest Android release](https://github.com/Macerce/switchguard/releases/latest) — download `SwitchGuard-x.y.z.apk` and open it on the phone. If SwitchGuard is already installed from Google Play, uninstall it first (different signature). The GitHub version tells you when a newer one is out.
 
 ### Windows 10 / 11

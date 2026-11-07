@@ -16,7 +16,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 ## Télécharger
 
 ### Android (téléphone, tablette, TV)
-- **Google Play** (test fermé): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [dernière version Android](https://github.com/Macerce/switchguard/releases/latest) — téléchargez `SwitchGuard-x.y.z.apk` et ouvrez-le sur le téléphone. Si SwitchGuard est déjà installé depuis Google Play, désinstallez-le d'abord (signature différente). La version GitHub vous prévient quand une nouvelle version sort.
 
 ### Windows 10 / 11

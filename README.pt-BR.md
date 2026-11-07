@@ -16,7 +16,7 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 ## Baixar
 
 ### Android (celular, tablet, TV)
-- **Google Play** (teste fechado): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [versão Android mais recente](https://github.com/Macerce/switchguard/releases/latest) — baixe `SwitchGuard-x.y.z.apk` e abra no celular. Se o SwitchGuard já estiver instalado pelo Google Play, desinstale-o primeiro (assinatura diferente). A versão do GitHub avisa quando sai uma mais nova.
 
 ### Windows 10 / 11

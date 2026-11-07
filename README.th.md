@@ -16,7 +16,7 @@ SwitchGuard เฝ้าดูปลั๊กและสวิตช์อั�
 ## ดาวน์โหลด
 
 ### Android (โทรศัพท์ แท็บเล็ต ทีวี)
-- **Google Play** (การทดสอบแบบปิด): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [เวอร์ชัน Android ล่าสุด](https://github.com/Macerce/switchguard/releases/latest) — ดาวน์โหลด `SwitchGuard-x.y.z.apk` แล้วเปิดบนโทรศัพท์ ถ้าติดตั้ง SwitchGuard จาก Google Play อยู่แล้ว ให้ถอนการติดตั้งก่อน (ลายเซ็นต่างกัน) เวอร์ชัน GitHub จะแจ้งเมื่อมีเวอร์ชันใหม่
 
 ### Windows 10 / 11

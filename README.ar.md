@@ -18,7 +18,7 @@
 ## التنزيل
 
 ### Android (هاتف، جهاز لوحي، تلفاز)
-- **Google Play** (اختبار مغلق): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [أحدث إصدار لـ Android](https://github.com/Macerce/switchguard/releases/latest) — نزّل `SwitchGuard-x.y.z.apk` وافتحه على الهاتف. إذا كان SwitchGuard مثبّتًا من Google Play فأزله أولًا (التوقيع مختلف). تُعلمك نسخة GitHub عند صدور نسخة أحدث.
 
 ### Windows 10 / 11

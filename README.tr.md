@@ -16,7 +16,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 ## İndir
 
 ### Android (telefon, tablet, TV)
-- **Google Play** (kapalı test): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [son Android sürümü](https://github.com/Macerce/switchguard/releases/latest) — `SwitchGuard-x.y.z.apk` dosyasını indirip telefonda açın. SwitchGuard Google Play'den kuruluysa önce onu kaldırın (imza farklı). GitHub sürümü yenisi çıkınca size haber verir.
 
 ### Windows 10 / 11

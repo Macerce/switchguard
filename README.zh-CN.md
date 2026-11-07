@@ -16,7 +16,7 @@ SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** �
 ## 下载
 
 ### Android (手机、平板、电视)
-- **Google Play** (封闭测试): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [最新 Android 版本](https://github.com/Macerce/switchguard/releases/latest) — 下载 `SwitchGuard-x.y.z.apk` 并在手机上打开。如果已从 Google Play 安装了 SwitchGuard，请先卸载（签名不同）。GitHub 版本会在有新版时提醒你。
 
 ### Windows 10 / 11

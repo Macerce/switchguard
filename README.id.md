@@ -16,7 +16,7 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 ## Unduh
 
 ### Android (ponsel, tablet, TV)
-- **Google Play** (uji tertutup): https://play.google.com/apps/testing/com.macerce.switchguard
+- **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [rilis Android terbaru](https://github.com/Macerce/switchguard/releases/latest) — unduh `SwitchGuard-x.y.z.apk` lalu buka di ponsel. Jika SwitchGuard sudah terpasang dari Google Play, copot dulu (tanda tangan berbeda). Versi GitHub memberi tahu Anda saat ada versi lebih baru.
 
 ### Windows 10 / 11
