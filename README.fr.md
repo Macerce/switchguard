@@ -467,7 +467,7 @@ SwitchGuard pour Windows (10 / 11) assure la même surveillance sur un PC : il r
 5. Ajoutez vos comptes dans Réglages → Comptes (les étapes Tuya et eWeLink sont plus bas).
 6. Passer à un autre ordinateur : sur l'ancien, Réglages → Sauvegarde et transfert → Sauvegarder dans un fichier ; installez sur le nouveau, Restaurer depuis un fichier, puis reconnectez-vous à eWeLink.
 7. Pour désinstaller : Paramètres Windows → Applications → Applications installées → SwitchGuard → Désinstaller.
-8. Installer une nouvelle version : désinstallez d'abord l'ancienne (étape 7), puis lancez le nouveau fichier d'installation. Vos réglages, comptes et sons sont conservés.
+8. Installer une nouvelle version : désinstallez d'abord l'ancienne (étape 7), puis lancez le nouveau fichier d'installation. Vos réglages, comptes et sons sont conservés. (Le bouton Mettre à jour de l'app s'en charge pour vous.)
 
 ## Compilation
 

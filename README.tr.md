@@ -467,7 +467,7 @@ SwitchGuard for Windows (10 / 11) aynı izlemeyi bilgisayarda yapar: tepside dur
 5. Hesaplarınızı Ayarlar → Hesaplar bölümünden ekleyin (Tuya ve eWeLink anlatımları aşağıda).
 6. Başka bir bilgisayara geçerken: eskisinde Ayarlar → Yedekleme ve aktarım → Dosyaya yedekle; yenisine kurup Dosyadan geri yükle; ardından eWeLink'e yeniden giriş yapın.
 7. Kaldırmak için: Windows Ayarlar → Uygulamalar → Yüklü uygulamalar → SwitchGuard → Kaldır.
-8. Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez.
+8. Yeni sürüm kurarken önce eski sürümü kaldırın (7. adım), sonra yeni kurulum dosyasını çalıştırın. Ayarlarınız, hesaplarınız ve sesleriniz silinmez. (Uygulamadaki Güncelle düğmesi bunu kendisi yapar.)
 
 ## Derleme
 

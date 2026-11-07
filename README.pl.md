@@ -467,7 +467,7 @@ SwitchGuard dla Windows (10 / 11) monitoruje tak samo na komputerze: siedzi w za
 5. Dodaj konta w Ustawienia → Konta (kroki dla Tuya i eWeLink są poniżej).
 6. Przenosiny na inny komputer: na starym Ustawienia → Kopia zapasowa i przenoszenie → Kopia do pliku; zainstaluj na nowym, Przywróć z pliku, a potem ponownie zaloguj się do eWeLink.
 7. Odinstalowanie: Ustawienia Windows → Aplikacje → Zainstalowane aplikacje → SwitchGuard → Odinstaluj.
-8. Instalacja nowej wersji: najpierw odinstaluj starą (krok 7), potem uruchom nowy instalator. Ustawienia, konta i dźwięki zostają.
+8. Instalacja nowej wersji: najpierw odinstaluj starą (krok 7), potem uruchom nowy instalator. Ustawienia, konta i dźwięki zostają. (Przycisk Aktualizuj w aplikacji robi to za Ciebie.)
 
 ## Budowanie
 

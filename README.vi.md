@@ -467,7 +467,7 @@ SwitchGuard cho Windows (10 / 11) theo dõi tương tự trên PC: nằm ở kha
 5. Thêm tài khoản trong Cài đặt → Tài khoản (các bước cho Tuya và eWeLink ở bên dưới).
 6. Chuyển sang máy tính khác: trên máy cũ, Cài đặt → Sao lưu & chuyển → Sao lưu ra tệp; cài trên máy mới, Khôi phục từ tệp, rồi đăng nhập lại eWeLink.
 7. Để gỡ cài đặt: Cài đặt Windows → Ứng dụng → Ứng dụng đã cài → SwitchGuard → Gỡ cài đặt.
-8. Cài phiên bản mới: trước tiên gỡ phiên bản cũ (bước 7), rồi chạy tệp cài đặt mới. Cài đặt, tài khoản và âm thanh của bạn được giữ nguyên.
+8. Cài phiên bản mới: trước tiên gỡ phiên bản cũ (bước 7), rồi chạy tệp cài đặt mới. Cài đặt, tài khoản và âm thanh của bạn được giữ nguyên. (Nút Cập nhật trong ứng dụng sẽ tự làm việc này.)
 
 ## Biên dịch
 

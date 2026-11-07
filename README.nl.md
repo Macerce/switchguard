@@ -467,7 +467,7 @@ SwitchGuard voor Windows (10 / 11) bewaakt op dezelfde manier op een pc: hij zit
 5. Voeg je accounts toe in Instellingen → Accounts (de stappen voor Tuya en eWeLink staan hieronder).
 6. Naar een andere computer: op de oude Instellingen → Back-up & overzetten → Back-up naar bestand; installeer op de nieuwe, Herstellen uit bestand, en log daarna opnieuw in bij eWeLink.
 7. Verwijderen: Windows-instellingen → Apps → Geïnstalleerde apps → SwitchGuard → Verwijderen.
-8. Een nieuwe versie installeren: verwijder eerst de oude (stap 7) en voer dan het nieuwe installatiebestand uit. Je instellingen, accounts en geluiden blijven bewaard.
+8. Een nieuwe versie installeren: verwijder eerst de oude (stap 7) en voer dan het nieuwe installatiebestand uit. Je instellingen, accounts en geluiden blijven bewaard. (De knop Bijwerken in de app doet dit voor je.)
 
 ## Bouwen
 

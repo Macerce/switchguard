@@ -467,7 +467,7 @@ SwitchGuard untuk Windows (10 / 11) melakukan pemantauan yang sama di PC: berada
 5. Tambahkan akun Anda di Pengaturan → Akun (langkah Tuya dan eWeLink ada di bawah).
 6. Pindah ke komputer lain: di komputer lama, Pengaturan → Cadangan & transfer → Cadangkan ke file; pasang di komputer baru, Pulihkan dari file, lalu masuk lagi ke eWeLink.
 7. Untuk menghapus: Pengaturan Windows → Aplikasi → Aplikasi terinstal → SwitchGuard → Hapus instalan.
-8. Memasang versi baru: hapus dulu versi lama (langkah 7), lalu jalankan file penyiapan yang baru. Pengaturan, akun, dan suara Anda tetap tersimpan.
+8. Memasang versi baru: hapus dulu versi lama (langkah 7), lalu jalankan file penyiapan yang baru. Pengaturan, akun, dan suara Anda tetap tersimpan. (Tombol Perbarui di aplikasi melakukannya untuk Anda.)
 
 ## Build
 
