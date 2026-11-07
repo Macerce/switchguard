@@ -366,7 +366,7 @@
     <string name="warn_session_expired">您的 eWeLink 登录已过期。请打开 SwitchGuard 重新登录以继续监控。</string>
     <string name="channel_session">登录警告</string>
     <string name="channel_session_desc">在您被登出且监控已停止时显示。</string>
-    <string name="session_lost_title">监控已停止 — 已登出</string>
+    <string name="session_lost_title">监控已停止 — 已退出登录</string>
     <string name="session_lost_body">此 eWeLink 账号已在另一台设备上登录，或登录已过期。在您重新登录之前，此手机将不会收到警报。</string>
     <string name="session_lost_tip">提示：eWeLink 每个账号只允许一个登录会话。请为每部手机使用各自的 eWeLink 账号，并在 eWeLink 应用中共享设备。</string>
     <string name="tab_automations">自动化</string>
@@ -884,7 +884,7 @@
     <string name="smart_charger_desc">如果这部手机/平板一直插电放在现场，拔掉充电器一分钟即视为停电；断网时同样有效。消息通过移动数据经 Telegram 发出。</string>
 
     <string name="widget_voice_label">SwitchGuard 语音指令</string>
-    <string name="widget_voice_description">一个磁贴：点按、说出指令（“关闭厨房”），即可执行</string>
+    <string name="widget_voice_description">一个磁贴：点按、说出指令（“Turn off kitchen”），即可执行</string>
     <string name="widget_voice_title">语音指令</string>
     <string name="widget_voice_tap">点按并说话</string>
     <string name="widget_group_label">SwitchGuard 分组</string>
@@ -1285,11 +1285,18 @@
     <plurals name="category_devices_n">
         <item quantity="other">%d 台设备</item>
     </plurals>
-    <string name="chat_not_understood">我没能理解这条指令。例如，可以写“关闭客厅和厨房”、“暖风机功率？”、“温度？”或“状态”。发送“帮助”查看所有指令。</string>
-    <string name="chat_help">可以随意书写指令。示例：\n• 打开客厅 · 关闭厨房和花园\n• 关闭所有灯（名称匹配的每台设备）\n• 客厅开着吗？ · 状态\n• 暖风机功率？ · 功率（当前、今日和平时功率）\n• 温度？（室外）\n• 晚间场景 · 在家 · 离家\n对于多通道设备，请加上通道编号，例如“打开水泵 2”。</string>
-    <string name="chat_ack_app">警报需在应用的警报界面中静音；“收到”命令在 Telegram 中使用。</string>
-    <string name="chat_switch_usage">哪台设备？例如，写“打开客厅”。</string>
-    <string name="chat_need_channel">%1$s 有 %2$d 个通道；请加上通道编号，例如“打开 %1$s 1”。</string>
+    <string name="chat_not_understood">我没能理解这条指令。例如，可以写“Turn off living room and kitchen”、“Heater watts?”、“Temperature?”或“Status”。发送“Help”查看所有指令。</string>
+    <string name="chat_help">可以随意书写指令（指令需使用英文或土耳其文）。示例：
+• Turn on living room · Turn off kitchen and garden
+• Turn off all lights（名称匹配的所有设备）
+• Is the living room on? · Status
+• Heater watts? · Power（当前、今日和平时功率）
+• Temperature?（室外）
+• Evening scene · Home · Away
+对于多通道设备，请加上通道编号，例如“Turn on pump 2”。</string>
+    <string name="chat_ack_app">警报需在应用的警报界面中静音；“Ack”命令可在 Telegram 中使用。</string>
+    <string name="chat_switch_usage">哪台设备？例如，写“Turn on living room”。</string>
+    <string name="chat_need_channel">%1$s 有 %2$d 个通道；请加上通道编号，例如“Turn on %1$s 1”。</string>
     <string name="chat_not_found">没有找到名为“%s”的设备。</string>
     <string name="chat_no_devices">尚未添加任何设备。</string>
     <string name="chat_power_none">没有设备可测量功率。</string>
@@ -1303,33 +1310,33 @@
     <string name="chat_temp_unknown">需要位置才能显示室外温度。您可以在应用的 设置 → 位置与区域 中设置。</string>
     <string name="chat_template_ran">模板“%1$s”：%2$s</string>
     <string name="chat_tpl_status">状态</string>
-    <string name="chat_tpl_status_text">状态</string>
+    <string name="chat_tpl_status_text">Status</string>
     <string name="chat_tpl_power">功率</string>
-    <string name="chat_tpl_power_text">功率</string>
+    <string name="chat_tpl_power_text">Power</string>
     <string name="chat_tpl_temp">温度</string>
-    <string name="chat_tpl_temp_text">温度？</string>
+    <string name="chat_tpl_temp_text">Temperature?</string>
     <string name="chat_tpl_home">我到家了</string>
-    <string name="chat_tpl_home_text">在家</string>
+    <string name="chat_tpl_home_text">Home</string>
     <string name="chat_tpl_away">我出门了</string>
-    <string name="chat_tpl_away_text">离家</string>
+    <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">帮助</string>
-    <string name="chat_tpl_help_text">帮助</string>
+    <string name="chat_tpl_help_text">Help</string>
     <string name="chat_title">聊天</string>
     <string name="chat_open">聊天指令</string>
-    <string name="chat_hint">输入指令，例如：关闭厨房</string>
+    <string name="chat_hint">输入指令，例如 Turn off kitchen</string>
     <string name="chat_send">发送</string>
     <string name="chat_voice">语音指令</string>
-    <string name="chat_voice_prompt">请说出指令，例如“关闭厨房”</string>
+    <string name="chat_voice_prompt">请说出指令，例如“Turn off kitchen”</string>
     <string name="chat_voice_unavailable">此设备不支持语音识别。请启用 Google 应用或语音输入。</string>
     <string name="chat_speak_on">语音回复已开启</string>
     <string name="chat_speak_off">语音回复已关闭</string>
-    <string name="chat_welcome">你好。你可以通过输入文字来管理设备：开关设备、查询状态、功率或室外温度。点按麦克风可改为语音输入（“关闭厨房”）；回复会朗读出来。下方有现成的模板；点按即可发送，长按可编辑。</string>
+    <string name="chat_welcome">你好。你可以通过输入文字来管理设备：开关设备、查询状态、功率或室外温度。点按麦克风可改为语音输入（“Turn off kitchen”）；回复会朗读出来。下方有现成的模板；点按即可发送，长按可编辑。指令需使用英文或土耳其文。</string>
     <string name="chat_templates">模板</string>
     <string name="chat_add_template">新建模板</string>
     <string name="chat_edit_template">编辑模板</string>
     <string name="chat_tpl_name">名称</string>
     <string name="chat_tpl_message">要发送的消息</string>
-    <string name="chat_tpl_message_help">按聊天中的写法填写，例如“关闭花园和泳池”。</string>
+    <string name="chat_tpl_message_help">按聊天中的写法填写，例如“Turn off garden and pool”。</string>
     <string name="chat_tpl_when">自动运行</string>
     <string name="chat_when_manual">仅点按时</string>
     <string name="chat_when_time">每天定时</string>

@@ -13,7 +13,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos comptes eWeL
 • Contrôle « L'alarme risque de ne pas vous parvenir » : repère les réglages du téléphone qui couperaient vos alarmes et les corrige en une touche
 • Alertes intelligentes : une seule alerte pour une coupure de courant (tous les appareils hors ligne en même temps, ou ce téléphone débranché), consommation inhabituelle, budget mensuel et rapport hebdomadaire
 • Telegram : si une alarme n'est pas arrêtée à temps, les personnes que vous choisissez reçoivent un message, par étapes ; consultez l'état, prenez en charge une alarme, commandez des appareils et lancez des scènes par commandes
-• Resonner si non résolu : des rappels tant qu'un appareil reste éteint, allumé ou hors ligne
+• Sonner à nouveau si non résolu : des rappels tant qu'un appareil reste éteint, allumé ou hors ligne
 • Mises à jour en direct en quelques secondes, avec vérifications de secours automatiques
 • Règles par appareil : alarme, notification ou rien — pour allumé, éteint, hors ligne et en ligne
 • Ignorer les brèves déconnexions, heures calmes, un son d'alarme différent pour chaque appareil, volume et vibration

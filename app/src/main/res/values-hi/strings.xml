@@ -211,7 +211,7 @@
     <string name="not_set">सेट नहीं है</string>
     <string name="logout_title">साइन आउट करें?</string>
     <string name="logout_body">निगरानी बंद हो जाएगी। आपकी सेटिंग और इतिहास सुरक्षित रहेंगे।</string>
-    <string name="always_awake">अधिकतम भरोसेमंदी</string>
+    <string name="always_awake">अधिकतम विश्वसनीयता</string>
     <string name="always_awake_desc">प्रोसेसर को जगाए रखता है ताकि कोई घटना देर से न आए। बैटरी ज़्यादा खर्च होती है।</string>
     <string name="offline_grace">थोड़ी देर के डिस्कनेक्शन अनदेखा करें</string>
     <string name="offline_grace_desc">डिवाइस के ऑफ़लाइन होने की सूचना देने से पहले इतनी देर रुकें। अगर वह समय पर वापस आ जाए, तो कोई सूचना नहीं मिलेगी।</string>
@@ -257,10 +257,10 @@
     <string name="test_alarm">टेस्ट अलार्म</string>
     <string name="test_alarm_desc">अलार्म अभी आज़माएँ: आवाज़ के साथ या चुपचाप, तुरंत या 10 सेकंड बाद</string>
     <string name="test_alarm_line">टेस्ट अलार्म</string>
-    <string name="test_alarm_line_silent">चुप टेस्ट अलार्म</string>
+    <string name="test_alarm_line_silent">साइलेंट टेस्ट अलार्म</string>
     <string name="test_alarm_sound">आवाज़ के साथ</string>
     <string name="test_alarm_sound_desc">असली अलार्म की तरह बजता और वाइब्रेट करता है</string>
-    <string name="test_alarm_silent">चुप (सिर्फ़ स्क्रीन)</string>
+    <string name="test_alarm_silent">साइलेंट (सिर्फ़ स्क्रीन)</string>
     <string name="test_alarm_silent_desc">न आवाज़, न वाइब्रेशन: किसी को जगाए बिना रात में अलार्म स्क्रीन और नोटिफ़िकेशन जाँचें</string>
     <string name="test_alarm_delay">%d सेकंड में बजाएँ</string>
     <string name="test_alarm_delay_desc">इस बीच फ़ोन को लॉक कर दें, ताकि लॉक स्क्रीन पर अलार्म स्क्रीन खुलती दिखे</string>
@@ -381,7 +381,7 @@
     <string name="automation_retrying">%1$s — विफल: %2$s · फिर कोशिश हो रही है</string>
     <string name="automation_gave_up_on">%1$s — चालू नहीं हुआ (%3$d कोशिशें): %2$s</string>
     <string name="automation_gave_up_off">%1$s — बंद नहीं हुआ (%3$d कोशिशें): %2$s</string>
-    <string name="automation_retried">%1$s (%2$d वीं कोशिश में)</string>
+    <string name="automation_retried">%1$s (%2$dवीं कोशिश में)</string>
     <string name="automations_empty">अभी कोई ऑटोमेशन नहीं</string>
     <string name="automations_examples">उदाहरण:\n• सम्प लेवल चैनल चालू होने पर लाइटें चालू करें\n• पंप 30 मिनट तक चालू रहे तो उसे बंद करें और अलार्म बजाएँ\n• पावर 2000 W से ऊपर जाए तो मुझे सूचित करें</string>
     <string name="automations_need_monitoring">निगरानी बंद है — जब तक आप उसे शुरू नहीं करेंगे, ऑटोमेशन नहीं चलेंगे।</string>
@@ -454,7 +454,7 @@
     <string name="energy_report_col_share">हिस्सा (%)</string>
     <string name="energy_report_col_avg">औसत (W)</string>
     <string name="energy_report_col_peak">अधिकतम (W)</string>
-    <string name="energy_report_col_peak_at">अधिकतम कब</string>
+    <string name="energy_report_col_peak_at">अधिकतम का समय</string>
     <string name="energy_report_col_covered">मापा गया समय</string>
     <string name="energy_report_col_cost">लागत</string>
     <string name="energy_report_page">पेज %1$d / %2$d</string>
@@ -470,7 +470,7 @@
     <string name="timer_other">अन्य टाइमर</string>
     <string name="timer_other_desc">eWeLink ऐप में बनाया गया (एक बार वाला, काउंटडाउन…)। जैसा है वैसा ही रहता है; इसे eWeLink में बदलें।</string>
     <string name="days_every">हर दिन</string>
-    <string name="days_weekdays">सप्ताह के दिन</string>
+    <string name="days_weekdays">कार्यदिवस</string>
     <string name="days_weekend">सप्ताहांत</string>
     <string name="section_summary">दैनिक सारांश</string>
     <string name="daily_summary">दैनिक सारांश सूचना</string>

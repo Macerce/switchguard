@@ -27,6 +27,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,7 +44,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.EventLog
@@ -199,7 +202,7 @@ fun App() {
                                     selected = tab == t,
                                     onClick = { select(t) },
                                     icon = { tabIcon(t) },
-                                    label = { Text(stringResource(t.label)) },
+                                    label = { TabLabel(stringResource(t.label)) },
                                 )
                             }
                         }
@@ -210,4 +213,17 @@ fun App() {
             }
         }
     }
+}
+
+/** Alt menü etiketi tek satır: uzun çevirilerde (ör. Fransızca "Automatisations") ikiye bölünmek yerine yazı küçülür. */
+@Composable
+private fun TabLabel(text: String) {
+    val size = MaterialTheme.typography.labelMedium.fontSize
+    Text(
+        text,
+        maxLines = 1,
+        softWrap = false,
+        overflow = TextOverflow.Clip,
+        autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = size, stepSize = 0.5.sp),
+    )
 }

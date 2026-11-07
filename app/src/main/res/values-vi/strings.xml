@@ -194,7 +194,7 @@
     <string name="tuya_not_connected">Chưa kết nối · chạm để kết nối</string>
     <string name="tuya_dialog_title">Kết nối Tuya / Smart Life</string>
     <string name="tuya_dialog_desc">Nhập Access ID và Access Secret của dự án Tuya Cloud (platform.tuya.com → Cloud → dự án của bạn → Overview). Tài khoản ứng dụng Smart Life / Tuya của bạn phải được liên kết với dự án.</string>
-    <string name="tuya_region">Data center</string>
+    <string name="tuya_region">Trung tâm dữ liệu</string>
     <string name="tuya_region_eu">Trung Âu</string>
     <string name="tuya_region_us">Tây Mỹ</string>
     <string name="tuya_region_cn">Trung Quốc</string>
@@ -292,7 +292,7 @@
     <string name="ready_title">Báo động có thể không đến được với bạn</string>
     <string name="ready_body">Hãy sửa các cài đặt điện thoại này để SwitchGuard luôn có thể kêu.</string>
     <string name="ready_fix">Khắc phục</string>
-    <string name="ready_done">Tôi đã làm xong</string>
+    <string name="ready_done">Đã xong</string>
     <string name="ready_notifications">Thông báo đang tắt</string>
     <string name="ready_notifications_desc">Không thể hiển thị báo động và cảnh báo.</string>
     <string name="ready_channel">Thông báo báo động bị hạ mức</string>
@@ -413,7 +413,7 @@
     <string name="trigger_power_below">công suất giảm xuống dưới</string>
     <string name="auto_action_turn_on">Bật</string>
     <string name="auto_action_turn_off">Tắt</string>
-    <string name="auto_action_alarm">Đổ chuông báo động</string>
+    <string name="auto_action_alarm">Phát báo động</string>
     <string name="auto_action_notify">Gửi thông báo</string>
 
     <string name="section_energy">Năng lượng</string>
@@ -433,9 +433,9 @@
     <string name="energy_cost">Chi phí ước tính</string>
     <string name="energy_avg_power">Công suất trung bình</string>
     <string name="energy_peak">Công suất đỉnh</string>
-    <string name="energy_busiest_hour">Giờ cao điểm nhất</string>
-    <string name="energy_busiest_day">Ngày cao điểm nhất</string>
-    <string name="energy_busiest_month">Tháng cao điểm nhất</string>
+    <string name="energy_busiest_hour">Giờ dùng nhiều nhất</string>
+    <string name="energy_busiest_day">Ngày dùng nhiều nhất</string>
+    <string name="energy_busiest_month">Tháng dùng nhiều nhất</string>
     <string name="energy_avg_per_day">Trung bình mỗi ngày</string>
     <string name="energy_avg_per_month">Trung bình mỗi tháng</string>
     <string name="energy_coverage">Đã đo</string>
@@ -483,7 +483,7 @@
     <string name="timer_other">Hẹn giờ khác</string>
     <string name="timer_other_desc">Được tạo trong ứng dụng eWeLink (một lần, đếm ngược…). Được giữ nguyên; hãy sửa trong eWeLink.</string>
     <string name="days_every">Mỗi ngày</string>
-    <string name="days_weekdays">Các ngày trong tuần</string>
+    <string name="days_weekdays">Ngày thường</string>
     <string name="days_weekend">Cuối tuần</string>
 
     <string name="section_summary">Tóm tắt hằng ngày</string>
@@ -540,7 +540,7 @@
     <string name="demo_power_drop">Giảm công suất trên kênh %d (máy bơm bị kẹt)</string>
     <string name="demo_power_drop_single">Giảm công suất (thiết bị bị kẹt)</string>
     <string name="demo_power_restore">Khôi phục công suất trên kênh %d</string>
-    <string name="demo_power_restore_single">Khôi phục công suất</string>
+    <string name="demo_power_restore_single">Cấp điện lại</string>
     <string name="alarm_open_app">Mở ứng dụng</string>
     <string name="perm_overlay">Hiện báo động trên các ứng dụng khác</string>
     <string name="perm_overlay_desc">Cần thiết trên Android TV để báo động hiện lên trên mọi nội dung đang phát. Chạm và cho phép SwitchGuard.</string>

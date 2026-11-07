@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.26.1 — 2026-11-07
+**Fixes**
+- Bottom bar labels no longer wrap onto two lines in long languages (German, French, Ukrainian…); the text shrinks to fit one line.
+- Translation fixes: Thai "alarm" meant an alarm clock; Chinese chat command examples had been translated (commands are English/Turkish only); Russian/Ukrainian comparison sentences, Polish/French grammar and more natural terms in several languages.
+
 ## 2.26.0 — 2026-11-07
 **New**
 - **20 languages**: the app now speaks English, Turkish, German, Spanish, Portuguese (Brazil), French, Italian, Dutch, Polish, Russian, Ukrainian, Arabic, Hindi, Indonesian, Vietnamese, Thai, Chinese (Simplified and Traditional), Japanese and Korean. Pick one in Settings → Language; Arabic uses a right-to-left layout. Chat and Telegram commands are still understood in English or Turkish.

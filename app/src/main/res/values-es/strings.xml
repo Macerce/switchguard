@@ -1534,7 +1534,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_today_kwh">Hoy %1$s kWh</string>
     <string name="board_recent">Actividad reciente</string>
     <string name="board_no_recent">Aún no hay eventos</string>
-    <string name="board_upcoming">Próximamente</string>
+    <string name="board_upcoming">A continuación</string>
     <string name="board_no_upcoming">Nada programado en las próximas 24 horas</string>
     <string name="board_in">en %1$s</string>
     <string name="board_kind_sunrise">amanecer</string>

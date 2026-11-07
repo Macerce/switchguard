@@ -4,7 +4,7 @@
 SwitchGuard – Alarm gniazdek
 
 ## Short description (≤80)
-Natychmiastowy alarm, gdy gniazdka eWeLink lub Tuya się przełączą lub padną.
+Natychmiastowy alarm, gdy gniazdka eWeLink lub Tuya przełączą się lub rozłączą.
 
 ## Full description (≤4000)
 SwitchGuard obserwuje gniazdka i przełączniki na Twoich kontach eWeLink i Tuya / Smart Life i uruchamia alarm w chwili, gdy coś się zmieni — wyłączone gniazdko zamrażarki, zatrzymana pompa, urządzenie, które straciło połączenie.

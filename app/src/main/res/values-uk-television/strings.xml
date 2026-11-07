@@ -16,6 +16,6 @@
         <item quantity="one">%d налаштування телевізора потребує виправлення</item>
         <item quantity="few">%d налаштування телевізора потребують виправлення</item>
         <item quantity="many">%d налаштувань телевізора потребують виправлення</item>
-        <item quantity="other">%d налаштування телевізора потребує виправлення</item>
+        <item quantity="other">%d налаштування телевізора потребують виправлення</item>
     </plurals>
 </resources>

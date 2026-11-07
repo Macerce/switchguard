@@ -18,7 +18,7 @@
     <string name="action_logout">ออกจากระบบ</string>
     <string name="action_start_monitoring">เริ่มตรวจสอบ</string>
     <string name="action_stop_monitoring">หยุดตรวจสอบ</string>
-    <string name="action_dismiss_alarm">ปิดสัญญาณปลุก</string>
+    <string name="action_dismiss_alarm">ปิดสัญญาณเตือน</string>
     <string name="action_clear_history">ล้างประวัติ</string>
 
     <string name="action_export">ส่งออก</string>
@@ -60,11 +60,11 @@
     <string name="backup_restore_body">ไฟล์สำรองข้อมูลจาก %1$s (เวอร์ชัน %2$s):\n%3$s\n\nการตั้งค่าของคุณจะถูกแทนที่ด้วยค่าในไฟล์สำรองข้อมูล การเชื่อมต่อบัญชีที่ไม่อยู่ในไฟล์สำรองข้อมูลจะคงเดิม คุณอาจต้องลงชื่อเข้าใช้ eWeLink อีกครั้ง</string>
     <string name="backup_item_ewelink">คีย์ API ของ eWeLink</string>
     <string name="backup_item_tuya">การเชื่อมต่อ Tuya</string>
-    <string name="backup_item_settings">การตั้งค่าสัญญาณปลุก การตรวจสอบ และช่วงเวลาเงียบ</string>
+    <string name="backup_item_settings">การตั้งค่าสัญญาณเตือน การตรวจสอบ และช่วงเวลาเงียบ</string>
     <string name="backup_restored">กู้คืนข้อมูลสำรองแล้ว</string>
     <string name="action_restore">กู้คืน</string>
     <string name="backup_file_word">สำรองข้อมูล</string>
-    <string name="widget_description">แสดงว่ากำลังตรวจสอบอยู่หรือไม่ และสัญญาณปลุกที่กำลังดัง</string>
+    <string name="widget_description">แสดงว่ากำลังตรวจสอบอยู่หรือไม่ และสัญญาณเตือนที่กำลังดัง</string>
     <string name="widget_sample">สด · กำลังดูอุปกรณ์ 3 เครื่อง</string>
     <string name="state_service_stopped">ไม่ได้กำลังตรวจสอบอยู่ — แตะเพื่อเปิด</string>
     <string name="secrets_unreadable">อ่านคีย์ที่บันทึกไว้บนโทรศัพท์เครื่องนี้ไม่ได้ (เช่น ข้อมูลแอปถูกคัดลอกมาจากโทรศัพท์เครื่องอื่น) โปรดใส่รายละเอียด eWeLink และ Tuya ของคุณอีกครั้งในการตั้งค่า</string>
@@ -73,7 +73,7 @@
     <string name="crash_report_subject">รายงานปัญหา SwitchGuard %s</string>
     <string name="crash_report_clear">ลบรายงานข้อขัดข้องที่บันทึกไว้</string>
     <string name="crash_report_no_mail">ไม่พบแอปอีเมล</string>
-    <string name="action_alarm">สัญญาณปลุก</string>
+    <string name="action_alarm">สัญญาณเตือน</string>
     <string name="action_notify">แจ้งเตือน</string>
     <string name="action_ignore">ไม่ทำอะไร</string>
 
@@ -85,7 +85,7 @@
     <string name="label_online_title">ออนไลน์</string>
     <string name="label_offline_title">ออฟไลน์</string>
 
-    <string name="state_live_title">การตรวจสอบสด</string>
+    <string name="state_live_title">ตรวจสอบแบบเรียลไทม์</string>
     <string name="state_polling_title">การตรวจสอบ (เป็นระยะ)</string>
     <string name="state_connecting">กำลังเชื่อมต่อ…</string>
     <string name="state_no_internet">เชื่อมต่อ eWeLink ไม่ได้ — ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</string>
@@ -95,7 +95,7 @@
     <string name="detail_ws_unsupported">App ID นี้ไม่รองรับการอัปเดตทันที จึงใช้การตรวจสอบเป็นระยะ (การเปลี่ยนแปลงที่สั้นกว่าช่วงเวลาอาจถูกพลาดไป)</string>
     <string name="detail_reconnecting">กำลังเชื่อมต่อใหม่เพื่อรับการอัปเดตทันที…</string>
     <string name="detail_api_error">รหัสข้อผิดพลาด %d</string>
-    <string name="monitoring_off_hint">เริ่มตรวจสอบเพื่อรับสัญญาณปลุก</string>
+    <string name="monitoring_off_hint">เริ่มตรวจสอบเพื่อรับสัญญาณเตือน</string>
     <string name="last_update">อัปเดตเมื่อ %s</string>
 
     <string name="alarm_banner_more">+อีก %d</string>
@@ -116,7 +116,7 @@
     <string name="section_recent_events">เหตุการณ์ล่าสุด</string>
     <string name="monitor_this_device">ตรวจสอบอุปกรณ์นี้</string>
     <string name="monitor_this_device_desc">การเปลี่ยนแปลงจะถูกบันทึกและแจ้งเตือนตามกฎด้านล่าง</string>
-    <string name="rules_hint">สัญญาณปลุกจะดังจนกว่าคุณจะปิด แจ้งเตือนจะแสดงการแจ้งเตือนปกติ ไม่ทำอะไรจะบันทึกเหตุการณ์ในประวัติเท่านั้น</string>
+    <string name="rules_hint">สัญญาณเตือนจะดังจนกว่าคุณจะปิด แจ้งเตือนจะแสดงการแจ้งเตือนปกติ ไม่ทำอะไรจะบันทึกเหตุการณ์ในประวัติเท่านั้น</string>
     <string name="event_turned_off">ปิดแล้ว</string>
     <string name="event_turned_on">เปิดแล้ว</string>
     <string name="event_went_offline">ออฟไลน์</string>
@@ -132,7 +132,7 @@
     <string name="clear_history_title">ล้างประวัติ?</string>
     <string name="clear_history_body">เหตุการณ์ที่บันทึกไว้ทั้งหมดจะถูกลบ การกระทำนี้ย้อนกลับไม่ได้</string>
 
-    <string name="section_alarm">สัญญาณปลุก</string>
+    <string name="section_alarm">สัญญาณเตือน</string>
     <string name="section_quiet_hours">ช่วงเวลาเงียบ</string>
     <string name="section_permissions">สิทธิ์</string>
     <string name="perm_autostart">เริ่มทำงานในเบื้องหลัง (%1$s)</string>
@@ -209,7 +209,7 @@
     <string name="tuya_ws_rejected">บริการข้อความของ Tuya ปฏิเสธการเชื่อมต่อ (เปิด Message Service และมีกฎที่ใช้งานอยู่หรือไม่?)</string>
     <string name="contact">ติดต่อและส่งความคิดเห็น</string>
     <string name="language">ภาษา</string>
-    <string name="language_desc">เลือกภาษาของแอป การแจ้งเตือน และสัญญาณปลุก</string>
+    <string name="language_desc">เลือกภาษาของแอป การแจ้งเตือน และสัญญาณเตือน</string>
     <string name="language_system">ภาษาของโทรศัพท์</string>
     <string name="logged_in">ลงชื่อเข้าใช้แล้ว</string>
     <string name="not_logged_in">ยังไม่ได้ลงชื่อเข้าใช้</string>
@@ -232,7 +232,7 @@
     <string name="event_monitor_gap">การตรวจสอบหยุดชะงัก: %1$s (%2$s) การเปลี่ยนแปลงในช่วงนี้อาจถูกพลาดไป</string>
     <string name="event_monitor_blind">การตรวจสอบไม่ทำงาน (ตั้งแต่ %1$s): อ่านสถานะอุปกรณ์ไม่ได้</string>
     <string name="event_monitor_restored">การตรวจสอบกลับมาทำงานอีกครั้ง (หยุดไป %1$s)</string>
-    <string name="event_reminder">เตือน: %1$s ยัง%2$s อยู่ (ผ่านมา %3$s นับจากสัญญาณปลุก)</string>
+    <string name="event_reminder">เตือน: %1$s ยัง%2$s อยู่ (ผ่านมา %3$s นับจากสัญญาณเตือน)</string>
     <string name="notif_blind_title">SwitchGuard ตรวจสอบไม่ได้</string>
     <string name="notif_monitor_title">สถานะการตรวจสอบ</string>
     <string name="monitoring_stopped_title">การตรวจสอบหยุดแล้ว</string>
@@ -246,37 +246,37 @@
     <string name="poll_interval">ช่วงเวลาตรวจสอบสำรอง</string>
     <string name="poll_interval_desc">ใช้เฉพาะเมื่อไม่มีการอัปเดตทันที</string>
     <string name="poll_interval_value">ทุก %d วินาที</string>
-    <string name="alarm_sound">เสียงปลุก</string>
-    <string name="default_sound">เสียงปลุกเริ่มต้น</string>
+    <string name="alarm_sound">เสียงเตือน</string>
+    <string name="default_sound">เสียงเตือนเริ่มต้น</string>
     <string name="device_sound">เสียงสำหรับอุปกรณ์นี้</string>
-    <string name="device_sound_default">เหมือนเสียงปลุกทั่วไป</string>
+    <string name="device_sound_default">เหมือนเสียงเตือนทั่วไป</string>
     <string name="device_sound_reset">ใช้เสียงทั่วไป</string>
     <string name="device_critical">อุปกรณ์สำคัญ</string>
-    <string name="device_critical_desc">สัญญาณปลุกจะดังแม้ในช่วงเวลาเงียบ</string>
+    <string name="device_critical_desc">สัญญาณเตือนจะดังแม้ในช่วงเวลาเงียบ</string>
     <string name="channel_events_custom">เหตุการณ์ (เสียงของอุปกรณ์)</string>
     <string name="channel_events_custom_desc">การแจ้งเตือนสำหรับอุปกรณ์ที่มีเสียงของตัวเอง เสียงเล่นโดยแอป</string>
-    <string name="alarm_volume">ระดับเสียงปลุก · %d%%</string>
+    <string name="alarm_volume">ระดับเสียงเตือน · %d%%</string>
     <string name="vibrate">สั่น</string>
     <string name="alarm_boost">ดังเต็มระดับเสียง</string>
-    <string name="alarm_boost_desc">เพิ่มระดับเสียงปลุกของโทรศัพท์เป็นสูงสุดขณะสัญญาณปลุกดัง และหยุดเพลงชั่วคราว จะคืนค่าเมื่อคุณปิดสัญญาณปลุก</string>
-    <string name="reminder">ปลุกซ้ำหากยังไม่แก้ไข</string>
-    <string name="reminder_desc">หลังจากคุณปิดสัญญาณปลุก จะดังอีกตามช่วงเวลานี้ตราบที่อุปกรณ์ยังอยู่ในสถานะที่ทำให้เกิดสัญญาณปลุก (ยังปิด ยังเปิด หรือออฟไลน์) หยุดเมื่ออุปกรณ์กลับเป็นปกติ</string>
+    <string name="alarm_boost_desc">เพิ่มระดับเสียงเตือนของโทรศัพท์เป็นสูงสุดขณะสัญญาณเตือนดัง และหยุดเพลงชั่วคราว จะคืนค่าเมื่อคุณปิดสัญญาณเตือน</string>
+    <string name="reminder">เตือนซ้ำหากยังไม่แก้ไข</string>
+    <string name="reminder_desc">หลังจากคุณปิดสัญญาณเตือน จะดังอีกตามช่วงเวลานี้ตราบที่อุปกรณ์ยังอยู่ในสถานะที่ทำให้เกิดสัญญาณเตือน (ยังปิด ยังเปิด หรือออฟไลน์) หยุดเมื่ออุปกรณ์กลับเป็นปกติ</string>
     <string name="reminder_every">ทุก %d นาที</string>
-    <string name="test_alarm">ทดสอบสัญญาณปลุก</string>
-    <string name="test_alarm_desc">ลองสัญญาณปลุกตอนนี้: มีเสียงหรือแบบเงียบ ทันทีหรือหลัง 10 วินาที</string>
-    <string name="test_alarm_line">ทดสอบสัญญาณปลุก</string>
-    <string name="test_alarm_line_silent">ทดสอบสัญญาณปลุกแบบเงียบ</string>
+    <string name="test_alarm">ทดสอบสัญญาณเตือน</string>
+    <string name="test_alarm_desc">ลองสัญญาณเตือนตอนนี้: มีเสียงหรือแบบเงียบ ทันทีหรือหลัง 10 วินาที</string>
+    <string name="test_alarm_line">ทดสอบสัญญาณเตือน</string>
+    <string name="test_alarm_line_silent">ทดสอบสัญญาณเตือนแบบเงียบ</string>
     <string name="test_alarm_sound">มีเสียง</string>
-    <string name="test_alarm_sound_desc">ดังและสั่นเหมือนสัญญาณปลุกจริง</string>
+    <string name="test_alarm_sound_desc">ดังและสั่นเหมือนสัญญาณเตือนจริง</string>
     <string name="test_alarm_silent">เงียบ (เฉพาะหน้าจอ)</string>
-    <string name="test_alarm_silent_desc">ไม่มีเสียงหรือการสั่น: ตรวจสอบหน้าจอสัญญาณปลุกและการแจ้งเตือนตอนกลางคืนโดยไม่ปลุกใคร</string>
+    <string name="test_alarm_silent_desc">ไม่มีเสียงหรือการสั่น: ตรวจสอบหน้าจอสัญญาณเตือนและการแจ้งเตือนตอนกลางคืนโดยไม่ปลุกใคร</string>
     <string name="test_alarm_delay">ดังใน %d วินาที</string>
-    <string name="test_alarm_delay_desc">ล็อกโทรศัพท์ระหว่างนี้เพื่อดูหน้าจอสัญญาณปลุกเปิดขึ้นบนหน้าจอล็อก</string>
-    <string name="test_alarm_delay_desc_tv">สลับไปแอปอื่นระหว่างนี้เพื่อดูสัญญาณปลุกขึ้นทับแอปนั้น</string>
+    <string name="test_alarm_delay_desc">ล็อกโทรศัพท์ระหว่างนี้เพื่อดูหน้าจอสัญญาณเตือนเปิดขึ้นบนหน้าจอล็อก</string>
+    <string name="test_alarm_delay_desc_tv">สลับไปแอปอื่นระหว่างนี้เพื่อดูสัญญาณเตือนขึ้นทับแอปนั้น</string>
     <string name="test_alarm_start">เริ่ม</string>
-    <string name="test_alarm_scheduled">สัญญาณปลุกทดสอบจะดังใน %d วินาที</string>
+    <string name="test_alarm_scheduled">สัญญาณเตือนทดสอบจะดังใน %d วินาที</string>
     <string name="quiet_hours">ช่วงเวลาเงียบ</string>
-    <string name="quiet_hours_desc">ในช่วงเวลานี้ สัญญาณปลุกจะกลายเป็นการแจ้งเตือน (อุปกรณ์สำคัญยังคงดัง)</string>
+    <string name="quiet_hours_desc">ในช่วงเวลานี้ สัญญาณเตือนจะกลายเป็นการแจ้งเตือน (อุปกรณ์สำคัญยังคงดัง)</string>
     <string name="quiet_start">เริ่ม</string>
     <string name="quiet_end">สิ้นสุด</string>
     <string name="perm_notifications">การแจ้งเตือน</string>
@@ -284,33 +284,33 @@
     <string name="perm_missing">ยังไม่อนุญาต — แตะเพื่อแก้ไข</string>
     <string name="perm_battery">กิจกรรมเบื้องหลัง</string>
     <string name="perm_battery_ok">ไม่จำกัด</string>
-    <string name="perm_battery_missing">ถูกจำกัด — สัญญาณปลุกอาจล่าช้า แตะเพื่อแก้ไข</string>
-    <string name="perm_full_screen">สัญญาณปลุกเต็มหน้าจอ</string>
-    <string name="perm_full_screen_missing">ยังไม่อนุญาต — สัญญาณปลุกจะไม่เต็มหน้าจอล็อก แตะเพื่อแก้ไข</string>
-    <string name="perm_lock_popup">สัญญาณปลุกบนหน้าจอล็อก (Xiaomi)</string>
-    <string name="perm_lock_popup_missing">ปิดอยู่ — สัญญาณปลุกจะไม่เปิดทับหน้าจอล็อก แตะเพื่อแก้ไข</string>
-    <string name="ready_title">สัญญาณปลุกอาจไปไม่ถึงคุณ</string>
-    <string name="ready_body">แก้การตั้งค่าโทรศัพท์เหล่านี้เพื่อให้ SwitchGuard ส่งเสียงปลุกได้ทุกเมื่อ</string>
+    <string name="perm_battery_missing">ถูกจำกัด — สัญญาณเตือนอาจล่าช้า แตะเพื่อแก้ไข</string>
+    <string name="perm_full_screen">สัญญาณเตือนเต็มหน้าจอ</string>
+    <string name="perm_full_screen_missing">ยังไม่อนุญาต — สัญญาณเตือนจะไม่เต็มหน้าจอล็อก แตะเพื่อแก้ไข</string>
+    <string name="perm_lock_popup">สัญญาณเตือนบนหน้าจอล็อก (Xiaomi)</string>
+    <string name="perm_lock_popup_missing">ปิดอยู่ — สัญญาณเตือนจะไม่เปิดทับหน้าจอล็อก แตะเพื่อแก้ไข</string>
+    <string name="ready_title">สัญญาณเตือนอาจไปไม่ถึงคุณ</string>
+    <string name="ready_body">แก้การตั้งค่าโทรศัพท์เหล่านี้เพื่อให้ SwitchGuard ส่งเสียงเตือนได้ทุกเมื่อ</string>
     <string name="ready_fix">แก้ไข</string>
-    <string name="ready_done">ฉันทำแล้ว</string>
+    <string name="ready_done">ทำแล้ว</string>
     <string name="ready_notifications">การแจ้งเตือนปิดอยู่</string>
-    <string name="ready_notifications_desc">แสดงสัญญาณปลุกและคำเตือนไม่ได้</string>
-    <string name="ready_channel">การแจ้งเตือนสัญญาณปลุกถูกลดระดับ</string>
-    <string name="ready_channel_desc">หมวดการแจ้งเตือน “สัญญาณปลุก” ไม่ได้ตั้งเป็นลำดับความสำคัญสูง สัญญาณปลุกจึงไม่เด้งขึ้นหรือเต็มหน้าจอ</string>
+    <string name="ready_notifications_desc">แสดงสัญญาณเตือนและคำเตือนไม่ได้</string>
+    <string name="ready_channel">การแจ้งเตือนสัญญาณเตือนถูกลดระดับ</string>
+    <string name="ready_channel_desc">หมวดการแจ้งเตือน “สัญญาณเตือน” ไม่ได้ตั้งเป็นลำดับความสำคัญสูง สัญญาณเตือนจึงไม่เด้งขึ้นหรือเต็มหน้าจอ</string>
     <string name="ready_dnd">ห้ามรบกวน: เงียบสนิท</string>
-    <string name="ready_dnd_desc">ในโหมดนี้ แม้แต่เสียงปลุกก็ถูกปิดเสียง</string>
-    <string name="ready_volume">ระดับเสียงปลุกต่ำมาก</string>
-    <string name="ready_volume_desc">ระดับเสียงปลุกของโทรศัพท์เป็นศูนย์หรือใกล้ศูนย์ คุณจึงอาจไม่ได้ยิน SwitchGuard การแก้ไขจะเปิด “ดังเต็มระดับเสียง”</string>
+    <string name="ready_dnd_desc">ในโหมดนี้ แม้แต่เสียงเตือนก็ถูกปิดเสียง</string>
+    <string name="ready_volume">ระดับเสียงเตือนต่ำมาก</string>
+    <string name="ready_volume_desc">ระดับเสียงเตือนของโทรศัพท์เป็นศูนย์หรือใกล้ศูนย์ คุณจึงอาจไม่ได้ยิน SwitchGuard การแก้ไขจะเปิด “ดังเต็มระดับเสียง”</string>
     <string name="ready_battery">กิจกรรมเบื้องหลังถูกจำกัด</string>
-    <string name="ready_battery_desc">โทรศัพท์อาจให้การตรวจสอบพักการทำงาน สัญญาณปลุกอาจล่าช้าหรือพลาดไป</string>
-    <string name="ready_full_screen">ไม่อนุญาตสัญญาณปลุกเต็มหน้าจอ</string>
-    <string name="ready_full_screen_desc">เมื่อโทรศัพท์ล็อกอยู่ สัญญาณปลุกเปิดหน้าจอขนาดใหญ่ไม่ได้</string>
-    <string name="ready_lock_popup">Xiaomi บล็อกหน้าจอสัญญาณปลุก</string>
-    <string name="ready_lock_popup_desc">เมื่อโทรศัพท์ล็อกอยู่ หน้าจอสัญญาณปลุกเปิดไม่ได้ แตะแก้ไข เปิดสิทธิ์อื่นๆ แล้วเปิด “แสดงบนหน้าจอล็อก” และ “เปิดหน้าต่างใหม่ขณะทำงานในเบื้องหลัง”</string>
+    <string name="ready_battery_desc">โทรศัพท์อาจให้การตรวจสอบพักการทำงาน สัญญาณเตือนอาจล่าช้าหรือพลาดไป</string>
+    <string name="ready_full_screen">ไม่อนุญาตสัญญาณเตือนเต็มหน้าจอ</string>
+    <string name="ready_full_screen_desc">เมื่อโทรศัพท์ล็อกอยู่ สัญญาณเตือนเปิดหน้าจอขนาดใหญ่ไม่ได้</string>
+    <string name="ready_lock_popup">Xiaomi บล็อกหน้าจอสัญญาณเตือน</string>
+    <string name="ready_lock_popup_desc">เมื่อโทรศัพท์ล็อกอยู่ หน้าจอสัญญาณเตือนเปิดไม่ได้ แตะแก้ไข เปิดสิทธิ์อื่นๆ แล้วเปิด “แสดงบนหน้าจอล็อก” และ “เปิดหน้าต่างใหม่ขณะทำงานในเบื้องหลัง”</string>
     <string name="ready_twin_this">นี่คือ SwitchGuard สำเนาที่สอง</string>
-    <string name="ready_twin_this_desc">สำเนานี้สร้างด้วยฟีเจอร์แอปคู่ (โคลนแอป) ของโทรศัพท์ สองสำเนาที่ทำงานคู่กันจะส่งเสียงปลุกทุกครั้งสองรอบ และทำให้อีกฝั่งออกจากระบบเมื่อใช้บัญชี eWeLink เดียวกัน บนโทรศัพท์ Xiaomi สิทธิ์ของอีกสำเนาจะแสดงว่าปิดอยู่ด้วย ใช้เพียงสำเนาเดียว: แตะ ลบ แล้วถอนการติดตั้งสำเนานี้ในหน้าที่เปิดขึ้น</string>
+    <string name="ready_twin_this_desc">สำเนานี้สร้างด้วยฟีเจอร์แอปคู่ (โคลนแอป) ของโทรศัพท์ สองสำเนาที่ทำงานคู่กันจะส่งเสียงเตือนทุกครั้งสองรอบ และทำให้อีกฝั่งออกจากระบบเมื่อใช้บัญชี eWeLink เดียวกัน บนโทรศัพท์ Xiaomi สิทธิ์ของอีกสำเนาจะแสดงว่าปิดอยู่ด้วย ใช้เพียงสำเนาเดียว: แตะ ลบ แล้วถอนการติดตั้งสำเนานี้ในหน้าที่เปิดขึ้น</string>
     <string name="ready_twin_other">มี SwitchGuard ตัวที่สองบนโทรศัพท์เครื่องนี้</string>
-    <string name="ready_twin_other_desc">มี SwitchGuard อีกสำเนาที่สร้างด้วยฟีเจอร์แอปคู่ (โคลนแอป) ของโทรศัพท์ สองสำเนาที่ทำงานคู่กันจะส่งเสียงปลุกทุกครั้งสองรอบ และทำให้อีกฝั่งออกจากระบบเมื่อใช้บัญชี eWeLink เดียวกัน บนโทรศัพท์ Xiaomi สิทธิ์ของสำเนานี้อาจแสดงว่าปิดอยู่ด้วย ลบสำเนาที่สอง: แตะไอคอนของมัน (อันที่มีป้ายเล็กๆ) ค้างไว้แล้วแตะ ถอนการติดตั้ง</string>
+    <string name="ready_twin_other_desc">มี SwitchGuard อีกสำเนาที่สร้างด้วยฟีเจอร์แอปคู่ (โคลนแอป) ของโทรศัพท์ สองสำเนาที่ทำงานคู่กันจะส่งเสียงเตือนทุกครั้งสองรอบ และทำให้อีกฝั่งออกจากระบบเมื่อใช้บัญชี eWeLink เดียวกัน บนโทรศัพท์ Xiaomi สิทธิ์ของสำเนานี้อาจแสดงว่าปิดอยู่ด้วย ลบสำเนาที่สอง: แตะไอคอนของมัน (อันที่มีป้ายเล็กๆ) ค้างไว้แล้วแตะ ถอนการติดตั้ง</string>
     <string name="ready_twin_remove">ลบ</string>
     <string name="ready_twin_keep">ฉันใช้ทั้งสองอย่างโดยตั้งใจ</string>
     <string name="setup_guide">คู่มือตั้งค่า</string>
@@ -327,8 +327,8 @@
     <string name="login_failed_no_code">ลงชื่อเข้าใช้ไม่สำเร็จ: ไม่ได้รับรหัสการอนุญาต</string>
 
     <string name="onb_welcome_title">ยินดีต้อนรับสู่ SwitchGuard</string>
-    <string name="onb_welcome_body">รับสัญญาณปลุกทันทีที่อุปกรณ์ eWeLink (Sonoff) หรือ Tuya / Smart Life ของคุณเปิดหรือปิด หรือขาดการเชื่อมต่อ</string>
-    <string name="onb_feature_alarm">สัญญาณปลุกที่ดังต่อเนื่องจนกว่าคุณจะปิด</string>
+    <string name="onb_welcome_body">รับสัญญาณเตือนทันทีที่อุปกรณ์ eWeLink (Sonoff) หรือ Tuya / Smart Life ของคุณเปิดหรือปิด หรือขาดการเชื่อมต่อ</string>
+    <string name="onb_feature_alarm">สัญญาณเตือนที่ดังต่อเนื่องจนกว่าคุณจะปิด</string>
     <string name="onb_feature_control">เปิดและปิดอุปกรณ์จากแอป</string>
     <string name="onb_feature_rules">กฎรายอุปกรณ์และช่วงเวลาเงียบ</string>
     <string name="onb_feature_history">ประวัติเหตุการณ์ครบถ้วน</string>
@@ -346,18 +346,18 @@
     <string name="onb_cred_privacy">ข้อมูลเหล่านี้เก็บไว้บนโทรศัพท์เครื่องนี้เท่านั้น และไม่ถูกส่งไปที่ใดนอกจาก eWeLink</string>
     <string name="onb_login_title">ลงชื่อเข้าใช้ eWeLink</string>
     <string name="onb_login_body">คุณจะลงชื่อเข้าใช้ในหน้าของ eWeLink เอง SwitchGuard ไม่เห็นรหัสผ่านของคุณเลย</string>
-    <string name="onb_perm_title">อนุญาตสัญญาณปลุก</string>
-    <string name="onb_perm_body">สิทธิ์เหล่านี้ช่วยให้สัญญาณปลุกไปถึงคุณ แม้หน้าจอจะปิดอยู่</string>
-    <string name="onb_perm_notif_desc">จำเป็นเพื่อแสดงสัญญาณปลุก</string>
-    <string name="onb_perm_battery_desc">ให้การตรวจสอบทำงานต่อในเบื้องหลังเพื่อไม่ให้สัญญาณปลุกล่าช้า</string>
-    <string name="onb_perm_full_screen_desc">ให้สัญญาณปลุกเปิดหน้าจอขนาดใหญ่ขณะโทรศัพท์ล็อกอยู่</string>
-    <string name="onb_perm_lock_popup_desc">บนโทรศัพท์ Xiaomi ให้สัญญาณปลุกเปิดทับหน้าจอล็อกได้</string>
+    <string name="onb_perm_title">อนุญาตสัญญาณเตือน</string>
+    <string name="onb_perm_body">สิทธิ์เหล่านี้ช่วยให้สัญญาณเตือนไปถึงคุณ แม้หน้าจอจะปิดอยู่</string>
+    <string name="onb_perm_notif_desc">จำเป็นเพื่อแสดงสัญญาณเตือน</string>
+    <string name="onb_perm_battery_desc">ให้การตรวจสอบทำงานต่อในเบื้องหลังเพื่อไม่ให้สัญญาณเตือนล่าช้า</string>
+    <string name="onb_perm_full_screen_desc">ให้สัญญาณเตือนเปิดหน้าจอขนาดใหญ่ขณะโทรศัพท์ล็อกอยู่</string>
+    <string name="onb_perm_lock_popup_desc">บนโทรศัพท์ Xiaomi ให้สัญญาณเตือนเปิดทับหน้าจอล็อกได้</string>
     <string name="onb_done_title">พร้อมแล้ว!</string>
     <string name="onb_done_body">เริ่มตรวจสอบเลย คุณปรับแต่งทุกอย่างได้ภายหลัง</string>
-    <string name="onb_done_tip_rules">แตะอุปกรณ์เพื่อเลือกว่าเหตุการณ์ใดจะส่งเสียงปลุก</string>
-    <string name="onb_done_tip_test">ใช้ “ทดสอบสัญญาณปลุก” ในแท็บการแจ้งเตือนเพื่อตรวจสอบเสียง</string>
+    <string name="onb_done_tip_rules">แตะอุปกรณ์เพื่อเลือกว่าเหตุการณ์ใดจะส่งเสียงเตือน</string>
+    <string name="onb_done_tip_test">ใช้ “ทดสอบสัญญาณเตือน” ในแท็บการแจ้งเตือนเพื่อตรวจสอบเสียง</string>
 
-    <string name="channel_alarm">สัญญาณปลุกอุปกรณ์</string>
+    <string name="channel_alarm">สัญญาณเตือนอุปกรณ์</string>
     <string name="channel_alarm_desc">ดังจนกว่าคุณจะปิดเมื่ออุปกรณ์เปลี่ยนแปลง</string>
     <string name="channel_events">การแจ้งเตือนอุปกรณ์</string>
     <string name="channel_status">สถานะการตรวจสอบ</string>
@@ -367,7 +367,7 @@
     <string name="channel_session">คำเตือนเซสชัน</string>
     <string name="channel_session_desc">แสดงเมื่อคุณออกจากระบบและการตรวจสอบหยุดแล้ว</string>
     <string name="session_lost_title">การตรวจสอบหยุดแล้ว — ออกจากระบบ</string>
-    <string name="session_lost_body">บัญชี eWeLink นี้ลงชื่อเข้าใช้บนอุปกรณ์อื่น หรือเซสชันหมดอายุ โทรศัพท์เครื่องนี้จะไม่ได้รับสัญญาณปลุกจนกว่าคุณจะลงชื่อเข้าใช้อีกครั้ง</string>
+    <string name="session_lost_body">บัญชี eWeLink นี้ลงชื่อเข้าใช้บนอุปกรณ์อื่น หรือเซสชันหมดอายุ โทรศัพท์เครื่องนี้จะไม่ได้รับสัญญาณเตือนจนกว่าคุณจะลงชื่อเข้าใช้อีกครั้ง</string>
     <string name="session_lost_tip">เคล็ดลับ: eWeLink อนุญาตหนึ่งเซสชันต่อหนึ่งบัญชี ให้โทรศัพท์แต่ละเครื่องมีบัญชี eWeLink ของตัวเอง แล้วแชร์อุปกรณ์จากแอป eWeLink</string>
     <string name="tab_automations">ระบบอัตโนมัติ</string>
     <string name="automation_add">เพิ่ม</string>
@@ -375,7 +375,7 @@
     <string name="automation_edit">แก้ไขระบบอัตโนมัติ</string>
     <string name="automation_name">ชื่อ</string>
     <string name="automation_when">เมื่อ</string>
-    <string name="automation_then">แล้ว</string>
+    <string name="automation_then">ให้ทำ</string>
     <string name="automation_device">อุปกรณ์</string>
     <string name="automation_event">เหตุการณ์</string>
     <string name="automation_channel">ช่อง</string>
@@ -394,7 +394,7 @@
     <string name="automation_gave_up_off">%1$s — ปิดไม่สำเร็จ (ลอง %3$d ครั้ง): %2$s</string>
     <string name="automation_retried">%1$s (สำเร็จในครั้งที่ %2$d)</string>
     <string name="automations_empty">ยังไม่มีระบบอัตโนมัติ</string>
-    <string name="automations_examples">ตัวอย่าง:\n• เมื่อช่องระดับน้ำในบ่อพักเปิด ให้เปิดไฟ\n• หากปั๊มเปิดค้าง 30 นาที ให้ปิดและส่งสัญญาณปลุก\n• หากกำลังไฟเกิน 2000 W ให้แจ้งฉัน</string>
+    <string name="automations_examples">ตัวอย่าง:\n• เมื่อช่องระดับน้ำในบ่อพักเปิด ให้เปิดไฟ\n• หากปั๊มเปิดค้าง 30 นาที ให้ปิดและส่งสัญญาณเตือน\n• หากกำลังไฟเกิน 2000 W ให้แจ้งฉัน</string>
     <string name="automations_need_monitoring">การตรวจสอบปิดอยู่ — ระบบอัตโนมัติจะไม่ทำงานจนกว่าคุณจะเริ่ม</string>
     <string name="event_by_automation">โดยระบบอัตโนมัติ</string>
     <string name="action_delete">ลบ</string>
@@ -405,7 +405,7 @@
     <string name="trigger_went_offline">ออฟไลน์</string>
     <string name="trigger_came_online">กลับมาออนไลน์</string>
     <string name="trigger_power_above">กำลังไฟเกิน</string>
-    <string name="power_data_stale">%1$s: ไม่มีข้อมูลกำลังไฟของช่องมา 5 นาที สัญญาณปลุกเมื่อกำลังไฟตกอาจใช้งานไม่ได้ในตอนนี้</string>
+    <string name="power_data_stale">%1$s: ไม่มีข้อมูลกำลังไฟของช่องมา 5 นาที สัญญาณเตือนเมื่อกำลังไฟตกอาจใช้งานไม่ได้ในตอนนี้</string>
     <string name="trigger_channel_power_low">เปิดอยู่แต่กำลังไฟตกต่ำกว่า:</string>
     <string name="automation_low_minutes">อย่างน้อย (นาที, 0 = ทันที)</string>
     <string name="automation_grace">ข้ามหลังช่องเปิด (นาที, สำหรับช่วงเริ่มทำงาน)</string>
@@ -413,7 +413,7 @@
     <string name="trigger_power_below">กำลังไฟตกต่ำกว่า</string>
     <string name="auto_action_turn_on">เปิด</string>
     <string name="auto_action_turn_off">ปิด</string>
-    <string name="auto_action_alarm">ส่งเสียงปลุก</string>
+    <string name="auto_action_alarm">ส่งเสียงเตือน</string>
     <string name="auto_action_notify">ส่งการแจ้งเตือน</string>
 
     <string name="section_energy">พลังงาน</string>
@@ -532,7 +532,7 @@
     <string name="demo_devices">อุปกรณ์สาธิต</string>
     <string name="demo_devices_desc">อุปกรณ์เสมือนสำหรับลองทุกฟีเจอร์</string>
     <string name="section_demo">สาธิต: จำลองเหตุการณ์</string>
-    <string name="demo_hint">ปุ่มเหล่านี้ทำเหมือนมีเหตุการณ์เกิดที่ตัวอุปกรณ์เอง (มีคนสลับ ไฟดับ หรือ Wi-Fi ขาด) กฎของคุณจึงมีผลและสัญญาณปลุกดังได้ การสลับด้วยปุ่มด้านบนนับว่าเป็นคุณ และจะไม่ส่งเสียงปลุก</string>
+    <string name="demo_hint">ปุ่มเหล่านี้ทำเหมือนมีเหตุการณ์เกิดที่ตัวอุปกรณ์เอง (มีคนสลับ ไฟดับ หรือ Wi-Fi ขาด) กฎของคุณจึงมีผลและสัญญาณเตือนดังได้ การสลับด้วยปุ่มด้านบนนับว่าเป็นคุณ และจะไม่ส่งเสียงเตือน</string>
     <string name="demo_toggle">สลับจากภายนอก</string>
     <string name="demo_toggle_channel">สลับช่อง %d จากภายนอก</string>
     <string name="demo_disconnect">ขาดการเชื่อมต่อ</string>
@@ -540,10 +540,10 @@
     <string name="demo_power_drop">ลดกำลังไฟช่อง %d (ปั๊มติดขัด)</string>
     <string name="demo_power_drop_single">ลดกำลังไฟ (อุปกรณ์ติดขัด)</string>
     <string name="demo_power_restore">คืนกำลังไฟช่อง %d</string>
-    <string name="demo_power_restore_single">คืนกำลังไฟ</string>
+    <string name="demo_power_restore_single">จ่ายไฟคืน</string>
     <string name="alarm_open_app">เปิดแอป</string>
-    <string name="perm_overlay">แสดงสัญญาณปลุกทับแอปอื่น</string>
-    <string name="perm_overlay_desc">จำเป็นบน Android TV เพื่อให้สัญญาณปลุกแสดงทับสิ่งที่กำลังเล่นอยู่ แตะแล้วอนุญาต SwitchGuard</string>
+    <string name="perm_overlay">แสดงสัญญาณเตือนทับแอปอื่น</string>
+    <string name="perm_overlay_desc">จำเป็นบน Android TV เพื่อให้สัญญาณเตือนแสดงทับสิ่งที่กำลังเล่นอยู่ แตะแล้วอนุญาต SwitchGuard</string>
     <string name="tv_keyboard_hint">เคล็ดลับ: พิมพ์หรือวางจากโทรศัพท์ด้วยแอป Google TV (รีโมต → แป้นพิมพ์)</string>
     <string name="tv_time_hint">ขึ้นและลงเพื่อเปลี่ยนค่า OK ที่ชั่วโมงจะไปที่นาที OK ที่นาทีจะบันทึก ย้อนกลับเพื่อยกเลิก</string>
     <string name="onb_platform_transfer">โอนย้ายจากอุปกรณ์อื่น</string>
@@ -576,7 +576,7 @@
     <string name="transfer_tv_qr_hint">ง่ายที่สุดบนทีวี: เลือก “เข้าสู่ระบบด้วยคิวอาร์โค้ด” ที่ด้านล่างของหน้าลงชื่อเข้าใช้ แล้วสแกนด้วยแอป eWeLink ที่ลงชื่อเข้าใช้ด้วยบัญชีที่คุณสร้างสำหรับอุปกรณ์นี้</string>
     <string name="transfer_send_warning_body">ทีวีหรือแท็บเล็ตต้องมีบัญชี eWeLink ของตัวเอง: สร้างบัญชีใหม่ในแอป eWeLink แชร์อุปกรณ์ของคุณให้บัญชีนั้น สมัครเป็นนักพัฒนาด้วยบัญชีนั้นและรอ eWeLink อนุมัติ จากนั้นใส่คีย์ API ของบัญชีนั้นบนอุปกรณ์อีกเครื่อง คีย์ eWeLink จะไม่ถูกโอน แต่คีย์ Tuya กฎ และการตั้งค่าจะถูกโอน การลงชื่อเข้าใช้ที่นั่นด้วยบัญชีของโทรศัพท์เครื่องนี้จะทำให้โทรศัพท์เครื่องนี้ออกจากระบบ</string>
     <plurals name="event_alarm_dismissed">
-        <item quantity="other">ปิดสัญญาณปลุกแล้ว · %1$d เหตุการณ์ · เวลาตอบสนอง %2$s</item>
+        <item quantity="other">ปิดสัญญาณเตือนแล้ว · %1$d เหตุการณ์ · เวลาตอบสนอง %2$s</item>
     </plurals>
     <plurals name="status_live">
         <item quantity="other">สด · กำลังดู %d อุปกรณ์</item>
@@ -588,7 +588,7 @@
         <item quantity="other">%d อุปกรณ์</item>
     </plurals>
     <plurals name="alarm_banner_title">
-        <item quantity="other">สัญญาณปลุก · %d การเปลี่ยนแปลง</item>
+        <item quantity="other">สัญญาณเตือน · %d การเปลี่ยนแปลง</item>
     </plurals>
     <plurals name="tuya_connected_x">
         <item quantity="other">เชื่อมต่อแล้ว · %1$s · %2$d อุปกรณ์</item>
@@ -615,16 +615,16 @@
         <item quantity="other">จะแนบรายงานข้อขัดข้องที่บันทึกไว้ %d รายการ จะไม่มีการแชร์อะไรหากคุณไม่ส่ง</item>
     </plurals>
 
-    <string name="tg_alarm_header">🚨 สัญญาณปลุก SwitchGuard ยังไม่ถูกปิดมา %d นาที</string>
-    <string name="tg_alarm_header_now">🚨 สัญญาณปลุก SwitchGuard กำลังดัง</string>
+    <string name="tg_alarm_header">🚨 สัญญาณเตือน SwitchGuard ยังไม่ถูกปิดมา %d นาที</string>
+    <string name="tg_alarm_header_now">🚨 สัญญาณเตือน SwitchGuard กำลังดัง</string>
     <string name="tg_footer">จาก: %s</string>
-    <string name="tg_dismissed">✅ ปิดสัญญาณปลุก SwitchGuard แล้วเมื่อ %1$s (%2$s หลังจากเริ่มดัง)</string>
+    <string name="tg_dismissed">✅ ปิดสัญญาณเตือน SwitchGuard แล้วเมื่อ %1$s (%2$s หลังจากเริ่มดัง)</string>
     <string name="tg_err_token">โทเค็นของบอตไม่ถูกต้อง</string>
     <string name="tg_err_blocked">บุคคลนั้นบล็อกบอตหรือลบแชทแล้ว</string>
     <string name="tg_err_chat">ไม่พบแชท: บุคคลนั้นยังไม่ได้แตะ Start ในบอต</string>
-    <string name="event_escalation_failed">สัญญาณปลุกไม่ถูกปิดมา %1$d นาที แต่ติดต่อ Telegram ไม่ได้: %2$s</string>
+    <string name="event_escalation_failed">สัญญาณเตือนไม่ถูกปิดมา %1$d นาที แต่ติดต่อ Telegram ไม่ได้: %2$s</string>
     <string name="tg_title">แจ้งคนอื่น</string>
-    <string name="tg_desc">หากไม่ปิดสัญญาณปลุกทันเวลา คนที่คุณเลือกจะได้รับข้อความ Telegram และอีกข้อความเมื่อปิดแล้ว แม้โทรศัพท์ของคุณอยู่อีกห้องตอนกลางคืน คนในบ้านหรือเพื่อนบ้านก็จะรู้ ข้อความส่งโดยบอต Telegram ที่คุณสร้างเอง ไม่ผ่านเซิร์ฟเวอร์อื่นใด</string>
+    <string name="tg_desc">หากไม่ปิดสัญญาณเตือนทันเวลา คนที่คุณเลือกจะได้รับข้อความ Telegram และอีกข้อความเมื่อปิดแล้ว แม้โทรศัพท์ของคุณอยู่อีกห้องตอนกลางคืน คนในบ้านหรือเพื่อนบ้านก็จะรู้ ข้อความส่งโดยบอต Telegram ที่คุณสร้างเอง ไม่ผ่านเซิร์ฟเวอร์อื่นใด</string>
     <string name="tg_step_bot">1. บอต Telegram</string>
     <string name="tg_step_bot_desc">ใน Telegram เปิด @BotFather ส่ง /newbot แล้วตั้งชื่อบอตของคุณ วางโทเค็นที่ BotFather ให้ไว้ด้านล่าง</string>
     <string name="tg_open_botfather">เปิด BotFather</string>
@@ -635,16 +635,16 @@
     <string name="tg_step_people_wait">ตรวจสอบโทเค็นบอตก่อน</string>
     <string name="tg_step_people_desc">ขอให้แต่ละคนเปิด %s ใน Telegram แล้วแตะ Start (หรือเพิ่มบอตเข้ากลุ่มครอบครัวก็ได้) จากนั้นแตะ ค้นหาผู้คน</string>
     <string name="tg_share">แชร์ลิงก์</string>
-    <string name="tg_share_text">ช่วยเปิดบอตนี้แล้วแตะ Start ได้ไหม จากนั้นคุณจะได้รับข้อความ Telegram หากสัญญาณปลุก SwitchGuard ของฉันไม่ถูกปิด %s</string>
+    <string name="tg_share_text">ช่วยเปิดบอตนี้แล้วแตะ Start ได้ไหม จากนั้นคุณจะได้รับข้อความ Telegram หากสัญญาณเตือน SwitchGuard ของฉันไม่ถูกปิด %s</string>
     <string name="tg_find">ค้นหาผู้คน</string>
     <string name="tg_none_found">ไม่พบใคร ลองอีกครั้งหลังจากบุคคลนั้นแตะ Start ในบอต (Telegram แสดงเฉพาะ 24 ชั่วโมงล่าสุด)</string>
     <string name="tg_group">กลุ่ม</string>
     <string name="tg_step_when">3. เมื่อไร</string>
-    <string name="tg_when_desc">จะแจ้งผู้คนหากไม่ปิดสัญญาณปลุกภายใน %d นาที</string>
-    <string name="tg_when_desc_now">จะแจ้งผู้คนทันทีที่สัญญาณปลุกดัง</string>
+    <string name="tg_when_desc">จะแจ้งผู้คนหากไม่ปิดสัญญาณเตือนภายใน %d นาที</string>
+    <string name="tg_when_desc_now">จะแจ้งผู้คนทันทีที่สัญญาณเตือนดัง</string>
     <string name="tg_test">ส่งข้อความทดสอบ</string>
-    <string name="tg_test_message">👋 ข้อความทดสอบ SwitchGuard: หากไม่ปิดสัญญาณปลุกภายใน %d นาที คุณจะได้รับแจ้งที่นี่</string>
-    <string name="tg_test_message_now">👋 ข้อความทดสอบ SwitchGuard: เมื่อสัญญาณปลุกดัง คุณจะได้รับแจ้งที่นี่ทันที</string>
+    <string name="tg_test_message">👋 ข้อความทดสอบ SwitchGuard: หากไม่ปิดสัญญาณเตือนภายใน %d นาที คุณจะได้รับแจ้งที่นี่</string>
+    <string name="tg_test_message_now">👋 ข้อความทดสอบ SwitchGuard: เมื่อสัญญาณเตือนดัง คุณจะได้รับแจ้งที่นี่ทันที</string>
     <string name="tg_test_sent">ส่งข้อความทดสอบแล้ว</string>
     <string name="tg_turn_off">ปิด</string>
     <string name="phone_entry_button">กรอกจากโทรศัพท์</string>
@@ -667,7 +667,7 @@
     <string name="phone_entry_page_empty">กรอกอย่างน้อยหนึ่งช่อง</string>
     <string name="phone_entry_page_note">หน้านี้ใช้ได้เฉพาะในเครือข่ายบ้านของคุณขณะที่หน้าต่างบนทีวียังเปิดอยู่</string>
     <plurals name="event_escalated">
-        <item quantity="other">สัญญาณปลุกไม่ถูกปิดมา %2$d นาที: แจ้ง %1$d คนทาง Telegram แล้ว</item>
+        <item quantity="other">สัญญาณเตือนไม่ถูกปิดมา %2$d นาที: แจ้ง %1$d คนทาง Telegram แล้ว</item>
     </plurals>
     <plurals name="tg_found">
         <item quantity="other">พบ %d แชท</item>
@@ -694,16 +694,16 @@
     <string name="settings_about">ความช่วยเหลือและข้อมูล</string>
     <string name="settings_about_desc">เวอร์ชัน %s · คู่มือและการติดต่อ</string>
     <string name="settings_group_connections">การเชื่อมต่อ</string>
-    <string name="settings_group_alerts">สัญญาณปลุกและการแจ้งเตือน</string>
+    <string name="settings_group_alerts">สัญญาณเตือนและการแจ้งเตือน</string>
     <string name="settings_group_app">แอป</string>
     <string name="settings_group_support">การสนับสนุน</string>
     <string name="settings_try">สาธิตและ Pro</string>
     <string name="settings_try_it">ทดสอบ</string>
     <string name="settings_sound">เสียง</string>
-    <string name="settings_when_alarm">ขณะสัญญาณปลุกดัง</string>
+    <string name="settings_when_alarm">ขณะสัญญาณเตือนดัง</string>
     <string name="settings_monitoring_intro">วิธีที่ SwitchGuard เฝ้าดูอุปกรณ์ของคุณในเบื้องหลัง</string>
     <string name="settings_quiet_critical">อุปกรณ์ในหมวดการแจ้งเตือนที่ตั้งให้ดังในช่วงเวลาเงียบ (ค่าเริ่มต้นคือสำคัญ) ยังคงดัง</string>
-    <string name="settings_permissions_intro">หากไม่มีสิ่งเหล่านี้ Android อาจทำให้สัญญาณปลุกไปไม่ถึงคุณ</string>
+    <string name="settings_permissions_intro">หากไม่มีสิ่งเหล่านี้ Android อาจทำให้สัญญาณเตือนไปไม่ถึงคุณ</string>
     <string name="settings_other_devices">อุปกรณ์อื่น</string>
     <string name="settings_help">ความช่วยเหลือ</string>
     <string name="settings_contact">ติดต่อ</string>
@@ -716,14 +716,14 @@
     <plurals name="perm_missing_n">
         <item quantity="other">ขาดสิทธิ์ %d รายการ</item>
     </plurals>
-    <string name="guard_ready">พร้อมส่งเสียงปลุกทันทีที่มีอะไรเปลี่ยนแปลง</string>
+    <string name="guard_ready">พร้อมส่งเสียงเตือนทันทีที่มีอะไรเปลี่ยนแปลง</string>
     <string name="monitoring_summary_now">แจ้งทันทีเมื่อออฟไลน์ · %s</string>
     <string name="monitoring_summary_grace">รอ %1$s เมื่อออฟไลน์ · %2$s</string>
     <plurals name="plan_free">
         <item quantity="other">ฟรี · ตรวจสอบ %d อุปกรณ์</item>
     </plurals>
     <string name="auto_if">ถ้า</string>
-    <string name="auto_then">แล้ว</string>
+    <string name="auto_then">จากนั้น</string>
     <string name="automation_name_hint">เช่น ปั๊มหยุดทำงาน</string>
     <string name="automation_minutes_short">ระยะเวลา</string>
     <string name="automation_low_minutes_short">ต่ำอย่างน้อย</string>
@@ -749,20 +749,20 @@
         <item quantity="other">การตั้งค่าโทรศัพท์ %d รายการต้องแก้ไข</item>
     </plurals>
     <string name="tab_alerts">การแจ้งเตือน</string>
-    <string name="alerts_ready">สัญญาณปลุกพร้อมแล้ว</string>
-    <string name="alerts_ready_desc">การเปลี่ยนแปลงบนอุปกรณ์ที่ตรวจสอบจะส่งเสียงปลุกทันที</string>
+    <string name="alerts_ready">สัญญาณเตือนพร้อมแล้ว</string>
+    <string name="alerts_ready_desc">การเปลี่ยนแปลงบนอุปกรณ์ที่ตรวจสอบจะส่งเสียงเตือนทันที</string>
     <string name="alerts_monitoring_off">การตรวจสอบปิดอยู่</string>
     <string name="alerts_monitoring_off_desc">การแจ้งเตือนจะไม่ทำงานจนกว่าคุณจะเริ่มตรวจสอบ</string>
     <string name="section_device_alerts">การแจ้งเตือนรายอุปกรณ์</string>
-    <string name="section_device_alerts_desc">สิ่งที่แต่ละอุปกรณ์ส่งเสียงปลุกหรือแจ้งเตือน</string>
+    <string name="section_device_alerts_desc">สิ่งที่แต่ละอุปกรณ์ส่งเสียงเตือนหรือแจ้งเตือน</string>
     <string name="device_alerts_not_monitored">ไม่ได้ตรวจสอบ</string>
-    <string name="device_alerts_none">ตรวจสอบอยู่ · ไม่มีสัญญาณปลุกหรือการแจ้งเตือน</string>
-    <string name="device_alerts_alarm">สัญญาณปลุก: %s</string>
+    <string name="device_alerts_none">ตรวจสอบอยู่ · ไม่มีสัญญาณเตือนหรือการแจ้งเตือน</string>
+    <string name="device_alerts_alarm">สัญญาณเตือน: %s</string>
     <string name="device_alerts_notify">การแจ้งเตือน: %s</string>
     <string name="device_alert_rules">กฎการแจ้งเตือน</string>
     <string name="section_conditional_alerts">การแจ้งเตือนตามเงื่อนไข</string>
-    <string name="conditional_alerts_desc">ส่งเสียงปลุกเมื่ออุปกรณ์เปิดหรือปิดค้างครู่หนึ่ง หรือกำลังไฟเปลี่ยน</string>
-    <string name="conditional_alerts_empty">ยังไม่มีการแจ้งเตือนตามเงื่อนไข ตัวอย่าง: ส่งเสียงปลุกหากปั๊มใช้ไฟต่ำกว่า 50 W เป็นเวลา 1 นาที</string>
+    <string name="conditional_alerts_desc">ส่งเสียงเตือนเมื่ออุปกรณ์เปิดหรือปิดค้างครู่หนึ่ง หรือกำลังไฟเปลี่ยน</string>
+    <string name="conditional_alerts_empty">ยังไม่มีการแจ้งเตือนตามเงื่อนไข ตัวอย่าง: ส่งเสียงเตือนหากปั๊มใช้ไฟต่ำกว่า 50 W เป็นเวลา 1 นาที</string>
     <string name="section_alert_settings">การตั้งค่าการแจ้งเตือน</string>
     <string name="alert_new">การแจ้งเตือนใหม่</string>
     <string name="alert_edit">แก้ไขการแจ้งเตือน</string>
@@ -784,18 +784,18 @@
     <string name="event_energy_high">เมื่อวาน %1$s ใช้พลังงานมากกว่าปกติ %2$d%% (%3$s; ค่าเฉลี่ย %4$s)</string>
     <string name="event_energy_low">เมื่อวาน %1$s ใช้พลังงานน้อยกว่าปกติ %2$d%% (%3$s; ค่าเฉลี่ย %4$s) — ตรวจสอบว่ายังทำงานอยู่</string>
     <string name="event_budget">ค่าไฟโดยประมาณของเดือนนี้ถึง %1$s (งบประมาณ %2$s)</string>
-    <string name="event_tg_ack">%1$s รับช่วงสัญญาณปลุกทาง Telegram (%2$s หลังจากเริ่มดัง)</string>
+    <string name="event_tg_ack">%1$s รับช่วงสัญญาณเตือนทาง Telegram (%2$s หลังจากเริ่มดัง)</string>
     <string name="event_tg_switch">Telegram (%1$s): %2$s → %3$s</string>
     <string name="event_watchdog_lost">%1$s ไม่ส่งสัญญาณมา %2$s: การตรวจสอบที่นั่นอาจหยุดแล้ว</string>
     <string name="event_watchdog_back">%1$s ส่งสัญญาณอีกครั้งแล้ว (เงียบไป %2$s)</string>
 
     <string name="tg_ack_button">✅ รับทราบ ฉันจัดการเอง</string>
-    <string name="tg_ack_done">ปิดเสียงสัญญาณปลุกแล้ว ขอบคุณ!</string>
-    <string name="tg_ack_stale">สัญญาณปลุกนี้ถูกปิดไปแล้ว</string>
+    <string name="tg_ack_done">ปิดเสียงสัญญาณเตือนแล้ว ขอบคุณ!</string>
+    <string name="tg_ack_stale">สัญญาณเตือนนี้ถูกปิดไปแล้ว</string>
     <string name="tg_someone">มีคน</string>
     <string name="tg_help">คำสั่ง SwitchGuard:
-/status – การตรวจสอบ สัญญาณปลุก และอุปกรณ์
-/ack – รับช่วงสัญญาณปลุกที่กำลังดัง
+/status – การตรวจสอบ สัญญาณเตือน และอุปกรณ์
+/ack – รับช่วงสัญญาณเตือนที่กำลังดัง
 /on ชื่อ [ช่อง] – เปิดอุปกรณ์หรือกลุ่ม (หลายรายการ: /on kitchen, garden)
 /off ชื่อ [ช่อง] – ปิดอุปกรณ์หรือกลุ่ม
 /watt [ชื่อ] – กำลังไฟตอนนี้ วันนี้ และที่ใช้ตามปกติ
@@ -806,7 +806,7 @@
 คุณเขียนอิสระได้ด้วย: “turn off kitchen and garden”, “heater watts”, “is the pump on”
 
 ต้องอนุญาตการเปิดและปิดอุปกรณ์และฉากในแอปก่อน (การแจ้งเตือน → การแจ้งเตือนอัจฉริยะ)</string>
-    <string name="tg_no_alarm">ไม่มีสัญญาณปลุกที่กำลังดัง</string>
+    <string name="tg_no_alarm">ไม่มีสัญญาณเตือนที่กำลังดัง</string>
     <string name="tg_cmd_too_old">คำสั่งนี้มาถึงช้า จึงไม่ได้ดำเนินการ โปรดส่งอีกครั้ง</string>
     <string name="tg_control_off">การเปิดและปิดอุปกรณ์จาก Telegram ปิดอยู่บนอุปกรณ์นี้ (การแจ้งเตือน → การแจ้งเตือนอัจฉริยะ)</string>
     <string name="tg_usage_on">อุปกรณ์ไหน? ตัวอย่าง: /on Lamp</string>
@@ -816,13 +816,13 @@
     <string name="tg_not_found">ไม่มีอุปกรณ์ชื่อ “%s” ส่ง /status เพื่อดูรายการ</string>
     <string name="tg_status_title">สถานะ SwitchGuard</string>
     <string name="tg_status_monitoring">การตรวจสอบ: %s</string>
-    <string name="tg_status_no_alarm">สัญญาณปลุก: ไม่มี</string>
+    <string name="tg_status_no_alarm">สัญญาณเตือน: ไม่มี</string>
     <plurals name="tg_status_alarm">
-        <item quantity="other">🚨 สัญญาณปลุกกำลังดัง (%d เหตุการณ์)</item>
+        <item quantity="other">🚨 สัญญาณเตือนกำลังดัง (%d เหตุการณ์)</item>
     </plurals>
     <string name="tg_status_outage">ไฟดับมา %s</string>
     <string name="tg_status_hint">/on ชื่อ หรือ /off ชื่อ เพื่อสลับอุปกรณ์</string>
-    <string name="tg_state_live">สด</string>
+    <string name="tg_state_live">เรียลไทม์</string>
     <string name="tg_state_polling">ตรวจสอบเป็นระยะ</string>
     <string name="wd_beat_running">SwitchGuard กำลังทำงาน</string>
     <string name="wd_beat_stopped">ปิดการตรวจสอบของ SwitchGuard แล้ว</string>
@@ -836,9 +836,9 @@
     <plurals name="weekly_month_outages">
         <item quantity="other">เดือนนี้: ไฟดับ %1$d ครั้ง รวม %2$s</item>
     </plurals>
-    <string name="weekly_alarms_none">สัญญาณปลุก: ไม่มี</string>
+    <string name="weekly_alarms_none">สัญญาณเตือน: ไม่มี</string>
     <plurals name="weekly_alarms">
-        <item quantity="other">สัญญาณปลุก: %1$d ครั้ง (ตอบสนองเฉลี่ย %2$s)</item>
+        <item quantity="other">สัญญาณเตือน: %1$d ครั้ง (ตอบสนองเฉลี่ย %2$s)</item>
     </plurals>
     <plurals name="weekly_escalations">
         <item quantity="other">แจ้งบุคคลที่สอง: %d ครั้ง</item>
@@ -850,7 +850,7 @@
 
     <string name="smart_title">การแจ้งเตือนอัจฉริยะ</string>
     <string name="smart_summary">ไฟดับ การใช้ไฟ รายงานประจำสัปดาห์ Telegram</string>
-    <string name="smart_desc">การแจ้งเตือนที่ดูอุปกรณ์ทั้งหมดรวมกัน: ไฟดับ การใช้ไฟผิดปกติ และสรุปประจำสัปดาห์ ด้วย Telegram คุณยังตรวจสอบสถานะ รับช่วงสัญญาณปลุก และสลับอุปกรณ์จากระยะไกลได้</string>
+    <string name="smart_desc">การแจ้งเตือนที่ดูอุปกรณ์ทั้งหมดรวมกัน: ไฟดับ การใช้ไฟผิดปกติ และสรุปประจำสัปดาห์ ด้วย Telegram คุณยังตรวจสอบสถานะ รับช่วงสัญญาณเตือน และสลับอุปกรณ์จากระยะไกลได้</string>
     <string name="smart_outage_section">ไฟดับ</string>
     <string name="smart_outage">ตรวจจับไฟดับ</string>
     <string name="smart_outage_desc">หากอุปกรณ์ที่ตรวจสอบทั้งหมดออฟไลน์พร้อมกัน คุณจะได้รับการแจ้งเตือน “ไฟดับ” หนึ่งครั้งแทนที่จะแจ้งทีละอุปกรณ์ และข้อความบอกระยะเวลาเมื่อไฟกลับมา</string>
@@ -863,18 +863,18 @@
     <string name="smart_budget_needs_price">ใส่ราคาไฟฟ้าในหน้าพลังงานของอุปกรณ์ก่อน: ไม่มีราคาจะคำนวณค่าใช้จ่ายไม่ได้</string>
     <string name="smart_weekly_section">รายงานประจำสัปดาห์</string>
     <string name="smart_weekly">รายงานประจำสัปดาห์</string>
-    <string name="smart_weekly_desc">ทุกวันจันทร์เวลา 09:00: ไฟดับ สัญญาณปลุกและเวลาตอบสนอง การหลุดการเชื่อมต่อ และการใช้ไฟของสัปดาห์ที่ผ่านมา ส่งไปยัง Telegram ด้วยหากตั้งค่าไว้</string>
+    <string name="smart_weekly_desc">ทุกวันจันทร์เวลา 09:00: ไฟดับ สัญญาณเตือนและเวลาตอบสนอง การหลุดการเชื่อมต่อ และการใช้ไฟของสัปดาห์ที่ผ่านมา ส่งไปยัง Telegram ด้วยหากตั้งค่าไว้</string>
     <string name="smart_weekly_preview">แสดงรายงานของสัปดาห์นี้</string>
     <string name="smart_tg_section">Telegram</string>
     <string name="smart_tg_needs_setup">ตั้งค่า Telegram ก่อนเพื่อใช้คำสั่ง การส่งต่อ และ watchdog</string>
     <string name="smart_tg_commands">คำสั่งและปุ่ม “รับทราบ”</string>
-    <string name="smart_tg_commands_desc">คนในรายชื่อของคุณส่ง /status และรับช่วงสัญญาณปลุกที่กำลังดังได้ ข้อความสัญญาณปลุกจะมีปุ่ม “รับทราบ” กดแล้วโทรศัพท์จะเงียบ</string>
+    <string name="smart_tg_commands_desc">คนในรายชื่อของคุณส่ง /status และรับช่วงสัญญาณเตือนที่กำลังดังได้ ข้อความสัญญาณเตือนจะมีปุ่ม “รับทราบ” กดแล้วโทรศัพท์จะเงียบ</string>
     <string name="smart_tg_control">อนุญาตให้เปิดและปิดอุปกรณ์</string>
     <string name="smart_tg_control_desc">คำสั่ง /on และ /off เฉพาะคนในรายชื่อของคุณเท่านั้นที่ใช้ได้</string>
     <string name="smart_tg_forward">ส่งการแจ้งเตือนอัจฉริยะไปยัง Telegram</string>
     <string name="smart_tg_forward_desc">ไฟดับ การใช้ไฟผิดปกติ การแจ้งเตือนงบประมาณ และรายงานประจำสัปดาห์จะถูกเขียนลง Telegram ด้วย</string>
     <string name="smart_wd">Watchdog</string>
-    <string name="smart_wd_desc">อุปกรณ์สองเครื่องที่ใช้บอตเดียวกันเฝ้าดูกันและกัน (เช่น โทรศัพท์กับกล่องทีวี) อุปกรณ์ที่ส่งจะอัปเดตข้อความที่ปักหมุดในแชท Telegram อยู่เสมอ อุปกรณ์ที่เฝ้าดูจะส่งเสียงปลุกและส่งข้อความหาผู้ติดต่อของคุณหากหยุด อย่าเลิกปักหมุดข้อความนั้น</string>
+    <string name="smart_wd_desc">อุปกรณ์สองเครื่องที่ใช้บอตเดียวกันเฝ้าดูกันและกัน (เช่น โทรศัพท์กับกล่องทีวี) อุปกรณ์ที่ส่งจะอัปเดตข้อความที่ปักหมุดในแชท Telegram อยู่เสมอ อุปกรณ์ที่เฝ้าดูจะส่งเสียงเตือนและส่งข้อความหาผู้ติดต่อของคุณหากหยุด อย่าเลิกปักหมุดข้อความนั้น</string>
     <string name="smart_tg_commands_list">คำสั่ง: /status · /ack · /on ชื่อ · /off ชื่อ · /scene ชื่อ · /home · /away · /help</string>
     <string name="wd_send">อุปกรณ์นี้ส่งสัญญาณ</string>
     <string name="wd_watch">เฝ้าดูอุปกรณ์อีกเครื่อง (%d นาที)</string>
@@ -1035,7 +1035,7 @@
     <string name="presence_home_desc">กฎที่ทำเครื่องหมาย “เฉพาะเมื่อไม่อยู่” จะไม่ทำงาน สลับเป็นไม่อยู่เมื่อคุณออกไป (ทำได้จากวิดเจ็ต นาฬิกา หรือ Telegram /away)</string>
     <string name="presence_away_desc">คุณไม่อยู่: กฎที่ทำเครื่องหมาย “เฉพาะเมื่อไม่อยู่” ทำงานอยู่</string>
     <string name="presence_soften">การแจ้งเตือนเบาลงเมื่ออยู่บ้าน</string>
-    <string name="presence_soften_desc">ขณะอยู่บ้าน สัญญาณปลุกของอุปกรณ์ที่ไม่สำคัญจะกลายเป็นการแจ้งเตือน (เหมือนช่วงเวลาเงียบ) อุปกรณ์สำคัญยังคงดังเสมอ</string>
+    <string name="presence_soften_desc">ขณะอยู่บ้าน สัญญาณเตือนของอุปกรณ์ที่ไม่สำคัญจะกลายเป็นการแจ้งเตือน (เหมือนช่วงเวลาเงียบ) อุปกรณ์สำคัญยังคงดังเสมอ</string>
     <string name="presence_toggle">เฉพาะเมื่ออยู่บ้าน / ไม่อยู่</string>
     <string name="presence_only_away">เฉพาะเมื่อไม่อยู่</string>
     <string name="presence_only_home">เฉพาะเมื่ออยู่บ้าน</string>
@@ -1045,7 +1045,7 @@
     <string name="tg_presence_home">🏠 ตั้งโหมดเป็นอยู่บ้านแล้ว</string>
 
     <string name="vacation_title">โหมดพักร้อน</string>
-    <string name="vacation_desc">ปิดอยู่ ขณะพักร้อน คุณจะนับว่าไม่อยู่ ช่วงเวลาเงียบจะถูกข้าม (ทุกสัญญาณปลุกดัง) และจะส่งรายงานทุกเช้า</string>
+    <string name="vacation_desc">ปิดอยู่ ขณะพักร้อน คุณจะนับว่าไม่อยู่ ช่วงเวลาเงียบจะถูกข้าม (ทุกสัญญาณเตือนดัง) และจะส่งรายงานทุกเช้า</string>
     <string name="vacation_until">พักร้อนถึง %s</string>
     <string name="vacation_effect">คุณจะนับว่าไม่อยู่ ช่วงเวลาเงียบปิด และมีรายงานมาทุกเช้าเวลา 09:00 สิ้นสุดเองอัตโนมัติ</string>
     <string name="vacation_pick">พักร้อนถึง</string>
@@ -1056,8 +1056,8 @@
     <string name="stages_desc">แต่ละคนจะได้รับข้อความหลังเวลารอของตัวเอง เช่น เพื่อนบ้านหลัง 5 นาที ญาติหลัง 15 นาที กลุ่มครอบครัวหลัง 30 นาที หากมีคนแตะ “รับทราบ” คนถัดไปจะไม่ได้รับข้อความ</string>
     <string name="stages_after">%d นาที</string>
     <string name="stages_now">ทันที</string>
-    <string name="calls_title">โทรเมื่อสัญญาณปลุกสำคัญ</string>
-    <string name="calls_desc">เมื่ออุปกรณ์ในหมวดสำคัญส่งเสียงปลุก จะโทรหาบุคคลนั้นจากสายของโทรศัพท์เครื่องนี้เมื่อครบเวลารอในการแจ้งเตือนเป็นขั้นตอน การโทรทำหน้าที่ปลุกเท่านั้น: สิ่งที่เกิดขึ้นอยู่ในข้อความ Telegram ที่ส่งพร้อมกัน (Android ไม่อนุญาตให้แอปเล่นเสียงเข้าไปในสายโทรศัพท์) ขอให้เขาบันทึกหมายเลขนี้ว่า “SwitchGuard alarm” การโทรจะซ้ำทุก 2 นาที สูงสุด 3 ครั้ง จนกว่าจะปิดสัญญาณปลุกหรือมีคนแตะ “รับทราบ” ใน Telegram ไม่สามารถโทรหากลุ่มได้</string>
+    <string name="calls_title">โทรเมื่อสัญญาณเตือนสำคัญ</string>
+    <string name="calls_desc">เมื่ออุปกรณ์ในหมวดสำคัญส่งเสียงเตือน จะโทรหาบุคคลนั้นจากสายของโทรศัพท์เครื่องนี้เมื่อครบเวลารอในการแจ้งเตือนเป็นขั้นตอน การโทรทำหน้าที่ปลุกเท่านั้น: สิ่งที่เกิดขึ้นอยู่ในข้อความ Telegram ที่ส่งพร้อมกัน (Android ไม่อนุญาตให้แอปเล่นเสียงเข้าไปในสายโทรศัพท์) ขอให้เขาบันทึกหมายเลขนี้ว่า “SwitchGuard alarm” การโทรจะซ้ำทุก 2 นาที สูงสุด 3 ครั้ง จนกว่าจะปิดสัญญาณเตือนหรือมีคนแตะ “รับทราบ” ใน Telegram ไม่สามารถโทรหากลุ่มได้</string>
     <string name="calls_no_people">เพิ่มบุคคล (ไม่ใช่กลุ่ม) ในการตั้งค่า Telegram ก่อน</string>
     <string name="calls_none">ไม่โทร</string>
     <string name="calls_phone">โทรศัพท์</string>
@@ -1130,19 +1130,19 @@
     <string name="report_trend_same">ใกล้เคียงกับ%s</string>
     <string name="report_trend_new">%1$s: %2$s</string>
 
-    <string name="weekly_intro">สรุป 7 วันที่ผ่านมา: ไฟดับ สัญญาณปลุกและความเร็วในการปิด อุปกรณ์ใดหลุดการเชื่อมต่อและเพราะอะไร และใช้พลังงานเท่าใด แต่ละค่าเปรียบเทียบกับสัปดาห์ก่อนหน้า สีเขียวคือปกติ สีส้มคือควรดู รายการ “สิ่งที่ควรทำ” ตอนท้ายรวบรวมข้อเสนอแนะไว้</string>
+    <string name="weekly_intro">สรุป 7 วันที่ผ่านมา: ไฟดับ สัญญาณเตือนและความเร็วในการปิด อุปกรณ์ใดหลุดการเชื่อมต่อและเพราะอะไร และใช้พลังงานเท่าใด แต่ละค่าเปรียบเทียบกับสัปดาห์ก่อนหน้า สีเขียวคือปกติ สีส้มคือควรดู รายการ “สิ่งที่ควรทำ” ตอนท้ายรวบรวมข้อเสนอแนะไว้</string>
     <string name="daily_report_title">รายงานประจำวัน</string>
-    <string name="daily_report_intro">สรุป 24 ชั่วโมงที่ผ่านมาขณะที่คุณพักร้อน: ไฟดับ สัญญาณปลุก การหลุดการเชื่อมต่อ และการใช้ไฟ เปรียบเทียบกับวันก่อนหน้า</string>
+    <string name="daily_report_intro">สรุป 24 ชั่วโมงที่ผ่านมาขณะที่คุณพักร้อน: ไฟดับ สัญญาณเตือน การหลุดการเชื่อมต่อ และการใช้ไฟ เปรียบเทียบกับวันก่อนหน้า</string>
     <string name="kpi_outage">ไฟดับ</string>
     <plurals name="kpi_outage_value">
         <item quantity="other">%1$d · %2$s</item>
     </plurals>
     <string name="kpi_outage_caption">จำนวนครั้งที่อุปกรณ์ที่ตรวจสอบทั้งหมดออฟไลน์พร้อมกัน และระยะเวลารวม</string>
-    <string name="kpi_alarms">สัญญาณปลุก</string>
-    <string name="kpi_alarms_caption">สัญญาณปลุกที่ดังและถูกปิด (บนโทรศัพท์ นาฬิกา หรือ Telegram)</string>
-    <string name="kpi_alarms_today_caption">สัญญาณปลุกที่ปิดแล้ววันนี้</string>
+    <string name="kpi_alarms">สัญญาณเตือน</string>
+    <string name="kpi_alarms_caption">สัญญาณเตือนที่ดังและถูกปิด (บนโทรศัพท์ นาฬิกา หรือ Telegram)</string>
+    <string name="kpi_alarms_today_caption">สัญญาณเตือนที่ปิดแล้ววันนี้</string>
     <string name="kpi_response">การตอบสนองเฉลี่ย</string>
-    <string name="kpi_response_caption">เวลาตั้งแต่สัญญาณปลุกเริ่มจนมีคนปิด ยิ่งสั้นยิ่งดี เกิน 10 นาทีควรตรวจสอบ</string>
+    <string name="kpi_response_caption">เวลาตั้งแต่สัญญาณเตือนเริ่มจนมีคนปิด ยิ่งสั้นยิ่งดี เกิน 10 นาทีควรตรวจสอบ</string>
     <string name="kpi_uptime">ความครอบคลุมของการตรวจสอบ</string>
     <string name="kpi_uptime_caption">สัดส่วนของช่วงเวลาที่การตรวจสอบทำงานอยู่ จะลดลงเมื่อโทรศัพท์ปิดหรือระบบหยุดแอป</string>
     <string name="kpi_energy">การใช้ไฟ</string>
@@ -1155,20 +1155,20 @@
     <string name="kpi_drops">การหลุดการเชื่อมต่อ</string>
     <string name="kpi_drops_caption">จำนวนครั้งที่อุปกรณ์ขาดการเชื่อมต่ออินเทอร์เน็ตวันนี้</string>
 
-    <string name="rep_sec_events">ไฟดับและสัญญาณปลุก</string>
-    <string name="rep_sec_events_explain">ไฟดับและสัญญาณปลุกในช่วงเวลานี้ และความเร็วในการจัดการสัญญาณปลุก</string>
+    <string name="rep_sec_events">ไฟดับและสัญญาณเตือน</string>
+    <string name="rep_sec_events_explain">ไฟดับและสัญญาณเตือนในช่วงเวลานี้ และความเร็วในการจัดการสัญญาณเตือน</string>
     <string name="rep_outage_item">ไฟดับ: %1$s นาน %2$s</string>
     <string name="rep_no_outage">ไม่มีไฟดับในช่วงนี้</string>
     <plurals name="rep_month_outages">
         <item quantity="other">เดือนนี้จนถึงตอนนี้: ไฟดับ %1$d ครั้ง รวม %2$s</item>
     </plurals>
-    <string name="rep_no_alarms">ไม่มีสัญญาณปลุกดังในช่วงนี้</string>
-    <string name="rep_slow_response">สัญญาณปลุกถูกปิดหลังเฉลี่ย %s: สัญญาณปลุกอาจไม่มีใครสังเกตเห็นเป็นเวลานาน</string>
-    <string name="rep_good_response">สัญญาณปลุกถูกปิดหลังเฉลี่ย %s</string>
+    <string name="rep_no_alarms">ไม่มีสัญญาณเตือนดังในช่วงนี้</string>
+    <string name="rep_slow_response">สัญญาณเตือนถูกปิดหลังเฉลี่ย %s: สัญญาณเตือนอาจไม่มีใครสังเกตเห็นเป็นเวลานาน</string>
+    <string name="rep_good_response">สัญญาณเตือนถูกปิดหลังเฉลี่ย %s</string>
     <plurals name="rep_escalations">
         <item quantity="other">แจ้งบุคคลที่สองทาง Telegram %d ครั้ง</item>
     </plurals>
-    <string name="act_check_sound">ตรวจสอบว่าระดับเสียงปลุกสูงและโทรศัพท์ไม่ได้อยู่อีกห้องตอนกลางคืน การแจ้งเตือน Telegram เป็นขั้นตอนก็ช่วยได้</string>
+    <string name="act_check_sound">ตรวจสอบว่าระดับเสียงเตือนสูงและโทรศัพท์ไม่ได้อยู่อีกห้องตอนกลางคืน การแจ้งเตือน Telegram เป็นขั้นตอนก็ช่วยได้</string>
     <string name="act_add_second_person">เพิ่มบุคคลที่สองใน Telegram (การแจ้งเตือน → แจ้งบุคคลที่สอง) เพื่อให้มีคนได้ยินเมื่อคุณไม่ได้ยิน</string>
 
     <string name="rep_sec_conn">การเชื่อมต่อ</string>
@@ -1214,7 +1214,7 @@
     <string name="gl_outage">ไฟดับ</string>
     <string name="gl_outage_def">อุปกรณ์ที่ตรวจสอบทั้งหมดออฟไลน์ภายใน 90 วินาทีของกันและกัน หรือโทรศัพท์เครื่องนี้ถูกถอดปลั๊กหนึ่งนาที (หากเปิดใช้)</string>
     <string name="gl_response">เวลาตอบสนอง</string>
-    <string name="gl_response_def">เวลาตั้งแต่เหตุการณ์แรกของสัญญาณปลุกจนถึงเมื่อถูกปิด</string>
+    <string name="gl_response_def">เวลาตั้งแต่เหตุการณ์แรกของสัญญาณเตือนจนถึงเมื่อถูกปิด</string>
     <string name="gl_uptime">ความครอบคลุมของการตรวจสอบ</string>
     <string name="gl_uptime_def">สัดส่วนเวลาที่ SwitchGuard ทำงานและเชื่อมต่ออยู่ เหตุการณ์ในเวลาที่เหลืออาจถูกพลาดไป</string>
     <string name="gl_dbm">dBm (สัญญาณ)</string>
@@ -1265,7 +1265,7 @@
     <string name="update_download">ดาวน์โหลด</string>
     <string name="update_later">ภายหลัง</string>
     <string name="alert_category">หมวดการแจ้งเตือน</string>
-    <string name="alert_category_desc">เมื่อเป็นอัตโนมัติ: สำคัญมากหากมีเหตุการณ์ใดส่งเสียงปลุก สำคัญหากเหตุการณ์เพียงแจ้งเตือน</string>
+    <string name="alert_category_desc">เมื่อเป็นอัตโนมัติ: สำคัญมากหากมีเหตุการณ์ใดส่งเสียงเตือน สำคัญหากเหตุการณ์เพียงแจ้งเตือน</string>
     <string name="category_auto">อัตโนมัติ</string>
     <string name="category_auto_now">อัตโนมัติ · ตอนนี้ %s</string>
     <string name="category_critical">สำคัญมาก</string>
@@ -1277,17 +1277,17 @@
     <string name="category_any_normal">อุปกรณ์ปกติเครื่องใดก็ได้</string>
     <string name="categories_title">หมวดการแจ้งเตือน</string>
     <string name="categories_summary">สำคัญมาก %1$d · สำคัญ %2$d · ปกติ %3$d</string>
-    <string name="categories_intro">ทุกอุปกรณ์มีหมวดการแจ้งเตือน หากคุณไม่เลือก ระบบจะตั้งให้อัตโนมัติ: อุปกรณ์ที่ตรวจสอบและมีเหตุการณ์ใดตั้งเป็นสัญญาณปลุกคือสำคัญมาก อุปกรณ์ที่ส่งเพียงการแจ้งเตือนคือสำคัญ ที่เหลือคือปกติ การแจ้งเตือนตามเงื่อนไขและระบบอัตโนมัติใช้หมวดเป็นตัวกระตุ้นได้ (เช่น “ส่งเสียงปลุกเมื่ออุปกรณ์สำคัญมากเครื่องใดออฟไลน์”)</string>
+    <string name="categories_intro">ทุกอุปกรณ์มีหมวดการแจ้งเตือน หากคุณไม่เลือก ระบบจะตั้งให้อัตโนมัติ: อุปกรณ์ที่ตรวจสอบและมีเหตุการณ์ใดตั้งเป็นสัญญาณเตือนคือสำคัญมาก อุปกรณ์ที่ส่งเพียงการแจ้งเตือนคือสำคัญ ที่เหลือคือปกติ การแจ้งเตือนตามเงื่อนไขและระบบอัตโนมัติใช้หมวดเป็นตัวกระตุ้นได้ (เช่น “ส่งเสียงเตือนเมื่ออุปกรณ์สำคัญมากเครื่องใดออฟไลน์”)</string>
     <string name="category_quiet">ดังในช่วงเวลาเงียบด้วย</string>
-    <string name="category_quiet_on">สัญญาณปลุกดังในช่วงเวลาเงียบด้วย</string>
-    <string name="category_quiet_off">ในช่วงเวลาเงียบ สัญญาณปลุกจะกลายเป็นการแจ้งเตือน</string>
+    <string name="category_quiet_on">สัญญาณเตือนดังในช่วงเวลาเงียบด้วย</string>
+    <string name="category_quiet_off">ในช่วงเวลาเงียบ สัญญาณเตือนจะกลายเป็นการแจ้งเตือน</string>
     <string name="category_empty">ไม่มีอุปกรณ์ในหมวดนี้</string>
     <plurals name="category_devices_n">
         <item quantity="other">%d อุปกรณ์</item>
     </plurals>
     <string name="chat_not_understood">ฉันไม่เข้าใจคำสั่งนั้น ตัวอย่าง เขียนว่า “Turn off living room and kitchen”, “Heater watts?”, “Temperature?” หรือ “Status” ส่ง “Help” เพื่อดูคำสั่งทั้งหมด</string>
     <string name="chat_help">เขียนคำสั่งได้อย่างอิสระ ตัวอย่าง:\n• Turn on living room · Turn off kitchen and garden\n• Turn off all lights (ทุกอุปกรณ์ที่ชื่อตรงกัน)\n• Is the living room on? · Status\n• Heater watts? · Power (ตอนนี้ วันนี้ และที่ใช้ตามปกติ)\n• Temperature? (ภายนอก)\n• Evening scene · Home · Away\nสำหรับอุปกรณ์หลายช่อง ใส่หมายเลขช่องด้วย เช่น “Turn on pump 2”</string>
-    <string name="chat_ack_app">ปิดเสียงสัญญาณปลุกจากหน้าจอสัญญาณปลุกในแอป คำสั่ง “Ack” ใช้ได้ใน Telegram</string>
+    <string name="chat_ack_app">ปิดเสียงสัญญาณเตือนจากหน้าจอสัญญาณเตือนในแอป คำสั่ง “Ack” ใช้ได้ใน Telegram</string>
     <string name="chat_switch_usage">อุปกรณ์ไหน? ตัวอย่าง เขียนว่า “Turn on living room”</string>
     <string name="chat_need_channel">%1$s มี %2$d ช่อง ใส่หมายเลขช่องด้วย เช่น “Turn on %1$s 1”</string>
     <string name="chat_not_found">ไม่พบอุปกรณ์ชื่อ “%s”</string>
@@ -1448,7 +1448,7 @@
     <string name="board_close">ปิด</string>
     <string name="board_all_ok">ปกติดี</string>
     <string name="board_watching">กำลังดู %1$d อุปกรณ์</string>
-    <string name="board_alarm">สัญญาณปลุกทำงานอยู่</string>
+    <string name="board_alarm">สัญญาณเตือนทำงานอยู่</string>
     <string name="board_offline">%1$d อุปกรณ์ออฟไลน์</string>
     <string name="board_no_internet">ไม่มีอินเทอร์เน็ต</string>
     <string name="board_auth">ลงชื่อเข้าใช้อีกครั้ง</string>

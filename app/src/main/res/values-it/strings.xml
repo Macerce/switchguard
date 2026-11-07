@@ -1540,9 +1540,9 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_in">tra %1$s</string>
     <string name="board_kind_sunrise">alba</string>
     <string name="board_kind_sunset">tramonto</string>
-    <string name="board_kind_cycle_start">il ciclo parte</string>
+    <string name="board_kind_cycle_start">avvio del ciclo</string>
     <string name="board_kind_cycle_step">passaggio successivo</string>
-    <string name="board_kind_cycle_end">il ciclo termina</string>
+    <string name="board_kind_cycle_end">fine del ciclo</string>
     <string name="board_kind_template">modello</string>
     <string name="board_no_location">Scegli un luogo in Impostazioni → Posizione per vedere il meteo</string>
     <string name="board_rain">Pioggia %1$d%%</string>

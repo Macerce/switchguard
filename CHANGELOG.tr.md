@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.26.1 — 2026-11-07
+**Düzeltmeler**
+- Alt menü etiketleri uzun dillerde (Almanca, Fransızca, Ukraynaca…) iki satıra bölünmüyor; yazı tek satıra sığacak kadar küçülür.
+- Çeviri düzeltmeleri: Tayca'da "alarm" çalar saat anlamındaydı; Çince'de sohbet komut örnekleri çevrilmişti (komutlar yalnız İngilizce/Türkçe); Rusça/Ukraynaca karşılaştırma cümleleri, Lehçe/Fransızca dilbilgisi ve birkaç dilde daha doğal terimler.
+
 ## 2.26.0 — 2026-11-07
 **Yeni**
 - **20 dil**: uygulama artık İngilizce, Türkçe, Almanca, İspanyolca, Portekizce (Brezilya), Fransızca, İtalyanca, Felemenkçe, Lehçe, Rusça, Ukraynaca, Arapça, Hintçe, Endonezce, Vietnamca, Tayca, Çince (Basitleştirilmiş ve Geleneksel), Japonca ve Korece. Ayarlar → Dil'den seçilir; Arapça sağdan sola düzende. Sohbet ve Telegram komutları yine İngilizce ya da Türkçe anlaşılır.

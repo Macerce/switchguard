@@ -389,7 +389,7 @@
     <string name="automation_edit">تعديل الأتمتة</string>
     <string name="automation_name">الاسم</string>
     <string name="automation_when">عندما</string>
-    <string name="automation_then">إذًا</string>
+    <string name="automation_then">عندئذٍ</string>
     <string name="automation_device">الجهاز</string>
     <string name="automation_event">الحدث</string>
     <string name="automation_channel">القناة</string>
@@ -500,7 +500,7 @@
     <string name="timer_other_desc">أُنشئ في تطبيق eWeLink (لمرة واحدة، عد تنازلي…). يبقى كما هو؛ عدّله في eWeLink.</string>
     <string name="days_every">كل يوم</string>
     <string name="days_weekdays">أيام الأسبوع</string>
-    <string name="days_weekend">عطلات نهاية الأسبوع</string>
+    <string name="days_weekend">عطلة نهاية الأسبوع</string>
 
     <!-- Günlük özet -->
     <string name="section_summary">الملخص اليومي</string>
@@ -545,7 +545,7 @@
     <string name="demo_pumps">تجريبي · لوحة المضخات</string>
     <string name="demo_light">تجريبي · إضاءة الحديقة</string>
     <string name="demo_auto_pump">توقفت المضخة</string>
-    <string name="demo_auto_light">ضوء الحديقة ترك مضاءً</string>
+    <string name="demo_auto_light">ضوء الحديقة بقي مضاءً</string>
     <string name="onb_platform_demo">جرّب بدون حساب (تجريبي)</string>
     <string name="onb_platform_demo_desc">ثلاثة أجهزة افتراضية بكل الميزات، دون إعداد. يمكنك إضافة حسابك الحقيقي لاحقًا في الإعدادات.</string>
     <string name="demo_devices">الأجهزة التجريبية</string>

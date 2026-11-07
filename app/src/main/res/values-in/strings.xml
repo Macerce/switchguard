@@ -90,7 +90,7 @@
     <string name="state_stopped">Pemantauan nonaktif</string>
     <string name="detail_ws_unsupported">Pembaruan instan tidak tersedia untuk App ID ini; memakai pemeriksaan berkala (perubahan yang lebih singkat dari interval mungkin terlewat)</string>
     <string name="detail_reconnecting">Menyambung ulang untuk pembaruan instan…</string>
-    <string name="detail_api_error">Kode error %d</string>
+    <string name="detail_api_error">Kode kesalahan %d</string>
     <string name="monitoring_off_hint">Mulai pemantauan untuk mendapat alarm</string>
     <string name="last_update">Diperbarui %s</string>
     <string name="alarm_banner_more">+%d lagi</string>
@@ -186,7 +186,7 @@
     <string name="tuya_not_connected">Tidak terhubung · ketuk untuk menghubungkan</string>
     <string name="tuya_dialog_title">Hubungkan Tuya / Smart Life</string>
     <string name="tuya_dialog_desc">Masukkan Access ID dan Access Secret proyek Tuya Cloud Anda (platform.tuya.com → Cloud → proyek Anda → Overview). Akun aplikasi Smart Life / Tuya Anda harus ditautkan ke proyek.</string>
-    <string name="tuya_region">Data center</string>
+    <string name="tuya_region">Pusat data</string>
     <string name="tuya_region_eu">Eropa Tengah</string>
     <string name="tuya_region_us">Amerika Barat</string>
     <string name="tuya_region_cn">Tiongkok</string>
@@ -421,9 +421,9 @@
     <string name="energy_cost">Perkiraan biaya</string>
     <string name="energy_avg_power">Daya rata-rata</string>
     <string name="energy_peak">Daya puncak</string>
-    <string name="energy_busiest_hour">Jam tersibuk</string>
-    <string name="energy_busiest_day">Hari tersibuk</string>
-    <string name="energy_busiest_month">Bulan tersibuk</string>
+    <string name="energy_busiest_hour">Jam pemakaian tertinggi</string>
+    <string name="energy_busiest_day">Hari pemakaian tertinggi</string>
+    <string name="energy_busiest_month">Bulan pemakaian tertinggi</string>
     <string name="energy_avg_per_day">Rata-rata harian</string>
     <string name="energy_avg_per_month">Rata-rata bulanan</string>
     <string name="energy_coverage">Terukur</string>
@@ -431,7 +431,7 @@
     <string name="energy_set_price">Harga per kWh</string>
     <string name="energy_price_title">Harga listrik</string>
     <string name="energy_price_desc">Masukkan harga yang Anda bayar per kWh (%1$s) untuk melihat perkiraan biaya di laporan. Kosongkan atau isi 0 untuk menyembunyikan biaya.</string>
-    <string name="energy_report">Ambil laporan</string>
+    <string name="energy_report">Buat laporan</string>
     <string name="energy_report_title">Laporan energi</string>
     <string name="energy_report_desc">Menyimpan periode yang dipilih (%1$s) dengan setiap jam, hari, atau bulan, total, puncak, biaya, dan penggunaan sakelar.</string>
     <string name="energy_report_pdf">Laporan PDF (untuk dicetak atau dibagikan)</string>

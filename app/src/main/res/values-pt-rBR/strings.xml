@@ -1500,7 +1500,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="cycle_jitter">Variação aleatória</string>
     <string name="cycle_jitter_desc">As durações mudam um pouco a cada vez, para que as luzes pareçam de uma casa habitada enquanto você está ausente.</string>
     <string name="cycle_jitter_off">Nenhuma</string>
-    <string name="cycle_presence">Iniciar sozinho</string>
+    <string name="cycle_presence">Iniciar automaticamente</string>
     <string name="cycle_presence_any">Sempre</string>
     <string name="cycle_stop_manual">Parar se alterado manualmente</string>
     <string name="cycle_stop_manual_desc">Se você acionar por conta própria um dos dispositivos do ciclo, o ciclo para e o dispositivo fica como você deixou.</string>
@@ -1508,13 +1508,13 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="cycle_running">Etapa %1$d/%2$d · %3$s</string>
     <string name="cycle_round_of">Rodada %1$d/%2$d</string>
     <string name="cycle_round_n">Rodada %d</string>
-    <string name="cycle_left">faltam %s</string>
+    <string name="cycle_left">Faltam %s</string>
     <string name="cycle_idle_manual">Inicia com um botão</string>
     <string name="cycle_next_at">Próximo: %s</string>
     <string name="cycle_disabled">Início automático desativado</string>
     <string name="cycle_start">Iniciar</string>
     <string name="cycle_stop">Parar</string>
-    <string name="cycle_enabled">Iniciar sozinho</string>
+    <string name="cycle_enabled">Iniciar automaticamente</string>
     <string name="cycle_delete_title">Excluir ciclo?</string>
     <string name="cycle_by_button">por botão</string>
     <string name="cycle_min_step">A menor etapa é de 5 segundos.</string>

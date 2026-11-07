@@ -98,7 +98,7 @@
     <string name="monitoring_off_hint">Почніть моніторинг, щоб отримувати тривоги</string>
     <string name="last_update">Оновлено %s</string>
 
-    <string name="alarm_banner_more">ще +%d</string>
+    <string name="alarm_banner_more">ще %d</string>
     <string name="login_needed_title">Потрібен вхід</string>
     <string name="login_needed_body">Увійдіть в обліковий запис eWeLink, щоб побачити свої пристрої.</string>
     <string name="no_devices">У цьому обліковому записі пристроїв не знайдено.</string>
@@ -119,7 +119,7 @@
     <string name="rules_hint">Тривога лунає, доки ви її не вимкнете. Сповіщення показує звичайне повідомлення. Нічого — лише записує подію в історію.</string>
     <string name="event_turned_off">Вимкнено</string>
     <string name="event_turned_on">Увімкнено</string>
-    <string name="event_went_offline">Пішов в офлайн</string>
+    <string name="event_went_offline">Зв\'язок утрачено</string>
     <string name="event_came_online">Знову онлайн</string>
 
     <string name="filter_all">Усі</string>
@@ -211,7 +211,7 @@
     <string name="language">Мова</string>
     <string name="language_desc">Виберіть мову застосунку, сповіщень і тривог.</string>
     <string name="language_system">Мова телефона</string>
-    <string name="logged_in">Увійшли</string>
+    <string name="logged_in">Вхід виконано</string>
     <string name="not_logged_in">Не виконано вхід</string>
     <string name="region_x">Регіон: %s</string>
     <string name="api_credentials">Облікові дані API</string>
@@ -222,7 +222,7 @@
     <string name="always_awake">Максимальна надійність</string>
     <string name="always_awake_desc">Не дає процесору засинати, щоб жодна подія не затримувалася. Витрачає більше заряду.</string>
     <string name="offline_grace">Ігнорувати короткі розриви зв\'язку</string>
-    <string name="offline_grace_desc">Зачекати стільки часу, перш ніж повідомляти, що пристрій пішов в офлайн. Якщо він повернеться вчасно, тривоги не буде.</string>
+    <string name="offline_grace_desc">Скільки чекати, перш ніж повідомляти, що пристрій утратив зв\'язок. Якщо він повернеться вчасно, сповіщення не буде.</string>
     <string name="grace_off">Вимк. (сповіщати одразу)</string>
     <string name="dur_seconds">%d с</string>
     <string name="dur_min_sec">%1$d хв %2$d с</string>
@@ -292,7 +292,7 @@
     <string name="ready_title">Тривоги можуть до вас не дійти</string>
     <string name="ready_body">Виправте ці налаштування телефона, щоб SwitchGuard міг завжди дзвонити.</string>
     <string name="ready_fix">Виправити</string>
-    <string name="ready_done">Я зробив(ла)</string>
+    <string name="ready_done">Зроблено</string>
     <string name="ready_notifications">Сповіщення вимкнено</string>
     <string name="ready_notifications_desc">Тривоги й попередження неможливо показати.</string>
     <string name="ready_channel">Сповіщення про тривоги приглушено</string>
@@ -358,7 +358,7 @@
     <string name="onb_done_tip_test">Скористайтеся «Тестовою тривогою» на вкладці «Сповіщення», щоб перевірити звук</string>
 
     <string name="channel_alarm">Тривога пристрою</string>
-    <string name="channel_alarm_desc">Лунає, доки ви її не вимкнете, коли пристрій змінюється</string>
+    <string name="channel_alarm_desc">Лунає, доки ви її не вимкнете, коли змінюється стан пристрою</string>
     <string name="channel_events">Сповіщення пристроїв</string>
     <string name="channel_status">Стан моніторингу</string>
     <string name="notif_alarm_title">⚠ Зміна пристрою (%d)</string>
@@ -433,7 +433,7 @@
     <string name="energy_cost">Орієнтовна вартість</string>
     <string name="energy_avg_power">Середня потужність</string>
     <string name="energy_peak">Пікова потужність</string>
-    <string name="energy_busiest_hour">Найвантажена година</string>
+    <string name="energy_busiest_hour">Найвантаженіша година</string>
     <string name="energy_busiest_day">Найвантаженіший день</string>
     <string name="energy_busiest_month">Найвантаженіший місяць</string>
     <string name="energy_avg_per_day">Середнє за день</string>
@@ -806,7 +806,7 @@
         <item quantity="one">%d налаштування телефона потребує виправлення</item>
         <item quantity="few">%d налаштування телефона потребують виправлення</item>
         <item quantity="many">%d налаштувань телефона потребують виправлення</item>
-        <item quantity="other">%d налаштування телефона потребує виправлення</item>
+        <item quantity="other">%d налаштування телефона потребують виправлення</item>
     </plurals>
     <string name="tab_alerts">Сповіщення</string>
     <string name="alerts_ready">Тривога готова</string>
@@ -862,11 +862,11 @@
     <string name="tg_help">Команди SwitchGuard:
 /status – моніторинг, тривога й пристрої
 /ack – перебрати тривогу, що лунає
-/on name [channel] – увімкнути пристрій або групу (кілька: /on kitchen, garden)
-/off name [channel] – вимкнути пристрій або групу
-/watt [name] – потужність зараз, сьогодні та звичайне споживання
+/on назва [канал] – увімкнути пристрій або групу (кілька: /on kitchen, garden)
+/off назва [канал] – вимкнути пристрій або групу
+/watt [назва] – потужність зараз, сьогодні та звичайне споживання
 /temp – температура надворі
-/scene name – запустити сцену
+/scene назва – запустити сцену
 /home · /away – режим вдома / не вдома
 
 Можна писати й вільно англійською або турецькою: “turn off kitchen and garden”, “heater watts”, “is the pump on”.
@@ -890,7 +890,7 @@
         <item quantity="other">🚨 Лунає тривога (%d події)</item>
     </plurals>
     <string name="tg_status_outage">Відключення електроенергії триває %s</string>
-    <string name="tg_status_hint">/on name або /off name перемикає пристрій.</string>
+    <string name="tg_status_hint">/on назва або /off назва перемикає пристрій.</string>
     <string name="tg_state_live">наживо</string>
     <string name="tg_state_polling">періодична перевірка</string>
     <string name="wd_beat_running">SwitchGuard працює</string>
@@ -956,7 +956,7 @@
     <string name="smart_tg_forward_desc">Відключення електроенергії, незвичне споживання, сповіщення про бюджет і тижневий звіт також пишуться в Telegram.</string>
     <string name="smart_wd">Сторожовий таймер</string>
     <string name="smart_wd_desc">Два пристрої з одним ботом стежать один за одним (наприклад, телефон і ТВ-приставка). Пристрій-відправник підтримує актуальним закріплене повідомлення в чаті Telegram; пристрій-спостерігач, якщо воно перестане оновлюватися, подає тривогу й пише вашим контактам. Не відкріплюйте це повідомлення.</string>
-    <string name="smart_tg_commands_list">Команди: /status · /ack · /on name · /off name · /scene name · /home · /away · /help</string>
+    <string name="smart_tg_commands_list">Команди: /status · /ack · /on назва · /off назва · /scene назва · /home · /away · /help</string>
     <string name="wd_send">Цей пристрій надсилає сигнал</string>
     <string name="wd_watch">Стежити за іншим пристроєм (%d хв)</string>
     <string name="event_charger_lost">Цей пристрій відключили від зарядного: можливе відключення електроенергії</string>
@@ -979,7 +979,7 @@
     <string name="widget_group_all_on">Усі ввімк.</string>
     <string name="widget_group_all_off">Усі вимк.</string>
     <string name="widget_group_empty">У цій групі немає пристроїв</string>
-    <string name="widget_group_more">ще +%d у застосунку</string>
+    <string name="widget_group_more">ще %d у застосунку</string>
     <plurals name="widget_group_members">
         <item quantity="one">%d пристрій</item>
         <item quantity="few">%d пристрої</item>
@@ -1221,9 +1221,9 @@
     <string name="report_vs_yesterday">учорашнім днем</string>
     <string name="report_vs_last_month">минулим місяцем</string>
     <string name="report_vs_last_year">минулим роком</string>
-    <string name="report_trend_up">▲ на %2$d%% більше, ніж за %1$s</string>
-    <string name="report_trend_down">▼ на %2$d%% менше, ніж за %1$s</string>
-    <string name="report_trend_same">Приблизно так само, як і %s</string>
+    <string name="report_trend_up">▲ на %2$d%% більше порівняно з %1$s</string>
+    <string name="report_trend_down">▼ на %2$d%% менше порівняно з %1$s</string>
+    <string name="report_trend_same">Майже без змін порівняно з %s</string>
     <string name="report_trend_new">%1$s: %2$s</string>
 
     <string name="weekly_intro">Підсумок останніх 7 днів: відключення електроенергії, тривоги та швидкість їх вимкнення, які пристрої втрачали зв\'язок і чому, а також скільки енергії було використано. Кожне значення порівнюється з попереднім тижнем. Зелений означає, що все гаразд, помаранчевий — що варто глянути; список «Що робити» наприкінці збирає поради.</string>
@@ -1337,14 +1337,14 @@
     <string name="energy_report_intro">Скільки електроенергії спожив пристрій %1$s у період %2$s. Картки вгорі — підсумок; діаграма показує споживання за відрізками (темніший стовпчик — найвищий, пунктирна лінія — середнє); таблиця наприкінці містить подробиці. Розділ «Головне» пояснює, що впадає в око.</string>
     <string name="kpi_total_caption">Енергія, використана за період (одиниця у вашому рахунку).</string>
     <string name="kpi_avg_power_caption">Середня потужність за час вимірювання.</string>
-    <string name="kpi_peak_caption">Найвищий момент: %s</string>
+    <string name="kpi_peak_caption">Пік: %s</string>
     <string name="kpi_bucket_avg_caption">Середнє за виміряними відрізками.</string>
     <string name="kpi_coverage_caption">Виміряно %1$s із %2$s. Менше охоплення означає, що частини споживання в цих числах немає.</string>
     <string name="ins_title">Головне</string>
     <string name="ins_explain">Що впадає в око в цей період, простими словами.</string>
     <string name="ins_busiest">Найбільше енергії використано в %1$s: %2$d%% від загального.</string>
-    <string name="ins_more">На %1$d%% більше, ніж %2$s.</string>
-    <string name="ins_less">На %1$d%% менше, ніж %2$s.</string>
+    <string name="ins_more">На %1$d%% більше порівняно з %2$s.</string>
+    <string name="ins_less">На %1$d%% менше порівняно з %2$s.</string>
     <string name="ins_coverage">Виміряно лише %d%% періоду: фактичне споживання вище за показане.</string>
     <string name="ins_projection">За такого темпу місяць завершиться приблизно на %s.</string>
     <string name="ins_standby">Нижче %1$s воно ніколи не опускається: близько %2$s на місяць лише в режимі очікування.</string>
@@ -1364,7 +1364,7 @@
     <string name="daily_col_on">Вмикань</string>
     <string name="daily_col_time">Час роботи</string>
     <string name="daily_table_note">Вмикань: скільки разів його вмикали сьогодні. Час роботи: загальний час у ввімкненому стані.</string>
-    <string name="daily_longest">Найдовше сьогодні був ввімкнений %1$s: %2$s.</string>
+    <string name="daily_longest">Найдовше сьогодні працював %1$s: %2$s.</string>
     <string name="update_title">Доступний SwitchGuard %1$s</string>
     <string name="update_body">У вас версія %1$s. Завантажте нову версію з GitHub і встановіть поверх цієї; ваші налаштування збережуться.</string>
     <string name="update_download">Завантажити</string>
@@ -1418,7 +1418,7 @@
     <string name="chat_tpl_temp_text">Temperature?</string>
     <string name="chat_tpl_home">Я вдома</string>
     <string name="chat_tpl_home_text">Home</string>
-    <string name="chat_tpl_away">Я пішов(ла)</string>
+    <string name="chat_tpl_away">Мене немає вдома</string>
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Довідка</string>
     <string name="chat_tpl_help_text">Help</string>

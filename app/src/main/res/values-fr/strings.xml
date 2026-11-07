@@ -110,7 +110,7 @@
     <string name="no_devices">Aucun appareil trouvé dans ce compte.</string>
     <string name="monitored">Surveillé</string>
     <string name="not_monitored">Non surveillé</string>
-    <string name="power">Puissance</string>
+    <string name="power">Marche/Arrêt</string>
     <string name="channel_n">Voie %d</string>
     <string name="action_expand">Afficher les voies</string>
     <string name="action_collapse">Masquer les voies</string>
@@ -682,7 +682,7 @@
     <string name="tg_share">Partager le lien</string>
     <string name="tg_share_text">Pourrais-tu ouvrir ce bot et toucher Start ? Tu recevras alors un message Telegram si mon alarme SwitchGuard n\'est pas arrêtée. %s</string>
     <string name="tg_find">Trouver les personnes</string>
-    <string name="tg_none_found">Personne trouvé. Réessayez après que la personne a touché Start dans le bot (Telegram n\'affiche que les dernières 24 heures).</string>
+    <string name="tg_none_found">Personne n\'a été trouvé. Réessayez après que la personne a touché Start dans le bot (Telegram n\'affiche que les dernières 24 heures).</string>
     <string name="tg_group">groupe</string>
     <string name="tg_step_when">3. Quand</string>
     <string name="tg_when_desc">Les personnes sont prévenues si l\'alarme n\'est pas arrêtée dans les %d min.</string>
@@ -1327,7 +1327,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="energy_report_intro">Combien d\'électricité %1$s a consommé en %2$s. Les cartes en haut sont le résumé ; le graphique montre la consommation tranche par tranche (la barre la plus foncée est la plus haute, la ligne pointillée la moyenne) ; le tableau à la fin donne les détails. La section « Points marquants » explique ce qui ressort.</string>
     <string name="kpi_total_caption">Énergie consommée sur la période (l\'unité de votre facture).</string>
     <string name="kpi_avg_power_caption">Puissance moyenne absorbée pendant la mesure.</string>
-    <string name="kpi_peak_caption">Moment le plus élevé : %s</string>
+    <string name="kpi_peak_caption">Pic : %s</string>
     <string name="kpi_bucket_avg_caption">Moyenne des tranches mesurées.</string>
     <string name="kpi_coverage_caption">%1$s sur %2$s mesurés. Une couverture plus faible signifie qu\'une partie de la consommation n\'est pas dans ces chiffres.</string>
     <string name="ins_title">Points marquants</string>
@@ -1408,7 +1408,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="chat_tpl_temp_text">Temperature?</string>
     <string name="chat_tpl_home">Je suis là</string>
     <string name="chat_tpl_home_text">Home</string>
-    <string name="chat_tpl_away">Je suis sorti</string>
+    <string name="chat_tpl_away">Je pars</string>
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Aide</string>
     <string name="chat_tpl_help_text">Help</string>
@@ -1485,7 +1485,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="cycle_start_title">Quand doit-il démarrer ?</string>
     <string name="cycle_start_manual">Avec un bouton</string>
     <string name="cycle_start_at">À une heure précise</string>
-    <string name="cycle_start_window">Pendant des heures</string>
+    <string name="cycle_start_window">Sur une plage horaire</string>
     <string name="cycle_start_time">Début</string>
     <string name="cycle_end_time">Fin</string>
     <string name="cycle_window_note">Démarre tout seul à l\'ouverture de la plage et s\'arrête à sa fin.</string>

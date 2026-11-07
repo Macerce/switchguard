@@ -68,7 +68,7 @@
     <string name="action_restore">Восстановить</string>
     <string name="backup_file_word">копия</string>
     <string name="widget_description">Показывает, работает ли мониторинг, и звучащую тревогу</string>
-    <string name="widget_sample">Онлайн · слежу за 3 устройствами</string>
+    <string name="widget_sample">Онлайн · отслеживаются 3 устройства</string>
     <string name="state_service_stopped">Мониторинг не работает — нажмите, чтобы открыть</string>
     <string name="secrets_unreadable">Сохранённые ключи нельзя прочитать на этом телефоне (например, данные приложения скопированы с другого телефона). Введите данные eWeLink и Tuya заново в Настройках.</string>
     <string name="crash_report">Отправить отчёт о проблеме</string>
@@ -111,7 +111,7 @@
     <string name="no_devices">В этом аккаунте устройства не найдены.</string>
     <string name="monitored">Отслеживается</string>
     <string name="not_monitored">Не отслеживается</string>
-    <string name="power">Мощность</string>
+    <string name="power">Питание</string>
     <string name="channel_n">Канал %d</string>
     <string name="action_expand">Показать каналы</string>
     <string name="action_collapse">Скрыть каналы</string>
@@ -294,7 +294,7 @@
     <string name="perm_missing">Не разрешено — нажмите, чтобы исправить</string>
     <string name="perm_battery">Фоновая активность</string>
     <string name="perm_battery_ok">Без ограничений</string>
-    <string name="perm_battery_missing">Ограничено — тревоги могут опаздывать. Нажмите, чтобы исправить.</string>
+    <string name="perm_battery_missing">Ограничено — тревоги могут опаздывать. Выберите, чтобы исправить.</string>
     <string name="perm_full_screen">Тревога на весь экран</string>
     <string name="perm_full_screen_missing">Не разрешено — тревога не займёт экран блокировки. Нажмите, чтобы исправить.</string>
     <string name="perm_lock_popup">Тревога на экране блокировки (Xiaomi)</string>
@@ -302,7 +302,7 @@
     <string name="ready_title">Тревога может до вас не дойти</string>
     <string name="ready_body">Исправьте эти настройки телефона, чтобы SwitchGuard всегда мог подать сигнал.</string>
     <string name="ready_fix">Исправить</string>
-    <string name="ready_done">Я сделал</string>
+    <string name="ready_done">Сделано</string>
     <string name="ready_notifications">Уведомления выключены</string>
     <string name="ready_notifications_desc">Тревоги и предупреждения не могут быть показаны.</string>
     <string name="ready_channel">Уведомления о тревоге приглушены</string>
@@ -403,7 +403,7 @@
     <string name="automation_delete_title">Удалить автоматизацию?</string>
     <string name="automation_fired">Автоматизация «%s»</string>
     <string name="automation_failed">%1$s — не удалось: %2$s</string>
-    <string name="automation_retrying">%1$s — не удалось: %2$s · повторяю</string>
+    <string name="automation_retrying">%1$s — не удалось: %2$s · повторная попытка</string>
     <string name="automation_gave_up_on">%1$s — НЕ включилось (попыток: %3$d): %2$s</string>
     <string name="automation_gave_up_off">%1$s — НЕ выключилось (попыток: %3$d): %2$s</string>
     <string name="automation_retried">%1$s (с попытки %2$d)</string>
@@ -556,8 +556,8 @@
     <string name="demo_toggle_channel">Переключить канал %d извне</string>
     <string name="demo_disconnect">Потерять связь</string>
     <string name="demo_reconnect">Восстановить связь</string>
-    <string name="demo_power_drop">Уронить мощность на канале %d (насос заглох)</string>
-    <string name="demo_power_drop_single">Уронить мощность (устройство заглохло)</string>
+    <string name="demo_power_drop">Снизить мощность на канале %d (насос заглох)</string>
+    <string name="demo_power_drop_single">Снизить мощность (устройство заглохло)</string>
     <string name="demo_power_restore">Восстановить мощность на канале %d</string>
     <string name="demo_power_restore_single">Восстановить мощность</string>
     <string name="alarm_open_app">Открыть приложение</string>
@@ -601,16 +601,16 @@
         <item quantity="other">Тревога отключена · %1$d события · время реакции %2$s</item>
     </plurals>
     <plurals name="status_live">
-        <item quantity="one">Онлайн · слежу за %d устройством</item>
-        <item quantity="few">Онлайн · слежу за %d устройствами</item>
-        <item quantity="many">Онлайн · слежу за %d устройствами</item>
-        <item quantity="other">Онлайн · слежу за %d устройства</item>
+        <item quantity="one">Онлайн · отслеживается %d устройство</item>
+        <item quantity="few">Онлайн · отслеживаются %d устройства</item>
+        <item quantity="many">Онлайн · отслеживается %d устройств</item>
+        <item quantity="other">Онлайн · отслеживается %d устройства</item>
     </plurals>
     <plurals name="status_polling">
-        <item quantity="one">Слежу за %1$d устройством · каждые %2$d с</item>
-        <item quantity="few">Слежу за %1$d устройствами · каждые %2$d с</item>
-        <item quantity="many">Слежу за %1$d устройствами · каждые %2$d с</item>
-        <item quantity="other">Слежу за %1$d устройства · каждые %2$d с</item>
+        <item quantity="one">Отслеживается %1$d устройство · каждые %2$d с</item>
+        <item quantity="few">Отслеживаются %1$d устройства · каждые %2$d с</item>
+        <item quantity="many">Отслеживается %1$d устройств · каждые %2$d с</item>
+        <item quantity="other">Отслеживается %1$d устройства · каждые %2$d с</item>
     </plurals>
     <plurals name="device_count">
         <item quantity="one">%d устройство</item>
@@ -1175,10 +1175,10 @@
     <string name="calls_phone">Телефонный звонок</string>
     <string name="calls_phone_target">Номер телефона</string>
     <string name="calls_test">Тестовый звонок</string>
-    <string name="calls_test_sent">Звонок запрошен. Дозвониться может занять несколько секунд.</string>
+    <string name="calls_test_sent">Звонок запрошен. Он может начаться через несколько секунд.</string>
     <string name="call_failed">Не удалось позвонить %1$s: %2$s</string>
     <string name="call_err_permission">Нет разрешения на телефонные звонки</string>
-    <string name="call_err_no_phone">это устройство не умеет звонить</string>
+    <string name="call_err_no_phone">это устройство не поддерживает телефонные звонки</string>
     <string name="tg_alarm_earlier">Уже оповещены: %s</string>
 
     <string name="scenes_title">Сценарии</string>
@@ -1247,9 +1247,9 @@
     <string name="report_vs_yesterday">вчерашнего дня</string>
     <string name="report_vs_last_month">прошлого месяца</string>
     <string name="report_vs_last_year">прошлого года</string>
-    <string name="report_trend_up">▲ на %2$d%% больше, чем %1$s</string>
-    <string name="report_trend_down">▼ на %2$d%% меньше, чем %1$s</string>
-    <string name="report_trend_same">Примерно как %s</string>
+    <string name="report_trend_up">▲ на %2$d%% выше уровня %1$s</string>
+    <string name="report_trend_down">▼ на %2$d%% ниже уровня %1$s</string>
+    <string name="report_trend_same">Примерно на уровне %s</string>
     <string name="report_trend_new">%1$s: %2$s</string>
 
     <string name="weekly_intro">Сводка за последние 7 дней: отключения электричества, тревоги и скорость их отключения, какие устройства теряли связь и почему, и сколько энергии потреблено. Каждое значение сравнивается с предыдущей неделей. Зелёный означает «всё хорошо», оранжевый — «стоит присмотреться»; список «Что делать» в конце собирает рекомендации.</string>
@@ -1363,14 +1363,14 @@
     <string name="energy_report_intro">Сколько электричества потребило устройство «%1$s» за %2$s. Карточки вверху — сводка; график показывает потребление по частям (более тёмный столбец — наибольшее, пунктир — среднее); таблица в конце содержит подробности. Раздел «Главное» объясняет, что выделяется.</string>
     <string name="kpi_total_caption">Энергия, потреблённая за период (единица в вашем счёте).</string>
     <string name="kpi_avg_power_caption">Средняя потребляемая мощность за время измерений.</string>
-    <string name="kpi_peak_caption">Наибольший момент: %s</string>
+    <string name="kpi_peak_caption">Пик: %s</string>
     <string name="kpi_bucket_avg_caption">Среднее по измеренным частям.</string>
     <string name="kpi_coverage_caption">Измерено %1$s из %2$s. Меньший охват означает, что часть потребления в эти цифры не вошла.</string>
     <string name="ins_title">Главное</string>
     <string name="ins_explain">Что выделяется в этом периоде, простыми словами.</string>
     <string name="ins_busiest">Больше всего энергии потреблено: %1$s — %2$d%% от общего объёма.</string>
-    <string name="ins_more">На %1$d%% больше, чем %2$s.</string>
-    <string name="ins_less">На %1$d%% меньше, чем %2$s.</string>
+    <string name="ins_more">На %1$d%% выше уровня %2$s.</string>
+    <string name="ins_less">На %1$d%% ниже уровня %2$s.</string>
     <string name="ins_coverage">Измерено лишь %d%% периода: фактическое потребление выше показанного.</string>
     <string name="ins_projection">При таком расходе месяц закончится примерно на %s.</string>
     <string name="ins_standby">Никогда не опускается ниже %1$s: около %2$s в месяц только в режиме ожидания.</string>
@@ -1445,7 +1445,7 @@
     <string name="chat_tpl_temp_text">Temperature?</string>
     <string name="chat_tpl_home">Я дома</string>
     <string name="chat_tpl_home_text">Home</string>
-    <string name="chat_tpl_away">Я ушёл</string>
+    <string name="chat_tpl_away">Меня нет дома</string>
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Справка</string>
     <string name="chat_tpl_help_text">Help</string>
@@ -1523,7 +1523,7 @@
     <string name="cycle_start_title">Когда запускать?</string>
     <string name="cycle_start_manual">Кнопкой</string>
     <string name="cycle_start_at">В заданное время</string>
-    <string name="cycle_start_window">В течение часов</string>
+    <string name="cycle_start_window">В заданные часы</string>
     <string name="cycle_start_time">Начало</string>
     <string name="cycle_end_time">Конец</string>
     <string name="cycle_window_note">Запускается сам, когда интервал начинается, и останавливается, когда он заканчивается.</string>
@@ -1587,7 +1587,7 @@
     <string name="board_open_app">Открыть приложение</string>
     <string name="board_close">Закрыть</string>
     <string name="board_all_ok">Всё в порядке</string>
-    <string name="board_watching">Слежу за устройствами: %1$d</string>
+    <string name="board_watching">Под наблюдением: %1$d</string>
     <string name="board_alarm">Тревога активна</string>
     <string name="board_offline">Устройств не в сети: %1$d</string>
     <string name="board_no_internet">Нет интернета</string>

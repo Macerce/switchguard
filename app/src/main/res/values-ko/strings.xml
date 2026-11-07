@@ -261,7 +261,7 @@
     <string name="device_sound">이 기기의 소리</string>
     <string name="device_sound_default">일반 알람 소리와 동일</string>
     <string name="device_sound_reset">일반 소리 사용</string>
-    <string name="device_critical">긴급 기기</string>
+    <string name="device_critical">중요 기기</string>
     <string name="device_critical_desc">방해 금지 시간에도 알람이 울립니다</string>
     <string name="channel_events_custom">이벤트 (기기별 소리)</string>
     <string name="channel_events_custom_desc">자체 소리가 있는 기기의 알림입니다. 소리는 앱에서 재생합니다.</string>
@@ -302,7 +302,7 @@
     <string name="ready_title">알람이 전달되지 않을 수 있습니다</string>
     <string name="ready_body">SwitchGuard가 항상 울릴 수 있도록 휴대폰 설정을 수정하세요.</string>
     <string name="ready_fix">해결</string>
-    <string name="ready_done">완료했습니다</string>
+    <string name="ready_done">완료</string>
     <string name="ready_notifications">알림이 꺼져 있습니다</string>
     <string name="ready_notifications_desc">알람과 경고를 표시할 수 없습니다.</string>
     <string name="ready_channel">알람 알림이 낮게 설정되어 있습니다</string>
@@ -375,7 +375,7 @@
     <string name="channel_events">기기 알림</string>
     <string name="channel_status">모니터링 상태</string>
     <string name="notif_alarm_title">⚠ 기기 변화 (%d)</string>
-    <string name="notif_event_title">기기 변화</string>
+    <string name="notif_event_title">기기 상태 변경</string>
     <string name="warn_session_expired">eWeLink 세션이 만료되었습니다. 모니터링을 계속하려면 SwitchGuard를 열고 다시 로그인하세요.</string>
     <string name="channel_session">세션 경고</string>
     <string name="channel_session_desc">로그아웃되어 모니터링이 중지되었을 때 표시됩니다.</string>
@@ -559,7 +559,7 @@
     <string name="demo_power_drop">채널 %d 전력 떨어뜨리기 (펌프 정지)</string>
     <string name="demo_power_drop_single">전력 떨어뜨리기 (기기 정지)</string>
     <string name="demo_power_restore">채널 %d 전력 복구</string>
-    <string name="demo_power_restore_single">전력 복구</string>
+    <string name="demo_power_restore_single">전원 복구</string>
     <string name="alarm_open_app">앱 열기</string>
     <string name="perm_overlay">다른 앱 위에 알람 표시</string>
     <string name="perm_overlay_desc">Android TV에서 재생 중인 화면 위에 알람이 표시되려면 필요합니다. 탭하여 SwitchGuard를 허용하세요.</string>
@@ -939,8 +939,8 @@
     <string name="trigger_temp_below">실외 온도가 다음 값 아래로 떨어질 때:</string>
     <string name="evt_sunrise">일출</string>
     <string name="evt_sunset">일몰</string>
-    <string name="evt_temp_above">다음보다 따뜻함</string>
-    <string name="evt_temp_below">다음보다 추움</string>
+    <string name="evt_temp_above">온도 이상</string>
+    <string name="evt_temp_below">온도 이하</string>
     <string name="trigger_zone_enter">도착 시</string>
     <string name="trigger_zone_exit">출발 시</string>
     <string name="evt_zone_enter">구역 도착</string>

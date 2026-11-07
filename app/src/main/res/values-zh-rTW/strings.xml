@@ -460,7 +460,7 @@
     <string name="energy_price_desc">輸入您每度電（kWh）支付的價格（%1$s），即可在報告中查看預估費用。留空或填 0 則隱藏費用。</string>
     <string name="energy_report">取得報告</string>
     <string name="energy_report_title">電能報告</string>
-    <string name="energy_report_desc">儲存所選期間（%1$s）的報告，包含每小時、每日或每月的數據、總計、尖峰、費用和開關使用情況。</string>
+    <string name="energy_report_desc">儲存所選期間（%1$s）的報告，包含每小時、每日或每月的資料、總計、尖峰、費用和開關使用情況。</string>
     <string name="energy_report_pdf">PDF 報告（可列印或分享）</string>
     <string name="energy_report_csv">CSV 表格（Excel、Google 試算表）</string>
     <string name="energy_report_done">報告已儲存</string>
@@ -1275,7 +1275,7 @@
     <string name="chart_legend_bar">用電量（kWh）</string>
     <string name="chart_legend_busiest">最高</string>
     <string name="chart_legend_avg">平均</string>
-    <string name="table_explain">圖表背後的數據，逐段列出。</string>
+    <string name="table_explain">圖表背後的資料，逐段列出。</string>
     <string name="table_note">kWh：用電量 · 占比：占總量的比例（%） · 平均 / 尖峰：功率（W） · 已量測：實際量測的時間 · –：無量測。</string>
 
     <string name="daily_intro">每個裝置今天的狀況：被開啟了幾次、持續開啟多久，以及用了多少電。</string>

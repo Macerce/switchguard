@@ -232,7 +232,7 @@
     <string name="always_awake">Maksymalna niezawodność</string>
     <string name="always_awake_desc">Utrzymuje procesor w stanie czuwania, aby żadne zdarzenie nie było opóźnione. Zużywa więcej baterii.</string>
     <string name="offline_grace">Ignoruj krótkie rozłączenia</string>
-    <string name="offline_grace_desc">Tyle czasu odczekaj, zanim zaalarmujesz, że urządzenie przeszło w tryb offline. Jeśli wróci na czas, alert nie zostanie wysłany.</string>
+    <string name="offline_grace_desc">Tyle czasu aplikacja czeka, zanim zgłosi, że urządzenie przeszło w tryb offline. Jeśli wróci na czas, alert nie zostanie wysłany.</string>
     <string name="grace_off">Wyłączone (alert natychmiast)</string>
     <string name="dur_seconds">%d s</string>
     <string name="dur_min_sec">%1$d min %2$d s</string>
@@ -536,7 +536,7 @@
     <string name="pro_upgrade">Kup Pro</string>
     <string name="pro_hint">Wersja bezpłatna: monitorowane urządzenia: tylko %1$d. Kup Pro, aby monitorować wszystkie.</string>
     <string name="pro_limit_title">Jedno urządzenie w wersji bezpłatnej</string>
-    <string name="pro_limit_body">Wersja bezpłatna monitoruje urządzenia: %1$d, a limit zajmuje \"%2$s\". Monitoruj zamiast tego to urządzenie albo kup Pro, aby monitorować wszystkie.</string>
+    <string name="pro_limit_body">Wersja bezpłatna monitoruje tylko %1$d urządzenie i zajmuje je już \"%2$s\". Monitoruj zamiast tego to urządzenie albo kup Pro, aby monitorować wszystkie.</string>
     <string name="pro_limit_switch">Monitoruj zamiast tego to</string>
     <string name="pro_limit_detail">Niemonitorowane — wersja bezpłatna monitoruje urządzenia: %1$d</string>
 
@@ -867,7 +867,7 @@
         <item quantity="one">Możliwa awaria zasilania: monitorowane urządzenie przeszło w tryb offline</item>
         <item quantity="few">Możliwa awaria zasilania: wszystkie %d monitorowane urządzenia przeszły w tryb offline jednocześnie</item>
         <item quantity="many">Możliwa awaria zasilania: wszystkie %d monitorowanych urządzeń przeszło w tryb offline jednocześnie</item>
-        <item quantity="other">Możliwa awaria zasilania: wszystkie %d monitorowanego urządzenia przeszły w tryb offline jednocześnie</item>
+        <item quantity="other">Możliwa awaria zasilania: wszystkie %d monitorowanego urządzenia przeszło w tryb offline jednocześnie</item>
     </plurals>
     <string name="event_outage_ended">Zasilanie wróciło: awaria trwała %1$s (%2$s)</string>
     <string name="event_energy_high">%1$s zużyło wczoraj o %2$d%% więcej energii niż zwykle (%3$s; średnia %4$s)</string>
