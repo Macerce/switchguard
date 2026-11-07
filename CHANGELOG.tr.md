@@ -6,6 +6,14 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.26.0 — 2026-11-07
+**Yeni**
+- **20 dil**: uygulama artık İngilizce, Türkçe, Almanca, İspanyolca, Portekizce (Brezilya), Fransızca, İtalyanca, Felemenkçe, Lehçe, Rusça, Ukraynaca, Arapça, Hintçe, Endonezce, Vietnamca, Tayca, Çince (Basitleştirilmiş ve Geleneksel), Japonca ve Korece. Ayarlar → Dil'den seçilir; Arapça sağdan sola düzende. Sohbet ve Telegram komutları yine İngilizce ya da Türkçe anlaşılır.
+
+**Düzeltmeler**
+- Uzun seçim listeleri (dil listesi gibi) artık ekrandan taşmıyor, kaydırılıyor.
+- Tüm diller her kurulumda geliyor; Google Play'den kurulunca da uygulama içinden dil değiştirmek çalışır.
+
 ## 2.25.0 — 6 Kasım 2026
 **Yenilikler**
 - **Bekleme ekranı**: şarjdaki telefon ya da tablet için tam ekran pano — büyük saat ve tarih, günün hava durumu (en düşük/en yüksek, yağış olasılığı), kritik durum (alarm, bağlantı, çevrimdışı cihazlar, evde/dışarıda), anlık toplam güç yarım daire göstergede + son 6 saatin eğrisi ve bugünkü kWh, son hareketler ve önümüzdeki 24 saatte çalışacak işler (gün doğumu/batımı otomasyonları, döngüler, saatli şablonlar). Kilit ekranının üstünde de görünür; ekran yanmasın diye her dakika hafifçe kayar, geceleri soluklaşır. Cihazlar’ın üst çubuğundan ya da Ayarlar → Bekleme ekranı’ndan açılır.

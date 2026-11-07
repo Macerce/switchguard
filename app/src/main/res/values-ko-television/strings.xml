@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">별 = 맨 위에 고정 · 화살표 = 이동 · ⇕ = 작은 카드 / 큰 카드 · 태그 = 카테고리. 이 화면으로 돌아오려면 오른쪽 위의 레이아웃 아이콘을 선택하세요.</string>
+    <string name="tuya_not_connected">연결되지 않음 · 선택하여 연결</string>
+    <string name="perm_missing">허용 안 됨 — 선택하여 해결</string>
+    <string name="perm_battery_missing">제한됨 — 알람이 늦어질 수 있습니다. 선택하여 해결하세요.</string>
+    <string name="onb_done_tip_rules">기기를 선택하여 어떤 이벤트에 알람이 울릴지 정하세요</string>
+    <string name="perm_overlay_desc">재생 중인 화면 위에 알람이 표시되려면 필요합니다. 선택하여 SwitchGuard를 허용하세요.</string>
+    <string name="ready_body">SwitchGuard가 항상 울릴 수 있도록 TV 설정을 수정하세요.</string>
+    <string name="alarm_boost_desc">알람이 울리는 동안 이 기기의 알람 볼륨을 최대로 올리고 재생 중인 것을 일시 정지합니다. 알람을 끄면 원래대로 복원됩니다</string>
+    <string name="test_alarm_sound_desc">실제 알람처럼 울립니다</string>
+    <string name="test_alarm_silent_desc">소리 없음: 다른 사람을 방해하지 않고 알람 화면을 확인합니다</string>
+    <string name="tap_to_toggle">확인을 눌러 켜거나 끄기</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="other">TV 설정 %d개를 수정해야 합니다</item>
+    </plurals>
+</resources>

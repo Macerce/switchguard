@@ -6,6 +6,14 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.26.0 — 2026-11-07
+**New**
+- **20 languages**: the app now speaks English, Turkish, German, Spanish, Portuguese (Brazil), French, Italian, Dutch, Polish, Russian, Ukrainian, Arabic, Hindi, Indonesian, Vietnamese, Thai, Chinese (Simplified and Traditional), Japanese and Korean. Pick one in Settings → Language; Arabic uses a right-to-left layout. Chat and Telegram commands are still understood in English or Turkish.
+
+**Fixes**
+- Long choice lists (like the language list) now scroll instead of running off the screen.
+- All languages ship in every install, so switching language in the app works even when installed from Google Play.
+
 ## 2.25.0 — 2026-11-06
 **New**
 - **Standby screen**: a full-screen board for a phone or tablet on charge — big clock and date, today's weather (low/high, chance of rain), critical status (alarm, connection, offline devices, home/away), live total power on a half-circle gauge with the last 6 hours and today's kWh, recent activity and what runs in the next 24 hours (sunrise/sunset automations, cycles, timed templates). It also shows over the lock screen, shifts slightly every minute to avoid burn-in and dims at night. Open it from the Devices top bar or Settings → Standby screen.

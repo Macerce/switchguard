@@ -310,7 +310,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
 
 @Composable
 private fun Clock(now: Long, big: Boolean) {
-    val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
+    val locale = LocalConfiguration.current.locales[0]
     val h24 = is24h()
     val time = remember(now / 1000, locale, h24) {
         android.text.format.DateFormat.format(
@@ -440,7 +440,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(stringResource(R.string.board_last_6h), color = Dim, fontSize = 12.sp)
-                Text(stringResource(R.string.board_today_kwh, String.format(Locale.getDefault(), "%.1f", todayKwh)), color = Dim, fontSize = 12.sp)
+                Text(stringResource(R.string.board_today_kwh, String.format(LocalConfiguration.current.locales[0], "%.1f", todayKwh)), color = Dim, fontSize = 12.sp)
             }
         }
     }
@@ -451,7 +451,7 @@ private fun boardWatts(w: Double): String =
 
 @Composable
 private fun BoardTitle(text: String) {
-    Text(text.uppercase(LocalConfiguration.current.locales[0] ?: Locale.getDefault()), color = Dim, fontSize = 12.sp, letterSpacing = 1.5.sp)
+    Text(text.uppercase(LocalConfiguration.current.locales[0]), color = Dim, fontSize = 12.sp, letterSpacing = 1.5.sp)
 }
 
 @Composable
@@ -480,7 +480,7 @@ private fun eventTime(t: Long): String {
     return when {
         android.text.format.DateUtils.isToday(t) -> clock
         android.text.format.DateUtils.isToday(t + android.text.format.DateUtils.DAY_IN_MILLIS) ->
-            stringResource(R.string.yesterday).lowercase(LocalConfiguration.current.locales[0] ?: Locale.getDefault()) + " " + clock
+            stringResource(R.string.yesterday).lowercase(LocalConfiguration.current.locales[0]) + " " + clock
         else -> DateFormat.getDateInstance(DateFormat.SHORT).format(Date(t))
     }
 }

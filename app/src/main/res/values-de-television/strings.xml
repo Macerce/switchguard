@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_hint">Stern = oben halten · Pfeile = verschieben · ⇕ = kleine / große Karte · Tag = Kategorie. Wähle oben rechts das Layout-Symbol, um hierher zurückzukehren.</string>
+    <string name="tuya_not_connected">Nicht verbunden · zum Verbinden auswählen</string>
+    <string name="perm_missing">Nicht erlaubt — zum Beheben auswählen</string>
+    <string name="perm_battery_missing">Eingeschränkt — Alarme können sich verzögern. Zum Beheben auswählen.</string>
+    <string name="onb_done_tip_rules">Wähle ein Gerät, um festzulegen, welche Ereignisse einen Alarm auslösen</string>
+    <string name="perm_overlay_desc">Nötig, damit der Alarm über der laufenden Wiedergabe erscheint. Auswählen und SwitchGuard erlauben.</string>
+    <string name="ready_body">Behebe diese TV-Einstellungen, damit SwitchGuard immer alarmieren kann.</string>
+    <string name="alarm_boost_desc">Stellt die Alarmlautstärke dieses Geräts auf Maximum, solange der Alarm läutet, und pausiert die laufende Wiedergabe; wird beim Beenden wiederhergestellt</string>
+    <string name="test_alarm_sound_desc">Läutet wie ein echter Alarm</string>
+    <string name="test_alarm_silent_desc">Ohne Ton: Alarmbildschirm prüfen, ohne jemanden zu stören</string>
+    <string name="tap_to_toggle">Mit OK ein- oder ausschalten</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d TV-Einstellung muss behoben werden</item>
+        <item quantity="other">%d TV-Einstellungen müssen behoben werden</item>
+    </plurals>
+</resources>

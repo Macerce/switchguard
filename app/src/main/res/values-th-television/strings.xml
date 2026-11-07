@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_hint">ดาว = ปักไว้ด้านบน · ลูกศร = ย้าย · ⇕ = การ์ดเล็ก / ใหญ่ · แท็ก = หมวดหมู่ เลือกไอคอนเลย์เอาต์ที่มุมขวาบนเพื่อกลับมาที่นี่</string>
+    <string name="tuya_not_connected">ยังไม่ได้เชื่อมต่อ · เลือกเพื่อเชื่อมต่อ</string>
+    <string name="perm_missing">ยังไม่อนุญาต — เลือกเพื่อแก้ไข</string>
+    <string name="perm_battery_missing">ถูกจำกัด — การแจ้งเตือนอาจล่าช้า เลือกเพื่อแก้ไข</string>
+    <string name="onb_done_tip_rules">เลือกอุปกรณ์เพื่อกำหนดว่าเหตุการณ์ใดจะส่งเสียงปลุก</string>
+    <string name="perm_overlay_desc">จำเป็นเพื่อให้สัญญาณปลุกแสดงทับสิ่งที่กำลังเล่นอยู่ เลือกแล้วอนุญาต SwitchGuard</string>
+    <string name="ready_body">แก้การตั้งค่าทีวีเหล่านี้เพื่อให้ SwitchGuard ส่งเสียงปลุกได้ทุกเมื่อ</string>
+    <string name="alarm_boost_desc">เพิ่มระดับเสียงปลุกของอุปกรณ์นี้เป็นสูงสุดขณะสัญญาณปลุกดัง และหยุดสิ่งที่กำลังเล่นอยู่ชั่วคราว จะคืนค่าเมื่อคุณปิดสัญญาณปลุก</string>
+    <string name="test_alarm_sound_desc">ดังเหมือนสัญญาณปลุกจริง</string>
+    <string name="test_alarm_silent_desc">ไม่มีเสียง: ดูหน้าจอสัญญาณปลุกโดยไม่รบกวนใคร</string>
+    <string name="tap_to_toggle">กด OK เพื่อเปิดหรือปิด</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="other">การตั้งค่าทีวี %d รายการต้องแก้ไข</item>
+    </plurals>
+</resources>

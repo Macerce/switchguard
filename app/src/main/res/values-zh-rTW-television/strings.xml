@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_hint">星號 = 置頂 · 方向鍵 = 移動 · ⇕ = 小卡片 / 大卡片 · 標籤 = 分類。選取右上角的版面圖示即可回到此處。</string>
+    <string name="tuya_not_connected">未連線 · 選取以連線</string>
+    <string name="perm_missing">未允許 — 選取以修正</string>
+    <string name="perm_battery_missing">受到限制 — 警報可能延遲。選取以修正。</string>
+    <string name="onb_done_tip_rules">選取裝置，即可選擇哪些事件要觸發警報</string>
+    <string name="perm_overlay_desc">警報需要顯示在正在播放的內容上方。選取後請允許 SwitchGuard。</string>
+    <string name="ready_body">請修正以下電視設定，讓 SwitchGuard 隨時都能響鈴。</string>
+    <string name="alarm_boost_desc">警報響鈴時，將此裝置的警報音量調到最大並暫停正在播放的內容；解除警報後會恢復</string>
+    <string name="test_alarm_sound_desc">與真正的警報一樣響鈴</string>
+    <string name="test_alarm_silent_desc">無聲：在不打擾他人的情況下檢視警報畫面</string>
+    <string name="tap_to_toggle">按「確定」鍵即可開啟或關閉</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="other">%d 項電視設定需要修正</item>
+    </plurals>
+</resources>

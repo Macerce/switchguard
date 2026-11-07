@@ -19,8 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 49
-        versionName = "2.25.0"
+        versionCode = 50
+        versionName = "2.26.0"
         // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
         // Mağaza derlemesinde her zaman false.
         buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
@@ -53,10 +53,18 @@ android {
         buildConfig = true
     }
 
+    // Uygulama içinden dil seçilebildiği için tüm diller her kurulumda olmalı; Play dile göre bölmesin.
+    bundle {
+        language { enableSplit = false }
+    }
+
     androidResources {
         generateLocaleConfig = true
-        // Kütüphanelerin getirdiği onlarca dili at; uygulama yalnızca EN + TR destekliyor.
-        localeFilters += listOf("en", "tr")
+        // Kütüphanelerin getirdiği başka dilleri at; uygulamanın kendi 20 dili kalsın.
+        localeFilters += listOf(
+            "en", "tr", "de", "es", "pt-rBR", "fr", "it", "nl", "pl", "ru", "uk",
+            "ar", "hi", "in", "vi", "th", "zh-rCN", "zh-rTW", "ja", "ko",
+        )
     }
 
     // Yerleşik Kotlin, jvmTarget'ı targetCompatibility'den alır.

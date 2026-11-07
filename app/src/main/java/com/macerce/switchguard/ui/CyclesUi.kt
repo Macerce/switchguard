@@ -150,6 +150,7 @@ private fun CyclePreset.desc() = when (this) {
 @Composable
 fun CyclesStrip(cycles: List<Cycle>, runs: Map<String, CycleRun>, onEdit: (String) -> Unit) {
     val context = LocalContext.current
+    val resources = androidx.compose.ui.platform.LocalResources.current
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     if (runs.isNotEmpty()) {
         LaunchedEffect(runs) {
@@ -180,7 +181,7 @@ fun CyclesStrip(cycles: List<Cycle>, runs: Map<String, CycleRun>, onEdit: (Strin
                             MonitorService.cycle(context, c.id, start = run == null)
                             Toast.makeText(
                                 context,
-                                context.getString(if (run == null) R.string.cycle_started_toast else R.string.cycle_stopped_toast, c.name),
+                                resources.getString(if (run == null) R.string.cycle_started_toast else R.string.cycle_stopped_toast, c.name),
                                 Toast.LENGTH_SHORT,
                             ).show()
                         },

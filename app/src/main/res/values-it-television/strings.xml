@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_hint">Stella = tieni in alto · frecce = sposta · ⇕ = scheda piccola / grande · etichetta = categoria. Seleziona l\'icona della disposizione in alto a destra per tornare qui.</string>
+    <string name="tuya_not_connected">Non connesso · seleziona per connettere</string>
+    <string name="perm_missing">Non consentito — seleziona per risolvere</string>
+    <string name="perm_battery_missing">Limitata — gli allarmi potrebbero essere in ritardo. Seleziona per risolvere.</string>
+    <string name="onb_done_tip_rules">Seleziona un dispositivo per scegliere quali eventi fanno suonare un allarme</string>
+    <string name="perm_overlay_desc">Necessario perché l\'allarme compaia sopra qualunque cosa sia in riproduzione. Seleziona e consenti SwitchGuard.</string>
+    <string name="ready_body">Correggi queste impostazioni della TV perché SwitchGuard possa suonare sempre.</string>
+    <string name="alarm_boost_desc">Porta al massimo il volume dell\'allarme di questo dispositivo mentre l\'allarme suona e mette in pausa ciò che è in riproduzione; viene ripristinato quando lo silenzi</string>
+    <string name="test_alarm_sound_desc">Suona come un vero allarme</string>
+    <string name="test_alarm_silent_desc">Nessun suono: controlla la schermata dell\'allarme senza disturbare nessuno</string>
+    <string name="tap_to_toggle">Premi OK per accendere o spegnere</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d impostazione della TV da correggere</item>
+        <item quantity="many">%d impostazioni della TV da correggere</item>
+        <item quantity="other">%d impostazioni della TV da correggere</item>
+    </plurals>
+</resources>

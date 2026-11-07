@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: без сенсорного экрана, выбор с пульта. -->
+<resources>
+    <string name="layout_hint">Звезда = держать вверху · стрелки = переместить · ⇕ = маленькая / большая карточка · метка = категория. Чтобы вернуться сюда, выберите значок расположения вверху справа.</string>
+    <string name="tuya_not_connected">Не подключено · выберите, чтобы подключить</string>
+    <string name="perm_missing">Не разрешено — выберите, чтобы исправить</string>
+    <string name="perm_battery_missing">Ограничено — будильники могут опаздывать. Выберите, чтобы исправить.</string>
+    <string name="onb_done_tip_rules">Выберите устройство, чтобы указать, какие события включают тревогу</string>
+    <string name="perm_overlay_desc">Нужно, чтобы тревога появлялась поверх всего, что воспроизводится. Выберите и разрешите SwitchGuard.</string>
+    <string name="ready_body">Исправьте эти настройки телевизора, чтобы SwitchGuard всегда мог подать сигнал.</string>
+    <string name="alarm_boost_desc">Пока звучит тревога, поднимает громкость этого устройства до максимума и ставит воспроизведение на паузу; после отключения тревоги всё возвращается</string>
+    <string name="test_alarm_sound_desc">Звучит как настоящая тревога</string>
+    <string name="test_alarm_silent_desc">Без звука: посмотрите экран тревоги, никому не мешая</string>
+    <string name="tap_to_toggle">Нажмите OK, чтобы включить или выключить</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d настройку телевизора нужно исправить</item>
+        <item quantity="few">%d настройки телевизора нужно исправить</item>
+        <item quantity="many">%d настроек телевизора нужно исправить</item>
+        <item quantity="other">%d настройки телевизора нужно исправить</item>
+    </plurals>
+</resources>

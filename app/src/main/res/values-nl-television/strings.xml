@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">Ster = bovenaan houden · pijlen = verplaatsen · ⇕ = kleine / grote kaart · label = categorie. Selecteer rechtsboven het indelingspictogram om hier terug te komen.</string>
+    <string name="tuya_not_connected">Niet verbonden · selecteer om te verbinden</string>
+    <string name="perm_missing">Niet toegestaan — selecteer om op te lossen</string>
+    <string name="perm_battery_missing">Beperkt — alarmen kunnen vertraagd zijn. Selecteer om op te lossen.</string>
+    <string name="onb_done_tip_rules">Selecteer een apparaat om te kiezen welke gebeurtenissen een alarm laten afgaan</string>
+    <string name="perm_overlay_desc">Nodig zodat het alarm bovenop alles wat speelt verschijnt. Selecteer en sta SwitchGuard toe.</string>
+    <string name="ready_body">Los deze tv-instellingen op zodat SwitchGuard altijd kan afgaan.</string>
+    <string name="alarm_boost_desc">Zet het alarmvolume van dit apparaat op maximaal zolang het alarm afgaat en pauzeert wat er speelt; wordt hersteld wanneer je het alarm uitzet</string>
+    <string name="test_alarm_sound_desc">Gaat af als een echt alarm</string>
+    <string name="test_alarm_silent_desc">Geen geluid: controleer het alarmscherm zonder iemand te storen</string>
+    <string name="tap_to_toggle">Druk op OK om aan of uit te zetten</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d tv-instelling moet worden opgelost</item>
+        <item quantity="other">%d tv-instellingen moeten worden opgelost</item>
+    </plurals>
+</resources>

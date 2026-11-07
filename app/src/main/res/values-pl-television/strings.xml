@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">Gwiazdka = zawsze na górze · strzałki = przesuń · ⇕ = mała / duża karta · etykieta = kategoria. Wybierz ikonę układu w prawym górnym rogu, aby tu wrócić.</string>
+    <string name="tuya_not_connected">Niepołączono · wybierz, aby połączyć</string>
+    <string name="perm_missing">Niedozwolone — wybierz, aby naprawić</string>
+    <string name="perm_battery_missing">Ograniczona — alarmy mogą być opóźnione. Wybierz, aby naprawić.</string>
+    <string name="onb_done_tip_rules">Wybierz urządzenie, aby określić, które zdarzenia uruchamiają alarm</string>
+    <string name="perm_overlay_desc">Potrzebne, aby alarm pojawiał się na wierzchu tego, co jest odtwarzane. Wybierz i zezwól SwitchGuard.</string>
+    <string name="ready_body">Popraw te ustawienia telewizora, aby SwitchGuard zawsze mógł dzwonić.</string>
+    <string name="alarm_boost_desc">Podnosi głośność alarmu na tym urządzeniu do maksimum, gdy alarm dzwoni, i wstrzymuje odtwarzane treści; po wyłączeniu alarmu przywraca poprzednią głośność</string>
+    <string name="test_alarm_sound_desc">Dzwoni jak prawdziwy alarm</string>
+    <string name="test_alarm_silent_desc">Bez dźwięku: sprawdź ekran alarmu, nikomu nie przeszkadzając</string>
+    <string name="tap_to_toggle">Naciśnij OK, aby włączyć lub wyłączyć</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">%d ustawienie telewizora wymaga poprawy</item>
+        <item quantity="few">%d ustawienia telewizora wymagają poprawy</item>
+        <item quantity="many">%d ustawień telewizora wymaga poprawy</item>
+        <item quantity="other">%d ustawienia telewizora wymaga poprawy</item>
+    </plurals>
+</resources>

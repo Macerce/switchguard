@@ -17,6 +17,8 @@
 
 **Uygulama adı:** SwitchGuard – Smart Plug Alarm
 
+**Mağaza metinlerinin 20 dildeki güncel hâli:** docs/play-listing/<dil>.md (2.26).
+
 **Kısa açıklama (EN, ≤80):** Instant alarm when your eWeLink or Tuya smart plugs switch or go offline.
 
 **Kısa açıklama (TR, ≤80):** eWeLink ve Tuya prizleriniz kapanınca ya da koptuğunda anında alarm.

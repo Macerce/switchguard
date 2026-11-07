@@ -1402,6 +1402,24 @@ private fun Divider(inset: Dp = 56.dp) = RowDivider(inset)
 private fun languageLabel(tag: String): String = when (tag) {
     "en" -> "English"
     "tr" -> "Türkçe"
+    "de" -> "Deutsch"
+    "es" -> "Español"
+    "pt-BR" -> "Português (Brasil)"
+    "fr" -> "Français"
+    "it" -> "Italiano"
+    "nl" -> "Nederlands"
+    "pl" -> "Polski"
+    "ru" -> "Русский"
+    "uk" -> "Українська"
+    "ar" -> "العربية"
+    "hi" -> "हिन्दी"
+    "id" -> "Bahasa Indonesia"
+    "vi" -> "Tiếng Việt"
+    "th" -> "ไทย"
+    "zh-CN" -> "简体中文"
+    "zh-TW" -> "繁體中文"
+    "ja" -> "日本語"
+    "ko" -> "한국어"
     else -> stringResource(R.string.language_system)
 }
 
@@ -1446,7 +1464,8 @@ fun <T> ChoiceDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            Column {
+            // Uzun listeler (20 dil) ekrana sığmayınca kaydırılır.
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 Text(description, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(bottom = 12.dp))
                 options.forEach { o ->
                     Row(

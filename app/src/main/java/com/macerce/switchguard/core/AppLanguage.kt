@@ -17,7 +17,10 @@ import java.util.Locale
  * [wrap] ile bu dilde açılır.
  */
 object AppLanguage {
-    val options = listOf("", "en", "tr")
+    val options = listOf(
+        "", "en", "tr", "de", "es", "pt-BR", "fr", "it", "nl", "pl", "ru", "uk",
+        "ar", "hi", "id", "vi", "th", "zh-CN", "zh-TW", "ja", "ko",
+    )
 
     private const val PREFS = "app_language"
     private const val KEY = "tag"
@@ -25,7 +28,7 @@ object AppLanguage {
     fun current(context: Context): String =
         if (Build.VERSION.SDK_INT >= 33) {
             val list = context.getSystemService(LocaleManager::class.java).applicationLocales
-            if (list.isEmpty) "" else list[0].language
+            if (list.isEmpty) "" else tagOf(list[0])
         } else {
             saved(context)
         }
@@ -48,6 +51,14 @@ object AppLanguage {
         Locale.setDefault(locale)
         val config = Configuration(base.resources.configuration).apply { setLocale(locale) }
         return base.createConfigurationContext(config)
+    }
+
+    /** Seçenek listesindeki etikete çevirir: bölge yalnız pt/zh için anlamlı. */
+    fun tagOf(locale: Locale): String = when (locale.language) {
+        "pt" -> "pt-BR"
+        "zh" -> if (locale.country == "TW" || locale.country == "HK" || locale.script == "Hant") "zh-TW" else "zh-CN"
+        "in" -> "id"
+        else -> locale.language
     }
 
     private fun saved(context: Context): String =

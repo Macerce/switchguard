@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
+<resources>
+    <string name="layout_hint">النجمة = البقاء في الأعلى · الأسهم = تحريك · ⇕ = بطاقة صغيرة / كبيرة · الوسم = الفئة. اختر أيقونة التخطيط في أعلى اليمين للعودة إلى هنا.</string>
+    <string name="tuya_not_connected">غير متصل · اختر للاتصال</string>
+    <string name="perm_missing">غير مسموح — اختر للإصلاح</string>
+    <string name="perm_battery_missing">مقيّد — قد تتأخر الإنذارات. اختر للإصلاح.</string>
+    <string name="onb_done_tip_rules">اختر جهازًا لتحديد الأحداث التي تُطلق إنذارًا</string>
+    <string name="perm_overlay_desc">مطلوب ليظهر الإنذار فوق أي شيء قيد التشغيل. اختر واسمح لـ SwitchGuard.</string>
+    <string name="ready_body">أصلح إعدادات التلفاز هذه ليتمكن SwitchGuard من الرنين دائمًا.</string>
+    <string name="alarm_boost_desc">يرفع مستوى صوت الإنذار في هذا الجهاز إلى الحد الأقصى أثناء رنين الإنذار ويوقف ما يُشغَّل مؤقتًا؛ ويُعاد إلى حاله عند إيقاف الإنذار</string>
+    <string name="test_alarm_sound_desc">يرنّ كأنه إنذار حقيقي</string>
+    <string name="test_alarm_silent_desc">بلا صوت: افحص شاشة الإنذار دون إزعاج أحد</string>
+    <string name="tap_to_toggle">اضغط OK للتشغيل أو الإيقاف</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="zero">%d إعداد في التلفاز يحتاج إلى إصلاح</item>
+        <item quantity="one">إعداد واحد في التلفاز يحتاج إلى إصلاح</item>
+        <item quantity="two">إعدادان في التلفاز يحتاجان إلى إصلاح</item>
+        <item quantity="few">%d إعدادات في التلفاز تحتاج إلى إصلاح</item>
+        <item quantity="many">%d إعدادًا في التلفاز يحتاج إلى إصلاح</item>
+        <item quantity="other">%d إعداد في التلفاز يحتاج إلى إصلاح</item>
+    </plurals>
+</resources>

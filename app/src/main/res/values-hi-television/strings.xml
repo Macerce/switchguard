@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_hint">तारा = ऊपर रखें · तीर = खिसकाएँ · ⇕ = छोटा / बड़ा कार्ड · टैग = श्रेणी। यहाँ वापस आने के लिए ऊपर दाईं ओर लेआउट आइकन चुनें।</string>
+    <string name="tuya_not_connected">कनेक्ट नहीं है · कनेक्ट करने के लिए चुनें</string>
+    <string name="perm_missing">अनुमति नहीं है — ठीक करने के लिए चुनें</string>
+    <string name="perm_battery_missing">प्रतिबंधित — अलार्म में देरी हो सकती है। ठीक करने के लिए चुनें।</string>
+    <string name="onb_done_tip_rules">किस घटना पर अलार्म बजे, यह चुनने के लिए किसी डिवाइस को चुनें</string>
+    <string name="perm_overlay_desc">ज़रूरी है ताकि जो भी चल रहा हो, अलार्म उसके ऊपर दिखे। चुनें और SwitchGuard को अनुमति दें।</string>
+    <string name="ready_body">TV की ये सेटिंग ठीक करें ताकि SwitchGuard हमेशा बज सके।</string>
+    <string name="alarm_boost_desc">अलार्म बजते समय इस डिवाइस के अलार्म की आवाज़ अधिकतम कर देता है और जो चल रहा हो उसे रोक देता है; बंद करने पर पहले जैसा हो जाता है</string>
+    <string name="test_alarm_sound_desc">असली अलार्म की तरह बजता है</string>
+    <string name="test_alarm_silent_desc">कोई आवाज़ नहीं: किसी को परेशान किए बिना अलार्म स्क्रीन जाँचें</string>
+    <string name="tap_to_toggle">चालू या बंद करने के लिए OK दबाएँ</string>
+    <plurals name="alerts_issues_n">
+        <item quantity="one">TV की %d सेटिंग ठीक करनी है</item>
+        <item quantity="other">TV की %d सेटिंग ठीक करनी हैं</item>
+    </plurals>
+</resources>
