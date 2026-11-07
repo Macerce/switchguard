@@ -59,9 +59,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.foundation.focusable
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -72,9 +72,6 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
-import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -105,6 +102,12 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material.icons.rounded.PowerSettingsNew
+import com.macerce.switchguard.desktop.ui.devices.DeviceUi
+import com.macerce.switchguard.desktop.ui.devices.LocalDeviceUi
+import com.macerce.switchguard.desktop.ui.devices.rememberSwitchControl
+import com.macerce.switchguard.core.DeviceSnapshot
 
 /**
  * Bekleme ekranı (telefon 2.25 `StandbyActivity`): çerçevesiz, ekranı kaplayan koyu pano — saat, hava, kritik durum,
@@ -127,31 +130,18 @@ fun StandbyWindow(graph: AppGraph) {
         LaunchedEffect(Unit) {
             window.toFront()
             while (true) {
-                // Ekran koruyucu modunda Windows ekranı zaten açık tutar; elle açılınca biz tutarız.
-                if (!saver) DisplayWake.keepOn()
+                // Pano kalıcı: açık kaldıkça ekranın boşta kapanma sayacı sıfırlanır (ekran koruyucudan açılsa da).
+                DisplayWake.keepOn()
                 delay(50_000)
-            }
-        }
-        // Ekran koruyucu: pencere odak alamasa da (Windows odak çalmayı engeller) herhangi bir tuş ya da fare hareketi
-        // kapatsın — Windows'un son girdi zamanı izlenir. Açılıştaki ilk 1,5 sn (masaüstü dönüşü) sayılmaz.
-        if (saver) {
-            LaunchedEffect(Unit) {
-                delay(1_500)
-                val start = lastInputTick() ?: return@LaunchedEffect
-                while (true) {
-                    delay(200)
-                    val now = lastInputTick() ?: return@LaunchedEffect
-                    if (now != start) { close(); return@LaunchedEffect }
-                }
             }
         }
         val focus = remember { FocusRequester() }
         LaunchedEffect(Unit) { runCatching { focus.requestFocus() } }
         Box(
             Modifier.fillMaxSize().focusRequester(focus).focusable().onPreviewKeyEvent {
-                // Ekran koruyucuda her tuş kapatır; elle açılınca yalnız Esc.
-                if (it.type == KeyEventType.KeyDown && (saver || it.key == Key.Escape)) { close(); true } else false
-            }.then(if (saver) Modifier.closeOnMouse(close) else Modifier),
+                // Pano kalıcıdır (ekran koruyucudan açılsa da): yalnız Esc ya da Kapat düğmesi kapatır.
+                if (it.type == KeyEventType.KeyDown && it.key == Key.Escape) { close(); true } else false
+            },
         ) {
             StandbyBoardScreen(
                 graph, strings,
@@ -174,28 +164,6 @@ private val Teal = Color(0xFF26A69A)
 private val Amber = Color(0xFFFFB300)
 private val Red = Color(0xFFEF5350)
 
-/** Windows'ta son klavye/fare girdisinin zamanı (GetLastInputInfo); başka sistemde ya da hata olursa null. */
-private fun lastInputTick(): Int? = runCatching {
-    if (!System.getProperty("os.name").startsWith("Windows")) return null
-    val info = com.sun.jna.platform.win32.WinUser.LASTINPUTINFO()
-    if (com.sun.jna.platform.win32.User32.INSTANCE.GetLastInputInfo(info)) info.dwTime else null
-}.getOrNull()
-
-/** Ekran koruyucu: fare biraz oynayınca ya da tıklanınca kapanır (pencere açılırkenki tek olay sayılmaz). */
-private fun Modifier.closeOnMouse(close: () -> Unit): Modifier = pointerInput(Unit) {
-    var origin: Offset? = null
-    awaitPointerEventScope {
-        while (true) {
-            val e = awaitPointerEvent(PointerEventPass.Initial)
-            if (e.type == PointerEventType.Press) { close(); return@awaitPointerEventScope }
-            val p = e.changes.firstOrNull()?.position ?: continue
-            val o = origin
-            if (o == null) origin = p
-            else if ((p - o).getDistance() > 12.dp.toPx()) { close(); return@awaitPointerEventScope }
-        }
-    }
-}
-
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 
 @Composable
@@ -216,6 +184,15 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
     val minute = now / 60_000
 
     val snapshots = remember(version) { store.snapshots }
+    val controls = remember(version) { boardSwitches(store.deviceLayout.sorted(store.snapshotsWithGroups)) }
+    var controlError by remember { mutableStateOf<String?>(null) }
+    LaunchedEffect(controlError) { if (controlError != null) { delay(5000); controlError = null } }
+    val deviceUi = remember(graph) {
+        DeviceUi(
+            send = { id, channel, on, onResult -> graph.engine.control(id, channel, on, onResult) },
+            message = { controlError = it },
+        )
+    }
     val monitored = remember(version) { store.monitoredIds() }
     val away = remember(version, minute) { store.isAway() }
     val lat = remember(version) { store.latitude }
@@ -282,6 +259,9 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
             val statusPill: @Composable () -> Unit = {
                 StatusPill(alarmLines, status.first, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away, strings)
             }
+            val panelH = if (controls.isEmpty()) 0.dp else if (wide) maxHeight * 0.42f else maxHeight * 0.38f
+            Column(Modifier.fillMaxSize()) {
+            Box(Modifier.fillMaxWidth().weight(1f)) {
             if (wide) {
                 Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(48.dp), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1.1f), verticalArrangement = Arrangement.spacedBy(18.dp)) {
@@ -309,6 +289,20 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
                     Upcoming(next, now, strings)
                 }
             }
+            }
+            if (controls.isNotEmpty()) {
+                CompositionLocalProvider(LocalDeviceUi provides deviceUi, LocalStrings provides strings) {
+                    ControlPanel(controls, strings, Modifier.fillMaxWidth().height(panelH).padding(top = 20.dp))
+                }
+            }
+            }
+        }
+        controlError?.let { msg ->
+            Text(
+                msg, color = Ink, fontSize = 15.sp,
+                modifier = Modifier.align(Alignment.TopCenter).padding(top = 16.dp)
+                    .clip(RoundedCornerShape(20.dp)).background(Color(0xFF5A1F1D)).padding(horizontal = 18.dp, vertical = 8.dp),
+            )
         }
         AnimatedVisibility(menu, Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp), enter = fadeIn(), exit = fadeOut()) {
             Row(
@@ -323,6 +317,68 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
                     Text(strings["board_close"] + "  (Esc)", color = Ink)
                 }
             }
+        }
+    }
+}
+
+/** Panodaki tek anahtar: tek kanallı cihaz/grup ya da çok kanallı cihazın bir kanalı. */
+private data class BoardSwitch(val device: DeviceSnapshot, val channel: Int, val on: Boolean, val multi: Boolean)
+
+private fun boardSwitches(devices: List<DeviceSnapshot>): List<BoardSwitch> = devices.flatMap { d ->
+    d.switches.entries.sortedBy { it.key }.map { (ch, on) -> BoardSwitch(d, ch, on, d.isMultiChannel) }
+}
+
+/** Akıllı ev paneli: cihazlar kullanıcının sırasıyla, dokununca aç/kapa (Cihazlar ekranıyla aynı komut yolu). */
+@Composable
+private fun ControlPanel(list: List<BoardSwitch>, strings: Strings, modifier: Modifier) {
+    Column(modifier) {
+        BoardTitle(strings["tab_devices"], strings)
+        androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
+            androidx.compose.foundation.lazy.grid.GridCells.Adaptive(190.dp),
+            Modifier.fillMaxSize().padding(top = 10.dp).testTag("standby-controls"),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            items(list.size, key = { "${list[it].device.id}/${list[it].channel}" }) { i -> ControlTile(list[i], strings) }
+        }
+    }
+}
+
+@Composable
+private fun ControlTile(s: BoardSwitch, strings: Strings) {
+    val control = rememberSwitchControl(s.device, s.channel, s.on)
+    val online = s.device.online
+    val lit = control.shown && online
+    val bg = when {
+        !online -> Color(0xFF141A19)
+        lit -> Color(0xFF103B36)
+        else -> Color(0xFF1B2422)
+    }
+    Row(
+        Modifier.fillMaxWidth().height(76.dp).clip(RoundedCornerShape(18.dp)).background(bg)
+            .clickable(enabled = online && !control.busy) { control.toggle(!control.shown) }
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            Icons.Rounded.PowerSettingsNew, null, Modifier.size(28.dp),
+            tint = when { !online -> Faint; lit -> Teal; else -> Dim },
+        )
+        Column(Modifier.weight(1f)) {
+            Text(s.device.name, color = if (online) Ink else Dim, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            val sub = buildString {
+                if (s.multi) append(strings.format("channel_n", s.channel + 1)).append(" · ")
+                append(
+                    when {
+                        !online -> strings["label_offline_title"]
+                        control.busy -> "…"
+                        control.shown -> strings["state_on_title"]
+                        else -> strings["state_off_title"]
+                    },
+                )
+            }
+            Text(sub, color = if (lit) Teal else Dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }
