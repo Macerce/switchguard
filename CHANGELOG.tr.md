@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## Sonraki sürüm — yayınlanmadı
+**Düzeltmeler**
+- Rusça: telefonda pil kısıtlaması uyarısı "Düzeltmek için seçin" (TV ifadesi) diyordu; artık "Düzeltmek için dokunun" diyor.
+
 ## 2.26.1 — 2026-11-07
 **Düzeltmeler**
 - Alt menü etiketleri uzun dillerde (Almanca, Fransızca, Ukraynaca…) iki satıra bölünmüyor; yazı tek satıra sığacak kadar küçülür.

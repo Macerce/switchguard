@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## Next — unreleased
+**Fixes**
+- Russian: the battery-restriction warning on phones said "Select to fix" (TV wording); it now says "Tap to fix".
+
 ## 2.26.1 — 2026-11-07
 **Fixes**
 - Bottom bar labels no longer wrap onto two lines in long languages (German, French, Ukrainian…); the text shrinks to fit one line.

@@ -294,7 +294,7 @@
     <string name="perm_missing">Не разрешено — нажмите, чтобы исправить</string>
     <string name="perm_battery">Фоновая активность</string>
     <string name="perm_battery_ok">Без ограничений</string>
-    <string name="perm_battery_missing">Ограничено — тревоги могут опаздывать. Выберите, чтобы исправить.</string>
+    <string name="perm_battery_missing">Ограничено — тревоги могут опаздывать. Нажмите, чтобы исправить.</string>
     <string name="perm_full_screen">Тревога на весь экран</string>
     <string name="perm_full_screen_missing">Не разрешено — тревога не займёт экран блокировки. Нажмите, чтобы исправить.</string>
     <string name="perm_lock_popup">Тревога на экране блокировки (Xiaomi)</string>
