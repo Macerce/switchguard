@@ -61,7 +61,7 @@ object StandbyBoard {
             if (start <= until) out += Upcoming(start, c.name, UpcomingKind.CYCLE_START)
         }
         for (t in templates) {
-            val at = ChatTemplate.nextAt(listOf(t), templateRuns, now) ?: continue
+            val at = ChatTemplate.nextAt(listOf(t), templateRuns, now, zone) ?: continue
             if (at in (now + 1)..until) out += Upcoming(at, t.name, UpcomingKind.TEMPLATE)
         }
         return out.sortedBy { it.time }

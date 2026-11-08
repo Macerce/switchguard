@@ -1,6 +1,7 @@
 package com.macerce.switchguard.core
 
 import java.util.Calendar
+import java.util.TimeZone
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -35,9 +36,9 @@ data class ChatTemplate(
         }
 
         /** Bugünkü çalışma anı (gün seçili değilse null). */
-        fun timeToday(t: ChatTemplate, now: Long): Long? {
+        fun timeToday(t: ChatTemplate, now: Long, zone: TimeZone = TimeZone.getDefault()): Long? {
             val minute = t.atMinute ?: return null
-            val cal = Calendar.getInstance().apply { timeInMillis = now }
+            val cal = Calendar.getInstance(zone).apply { timeInMillis = now }
             if (t.days and (1 shl ActiveWindow.dayIndex(cal)) == 0) return null
             cal.set(Calendar.HOUR_OF_DAY, minute / 60); cal.set(Calendar.MINUTE, minute % 60)
             cal.set(Calendar.SECOND, 0); cal.set(Calendar.MILLISECOND, 0)
@@ -63,10 +64,10 @@ data class ChatTemplate(
         }
 
         /** Bir sonraki saatli çalışma (bugün ya da yarın); yoksa null. */
-        fun nextAt(list: List<ChatTemplate>, lastRun: Map<String, Long>, now: Long): Long? =
+        fun nextAt(list: List<ChatTemplate>, lastRun: Map<String, Long>, now: Long, zone: TimeZone = TimeZone.getDefault()): Long? =
             list.filter { it.enabled }.mapNotNull { t ->
-                timeToday(t, now)?.takeIf { it > now || (lastRun[t.id] ?: 0) < it }
-                    ?: timeToday(t, now + 86_400_000L)
+                timeToday(t, now, zone)?.takeIf { it > now || (lastRun[t.id] ?: 0) < it }
+                    ?: timeToday(t, now + 86_400_000L, zone)
             }.minOrNull()
 
         const val LATE_MS = 2 * 3_600_000L
