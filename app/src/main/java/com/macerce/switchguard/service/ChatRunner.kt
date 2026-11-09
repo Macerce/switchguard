@@ -33,6 +33,8 @@ object ChatRunner {
         when (intent) {
             is ChatCommand.Intent.Switch ->
                 if (!control) context.getString(R.string.tg_control_off) else switch(context, intent)
+            is ChatCommand.Intent.Batch ->
+                if (!control) context.getString(R.string.tg_control_off) else intent.steps.map { switch(context, it) }.joinToString("\n")
             is ChatCommand.Intent.Status -> status(context, intent.query)
             is ChatCommand.Intent.Power -> power(context, intent.query)
             ChatCommand.Intent.Temperature -> temperature(context)

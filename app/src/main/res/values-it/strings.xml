@@ -1386,16 +1386,12 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Aiuto</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Comandi in chat</string>
-    <string name="chat_hint">Scrivi un comando, ad es. Turn off kitchen</string>
-    <string name="chat_send">Invia</string>
     <string name="chat_voice">Comando vocale</string>
     <string name="chat_voice_prompt">Dillo, ad es. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Il riconoscimento vocale non è disponibile su questo dispositivo. Attiva l\'app Google o la digitazione vocale.</string>
     <string name="chat_speak_on">Risposte vocali attive</string>
     <string name="chat_speak_off">Risposte vocali disattivate</string>
-    <string name="chat_welcome">Ciao. Puoi gestire i tuoi dispositivi scrivendo (in inglese o turco): accenderli o spegnerli, chiedere il loro stato, il consumo o la temperatura esterna. Tocca il microfono per dirlo a voce (“Turn off kitchen”); la risposta viene letta ad alta voce. Qui sotto trovi modelli pronti; toccane uno per inviarlo, tienilo premuto per modificarlo.</string>
+    <string name="chat_welcome">Ciao. Tocca il microfono e di\' cosa vuoi (comandi in inglese o turco): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” o “Temperature?”. La risposta viene letta ad alta voce. Qui sotto trovi modelli pronti; toccane uno per eseguirlo, tienilo premuto per modificarlo.</string>
     <string name="chat_templates">Modelli</string>
     <string name="chat_add_template">Nuovo modello</string>
     <string name="chat_edit_template">Modifica modello</string>

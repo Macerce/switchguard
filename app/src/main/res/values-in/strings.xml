@@ -1272,16 +1272,12 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Bantuan</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Perintah chat</string>
-    <string name="chat_hint">Tulis perintah, mis. Turn off kitchen</string>
-    <string name="chat_send">Kirim</string>
     <string name="chat_voice">Perintah suara</string>
     <string name="chat_voice_prompt">Ucapkan, mis. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Pengenalan suara tidak tersedia di perangkat ini. Aktifkan aplikasi Google atau pengetikan suara.</string>
     <string name="chat_speak_on">Balasan lisan aktif</string>
     <string name="chat_speak_off">Balasan lisan nonaktif</string>
-    <string name="chat_welcome">Halo. Anda dapat mengelola perangkat dengan menulis (dalam bahasa Inggris atau Turki): menyalakan atau mematikannya, menanyakan status, pemakaian daya, atau suhu luar. Ketuk mikrofon untuk mengucapkannya (“Turn off kitchen”); balasan dibacakan. Templat siap pakai ada di bawah; ketuk untuk mengirim, tahan untuk mengubah.</string>
+    <string name="chat_welcome">Halo. Ketuk mikrofon dan ucapkan yang Anda inginkan (dalam bahasa Inggris atau Turki): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” atau “Temperature?”. Balasan dibacakan. Templat siap pakai ada di bawah; ketuk untuk menjalankan, tahan untuk mengubah.</string>
     <string name="chat_templates">Templat</string>
     <string name="chat_add_template">Templat baru</string>
     <string name="chat_edit_template">Ubah templat</string>

@@ -1314,16 +1314,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">ช่วยเหลือ</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">แชท</string>
-    <string name="chat_open">คำสั่งแชท</string>
-    <string name="chat_hint">เขียนคำสั่ง เช่น Turn off kitchen</string>
-    <string name="chat_send">ส่ง</string>
     <string name="chat_voice">คำสั่งเสียง</string>
     <string name="chat_voice_prompt">พูด เช่น “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">อุปกรณ์นี้ไม่รองรับการรู้จำเสียงพูด เปิดใช้แอป Google หรือการพิมพ์ด้วยเสียง</string>
     <string name="chat_speak_on">เปิดการตอบด้วยเสียง</string>
     <string name="chat_speak_off">ปิดการตอบด้วยเสียง</string>
-    <string name="chat_welcome">สวัสดี คุณจัดการอุปกรณ์ได้ด้วยการเขียน: เปิดหรือปิด ถามสถานะ การใช้ไฟ หรืออุณหภูมิภายนอก แตะไมโครโฟนเพื่อพูดแทน (“Turn off kitchen”) คำตอบจะถูกอ่านออกเสียง เทมเพลตสำเร็จรูปอยู่ด้านล่าง แตะเพื่อส่ง กดค้างเพื่อแก้ไข</string>
+    <string name="chat_welcome">สวัสดี แตะไมโครโฟนแล้วพูดสิ่งที่ต้องการ (คำสั่งเป็นภาษาอังกฤษหรือตุรกี): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” หรือ “Temperature?” คำตอบจะถูกอ่านออกเสียง เทมเพลตสำเร็จรูปอยู่ด้านล่าง แตะเพื่อเรียกใช้ กดค้างเพื่อแก้ไข</string>
     <string name="chat_templates">เทมเพลต</string>
     <string name="chat_add_template">เทมเพลตใหม่</string>
     <string name="chat_edit_template">แก้ไขเทมเพลต</string>

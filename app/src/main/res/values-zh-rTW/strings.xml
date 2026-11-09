@@ -1340,16 +1340,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">說明</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">聊天</string>
-    <string name="chat_open">聊天指令</string>
-    <string name="chat_hint">輸入指令，例如 Turn off kitchen</string>
-    <string name="chat_send">傳送</string>
     <string name="chat_voice">語音指令</string>
     <string name="chat_voice_prompt">請說出指令，例如「Turn off kitchen」</string>
     <string name="chat_voice_unavailable">此裝置無法使用語音辨識。請啟用 Google 應用程式或語音輸入。</string>
     <string name="chat_speak_on">語音回覆已開啟</string>
     <string name="chat_speak_off">語音回覆已關閉</string>
-    <string name="chat_welcome">您好。您可以用輸入的方式管理裝置：開啟或關閉、查詢狀態、用電量或室外溫度。點麥克風即可改用說的（「Turn off kitchen」）；回覆會以語音朗讀。下方有現成的範本；點一下即可傳送，長按可編輯。指令需使用英文或土耳其文。</string>
+    <string name="chat_welcome">您好。點一下麥克風，說出您想做的事（指令需使用英文或土耳其文）：「Turn off the kitchen light」、「Turn on the garden and turn off the garage」、「Is the living room on?」、「Heater watts?」或「Temperature?」。回覆會以語音朗讀。下方有現成的範本；點一下即可執行，長按可編輯。</string>
     <string name="chat_templates">範本</string>
     <string name="chat_add_template">新增範本</string>
     <string name="chat_edit_template">編輯範本</string>

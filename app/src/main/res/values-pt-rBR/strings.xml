@@ -1413,16 +1413,12 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Ajuda</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Comandos de chat</string>
-    <string name="chat_hint">Escreva um comando, ex.: Turn off kitchen</string>
-    <string name="chat_send">Enviar</string>
     <string name="chat_voice">Comando de voz</string>
     <string name="chat_voice_prompt">Diga, ex.: “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">O reconhecimento de fala não está disponível neste dispositivo. Ative o app Google ou a digitação por voz.</string>
     <string name="chat_speak_on">Respostas faladas ativadas</string>
     <string name="chat_speak_off">Respostas faladas desativadas</string>
-    <string name="chat_welcome">Olá. Você pode gerenciar seus dispositivos escrevendo: ligar ou desligar, perguntar o status, o consumo de energia ou a temperatura externa (os comandos funcionam em inglês ou turco). Toque no microfone para falar em vez de escrever (“Turn off kitchen”); a resposta é lida em voz alta. Os modelos prontos estão abaixo; toque em um para enviá-lo, mantenha pressionado para editar.</string>
+    <string name="chat_welcome">Olá. Toque no microfone e diga o que você quer (os comandos funcionam em inglês ou turco): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” ou “Temperature?”. A resposta é lida em voz alta. Os modelos prontos estão abaixo; toque em um para executá-lo, mantenha pressionado para editar.</string>
     <string name="chat_templates">Modelos</string>
     <string name="chat_add_template">Novo modelo</string>
     <string name="chat_edit_template">Editar modelo</string>

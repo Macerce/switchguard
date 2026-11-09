@@ -1521,16 +1521,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">مساعدة</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">الدردشة</string>
-    <string name="chat_open">أوامر الدردشة</string>
-    <string name="chat_hint">اكتب أمرًا، مثل Turn off kitchen</string>
-    <string name="chat_send">إرسال</string>
     <string name="chat_voice">أمر صوتي</string>
     <string name="chat_voice_prompt">قل مثلًا “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">التعرف على الكلام غير متاح على هذا الجهاز. فعّل تطبيق Google أو الكتابة الصوتية.</string>
     <string name="chat_speak_on">الردود المنطوقة قيد التشغيل</string>
     <string name="chat_speak_off">الردود المنطوقة متوقفة</string>
-    <string name="chat_welcome">مرحبًا. يمكنك إدارة أجهزتك بالكتابة: شغّلها أو أوقفها، واسأل عن حالتها أو استهلاكها للطاقة أو درجة الحرارة الخارجية (بالإنجليزية أو التركية). اضغط على الميكروفون لتقول الأمر بدلًا من كتابته (“Turn off kitchen”)؛ وسيُقرأ الرد بصوت عالٍ. القوالب الجاهزة في الأسفل؛ اضغط على أحدها لإرساله، واضغط مطولًا لتعديله.</string>
+    <string name="chat_welcome">مرحبًا. اضغط على الميكروفون وقل ما تريد (بالإنجليزية أو التركية): “Turn off the kitchen light”، “Turn on the garden and turn off the garage”، “Is the living room on?”، “Heater watts?” أو “Temperature?”. سيُقرأ الرد بصوت عالٍ. القوالب الجاهزة في الأسفل؛ اضغط على أحدها لتشغيله، واضغط مطولًا لتعديله.</string>
     <string name="chat_templates">القوالب</string>
     <string name="chat_add_template">قالب جديد</string>
     <string name="chat_edit_template">تعديل القالب</string>

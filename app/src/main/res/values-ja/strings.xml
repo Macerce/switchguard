@@ -1341,16 +1341,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">ヘルプ</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">チャット</string>
-    <string name="chat_open">チャットコマンド</string>
-    <string name="chat_hint">コマンドを入力（例: Turn off kitchen）</string>
-    <string name="chat_send">送信</string>
     <string name="chat_voice">音声コマンド</string>
     <string name="chat_voice_prompt">話してください（例: “Turn off kitchen”）</string>
     <string name="chat_voice_unavailable">このデバイスでは音声認識を利用できません。Googleアプリまたは音声入力を有効にしてください。</string>
     <string name="chat_speak_on">音声での返信: オン</string>
     <string name="chat_speak_off">音声での返信: オフ</string>
-    <string name="chat_welcome">こんにちは。文章を入力してデバイスを管理できます: オン・オフ、状況、消費電力、外気温の確認など（コマンドは英語またはトルコ語）。マイクをタップすると声で伝えられ（“Turn off kitchen”）、返信は読み上げられます。用意されたテンプレートが下にあります。タップで送信、長押しで編集できます。</string>
+    <string name="chat_welcome">こんにちは。マイクをタップして、やりたいことを話してください（コマンドは英語またはトルコ語）: “Turn off the kitchen light”、“Turn on the garden and turn off the garage”、“Is the living room on?”、“Heater watts?”、“Temperature?” など。返信は読み上げられます。用意されたテンプレートが下にあります。タップで実行、長押しで編集できます。</string>
     <string name="chat_templates">テンプレート</string>
     <string name="chat_add_template">新しいテンプレート</string>
     <string name="chat_edit_template">テンプレートを編集</string>

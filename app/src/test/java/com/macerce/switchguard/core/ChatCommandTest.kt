@@ -47,6 +47,53 @@ class ChatCommandTest {
     }
 
     @Test
+    fun spokenSentences() {
+        fun on(vararg t: String) = ChatCommand.Intent.Switch(true, t.toList())
+        fun off(vararg t: String) = ChatCommand.Intent.Switch(false, t.toList())
+        assertEquals(off("mutfagin isigini"), ChatCommand.parse("Mutfağın ışığını kapat"))
+        assertEquals(off("mutfaktaki isigi"), ChatCommand.parse("mutfaktaki ışığı kapatır mısın"))
+        assertEquals(on("pompayi"), ChatCommand.parse("pompayı çalıştır"))
+        assertEquals(off("pompayi"), ChatCommand.parse("lütfen pompayı durdur"))
+        assertEquals(off("kitchen light"), ChatCommand.parse("Turn off the kitchen light"))
+        assertEquals(off("kitchen light"), ChatCommand.parse("turn the kitchen light off"))
+        assertEquals(on("pompa bir"), ChatCommand.parse("pompa bir aç"))
+        assertEquals(on("salonu bir"), ChatCommand.parse("şu salonu bir aç"))
+        // Tek cümlede aç ve kapat.
+        assertEquals(ChatCommand.Intent.Batch(listOf(on("mutfagi"), off("salonu", "klimayi"))), ChatCommand.parse("mutfağı aç, salonu ve klimayı kapat"))
+        assertEquals(ChatCommand.Intent.Batch(listOf(off("salon"), on("mutfak"))), ChatCommand.parse("salon kapat mutfak aç"))
+        assertEquals(
+            ChatCommand.Intent.Batch(listOf(on("garden"), off("garage"))),
+            ChatCommand.parse("Turn on the garden and turn off the garage"),
+        )
+        assertEquals(ChatCommand.Intent.Batch(listOf(on("kitchen"), off("garden"))), ChatCommand.parse("turn the kitchen on and the garden off"))
+        // Aynı yöndeki adımlar birleşir.
+        assertEquals(on("salonu", "mutfagi"), ChatCommand.parse("salonu aç mutfağı aç"))
+        assertNull(ChatCommand.parse("aç kapat"))
+    }
+
+    @Test
+    fun resolvesSpokenTargets() {
+        val oda = DeviceSnapshot("o", "Yatak Odası", online = true, switches = mapOf(0 to false))
+        val isitici = DeviceSnapshot("i", "Isıtıcı", online = true, switches = mapOf(0 to false))
+        val all = devices + oda + isitici
+        assertEquals(ChatCommand.Target.One(mutfak, 0), ChatCommand.resolve("mutfagin isigini", all))
+        assertEquals(ChatCommand.Target.One(mutfak, 0), ChatCommand.resolve("mutfaktaki isigi", all))
+        // Adında "ışık" geçmeyen cihaz: genel söz atılır.
+        assertEquals(ChatCommand.Target.One(oda, 0), ChatCommand.resolve("yatak odasinin isigini", all))
+        assertEquals(ChatCommand.Target.One(klima, 0), ChatCommand.resolve("klimanin lambasini", all))
+        // "ısıtıcı" ile "ışık" aynı kök değil.
+        assertEquals(ChatCommand.Target.One(isitici, 0), ChatCommand.resolve("isiticiyi", all))
+        assertEquals(ChatCommand.Target.NotFound, ChatCommand.resolve("isiticiyi", devices))
+        // Kanal: sözle, sıra sayısıyla, "kanal" sözüyle.
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pompa iki", all))
+        assertEquals(ChatCommand.Target.One(pompa, 0), ChatCommand.resolve("pompa bir", all))
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pompanin ikinci kanalini", all))
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pump second channel".replace("pump", "pompa"), all))
+        assertEquals(ChatCommand.Target.One(salon, 0), ChatCommand.resolve("salonu bir", all))
+        assertEquals(ChatCommand.Target.NotFound, ChatCommand.resolve("kanal", all))
+    }
+
+    @Test
     fun typicalWattsIgnoresStandby() {
         val samples = listOf(0.5, 1.0, 850.0, 900.0, 950.0, 2.0, 880.0, 920.0).mapIndexed { i, w -> PowerSample(i.toLong(), w) }
         assertEquals(900.0, ChatCommand.typicalWatts(samples)!!, 0.01)

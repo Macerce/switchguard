@@ -1412,16 +1412,12 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Aide</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Commandes par chat</string>
-    <string name="chat_hint">Écrivez une commande, p. ex. Turn off kitchen</string>
-    <string name="chat_send">Envoyer</string>
     <string name="chat_voice">Commande vocale</string>
     <string name="chat_voice_prompt">Dites-le, p. ex. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">La reconnaissance vocale n\'est pas disponible sur cet appareil. Activez l\'application Google ou la saisie vocale.</string>
     <string name="chat_speak_on">Réponses vocales activées</string>
     <string name="chat_speak_off">Réponses vocales désactivées</string>
-    <string name="chat_welcome">Bonjour. Vous pouvez gérer vos appareils en écrivant : les allumer ou les éteindre, demander leur état, leur consommation ou la température extérieure (commandes en anglais ou en turc). Touchez le microphone pour le dire à la place (“Turn off kitchen”) ; la réponse est lue à voix haute. Des modèles prêts à l\'emploi sont ci-dessous ; touchez-en un pour l\'envoyer, maintenez-le pour le modifier.</string>
+    <string name="chat_welcome">Bonjour. Touchez le microphone et dites ce que vous voulez (commandes en anglais ou en turc) : “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” ou “Temperature?”. La réponse est lue à voix haute. Des modèles prêts à l\'emploi sont ci-dessous ; touchez-en un pour l\'exécuter, maintenez-le pour le modifier.</string>
     <string name="chat_templates">Modèles</string>
     <string name="chat_add_template">Nouveau modèle</string>
     <string name="chat_edit_template">Modifier le modèle</string>

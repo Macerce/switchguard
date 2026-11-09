@@ -1377,16 +1377,12 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="chat_tpl_away_text">Weg</string>
     <string name="chat_tpl_help">Help</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Chatcommando\'s</string>
-    <string name="chat_hint">Schrijf een commando, bijv. Zet keuken uit</string>
-    <string name="chat_send">Verzenden</string>
     <string name="chat_voice">Spraakcommando</string>
     <string name="chat_voice_prompt">Zeg het, bijv. “Zet keuken uit”</string>
     <string name="chat_voice_unavailable">Spraakherkenning is niet beschikbaar op dit apparaat. Schakel de Google-app of spraakgestuurd typen in.</string>
     <string name="chat_speak_on">Gesproken antwoorden aan</string>
     <string name="chat_speak_off">Gesproken antwoorden uit</string>
-    <string name="chat_welcome">Hallo. Je kunt je apparaten beheren door te schrijven: aan- of uitzetten, hun status, vermogensgebruik of de buitentemperatuur opvragen. Tik op de microfoon om het in te spreken (“Zet keuken uit”); het antwoord wordt voorgelezen. Hieronder staan kant-en-klare sjablonen; tik op een sjabloon om het te versturen, houd het ingedrukt om het te bewerken.</string>
+    <string name="chat_welcome">Hallo. Tik op de microfoon en zeg wat je wilt (commando\'s in het Engels of Turks): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” of “Temperature?”. Het antwoord wordt voorgelezen. Hieronder staan kant-en-klare sjablonen; tik op een sjabloon om het uit te voeren, houd het ingedrukt om het te bewerken.</string>
     <string name="chat_templates">Sjablonen</string>
     <string name="chat_add_template">Nieuw sjabloon</string>
     <string name="chat_edit_template">Sjabloon bewerken</string>

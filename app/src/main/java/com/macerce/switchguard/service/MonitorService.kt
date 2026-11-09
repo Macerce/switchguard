@@ -1552,6 +1552,7 @@ class MonitorService : Service() {
             is ChatCommand.Intent.SetPresence -> return onTelegramCommand(u, TelegramBot.Command.SetPresence(intent.away), now)
             is ChatCommand.Intent.RunScene -> return onTelegramCommand(u, TelegramBot.Command.RunScene(intent.query), now)
             is ChatCommand.Intent.Switch -> return onTelegramSwitch(u, intent, age)
+            is ChatCommand.Intent.Batch -> return intent.steps.forEach { onTelegramSwitch(u, it, age) }
             else -> Unit
         }
         // Durum/güç/sıcaklık soruları: ölçüm geçmişi okunur, iş parçacığında.

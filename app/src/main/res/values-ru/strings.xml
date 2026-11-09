@@ -1449,16 +1449,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Справка</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Чат</string>
-    <string name="chat_open">Команды в чате</string>
-    <string name="chat_hint">Напишите команду, например Turn off kitchen</string>
-    <string name="chat_send">Отправить</string>
     <string name="chat_voice">Голосовая команда</string>
     <string name="chat_voice_prompt">Скажите, например, «Turn off kitchen»</string>
     <string name="chat_voice_unavailable">Распознавание речи недоступно на этом устройстве. Включите приложение Google или голосовой ввод.</string>
     <string name="chat_speak_on">Голосовые ответы включены</string>
     <string name="chat_speak_off">Голосовые ответы выключены</string>
-    <string name="chat_welcome">Здравствуйте. Вы можете управлять устройствами, просто написав: включать и выключать их, узнавать состояние, потребление мощности или температуру на улице (команды на английском или турецком). Нажмите на микрофон, чтобы сказать вместо этого («Turn off kitchen»); ответ будет озвучен. Готовые шаблоны ниже: нажмите, чтобы отправить, удерживайте, чтобы изменить.</string>
+    <string name="chat_welcome">Здравствуйте. Нажмите на микрофон и скажите, что нужно (команды на английском или турецком): «Turn off the kitchen light», «Turn on the garden and turn off the garage», «Is the living room on?», «Heater watts?» или «Temperature?». Ответ будет озвучен. Готовые шаблоны ниже: нажмите, чтобы выполнить, удерживайте, чтобы изменить.</string>
     <string name="chat_templates">Шаблоны</string>
     <string name="chat_add_template">Новый шаблон</string>
     <string name="chat_edit_template">Изменить шаблон</string>

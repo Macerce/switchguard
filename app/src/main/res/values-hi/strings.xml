@@ -1308,16 +1308,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">मदद</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">चैट</string>
-    <string name="chat_open">चैट कमांड</string>
-    <string name="chat_hint">कमांड लिखें, जैसे Turn off kitchen</string>
-    <string name="chat_send">भेजें</string>
     <string name="chat_voice">वॉइस कमांड</string>
     <string name="chat_voice_prompt">बोलें, जैसे “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">इस डिवाइस पर स्पीच रिकग्निशन उपलब्ध नहीं है। Google ऐप या वॉइस टाइपिंग चालू करें।</string>
     <string name="chat_speak_on">बोलकर जवाब चालू</string>
     <string name="chat_speak_off">बोलकर जवाब बंद</string>
-    <string name="chat_welcome">नमस्ते। आप लिखकर अपने डिवाइस चला सकते हैं: उन्हें चालू या बंद करें, उनकी स्थिति, पावर खपत या बाहर का तापमान पूछें (अंग्रेज़ी या तुर्की में)। लिखने की जगह बोलने के लिए माइक्रोफ़ोन पर टैप करें (“Turn off kitchen”); जवाब ज़ोर से पढ़कर सुनाया जाता है। तैयार टेम्पलेट नीचे हैं; भेजने के लिए एक पर टैप करें, बदलने के लिए उसे देर तक दबाएँ।</string>
+    <string name="chat_welcome">नमस्ते। माइक्रोफ़ोन पर टैप करें और बोलें कि आप क्या चाहते हैं (अंग्रेज़ी या तुर्की में): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” या “Temperature?”। जवाब ज़ोर से पढ़कर सुनाया जाता है। तैयार टेम्पलेट नीचे हैं; चलाने के लिए एक पर टैप करें, बदलने के लिए उसे देर तक दबाएँ।</string>
     <string name="chat_templates">टेम्पलेट</string>
     <string name="chat_add_template">नया टेम्पलेट</string>
     <string name="chat_edit_template">टेम्पलेट बदलें</string>

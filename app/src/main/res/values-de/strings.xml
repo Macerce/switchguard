@@ -1375,16 +1375,12 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Hilfe</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Chat-Befehle</string>
-    <string name="chat_hint">Befehl schreiben, z. B. Turn off kitchen</string>
-    <string name="chat_send">Senden</string>
     <string name="chat_voice">Sprachbefehl</string>
     <string name="chat_voice_prompt">Sprich, z. B. „Turn off kitchen“</string>
     <string name="chat_voice_unavailable">Spracherkennung ist auf diesem Gerät nicht verfügbar. Aktiviere die Google-App oder die Spracheingabe.</string>
     <string name="chat_speak_on">Sprachausgabe an</string>
     <string name="chat_speak_off">Sprachausgabe aus</string>
-    <string name="chat_welcome">Hallo. Du kannst deine Geräte per Text verwalten: ein- oder ausschalten, nach Status, Stromverbrauch oder Außentemperatur fragen (Befehle auf Englisch oder Türkisch). Tippe auf das Mikrofon, um stattdessen zu sprechen („Turn off kitchen“); die Antwort wird vorgelesen. Fertige Vorlagen stehen unten; tippe auf eine, um sie zu senden, halte sie gedrückt, um sie zu bearbeiten.</string>
+    <string name="chat_welcome">Hallo. Tippe auf das Mikrofon und sag, was du möchtest (Befehle auf Englisch oder Türkisch): „Turn off the kitchen light“, „Turn on the garden and turn off the garage“, „Is the living room on?“, „Heater watts?“ oder „Temperature?“. Die Antwort wird vorgelesen. Fertige Vorlagen stehen unten; tippe auf eine, um sie auszuführen, halte sie gedrückt, um sie zu bearbeiten.</string>
     <string name="chat_templates">Vorlagen</string>
     <string name="chat_add_template">Neue Vorlage</string>
     <string name="chat_edit_template">Vorlage bearbeiten</string>

@@ -1385,16 +1385,12 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Ayuda</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Comandos de chat</string>
-    <string name="chat_hint">Escribe un comando, p. ej. Turn off kitchen</string>
-    <string name="chat_send">Enviar</string>
     <string name="chat_voice">Comando de voz</string>
     <string name="chat_voice_prompt">Dilo, p. ej. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">El reconocimiento de voz no está disponible en este dispositivo. Activa la app de Google o el dictado por voz.</string>
     <string name="chat_speak_on">Respuestas habladas activadas</string>
     <string name="chat_speak_off">Respuestas habladas desactivadas</string>
-    <string name="chat_welcome">Hola. Puedes gestionar tus dispositivos escribiendo (en inglés o turco): encenderlos o apagarlos, preguntar su estado, el consumo de potencia o la temperatura exterior. Toca el micrófono para decirlo en voz alta (“Turn off kitchen”); la respuesta se lee en voz alta. Abajo hay plantillas ya preparadas; toca una para enviarla, mantenla pulsada para editarla.</string>
+    <string name="chat_welcome">Hola. Toca el micrófono y di lo que quieres (comandos en inglés o turco): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” o “Temperature?”. La respuesta se lee en voz alta. Abajo hay plantillas ya preparadas; toca una para ejecutarla, mantenla pulsada para editarla.</string>
     <string name="chat_templates">Plantillas</string>
     <string name="chat_add_template">Nueva plantilla</string>
     <string name="chat_edit_template">Editar plantilla</string>

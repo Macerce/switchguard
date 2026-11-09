@@ -58,7 +58,7 @@ import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material.icons.rounded.Forum
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Nightlight
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Button
@@ -246,7 +246,7 @@ fun DevicesScreen(
                     }
                     if (devices.isNotEmpty()) {
                         IconButton(modifier = Modifier.tvFocusRing(), onClick = onOpenChat) {
-                            Icon(Icons.Rounded.Forum, stringResource(R.string.chat_open))
+                            Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice))
                         }
                     }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = doRefresh, enabled = loggedIn) {

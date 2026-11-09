@@ -6,8 +6,18 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## Sonraki sürüm — yayınlanmadı
+## 2.27.0 — 2026-11-10
+**Yeni**
+- **Sesli komut**: Cihazlar’ın üst çubuğundaki mikrofon artık doğrudan sesli komut ekranını açar; büyük mikrofon düğmesine dokunup söylemeniz yeter, yanıt sesli okunur. Doğal cümleler anlaşılır: “Mutfağın ışığını kapat”, “Mutfaktaki ışığı kapatır mısın”, “Pompayı çalıştır / durdur”, “Pompanın ikinci kanalını aç”, “Pompa iki aç”.
+- Tek cümlede hem aç hem kapat: “Bahçeyi aç, garajı ve salonu kapat” (Telegram’da da çalışır).
+- Cihazın adında “ışık/lamba” geçmese de bulunur: “Yatak odasının ışığını aç” → “Yatak Odası”.
+- Uygulama Türkçe ya da İngilizce dışında bir dildeyken mikrofon İngilizce dinler (komutlar yalnız bu iki dilde anlaşılır).
+
+**Değişenler**
+- Uygulama içindeki yazarak komut verme kutusu kaldırıldı; yazarak kontrol Telegram’dan sürer. Hazır şablonlar yerinde.
+
 **Düzeltmeler**
+- Benzer başlayan adlar karışmıyor: “ısıtıcıyı aç” artık “Işık” adlı cihazı açmaz.
 - Rusça: telefonda pil kısıtlaması uyarısı "Düzeltmek için seçin" (TV ifadesi) diyordu; artık "Düzeltmek için dokunun" diyor.
 
 ## 2.26.1 — 2026-11-07

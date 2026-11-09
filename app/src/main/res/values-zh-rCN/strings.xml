@@ -1321,16 +1321,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">帮助</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">聊天</string>
-    <string name="chat_open">聊天指令</string>
-    <string name="chat_hint">输入指令，例如 Turn off kitchen</string>
-    <string name="chat_send">发送</string>
     <string name="chat_voice">语音指令</string>
     <string name="chat_voice_prompt">请说出指令，例如“Turn off kitchen”</string>
     <string name="chat_voice_unavailable">此设备不支持语音识别。请启用 Google 应用或语音输入。</string>
     <string name="chat_speak_on">语音回复已开启</string>
     <string name="chat_speak_off">语音回复已关闭</string>
-    <string name="chat_welcome">你好。你可以通过输入文字来管理设备：开关设备、查询状态、功率或室外温度。点按麦克风可改为语音输入（“Turn off kitchen”）；回复会朗读出来。下方有现成的模板；点按即可发送，长按可编辑。指令需使用英文或土耳其文。</string>
+    <string name="chat_welcome">你好。点按麦克风，说出你想做的事（指令需使用英文或土耳其文）：“Turn off the kitchen light”、“Turn on the garden and turn off the garage”、“Is the living room on?”、“Heater watts?”或“Temperature?”。回复会朗读出来。下方有现成的模板；点按即可运行，长按可编辑。</string>
     <string name="chat_templates">模板</string>
     <string name="chat_add_template">新建模板</string>
     <string name="chat_edit_template">编辑模板</string>

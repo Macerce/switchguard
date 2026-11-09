@@ -1314,16 +1314,12 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Trợ giúp</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Trò chuyện</string>
-    <string name="chat_open">Lệnh trò chuyện</string>
-    <string name="chat_hint">Viết một lệnh, ví dụ Turn off kitchen</string>
-    <string name="chat_send">Gửi</string>
     <string name="chat_voice">Lệnh giọng nói</string>
     <string name="chat_voice_prompt">Hãy nói, ví dụ “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Thiết bị này không hỗ trợ nhận dạng giọng nói. Hãy bật ứng dụng Google hoặc nhập bằng giọng nói.</string>
     <string name="chat_speak_on">Đọc to câu trả lời: bật</string>
     <string name="chat_speak_off">Đọc to câu trả lời: tắt</string>
-    <string name="chat_welcome">Xin chào. Bạn có thể quản lý thiết bị bằng cách viết: bật hoặc tắt chúng, hỏi trạng thái, mức dùng điện hoặc nhiệt độ ngoài trời (bằng tiếng Anh hoặc tiếng Thổ Nhĩ Kỳ). Chạm vào micro để nói thay vì viết (“Turn off kitchen”); câu trả lời sẽ được đọc to. Các mẫu làm sẵn nằm bên dưới; chạm vào một mẫu để gửi, giữ để sửa.</string>
+    <string name="chat_welcome">Xin chào. Chạm vào micro và nói điều bạn muốn (bằng tiếng Anh hoặc tiếng Thổ Nhĩ Kỳ): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” hoặc “Temperature?”. Câu trả lời sẽ được đọc to. Các mẫu làm sẵn nằm bên dưới; chạm vào một mẫu để chạy, giữ để sửa.</string>
     <string name="chat_templates">Mẫu</string>
     <string name="chat_add_template">Mẫu mới</string>
     <string name="chat_edit_template">Sửa mẫu</string>

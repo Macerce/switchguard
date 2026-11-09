@@ -1341,16 +1341,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">도움말</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">채팅</string>
-    <string name="chat_open">채팅 명령</string>
-    <string name="chat_hint">명령을 입력하세요. 예: Turn off kitchen</string>
-    <string name="chat_send">보내기</string>
     <string name="chat_voice">음성 명령</string>
     <string name="chat_voice_prompt">말씀하세요. 예: “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">이 기기에서는 음성 인식을 사용할 수 없습니다. Google 앱이나 음성 입력을 활성화하세요.</string>
     <string name="chat_speak_on">음성 답변 켜짐</string>
     <string name="chat_speak_off">음성 답변 꺼짐</string>
-    <string name="chat_welcome">안녕하세요. 글을 써서 기기를 관리할 수 있습니다: 켜고 끄기, 상태, 전력 사용량, 실외 온도 확인. 마이크를 탭하면 말로 할 수도 있으며(“Turn off kitchen”) 답변을 소리 내어 읽어 줍니다. 아래에 준비된 템플릿이 있습니다. 탭하면 전송되고, 길게 누르면 편집할 수 있습니다. 명령은 영어 또는 튀르키예어로 입력합니다.</string>
+    <string name="chat_welcome">안녕하세요. 마이크를 탭하고 원하는 것을 말하세요 (명령은 영어 또는 튀르키예어로 말합니다): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?”, “Temperature?”. 답변을 소리 내어 읽어 줍니다. 아래에 준비된 템플릿이 있습니다. 탭하면 실행되고, 길게 누르면 편집할 수 있습니다.</string>
     <string name="chat_templates">템플릿</string>
     <string name="chat_add_template">새 템플릿</string>
     <string name="chat_edit_template">템플릿 편집</string>

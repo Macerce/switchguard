@@ -1422,16 +1422,12 @@
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Довідка</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Чат</string>
-    <string name="chat_open">Команди в чаті</string>
-    <string name="chat_hint">Напишіть команду, напр. Turn off kitchen</string>
-    <string name="chat_send">Надіслати</string>
     <string name="chat_voice">Голосова команда</string>
     <string name="chat_voice_prompt">Скажіть, напр. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Розпізнавання мовлення недоступне на цьому пристрої. Увімкніть застосунок Google або голосове введення.</string>
     <string name="chat_speak_on">Озвучування відповідей увімкнено</string>
     <string name="chat_speak_off">Озвучування відповідей вимкнено</string>
-    <string name="chat_welcome">Вітаю. Ви можете керувати пристроями текстом: вмикати чи вимикати їх, питати про стан, споживання або температуру надворі. Торкніться мікрофона, щоб сказати голосом (“Turn off kitchen”); відповідь буде озвучено. Нижче готові шаблони; торкніться, щоб надіслати, утримуйте, щоб змінити. Команди працюють англійською або турецькою.</string>
+    <string name="chat_welcome">Вітаю. Торкніться мікрофона й скажіть, що потрібно (команди англійською або турецькою): “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” або “Temperature?”. Відповідь буде озвучено. Нижче готові шаблони; торкніться, щоб виконати, утримуйте, щоб змінити.</string>
     <string name="chat_templates">Шаблони</string>
     <string name="chat_add_template">Новий шаблон</string>
     <string name="chat_edit_template">Редагувати шаблон</string>

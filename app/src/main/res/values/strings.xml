@@ -1350,9 +1350,9 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="other">%d devices</item>
     </plurals>
     <string name="chat_not_understood">I couldn\'t understand that command. For example, write “Turn off living room and kitchen”, “Heater watts?”, “Temperature?” or “Status”. Send “Help” for all commands.</string>
-    <string name="chat_help">Write your commands freely. Examples:\n• Turn on living room · Turn off kitchen and garden\n• Turn off all lights (every device whose name matches)\n• Is the living room on? · Status\n• Heater watts? · Power (now, today and usual draw)\n• Temperature? (outdoor)\n• Evening scene · Home · Away\nFor multi-channel devices add the channel number, e.g. “Turn on pump 2”.</string>
+    <string name="chat_help">Say or write your commands freely. Examples:\n• Turn on living room · Turn off kitchen and garden\n• Turn off the kitchen light · Turn on the garden and turn off the garage\n• Turn off all lights (every device whose name matches)\n• Is the living room on? · Status\n• Heater watts? · Power (now, today and usual draw)\n• Temperature? (outdoor)\n• Evening scene · Home · Away\nFor multi-channel devices add the channel number, e.g. “Turn on pump 2” or “Turn on pump second channel”.</string>
     <string name="chat_ack_app">Alarms are silenced from the alarm screen in the app; the “Ack” command works in Telegram.</string>
-    <string name="chat_switch_usage">Which device? For example, write “Turn on living room”.</string>
+    <string name="chat_switch_usage">Which device? For example, “Turn on living room”.</string>
     <string name="chat_need_channel">%1$s has %2$d channels; add the channel number, e.g. “Turn on %1$s 1”.</string>
     <string name="chat_not_found">No device named “%s” was found.</string>
     <string name="chat_no_devices">No devices have been added yet.</string>
@@ -1378,22 +1378,18 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Help</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Chat</string>
-    <string name="chat_open">Chat commands</string>
-    <string name="chat_hint">Write a command, e.g. Turn off kitchen</string>
-    <string name="chat_send">Send</string>
     <string name="chat_voice">Voice command</string>
     <string name="chat_voice_prompt">Say it, e.g. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Speech recognition is not available on this device. Enable the Google app or voice typing.</string>
     <string name="chat_speak_on">Spoken replies on</string>
     <string name="chat_speak_off">Spoken replies off</string>
-    <string name="chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Tap the microphone to say it instead (“Turn off kitchen”); the reply is read aloud. Ready-made templates are below; tap one to send it, hold it to edit.</string>
+    <string name="chat_welcome">Hello. Tap the microphone and say what you want: “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” or “Temperature?”. The reply is read aloud. Ready-made templates are below; tap one to run it, hold it to edit.</string>
     <string name="chat_templates">Templates</string>
     <string name="chat_add_template">New template</string>
     <string name="chat_edit_template">Edit template</string>
     <string name="chat_tpl_name">Name</string>
     <string name="chat_tpl_message">Message to send</string>
-    <string name="chat_tpl_message_help">Written as in the chat, e.g. “Turn off garden and pool”.</string>
+    <string name="chat_tpl_message_help">Written the way you would say it, e.g. “Turn off garden and pool”.</string>
     <string name="chat_tpl_when">Run automatically</string>
     <string name="chat_when_manual">Only when tapped</string>
     <string name="chat_when_time">Every day at a time</string>
@@ -1406,7 +1402,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="chat_tpl_enabled">Automatic run on</string>
     <string name="chat_tpl_auto">Auto</string>
     <string name="chat_tpl_try">Try</string>
-    <string name="chat_tpl_invalid">The message is not understood; try it in the chat first.</string>
+    <string name="chat_tpl_invalid">The message is not understood; try a different wording.</string>
     <string name="chat_clear">Clear chat</string>
     <!-- Cycles and timers -->
     <string name="cycles_title">Cycles &amp; timers</string>

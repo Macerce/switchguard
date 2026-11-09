@@ -9,6 +9,8 @@ object ChatCommand {
     sealed class Intent {
         /** Birden çok hedef: her biri ayrı cihaz/grup adı (sonunda kanal numarası olabilir). */
         data class Switch(val on: Boolean, val targets: List<String>) : Intent()
+        /** Tek cümlede hem aç hem kapat: "mutfağı aç, salonu kapat". Adımlar söyleniş sırasıyla. */
+        data class Batch(val steps: List<Switch>) : Intent()
         /** Boş sorgu = genel durum. */
         data class Status(val query: String) : Intent()
         /** Boş sorgu = güç ölçen bütün cihazlar. */
@@ -20,8 +22,21 @@ object ChatCommand {
         data object Ack : Intent()
     }
 
-    private val ON = setOf("ac", "acin", "acar", "acsana", "acabilir", "yak", "yakin", "on")
-    private val OFF = setOf("kapat", "kapa", "kapatin", "kapatir", "kapatsana", "kapatabilir", "sondur", "off")
+    private val ON = setOf(
+        "ac", "acin", "acar", "acsana", "acabilir", "acalim", "aciver", "acilsin", "yak", "yakin", "yakar", "yansin",
+        "calistir", "baslat", "on", "start",
+    )
+    private val OFF = setOf(
+        "kapat", "kapa", "kapatin", "kapatir", "kapatsana", "kapatabilir", "kapatalim", "kapativer", "kapansin",
+        "sondur", "sondurun", "sonsun", "durdur", "off", "stop",
+    )
+    /** Cihaz adında geçmeyebilen genel sözler: "mutfağın ışığını" → adı yalnızca "Mutfak" olan cihaz. */
+    private val GENERIC = listOf("isik", "lamba", "light", "lamp")
+    private val NUMBERS = mapOf(
+        "bir" to "1", "birinci" to "1", "iki" to "2", "ikinci" to "2", "uc" to "3", "ucuncu" to "3", "dort" to "4", "dorduncu" to "4",
+        "one" to "1", "first" to "1", "two" to "2", "second" to "2", "three" to "3", "third" to "3", "four" to "4", "fourth" to "4",
+    )
+    private val CHANNEL = listOf("kanal", "channel", "numara", "number", "nolu")
     private val ALL = setOf("tum", "tumu", "tumunu", "butun", "hepsi", "hepsini", "all", "every", "everything")
     private val FILLER = setOf(
         "turn", "switch", "lutfen", "please", "the", "misin", "musun", "mi", "mu", "bir", "da", "de", "su", "simdi", "now", "and", "ve",
@@ -68,12 +83,54 @@ object ChatCommand {
         if (words.any { it in SCENE } && words.any { it.startsWith("sahne") || it == "scene" }) {
             return Intent.RunScene(strip(words, SCENE))
         }
-        if (on != off) {
-            val targets = split(t).map { strip(DeviceKinds.words(it), ON + OFF) }.filter { it.isNotEmpty() }
-            if (targets.isNotEmpty()) return Intent.Switch(on, targets)
+        if (on || off) {
+            val steps = clauses(t)
+            if (steps.size == 1) return steps[0]
+            if (steps.size > 1) return Intent.Batch(steps)
         }
         if (words.any { it in STATUS }) return Intent.Status(strip(words, STATUS))
         return null
+    }
+
+    /**
+     * Cümleyi aç/kapat sözlerinden böler: "mutfağı aç salonu kapat" → iki adım. Türkçede söz hedeften sonra gelir
+     * ("salonu aç"), İngilizcede çoğu kez önce ("turn on kitchen"); cümle sözle başlıyorsa her söz ardındakine uygulanır.
+     * Art arda aynı yöndeki adımlar birleşir.
+     */
+    private fun clauses(text: String): List<Intent.Switch> {
+        val tokens = text.trim().split(Regex("""\s+"""))
+        fun verb(token: String): Boolean? = DeviceKinds.words(token).singleOrNull()?.let { if (it in ON) true else if (it in OFF) false else null }
+        val firstReal = tokens.firstOrNull { tok -> DeviceKinds.words(tok).any { it !in FILLER } }
+        val leading = firstReal != null && verb(firstReal) != null
+        val parts = mutableListOf<Pair<Boolean, String>>()
+        val pending = StringBuilder()
+        var current: Boolean? = null
+        for (tok in tokens) {
+            val v = verb(tok)
+            if (v == null) {
+                pending.append(tok).append(' ')
+                continue
+            }
+            if (leading) current?.let { parts += it to pending.toString() } else parts += v to pending.toString()
+            pending.clear()
+            current = v
+        }
+        // Son sözden sonra kalanlar: baştaki düzende onun hedefi, sondaki düzende son adıma eklenir ("salonu kapat, mutfağı da").
+        current?.let { parts += it to pending.toString() }
+        val steps = mutableListOf<Intent.Switch>()
+        for ((on, chunk) in parts) {
+            val targets = split(chunk).map { target(DeviceKinds.words(it)) }.filter { it.isNotEmpty() }
+            if (targets.isEmpty()) continue
+            val last = steps.lastOrNull()
+            if (last != null && last.on == on) steps[steps.size - 1] = last.copy(targets = last.targets + targets) else steps += Intent.Switch(on, targets)
+        }
+        return steps
+    }
+
+    /** Hedef sözleri; sondaki "bir" kanal numarası olabilir ("pompa bir"), başka yerde dolgu ("şunu bir aç"). */
+    private fun target(words: List<String>): String {
+        val kept = words.filterIndexed { i, w -> w !in ON && w !in OFF && (w !in FILLER || (w == "bir" && i == words.lastIndex && i > 0)) }
+        return if (kept == listOf("bir")) "" else kept.joinToString(" ")
     }
 
     /** "salon, mutfak ve bahçe" → üç hedef. */
@@ -108,11 +165,24 @@ object ChatCommand {
                 TelegramBot.Match.NotFound -> Unit
             }
         }
-        val number = query.last().toIntOrNull()
-        val nameWords = if (number != null && query.size > 1) query.dropLast(1) else query
-        val found = devices.filter { d ->
+        // Konuşma dili: "pompanın ikinci kanalı" → "pompanin 2".
+        val spoken = tidy(query)
+        if (spoken.isEmpty()) return Target.NotFound
+        if (!all && spoken != query) {
+            val m = TelegramBot.match(spoken.joinToString(" "), devices)
+            if (m is TelegramBot.Match.Found) return Target.One(m.device, m.channel)
+        }
+        val number = spoken.last().toIntOrNull()
+        val nameWords = if (number != null && spoken.size > 1) spoken.dropLast(1) else spoken
+        fun search(wanted: List<String>) = devices.filter { d ->
             val name = DeviceKinds.words(d.name)
-            nameWords.all { q -> name.any { n -> similar(q, n) } }
+            wanted.all { q -> name.any { n -> similar(q, n) } }
+        }
+        var found = search(nameWords)
+        if (found.isEmpty()) {
+            // "mutfağın ışığını": cihazın adı yalnızca "Mutfak" olabilir.
+            val specific = nameWords.filterNot { q -> GENERIC.any { similar(q, it) } }
+            if (specific.isNotEmpty() && specific.size < nameWords.size) found = search(specific)
         }
         return when {
             found.isEmpty() -> Target.NotFound
@@ -130,14 +200,30 @@ object ChatCommand {
         }
     }
 
-    /** Ekli/yumuşamış kelime aynı kök mü: "isigini"~"isik", "salonu"~"salon", "pompayi"~"pompa". */
+    /** Sayı sözlerini rakama çevirir, "kanal/numara" sözlerini atar, kanal numarasını sona alır. */
+    private fun tidy(query: List<String>): List<String> {
+        val words = query.filterNot { w -> CHANNEL.any { w.startsWith(it) } }.mapIndexed { i, w -> if (i > 0) NUMBERS[w] ?: w else w }
+        val i = words.indexOfLast { it.toIntOrNull() != null }
+        return if (i > 0 && i < words.lastIndex) words.filterIndexed { j, _ -> j != i } + words[i] else words
+    }
+
+    /**
+     * Ekli/yumuşamış kelime aynı kök mü: "isigini"~"isik", "mutfagin"~"mutfak", "salonu"~"salon", "pompayi"~"pompa".
+     * Yalnız son ünsüz yumuşaması (k→ğ, p→b, t→d) sayılır; "isiticiyi" ile "isik" aynı kök değildir.
+     */
     fun similar(q: String, n: String): Boolean {
         if (q == n) return true
         if (q.toIntOrNull() != null || n.toIntOrNull() != null) return false
         if (q.length >= 3 && n.startsWith(q)) return true
-        if (n.length >= 3 && q.startsWith(n)) return true
-        val common = q.zip(n).takeWhile { it.first == it.second }.size
-        return common >= maxOf(3, n.length - 1)
+        if (n.length < 3) return false
+        if (q.startsWith(n)) return true
+        val soft = when (n.last()) {
+            'k' -> 'g'
+            'p' -> 'b'
+            't' -> 'd'
+            else -> return false
+        }
+        return q.length > n.length && q.startsWith(n.dropLast(1) + soft)
     }
 
     /**

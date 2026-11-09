@@ -6,8 +6,18 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## Next — unreleased
+## 2.27.0 — 2026-11-10
+**New**
+- **Voice commands**: the microphone in the Devices top bar now opens the voice command screen; tap the big microphone and say it, the reply is read aloud. Natural sentences are understood: “Turn off the kitchen light”, “Turn the kitchen light off”, “Start / stop the pump”, “Turn on pump second channel”, “Turn on pump two”.
+- On and off in one sentence: “Turn on the garden and turn off the garage” (works in Telegram too).
+- A device is found even when its name has no “light/lamp” in it: “Turn on the bedroom light” → “Bedroom”.
+- When the app runs in a language other than English or Turkish, the microphone listens in English (commands are understood in these two languages only).
+
+**Changed**
+- The in-app box for typing commands is gone; typed control continues over Telegram. Templates stay.
+
 **Fixes**
+- Names that merely start alike no longer get mixed up (Turkish “ısıtıcı” no longer matched a device named “Işık”).
 - Russian: the battery-restriction warning on phones said "Select to fix" (TV wording); it now says "Tap to fix".
 
 ## 2.26.1 — 2026-11-07

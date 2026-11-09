@@ -1449,16 +1449,12 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Pomoc</string>
     <string name="chat_tpl_help_text">Help</string>
-    <string name="chat_title">Czat</string>
-    <string name="chat_open">Polecenia czatu</string>
-    <string name="chat_hint">Napisz polecenie, np. Turn off kitchen</string>
-    <string name="chat_send">Wyślij</string>
     <string name="chat_voice">Polecenie głosowe</string>
     <string name="chat_voice_prompt">Powiedz, np. „Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Rozpoznawanie mowy jest niedostępne na tym urządzeniu. Włącz aplikację Google lub pisanie głosowe.</string>
     <string name="chat_speak_on">Odpowiedzi głosowe włączone</string>
     <string name="chat_speak_off">Odpowiedzi głosowe wyłączone</string>
-    <string name="chat_welcome">Cześć. Możesz zarządzać urządzeniami, pisząc: włączaj je lub wyłączaj, pytaj o stan, pobór mocy albo temperaturę na zewnątrz (polecenia po angielsku lub turecku). Dotknij mikrofonu, aby powiedzieć polecenie („Turn off kitchen”); odpowiedź zostanie odczytana na głos. Gotowe szablony są poniżej; dotknij jednego, aby go wysłać, przytrzymaj, aby edytować.</string>
+    <string name="chat_welcome">Cześć. Dotknij mikrofonu i powiedz, czego chcesz (polecenia po angielsku lub turecku): „Turn off the kitchen light”, „Turn on the garden and turn off the garage”, „Is the living room on?”, „Heater watts?” lub „Temperature?”. Odpowiedź zostanie odczytana na głos. Gotowe szablony są poniżej; dotknij jednego, aby go uruchomić, przytrzymaj, aby edytować.</string>
     <string name="chat_templates">Szablony</string>
     <string name="chat_add_template">Nowy szablon</string>
     <string name="chat_edit_template">Edytuj szablon</string>
