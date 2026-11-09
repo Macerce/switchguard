@@ -6,15 +6,21 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.27.0 — 2026-11-10
+## 2.28.1 — 2026-11-10
 **New**
-- **Voice commands**: the microphone in the Devices top bar now opens the voice command screen; tap the big microphone and say it, the reply is read aloud. Natural sentences are understood: “Turn off the kitchen light”, “Turn the kitchen light off”, “Start / stop the pump”, “Turn on pump second channel”, “Turn on pump two”.
+- **Voice commands**: the microphone in the Devices top bar opens the chat; tap the microphone and say it, or type it, and the reply is read aloud. Natural sentences are understood: “Turn off the kitchen light”, “Turn the kitchen light off”, “Start / stop the pump”, “Turn on pump second channel”, “Turn on pump two”.
 - On and off in one sentence: “Turn on the garden and turn off the garage” (works in Telegram too).
+- **Timed commands**: “Turn off the kitchen in 10 minutes”, “Turn off the heater in half an hour”, “Turn on the pump for 20 minutes”. The countdown shows up as a cycle in the Automation tab, can be stopped there, and removes itself when done.
+- **Everything off / on**: one command for every device; to avoid accidents it first says how many switches are affected and waits for “Yes”.
+- **Cycles by voice**: “Start the garden cycle”, “Stop the garden cycle”.
+- When the app asks something the microphone reopens by itself: “Which channel?” → “two”; when several devices match, just say the name.
+- New questions: “What is on?”, “Briefing” (weather, what is on, what is offline, current power, what is coming up), “Daily summary”.
+- **All devices on the standby screen**: every device (each channel of multi-channel ones, groups included) is a tile; tap to switch it. If the phone is locked it asks you to unlock first.
+- **Three buttons on the standby screen**: microphone (voice command), **read out the status** (weather, which devices are on, which are offline, power draw, what is coming up) and **today's summary**. The text is shown too; tap it to close and stop the reading.
+- **More detailed daily summary**: alarms and drops, total energy and estimated cost, yesterday's energy by the same time, per device how often it turned on / how long it stayed on / what it used, the longest-running one and what is on right now. The daily summary notification carries the same detail; in the chat and on the standby screen it is read aloud.
+- **More ready-made templates**: Briefing, What's on, Lights off, Lights on, All off, Today's summary. The template you use most moves to the front.
 - A device is found even when its name has no “light/lamp” in it: “Turn on the bedroom light” → “Bedroom”.
 - When the app runs in a language other than English or Turkish, the microphone listens in English (commands are understood in these two languages only).
-
-**Changed**
-- The in-app box for typing commands is gone; typed control continues over Telegram. Templates stay.
 
 **Fixes**
 - Names that merely start alike no longer get mixed up (Turkish “ısıtıcı” no longer matched a device named “Işık”).

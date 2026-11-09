@@ -1928,6 +1928,10 @@ class MonitorService : Service() {
                 sendAutomationSwitch(cmd.cycle.name, device, cmd.target.channel, cmd.on, attempt = 1, logSuccess = false)
             }
         }
+        // Süreli sesli/yazılı komutların tek kullanımlık döngüleri bitince listeden kalkar.
+        for (e in r.events) {
+            if (e.kind != CycleEventKind.STARTED && e.cycle.id.startsWith(ChatRunner.ONCE_PREFIX)) store.deleteCycle(e.cycle.id)
+        }
         handler.removeCallbacks(cycleRunnable)
         val due = CycleEngine.nextDueAt(store.cycles, r.runs, System.currentTimeMillis()) ?: return
         handler.postDelayed(cycleRunnable, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)

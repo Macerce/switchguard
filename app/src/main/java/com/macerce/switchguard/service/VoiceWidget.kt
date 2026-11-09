@@ -99,11 +99,7 @@ class VoiceCommandActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState != null) return
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, resources.configuration.locales[0].toLanguageTag())
-            .putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.chat_voice_prompt))
-            .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
+        val intent = Speaker.listenIntent(this)
         try {
             listen.launch(intent)
         } catch (_: ActivityNotFoundException) {
@@ -115,26 +111,63 @@ class VoiceCommandActivity : ComponentActivity() {
 
 /** Yanıtı sesli okur (ekran kapansa da biter, sonra okuyucu kapatılır). */
 object Speaker {
+    private var current: TextToSpeech? = null
+    private val main = android.os.Handler(android.os.Looper.getMainLooper())
+
     /** Emoji ve simgeler atlanır ("⚠️" "uyarı işareti" diye okunmasın). */
     fun speakable(text: String): String =
-        text.replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\uFE0F\\u200D•·]"), " ").replace(Regex("\\s+"), " ").trim()
+        text.replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\uFE0F\\u200D•·]"), " ").replace(Regex("[ \\t]+"), " ").trim()
 
-    fun say(context: Context, text: String) {
+    /** Okumayı keser (yeni okuma başlarken ya da ekrandan çıkılırken). */
+    @Synchronized
+    fun stop() {
+        current?.let { runCatching { it.stop(); it.shutdown() } }
+        current = null
+    }
+
+    /** [text]'i sesli okur; önceki okuma kesilir. [onDone] okuma kendiliğinden bitince ana iş parçacığında çağrılır. */
+    @Synchronized
+    fun say(context: Context, text: String, onDone: (() -> Unit)? = null) {
         val clean = speakable(text)
+        stop()
         if (clean.isEmpty()) return
         val app = context.applicationContext
+        val locale = context.resources.configuration.locales[0]
         var engine: TextToSpeech? = null
+        fun finish(e: TextToSpeech, completed: Boolean) {
+            synchronized(this) {
+                if (current !== e) return
+                current = null
+            }
+            runCatching { e.shutdown() }
+            if (completed && onDone != null) main.post(onDone)
+        }
         engine = TextToSpeech(app) { status ->
             val e = engine ?: return@TextToSpeech
-            if (status != TextToSpeech.SUCCESS) { e.shutdown(); return@TextToSpeech }
-            e.language = app.resources.configuration.locales[0]
+            if (status != TextToSpeech.SUCCESS) { finish(e, false); return@TextToSpeech }
+            e.language = locale
             e.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onStart(id: String?) = Unit
-                override fun onDone(id: String?) = e.shutdown()
+                override fun onDone(id: String?) = finish(e, true)
                 @Deprecated("Deprecated in Java")
-                override fun onError(id: String?) = e.shutdown()
+                override fun onError(id: String?) = finish(e, false)
             })
-            e.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "voice")
+            // Uzun özetler okuyucunun sınırını aşmasın: satır satır sıraya konur, bitiş son satırda bildirilir.
+            val parts = clean.split('\n').map { it.trim() }.filter { it.isNotEmpty() }
+            parts.forEachIndexed { i, part ->
+                e.speak(part, if (i == 0) TextToSpeech.QUEUE_FLUSH else TextToSpeech.QUEUE_ADD, null, if (i == parts.lastIndex) "last" else "part")
+            }
         }
+        current = engine
+    }
+
+    /** Android'in konuşma tanıma penceresi. Komutlar yalnız Türkçe ve İngilizce anlaşılır: başka dilde İngilizce dinlenir. */
+    fun listenIntent(context: Context): Intent {
+        val locale = context.resources.configuration.locales[0]
+        return Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, if (locale.language == "tr") locale.toLanguageTag() else "en-US")
+            .putExtra(RecognizerIntent.EXTRA_PROMPT, context.getString(R.string.chat_voice_prompt))
+            .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
     }
 }

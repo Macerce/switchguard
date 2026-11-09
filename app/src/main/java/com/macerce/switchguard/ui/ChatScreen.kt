@@ -2,9 +2,7 @@ package com.macerce.switchguard.ui
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.speech.RecognizerIntent
-import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,10 +26,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.automirrored.rounded.VolumeOff
 import androidx.compose.material.icons.automirrored.rounded.VolumeUp
 import androidx.compose.material.icons.rounded.Add
@@ -40,7 +40,6 @@ import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -64,8 +63,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
@@ -77,6 +77,7 @@ import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.ChatRunner
+import com.macerce.switchguard.service.Speaker
 import com.macerce.switchguard.ui.theme.raisedOnTile
 import com.macerce.switchguard.ui.theme.tileColor
 import java.util.Locale
@@ -86,7 +87,7 @@ import kotlinx.coroutines.launch
 /** Yanıtın altında gösterilen düğme. */
 private enum class ChatAction { SET_LOCATION }
 
-/** Konuşma satırı: kullanıcının söylediği ya da uygulamanın yanıtı. */
+/** Sohbet satırı: kullanıcının yazdığı / söylediği ya da uygulamanın yanıtı. */
 private data class ChatLine(
     val mine: Boolean,
     val text: String,
@@ -102,7 +103,7 @@ private fun sentence(text: String, locale: Locale): String = text.replaceFirstCh
 /** Ekran kapanıp açılınca konuşma kaybolmasın (uygulama açık kaldıkça). */
 private val lines = mutableStateListOf<ChatLine>()
 
-/** Sesli komut: mikrofona söyleyerek cihazları açıp kapatma, durum/güç/sıcaklık sorma; altta hazır şablonlar. Yazı kutusu yok. */
+/** Uygulama içi sohbet: yazarak ya da mikrofona söyleyerek cihazları yönetme; altta hazır şablonlar (en çok kullanılan başta). */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChatScreen(onBack: () -> Unit) {
@@ -111,78 +112,59 @@ fun ChatScreen(onBack: () -> Unit) {
     val version by store.version.collectAsStateWithLifecycle()
     val templates = remember(version) { ChatRunner.templates(context) }
     val scope = rememberCoroutineScope()
+    var input by rememberSaveable { mutableStateOf("") }
     var busy by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf<ChatTemplate?>(null) }
     val listState = rememberLazyListState()
     val notUnderstood = stringResource(R.string.chat_not_understood)
-    val chatTitle = stringResource(R.string.chat_voice)
+    val chatTitle = stringResource(R.string.chat_title)
+    val noVoice = stringResource(R.string.chat_voice_unavailable)
     val locale = LocalConfiguration.current.locales[0]
     var locationFor by remember { mutableStateOf<String?>(null) }
     var speak by remember { mutableStateOf(store.chatSpeak) }
-    // Sesli yanıt için okuyucu; ilk sesli komutta kurulur, ekrandan çıkınca kapatılır.
-    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
-    DisposableEffect(Unit) { onDispose { tts?.shutdown() } }
+    DisposableEffect(Unit) { onDispose { Speaker.stop() } }
 
-    fun say(text: String) {
-        val clean = com.macerce.switchguard.service.Speaker.speakable(text)
-        if (clean.isEmpty()) return
-        tts?.let { it.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "chat"); return }
-        var engine: TextToSpeech? = null
-        engine = TextToSpeech(context.applicationContext) { status ->
-            val e = engine ?: return@TextToSpeech
-            if (status == TextToSpeech.SUCCESS) {
-                e.language = locale
-                e.speak(clean, TextToSpeech.QUEUE_FLUSH, null, "chat")
-            }
+    // Sesle komut: Android'in konuşma tanıma penceresi (uygulama mikrofon izni istemez); söylenen cümle doğrudan gönderilir.
+    var onHeard by remember { mutableStateOf<(String) -> Unit>({}) }
+    val voice = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
+        result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull { it.isNotBlank() }?.let { onHeard(it) }
+    }
+    fun listen() {
+        Speaker.stop()
+        try {
+            voice.launch(Speaker.listenIntent(context))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(context, noVoice, Toast.LENGTH_LONG).show()
         }
-        tts = engine
     }
 
     fun send(text: String, spoken: Boolean = false) {
         val t = text.trim()
         if (t.isEmpty() || busy) return
         lines += ChatLine(true, sentence(t, locale))
+        input = ""
         busy = true
         scope.launch {
             val intent = ChatCommand.parse(t)
-            val answer = runCatching { ChatRunner.answer(context, t, chatTitle) }
-                .getOrElse { "⚠️ " + it.message.orEmpty() } ?: notUnderstood
+            val reply = runCatching { ChatRunner.reply(context, t, chatTitle) }.getOrElse { ChatRunner.Reply("⚠️ " + it.message.orEmpty()) }
+            val answer = reply?.text ?: notUnderstood
             // Konum yoksa sıcaklık yanıtının altında doğrudan konum seçme düğmesi.
             val needsLocation = intent == ChatCommand.Intent.Temperature && (store.latitude == null || store.longitude == null)
             lines += ChatLine(false, answer, action = if (needsLocation) ChatAction.SET_LOCATION else null, retry = if (needsLocation) t else null)
             busy = false
-            if (spoken && speak) say(answer)
+            // Sesli komutun yanıtı okunur; yanıt bir soruysa ("Hangi kanal?") okuma bitince mikrofon yeniden açılır.
+            if (spoken && speak) Speaker.say(context, answer) { if (reply?.ask == true) listen() }
+            else if (spoken && reply?.ask == true) listen()
         }
     }
-
-    // Sesle komut: Android'in konuşma tanıma penceresi (uygulama mikrofon izni istemez); söylenen cümle doğrudan gönderilir.
-    val voicePrompt = stringResource(R.string.chat_voice_prompt)
-    val noVoice = stringResource(R.string.chat_voice_unavailable)
-    val voice = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
-        val heard = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull { it.isNotBlank() }
-        if (heard != null) send(heard, spoken = true)
-    }
-    fun listen() {
-        tts?.stop()
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            // Komutlar yalnız Türkçe ve İngilizce anlaşılır: başka dilde kullanılan uygulamada İngilizce dinlenir.
-            .putExtra(RecognizerIntent.EXTRA_LANGUAGE, if (locale.language == "tr") locale.toLanguageTag() else "en-US")
-            .putExtra(RecognizerIntent.EXTRA_PROMPT, voicePrompt)
-            .putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1)
-        try {
-            voice.launch(intent)
-        } catch (_: ActivityNotFoundException) {
-            Toast.makeText(context, noVoice, Toast.LENGTH_LONG).show()
-        }
-    }
+    onHeard = { send(it, spoken = true) }
     // Sona kaydır: hoş geldin + satırlar + (varsa) "yanıt hazırlanıyor".
     LaunchedEffect(lines.size, busy) { listState.animateScrollToItem(lines.size + if (busy) 1 else 0) }
 
     Column(Modifier.fillMaxSize().imePadding()) {
         AppTopBar(
-            title = stringResource(R.string.chat_voice),
+            title = stringResource(R.string.chat_title),
             small = true,
             navigationIcon = {
                 IconButton(modifier = Modifier.tvFocusRing(), onClick = onBack) {
@@ -193,7 +175,7 @@ fun ChatScreen(onBack: () -> Unit) {
                 IconButton(modifier = Modifier.tvFocusRing(), onClick = {
                     speak = !speak
                     store.chatSpeak = speak
-                    if (!speak) tts?.stop()
+                    if (!speak) Speaker.stop()
                 }) {
                     Icon(
                         if (speak) Icons.AutoMirrored.Rounded.VolumeUp else Icons.AutoMirrored.Rounded.VolumeOff,
@@ -233,7 +215,7 @@ fun ChatScreen(onBack: () -> Unit) {
                 val shape = RoundedCornerShape(16.dp)
                 Row(
                     Modifier.background(raisedOnTile(), shape).tvFocusRing(shape)
-                        .combinedClickable(onClick = { send(t.text) }, onLongClick = { editing = t })
+                        .combinedClickable(onClick = { ChatRunner.countUse(context, t.id); send(t.text) }, onLongClick = { editing = t })
                         .padding(horizontal = 14.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -258,21 +240,27 @@ fun ChatScreen(onBack: () -> Unit) {
                 }
             }
         }
-        // Yazı kutusu yok: tek giriş büyük mikrofon düğmesi.
-        Column(
-            Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            FilledIconButton(onClick = { listen() }, enabled = !busy, modifier = Modifier.size(72.dp).tvFocusRing()) {
-                Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice), Modifier.size(36.dp))
-            }
-            Text(
-                voicePrompt,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 6.dp),
+        Row(Modifier.fillMaxWidth().padding(start = 16.dp, end = 8.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(
+                value = input,
+                onValueChange = { input = it },
+                placeholder = { Text(stringResource(R.string.chat_hint)) },
+                modifier = Modifier.weight(1f),
+                singleLine = true,
+                shape = RoundedCornerShape(24.dp),
+                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Send),
+                keyboardActions = KeyboardActions(onSend = { send(input) }),
             )
+            // Yazı yokken mikrofon, yazı varken gönder.
+            if (input.isBlank()) {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { listen() }, enabled = !busy) {
+                    Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice), tint = MaterialTheme.colorScheme.primary)
+                }
+            } else {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { send(input) }, enabled = !busy) {
+                    Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send), tint = MaterialTheme.colorScheme.primary)
+                }
+            }
         }
     }
 
@@ -303,11 +291,11 @@ fun ChatScreen(onBack: () -> Unit) {
             onTry = { send(it) },
             onSave = { saved ->
                 val list = ChatRunner.templates(context)
-                store.chatTemplates = if (list.any { it.id == saved.id }) list.map { if (it.id == saved.id) saved else it } else list + saved
+                ChatRunner.saveTemplates(context, if (list.any { it.id == saved.id }) list.map { if (it.id == saved.id) saved else it } else list + saved)
                 editing = null
             },
             onDelete = {
-                store.chatTemplates = ChatRunner.templates(context).filterNot { it.id == t.id }
+                ChatRunner.saveTemplates(context, ChatRunner.templates(context).filterNot { it.id == t.id })
                 editing = null
             },
             onDismiss = { editing = null },

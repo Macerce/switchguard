@@ -361,6 +361,19 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var chatTemplates: List<com.macerce.switchguard.core.ChatTemplate>?
         get() = parsed.get("chatTemplates", prefs.getString("chatTemplates", null)) { com.macerce.switchguard.core.ChatTemplate.listFromJson(it) }
         set(v) = put { if (v == null) remove("chatTemplates") else putString("chatTemplates", com.macerce.switchguard.core.ChatTemplate.listToJson(v)) }
+    /** Şablon başına kullanım sayısı: en çok kullanılan en başta gösterilir. */
+    var chatTemplateUses: Map<String, Int>
+        get() = parsed.get("chatTemplateUses", prefs.getString("chatTemplateUses", null)) { json ->
+            runCatching { org.json.JSONObject(json ?: "{}").let { o -> o.keys().asSequence().associateWith { o.optInt(it) } } }.getOrDefault(emptyMap())
+        }
+        set(v) = put { putString("chatTemplateUses", org.json.JSONObject(v as Map<*, *>).toString()) }
+    /**
+     * Kullanıcıya daha önce sunulmuş hazır şablonlar; listede yoksa silinmiştir, geri eklenmez.
+     * İlk altısı 2.18'den beri vardı: şablonlarını düzenlemiş eski kullanıcıda onlar "görülmüş" sayılır.
+     */
+    var chatDefaultsSeen: Set<String>
+        get() = prefs.getStringSet("chatDefaultsSeen", null) ?: setOf("d-status", "d-power", "d-temp", "d-home", "d-away", "d-help")
+        set(v) = put { putStringSet("chatDefaultsSeen", v) }
     /** Sohbette sesle verilen komutun yanıtı sesli okunsun. */
     var chatSpeak: Boolean
         get() = prefs.getBoolean("chatSpeak", true)

@@ -1350,7 +1350,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="other">%d devices</item>
     </plurals>
     <string name="chat_not_understood">I couldn\'t understand that command. For example, write “Turn off living room and kitchen”, “Heater watts?”, “Temperature?” or “Status”. Send “Help” for all commands.</string>
-    <string name="chat_help">Say or write your commands freely. Examples:\n• Turn on living room · Turn off kitchen and garden\n• Turn off the kitchen light · Turn on the garden and turn off the garage\n• Turn off all lights (every device whose name matches)\n• Is the living room on? · Status\n• Heater watts? · Power (now, today and usual draw)\n• Temperature? (outdoor)\n• Evening scene · Home · Away\nFor multi-channel devices add the channel number, e.g. “Turn on pump 2” or “Turn on pump second channel”.</string>
+    <string name="chat_help">Say or write your commands freely. Examples:\n• Turn on living room · Turn off kitchen and garden\n• Turn off the kitchen light · Turn on the garden and turn off the garage\n• Turn off the kitchen in 10 minutes · Turn on the pump for 20 minutes\n• Turn off all lights (every device whose name matches) · Turn everything off (asks first)\n• Start the garden cycle · Stop the garden cycle\n• Is the living room on? · What is on? · Status\n• Briefing (weather, what is on, what is coming up) · Daily summary\n• Heater watts? · Power (now, today and usual draw)\n• Temperature? (outdoor)\n• Evening scene · Home · Away\nFor multi-channel devices add the channel number, e.g. “Turn on pump 2” or “Turn on pump second channel”.</string>
     <string name="chat_ack_app">Alarms are silenced from the alarm screen in the app; the “Ack” command works in Telegram.</string>
     <string name="chat_switch_usage">Which device? For example, “Turn on living room”.</string>
     <string name="chat_need_channel">%1$s has %2$d channels; add the channel number, e.g. “Turn on %1$s 1”.</string>
@@ -1378,12 +1378,16 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="chat_tpl_away_text">Away</string>
     <string name="chat_tpl_help">Help</string>
     <string name="chat_tpl_help_text">Help</string>
+    <string name="chat_title">Chat</string>
+    <string name="chat_open">Chat commands</string>
+    <string name="chat_hint">Write a command, e.g. Turn off kitchen</string>
+    <string name="chat_send">Send</string>
     <string name="chat_voice">Voice command</string>
     <string name="chat_voice_prompt">Say it, e.g. “Turn off kitchen”</string>
     <string name="chat_voice_unavailable">Speech recognition is not available on this device. Enable the Google app or voice typing.</string>
     <string name="chat_speak_on">Spoken replies on</string>
     <string name="chat_speak_off">Spoken replies off</string>
-    <string name="chat_welcome">Hello. Tap the microphone and say what you want: “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” or “Temperature?”. The reply is read aloud. Ready-made templates are below; tap one to run it, hold it to edit.</string>
+    <string name="chat_welcome">Hello. Tap the microphone and say what you want, or type it: “Turn off the kitchen light”, “Turn on the garden and turn off the garage”, “Is the living room on?”, “Heater watts?” or “Temperature?”. The reply is read aloud. Ready-made templates are below; tap one to run it, hold it to edit.</string>
     <string name="chat_templates">Templates</string>
     <string name="chat_add_template">New template</string>
     <string name="chat_edit_template">Edit template</string>
@@ -1544,4 +1548,22 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="weather_snow">Snow</string>
     <string name="weather_showers">Showers</string>
     <string name="weather_storm">Thunderstorm</string>
+    <string name="chat_confirm_all_off">This will turn off %1$d switches. Say or write “Yes” to confirm, “No” to cancel.</string>
+    <string name="chat_confirm_all_on">This will turn on %1$d switches. Say or write “Yes” to confirm, “No” to cancel.</string>
+    <string name="chat_all_already_on">Everything is already on.</string>
+    <string name="chat_none_on">Nothing is on.</string>
+    <string name="chat_nothing_pending">There is nothing to confirm.</string>
+    <string name="chat_cancelled">Cancelled.</string>
+    <string name="chat_timer_later">%1$s: %2$s in %3$s.</string>
+    <string name="chat_timer_for">%1$s: %2$s for %3$s.</string>
+    <string name="chat_cycle_started">%1$s started.</string>
+    <string name="chat_cycle_stopped">%1$s stopped.</string>
+    <string name="chat_cycle_not_found">No single cycle matches “%1$s”. Cycles: %2$s</string>
+    <string name="chat_tpl_brief">Briefing</string>
+    <string name="chat_tpl_whats_on">What\'s on</string>
+    <string name="chat_tpl_lights_off">Lights off</string>
+    <string name="chat_tpl_lights_on">Lights on</string>
+    <string name="chat_tpl_all_off">All off</string>
+    <string name="board_brief">Read out the status</string>
+    <string name="summary_yesterday">Yesterday by this time: %1$s.</string>
 </resources>

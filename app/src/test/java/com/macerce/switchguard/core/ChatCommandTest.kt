@@ -72,6 +72,44 @@ class ChatCommandTest {
     }
 
     @Test
+    fun timedAllCycleAndSummaries() {
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("mutfagi"), 600, hold = false), ChatCommand.parse("Mutfağı 10 dakika sonra kapat"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("pompayi"), 1200, hold = true), ChatCommand.parse("pompayı 20 dakikalığına aç"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("klimayi"), 1800, hold = false), ChatCommand.parse("klimayı yarım saat sonra kapat"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("salonu", "mutfagi"), 3600, hold = true), ChatCommand.parse("salonu ve mutfağı 1 saat boyunca aç"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("kitchen"), 600, hold = false), ChatCommand.parse("turn off the kitchen in 10 minutes"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("pump"), 1200, hold = true), ChatCommand.parse("turn on pump for 20 minutes"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("heater"), 1800, hold = false), ChatCommand.parse("turn off heater in half an hour"))
+        // Süresi olan karışık komut anlaşılmaz sayılır (yanlışlıkla hemen yürütülmesin).
+        assertNull(ChatCommand.parse("mutfağı aç salonu 10 dakika sonra kapat"))
+
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("hepsini kapat"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("her şeyi kapat"))
+        assertEquals(ChatCommand.Intent.SwitchAll(true), ChatCommand.parse("tüm cihazları aç"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("turn everything off"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("turn off all devices"))
+        assertEquals(ChatCommand.Intent.Switch(false, listOf("tum isiklari")), ChatCommand.parse("tüm ışıkları kapat"))
+        assertEquals(ChatCommand.Intent.Confirm(true), ChatCommand.parse("Evet"))
+        assertEquals(ChatCommand.Intent.Confirm(false), ChatCommand.parse("hayır"))
+        assertEquals(ChatCommand.Intent.Confirm(false), ChatCommand.parse("cancel"))
+
+        assertEquals(ChatCommand.Intent.RunCycle(true, "sulama"), ChatCommand.parse("sulama döngüsünü başlat"))
+        assertEquals(ChatCommand.Intent.RunCycle(false, "bahce isiklari"), ChatCommand.parse("bahçe ışıkları döngüsünü durdur"))
+        assertEquals(ChatCommand.Intent.RunCycle(true, "garden"), ChatCommand.parse("start the garden cycle"))
+
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("neler açık"))
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("hangi cihazlar açık"))
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("what is on?"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("durum özeti"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("neler oluyor"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("briefing"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("günün özeti"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("bugün ne oldu"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("daily summary"))
+        assertEquals(ChatCommand.Intent.Status(""), ChatCommand.parse("durum"))
+    }
+
+    @Test
     fun resolvesSpokenTargets() {
         val oda = DeviceSnapshot("o", "Yatak Odası", online = true, switches = mapOf(0 to false))
         val isitici = DeviceSnapshot("i", "Isıtıcı", online = true, switches = mapOf(0 to false))

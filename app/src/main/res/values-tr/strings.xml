@@ -1346,7 +1346,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item quantity="other">%d cihaz</item>
     </plurals>
     <string name="chat_not_understood">Bu komutu anlayamadım. Örneğin “Salon ve mutfağı kapat”, “Klima kaç watt?”, “Kaç derece?” ya da “Durum” yazabilirsiniz. Tüm komutlar için “Yardım” yazın.</string>
-    <string name="chat_help">Komutlarınızı serbestçe söyleyebilir ya da yazabilirsiniz. Örnekler:\n• Salonu aç · Mutfak ve bahçeyi kapat\n• Mutfağın ışığını kapat · Bahçeyi aç, garajı kapat\n• Tüm ışıkları kapat (adı eşleşen bütün cihazlar)\n• Salon açık mı? · Durum\n• Klima kaç watt? · Güç (anlık, bugün ve olağan tüketim)\n• Kaç derece? (dış sıcaklık)\n• Akşam sahnesi · Evdeyim · Dışarıdayım\nÇok kanallı cihazlarda kanal numarasını ekleyin, ör. “Pompa 2 aç” ya da “Pompanın ikinci kanalını aç”.</string>
+    <string name="chat_help">Komutlarınızı serbestçe söyleyebilir ya da yazabilirsiniz. Örnekler:\n• Salonu aç · Mutfak ve bahçeyi kapat\n• Mutfağın ışığını kapat · Bahçeyi aç, garajı kapat\n• Mutfağı 10 dakika sonra kapat · Pompayı 20 dakikalığına aç\n• Tüm ışıkları kapat (adı eşleşen bütün cihazlar) · Hepsini kapat (önce sorar)\n• Sulama döngüsünü başlat · Sulama döngüsünü durdur\n• Salon açık mı? · Neler açık? · Durum\n• Durum özeti (hava, açık cihazlar, yakında çalışacaklar) · Günün özeti\n• Klima kaç watt? · Güç (anlık, bugün ve olağan tüketim)\n• Kaç derece? (dış sıcaklık)\n• Akşam sahnesi · Evdeyim · Dışarıdayım\nÇok kanallı cihazlarda kanal numarasını ekleyin, ör. “Pompa 2 aç” ya da “Pompanın ikinci kanalını aç”.</string>
     <string name="chat_ack_app">Alarm, uygulamadaki alarm ekranından susturulur; “Gördüm” komutu Telegram\'da çalışır.</string>
     <string name="chat_switch_usage">Hangi cihaz? Örneğin “Salonu aç”.</string>
     <string name="chat_need_channel">%1$s %2$d kanallı; kanal numarasını da yazın, ör. “%1$s 1 aç”.</string>
@@ -1374,12 +1374,16 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="chat_tpl_away_text">Dışarıdayım</string>
     <string name="chat_tpl_help">Yardım</string>
     <string name="chat_tpl_help_text">Yardım</string>
+    <string name="chat_title">Sohbet</string>
+    <string name="chat_open">Sohbetle komut</string>
+    <string name="chat_hint">Bir komut yazın, ör. Mutfağı kapat</string>
+    <string name="chat_send">Gönder</string>
     <string name="chat_voice">Sesle komut</string>
     <string name="chat_voice_prompt">Söyleyin, ör. “Mutfağı kapat”</string>
     <string name="chat_voice_unavailable">Bu cihazda konuşma tanıma yok. Google uygulamasını ya da sesle yazmayı açın.</string>
     <string name="chat_speak_on">Sesli yanıt açık</string>
     <string name="chat_speak_off">Sesli yanıt kapalı</string>
-    <string name="chat_welcome">Merhaba. Mikrofona dokunup isteğinizi söyleyin: “Mutfağın ışığını kapat”, “Bahçeyi aç, garajı kapat”, “Salon açık mı?”, “Klima kaç watt?” ya da “Kaç derece?”. Yanıt sesli okunur. Hazır şablonlar aşağıdadır; şablona dokunduğunuzda çalışır, düzenlemek için basılı tutun.</string>
+    <string name="chat_welcome">Merhaba. Mikrofona dokunup isteğinizi söyleyin ya da yazın: “Mutfağın ışığını kapat”, “Bahçeyi aç, garajı kapat”, “Salon açık mı?”, “Klima kaç watt?” ya da “Kaç derece?”. Yanıt sesli okunur. Hazır şablonlar aşağıdadır; şablona dokunduğunuzda çalışır, düzenlemek için basılı tutun.</string>
     <string name="chat_templates">Şablonlar</string>
     <string name="chat_add_template">Yeni şablon</string>
     <string name="chat_edit_template">Şablonu düzenle</string>
@@ -1540,4 +1544,22 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="weather_snow">Karlı</string>
     <string name="weather_showers">Sağanak</string>
     <string name="weather_storm">Gök gürültülü fırtına</string>
+    <string name="chat_confirm_all_off">%1$d anahtar kapatılacak. Onaylamak için “Evet”, vazgeçmek için “Hayır” deyin ya da yazın.</string>
+    <string name="chat_confirm_all_on">%1$d anahtar açılacak. Onaylamak için “Evet”, vazgeçmek için “Hayır” deyin ya da yazın.</string>
+    <string name="chat_all_already_on">Her şey zaten açık.</string>
+    <string name="chat_none_on">Açık cihaz yok.</string>
+    <string name="chat_nothing_pending">Onay bekleyen bir işlem yok.</string>
+    <string name="chat_cancelled">Vazgeçildi.</string>
+    <string name="chat_timer_later">%1$s: %3$s sonra %2$s.</string>
+    <string name="chat_timer_for">%1$s: %3$s boyunca %2$s.</string>
+    <string name="chat_cycle_started">%1$s başlatıldı.</string>
+    <string name="chat_cycle_stopped">%1$s durduruldu.</string>
+    <string name="chat_cycle_not_found">“%1$s” adına uyan tek bir döngü yok. Döngüler: %2$s</string>
+    <string name="chat_tpl_brief">Durum özeti</string>
+    <string name="chat_tpl_whats_on">Neler açık</string>
+    <string name="chat_tpl_lights_off">Işıkları kapat</string>
+    <string name="chat_tpl_lights_on">Işıkları aç</string>
+    <string name="chat_tpl_all_off">Hepsini kapat</string>
+    <string name="board_brief">Durumu sesli oku</string>
+    <string name="summary_yesterday">Dün aynı saate kadar: %1$s.</string>
 </resources>

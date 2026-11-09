@@ -6,15 +6,21 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## 2.27.0 — 2026-11-10
+## 2.28.1 — 2026-11-10
 **Yeni**
-- **Sesli komut**: Cihazlar’ın üst çubuğundaki mikrofon artık doğrudan sesli komut ekranını açar; büyük mikrofon düğmesine dokunup söylemeniz yeter, yanıt sesli okunur. Doğal cümleler anlaşılır: “Mutfağın ışığını kapat”, “Mutfaktaki ışığı kapatır mısın”, “Pompayı çalıştır / durdur”, “Pompanın ikinci kanalını aç”, “Pompa iki aç”.
+- **Sesli komut**: Cihazlar’ın üst çubuğundaki mikrofon sohbeti açar; mikrofona dokunup söyleyin ya da yazın, yanıt sesli okunur. Doğal cümleler anlaşılır: “Mutfağın ışığını kapat”, “Mutfaktaki ışığı kapatır mısın”, “Pompayı çalıştır / durdur”, “Pompanın ikinci kanalını aç”, “Pompa iki aç”.
 - Tek cümlede hem aç hem kapat: “Bahçeyi aç, garajı ve salonu kapat” (Telegram’da da çalışır).
+- **Süreli komut**: “Mutfağı 10 dakika sonra kapat”, “Klimayı yarım saat sonra kapat”, “Pompayı 20 dakikalığına aç”. Geri sayım Otomasyon sekmesinde döngü olarak görünür, oradan durdurulabilir; bitince kendiliğinden silinir.
+- **Hepsini kapat / aç**: bütün cihazlara birden komut; yanlışlıkla olmasın diye önce kaç anahtarın etkileneceğini söyler ve “Evet” bekler.
+- **Sesle döngü**: “Sulama döngüsünü başlat / durdur”.
+- Soru sorulunca mikrofon kendiliğinden yeniden açılır: “Hangi kanal?” → “iki”; birden çok cihaz eşleşince adını söylemeniz yeter.
+- Yeni sorular: “Neler açık?”, “Durum özeti” (hava, açık cihazlar, çevrimdışı olanlar, anlık güç, yakında çalışacak işler), “Günün özeti”.
+- **Bekleme ekranında bütün cihazlar**: her cihaz (çok kanallıda her kanal, gruplar dahil) bir kutucuk; dokununca açılır ya da kapanır. Telefon kilitliyse önce kilidi açmanızı ister.
+- **Bekleme ekranında üç düğme**: mikrofon (sesli komut), **durumu sesli oku** (şu an hava nasıl, hangi cihazlar açık, hangileri çevrimdışı, ne kadar güç çekiliyor, önümüzdeki işler) ve **günün özeti**. Metin ekranda da görünür; dokununca kapanır ve okuma kesilir.
+- **Günün özeti daha ayrıntılı**: alarm ve kopma sayısı, toplam tüketim ve tahmini maliyet, dünün aynı saatine kadarki tüketim, cihaz cihaz kaç kez açıldığı / ne kadar açık kaldığı / ne harcadığı, en uzun açık kalan ve şu an açık olanlar. Günlük özet bildirimi de bu ayrıntıyla gelir; sohbette ve bekleme ekranında sesli okunur.
+- **Daha çok hazır şablon**: Durum özeti, Neler açık, Işıkları kapat, Işıkları aç, Hepsini kapat, Günün özeti. En sık kullandığınız şablon en başa geçer.
 - Cihazın adında “ışık/lamba” geçmese de bulunur: “Yatak odasının ışığını aç” → “Yatak Odası”.
 - Uygulama Türkçe ya da İngilizce dışında bir dildeyken mikrofon İngilizce dinler (komutlar yalnız bu iki dilde anlaşılır).
-
-**Değişenler**
-- Uygulama içindeki yazarak komut verme kutusu kaldırıldı; yazarak kontrol Telegram’dan sürer. Hazır şablonlar yerinde.
 
 **Düzeltmeler**
 - Benzer başlayan adlar karışmıyor: “ısıtıcıyı aç” artık “Işık” adlı cihazı açmaz.

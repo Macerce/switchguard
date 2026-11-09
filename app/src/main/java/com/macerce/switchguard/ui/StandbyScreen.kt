@@ -1,13 +1,17 @@
 package com.macerce.switchguard.ui
 
 import android.app.KeyguardManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -19,19 +23,24 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AcUnit
 import androidx.compose.material.icons.rounded.Autorenew
@@ -41,9 +50,13 @@ import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Grain
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.NightsStay
 import androidx.compose.material.icons.rounded.NotificationsActive
+import androidx.compose.material.icons.rounded.PowerSettingsNew
+import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.Thunderstorm
+import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material.icons.rounded.Umbrella
 import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material.icons.rounded.WbCloudy
@@ -54,12 +67,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -90,6 +105,7 @@ import com.macerce.switchguard.api.WeatherClient
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.DeviceGroup
+import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.DurationText
 import com.macerce.switchguard.core.StandbyBoard
 import com.macerce.switchguard.core.StandbyBoard.UpcomingKind
@@ -100,9 +116,13 @@ import com.macerce.switchguard.data.LoggedEvent
 import com.macerce.switchguard.data.MetricsLog
 import com.macerce.switchguard.data.RuntimeState
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.service.Briefing
+import com.macerce.switchguard.service.ChatRunner
+import com.macerce.switchguard.service.Speaker
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DateFormat
 import java.util.Calendar
@@ -112,11 +132,38 @@ import kotlin.math.roundToInt
 
 /**
  * Bekleme ekranı: şarjdayken ya da masada dururken açık kalan, kilit ekranının üstünde de görünen tam ekran pano.
- * Saat, hava, kritik durum, anlık güç (yarım daire), son hareketler ve yakında çalışacak işler.
+ * Saat, hava, kritik durum, bütün cihazlar (dokununca aç/kapat), anlık güç (yarım daire), son hareketler ve yakında
+ * çalışacak işler; altta sesli komut, durumu sesli okuma ve günün özeti düğmeleri.
  * Aynı içerik Android ekran koruyucusu olarak da çalışır (bkz. [com.macerce.switchguard.service.StandbyDream]).
  */
 class StandbyActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) = super.attachBaseContext(AppLanguage.wrap(newBase))
+
+    /** Son sesli komut (an, söylenen); pano bunu görünce yürütür. */
+    private var heard by mutableStateOf<Pair<Long, String>?>(null)
+    private val voice = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        val text = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.firstOrNull { it.isNotBlank() }
+        if (result.resultCode == RESULT_OK && text != null) heard = System.currentTimeMillis() to text
+    }
+
+    private fun listen() {
+        Speaker.stop()
+        try {
+            voice.launch(Speaker.listenIntent(this))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.chat_voice_unavailable, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /** Cihaz kontrolü ve sesli komut kilit ekranından verilemez: kilitliyse önce kilit açtırılır. */
+    private fun unlocked(action: () -> Unit) {
+        val km = getSystemService(KeyguardManager::class.java)
+        if (Build.VERSION.SDK_INT >= 26 && km?.isKeyguardLocked == true) {
+            km.requestDismissKeyguard(this, object : KeyguardManager.KeyguardDismissCallback() {
+                override fun onDismissSucceeded() = action()
+            })
+        } else action()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,6 +184,8 @@ class StandbyActivity : ComponentActivity() {
                 StandbyBoardScreen(
                     onOpenApp = { openApp() },
                     onClose = { finish() },
+                    host = remember { StandbyHost(listen = { listen() }, unlocked = { unlocked(it) }) },
+                    heard = heard,
                 )
             }
         }
@@ -174,12 +223,47 @@ private val Red = Color(0xFFEF5350)
 
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 
+/** Panonun etkinliğe bağlı işleri: konuşma tanıma penceresi ve kilit açtırma. */
+class StandbyHost(val listen: () -> Unit, val unlocked: (() -> Unit) -> Unit)
+
 /**
  * Bekleme panosu. [onOpenApp]/[onClose] null ise (ekran koruyucu) dokununca menü çıkmaz; sistem dokunuşla kapatır.
+ * [host] null ise (ekran koruyucu) cihaz kutucukları yalnız gösterilir, düğmeler çıkmaz. [heard] son sesli komut.
  */
 @Composable
-fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
+fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost? = null, heard: Pair<Long, String>? = null) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    // Alttaki pencere: sesli komutun yanıtı, durum özeti ya da günün özeti; dokununca kapanır, okuma kesilir.
+    var panel by remember { mutableStateOf<String?>(null) }
+    var working by remember { mutableStateOf(false) }
+    val boardName = stringResource(R.string.board_menu)
+    val notUnderstood = stringResource(R.string.chat_not_understood)
+    DisposableEffect(Unit) { onDispose { Speaker.stop() } }
+    fun show(text: String, ask: Boolean = false) {
+        panel = text
+        // Yanıt bir soruysa ("Hangi kanal?", "Emin misiniz?") okuma bitince mikrofon yeniden açılır.
+        Speaker.say(context, text) { if (ask) host?.listen?.invoke() }
+    }
+    fun read(build: () -> String) {
+        if (working) return
+        working = true
+        panel = null
+        Speaker.stop()
+        scope.launch {
+            val text = withContext(Dispatchers.IO) { runCatching(build).getOrElse { "⚠️ " + it.message.orEmpty() } }
+            working = false
+            show(text)
+        }
+    }
+    LaunchedEffect(heard) {
+        val said = heard?.second ?: return@LaunchedEffect
+        working = true
+        panel = null
+        val reply = runCatching { ChatRunner.reply(context, said, boardName) }.getOrElse { ChatRunner.Reply("⚠️ " + it.message.orEmpty()) }
+        working = false
+        show(reply?.text ?: notUnderstood, reply?.ask == true)
+    }
     val store = remember { Store.get(context) }
     val events = remember { EventLog.get(context) }
     val metrics = remember { MetricsLog.get(context) }
@@ -198,6 +282,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
     val minute = now / 60_000
 
     val snapshots = remember(version) { store.snapshots }
+    val tiles = remember(version) { store.snapshotsWithGroups }
     val monitored = remember(version) { store.monitoredIds() }
     val alarmLines = remember(version) { store.pendingAlarm }
     val away = remember(version, minute) { store.isAway() }
@@ -250,7 +335,9 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
     Box(
         Modifier.fillMaxSize().background(Bg)
             .then(
-                if (onOpenApp != null) Modifier.clickable(remember { MutableInteractionSource() }, indication = null) { menu = !menu }
+                if (onOpenApp != null) Modifier.clickable(remember { MutableInteractionSource() }, indication = null) {
+                    if (panel != null) { panel = null; Speaker.stop() } else menu = !menu
+                }
                 else Modifier
             ),
     ) {
@@ -266,16 +353,33 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
             val status: @Composable () -> Unit = {
                 StatusPill(alarmLines, conn.state, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away)
             }
+            val devices: @Composable () -> Unit = {
+                if (tiles.isNotEmpty()) DeviceTiles(
+                    tiles,
+                    onToggle = host?.let { h ->
+                        { d, ch, on ->
+                            h.unlocked {
+                                scope.launch {
+                                    val r = Actions.setSwitch(context, d, ch, on)
+                                    if (r.isFailure) panel = "⚠️ ${d.name}: ${r.exceptionOrNull()?.message.orEmpty()}"
+                                }
+                            }
+                        }
+                    },
+                )
+            }
             val gauge: @Composable (Dp) -> Unit = { w ->
                 val p = power
                 if (p != null) PowerGauge(livePower, p.series, p.todayKwh, w)
             }
             if (wide) {
                 Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(32.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Column(Modifier.weight(1.1f), verticalArrangement = Arrangement.spacedBy(14.dp)) {
+                    Column(Modifier.weight(1.1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         Clock(now, big = !compact)
                         WeatherLine(weather, lat != null)
                         status()
+                        devices()
+                        if (host != null) Spacer(Modifier.height(64.dp))
                     }
                     if (power != null) {
                         Box(Modifier.weight(0.8f), contentAlignment = Alignment.Center) { gauge(if (compact) 220.dp else 280.dp) }
@@ -286,23 +390,101 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?) {
                     }
                 }
             } else {
-                Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(18.dp)) {
+                Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                     Clock(now, big = true)
                     WeatherLine(weather, lat != null)
                     status()
+                    devices()
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { gauge(260.dp) }
                     Recent(events, lines)
                     Upcoming(next, now)
+                    if (host != null) Spacer(Modifier.height(64.dp))
                 }
             }
         }
-        AnimatedVisibility(menu, Modifier.align(Alignment.BottomCenter).padding(bottom = 24.dp), enter = fadeIn(), exit = fadeOut()) {
+        if (host != null) {
+            Row(
+                Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f),
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                BoardAction(Icons.Rounded.Mic, stringResource(R.string.chat_voice)) { host.unlocked { host.listen() } }
+                BoardAction(Icons.Rounded.RecordVoiceOver, stringResource(R.string.board_brief)) { read { Briefing.status(context) } }
+                BoardAction(Icons.Rounded.Today, stringResource(R.string.summary_title)) { read { Briefing.summary(context) } }
+            }
+            AnimatedVisibility(
+                panel != null || working,
+                Modifier.align(Alignment.BottomCenter).padding(start = 20.dp, end = 20.dp, bottom = 88.dp),
+                enter = fadeIn(), exit = fadeOut(),
+            ) {
+                Column(
+                    Modifier.widthIn(max = 560.dp).heightIn(max = 380.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1B2422))
+                        .clickable { panel = null; Speaker.stop() }
+                        .verticalScroll(rememberScrollState()).padding(horizontal = 18.dp, vertical = 14.dp),
+                ) {
+                    Text(panel ?: stringResource(R.string.chat_typing), color = Ink, fontSize = 16.sp, lineHeight = 23.sp)
+                }
+            }
+        }
+        AnimatedVisibility(
+            menu && panel == null && !working,
+            Modifier.align(Alignment.BottomCenter).padding(bottom = if (host != null) 88.dp else 24.dp), enter = fadeIn(), exit = fadeOut(),
+        ) {
             Row(
                 Modifier.clip(RoundedCornerShape(28.dp)).background(Color(0xFF1B2422)).padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 onOpenApp?.let { TextButton(onClick = it) { Text(stringResource(R.string.board_open_app), color = Teal) } }
                 onClose?.let { TextButton(onClick = it) { Text(stringResource(R.string.board_close), color = Ink) } }
+            }
+        }
+    }
+}
+
+/** Alttaki yuvarlak düğme (sesli komut, durumu oku, günün özeti). */
+@Composable
+private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
+    Box(
+        Modifier.size(52.dp).clip(CircleShape).background(Color(0xFF1B2422)).clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) { Icon(icon, label, tint = Ink, modifier = Modifier.size(26.dp)) }
+}
+
+/**
+ * Bütün cihazlar (gruplar dahil) küçük kutucuklar halinde; çok kanallıda her kanal ayrı kutucuk.
+ * [onToggle] null ise (ekran koruyucu) yalnız durum gösterilir.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun DeviceTiles(devices: List<DeviceSnapshot>, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        BoardTitle(stringResource(R.string.tab_devices))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (d in devices) {
+                val channels = if (d.isMultiChannel) d.switches.keys.sorted() else listOf(d.switches.keys.minOrNull() ?: 0)
+                for (ch in channels) {
+                    val on = d.online && d.switches[ch] == true
+                    val shape = RoundedCornerShape(14.dp)
+                    Row(
+                        Modifier.clip(shape).background(if (on) Teal.copy(alpha = 0.24f) else Faint)
+                            .then(if (onToggle != null && d.online) Modifier.clickable { onToggle(d, ch, !on) } else Modifier)
+                            .alpha(if (d.online) 1f else 0.5f)
+                            .padding(horizontal = 12.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        Icon(
+                            if (d.online) Icons.Rounded.PowerSettingsNew else Icons.Rounded.CloudOff, null,
+                            tint = if (on) Teal else Dim, modifier = Modifier.size(18.dp),
+                        )
+                        Text(
+                            d.name,
+                            color = if (on) Ink else Dim, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                            modifier = Modifier.widthIn(max = 150.dp),
+                        )
+                        // Kanal numarası ayrı yazılır ki uzun adda kesilmesin.
+                        if (channels.size > 1) Text((ch + 1).toString(), color = if (on) Teal else Dim, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                    }
+                }
             }
         }
     }

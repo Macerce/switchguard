@@ -49,8 +49,9 @@ class SummaryReceiver : BroadcastReceiver() {
         val result = goAsync()
         Thread {
             try {
-                DailySummary.build(context)?.let { lines ->
-                    Notifier(context, Store.get(context)).notifySummary(context.getString(R.string.summary_title), lines)
+                // Hiç kayıt yoksa (izleme bugün çalışmadıysa) bildirim gönderilmez.
+                if (DailySummary.build(context) != null) {
+                    Notifier(context, Store.get(context)).notifySummary(context.getString(R.string.summary_title), Briefing.summaryLines(context))
                 }
             } finally {
                 SummaryScheduler.schedule(context)

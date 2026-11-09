@@ -11,6 +11,23 @@ object ChatCommand {
         data class Switch(val on: Boolean, val targets: List<String>) : Intent()
         /** Tek cümlede hem aç hem kapat: "mutfağı aç, salonu kapat". Adımlar söyleniş sırasıyla. */
         data class Batch(val steps: List<Switch>) : Intent()
+        /**
+         * Süreli komut. [hold] false: [seconds] sonra aç/kapat ("10 dakika sonra kapat").
+         * [hold] true: şimdi aç/kapat, [seconds] sonra tersine çevir ("20 dakikalığına aç").
+         */
+        data class Timed(val on: Boolean, val targets: List<String>, val seconds: Int, val hold: Boolean) : Intent()
+        /** "Hepsini kapat": bütün cihazlar; yürütülmeden önce onay istenir. */
+        data class SwitchAll(val on: Boolean) : Intent()
+        /** Onay bekleyen işleme "evet" / "hayır". */
+        data class Confirm(val yes: Boolean) : Intent()
+        /** "Sulama döngüsünü başlat / durdur". */
+        data class RunCycle(val start: Boolean, val query: String) : Intent()
+        /** "Neler açık?" */
+        data object WhatsOn : Intent()
+        /** Şu anki durumun sözlü özeti: hava, açık cihazlar, yakında çalışacak işler. */
+        data object Briefing : Intent()
+        /** Günün özeti. */
+        data object Summary : Intent()
         /** Boş sorgu = genel durum. */
         data class Status(val query: String) : Intent()
         /** Boş sorgu = güç ölçen bütün cihazlar. */
@@ -37,6 +54,13 @@ object ChatCommand {
         "one" to "1", "first" to "1", "two" to "2", "second" to "2", "three" to "3", "third" to "3", "four" to "4", "fourth" to "4",
     )
     private val CHANNEL = listOf("kanal", "channel", "numara", "number", "nolu")
+    private val YES = setOf("evet", "onayla", "onay", "onayliyorum", "tamam", "yes", "confirm", "ok", "okay", "sure")
+    private val NO = setOf("hayir", "iptal", "vazgec", "vazgectim", "no", "cancel", "nope")
+    /** "her şeyi", "tüm cihazları", "everything": [ALL] ile birlikte hedefin tamamıysa bütün cihazlar. */
+    private val EVERYTHING = setOf("her", "sey", "seyi", "cihaz", "cihazi", "cihazlar", "cihazlari", "device", "devices", "of", "them")
+    private val CYCLE = listOf("dongu", "zamanlayici", "cycle", "timer")
+    private val AMOUNTS = mapOf("yarim" to 0.5, "half" to 0.5, "bir" to 1.0, "iki" to 2.0, "uc" to 3.0, "dort" to 4.0, "bes" to 5.0,
+        "a" to 1.0, "an" to 1.0, "one" to 1.0, "two" to 2.0, "three" to 3.0, "four" to 4.0, "five" to 5.0, "ten" to 10.0)
     private val ALL = setOf("tum", "tumu", "tumunu", "butun", "hepsi", "hepsini", "all", "every", "everything")
     private val FILLER = setOf(
         "turn", "switch", "lutfen", "please", "the", "misin", "musun", "mi", "mu", "bir", "da", "de", "su", "simdi", "now", "and", "ve",
@@ -72,6 +96,18 @@ object ChatCommand {
         if (words.isEmpty()) return null
         if (words.size <= 2 && words.any { it in setOf("yardim", "help", "komutlar", "commands") }) return Intent.Help
         if (words.size <= 2 && words.any { it == "gordum" || it == "ack" }) return Intent.Ack
+        if (words.size <= 2 && words.all { it in YES }) return Intent.Confirm(true)
+        if (words.size <= 2 && words.all { it in NO }) return Intent.Confirm(false)
+        if (words.any { it.startsWith("brif") || it.startsWith("brief") } || ("neler" in words && "oluyor" in words) ||
+            ("going" in words && "on" in words)) return Intent.Briefing
+        if (words.any { it.startsWith("ozet") || it == "summary" }) {
+            return if (words.any { it.startsWith("durum") || it == "status" }) Intent.Briefing else Intent.Summary
+        }
+        if ("bugun" in words && words.any { it == "oldu" || it == "olmus" }) return Intent.Summary
+        if (words.any { it in setOf("neler", "hangi", "hangileri", "hangisi", "what", "whats", "which") } && words.any { it == "acik" || it == "on" }) {
+            return Intent.WhatsOn
+        }
+        if ("acik" in words && words.any { it.startsWith("olan") }) return Intent.WhatsOn
         if (words.size <= 3 && words.any { it in HOME }) return Intent.SetPresence(false)
         if (words.size <= 3 && words.any { it in AWAY }) return Intent.SetPresence(true)
         val on = words.any { it in ON }
@@ -83,8 +119,20 @@ object ChatCommand {
         if (words.any { it in SCENE } && words.any { it.startsWith("sahne") || it == "scene" }) {
             return Intent.RunScene(strip(words, SCENE))
         }
+        if ((on || off) && words.any { w -> CYCLE.any { w.startsWith(it) } }) {
+            if (on == off) return null
+            return Intent.RunCycle(on, words.filterNot { w -> w in ON || w in OFF || w in FILLER || CYCLE.any { w.startsWith(it) } }.joinToString(" "))
+        }
         if (on || off) {
-            val steps = clauses(t)
+            val timed = duration(t)
+            val steps = clauses(timed?.rest ?: t)
+            val everything = steps.size == 1 && steps[0].targets.size == 1 &&
+                DeviceKinds.words(steps[0].targets[0]).let { w -> w.any { it in ALL || it == "sey" || it == "seyi" } && w.all { it in ALL || it in EVERYTHING } }
+            if (timed != null) {
+                // Süreli komut tek yönlü olmalı; karışık ya da "hepsini" ile süre birlikte anlaşılmaz sayılır.
+                return if (steps.size == 1 && !everything) Intent.Timed(steps[0].on, steps[0].targets, timed.seconds, timed.hold) else null
+            }
+            if (everything) return Intent.SwitchAll(steps[0].on)
             if (steps.size == 1) return steps[0]
             if (steps.size > 1) return Intent.Batch(steps)
         }
@@ -125,6 +173,47 @@ object ChatCommand {
             if (last != null && last.on == on) steps[steps.size - 1] = last.copy(targets = last.targets + targets) else steps += Intent.Switch(on, targets)
         }
         return steps
+    }
+
+    private class Duration(val seconds: Int, val hold: Boolean, val rest: String)
+
+    private fun unit(w: String): Int = when {
+        w.startsWith("saniye") || w in setOf("sn", "sec", "secs", "second", "seconds") -> 1
+        w.startsWith("dakika") || w in setOf("dk", "min", "mins", "minute", "minutes") -> 60
+        w.startsWith("saat") || w in setOf("hour", "hours", "hr", "hrs") -> 3600
+        else -> 0
+    }
+
+    /**
+     * Cümledeki süreyi bulur ve çıkarır: "10 dakika sonra", "yarım saat sonra", "in 10 minutes" (gecikme);
+     * "20 dakikalığına", "1 saat boyunca", "for 20 minutes" (o süre boyunca). Süre yoksa ya da yönü belli değilse null.
+     */
+    private fun duration(text: String): Duration? {
+        val tokens = text.trim().split(Regex("""\s+"""))
+        val norm = tokens.map { DeviceKinds.words(it).joinToString("") }
+        for (i in 1 until tokens.size) {
+            val u = unit(norm[i])
+            if (u == 0) continue
+            var first = i - 1
+            var amount = norm[first].toDoubleOrNull() ?: AMOUNTS[norm[first]] ?: continue
+            // "half an hour"
+            if (norm[first] in setOf("a", "an") && first > 0 && norm[first - 1] == "half") { first--; amount = 0.5 }
+            var last = i
+            val before = norm.getOrNull(first - 1)
+            val after = norm.getOrNull(i + 1)
+            val hold: Boolean
+            when {
+                norm[i].endsWith("ligina") || norm[i].endsWith("ligine") -> hold = true
+                after in setOf("boyunca", "sureyle", "sureligine") -> { hold = true; last = i + 1 }
+                after == "sonra" || after == "later" -> { hold = false; last = i + 1 }
+                before == "for" -> { hold = true; first-- }
+                before == "in" || before == "after" -> { hold = false; first-- }
+                else -> continue
+            }
+            val seconds = (amount * u).toLong().coerceIn(Cycle.MIN_STEP_SECONDS.toLong(), Cycle.MAX_STEP_SECONDS.toLong()).toInt()
+            return Duration(seconds, hold, tokens.filterIndexed { j, _ -> j < first || j > last }.joinToString(" "))
+        }
+        return null
     }
 
     /** Hedef sözleri; sondaki "bir" kanal numarası olabilir ("pompa bir"), başka yerde dolgu ("şunu bir aç"). */
