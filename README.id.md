@@ -23,8 +23,8 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 - **Penginstal**: [rilis Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — unduh `SwitchGuard-x.y.z-Kurulum.exe` dari rilis terbaru lalu jalankan. Aplikasi mencari versi baru sendiri dan memperbarui diri dengan satu klik; pengaturan tetap tersimpan.
 
 ### Gratis dan Pro
-- Gratis: semua fitur, untuk 1 perangkat yang dipantau. Perangkat demo memungkinkan Anda mencoba semuanya tanpa perangkat keras.
-- Android: Pro adalah pembelian sekali di Google Play (tanpa langganan) dan memantau semua perangkat; ikut pindah ke ponsel baru bersama akun Google Anda.
+- Android: sepenuhnya gratis — semua fitur, semua perangkat dipantau, tanpa pembelian. Perangkat demo memungkinkan Anda mencoba semuanya tanpa perangkat keras.
+- Windows gratis: semua fitur, untuk 1 perangkat yang dipantau.
 - Windows: kunci lisensi Pro (Setelan → kartu paket) memantau semua perangkat. Untuk mendapatkan kunci, hubungi **switchguardapp@gmail.com**
 
 ## Persyaratan
@@ -136,12 +136,11 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 
 ### Beberapa perangkat
 
-Ponsel, tablet, Android TV, dan PC: **setiap perangkat memerlukan akun eWeLink sendiri dengan fitur developer yang disetujui, dan kunci API milik akun itu (App ID / Secret)** — eWeLink hanya mengizinkan satu perangkat masuk per akun. Bagikan perangkat Anda ke akun tambahan dari aplikasi eWeLink. Kunci Tuya bisa dipakai di beberapa perangkat. Pro dibeli sekali dan berlaku di semua perangkat Android dengan akun Google yang sama. Detail: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Ponsel, tablet, Android TV, dan PC: **setiap perangkat memerlukan akun eWeLink sendiri dengan fitur developer yang disetujui, dan kunci API milik akun itu (App ID / Secret)** — eWeLink hanya mengizinkan satu perangkat masuk per akun. Bagikan perangkat Anda ke akun tambahan dari aplikasi eWeLink. Kunci Tuya bisa dipakai di beberapa perangkat. Detail: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo & Pro
+### Demo
 
 - **Perangkat demo** — Perangkat virtual untuk mencoba semua fitur. Ini bertindak seolah-olah sesuatu terjadi pada perangkat itu sendiri (seseorang menyalakannya, listrik atau Wi-Fi padam), sehingga aturan Anda berlaku dan alarm dapat berbunyi. Menyalakan lewat tombol di atas dianggap tindakan Anda dan tidak membunyikan alarm.
-- Versi gratis memantau 1 perangkat. Pro memantau semua perangkat Anda, dengan semua fitur. Sekali bayar, tanpa langganan. Terhubung ke akun Google Anda, sehingga ikut pindah ke ponsel baru.
 
 ## Semua setelan
 
@@ -151,8 +150,6 @@ Semuanya sesuai urutan di aplikasi. Tab **Pengaturan** berisi koneksi dan opsi a
 
 | Setelan | Fungsinya |
 |---|---|
-| Pro / Dapatkan Pro | Versi gratis memantau 1 perangkat. Pro memantau semua perangkat Anda, dengan semua fitur. Sekali bayar, tanpa langganan. Terhubung ke akun Google Anda, sehingga ikut pindah ke ponsel baru. |
-| Pulihkan | Memeriksa ulang pembelian Google Play Anda (ponsel baru, pasang ulang). |
 | eWeLink — Masuk dengan eWeLink | Membuka halaman masuk eWeLink sendiri; aplikasi tidak pernah melihat kata sandi Anda. |
 | Kredensial API | App ID, App Secret, dan wilayah aplikasi developer eWeLink Anda. |
 | Keluar | Pemantauan akan berhenti. Pengaturan dan riwayat Anda tetap tersimpan. |
@@ -371,7 +368,6 @@ Nama perintah bahasa Inggris dan Turki sama-sama berfungsi (mis. /status = /duru
 - Aplikasi hanya berkomunikasi dengan cloud yang Anda hubungkan (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) dan, hanya jika Anda memakainya, dengan Telegram, Open-Meteo (suhu dan cuaca; lokasi dibulatkan sekitar 100 m), dan ubin peta OpenStreetMap.
 - Kata sandi eWeLink Anda diketik di halaman eWeLink sendiri; aplikasi tidak pernah melihatnya.
 - Data aplikasi dikecualikan dari cadangan cloud Android; cadangan file dilindungi kata sandi; transfer Wi-Fi dienkripsi dengan kode sekali pakai dan tetap di jaringan rumah Anda.
-- Pembelian Pro ditangani oleh Google Play.
 
 Kebijakan privasi lengkap: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

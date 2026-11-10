@@ -23,8 +23,8 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 - **Trình cài đặt**: [các bản Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — tải `SwitchGuard-x.y.z-Kurulum.exe` của bản mới nhất rồi chạy. Ứng dụng tự tìm bản mới và cập nhật chỉ với một cú nhấp; cài đặt được giữ nguyên.
 
 ### Miễn phí và Pro
-- Miễn phí: mọi tính năng, cho 1 thiết bị được theo dõi. Thiết bị demo cho phép thử mọi thứ mà không cần phần cứng.
-- Android: Pro là giao dịch mua một lần trên Google Play (không đăng ký) và theo dõi mọi thiết bị; đi theo tài khoản Google của bạn sang điện thoại mới.
+- Android: hoàn toàn miễn phí — mọi tính năng, theo dõi mọi thiết bị, không cần mua. Thiết bị demo cho phép thử mọi thứ mà không cần phần cứng.
+- Windows miễn phí: mọi tính năng, cho 1 thiết bị được theo dõi.
 - Windows: khóa giấy phép Pro (Cài đặt → thẻ gói) theo dõi mọi thiết bị. Để nhận khóa, liên hệ **switchguardapp@gmail.com**
 
 ## Yêu cầu
@@ -136,12 +136,11 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 
 ### Nhiều thiết bị
 
-Điện thoại, máy tính bảng, Android TV và PC: **mỗi thiết bị cần một tài khoản eWeLink riêng đã được duyệt tính năng nhà phát triển, và khóa API riêng của tài khoản đó (App ID / Secret)** — eWeLink chỉ cho một thiết bị đăng nhập trên mỗi tài khoản. Hãy chia sẻ thiết bị cho tài khoản bổ sung trong ứng dụng eWeLink. Khóa Tuya có thể dùng trên nhiều thiết bị. Pro mua một lần và dùng được trên mọi thiết bị Android cùng tài khoản Google. Chi tiết: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Điện thoại, máy tính bảng, Android TV và PC: **mỗi thiết bị cần một tài khoản eWeLink riêng đã được duyệt tính năng nhà phát triển, và khóa API riêng của tài khoản đó (App ID / Secret)** — eWeLink chỉ cho một thiết bị đăng nhập trên mỗi tài khoản. Hãy chia sẻ thiết bị cho tài khoản bổ sung trong ứng dụng eWeLink. Khóa Tuya có thể dùng trên nhiều thiết bị. Chi tiết: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo & Pro
+### Demo
 
 - **Thiết bị demo** — Thiết bị ảo để thử mọi tính năng. Các nút này hoạt động như thể có điều gì đó xảy ra ngay tại thiết bị (ai đó bật/tắt, mất điện hoặc mất Wi-Fi), nên các quy tắc của bạn được áp dụng và báo động có thể kêu. Bật/tắt bằng các nút phía trên được tính là do bạn thực hiện và không làm báo động kêu.
-- Bản miễn phí giám sát 1 thiết bị. Pro giám sát tất cả thiết bị của bạn, với đầy đủ tính năng. Thanh toán một lần, không đăng ký. Gắn với tài khoản Google của bạn nên sẽ đi cùng bạn sang điện thoại mới.
 
 ## Tất cả cài đặt
 
@@ -151,8 +150,6 @@ Mọi thứ theo đúng thứ tự trong ứng dụng. Thẻ **Cài đặt** ch�
 
 | Cài đặt | Tác dụng |
 |---|---|
-| Pro / Nhận Pro | Bản miễn phí giám sát 1 thiết bị. Pro giám sát tất cả thiết bị của bạn, với đầy đủ tính năng. Thanh toán một lần, không đăng ký. Gắn với tài khoản Google của bạn nên sẽ đi cùng bạn sang điện thoại mới. |
-| Khôi phục | Kiểm tra lại các giao dịch mua trên Google Play (điện thoại mới, cài lại). |
 | eWeLink — Đăng nhập bằng eWeLink | Mở trang đăng nhập riêng của eWeLink; ứng dụng không bao giờ thấy mật khẩu của bạn. |
 | Thông tin xác thực API | App ID, App Secret và khu vực của ứng dụng nhà phát triển eWeLink. |
 | Đăng xuất | Giám sát sẽ dừng. Cài đặt và lịch sử của bạn được giữ lại. |
@@ -371,7 +368,6 @@ Cả tên lệnh tiếng Anh và tiếng Thổ Nhĩ Kỳ đều dùng được (
 - Ứng dụng chỉ kết nối với các đám mây bạn liên kết (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) và, chỉ khi bạn dùng, với Telegram, Open-Meteo (nhiệt độ và thời tiết; vị trí làm tròn khoảng 100 m) và ô bản đồ OpenStreetMap.
 - Mật khẩu eWeLink được nhập trên trang của chính eWeLink; ứng dụng không bao giờ thấy nó.
 - Dữ liệu ứng dụng không nằm trong sao lưu đám mây của Android; bản sao lưu ra tệp có mật khẩu; chuyển qua Wi-Fi được mã hóa bằng mã dùng một lần và không ra khỏi mạng gia đình.
-- Giao dịch mua Pro do Google Play xử lý.
 
 Chính sách quyền riêng tư đầy đủ: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

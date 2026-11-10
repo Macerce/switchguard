@@ -23,8 +23,8 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - **Kurulum**: [Windows sürümleri](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — en yenisinin `SwitchGuard-x.y.z-Kurulum.exe` dosyasını indirip çalıştırın. Uygulama yeni sürümleri kendisi bulur ve tek tıkla günceller; ayarlar korunur.
 
 ### Ücretsiz ve Pro
-- Ücretsiz: tüm özellikler, 1 izlenen cihaz için. Demo cihazlarla donanım olmadan her şeyi deneyebilirsiniz.
-- Android: Pro, Google Play'den tek seferlik satın alınır (abonelik yok) ve tüm cihazları izler; Google hesabınızla yeni telefona taşınır.
+- Android: tamamen ücretsiz — tüm özellikler, tüm cihazlar izlenir, satın alma yok. Demo cihazlarla donanım olmadan her şeyi deneyebilirsiniz.
+- Windows ücretsiz sürüm: tüm özellikler, 1 izlenen cihaz için.
 - Windows: Pro lisans anahtarı (Ayarlar → plan kartı) tüm cihazları izler. Anahtar için: **switchguardapp@gmail.com**
 
 ## Gereksinimler
@@ -136,12 +136,11 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 
 ### Birden fazla cihaz
 
-Telefon, tablet, Android TV ve bilgisayar: **her cihazın geliştirici özelliği onaylanmış kendi eWeLink hesabı ve o hesabın kendi API anahtarları (App ID / Secret) olmalı** — eWeLink her hesapta tek oturum açık cihaza izin verir. Cihazlarınızı eWeLink uygulamasından ek hesaba paylaşın. Tuya anahtarları birden çok cihazda kullanılabilir. Pro bir kez alınır ve aynı Google hesabındaki tüm Android cihazlarda çalışır. Ayrıntılar: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefon, tablet, Android TV ve bilgisayar: **her cihazın geliştirici özelliği onaylanmış kendi eWeLink hesabı ve o hesabın kendi API anahtarları (App ID / Secret) olmalı** — eWeLink her hesapta tek oturum açık cihaza izin verir. Cihazlarınızı eWeLink uygulamasından ek hesaba paylaşın. Tuya anahtarları birden çok cihazda kullanılabilir. Ayrıntılar: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo ve Pro
+### Demo
 
 - **Demo cihazlar** — Tüm özellikleri denemek için sanal cihazlar. Bunlar cihazın kendisinde bir şey olmuş gibi davranır (biri cihazı açtı/kapattı, elektrik ya da Wi-Fi gitti); kurallarınız uygulanır ve alarm çalabilir. Yukarıdaki düğmelerle açıp kapatmak sizin işleminiz sayılır, alarm çaldırmaz.
-- Ücretsiz sürüm 1 cihazı izler. Pro tüm cihazlarınızı, bütün özellikleriyle izler. Tek seferlik ödeme, abonelik yok. Google hesabınıza bağlıdır; telefon değiştirseniz de geçerli.
 
 ## Tüm ayarlar
 
@@ -151,8 +150,6 @@ Aşağıdakilerin hepsi uygulamadaki sırayla. **Ayarlar** sekmesinde bağlantı
 
 | Ayar | Ne işe yarar |
 |---|---|
-| Pro / Pro'ya geç | Ücretsiz sürüm 1 cihazı izler. Pro tüm cihazlarınızı, bütün özellikleriyle izler. Tek seferlik ödeme, abonelik yok. Google hesabınıza bağlıdır; telefon değiştirseniz de geçerli. |
-| Geri yükle | Google Play satın alımlarınızı yeniden kontrol eder (yeni telefon, yeniden kurulum). |
 | eWeLink — eWeLink ile giriş yap | eWeLink'in kendi giriş sayfasını açar; uygulama şifrenizi hiç görmez. |
 | API bilgileri | eWeLink geliştirici uygulamanızın App ID, App Secret ve bölgesi. |
 | Çıkış yap | İzleme duracak. Ayarlarınız ve geçmişiniz korunur. |
@@ -371,7 +368,6 @@ Türkçe ve İngilizce komut adlarının ikisi de çalışır (ör. /durum = /st
 - Uygulama yalnızca bağladığınız bulutlarla (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) ve yalnızca kullanırsanız Telegram, Open-Meteo (sıcaklık ve hava durumu; konum yaklaşık 100 m'ye yuvarlanır) ve OpenStreetMap harita karolarıyla konuşur.
 - eWeLink şifreniz eWeLink'in kendi sayfasına yazılır; uygulama onu hiç görmez.
 - Uygulama verileri Android bulut yedeğine dahil edilmez; dosya yedekleri şifreyle korunur; Wi-Fi aktarımı tek seferlik kodla şifrelenir ve ev ağınızdan çıkmaz.
-- Pro satın alımlarını Google Play yönetir.
 
 Gizlilik politikasının tamamı: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

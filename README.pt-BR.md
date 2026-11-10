@@ -23,8 +23,8 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 - **Instalador**: [versões para Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — baixe `SwitchGuard-x.y.z-Kurulum.exe` da mais recente e execute. O app procura novas versões e se atualiza com um clique; as configurações são mantidas.
 
 ### Grátis e Pro
-- Grátis: todos os recursos, para 1 dispositivo monitorado. Os dispositivos de demonstração permitem testar tudo sem hardware.
-- Android: o Pro é uma compra única no Google Play (sem assinatura) e monitora todos os dispositivos; acompanha sua conta Google para um celular novo.
+- Android: totalmente grátis — todos os recursos, todos os dispositivos monitorados, sem compras. Os dispositivos de demonstração permitem testar tudo sem hardware.
+- Windows grátis: todos os recursos, para 1 dispositivo monitorado.
 - Windows: uma chave de licença Pro (Configurações → cartão do plano) monitora todos os dispositivos. Para obter uma chave: **switchguardapp@gmail.com**
 
 ## Requisitos
@@ -136,12 +136,11 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 
 ### Vários dispositivos
 
-Celular, tablet, Android TV e PC: **cada dispositivo precisa da própria conta eWeLink com o recurso de desenvolvedor aprovado e das chaves de API dessa conta (App ID / Secret)** — a eWeLink permite um dispositivo conectado por conta. Compartilhe seus dispositivos com a conta extra no app eWeLink. As chaves Tuya podem ser usadas em vários dispositivos. O Pro é comprado uma vez e vale em todos os dispositivos Android com a mesma conta Google. Detalhes: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Celular, tablet, Android TV e PC: **cada dispositivo precisa da própria conta eWeLink com o recurso de desenvolvedor aprovado e das chaves de API dessa conta (App ID / Secret)** — a eWeLink permite um dispositivo conectado por conta. Compartilhe seus dispositivos com a conta extra no app eWeLink. As chaves Tuya podem ser usadas em vários dispositivos. Detalhes: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo e Pro
+### Demo
 
 - **Dispositivos de demonstração** — Dispositivos virtuais para experimentar todos os recursos. Eles agem como se algo tivesse acontecido no próprio dispositivo (alguém o acionou, a energia ou o Wi-Fi caiu), então suas regras se aplicam e o alarme pode tocar. Acionar pelos botões acima conta como você e não toca o alarme.
-- A versão gratuita monitora 1 dispositivo. O Pro monitora todos os seus dispositivos, com todos os recursos. Pagamento único, sem assinatura. Vinculado à sua conta Google, então vai com você para um novo celular.
 
 ## Todas as configurações
 
@@ -151,8 +150,6 @@ Tudo na ordem do app. A aba **Ajustes** reúne conexões e opções do app; alar
 
 | Configuração | Para que serve |
 |---|---|
-| Pro / Obter o Pro | A versão gratuita monitora 1 dispositivo. O Pro monitora todos os seus dispositivos, com todos os recursos. Pagamento único, sem assinatura. Vinculado à sua conta Google, então vai com você para um novo celular. |
-| Restaurar | Verifica de novo suas compras no Google Play (celular novo, reinstalação). |
 | eWeLink — Entrar com eWeLink | Abre a própria página de login da eWeLink; o app nunca vê sua senha. |
 | Credenciais da API | App ID, App Secret e região do seu app de desenvolvedor eWeLink. |
 | Sair | O monitoramento será interrompido. Seus ajustes e histórico são mantidos. |
@@ -371,7 +368,6 @@ Os nomes de comando em inglês e em turco funcionam (ex.: /status = /durum, /on 
 - O app só fala com as nuvens que você conecta (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) e, só se você usar, com Telegram, Open-Meteo (temperatura e clima; localização arredondada para cerca de 100 m) e blocos de mapa do OpenStreetMap.
 - Sua senha eWeLink é digitada na própria página da eWeLink; o app nunca a vê.
 - Os dados do app ficam fora do backup em nuvem do Android; backups em arquivo são protegidos por senha; a transferência por Wi-Fi é criptografada com um código de uso único e não sai da sua rede doméstica.
-- As compras do Pro são processadas pelo Google Play.
 
 Política de privacidade completa: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

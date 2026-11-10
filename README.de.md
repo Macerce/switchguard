@@ -23,8 +23,8 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 - **Installationsprogramm**: [Windows-Versionen](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — lade `SwitchGuard-x.y.z-Kurulum.exe` der neuesten Version herunter und starte sie. Die App sucht selbst nach neuen Versionen und aktualisiert sich mit einem Klick; die Einstellungen bleiben erhalten.
 
 ### Kostenlos und Pro
-- Kostenlos: alle Funktionen für 1 überwachtes Gerät. Mit Demo-Geräten kannst du alles ohne Hardware ausprobieren.
-- Android: Pro ist ein einmaliger Kauf in Google Play (kein Abo) und überwacht alle Geräte; es zieht mit deinem Google-Konto auf ein neues Handy um.
+- Android: komplett kostenlos — alle Funktionen, alle Geräte überwacht, keine Käufe. Mit Demo-Geräten kannst du alles ohne Hardware ausprobieren.
+- Windows kostenlos: alle Funktionen für 1 überwachtes Gerät.
 - Windows: Ein Pro-Lizenzschlüssel (Einstellungen → Tarifkarte) überwacht alle Geräte. Schlüssel gibt es über **switchguardapp@gmail.com**
 
 ## Voraussetzungen
@@ -136,12 +136,11 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 
 ### Mehrere Geräte
 
-Handy, Tablet, Android TV und PC: **Jedes Gerät braucht ein eigenes eWeLink-Konto mit freigeschalteter Entwicklerfunktion und den eigenen API-Schlüsseln dieses Kontos (App ID / Secret)** — eWeLink erlaubt pro Konto nur ein angemeldetes Gerät. Gib deine Geräte in der eWeLink-App für das zusätzliche Konto frei. Tuya-Schlüssel können auf mehreren Geräten genutzt werden. Pro wird einmal gekauft und gilt auf allen Android-Geräten mit demselben Google-Konto. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Handy, Tablet, Android TV und PC: **Jedes Gerät braucht ein eigenes eWeLink-Konto mit freigeschalteter Entwicklerfunktion und den eigenen API-Schlüsseln dieses Kontos (App ID / Secret)** — eWeLink erlaubt pro Konto nur ein angemeldetes Gerät. Gib deine Geräte in der eWeLink-App für das zusätzliche Konto frei. Tuya-Schlüssel können auf mehreren Geräten genutzt werden. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo & Pro
+### Demo
 
 - **Demo-Geräte** — Virtuelle Geräte, um alle Funktionen auszuprobieren. Diese verhalten sich, als wäre am Gerät selbst etwas passiert (jemand hat es geschaltet, Strom oder WLAN ist ausgefallen), daher gelten deine Regeln und der Alarm kann läuten. Schalten mit den Tasten oben zählt als deine Aktion und löst keinen Alarm aus.
-- Die kostenlose Version überwacht 1 Gerät. Pro überwacht alle deine Geräte, mit allen Funktionen. Einmalige Zahlung, kein Abo. An dein Google-Konto gebunden, daher zieht es mit dir auf ein neues Handy um.
 
 ## Alle Einstellungen
 
@@ -151,8 +150,6 @@ Alles in der Reihenfolge der App. Der Tab **Einstellungen** enthält Verbindunge
 
 | Einstellung | Wozu |
 |---|---|
-| Pro / Pro holen | Die kostenlose Version überwacht 1 Gerät. Pro überwacht alle deine Geräte, mit allen Funktionen. Einmalige Zahlung, kein Abo. An dein Google-Konto gebunden, daher zieht es mit dir auf ein neues Handy um. |
-| Wiederherstellen | Prüft deine Google-Play-Käufe erneut (neues Handy, Neuinstallation). |
 | eWeLink — Mit eWeLink anmelden | Öffnet die eigene Anmeldeseite von eWeLink; die App sieht dein Passwort nie. |
 | API-Zugangsdaten | App ID, App Secret und Region deiner eWeLink-Entwickler-App. |
 | Abmelden | Die Überwachung wird beendet. Deine Einstellungen und der Verlauf bleiben erhalten. |
@@ -371,7 +368,6 @@ Englische und türkische Befehlsnamen funktionieren beide (z. B. /status = /duru
 - Die App spricht nur mit den verbundenen Clouds (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) und, nur wenn du sie nutzt, mit Telegram, Open-Meteo (Temperatur und Wetter, Standort auf ca. 100 m gerundet) und OpenStreetMap-Kartenkacheln.
 - Dein eWeLink-Passwort gibst du auf der eigenen Seite von eWeLink ein; die App sieht es nie.
 - App-Daten sind von der Android-Cloud-Sicherung ausgeschlossen; Datei-Sicherungen sind passwortgeschützt; die WLAN-Übertragung ist mit einem Einmalcode verschlüsselt und bleibt im Heimnetz.
-- Pro-Käufe wickelt Google Play ab.
 
 Vollständige Datenschutzerklärung: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

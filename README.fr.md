@@ -23,8 +23,8 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 - **Programme d'installation**: [versions Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — téléchargez `SwitchGuard-x.y.z-Kurulum.exe` de la plus récente et lancez-le. L'application cherche elle-même les nouvelles versions et se met à jour en un clic ; les réglages sont conservés.
 
 ### Gratuit et Pro
-- Gratuit : toutes les fonctions, pour 1 appareil surveillé. Les appareils de démonstration permettent de tout essayer sans matériel.
-- Android : Pro est un achat unique sur Google Play (sans abonnement) et surveille tous les appareils ; il vous suit sur un nouveau téléphone avec votre compte Google.
+- Android : entièrement gratuit — toutes les fonctions, tous les appareils surveillés, sans achat. Les appareils de démonstration permettent de tout essayer sans matériel.
+- Windows gratuit : toutes les fonctions, pour 1 appareil surveillé.
 - Windows : une clé de licence Pro (Paramètres → carte de l'offre) surveille tous les appareils. Pour obtenir une clé : **switchguardapp@gmail.com**
 
 ## Configuration requise
@@ -136,12 +136,11 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 
 ### Plusieurs appareils
 
-Téléphone, tablette, Android TV et PC : **chaque appareil a besoin de son propre compte eWeLink avec la fonction développeur approuvée, et des clés API de ce compte (App ID / Secret)** — eWeLink n'autorise qu'un appareil connecté par compte. Partagez vos appareils avec le compte supplémentaire depuis l'application eWeLink. Les clés Tuya peuvent servir sur plusieurs appareils. Pro s'achète une fois et fonctionne sur tous les appareils Android du même compte Google. Détails : [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Téléphone, tablette, Android TV et PC : **chaque appareil a besoin de son propre compte eWeLink avec la fonction développeur approuvée, et des clés API de ce compte (App ID / Secret)** — eWeLink n'autorise qu'un appareil connecté par compte. Partagez vos appareils avec le compte supplémentaire depuis l'application eWeLink. Les clés Tuya peuvent servir sur plusieurs appareils. Détails : [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Démo et Pro
+### Démo
 
 - **Appareils de démo** — Appareils virtuels pour essayer toutes les fonctions. Ces boutons agissent comme si quelque chose s'était produit sur l'appareil lui-même (quelqu'un l'a actionné, le courant ou le Wi-Fi a été coupé) : vos règles s'appliquent et l'alarme peut sonner. Actionner les boutons ci-dessus compte comme vous et ne déclenche pas l'alarme.
-- La version gratuite surveille 1 appareil. Pro surveille tous vos appareils, avec toutes les fonctions. Paiement unique, sans abonnement. Lié à votre compte Google, il vous suit donc sur un nouveau téléphone.
 
 ## Tous les réglages
 
@@ -151,8 +150,6 @@ Tout est dans l'ordre de l'application. L'onglet **Réglages** regroupe les conn
 
 | Réglage | À quoi il sert |
 |---|---|
-| Pro / Obtenir Pro | La version gratuite surveille 1 appareil. Pro surveille tous vos appareils, avec toutes les fonctions. Paiement unique, sans abonnement. Lié à votre compte Google, il vous suit donc sur un nouveau téléphone. |
-| Restaurer | Vérifie à nouveau vos achats Google Play (nouveau téléphone, réinstallation). |
 | eWeLink — Se connecter avec eWeLink | Ouvre la page de connexion d'eWeLink elle-même ; l'application ne voit jamais votre mot de passe. |
 | Identifiants API | App ID, App Secret et région de votre application développeur eWeLink. |
 | Se déconnecter | La surveillance s'arrêtera. Vos réglages et votre historique sont conservés. |
@@ -371,7 +368,6 @@ Les noms de commande anglais et turcs fonctionnent tous les deux (p. ex. /status
 - L'application ne communique qu'avec les clouds que vous connectez (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) et, seulement si vous les utilisez, avec Telegram, Open-Meteo (température et météo ; position arrondie à environ 100 m) et les tuiles de carte OpenStreetMap.
 - Votre mot de passe eWeLink se saisit sur la page d'eWeLink elle-même ; l'application ne le voit jamais.
 - Les données de l'application sont exclues de la sauvegarde cloud d'Android ; les sauvegardes en fichier sont protégées par mot de passe ; le transfert Wi-Fi est chiffré par un code à usage unique et reste dans votre réseau domestique.
-- Les achats Pro sont gérés par Google Play.
 
 Politique de confidentialité complète: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

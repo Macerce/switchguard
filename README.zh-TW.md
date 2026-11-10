@@ -23,8 +23,8 @@ SwitchGuard 會監控你自己的 **eWeLink / SONOFF** 與 **Tuya / Smart Life**
 - **安裝程式**: [Windows 版本](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — 從最新版本下載 `SwitchGuard-x.y.z-Kurulum.exe` 並執行。應用程式會自行尋找新版本並一鍵更新；設定會保留。
 
 ### 免費版與 Pro
-- 免費：所有功能，可監控 1 台裝置。示範裝置讓你不需硬體也能試用所有功能。
-- Android：Pro 是 Google Play 上的一次性購買（無訂閱），可監控所有裝置；會跟著 Google 帳號轉移到新手機。
+- Android：完全免費 — 所有功能，監控所有裝置，無需購買。示範裝置讓你不需硬體也能試用所有功能。
+- Windows 免費版：所有功能，可監控 1 台裝置。
 - Windows：Pro 授權金鑰（設定 → 方案卡片）可監控所有裝置。索取金鑰請聯絡 **switchguardapp@gmail.com**
 
 ## 系統需求
@@ -136,12 +136,11 @@ SwitchGuard 會監控你自己的 **eWeLink / SONOFF** 與 **Tuya / Smart Life**
 
 ### 多台裝置
 
-手機、平板、Android TV 和電腦：**每台裝置都需要自己的 eWeLink 帳號（已核准開發者功能）以及該帳號自己的 API 金鑰（App ID / Secret）**——eWeLink 每個帳號只允許一台裝置登入。請在 eWeLink 應用程式中將裝置分享給額外的帳號。Tuya 金鑰可在多台裝置上使用。Pro 只需購買一次，可在同一 Google 帳號的所有 Android 裝置上使用。詳情： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+手機、平板、Android TV 和電腦：**每台裝置都需要自己的 eWeLink 帳號（已核准開發者功能）以及該帳號自己的 API 金鑰（App ID / Secret）**——eWeLink 每個帳號只允許一台裝置登入。請在 eWeLink 應用程式中將裝置分享給額外的帳號。Tuya 金鑰可在多台裝置上使用。詳情： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### 示範與 Pro
+### 示範
 
 - **示範裝置** — 可試用所有功能的虛擬裝置。這些操作會模擬裝置本身發生了狀況（有人操作了開關、斷電或 Wi-Fi 中斷），因此您的規則會生效，警報也可能響鈴。用上方按鈕操作視同您本人操作，不會觸發警報。
-- 免費版可監控 1 個裝置。Pro 版可監控您所有的裝置，並提供全部功能。一次付費，無需訂閱。與您的 Google 帳號綁定，換新手機時也能一併帶走。
 
 ## 所有設定
 
@@ -151,8 +150,6 @@ SwitchGuard 會監控你自己的 **eWeLink / SONOFF** 與 **Tuya / Smart Life**
 
 | 設定 | 用途 |
 |---|---|
-| Pro / 購買 Pro | 免費版可監控 1 個裝置。Pro 版可監控您所有的裝置，並提供全部功能。一次付費，無需訂閱。與您的 Google 帳號綁定，換新手機時也能一併帶走。 |
-| 還原 | 重新檢查你的 Google Play 購買記錄（新手機、重新安裝）。 |
 | eWeLink — 使用 eWeLink 登入 | 開啟 eWeLink 自己的登入頁面；應用程式永遠看不到你的密碼。 |
 | API 憑證 | 你的 eWeLink 開發者應用程式的 App ID、App Secret 和區域。 |
 | 登出 | 監控將會停止。您的設定和記錄會保留。 |
@@ -371,7 +368,6 @@ SwitchGuard 指令：
 - 應用程式只與你連結的雲端通訊（eWeLink `*.coolkit.cc` / `*.coolkit.cn`，Tuya `openapi.tuya*.com`），且只在你使用時才連到 Telegram、Open-Meteo（溫度和天氣；位置約四捨五入到 100 公尺）以及 OpenStreetMap 地圖圖磚。
 - 你的 eWeLink 密碼是在 eWeLink 自己的頁面上輸入；應用程式永遠看不到。
 - 應用程式資料不納入 Android 雲端備份；檔案備份受密碼保護；Wi-Fi 傳輸以一次性代碼加密，且只在你的家用網路內進行。
-- Pro 購買由 Google Play 處理。
 
 完整隱私權政策: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

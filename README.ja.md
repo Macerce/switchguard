@@ -23,8 +23,8 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 - **インストーラー**: [Windows リリース](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — 最新のリリースから `SwitchGuard-x.y.z-Kurulum.exe` をダウンロードして実行します。アプリは新しいバージョンを自分で探し、ワンクリックで更新します。設定は保持されます。
 
 ### 無料版と Pro
-- 無料：すべての機能を、監視デバイス 1 台まで利用できます。デモデバイスを使えば、機器がなくてもすべて試せます。
-- Android：Pro は Google Play での買い切り（サブスクリプションなし）で、すべてのデバイスを監視します。Google アカウントと一緒に新しいスマートフォンへ引き継がれます。
+- Android：完全無料 — すべての機能、すべてのデバイスを監視、購入なし。デモデバイスを使えば、機器がなくてもすべて試せます。
+- Windows 無料版：すべての機能を、監視デバイス 1 台まで利用できます。
 - Windows：Pro ライセンスキー（設定 → プランカード）ですべてのデバイスを監視します。キーのお問い合わせ先： **switchguardapp@gmail.com**
 
 ## 動作要件
@@ -136,12 +136,11 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 ### 複数のデバイス
 
-スマートフォン、タブレット、Android TV、PC：**各端末には、開発者機能が承認された専用の eWeLink アカウントと、そのアカウント自身の API キー（App ID / Secret）が必要です**。eWeLink は 1 アカウントにつき 1 台しかログインできません。eWeLink アプリで追加アカウントにデバイスを共有してください。Tuya のキーは複数の端末で使えます。Pro は一度購入すれば、同じ Google アカウントのすべての Android 端末で使えます。詳細： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+スマートフォン、タブレット、Android TV、PC：**各端末には、開発者機能が承認された専用の eWeLink アカウントと、そのアカウント自身の API キー（App ID / Secret）が必要です**。eWeLink は 1 アカウントにつき 1 台しかログインできません。eWeLink アプリで追加アカウントにデバイスを共有してください。Tuya のキーは複数の端末で使えます。詳細： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### デモとPro
+### デモ
 
 - **デモデバイス** — 全機能を試せる仮想デバイス。デバイス本体で何かが起きた（誰かが操作した、停電やWi-Fi切断が起きた）かのように動作するため、ルールが適用されアラームが鳴ります。上のボタンでの操作はご自身の操作として扱われ、アラームは鳴りません。
-- 無料版で監視できるのは1台です。Proではすべてのデバイスを、全機能で監視できます。買い切りで、サブスクリプションではありません。Googleアカウントに紐付けられるため、新しいスマートフォンにも引き継げます。
 
 ## すべての設定
 
@@ -151,8 +150,6 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 | 設定 | 内容 |
 |---|---|
-| Pro / Proを購入 | 無料版で監視できるのは1台です。Proではすべてのデバイスを、全機能で監視できます。買い切りで、サブスクリプションではありません。Googleアカウントに紐付けられるため、新しいスマートフォンにも引き継げます。 |
-| 復元 | Google Play の購入を再確認します（新しいスマートフォン、再インストール時）。 |
 | eWeLink — eWeLinkでログイン | eWeLink 自身のサインインページを開きます。アプリがパスワードを見ることはありません。 |
 | API認証情報 | eWeLink 開発者アプリの App ID、App Secret、リージョン。 |
 | ログアウト | 監視が停止します。設定と履歴は保持されます。 |
@@ -371,7 +368,6 @@ SwitchGuardコマンド:
 - アプリが通信するのは、接続したクラウド（eWeLink `*.coolkit.cc` / `*.coolkit.cn`、Tuya `openapi.tuya*.com`）と、使う場合に限り Telegram、Open-Meteo（気温と天気。位置は約 100 m に丸め）、OpenStreetMap の地図タイルだけです。
 - eWeLink のパスワードは eWeLink 自身のページで入力するため、アプリが見ることはありません。
 - アプリのデータは Android のクラウドバックアップから除外されます。ファイルへのバックアップはパスワードで保護され、Wi-Fi 転送はワンタイムコードで暗号化されて自宅のネットワーク内で完結します。
-- Pro の購入は Google Play が処理します。
 
 プライバシーポリシー全文: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

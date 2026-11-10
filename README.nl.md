@@ -23,8 +23,8 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 - **Installatieprogramma**: [Windows-versies](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — download `SwitchGuard-x.y.z-Kurulum.exe` van de nieuwste en voer het uit. De app zoekt zelf naar nieuwe versies en werkt zich met één klik bij; instellingen blijven bewaard.
 
 ### Gratis en Pro
-- Gratis: alle functies, voor 1 bewaakt apparaat. Met demo-apparaten probeer je alles zonder hardware.
-- Android: Pro is een eenmalige aankoop in Google Play (geen abonnement) en bewaakt alle apparaten; het verhuist met je Google-account mee naar een nieuwe telefoon.
+- Android: helemaal gratis — alle functies, alle apparaten bewaakt, geen aankopen. Met demo-apparaten probeer je alles zonder hardware.
+- Windows gratis: alle functies, voor 1 bewaakt apparaat.
 - Windows: een Pro-licentiesleutel (Instellingen → abonnementskaart) bewaakt alle apparaten. Voor een sleutel: **switchguardapp@gmail.com**
 
 ## Vereisten
@@ -136,12 +136,11 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 
 ### Meerdere apparaten
 
-Telefoon, tablet, Android TV en pc: **elk apparaat heeft een eigen eWeLink-account nodig met goedgekeurde ontwikkelaarsfunctie, en de eigen API-sleutels van dat account (App ID / Secret)** — eWeLink staat één ingelogd apparaat per account toe. Deel je apparaten in de eWeLink-app met het extra account. Tuya-sleutels kun je op meerdere apparaten gebruiken. Pro koop je één keer en werkt op alle Android-apparaten met hetzelfde Google-account. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefoon, tablet, Android TV en pc: **elk apparaat heeft een eigen eWeLink-account nodig met goedgekeurde ontwikkelaarsfunctie, en de eigen API-sleutels van dat account (App ID / Secret)** — eWeLink staat één ingelogd apparaat per account toe. Deel je apparaten in de eWeLink-app met het extra account. Tuya-sleutels kun je op meerdere apparaten gebruiken. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo & Pro
+### Demo
 
 - **Demo-apparaten** — Virtuele apparaten om alle functies uit te proberen. Deze werken alsof er iets met het apparaat zelf gebeurde (iemand schakelde het, de stroom of wifi viel uit), dus je regels gelden en het alarm kan afgaan. Schakelen met de knoppen hierboven telt als jijzelf en laat het alarm niet afgaan.
-- De gratis versie bewaakt 1 apparaat. Pro bewaakt al je apparaten, met alle functies. Eenmalige betaling, geen abonnement. Gekoppeld aan je Google-account, dus het gaat mee naar een nieuwe telefoon.
 
 ## Alle instellingen
 
@@ -151,8 +150,6 @@ Alles in de volgorde van de app. Het tabblad **Instellingen** bevat verbindingen
 
 | Instelling | Waarvoor |
 |---|---|
-| Pro / Pro kopen | De gratis versie bewaakt 1 apparaat. Pro bewaakt al je apparaten, met alle functies. Eenmalige betaling, geen abonnement. Gekoppeld aan je Google-account, dus het gaat mee naar een nieuwe telefoon. |
-| Herstellen | Controleert je Google Play-aankopen opnieuw (nieuwe telefoon, herinstallatie). |
 | eWeLink — Inloggen met eWeLink | Opent de eigen inlogpagina van eWeLink; de app ziet je wachtwoord nooit. |
 | API-gegevens | App ID, App Secret en regio van je eWeLink-ontwikkelaarsapp. |
 | Uitloggen | De bewaking stopt. Je instellingen en geschiedenis blijven bewaard. |
@@ -371,7 +368,6 @@ Zowel Engelse als Turkse opdrachtnamen werken (bijv. /status = /durum, /on = /ac
 - De app praat alleen met de clouds die je koppelt (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) en, alleen als je ze gebruikt, met Telegram, Open-Meteo (temperatuur en weer; locatie afgerond op ongeveer 100 m) en OpenStreetMap-kaarttegels.
 - Je eWeLink-wachtwoord typ je op de eigen pagina van eWeLink; de app ziet het nooit.
 - App-gegevens zijn uitgesloten van de Android-cloudback-up; bestandsback-ups zijn met een wachtwoord beveiligd; overzetten via wifi is versleuteld met een eenmalige code en blijft in je thuisnetwerk.
-- Pro-aankopen worden door Google Play afgehandeld.
 
 Volledig privacybeleid: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

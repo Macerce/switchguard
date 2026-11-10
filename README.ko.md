@@ -23,8 +23,8 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 - **설치 프로그램**: [Windows 릴리스](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — 최신 릴리스에서 `SwitchGuard-x.y.z-Kurulum.exe`를 내려받아 실행하세요. 앱이 새 버전을 직접 찾아 클릭 한 번으로 업데이트하며, 설정은 유지됩니다.
 
 ### 무료와 Pro
-- 무료: 모든 기능을 모니터링 기기 1대에 사용할 수 있습니다. 데모 기기로 하드웨어 없이 모든 것을 체험할 수 있습니다.
-- Android: Pro는 Google Play에서 한 번만 구매하며(구독 없음) 모든 기기를 모니터링합니다. Google 계정과 함께 새 휴대폰으로 옮겨집니다.
+- Android: 완전 무료 — 모든 기능, 모든 기기 모니터링, 구매 없음. 데모 기기로 하드웨어 없이 모든 것을 체험할 수 있습니다.
+- Windows 무료: 모든 기능을 모니터링 기기 1대에 사용할 수 있습니다.
 - Windows: Pro 라이선스 키(설정 → 요금제 카드)로 모든 기기를 모니터링합니다. 키 문의: **switchguardapp@gmail.com**
 
 ## 요구 사항
@@ -136,12 +136,11 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 
 ### 여러 기기
 
-휴대폰, 태블릿, Android TV, PC: **기기마다 개발자 기능이 승인된 별도의 eWeLink 계정과 그 계정 자체의 API 키(App ID / Secret)가 필요합니다** — eWeLink는 계정당 로그인 기기를 하나만 허용합니다. eWeLink 앱에서 추가 계정에 기기를 공유하세요. Tuya 키는 여러 기기에서 쓸 수 있습니다. Pro는 한 번 구매하면 같은 Google 계정의 모든 Android 기기에서 작동합니다. 자세히: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+휴대폰, 태블릿, Android TV, PC: **기기마다 개발자 기능이 승인된 별도의 eWeLink 계정과 그 계정 자체의 API 키(App ID / Secret)가 필요합니다** — eWeLink는 계정당 로그인 기기를 하나만 허용합니다. eWeLink 앱에서 추가 계정에 기기를 공유하세요. Tuya 키는 여러 기기에서 쓸 수 있습니다. 자세히: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### 데모 및 Pro
+### 데모
 
 - **데모 기기** — 모든 기능을 체험해 볼 수 있는 가상 기기. 기기 자체에서 무언가 일어난 것처럼 동작합니다 (누군가 스위치를 조작했거나 전원 또는 Wi-Fi가 끊긴 경우). 그래서 규칙이 적용되고 알람이 울릴 수 있습니다. 위의 버튼으로 조작하면 사용자가 한 것으로 간주되어 알람이 울리지 않습니다.
-- 무료 버전은 기기 1대를 모니터링합니다. Pro는 모든 기능과 함께 모든 기기를 모니터링합니다. 구독 없이 한 번만 결제합니다. Google 계정에 연결되므로 새 휴대폰으로도 그대로 이어집니다.
 
 ## 모든 설정
 
@@ -151,8 +150,6 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 
 | 설정 | 기능 |
 |---|---|
-| Pro / Pro 구매 | 무료 버전은 기기 1대를 모니터링합니다. Pro는 모든 기능과 함께 모든 기기를 모니터링합니다. 구독 없이 한 번만 결제합니다. Google 계정에 연결되므로 새 휴대폰으로도 그대로 이어집니다. |
-| 복원 | Google Play 구매 내역을 다시 확인합니다(새 휴대폰, 재설치). |
 | eWeLink — eWeLink로 로그인 | eWeLink 자체 로그인 페이지를 엽니다. 앱은 비밀번호를 절대 보지 않습니다. |
 | API 자격 증명 | eWeLink 개발자 앱의 App ID, App Secret, 지역. |
 | 로그아웃 | 모니터링이 중지됩니다. 설정과 기록은 유지됩니다. |
@@ -371,7 +368,6 @@ SwitchGuard 명령어:
 - 앱은 연결한 클라우드(eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`)와, 사용하는 경우에만 Telegram, Open-Meteo(기온과 날씨, 위치는 약 100 m로 반올림), OpenStreetMap 지도 타일과만 통신합니다.
 - eWeLink 비밀번호는 eWeLink 자체 페이지에서 입력하므로 앱이 보지 않습니다.
 - 앱 데이터는 Android 클라우드 백업에서 제외되고, 파일 백업은 비밀번호로 보호되며, Wi-Fi 전송은 일회용 코드로 암호화되어 집 네트워크 안에서만 이루어집니다.
-- Pro 구매는 Google Play가 처리합니다.
 
 전체 개인정보처리방침: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 

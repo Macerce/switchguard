@@ -23,8 +23,8 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - **Installer**: [Windows releases](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — download `SwitchGuard-x.y.z-Kurulum.exe` from the newest one and run it. The app checks for new versions and updates itself with one click; settings are kept.
 
 ### Free and Pro
-- Free: every feature, for 1 monitored device. Demo devices let you try everything without hardware.
-- Android: Pro is a one-time Google Play purchase (no subscription) and monitors all devices; it follows your Google account to a new phone.
+- Android: completely free — every feature, all devices monitored, no purchases. Demo devices let you try everything without hardware.
+- Windows free version: every feature, for 1 monitored device.
 - Windows: a Pro license key (Settings → plan card) monitors all devices. For a key, contact **switchguardapp@gmail.com**
 
 ## Requirements
@@ -136,12 +136,11 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 
 ### Several devices
 
-Phone, tablet, Android TV and PC: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account. Share your devices to the extra account in the eWeLink app. Tuya keys can be used on several devices. Pro is bought once and works on all Android devices with the same Google account. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Phone, tablet, Android TV and PC: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account. Share your devices to the extra account in the eWeLink app. Tuya keys can be used on several devices. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
-### Demo & Pro
+### Demo
 
 - **Demo devices** — Virtual devices for trying every feature. These act as if something happened at the device itself (someone switched it, the power or Wi-Fi went out), so your rules apply and the alarm can ring. Switching with the buttons above counts as you and does not ring the alarm.
-- The free version monitors 1 device. Pro monitors all your devices, with every feature. One-time payment, no subscription. Linked to your Google account, so it moves with you to a new phone.
 
 ## All settings
 
@@ -151,8 +150,6 @@ Everything below is in the order shown in the app. The **Settings** tab holds co
 
 | Setting | What it does |
 |---|---|
-| Pro / Get Pro | The free version monitors 1 device. Pro monitors all your devices, with every feature. One-time payment, no subscription. Linked to your Google account, so it moves with you to a new phone. |
-| Restore | Checks your Google Play purchases again (new phone, reinstall). |
 | eWeLink — Sign in with eWeLink | Opens eWeLink's own sign-in page; the app never sees your password. |
 | API credentials | App ID, App Secret and region of your eWeLink developer app. |
 | Sign out | Monitoring will stop. Your settings and history are kept. |
@@ -371,7 +368,6 @@ English and Turkish command names both work (e.g. /status = /durum, /on = /ac). 
 - The app talks only to the clouds you connect (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) and, only if you use them, Telegram, Open-Meteo (temperature and weather, location rounded to about 100 m) and OpenStreetMap map tiles.
 - Your eWeLink password is typed on eWeLink's own page; the app never sees it.
 - App data is excluded from Android cloud backup; file backups are password-protected; Wi-Fi transfer is encrypted with a one-time code and stays in your home network.
-- Pro purchases are handled by Google Play.
 
 Full privacy policy: [Google Sites](https://sites.google.com/view/switchguard-privacy) · [docs/privacy-policy.md](docs/privacy-policy.md)
 
