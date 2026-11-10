@@ -504,23 +504,6 @@
     <string name="raw_data_desc">Sao chép dữ liệu thô của thiết bị vào bộ nhớ tạm, hữu ích để báo cáo model chưa được hỗ trợ</string>
     <string name="raw_data_copied">Đã sao chép</string>
     <string name="action_later">Để sau</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Bản miễn phí giám sát %1$d thiết bị. Pro giám sát tất cả thiết bị của bạn, với đầy đủ tính năng.</string>
-    <string name="pro_once">Thanh toán một lần, không đăng ký. Gắn với tài khoản Google của bạn nên sẽ đi cùng bạn sang điện thoại mới.</string>
-    <string name="pro_pending">Thanh toán của bạn đang chờ xử lý. Pro sẽ bật ngay khi Google Play xác nhận.</string>
-    <string name="pro_unavailable">Google Play hiện không khả dụng. Hãy đảm bảo ứng dụng được cài từ Google Play và bạn đang trực tuyến.</string>
-    <string name="pro_buy">Nhận Pro · %s</string>
-    <string name="pro_loading">Đang tải giá…</string>
-    <string name="pro_active">Đang hoạt động — tất cả thiết bị đều được giám sát. Cảm ơn bạn!</string>
-    <string name="pro_free_status">Bản miễn phí: giám sát %1$d thiết bị</string>
-    <string name="pro_restore">Khôi phục</string>
-    <string name="pro_restoring">Đang kiểm tra các giao dịch mua của bạn…</string>
-    <string name="pro_upgrade">Nhận Pro</string>
-    <string name="pro_hint">Bản miễn phí: chỉ giám sát %1$d thiết bị. Hãy nhận Pro để giám sát tất cả.</string>
-    <string name="pro_limit_title">Một thiết bị trong bản miễn phí</string>
-    <string name="pro_limit_body">Bản miễn phí giám sát %1$d thiết bị, và \"%2$s\" đang dùng suất đó. Hãy giám sát thiết bị này thay thế, hoặc nhận Pro để giám sát tất cả.</string>
-    <string name="pro_limit_switch">Giám sát thiết bị này thay thế</string>
-    <string name="pro_limit_detail">Không giám sát — bản miễn phí giám sát %1$d thiết bị</string>
 
     <string name="demo_freezer">Demo · Tủ đông</string>
     <string name="demo_pumps">Demo · Bảng điều khiển máy bơm</string>
@@ -711,7 +694,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Hằng ngày lúc %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · giám sát tất cả thiết bị</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="other">Thiếu %d quyền</item>
@@ -719,9 +701,6 @@
     <string name="guard_ready">Sẵn sàng kêu ngay khi có thay đổi</string>
     <string name="monitoring_summary_now">Cảnh báo ngay khi ngoại tuyến · %s</string>
     <string name="monitoring_summary_grace">Chờ %1$s khi ngoại tuyến · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">Miễn phí · giám sát %d thiết bị</item>
-    </plurals>
     <string name="auto_if">Nếu</string>
     <string name="auto_then">Thì</string>
     <string name="automation_name_hint">ví dụ: Máy bơm đã dừng</string>

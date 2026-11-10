@@ -995,14 +995,8 @@ class MonitorService : Service() {
                 val args = EventArgs.AutoAlert(a.name, source?.name)
                 val text = args.render(source?.name ?: a.name, strings)
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
-                // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
-                val allowed = store.isPro || !a.trigger.kind.usesDevice || store.monitoredIds().let { ids ->
-                    a.trigger.deviceId in ids ||
-                        store.groups.firstOrNull { it.deviceId == a.trigger.deviceId }?.members?.all { it.deviceId in ids } == true
-                }
                 val rules = store.rulesFor(a.trigger.deviceId)
-                val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
+                val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = rules.soundUri
                 when (effective) {

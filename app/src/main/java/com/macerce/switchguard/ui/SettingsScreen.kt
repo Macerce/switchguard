@@ -150,7 +150,6 @@ import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.Cloud
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.PhoneEntry
 import com.macerce.switchguard.data.CrashLog
 import com.macerce.switchguard.data.Store
@@ -278,7 +277,7 @@ private fun SettingsHome(
     Column(Modifier.fillMaxSize()) {
         AppTopBar(stringResource(R.string.tab_settings))
         Column(Modifier.verticalScroll(rememberScrollState()).padding(bottom = 24.dp)) {
-            PlanCard(s.isPro) { showDialog { ProDialog(onDismiss = { showDialog(null) }) } }
+            AppCard()
 
             SectionTitle(stringResource(R.string.settings_group_connections))
             SectionCard {
@@ -362,16 +361,14 @@ private fun SettingsHome(
     }
 }
 
-/** Ayarların başındaki uygulama kartı: logo, plan ve (ücretsizse) Pro'ya geçiş. */
+/** Ayarların başındaki uygulama kartı: logo, ad ve sürüm. */
 @Composable
-private fun PlanCard(isPro: Boolean, onClick: () -> Unit) {
+private fun AppCard() {
     val dark = LocalDarkTheme.current
     Row(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
-            .tvFocusRing(RoundedCornerShape(24.dp))
             .clip(RoundedCornerShape(24.dp))
             .background(tileColor())
-            .clickable(onClick = onClick)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -385,20 +382,9 @@ private fun PlanCard(isPro: Boolean, onClick: () -> Unit) {
         Column(Modifier.weight(1f)) {
             Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
             Text(
-                if (isPro) stringResource(R.string.plan_pro) else pluralStringResource(R.plurals.plan_free, Entitlement.FREE_DEVICES, Entitlement.FREE_DEVICES),
+                com.macerce.switchguard.BuildConfig.VERSION_NAME,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-        if (isPro) {
-            Icon(Icons.Rounded.WorkspacePremium, null, tint = MaterialTheme.colorScheme.primary)
-        } else {
-            Text(
-                stringResource(R.string.pro_upgrade),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier.clip(CircleShape).background(MaterialTheme.colorScheme.primary)
-                    .padding(horizontal = 14.dp, vertical = 8.dp),
             )
         }
     }
@@ -575,8 +561,6 @@ private fun AccountsPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
                 if (it) Actions.enableDemo(context) else Actions.disableDemo(context)
             })
         }
-        Divider()
-        ProRow(s.isPro) { showDialog { ProDialog(onDismiss = close) } }
     }
 }
 

@@ -324,7 +324,7 @@ object Actions {
         val issues = runCatching { Readiness.issues(readinessInput(context, store)) }.getOrDefault(emptyList())
         val diagnostics = listOf(
             "monitoring=${store.monitoringEnabled} state=${connection.state} detail=${connection.detail}",
-            "accounts: ewelink=${store.isLoggedIn} tuya=${store.hasTuya} demo=${store.demoMode} pro=${store.isPro}",
+            "accounts: ewelink=${store.isLoggedIn} tuya=${store.hasTuya} demo=${store.demoMode}",
             "devices=${store.snapshots.size} monitored=${store.monitoredIds().size} automations=${store.automations.size}",
             "readiness=${issues.joinToString(",").ifEmpty { "ok" }}",
             "settings: grace=${store.offlineGraceSec}s poll=${store.pollIntervalSec}s blind=${store.blindAlertMin}min " +

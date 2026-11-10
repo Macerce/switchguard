@@ -522,23 +522,6 @@
     <string name="raw_data_desc">Kopiuje surowe dane urządzenia do schowka, co przydaje się przy zgłaszaniu nieobsługiwanego modelu</string>
     <string name="raw_data_copied">Skopiowano</string>
     <string name="action_later">Nie teraz</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Wersja bezpłatna monitoruje urządzenia: %1$d. Pro monitoruje wszystkie Twoje urządzenia, ze wszystkimi funkcjami.</string>
-    <string name="pro_once">Jednorazowa płatność, bez subskrypcji. Powiązana z Twoim kontem Google, więc przenosi się z Tobą na nowy telefon.</string>
-    <string name="pro_pending">Twoja płatność oczekuje na realizację. Pro włączy się, gdy tylko Google Play ją potwierdzi.</string>
-    <string name="pro_unavailable">Google Play jest teraz niedostępny. Upewnij się, że aplikację zainstalowano z Google Play i że masz połączenie z internetem.</string>
-    <string name="pro_buy">Kup Pro · %s</string>
-    <string name="pro_loading">Wczytywanie ceny…</string>
-    <string name="pro_active">Aktywne — monitorowane są wszystkie urządzenia. Dziękujemy!</string>
-    <string name="pro_free_status">Wersja bezpłatna: monitorowane urządzenia: %1$d</string>
-    <string name="pro_restore">Przywróć</string>
-    <string name="pro_restoring">Sprawdzanie Twoich zakupów…</string>
-    <string name="pro_upgrade">Kup Pro</string>
-    <string name="pro_hint">Wersja bezpłatna: monitorowane urządzenia: tylko %1$d. Kup Pro, aby monitorować wszystkie.</string>
-    <string name="pro_limit_title">Jedno urządzenie w wersji bezpłatnej</string>
-    <string name="pro_limit_body">Wersja bezpłatna monitoruje tylko %1$d urządzenie i zajmuje je już \"%2$s\". Monitoruj zamiast tego to urządzenie albo kup Pro, aby monitorować wszystkie.</string>
-    <string name="pro_limit_switch">Monitoruj zamiast tego to</string>
-    <string name="pro_limit_detail">Niemonitorowane — wersja bezpłatna monitoruje urządzenia: %1$d</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Zamrażarka</string>
@@ -783,7 +766,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Codziennie o %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · monitorowane wszystkie urządzenia</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">Brakuje %d uprawnienia</item>
@@ -794,12 +776,6 @@
     <string name="guard_ready">Gotowy zadzwonić w chwili, gdy coś się zmieni</string>
     <string name="monitoring_summary_now">Alert od razu, gdy offline · %s</string>
     <string name="monitoring_summary_grace">Czeka %1$s, gdy offline · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Bezpłatnie · monitoruje %d urządzenie</item>
-        <item quantity="few">Bezpłatnie · monitoruje %d urządzenia</item>
-        <item quantity="many">Bezpłatnie · monitoruje %d urządzeń</item>
-        <item quantity="other">Bezpłatnie · monitoruje %d urządzenia</item>
-    </plurals>
     <string name="auto_if">Jeśli</string>
     <string name="auto_then">Wtedy</string>
     <string name="automation_name_hint">np. Pompa się zatrzymała</string>

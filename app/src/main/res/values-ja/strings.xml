@@ -522,23 +522,6 @@
     <string name="raw_data_desc">デバイスの生データをクリップボードにコピーします。未対応モデルを報告するときに役立ちます</string>
     <string name="raw_data_copied">コピーしました</string>
     <string name="action_later">今はしない</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">無料版で監視できるのは%1$d台です。Proではすべてのデバイスを、全機能で監視できます。</string>
-    <string name="pro_once">買い切りで、サブスクリプションではありません。Googleアカウントに紐付けられるため、新しいスマートフォンにも引き継げます。</string>
-    <string name="pro_pending">お支払いは保留中です。Google Playが確認し次第、Proが有効になります。</string>
-    <string name="pro_unavailable">現在Google Playを利用できません。アプリをGoogle Playからインストールしたこと、およびオンラインであることを確認してください。</string>
-    <string name="pro_buy">Proを購入 · %s</string>
-    <string name="pro_loading">価格を読み込み中…</string>
-    <string name="pro_active">有効 — すべてのデバイスを監視しています。ありがとうございます！</string>
-    <string name="pro_free_status">無料版: %1$d台を監視中</string>
-    <string name="pro_restore">復元</string>
-    <string name="pro_restoring">購入情報を確認中…</string>
-    <string name="pro_upgrade">Proを購入</string>
-    <string name="pro_hint">無料版: 監視できるのは%1$d台のみです。すべてを監視するにはProを購入してください。</string>
-    <string name="pro_limit_title">無料版は1台まで</string>
-    <string name="pro_limit_body">無料版で監視できるのは%1$d台で、現在は「%2$s」が使用中です。代わりにこのデバイスを監視するか、Proを購入してすべてを監視してください。</string>
-    <string name="pro_limit_switch">代わりにこれを監視</string>
-    <string name="pro_limit_detail">監視対象外 — 無料版で監視できるのは%1$d台です</string>
 
     <!-- Demo -->
     <string name="demo_freezer">デモ · 冷凍庫</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s～%2$s</string>
     <string name="daily_at">毎日 %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · すべてのデバイスを監視</string>
     <string name="demo_short">デモ</string>
     <plurals name="perm_missing_n">
         <item quantity="other">%d件の権限が不足しています</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">変化があった瞬間に鳴らす準備ができています</string>
     <string name="monitoring_summary_now">オフラインになるとすぐに通知 · %s</string>
     <string name="monitoring_summary_grace">オフラインになってから%1$s待機 · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">無料 · %d台を監視</item>
-    </plurals>
     <string name="auto_if">条件</string>
     <string name="auto_then">実行</string>
     <string name="automation_name_hint">例: ポンプ停止</string>

@@ -522,23 +522,6 @@
     <string name="raw_data_desc">將裝置的原始資料複製到剪貼簿，適合用於回報不支援的型號</string>
     <string name="raw_data_copied">已複製</string>
     <string name="action_later">暫時不要</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">免費版可監控 %1$d 個裝置。Pro 版可監控您所有的裝置，並提供全部功能。</string>
-    <string name="pro_once">一次付費，無需訂閱。與您的 Google 帳號綁定，換新手機時也能一併帶走。</string>
-    <string name="pro_pending">您的付款處理中。Google Play 確認後，Pro 會立即啟用。</string>
-    <string name="pro_unavailable">目前無法使用 Google Play。請確認應用程式是從 Google Play 安裝，且您已連上網路。</string>
-    <string name="pro_buy">購買 Pro · %s</string>
-    <string name="pro_loading">正在載入價格…</string>
-    <string name="pro_active">已啟用 — 所有裝置都在監控中。感謝您！</string>
-    <string name="pro_free_status">免費版：監控 %1$d 個裝置</string>
-    <string name="pro_restore">還原</string>
-    <string name="pro_restoring">正在檢查您的購買項目…</string>
-    <string name="pro_upgrade">購買 Pro</string>
-    <string name="pro_hint">免費版：只監控 %1$d 個裝置。購買 Pro 即可全部監控。</string>
-    <string name="pro_limit_title">免費版只能監控一個裝置</string>
-    <string name="pro_limit_body">免費版可監控 %1$d 個裝置，目前由「%2$s」占用。您可以改為監控此裝置，或購買 Pro 監控全部裝置。</string>
-    <string name="pro_limit_switch">改為監控這個</string>
-    <string name="pro_limit_detail">未監控 — 免費版可監控 %1$d 個裝置</string>
 
     <!-- Demo -->
     <string name="demo_freezer">示範 · 冷凍櫃</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">每天 %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · 監控所有裝置</string>
     <string name="demo_short">示範</string>
     <plurals name="perm_missing_n">
         <item quantity="other">缺少 %d 項權限</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">已就緒，一有變化立即響鈴</string>
     <string name="monitoring_summary_now">離線時立即提醒 · %s</string>
     <string name="monitoring_summary_grace">離線時等待 %1$s · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">免費 · 監控 %d 個裝置</item>
-    </plurals>
     <string name="auto_if">如果</string>
     <string name="auto_then">就</string>
     <string name="automation_name_hint">例如：水泵停止</string>

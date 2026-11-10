@@ -20,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.macerce.switchguard.billing.Billing
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.AppShortcuts
@@ -64,7 +63,6 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         AlarmActivity.appInFront = true
         // Satın alma/iade başka cihazda ya da Play'de olmuş olabilir: her açılışta tazele.
-        Billing.get(this).refresh()
         // İzleme açık görünüyor ama servis yok (güncelleme/yeniden başlatma yayını engellendi, ör. Xiaomi): yeniden başlat.
         if (Store.get(this).monitoringEnabled && MonitorService.instance == null) {
             MonitorService.send(this, MonitorService.ACTION_START)

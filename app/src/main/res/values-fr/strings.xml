@@ -521,23 +521,6 @@
     <string name="raw_data_desc">Copie les données brutes de l\'appareil dans le presse-papiers, utile pour signaler un modèle non pris en charge</string>
     <string name="raw_data_copied">Copié</string>
     <string name="action_later">Pas maintenant</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">La version gratuite surveille %1$d appareil. Pro surveille tous vos appareils, avec toutes les fonctions.</string>
-    <string name="pro_once">Paiement unique, sans abonnement. Lié à votre compte Google, il vous suit donc sur un nouveau téléphone.</string>
-    <string name="pro_pending">Votre paiement est en attente. Pro s\'active dès que Google Play le confirme.</string>
-    <string name="pro_unavailable">Google Play n\'est pas disponible pour le moment. Vérifiez que l\'application a été installée depuis Google Play et que vous êtes en ligne.</string>
-    <string name="pro_buy">Obtenir Pro · %s</string>
-    <string name="pro_loading">Chargement du prix…</string>
-    <string name="pro_active">Actif — tous les appareils sont surveillés. Merci !</string>
-    <string name="pro_free_status">Version gratuite : %1$d appareil surveillé</string>
-    <string name="pro_restore">Restaurer</string>
-    <string name="pro_restoring">Vérification de vos achats…</string>
-    <string name="pro_upgrade">Obtenir Pro</string>
-    <string name="pro_hint">Version gratuite : seulement %1$d appareil est surveillé. Passez à Pro pour les surveiller tous.</string>
-    <string name="pro_limit_title">Un appareil dans la version gratuite</string>
-    <string name="pro_limit_body">La version gratuite surveille %1$d appareil, et « %2$s » l\'utilise. Surveillez plutôt cet appareil, ou passez à Pro pour les surveiller tous.</string>
-    <string name="pro_limit_switch">Surveiller celui-ci à la place</string>
-    <string name="pro_limit_detail">Non surveillé — la version gratuite surveille %1$d appareil</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Démo · Congélateur</string>
@@ -765,7 +748,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Tous les jours à %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · tous les appareils surveillés</string>
     <string name="demo_short">Démo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">%d autorisation manquante</item>
@@ -775,11 +757,6 @@
     <string name="guard_ready">Prêt à sonner dès que quelque chose change</string>
     <string name="monitoring_summary_now">Alerte immédiate si hors ligne · %s</string>
     <string name="monitoring_summary_grace">Attend %1$s si hors ligne · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Gratuit · surveille %d appareil</item>
-        <item quantity="many">Gratuit · surveille %d appareils</item>
-        <item quantity="other">Gratuit · surveille %d appareils</item>
-    </plurals>
     <string name="auto_if">Si</string>
     <string name="auto_then">Alors</string>
     <string name="automation_name_hint">p. ex. Pompe arrêtée</string>

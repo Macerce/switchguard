@@ -9,7 +9,6 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EwelinkRegion
 import com.macerce.switchguard.core.ParseCache
 import com.macerce.switchguard.core.QuietHours
@@ -177,7 +176,6 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         snapshots = snapshots.filter { it.cloud != Cloud.DEMO }
         rules = rules.filterKeys { !Demo.isDemo(it) }
         automations = automations.filterNot { Demo.isDemoAutomation(it) }
-        if (freeDeviceId?.let(Demo::isDemo) == true) freeDeviceId = null
     }
 
     fun disconnectTuya() {
@@ -499,30 +497,18 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     }
     fun setRules(deviceId: String, r: DeviceRules) { rules = rules + (deviceId to r) }
     /**
-     * Gerçekten izlenen cihazlar: kuralı açık olanlar, ücretsiz sürümde yalnızca biri (bkz. [Entitlement]).
-     * Demo cihazları sınıra sayılmaz; denemede her özellik görülebilsin.
+     * Gerçekten izlenen cihazlar: kuralı açık olanlar (tam sürüm, cihaz sınırı yok).
      */
     fun monitoredIds(): Set<String> {
         val all = rules
         val wants = { id: String -> (all[id] ?: DeviceRules()).monitored }
-        val (demo, real) = snapshots.map { it.id }.partition(Demo::isDemo)
-        return demo.filter(wants).toSet() + Entitlement.monitored(real, wants, isPro, freeDeviceId)
+        return snapshots.map { it.id }.filter(wants).toSet()
     }
 
-    // --- Pro ---
-    /** Son bilinen satın alma durumu; Play'e ulaşılamadığında da (çevrimdışı) geçerli kalır. */
-    var isPro: Boolean
-        get() = BuildConfig.OWNER_UNLOCK || prefs.getBoolean("pro", false)
-        set(v) = put { putBoolean("pro", v) }
-    /** Ücretsiz sürümde kullanıcının izlemek için seçtiği cihaz. */
     /** Geçmiş sekmesinde görülen son olayın kimliği; sonrakiler "görülmemiş" sayılır. Hiç ayarlanmadıysa null. */
     var historySeenId: Long?
         get() = if (prefs.contains("historySeen")) prefs.getLong("historySeen", 0) else null
         set(v) = put { if (v == null) remove("historySeen") else putLong("historySeen", v) }
-
-    var freeDeviceId: String?
-        get() = prefs.getString("freeDevice", null)
-        set(v) = put { if (v == null) remove("freeDevice") else putString("freeDevice", v) }
 
     // --- Otomasyon ---
     var automations: List<Automation>

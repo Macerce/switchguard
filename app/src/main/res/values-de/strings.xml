@@ -520,23 +520,6 @@
     <string name="raw_data_desc">Kopiert die Rohdaten des Geräts in die Zwischenablage, nützlich, um ein nicht unterstütztes Modell zu melden</string>
     <string name="raw_data_copied">Kopiert</string>
     <string name="action_later">Jetzt nicht</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Die kostenlose Version überwacht %1$d Gerät. Pro überwacht alle deine Geräte, mit allen Funktionen.</string>
-    <string name="pro_once">Einmalige Zahlung, kein Abo. An dein Google-Konto gebunden, daher zieht es mit dir auf ein neues Handy um.</string>
-    <string name="pro_pending">Deine Zahlung steht noch aus. Pro wird aktiviert, sobald Google Play sie bestätigt.</string>
-    <string name="pro_unavailable">Google Play ist derzeit nicht verfügbar. Stelle sicher, dass die App über Google Play installiert wurde und du online bist.</string>
-    <string name="pro_buy">Pro holen · %s</string>
-    <string name="pro_loading">Preis wird geladen…</string>
-    <string name="pro_active">Aktiv — alle Geräte werden überwacht. Danke!</string>
-    <string name="pro_free_status">Kostenlose Version: %1$d Gerät überwacht</string>
-    <string name="pro_restore">Wiederherstellen</string>
-    <string name="pro_restoring">Deine Käufe werden geprüft…</string>
-    <string name="pro_upgrade">Pro holen</string>
-    <string name="pro_hint">Kostenlose Version: Nur %1$d Gerät wird überwacht. Hol dir Pro, um alle zu überwachen.</string>
-    <string name="pro_limit_title">Ein Gerät in der kostenlosen Version</string>
-    <string name="pro_limit_body">Die kostenlose Version überwacht %1$d Gerät, und es ist bereits durch \"%2$s\" belegt. Überwache stattdessen dieses Gerät oder hol dir Pro, um alle zu überwachen.</string>
-    <string name="pro_limit_switch">Stattdessen dieses überwachen</string>
-    <string name="pro_limit_detail">Nicht überwacht — die kostenlose Version überwacht %1$d Gerät</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Gefrierschrank</string>
@@ -747,7 +730,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Täglich um %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · alle Geräte überwacht</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">%d Berechtigung fehlt</item>
@@ -756,10 +738,6 @@
     <string name="guard_ready">Bereit zu läuten, sobald sich etwas ändert</string>
     <string name="monitoring_summary_now">Sofortige Meldung bei Offline · %s</string>
     <string name="monitoring_summary_grace">Wartet %1$s bei Offline · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Kostenlos · überwacht %d Gerät</item>
-        <item quantity="other">Kostenlos · überwacht %d Geräte</item>
-    </plurals>
     <string name="auto_if">Wenn</string>
     <string name="auto_then">Dann</string>
     <string name="automation_name_hint">z. B. Pumpe gestoppt</string>

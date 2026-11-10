@@ -55,7 +55,6 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.data.EventLog
 import com.macerce.switchguard.data.Store
@@ -138,43 +137,15 @@ fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
     // Kural açık olsa bile ücretsiz sürümde başka cihaz izleniyorsa bu cihaz izlenmez.
     val monitoredIds = remember(version) { store.monitoredIds() }
     val monitored = deviceId in monitoredIds
-    var dialog by remember { mutableStateOf<(@Composable () -> Unit)?>(null) }
-    dialog?.invoke()
-
     SectionTitle(stringResource(R.string.section_monitoring))
     SectionCard {
-        // Demo cihazları ücretsiz sürüm sınırına sayılmaz.
-        val demo = Demo.isDemo(deviceId)
-        val other = monitoredIds.firstOrNull { it != deviceId && !Demo.isDemo(it) }.takeUnless { demo }
         InfoRow(
             Icons.Rounded.NotificationsActive,
             stringResource(R.string.monitor_this_device),
-            if (!monitored && !store.isPro && other != null) stringResource(R.string.pro_limit_detail, Entitlement.FREE_DEVICES)
-            else stringResource(R.string.monitor_this_device_desc),
+            stringResource(R.string.monitor_this_device_desc),
         ) {
             Switch(checked = monitored, modifier = focusRequester?.let { Modifier.focusRequester(it) } ?: Modifier, onCheckedChange = { on ->
-                when {
-                    !on -> store.setRules(deviceId, rules.copy(monitored = false))
-                    store.isPro || other == null -> {
-                        if (!demo) store.freeDeviceId = deviceId
-                        store.setRules(deviceId, rules.copy(monitored = true))
-                    }
-                    else -> {
-                        val otherName = store.snapshots.firstOrNull { it.id == other }?.name.orEmpty()
-                        dialog = {
-                            FreeSlotDialog(
-                                otherName = otherName,
-                                onSwitch = {
-                                    store.freeDeviceId = deviceId
-                                    store.setRules(deviceId, rules.copy(monitored = true))
-                                    dialog = null
-                                },
-                                onUpgrade = { dialog = { ProDialog(onDismiss = { dialog = null }) } },
-                                onDismiss = { dialog = null },
-                            )
-                        }
-                    }
-                }
+                store.setRules(deviceId, rules.copy(monitored = on))
             })
         }
     }
@@ -216,18 +187,6 @@ fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
         RowDivider()
         CategoryRow(rules) { store.setRules(deviceId, rules.copy(category = it)) }
     }
-}
-
-/** Ücretsiz sürümde izleme hakkı başka cihazdayken: hakkı bu cihaza taşı ya da Pro'ya geç. */
-@Composable
-private fun FreeSlotDialog(otherName: String, onSwitch: () -> Unit, onUpgrade: () -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.pro_limit_title)) },
-        text = { Text(stringResource(R.string.pro_limit_body, Entitlement.FREE_DEVICES, otherName)) },
-        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) } },
-        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onSwitch) { Text(stringResource(R.string.pro_limit_switch)) } },
-    )
 }
 
 private fun EventType.icon(): ImageVector = when (this) {

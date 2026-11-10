@@ -504,23 +504,6 @@
     <string name="raw_data_desc">Копіює необроблені дані пристрою в буфер обміну; корисно, щоб повідомити про непідтримувану модель</string>
     <string name="raw_data_copied">Скопійовано</string>
     <string name="action_later">Не зараз</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Безкоштовна версія стежить за пристроями: %1$d. Pro стежить за всіма вашими пристроями з усіма функціями.</string>
-    <string name="pro_once">Одноразова оплата, без підписки. Прив\'язана до вашого облікового запису Google, тож переходить із вами на новий телефон.</string>
-    <string name="pro_pending">Ваш платіж очікує підтвердження. Pro ввімкнеться, щойно Google Play його підтвердить.</string>
-    <string name="pro_unavailable">Google Play зараз недоступний. Переконайтеся, що застосунок встановлено з Google Play і ви онлайн.</string>
-    <string name="pro_buy">Отримати Pro · %s</string>
-    <string name="pro_loading">Завантаження ціни…</string>
-    <string name="pro_active">Активовано — стежимо за всіма пристроями. Дякуємо!</string>
-    <string name="pro_free_status">Безкоштовна версія: під наглядом пристроїв — %1$d</string>
-    <string name="pro_restore">Відновити</string>
-    <string name="pro_restoring">Перевірка ваших покупок…</string>
-    <string name="pro_upgrade">Отримати Pro</string>
-    <string name="pro_hint">Безкоштовна версія: під наглядом лише пристроїв — %1$d. Отримайте Pro, щоб стежити за всіма.</string>
-    <string name="pro_limit_title">Безкоштовна версія — один пристрій</string>
-    <string name="pro_limit_body">Безкоштовна версія стежить за пристроями: %1$d, і цей ліміт займає «%2$s». Стежте натомість за цим пристроєм або отримайте Pro, щоб стежити за всіма.</string>
-    <string name="pro_limit_switch">Стежити натомість за цим</string>
-    <string name="pro_limit_detail">Без нагляду — безкоштовна версія стежить за пристроями: %1$d</string>
 
     <string name="demo_freezer">Демо · Морозильна камера</string>
     <string name="demo_pumps">Демо · Панель насосів</string>
@@ -762,7 +745,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Щодня о %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · стежимо за всіма пристроями</string>
     <string name="demo_short">Демо</string>
     <plurals name="perm_missing_n">
         <item quantity="one">Бракує %d дозволу</item>
@@ -773,12 +755,6 @@
     <string name="guard_ready">Готовий дзвонити, щойно щось зміниться</string>
     <string name="monitoring_summary_now">Одразу сповіщає про офлайн · %s</string>
     <string name="monitoring_summary_grace">Чекає %1$s перед сповіщенням про офлайн · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Безкоштовно · стежить за %d пристроєм</item>
-        <item quantity="few">Безкоштовно · стежить за %d пристроями</item>
-        <item quantity="many">Безкоштовно · стежить за %d пристроями</item>
-        <item quantity="other">Безкоштовно · стежить за %d пристроєм</item>
-    </plurals>
     <string name="auto_if">Якщо</string>
     <string name="auto_then">Тоді</string>
     <string name="automation_name_hint">напр. Насос зупинився</string>

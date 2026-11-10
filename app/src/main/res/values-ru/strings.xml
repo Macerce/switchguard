@@ -522,23 +522,6 @@
     <string name="raw_data_desc">Копирует исходные данные устройства в буфер обмена; полезно, чтобы сообщить о неподдерживаемой модели</string>
     <string name="raw_data_copied">Скопировано</string>
     <string name="action_later">Не сейчас</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Бесплатная версия отслеживает устройств: %1$d. Pro отслеживает все ваши устройства и включает все функции.</string>
-    <string name="pro_once">Единоразовая оплата, без подписки. Привязана к вашему аккаунту Google, поэтому переходит с вами на новый телефон.</string>
-    <string name="pro_pending">Ваш платёж ожидает подтверждения. Pro включится, как только Google Play его подтвердит.</string>
-    <string name="pro_unavailable">Google Play сейчас недоступен. Убедитесь, что приложение установлено из Google Play и есть подключение к интернету.</string>
-    <string name="pro_buy">Купить Pro · %s</string>
-    <string name="pro_loading">Загрузка цены…</string>
-    <string name="pro_active">Активно — отслеживаются все устройства. Спасибо!</string>
-    <string name="pro_free_status">Бесплатная версия: отслеживается устройств: %1$d</string>
-    <string name="pro_restore">Восстановить</string>
-    <string name="pro_restoring">Проверка ваших покупок…</string>
-    <string name="pro_upgrade">Купить Pro</string>
-    <string name="pro_hint">Бесплатная версия: отслеживается только устройств: %1$d. Купите Pro, чтобы отслеживать все.</string>
-    <string name="pro_limit_title">Одно устройство в бесплатной версии</string>
-    <string name="pro_limit_body">Бесплатная версия отслеживает устройств: %1$d, и этот лимит занимает «%2$s». Отслеживайте вместо него это устройство или купите Pro, чтобы отслеживать все.</string>
-    <string name="pro_limit_switch">Отслеживать вместо него это</string>
-    <string name="pro_limit_detail">Не отслеживается — бесплатная версия отслеживает устройств: %1$d</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Демо · Морозильник</string>
@@ -783,7 +766,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Ежедневно в %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · отслеживаются все устройства</string>
     <string name="demo_short">Демо</string>
     <plurals name="perm_missing_n">
         <item quantity="one">Не хватает %d разрешения</item>
@@ -794,12 +776,6 @@
     <string name="guard_ready">Готов подать сигнал, как только что-то изменится</string>
     <string name="monitoring_summary_now">Оповещение сразу при потере связи · %s</string>
     <string name="monitoring_summary_grace">Ждёт %1$s при потере связи · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Бесплатно · отслеживается %d устройство</item>
-        <item quantity="few">Бесплатно · отслеживается %d устройства</item>
-        <item quantity="many">Бесплатно · отслеживается %d устройств</item>
-        <item quantity="other">Бесплатно · отслеживается %d устройства</item>
-    </plurals>
     <string name="auto_if">Если</string>
     <string name="auto_then">Тогда</string>
     <string name="automation_name_hint">например, Насос остановился</string>

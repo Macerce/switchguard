@@ -123,7 +123,6 @@ import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
 import com.macerce.switchguard.core.DeviceSnapshot
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.Readiness
 import com.macerce.switchguard.data.ConnState
 import com.macerce.switchguard.data.LiveState
@@ -167,9 +166,6 @@ fun DevicesScreen(
     // eWeLink'e giriş ya da Tuya bağlantısı: ikisinden biri yeter.
     val loggedIn = remember(version) { store.hasAnyAccount }
     val monitoredIds = remember(version) { store.monitoredIds() }
-    val isPro = remember(version) { store.isPro }
-    var showPro by remember { mutableStateOf(false) }
-    if (showPro) ProDialog(onDismiss = { showPro = false })
     val layout = remember(version) { store.deviceLayout }
     // Gruplar ızgarada cihaz gibi durur (sıralanır, kategoriye girer); düğmeleri bütün üyeleri açıp kapatır.
     val groups = remember(version) { store.groups }
@@ -312,9 +308,6 @@ fun DevicesScreen(
                 }
                 if (loggedIn && devices.isEmpty()) {
                     item(span = full) { EmptyDevices(showTuyaHint = store.hasTuya) }
-                }
-                if (loggedIn && !isPro && !editMode && devices.count { !Demo.isDemo(it.id) } > Entitlement.FREE_DEVICES) {
-                    item(span = full) { ProHintCard { showPro = true } }
                 }
                 if (editMode) {
                     item(key = "edit-hint", span = full) {
@@ -623,23 +616,6 @@ private fun LoginPromptCard(sessionLost: Boolean) {
             Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
                 Text(stringResource(if (sessionLost) R.string.action_relogin else R.string.action_login))
             }
-        }
-    }
-}
-
-/** Ücretsiz sürümde birden fazla cihaz varken: yalnızca biri izleniyor. */
-@Composable
-private fun ProHintCard(onUpgrade: () -> Unit) {
-    SectionCard(horizontalPadding = 0) {
-        Row(Modifier.padding(start = 20.dp, end = 8.dp, top = 12.dp, bottom = 12.dp), verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Rounded.WorkspacePremium, null, tint = MaterialTheme.colorScheme.primary)
-            Spacer(Modifier.width(16.dp))
-            Text(
-                stringResource(R.string.pro_hint, Entitlement.FREE_DEVICES),
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1f),
-            )
-            TextButton(modifier = Modifier.tvFocusRing(), onClick = onUpgrade) { Text(stringResource(R.string.pro_upgrade)) }
         }
     }
 }

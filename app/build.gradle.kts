@@ -19,11 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 54
-        versionName = "2.28.1"
-        // Geliştiricinin kendi telefonları için: ./gradlew assembleRelease -PownerUnlock=true
-        // Mağaza derlemesinde her zaman false.
-        buildConfigField("boolean", "OWNER_UNLOCK", (project.findProperty("ownerUnlock") == "true").toString())
+        versionCode = 55
+        versionName = "2.29.0"
         // Cihaz üstü testler (Keystore, bildirimler, ses): ./gradlew connectedDebugAndroidTest
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -89,8 +86,7 @@ dependencies {
     implementation("com.google.zxing:core:3.5.4")
     // Cihaz kartlarını basılı tutup sürükleyerek sıralama (masaüstüyle aynı kütüphane).
     implementation("sh.calvin.reorderable:reorderable:3.1.0")
-    implementation("com.android.billingclient:billing:9.1.0")
-    // Billing → play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
+    // play-services-base eski fragment 1.1.0'ı çekiyor; Play Console "eski SDK" uyarısı veriyor.
     implementation("androidx.fragment:fragment:1.9.1")
     // Uygulama içinden Play değerlendirme penceresi (bir kez, uygun anda).
     implementation("com.google.android.play:review:2.0.2")
