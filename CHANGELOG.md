@@ -6,6 +6,14 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.29.1 — 2026-11-10
+**Changes**
+- **Location consent**: before any location permission is requested (zones, “Use this device's location”, “My current location” on the map) a separate window explains what the location is used for; the system prompt opens only after you tap “Agree”. “No thanks” asks for nothing.
+
+## 2.29.0 — 2026-11-10
+**Changes**
+- **Full version for everyone**: Pro and in-app purchases are removed; every device is monitored.
+
 ## 2.28.1 — 2026-11-10
 **New**
 - **Voice commands**: the microphone in the Devices top bar opens the chat; tap the microphone and say it, or type it, and the reply is read aloud. Natural sentences are understood: “Turn off the kitchen light”, “Turn the kitchen light off”, “Start / stop the pump”, “Turn on pump second channel”, “Turn on pump two”.

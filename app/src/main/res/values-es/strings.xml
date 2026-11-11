@@ -1549,4 +1549,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="chat_tpl_all_off">Apagar todo</string>
     <string name="board_brief">Leer el estado en voz alta</string>
     <string name="summary_yesterday">Ayer hasta esta hora: %1$s.</string>
+    <string name="loc_consent_title">Datos de ubicación</string>
+    <string name="loc_consent_zone">SwitchGuard recopila datos de ubicación para habilitar las automatizaciones por zona (encender o apagar tus dispositivos cuando entras o sales de una zona que elegiste), incluso cuando la aplicación está cerrada o no se está usando. Tu ubicación permanece en este teléfono y nunca se envía a ningún servidor ni se comparte con nadie.</string>
+    <string name="loc_consent_weather">SwitchGuard recopila tu ubicación aproximada para habilitar las reglas de amanecer, atardecer y temperatura exterior. Se lee una sola vez, ahora, y se guarda en este dispositivo; para la temperatura se envía a Open-Meteo redondeada a unos 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard usa tu ubicación para centrar el mapa donde estás mientras eliges una zona. Se lee una sola vez, ahora, solo para mover el mapa.</string>
+    <string name="loc_consent_agree">Aceptar</string>
+    <string name="loc_consent_deny">No, gracias</string>
 </resources>

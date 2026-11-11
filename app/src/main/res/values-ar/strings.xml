@@ -1687,4 +1687,10 @@
     <string name="chat_tpl_all_off">إيقاف الكل</string>
     <string name="board_brief">قراءة الحالة بصوت عالٍ</string>
     <string name="summary_yesterday">أمس حتى هذا الوقت: %1$s.</string>
+    <string name="loc_consent_title">بيانات الموقع</string>
+    <string name="loc_consent_zone">يجمع SwitchGuard بيانات الموقع لتفعيل أتمتة المناطق (تشغيل أجهزتك أو إيقافها عند دخولك منطقة اخترتها أو مغادرتها)، حتى عندما يكون التطبيق مغلقًا أو غير مستخدم. يبقى موقعك على هذا الهاتف ولا يُرسل إلى أي خادم ولا يُشارك مع أي أحد.</string>
+    <string name="loc_consent_weather">يجمع SwitchGuard موقعك التقريبي لتفعيل قواعد شروق الشمس وغروبها ودرجة الحرارة الخارجية. يُقرأ مرة واحدة الآن ويُحفظ على هذا الجهاز؛ ولأجل درجة الحرارة يُرسل إلى Open-Meteo مقرّبًا إلى نحو 100 متر.</string>
+    <string name="loc_consent_map">يستخدم SwitchGuard موقعك لتوسيط الخريطة على مكانك أثناء اختيار منطقة. يُقرأ مرة واحدة الآن، فقط لتحريك الخريطة.</string>
+    <string name="loc_consent_agree">أوافق</string>
+    <string name="loc_consent_deny">لا، شكرًا</string>
 </resources>

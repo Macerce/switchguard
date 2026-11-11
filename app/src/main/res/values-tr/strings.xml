@@ -1540,4 +1540,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="chat_tpl_all_off">Hepsini kapat</string>
     <string name="board_brief">Durumu sesli oku</string>
     <string name="summary_yesterday">Dün aynı saate kadar: %1$s.</string>
+    <string name="loc_consent_title">Konum verisi</string>
+    <string name="loc_consent_zone">SwitchGuard, bölge otomasyonlarını çalıştırmak (seçtiğiniz bir bölgeye girdiğinizde ya da çıktığınızda cihazlarınızı açıp kapatmak) için uygulama kapalıyken ya da kullanılmıyorken de konum verisi toplar. Konumunuz bu telefonda kalır; hiçbir sunucuya gönderilmez, kimseyle paylaşılmaz.</string>
+    <string name="loc_consent_weather">SwitchGuard, gün doğumu, gün batımı ve dış sıcaklık kurallarını çalıştırmak için yaklaşık konumunuzu toplar. Konum şimdi bir kez okunur ve bu cihazda tutulur; sıcaklık için yaklaşık 100 m\'ye yuvarlanarak Open-Meteo\'ya gönderilir.</string>
+    <string name="loc_consent_map">SwitchGuard, bölge seçerken haritayı bulunduğunuz yere getirmek için konumunuzu kullanır. Konum şimdi bir kez, yalnızca haritayı kaydırmak için okunur.</string>
+    <string name="loc_consent_agree">Kabul ediyorum</string>
+    <string name="loc_consent_deny">Hayır, teşekkürler</string>
 </resources>

@@ -1544,4 +1544,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="chat_tpl_all_off">All off</string>
     <string name="board_brief">Read out the status</string>
     <string name="summary_yesterday">Yesterday by this time: %1$s.</string>
+    <string name="loc_consent_title">Location data</string>
+    <string name="loc_consent_zone">SwitchGuard collects location data to enable zone automations (switching your devices when you arrive at or leave a zone you picked), even when the app is closed or not in use. Your location stays on this phone and is never sent to any server or shared with anyone.</string>
+    <string name="loc_consent_weather">SwitchGuard collects your approximate location to enable sunrise, sunset and outside temperature rules. It is read once, now, and kept on this device; for the temperature it is sent to Open-Meteo rounded to about 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard uses your location to center the map on where you are while you pick a zone. It is read once, now, only to move the map.</string>
+    <string name="loc_consent_agree">Agree</string>
+    <string name="loc_consent_deny">No thanks</string>
 </resources>

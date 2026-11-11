@@ -1615,4 +1615,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="chat_tpl_all_off">Wyłącz wszystko</string>
     <string name="board_brief">Odczytaj stan na głos</string>
     <string name="summary_yesterday">Wczoraj do tej godziny: %1$s.</string>
+    <string name="loc_consent_title">Dane o lokalizacji</string>
+    <string name="loc_consent_zone">SwitchGuard zbiera dane o lokalizacji, aby umożliwić automatyzacje stref (włączanie i wyłączanie urządzeń, gdy wchodzisz do wybranej strefy lub ją opuszczasz), nawet gdy aplikacja jest zamknięta lub nieużywana. Twoja lokalizacja pozostaje na tym telefonie i nigdy nie jest wysyłana na żaden serwer ani nikomu udostępniana.</string>
+    <string name="loc_consent_weather">SwitchGuard zbiera Twoją przybliżoną lokalizację, aby umożliwić reguły wschodu słońca, zachodu słońca i temperatury zewnętrznej. Jest odczytywana raz, teraz, i przechowywana na tym urządzeniu; dla temperatury jest wysyłana do Open-Meteo zaokrąglona do około 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard używa Twojej lokalizacji, aby wyśrodkować mapę na miejscu, w którym jesteś, gdy wybierasz strefę. Jest odczytywana raz, teraz, tylko po to, aby przesunąć mapę.</string>
+    <string name="loc_consent_agree">Zgadzam się</string>
+    <string name="loc_consent_deny">Nie, dziękuję</string>
 </resources>

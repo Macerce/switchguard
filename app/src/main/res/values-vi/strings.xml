@@ -1478,4 +1478,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="chat_tpl_all_off">Tắt tất cả</string>
     <string name="board_brief">Đọc to trạng thái</string>
     <string name="summary_yesterday">Hôm qua đến giờ này: %1$s.</string>
+    <string name="loc_consent_title">Dữ liệu vị trí</string>
+    <string name="loc_consent_zone">SwitchGuard thu thập dữ liệu vị trí để bật tự động hóa theo vùng (bật hoặc tắt thiết bị của bạn khi bạn đến hoặc rời một vùng đã chọn), ngay cả khi ứng dụng đã đóng hoặc không được sử dụng. Vị trí của bạn nằm lại trên điện thoại này và không bao giờ được gửi đến máy chủ nào hay chia sẻ với bất kỳ ai.</string>
+    <string name="loc_consent_weather">SwitchGuard thu thập vị trí gần đúng của bạn để bật các quy tắc theo bình minh, hoàng hôn và nhiệt độ ngoài trời. Vị trí được đọc một lần, ngay bây giờ, và lưu trên thiết bị này; để lấy nhiệt độ, vị trí được gửi đến Open-Meteo sau khi làm tròn khoảng 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard dùng vị trí của bạn để đưa bản đồ về nơi bạn đang đứng khi bạn chọn vùng. Vị trí được đọc một lần, ngay bây giờ, chỉ để di chuyển bản đồ.</string>
+    <string name="loc_consent_agree">Đồng ý</string>
+    <string name="loc_consent_deny">Không, cảm ơn</string>
 </resources>

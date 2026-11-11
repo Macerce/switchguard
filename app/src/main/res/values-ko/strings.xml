@@ -1507,4 +1507,10 @@
     <string name="chat_tpl_all_off">모두 끄기</string>
     <string name="board_brief">상태 읽어 주기</string>
     <string name="summary_yesterday">어제 이 시각까지: %1$s.</string>
+    <string name="loc_consent_title">위치 데이터</string>
+    <string name="loc_consent_zone">SwitchGuard는 구역 자동화(선택한 구역에 도착하거나 떠날 때 기기를 켜고 끄는 기능)를 사용할 수 있도록 앱이 닫혀 있거나 사용 중이 아닐 때에도 위치 데이터를 수집합니다. 위치는 이 휴대전화에만 남으며 어떤 서버로도 전송되지 않고 누구와도 공유되지 않습니다.</string>
+    <string name="loc_consent_weather">SwitchGuard는 일출, 일몰 및 외부 온도 규칙을 사용할 수 있도록 대략적인 위치를 수집합니다. 위치는 지금 한 번만 읽어 이 기기에 저장되며, 온도 확인을 위해 약 100m 단위로 반올림되어 Open-Meteo로 전송됩니다.</string>
+    <string name="loc_consent_map">SwitchGuard는 구역을 선택할 때 지도를 현재 위치로 옮기기 위해 위치를 사용합니다. 위치는 지금 한 번, 지도를 옮기는 데에만 읽습니다.</string>
+    <string name="loc_consent_agree">동의</string>
+    <string name="loc_consent_deny">아니요</string>
 </resources>

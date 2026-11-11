@@ -1436,4 +1436,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="chat_tpl_all_off">Matikan semua</string>
     <string name="board_brief">Bacakan status</string>
     <string name="summary_yesterday">Kemarin hingga jam ini: %1$s.</string>
+    <string name="loc_consent_title">Data lokasi</string>
+    <string name="loc_consent_zone">SwitchGuard mengumpulkan data lokasi untuk mengaktifkan otomatisasi zona (menyalakan atau mematikan perangkat Anda saat Anda tiba di atau meninggalkan zona yang Anda pilih), bahkan saat aplikasi ditutup atau tidak digunakan. Lokasi Anda tetap di ponsel ini dan tidak pernah dikirim ke server mana pun atau dibagikan kepada siapa pun.</string>
+    <string name="loc_consent_weather">SwitchGuard mengumpulkan perkiraan lokasi Anda untuk mengaktifkan aturan matahari terbit, matahari terbenam, dan suhu luar. Lokasi dibaca satu kali, sekarang, dan disimpan di perangkat ini; untuk suhu, lokasi dikirim ke Open-Meteo dengan pembulatan sekitar 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard menggunakan lokasi Anda untuk memusatkan peta di tempat Anda berada saat memilih zona. Lokasi dibaca satu kali, sekarang, hanya untuk menggeser peta.</string>
+    <string name="loc_consent_agree">Setuju</string>
+    <string name="loc_consent_deny">Tidak, terima kasih</string>
 </resources>

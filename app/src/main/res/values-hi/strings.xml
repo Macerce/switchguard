@@ -1472,4 +1472,10 @@
     <string name="chat_tpl_all_off">सब बंद</string>
     <string name="board_brief">स्थिति पढ़कर सुनाएँ</string>
     <string name="summary_yesterday">कल इस समय तक: %1$s।</string>
+    <string name="loc_consent_title">स्थान डेटा</string>
+    <string name="loc_consent_zone">SwitchGuard ज़ोन ऑटोमेशन चालू करने के लिए (जब आप अपने चुने हुए ज़ोन में पहुँचते हैं या उससे निकलते हैं तब आपके डिवाइस चालू या बंद करना) स्थान डेटा एकत्र करता है, तब भी जब ऐप बंद हो या उपयोग में न हो। आपका स्थान इसी फ़ोन पर रहता है और कभी किसी सर्वर को नहीं भेजा जाता, न किसी के साथ साझा किया जाता है।</string>
+    <string name="loc_consent_weather">SwitchGuard सूर्योदय, सूर्यास्त और बाहरी तापमान के नियम चालू करने के लिए आपका अनुमानित स्थान एकत्र करता है। यह अभी एक बार पढ़ा जाता है और इसी डिवाइस पर रखा जाता है; तापमान के लिए इसे लगभग 100 मी तक पूर्णांकित करके Open-Meteo को भेजा जाता है।</string>
+    <string name="loc_consent_map">ज़ोन चुनते समय नक्शे को आपकी जगह पर लाने के लिए SwitchGuard आपके स्थान का उपयोग करता है। यह अभी एक बार, केवल नक्शा खिसकाने के लिए पढ़ा जाता है।</string>
+    <string name="loc_consent_agree">सहमत हूँ</string>
+    <string name="loc_consent_deny">नहीं, धन्यवाद</string>
 </resources>

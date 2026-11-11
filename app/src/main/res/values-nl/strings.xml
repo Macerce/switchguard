@@ -1543,4 +1543,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="chat_tpl_all_off">Alles uit</string>
     <string name="board_brief">Status voorlezen</string>
     <string name="summary_yesterday">Gisteren tot dit tijdstip: %1$s.</string>
+    <string name="loc_consent_title">Locatiegegevens</string>
+    <string name="loc_consent_zone">SwitchGuard verzamelt locatiegegevens om zone-automatiseringen mogelijk te maken (je apparaten schakelen wanneer je een gekozen zone binnenkomt of verlaat), ook wanneer de app is gesloten of niet wordt gebruikt. Je locatie blijft op deze telefoon en wordt nooit naar een server gestuurd of met iemand gedeeld.</string>
+    <string name="loc_consent_weather">SwitchGuard verzamelt je locatie bij benadering om regels voor zonsopkomst, zonsondergang en buitentemperatuur mogelijk te maken. Deze wordt nu één keer gelezen en op dit apparaat bewaard; voor de temperatuur wordt ze afgerond op ongeveer 100 m naar Open-Meteo gestuurd.</string>
+    <string name="loc_consent_map">SwitchGuard gebruikt je locatie om de kaart te centreren op waar je bent terwijl je een zone kiest. Deze wordt nu één keer gelezen, alleen om de kaart te verplaatsen.</string>
+    <string name="loc_consent_agree">Akkoord</string>
+    <string name="loc_consent_deny">Nee, bedankt</string>
 </resources>

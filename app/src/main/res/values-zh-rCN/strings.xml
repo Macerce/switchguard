@@ -1485,4 +1485,10 @@
     <string name="chat_tpl_all_off">全部关闭</string>
     <string name="board_brief">朗读状态</string>
     <string name="summary_yesterday">昨天截至此时：%1$s。</string>
+    <string name="loc_consent_title">位置数据</string>
+    <string name="loc_consent_zone">SwitchGuard 会收集位置数据以启用区域自动化（在您到达或离开所选区域时开关您的设备），即使应用已关闭或未在使用时也是如此。您的位置只保留在这部手机上，绝不会发送到任何服务器或与任何人共享。</string>
+    <string name="loc_consent_weather">SwitchGuard 会收集您的大致位置以启用日出、日落和室外温度规则。位置仅在此刻读取一次并保存在本设备上；获取温度时会将其四舍五入到约 100 米后发送给 Open-Meteo。</string>
+    <string name="loc_consent_map">SwitchGuard 会使用您的位置，在您选择区域时将地图移到您所在的位置。位置仅在此刻读取一次，只用于移动地图。</string>
+    <string name="loc_consent_agree">同意</string>
+    <string name="loc_consent_deny">不用了</string>
 </resources>

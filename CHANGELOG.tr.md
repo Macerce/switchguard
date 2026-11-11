@@ -6,6 +6,14 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.29.1 — 2026-11-10
+**Değişiklikler**
+- **Konum onayı**: herhangi bir konum izni istenmeden önce (bölgeler, “Bu cihazın konumunu kullan”, haritada “Bulunduğum yer”) konumun ne için kullanıldığını anlatan ayrı bir pencere açılır; sistem izin penceresi yalnızca “Kabul ediyorum”a dokununca gelir. “Hayır, teşekkürler” hiçbir izin istemez.
+
+## 2.29.0 — 2026-11-10
+**Değişiklikler**
+- **Herkese tam sürüm**: Pro ve uygulama içi satın alma kaldırıldı; bütün cihazlar izlenir.
+
 ## 2.28.1 — 2026-11-10
 **Yeni**
 - **Sesli komut**: Cihazlar’ın üst çubuğundaki mikrofon sohbeti açar; mikrofona dokunup söyleyin ya da yazın, yanıt sesli okunur. Doğal cümleler anlaşılır: “Mutfağın ışığını kapat”, “Mutfaktaki ışığı kapatır mısın”, “Pompayı çalıştır / durdur”, “Pompanın ikinci kanalını aç”, “Pompa iki aç”.

@@ -1507,4 +1507,10 @@
     <string name="chat_tpl_all_off">すべてオフ</string>
     <string name="board_brief">状況を読み上げる</string>
     <string name="summary_yesterday">昨日の同時刻まで: %1$s。</string>
+    <string name="loc_consent_title">位置情報</string>
+    <string name="loc_consent_zone">SwitchGuard は、ゾーン自動化（選んだゾーンに入ったとき、または出たときにデバイスをオン／オフする機能）を有効にするため、アプリを閉じているときや使用していないときにも位置情報を収集します。位置情報はこのスマートフォン内にとどまり、サーバーに送信されたり、誰かと共有されたりすることはありません。</string>
+    <string name="loc_consent_weather">SwitchGuard は、日の出・日の入り・外気温のルールを有効にするため、おおよその位置情報を収集します。位置情報は今 1 回だけ読み取られ、このデバイスに保存されます。気温の取得には、約 100 m に丸めた位置が Open-Meteo に送信されます。</string>
+    <string name="loc_consent_map">SwitchGuard は、ゾーンを選ぶときに地図を現在地に移動するため、位置情報を使用します。位置情報は今 1 回だけ、地図を移動するためにのみ読み取られます。</string>
+    <string name="loc_consent_agree">同意する</string>
+    <string name="loc_consent_deny">いいえ</string>
 </resources>

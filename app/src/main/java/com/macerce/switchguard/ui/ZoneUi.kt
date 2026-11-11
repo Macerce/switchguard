@@ -193,6 +193,19 @@ fun ZonePermissionCard(modifier: Modifier = Modifier) {
     val background = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { refresh++ }
     val fine = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { refresh++ }
     val scheme = MaterialTheme.colorScheme
+    // İzin penceresinden önce belirgin açıklama + açık onay (Play kuralı).
+    var consent by remember { mutableStateOf(false) }
+    if (consent) LocationConsentDialog(
+        stringResource(R.string.loc_consent_zone),
+        onAgree = {
+            if (needsBackground && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                background.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            } else {
+                fine.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+            }
+        },
+        onDismiss = { consent = false },
+    )
     if (ok && unavailable) {
         Surface(modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), color = scheme.errorContainer) {
             Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -214,13 +227,7 @@ fun ZonePermissionCard(modifier: Modifier = Modifier) {
             if (needsBackground) {
                 Text(stringResource(R.string.zone_perm_background), style = MaterialTheme.typography.bodyMedium, color = scheme.onTertiaryContainer)
             }
-            Button(modifier = Modifier.tvFocusRing(), onClick = {
-                if (needsBackground && Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    background.launch(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                } else {
-                    fine.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
-                }
-            }) { Text(stringResource(R.string.zone_perm_grant)) }
+            Button(modifier = Modifier.tvFocusRing(), onClick = { consent = true }) { Text(stringResource(R.string.zone_perm_grant)) }
         }
     }
 }
@@ -264,6 +271,12 @@ fun ZoneEditorDialog(initial: Zone?, onSaved: (Zone) -> Unit, onDismiss: () -> U
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { r ->
         if (r.values.any { it }) locate() else error = noLocation
     }
+    var consent by remember { mutableStateOf(false) }
+    if (consent) LocationConsentDialog(
+        stringResource(R.string.loc_consent_map),
+        onAgree = { permission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) },
+        onDismiss = { consent = false },
+    )
     fun search() {
         val q = query.trim()
         if (q.length < 2) return
@@ -321,7 +334,7 @@ fun ZoneEditorDialog(initial: Zone?, onSaved: (Zone) -> Unit, onDismiss: () -> U
                             val granted = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
                                 context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
                             if (granted) locate()
-                            else permission.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
+                            else consent = true
                         }
                     }
                     Text(

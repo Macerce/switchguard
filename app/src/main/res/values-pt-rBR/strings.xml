@@ -1579,4 +1579,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="chat_tpl_all_off">Desligar tudo</string>
     <string name="board_brief">Ler o status em voz alta</string>
     <string name="summary_yesterday">Ontem até este horário: %1$s.</string>
+    <string name="loc_consent_title">Dados de localização</string>
+    <string name="loc_consent_zone">O SwitchGuard coleta dados de localização para habilitar as automações por zona (ligar ou desligar seus dispositivos quando você entra ou sai de uma zona escolhida), mesmo quando o app está fechado ou não está em uso. Sua localização fica neste telefone e nunca é enviada a nenhum servidor nem compartilhada com ninguém.</string>
+    <string name="loc_consent_weather">O SwitchGuard coleta sua localização aproximada para habilitar as regras de nascer do sol, pôr do sol e temperatura externa. Ela é lida uma única vez, agora, e fica neste dispositivo; para a temperatura, é enviada ao Open-Meteo arredondada para cerca de 100 m.</string>
+    <string name="loc_consent_map">O SwitchGuard usa sua localização para centralizar o mapa onde você está enquanto escolhe uma zona. Ela é lida uma única vez, agora, apenas para mover o mapa.</string>
+    <string name="loc_consent_agree">Concordo</string>
+    <string name="loc_consent_deny">Não, obrigado</string>
 </resources>

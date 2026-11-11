@@ -62,6 +62,12 @@ fun LocationSetup(store: Store, onChanged: () -> Unit, modifier: Modifier = Modi
     val permission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
         if (ok) fetch() else manual = true
     }
+    var consent by remember { mutableStateOf(false) }
+    if (consent) LocationConsentDialog(
+        stringResource(R.string.loc_consent_weather),
+        onAgree = { permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION) },
+        onDismiss = { consent = false },
+    )
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val lat = store.latitude
         val lon = store.longitude
@@ -75,7 +81,7 @@ fun LocationSetup(store: Store, onChanged: () -> Unit, modifier: Modifier = Modi
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilledTonalButton(modifier = Modifier.tvFocusRing(), onClick = {
                 if (context.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) fetch()
-                else permission.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                else consent = true
             }) { Text(stringResource(R.string.location_use_phone)) }
             TextButton(modifier = Modifier.tvFocusRing(), onClick = { manual = true }) { Text(stringResource(R.string.location_manual)) }
         }

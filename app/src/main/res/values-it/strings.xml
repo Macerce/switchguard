@@ -1550,4 +1550,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="chat_tpl_all_off">Spegni tutto</string>
     <string name="board_brief">Leggi lo stato ad alta voce</string>
     <string name="summary_yesterday">Ieri fino a quest\'ora: %1$s.</string>
+    <string name="loc_consent_title">Dati sulla posizione</string>
+    <string name="loc_consent_zone">SwitchGuard raccoglie dati sulla posizione per abilitare le automazioni a zone (accendere o spegnere i tuoi dispositivi quando entri in una zona scelta o ne esci), anche quando l\'app è chiusa o non è in uso. La tua posizione resta su questo telefono e non viene mai inviata a nessun server né condivisa con nessuno.</string>
+    <string name="loc_consent_weather">SwitchGuard raccoglie la tua posizione approssimativa per abilitare le regole di alba, tramonto e temperatura esterna. Viene letta una sola volta, adesso, e conservata su questo dispositivo; per la temperatura viene inviata a Open-Meteo arrotondata a circa 100 m.</string>
+    <string name="loc_consent_map">SwitchGuard usa la tua posizione per centrare la mappa dove ti trovi mentre scegli una zona. Viene letta una sola volta, adesso, solo per spostare la mappa.</string>
+    <string name="loc_consent_agree">Accetto</string>
+    <string name="loc_consent_deny">No, grazie</string>
 </resources>

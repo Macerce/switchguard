@@ -1541,4 +1541,10 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="chat_tpl_all_off">Alles aus</string>
     <string name="board_brief">Status vorlesen</string>
     <string name="summary_yesterday">Gestern bis zu dieser Uhrzeit: %1$s.</string>
+    <string name="loc_consent_title">Standortdaten</string>
+    <string name="loc_consent_zone">SwitchGuard erfasst Standortdaten, um Zonen-Automationen zu ermöglichen (Ihre Geräte schalten, wenn Sie eine gewählte Zone betreten oder verlassen), auch wenn die App geschlossen ist oder nicht verwendet wird. Ihr Standort bleibt auf diesem Telefon und wird an keinen Server gesendet oder mit jemandem geteilt.</string>
+    <string name="loc_consent_weather">SwitchGuard erfasst Ihren ungefähren Standort, um Regeln für Sonnenaufgang, Sonnenuntergang und Außentemperatur zu ermöglichen. Er wird jetzt einmalig gelesen und auf diesem Gerät gespeichert; für die Temperatur wird er auf etwa 100 m gerundet an Open-Meteo gesendet.</string>
+    <string name="loc_consent_map">SwitchGuard verwendet Ihren Standort, um die Karte beim Auswählen einer Zone auf Ihre Position zu zentrieren. Er wird jetzt einmalig gelesen, nur um die Karte zu verschieben.</string>
+    <string name="loc_consent_agree">Zustimmen</string>
+    <string name="loc_consent_deny">Nein danke</string>
 </resources>
