@@ -680,7 +680,7 @@
     <string name="settings_group_alerts">สัญญาณเตือนและการแจ้งเตือน</string>
     <string name="settings_group_app">แอป</string>
     <string name="settings_group_support">การสนับสนุน</string>
-    <string name="settings_try">สาธิตและ Pro</string>
+    <string name="settings_try">สาธิต</string>
     <string name="settings_try_it">ทดสอบ</string>
     <string name="settings_sound">เสียง</string>
     <string name="settings_when_alarm">ขณะสัญญาณเตือนดัง</string>
@@ -1508,4 +1508,16 @@
     <string name="sensor_motion_off">ไม่มีการเคลื่อนไหว</string>
     <string name="sensor_water_on">น้ำรั่ว!</string>
     <string name="sensor_water_off">แห้ง</string>
+    <string name="demo_sensor">สาธิต · เซ็นเซอร์ห้องนั่งเล่น</string>
+    <string name="demo_door">สาธิต · ประตูหน้า</string>
+    <string name="sensor_alerts">การแจ้งเตือนเซ็นเซอร์</string>
+    <string name="sensor_alert_door">เมื่อประตูเปิด</string>
+    <string name="sensor_alert_motion">เมื่อตรวจพบการเคลื่อนไหว</string>
+    <string name="sensor_alert_water">เมื่อตรวจพบน้ำรั่ว</string>
+    <string name="sensor_alert_battery" formatted="false">เมื่อแบตเตอรี่ต่ำกว่า 15 %</string>
+    <string name="sensor_alert_range">เมื่อ%1$sออกนอกช่วง</string>
+    <string name="sensor_min">ต่ำสุด</string>
+    <string name="sensor_max">สูงสุด</string>
+    <string name="sensor_alerts_hint">รายการเหล่านี้จะแสดงใน การแจ้งเตือน › การแจ้งเตือนแบบมีเงื่อนไข ด้วย ซึ่งแก้ไขรายละเอียดได้</string>
+    <string name="board_sensors">เซ็นเซอร์</string>
 </resources>

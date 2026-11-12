@@ -734,7 +734,7 @@
     <string name="settings_group_alerts">Alarmes et notifications</string>
     <string name="settings_group_app">Application</string>
     <string name="settings_group_support">Assistance</string>
-    <string name="settings_try">Démo et Pro</string>
+    <string name="settings_try">Démo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Son</string>
     <string name="settings_when_alarm">Pendant qu\'une alarme sonne</string>
@@ -1608,4 +1608,16 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="sensor_motion_off">Aucun mouvement</string>
     <string name="sensor_water_on">Fuite d\'eau !</string>
     <string name="sensor_water_off">Sec</string>
+    <string name="demo_sensor">Démo · Capteur du salon</string>
+    <string name="demo_door">Démo · Porte d\'entrée</string>
+    <string name="sensor_alerts">Alertes des capteurs</string>
+    <string name="sensor_alert_door">Quand la porte s\'ouvre</string>
+    <string name="sensor_alert_motion">Quand un mouvement est détecté</string>
+    <string name="sensor_alert_water">Quand une fuite d\'eau est détectée</string>
+    <string name="sensor_alert_battery" formatted="false">Quand la batterie passe sous 15 %</string>
+    <string name="sensor_alert_range">Quand %1$s sort de la plage</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Max</string>
+    <string name="sensor_alerts_hint">Elles apparaissent aussi dans Alertes › Alertes conditionnelles, où vous pouvez les modifier en détail.</string>
+    <string name="board_sensors">Capteurs</string>
 </resources>

@@ -6,11 +6,15 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## Next version — unreleased
+## 2.30.3 — unreleased
 **New**
 - **eWeLink sensors**: temperature/humidity (TH16, THR316/320, SNZB-02 family), door (DW2, SNZB-04), motion/presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery are read and shown on the device card (“23.5 °C · 55 %”, “Door open”). Model table from AlexxIT/SonoffLAN (MIT).
 - **Sensor automations**: new events “Sensor above / below” (e.g. turn the AC on when the room passes 26 °C; with hysteresis, fires once) and “Sensor detects / clears” (alarm when the door opens, light on when there is motion).
 - The Wi-Fi door sensor (DW2) no longer shows up as a switchable relay.
+- **Sensor alerts** (Alerts › device): one-tap Alarm/Notify/Off for door opened, motion, water leak and low battery; min/max limits for temperature and humidity. They also show under Conditional alerts. Sensor-only devices hide the turned on/off rules.
+- **Standby screen**: new “Sensors” block (large temperature/humidity, door open/water leak in red, low battery hint) and a list of active rules (name + If → Then). Sensors no longer appear as on/off tiles.
+- Chat “temperature” now includes room sensors. Sensor devices get a thermometer/door icon. The threshold field is prefilled with the sensor's current value.
+- Demo: added a temperature/humidity sensor and a door sensor (values change); turning demo off also removes rules tied to demo devices; tapping the whole Demo row toggles it; “Demo & Pro” is now “Demo”.
 
 ## 2.29.1 — 2026-11-10
 **Changes**

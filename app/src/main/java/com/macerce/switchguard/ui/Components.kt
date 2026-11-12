@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.DoorFront
 import androidx.compose.material.icons.rounded.ElectricalServices
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Lightbulb
+import androidx.compose.material.icons.rounded.Thermostat
 import androidx.compose.material.icons.rounded.Power
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.WaterDrop
@@ -270,6 +271,7 @@ fun DeviceKind.icon(): ImageVector = when (this) {
     DeviceKind.SWITCH -> Icons.Rounded.PowerSettingsNew
     DeviceKind.GROUP -> Icons.Rounded.Workspaces
     DeviceKind.CATEGORY -> Icons.AutoMirrored.Rounded.Label
+    DeviceKind.SENSOR -> Icons.Rounded.Thermostat
 }
 
 /**

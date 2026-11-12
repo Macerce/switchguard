@@ -715,7 +715,7 @@
     <string name="settings_group_alerts">Alarm ve bildirimler</string>
     <string name="settings_group_app">Uygulama</string>
     <string name="settings_group_support">Destek</string>
-    <string name="settings_try">Demo ve Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Deneme</string>
     <string name="settings_sound">Ses</string>
     <string name="settings_when_alarm">Alarm çalarken</string>
@@ -1570,4 +1570,16 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="sensor_motion_off">Hareket yok</string>
     <string name="sensor_water_on">Su kaçağı!</string>
     <string name="sensor_water_off">Kuru</string>
+    <string name="demo_sensor">Demo · Salon sensörü</string>
+    <string name="demo_door">Demo · Ön kapı</string>
+    <string name="sensor_alerts">Sensör uyarıları</string>
+    <string name="sensor_alert_door">Kapı açılınca</string>
+    <string name="sensor_alert_motion">Hareket algılanınca</string>
+    <string name="sensor_alert_water">Su kaçağı algılanınca</string>
+    <string name="sensor_alert_battery" formatted="false">Pil %15\'in altına inince</string>
+    <string name="sensor_alert_range">%1$s sınır dışına çıkınca</string>
+    <string name="sensor_min">En az</string>
+    <string name="sensor_max">En çok</string>
+    <string name="sensor_alerts_hint">Bunlar Uyarılar › Koşullu uyarılar\'da da görünür; oradan ayrıntılı düzenlenebilir.</string>
+    <string name="board_sensors">Sensörler</string>
 </resources>

@@ -786,7 +786,7 @@
     <string name="settings_group_alerts">الإنذارات والإشعارات</string>
     <string name="settings_group_app">التطبيق</string>
     <string name="settings_group_support">الدعم</string>
-    <string name="settings_try">التجريبي وPro</string>
+    <string name="settings_try">التجريبي</string>
     <string name="settings_try_it">تجربة</string>
     <string name="settings_sound">الصوت</string>
     <string name="settings_when_alarm">أثناء رنين الإنذار</string>
@@ -1717,4 +1717,16 @@
     <string name="sensor_motion_off">لا توجد حركة</string>
     <string name="sensor_water_on">تسرب مياه!</string>
     <string name="sensor_water_off">جاف</string>
+    <string name="demo_sensor">تجريبي · مستشعر غرفة المعيشة</string>
+    <string name="demo_door">تجريبي · الباب الأمامي</string>
+    <string name="sensor_alerts">تنبيهات المستشعرات</string>
+    <string name="sensor_alert_door">عند فتح الباب</string>
+    <string name="sensor_alert_motion">عند اكتشاف حركة</string>
+    <string name="sensor_alert_water">عند اكتشاف تسرب مياه</string>
+    <string name="sensor_alert_battery" formatted="false">عندما تنخفض البطارية عن 15 %</string>
+    <string name="sensor_alert_range">عندما تخرج %1$s عن النطاق</string>
+    <string name="sensor_min">الأدنى</string>
+    <string name="sensor_max">الأقصى</string>
+    <string name="sensor_alerts_hint">تظهر أيضًا في التنبيهات › التنبيهات المشروطة، حيث يمكن تعديلها بالتفصيل.</string>
+    <string name="board_sensors">المستشعرات</string>
 </resources>

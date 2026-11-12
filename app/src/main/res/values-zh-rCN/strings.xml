@@ -680,7 +680,7 @@
     <string name="settings_group_alerts">警报与通知</string>
     <string name="settings_group_app">应用</string>
     <string name="settings_group_support">支持</string>
-    <string name="settings_try">演示与 Pro</string>
+    <string name="settings_try">演示</string>
     <string name="settings_try_it">测试</string>
     <string name="settings_sound">声音</string>
     <string name="settings_when_alarm">警报响铃时</string>
@@ -1515,4 +1515,16 @@
     <string name="sensor_motion_off">无移动</string>
     <string name="sensor_water_on">漏水！</string>
     <string name="sensor_water_off">干燥</string>
+    <string name="demo_sensor">演示 · 客厅传感器</string>
+    <string name="demo_door">演示 · 前门</string>
+    <string name="sensor_alerts">传感器提醒</string>
+    <string name="sensor_alert_door">门打开时</string>
+    <string name="sensor_alert_motion">检测到移动时</string>
+    <string name="sensor_alert_water">检测到漏水时</string>
+    <string name="sensor_alert_battery" formatted="false">电量低于 15 % 时</string>
+    <string name="sensor_alert_range">%1$s超出范围时</string>
+    <string name="sensor_min">最低</string>
+    <string name="sensor_max">最高</string>
+    <string name="sensor_alerts_hint">这些也会显示在 提醒 › 条件提醒 中，可在那里详细编辑。</string>
+    <string name="board_sensors">传感器</string>
 </resources>

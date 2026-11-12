@@ -6,11 +6,15 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## Sonraki sürüm — yayınlanmadı
+## 2.30.3 — yayınlanmadı
 **Yenilikler**
 - **eWeLink sensörleri**: sıcaklık/nem (TH16, THR316/320, SNZB-02 ailesi), kapı (DW2, SNZB-04), hareket/varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri okunur; cihaz kartında görünür (“23,5 °C · 55 %”, “Kapı açık”). Model tablosu AlexxIT/SonoffLAN'dan (MIT).
 - **Sensörlü otomasyon**: yeni olaylar “Sensör üstünde / altında” (ör. oda 26 °C'yi geçince klimayı aç; histerezisli, bir kez tetiklenir) ve “Sensör algıladı / normal” (kapı açılınca alarm, hareket olunca ışığı aç).
 - Wi-Fi kapı sensörü (DW2) artık yanlışlıkla aç/kapa düğmeli röle gibi görünmez.
+- **Sensör uyarıları** (Uyarılar › cihaz): kapı açılınca / hareket / su kaçağı / pil azalınca için tek dokunuşla Alarm-Bildirim-Yok; sıcaklık ve nem için en az/en çok sınırı. Koşullu uyarılar listesinde de görünür. Yalnız sensör olan cihazda açıldı/kapandı kuralları gizlenir.
+- **Bekleme ekranı**: yeni “Sensörler” bloğu (büyük sıcaklık/nem, kapı açık/su kaçağı kırmızı, pil azsa uyarı) ve açık kuralların listesi (ad + Eğer → O zaman). Sensörler artık aç/kapa kutucuğu olarak görünmez.
+- Sohbette “sıcaklık” oda sensörlerini de söyler. Sensör cihazları termometre/kapı simgesiyle görünür. Eşik alanı sensörün şu anki değeriyle dolar.
+- Demo: sıcaklık/nem sensörü ve kapı sensörü eklendi (değerleri oynar); demo kapanınca demo cihazlara bağlı kurallar da silinir; Demo satırının tamamına dokunmak anahtarı çevirir; “Demo ve Pro” başlığı “Demo” oldu.
 
 ## 2.29.1 — 2026-11-10
 **Değişiklikler**

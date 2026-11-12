@@ -106,6 +106,11 @@ import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.Automation
+import com.macerce.switchguard.core.SensorKind
+import androidx.compose.material.icons.rounded.Sensors
+import androidx.compose.material.icons.rounded.Bolt
 import com.macerce.switchguard.core.DurationText
 import com.macerce.switchguard.core.StandbyBoard
 import com.macerce.switchguard.core.StandbyBoard.UpcomingKind
@@ -282,7 +287,12 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
     val minute = now / 60_000
 
     val snapshots = remember(version) { store.snapshots }
-    val tiles = remember(version) { store.snapshotsWithGroups }
+    // Yalnız sensörler aç/kapa kutucuğu değil, ayrı "Sensörler" bloğunda değerleriyle gösterilir.
+    val tiles = remember(version) { store.snapshotsWithGroups.filterNot { it.sensorOnly } }
+    val sensors = remember(version) { snapshots.filter { it.hasSensors } }
+    // Açık kurallar (otomasyon + koşullu uyarı); sensör hızlı uyarıları da dahil.
+    val rules = remember(version) { store.automations.filter { it.enabled } }
+    val ruleDevices = remember(version) { store.snapshotsWithGroups }
     val monitored = remember(version) { store.monitoredIds() }
     val alarmLines = remember(version) { store.pendingAlarm }
     val away = remember(version, minute) { store.isAway() }
@@ -368,6 +378,8 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     },
                 )
             }
+            val sensorBlock: @Composable () -> Unit = { if (sensors.isNotEmpty()) SensorReadings(sensors) }
+            val ruleBlock: @Composable (Int) -> Unit = { n -> if (rules.isNotEmpty()) Rules(rules, ruleDevices, n) }
             val gauge: @Composable (Dp) -> Unit = { w ->
                 val p = power
                 if (p != null) PowerGauge(livePower, p.series, p.todayKwh, w)
@@ -377,6 +389,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     Column(Modifier.weight(1.1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(14.dp)) {
                         Clock(now, big = !compact)
                         WeatherLine(weather, lat != null)
+                        sensorBlock()
                         status()
                         devices()
                         if (host != null) Spacer(Modifier.height(64.dp))
@@ -384,20 +397,24 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     if (power != null) {
                         Box(Modifier.weight(0.8f), contentAlignment = Alignment.Center) { gauge(if (compact) 220.dp else 280.dp) }
                     }
-                    Column(Modifier.weight(1.1f), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Column(Modifier.weight(1.1f).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         Recent(events, lines)
                         Upcoming(next, now)
+                        ruleBlock(if (compact) 2 else 4)
+                        if (host != null) Spacer(Modifier.height(64.dp))
                     }
                 }
             } else {
                 Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(18.dp)) {
                     Clock(now, big = true)
                     WeatherLine(weather, lat != null)
+                    sensorBlock()
                     status()
                     devices()
                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { gauge(260.dp) }
                     Recent(events, lines)
                     Upcoming(next, now)
+                    ruleBlock(6)
                     if (host != null) Spacer(Modifier.height(64.dp))
                 }
             }
@@ -486,6 +503,65 @@ private fun DeviceTiles(devices: List<DeviceSnapshot>, onToggle: ((DeviceSnapsho
                     }
                 }
             }
+        }
+    }
+}
+
+/**
+ * Oda sensörleri: her cihaz bir kutucuk, büyük sıcaklık/nem; kapı açık, hareket ya da su kaçağı kırmızı/turuncu.
+ * Pil yalnızca %20'nin altındaysa gösterilir.
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun SensorReadings(devices: List<DeviceSnapshot>) {
+    val res = LocalContext.current.resources
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        BoardTitle(stringResource(R.string.board_sensors))
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            for (d in devices) {
+                val s = d.sensors
+                val alert = d.online && (d.sensorActive(SensorKind.WATER) == true || d.sensorActive(SensorKind.DOOR) == true)
+                val busy = d.online && d.sensorActive(SensorKind.MOTION) == true
+                val accent = when { alert -> Color(0xFFFF6B6B); busy -> Amber; else -> Teal }
+                Column(
+                    Modifier.clip(RoundedCornerShape(16.dp)).background(if (alert) accent.copy(alpha = 0.18f) else Faint)
+                        .alpha(if (d.online) 1f else 0.5f).padding(horizontal = 14.dp, vertical = 10.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        val icon = s.keys.firstOrNull { it != SensorKind.BATTERY }?.icon() ?: Icons.Rounded.Sensors
+                        Icon(if (d.online) icon else Icons.Rounded.CloudOff, null, tint = if (d.online) accent else Dim, modifier = Modifier.size(16.dp))
+                        Text(d.name, color = Dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.widthIn(max = 170.dp))
+                    }
+                    Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        s[SensorKind.TEMPERATURE]?.let { Text(formatNumber(it) + "°", color = Ink, fontSize = 30.sp, fontWeight = FontWeight.Light) }
+                        s[SensorKind.HUMIDITY]?.let { Text(formatNumber(it.roundToInt().toDouble()) + " %", color = Dim, fontSize = 18.sp, modifier = Modifier.padding(bottom = 4.dp)) }
+                        for (k in listOf(SensorKind.DOOR, SensorKind.MOTION, SensorKind.WATER)) {
+                            val v = s[k] ?: continue
+                            Text(res.getString(k.stateLabel(v >= 0.5)), color = if (v >= 0.5) accent else Ink, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                        }
+                        s[SensorKind.BATTERY]?.takeIf { it < 20 }?.let {
+                            Text("🔋 " + it.roundToInt() + " %", color = Amber, fontSize = 13.sp, modifier = Modifier.padding(bottom = 4.dp))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** Açık kurallar: ad ve "Eğer → O zaman" özeti; uyarılar zil, otomasyonlar şimşek simgesiyle. */
+@Composable
+private fun Rules(list: List<Automation>, devices: List<DeviceSnapshot>, max: Int) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        BoardTitle(stringResource(R.string.automations_rules_title) + " · " + list.size)
+        for (a in list.take(max)) {
+            val (cond, act) = describe(a, devices)
+            val alert = a.action.kind == ActionKind.ALARM || a.action.kind == ActionKind.NOTIFY
+            BoardRow(
+                if (alert) Icons.Rounded.NotificationsActive else Icons.Rounded.Bolt,
+                if (a.action.kind == ActionKind.ALARM) Color(0xFFFF6B6B) else if (alert) Amber else Teal,
+                a.name.ifBlank { cond }, "", sub = "$cond → $act", lines = 1,
+            )
         }
     }
 }

@@ -3,6 +3,7 @@ package com.macerce.switchguard.service
 import android.content.Context
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.ChatCommand
+import com.macerce.switchguard.core.SensorKind
 import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.Cycle
 import com.macerce.switchguard.core.CycleEnd
@@ -117,13 +118,19 @@ object ChatRunner {
     private fun temperature(context: Context): String {
         val store = Store.get(context)
         val runtime = RuntimeState.get(context)
+        // Oda sensörleri (TH16, SNZB-02 ...): "Salon: 23,5 °C · 55 %".
+        val indoor = store.snapshots.filter { it.online && SensorKind.TEMPERATURE in it.sensors }.joinToString("\n") { d ->
+            d.name + ": " + listOf(SensorKind.TEMPERATURE, SensorKind.HUMIDITY)
+                .mapNotNull { k -> d.sensors[k]?.let { com.macerce.switchguard.ui.formatSensor(k, it) } }.joinToString(" · ")
+        }
+        fun withIndoor(outdoor: String) = if (indoor.isEmpty()) outdoor else "$indoor\n$outdoor"
         val lat = store.latitude
         val lon = store.longitude
-        if (lat == null || lon == null) return context.getString(R.string.chat_temp_unknown)
+        if (lat == null || lon == null) return indoor.ifEmpty { context.getString(R.string.chat_temp_unknown) }
         val fresh = runCatching { com.macerce.switchguard.api.WeatherClient.temperature(lat, lon) }.getOrNull()
         if (fresh != null) runtime.outdoorTemp = fresh
-        val t = fresh ?: runtime.outdoorTemp ?: return context.getString(R.string.chat_temp_failed)
-        return context.getString(R.string.chat_temp, String.format(Locale.getDefault(), "%.1f", t))
+        val t = fresh ?: runtime.outdoorTemp ?: return withIndoor(context.getString(R.string.chat_temp_failed))
+        return withIndoor(context.getString(R.string.chat_temp, String.format(Locale.getDefault(), "%.1f", t)))
     }
 
     /** [askKey] doluysa ve tek hedef netleşmediyse soru olarak hatırlanır (yanıtı sıradaki mesajdır). */

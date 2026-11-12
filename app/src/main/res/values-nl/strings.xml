@@ -718,7 +718,7 @@
     <string name="settings_group_alerts">Alarmen &amp; meldingen</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Ondersteuning</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Geluid</string>
     <string name="settings_when_alarm">Terwijl een alarm afgaat</string>
@@ -1573,4 +1573,16 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="sensor_motion_off">Geen beweging</string>
     <string name="sensor_water_on">Waterlek!</string>
     <string name="sensor_water_off">Droog</string>
+    <string name="demo_sensor">Demo · Woonkamersensor</string>
+    <string name="demo_door">Demo · Voordeur</string>
+    <string name="sensor_alerts">Sensormeldingen</string>
+    <string name="sensor_alert_door">Als de deur opengaat</string>
+    <string name="sensor_alert_motion">Als er beweging is</string>
+    <string name="sensor_alert_water">Als er een waterlek is</string>
+    <string name="sensor_alert_battery" formatted="false">Als de batterij onder 15 % komt</string>
+    <string name="sensor_alert_range">Als %1$s buiten het bereik komt</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Max</string>
+    <string name="sensor_alerts_hint">Deze staan ook onder Meldingen › Voorwaardelijke meldingen, waar je ze uitgebreid kunt bewerken.</string>
+    <string name="board_sensors">Sensoren</string>
 </resources>

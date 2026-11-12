@@ -556,10 +556,13 @@ private fun AccountsPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
 
     SectionTitle(stringResource(R.string.settings_try))
     SectionCard {
-        InfoRow(Icons.Rounded.Science, stringResource(R.string.demo_devices), stringResource(R.string.demo_devices_desc)) {
-            Switch(checked = s.demoMode, onCheckedChange = {
-                if (it) Actions.enableDemo(context) else Actions.disableDemo(context)
-            })
+        val toggleDemo = { on: Boolean -> if (on) Actions.enableDemo(context) else Actions.disableDemo(context) }
+        // Satırın tamamına dokunmak da anahtarı çevirir (yalnız anahtara değil).
+        InfoRow(
+            Icons.Rounded.Science, stringResource(R.string.demo_devices), stringResource(R.string.demo_devices_desc),
+            Modifier.clickable { toggleDemo(!s.demoMode) },
+        ) {
+            Switch(checked = s.demoMode, onCheckedChange = { toggleDemo(it) })
         }
     }
 }

@@ -713,7 +713,7 @@
     <string name="settings_group_alerts">Alarmas y notificaciones</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Soporte</string>
-    <string name="settings_try">Demo y Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Probar</string>
     <string name="settings_sound">Sonido</string>
     <string name="settings_when_alarm">Mientras suena una alarma</string>
@@ -1579,4 +1579,16 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="sensor_motion_off">Sin movimiento</string>
     <string name="sensor_water_on">¡Fuga de agua!</string>
     <string name="sensor_water_off">Seco</string>
+    <string name="demo_sensor">Demo · Sensor del salón</string>
+    <string name="demo_door">Demo · Puerta principal</string>
+    <string name="sensor_alerts">Alertas de sensores</string>
+    <string name="sensor_alert_door">Cuando se abra la puerta</string>
+    <string name="sensor_alert_motion">Cuando se detecte movimiento</string>
+    <string name="sensor_alert_water">Cuando se detecte una fuga de agua</string>
+    <string name="sensor_alert_battery" formatted="false">Cuando la batería baje del 15 %</string>
+    <string name="sensor_alert_range">Cuando %1$s salga del rango</string>
+    <string name="sensor_min">Mín.</string>
+    <string name="sensor_max">Máx.</string>
+    <string name="sensor_alerts_hint">También aparecen en Alertas › Alertas condicionales, donde puedes editarlas en detalle.</string>
+    <string name="board_sensors">Sensores</string>
 </resources>

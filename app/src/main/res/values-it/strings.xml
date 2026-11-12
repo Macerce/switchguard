@@ -714,7 +714,7 @@
     <string name="settings_group_alerts">Allarmi e notifiche</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Assistenza</string>
-    <string name="settings_try">Demo e Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Prova</string>
     <string name="settings_sound">Suono</string>
     <string name="settings_when_alarm">Mentre un allarme suona</string>
@@ -1580,4 +1580,16 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="sensor_motion_off">Nessun movimento</string>
     <string name="sensor_water_on">Perdita d\'acqua!</string>
     <string name="sensor_water_off">Asciutto</string>
+    <string name="demo_sensor">Demo · Sensore del soggiorno</string>
+    <string name="demo_door">Demo · Porta d\'ingresso</string>
+    <string name="sensor_alerts">Avvisi dei sensori</string>
+    <string name="sensor_alert_door">Quando la porta si apre</string>
+    <string name="sensor_alert_motion">Quando viene rilevato movimento</string>
+    <string name="sensor_alert_water">Quando viene rilevata una perdita d\'acqua</string>
+    <string name="sensor_alert_battery" formatted="false">Quando la batteria scende sotto il 15 %</string>
+    <string name="sensor_alert_range">Quando %1$s esce dall\'intervallo</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Max</string>
+    <string name="sensor_alerts_hint">Compaiono anche in Avvisi › Avvisi condizionali, dove puoi modificarli in dettaglio.</string>
+    <string name="board_sensors">Sensori</string>
 </resources>

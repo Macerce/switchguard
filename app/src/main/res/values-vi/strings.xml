@@ -680,7 +680,7 @@
     <string name="settings_group_alerts">Báo động &amp; thông báo</string>
     <string name="settings_group_app">Ứng dụng</string>
     <string name="settings_group_support">Hỗ trợ</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Thử</string>
     <string name="settings_sound">Âm thanh</string>
     <string name="settings_when_alarm">Khi báo động đang kêu</string>
@@ -1508,4 +1508,16 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="sensor_motion_off">Không có chuyển động</string>
     <string name="sensor_water_on">Rò rỉ nước!</string>
     <string name="sensor_water_off">Khô</string>
+    <string name="demo_sensor">Demo · Cảm biến phòng khách</string>
+    <string name="demo_door">Demo · Cửa trước</string>
+    <string name="sensor_alerts">Cảnh báo cảm biến</string>
+    <string name="sensor_alert_door">Khi cửa mở</string>
+    <string name="sensor_alert_motion">Khi phát hiện chuyển động</string>
+    <string name="sensor_alert_water">Khi phát hiện rò rỉ nước</string>
+    <string name="sensor_alert_battery" formatted="false">Khi pin dưới 15 %</string>
+    <string name="sensor_alert_range">Khi %1$s ra ngoài phạm vi</string>
+    <string name="sensor_min">Tối thiểu</string>
+    <string name="sensor_max">Tối đa</string>
+    <string name="sensor_alerts_hint">Chúng cũng xuất hiện trong Cảnh báo › Cảnh báo có điều kiện, nơi bạn có thể chỉnh chi tiết.</string>
+    <string name="board_sensors">Cảm biến</string>
 </resources>

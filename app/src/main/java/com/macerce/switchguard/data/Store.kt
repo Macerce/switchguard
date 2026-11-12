@@ -165,7 +165,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     /** Demo cihazlarını ve örnek otomasyonlarını ekler; zaten varsa dokunmaz. */
     fun enableDemo(names: Demo.Names) {
         demoMode = true
-        if (snapshots.none { it.cloud == Cloud.DEMO }) snapshots = snapshots + Demo.devices(names)
+        // Eksik demo cihazları eklenir (yeni sürümle gelen sensörler, demo zaten açıkken de).
+        val have = snapshots.map { it.id }.toSet()
+        Demo.devices(names).filter { it.id !in have }.takeIf { it.isNotEmpty() }?.let { snapshots = snapshots + it }
         val existing = automations.map { it.id }.toSet()
         automations = automations + Demo.automations(names).filter { it.id !in existing }
     }
@@ -175,7 +177,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         demoMode = false
         snapshots = snapshots.filter { it.cloud != Cloud.DEMO }
         rules = rules.filterKeys { !Demo.isDemo(it) }
-        automations = automations.filterNot { Demo.isDemoAutomation(it) }
+        // Demo cihazlarına bağlı (kullanıcının sonradan kurduğu, sensör uyarıları dahil) kurallar da gider: cihazsız kalmasınlar.
+        automations = automations.filterNot {
+            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId))
+        }
     }
 
     fun disconnectTuya() {

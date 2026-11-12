@@ -118,6 +118,29 @@ class SensorsTest {
         assertEquals(1, e.onStates(mapOf("s" to dev(null, 1.0)), mapOf("s" to dev(null, 0.0)), listOf(closed), 1_200_000L).size)
     }
 
+    @Test fun sensorAlertQuickRules() {
+        val door = SensorAlerts.simple("d", "Kapı", SensorKind.DOOR, ActionKind.ALARM)!!
+        assertEquals("salert:d:DOOR", door.id)
+        assertEquals(TriggerKind.SENSOR_ACTIVE, door.trigger.kind)
+        assertEquals(AutomationTab.ALERTS, AutomationTab.tabOf(door))
+        assertEquals(null, SensorAlerts.simple("d", "Kapı", SensorKind.DOOR, null))
+        val bat = SensorAlerts.simple("d", "Pil", SensorKind.BATTERY, ActionKind.NOTIFY)!!
+        assertEquals(TriggerKind.SENSOR_BELOW, bat.trigger.kind)
+        assertEquals(SensorAlerts.LOW_BATTERY, bat.trigger.watts, 0.0)
+        val hi = SensorAlerts.bound("d", "Dondurucu", SensorKind.TEMPERATURE, SensorAlerts.Bound.MAX, -15.0, ActionKind.ALARM)!!
+        assertEquals("salert:d:TEMPERATURE:MAX", hi.id)
+        assertEquals(TriggerKind.SENSOR_ABOVE, hi.trigger.kind)
+        assertEquals(null, SensorAlerts.bound("d", "x", SensorKind.TEMPERATURE, SensorAlerts.Bound.MIN, null, ActionKind.ALARM))
+        assertEquals(ActionKind.ALARM, SensorAlerts.actionOf(listOf(hi), hi.id))
+        assertEquals(null, SensorAlerts.actionOf(listOf(hi.copy(enabled = false)), hi.id))
+        assertEquals(-15.0, SensorAlerts.valueOf(listOf(hi), hi.id)!!, 0.0)
+    }
+
+    @Test fun sensorOnlyDeviceKind() {
+        assertEquals(DeviceKind.SENSOR, DeviceKinds.of(dev(22.0)))
+        assertEquals(DeviceKind.DOOR, DeviceKinds.of(dev(null, 0.0)))
+    }
+
     @Test fun automationJsonKeepsSensor() {
         val a = Automation("a", "Nem", true, Trigger(TriggerKind.SENSOR_ABOVE, "s", watts = 70.0, sensor = SensorKind.HUMIDITY), AutoAction(ActionKind.TURN_ON, "fan"))
         assertEquals(a, Automation.listFromJson(Automation.listToJson(listOf(a))).single())

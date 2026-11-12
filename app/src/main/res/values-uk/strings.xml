@@ -731,7 +731,7 @@
     <string name="settings_group_alerts">Тривоги й сповіщення</string>
     <string name="settings_group_app">Застосунок</string>
     <string name="settings_group_support">Підтримка</string>
-    <string name="settings_try">Демо й Pro</string>
+    <string name="settings_try">Демо</string>
     <string name="settings_try_it">Тест</string>
     <string name="settings_sound">Звук</string>
     <string name="settings_when_alarm">Поки лунає тривога</string>
@@ -1616,4 +1616,16 @@
     <string name="sensor_motion_off">Немає руху</string>
     <string name="sensor_water_on">Протікання води!</string>
     <string name="sensor_water_off">Сухо</string>
+    <string name="demo_sensor">Демо · Датчик у вітальні</string>
+    <string name="demo_door">Демо · Вхідні двері</string>
+    <string name="sensor_alerts">Сповіщення датчиків</string>
+    <string name="sensor_alert_door">Коли двері відчиняються</string>
+    <string name="sensor_alert_motion">Коли виявлено рух</string>
+    <string name="sensor_alert_water">Коли виявлено протікання</string>
+    <string name="sensor_alert_battery" formatted="false">Коли заряд нижче 15 %</string>
+    <string name="sensor_alert_range">Коли %1$s виходить за межі</string>
+    <string name="sensor_min">Мін.</string>
+    <string name="sensor_max">Макс.</string>
+    <string name="sensor_alerts_hint">Вони також є в розділі Сповіщення › Умовні сповіщення, де їх можна налаштувати детально.</string>
+    <string name="board_sensors">Датчики</string>
 </resources>

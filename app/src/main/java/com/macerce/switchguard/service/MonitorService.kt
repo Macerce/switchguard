@@ -271,6 +271,8 @@ class MonitorService : Service() {
 
     private fun startMonitoring() {
         store.monitoringEnabled = true
+        // Demo açıkken güncellemeyle gelen yeni demo cihazları (sensörler) da eklensin.
+        runCatching { com.macerce.switchguard.ui.Actions.addMissingDemoDevices(this) }
         val status = notifier.statusNotification(getString(R.string.app_name), getString(R.string.state_connecting))
         if (Build.VERSION.SDK_INT >= 34) {
             startForeground(Notifier.ID_STATUS, status, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
@@ -653,7 +655,7 @@ class MonitorService : Service() {
         lastDemoJitterAt = wall
         val random = kotlin.random.Random(wall)
         val list = store.snapshots
-        if (list.none { it.cloud == Cloud.DEMO && it.hasEnergy }) return
+        if (list.none { it.cloud == Cloud.DEMO && (it.hasEnergy || it.hasSensors) }) return
         process(list.map {
             if (it.cloud == Cloud.DEMO && it.online) Demo.recompute(it, demoStalled[it.id].orEmpty(), random) else it
         })

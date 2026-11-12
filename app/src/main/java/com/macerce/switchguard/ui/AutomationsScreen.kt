@@ -348,7 +348,7 @@ private fun Clause(label: String, text: String) {
 
 /** ("Rögar · Kanal 1 açılınca", "Lamba: aç · 5 dk sonra") */
 @Composable
-private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String, String> {
+internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String, String> {
     val t = a.trigger
     val src = devices.firstOrNull { it.id == t.deviceId }
     val zoneContext = LocalContext.current
@@ -619,6 +619,10 @@ fun AutomationEditor(
     // Seçili olaya uyan sensörler (sayısal ya da ikili); seçim uymuyorsa ilkine geçilir.
     val sensorChoices = src?.sensors?.keys?.filter { triggerKind.usesSensor && it.binary == triggerKind.usesSensorState }.orEmpty()
     if (triggerKind.usesSensor && sensorKind !in sensorChoices) sensorKind = sensorChoices.firstOrNull()
+    // Yeni eşik alanı sensörün şu anki değeriyle (yuvarlanmış) dolar: kullanıcı neyin üstünde/altında olduğunu görsün.
+    if (triggerKind.usesSensorValue && sensorValue.isEmpty()) {
+        sensorKind?.let { k -> src?.sensors?.get(k) }?.let { sensorValue = formatNumber(Math.round(it).toDouble()) }
+    }
     val sensorThreshold = sensorValue.replace(',', '.').toDoubleOrNull()
 
     val wattsValue = watts.replace(',', '.').toDoubleOrNull()
@@ -729,7 +733,7 @@ fun AutomationEditor(
                 OptionChips(kinds, triggerKind, { it.icon() }, { stringResource(it.shortTitle()) }) { triggerKind = it }
                 if (triggerKind.usesDevice) {
                     FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(devices, triggerDevice) { triggerDevice = it.id; triggerChannel = 0 }
+                    DeviceChooser(devices, triggerDevice) { if (it.id != triggerDevice) sensorValue = ""; triggerDevice = it.id; triggerChannel = 0 }
                     if (triggerKind.usesChannel && src?.isMultiChannel == true) {
                         FieldLabel(stringResource(R.string.automation_channel))
                         ChannelChooser(src, triggerChannel) { triggerChannel = it }
@@ -737,7 +741,7 @@ fun AutomationEditor(
                 }
                 if (triggerKind.usesSensor && sensorChoices.isNotEmpty()) {
                     FieldLabel(stringResource(R.string.sensor_choose))
-                    OptionChips(sensorChoices, sensorKind ?: sensorChoices.first(), { it.icon() }, { stringResource(it.label()) }) { sensorKind = it }
+                    OptionChips(sensorChoices, sensorKind ?: sensorChoices.first(), { it.icon() }, { stringResource(it.label()) }) { if (it != sensorKind) { sensorKind = it; sensorValue = "" } }
                     val kind = sensorKind
                     if (triggerKind.usesSensorValue && kind != null) {
                         NumberField(sensorValue, stringResource(R.string.sensor_threshold), kind.unit, allowNegative = kind == SensorKind.TEMPERATURE) { sensorValue = it }
@@ -1176,7 +1180,7 @@ internal fun Stepper(
 
 /** Sayı alanı (güç eşiği W, sıcaklık °C); [allowNegative] eksi değere izin verir. */
 @Composable
-private fun NumberField(value: String, label: String, suffix: String, allowNegative: Boolean = false, onChange: (String) -> Unit) {
+internal fun NumberField(value: String, label: String, suffix: String, allowNegative: Boolean = false, onChange: (String) -> Unit) {
     TextField(
         value = value,
         onValueChange = { v ->

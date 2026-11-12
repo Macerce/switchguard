@@ -241,17 +241,28 @@ object Actions {
         val store = Store.get(context)
         // Yeniden açılan demo cihazları varsayılan durumla gelir: özetler eski son durumu sürdürmesin.
         val previous = store.snapshots.associateBy { it.id }
-        store.enableDemo(
-            Demo.Names(
-                freezer = context.getString(R.string.demo_freezer),
-                pumps = context.getString(R.string.demo_pumps),
-                light = context.getString(R.string.demo_light),
-                stalledPump = context.getString(R.string.demo_auto_pump),
-                lightLeftOn = context.getString(R.string.demo_auto_light),
-            )
-        )
+        store.enableDemo(demoNames(context))
         runCatching { MetricsLog.get(context).record(previous, store.snapshots) }
     }
+
+    /** Demo açıkken sonradan eklenen demo cihazlarını (sensörler) ekler; otomasyonlara dokunmaz (silinenler geri gelmez). */
+    fun addMissingDemoDevices(context: Context) {
+        val store = Store.get(context)
+        if (!store.demoMode) return
+        val have = store.snapshots.map { it.id }.toSet()
+        val missing = Demo.devices(demoNames(context)).filter { it.id !in have }
+        if (missing.isNotEmpty()) store.snapshots = store.snapshots + missing
+    }
+
+    private fun demoNames(context: Context) = Demo.Names(
+        freezer = context.getString(R.string.demo_freezer),
+        pumps = context.getString(R.string.demo_pumps),
+        light = context.getString(R.string.demo_light),
+        stalledPump = context.getString(R.string.demo_auto_pump),
+        lightLeftOn = context.getString(R.string.demo_auto_light),
+        sensor = context.getString(R.string.demo_sensor),
+        door = context.getString(R.string.demo_door),
+    )
 
     fun disableDemo(context: Context) {
         val store = Store.get(context)

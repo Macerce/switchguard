@@ -716,7 +716,7 @@
     <string name="settings_group_alerts">Alarme &amp; Benachrichtigungen</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Support</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Testen</string>
     <string name="settings_sound">Ton</string>
     <string name="settings_when_alarm">Während ein Alarm läutet</string>
@@ -1571,4 +1571,16 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="sensor_motion_off">Keine Bewegung</string>
     <string name="sensor_water_on">Wasserleck!</string>
     <string name="sensor_water_off">Trocken</string>
+    <string name="demo_sensor">Demo · Wohnzimmersensor</string>
+    <string name="demo_door">Demo · Haustür</string>
+    <string name="sensor_alerts">Sensorwarnungen</string>
+    <string name="sensor_alert_door">Wenn die Tür geöffnet wird</string>
+    <string name="sensor_alert_motion">Wenn Bewegung erkannt wird</string>
+    <string name="sensor_alert_water">Wenn ein Wasserleck erkannt wird</string>
+    <string name="sensor_alert_battery" formatted="false">Wenn der Akku unter 15 % fällt</string>
+    <string name="sensor_alert_range">Wenn %1$s den Bereich verlässt</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Max</string>
+    <string name="sensor_alerts_hint">Diese erscheinen auch unter Warnungen › Bedingte Warnungen und lassen sich dort genauer bearbeiten.</string>
+    <string name="board_sensors">Sensoren</string>
 </resources>

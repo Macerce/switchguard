@@ -704,7 +704,7 @@ private fun DeviceTile(
 @Composable
 fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
     val scheme = MaterialTheme.colorScheme
-    val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud) { DeviceKinds.of(device) }
+    val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud, device.sensorOnly, SensorKind.DOOR in device.sensors) { DeviceKinds.of(device) }
     val anyOn = device.switches.values.any { it }
     val raised = raisedOnTile()
     val (bg, tint) = when {

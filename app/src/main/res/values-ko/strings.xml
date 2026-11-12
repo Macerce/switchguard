@@ -701,7 +701,7 @@
     <string name="settings_group_alerts">알람 및 알림</string>
     <string name="settings_group_app">앱</string>
     <string name="settings_group_support">지원</string>
-    <string name="settings_try">데모 및 Pro</string>
+    <string name="settings_try">데모</string>
     <string name="settings_try_it">테스트</string>
     <string name="settings_sound">소리</string>
     <string name="settings_when_alarm">알람이 울리는 동안</string>
@@ -1537,4 +1537,16 @@
     <string name="sensor_motion_off">움직임 없음</string>
     <string name="sensor_water_on">누수!</string>
     <string name="sensor_water_off">건조</string>
+    <string name="demo_sensor">데모 · 거실 센서</string>
+    <string name="demo_door">데모 · 현관문</string>
+    <string name="sensor_alerts">센서 알림</string>
+    <string name="sensor_alert_door">문이 열리면</string>
+    <string name="sensor_alert_motion">움직임이 감지되면</string>
+    <string name="sensor_alert_water">누수가 감지되면</string>
+    <string name="sensor_alert_battery" formatted="false">배터리가 15 % 미만이면</string>
+    <string name="sensor_alert_range">%1$s이(가) 범위를 벗어나면</string>
+    <string name="sensor_min">최소</string>
+    <string name="sensor_max">최대</string>
+    <string name="sensor_alerts_hint">이 항목은 알림 › 조건부 알림에도 표시되며 거기서 자세히 편집할 수 있습니다.</string>
+    <string name="board_sensors">센서</string>
 </resources>

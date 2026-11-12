@@ -752,7 +752,7 @@
     <string name="settings_group_alerts">Тревоги и уведомления</string>
     <string name="settings_group_app">Приложение</string>
     <string name="settings_group_support">Поддержка</string>
-    <string name="settings_try">Демо и Pro</string>
+    <string name="settings_try">Демо</string>
     <string name="settings_try_it">Проверка</string>
     <string name="settings_sound">Звук</string>
     <string name="settings_when_alarm">Пока звучит тревога</string>
@@ -1645,4 +1645,16 @@
     <string name="sensor_motion_off">Нет движения</string>
     <string name="sensor_water_on">Протечка воды!</string>
     <string name="sensor_water_off">Сухо</string>
+    <string name="demo_sensor">Демо · Датчик в гостиной</string>
+    <string name="demo_door">Демо · Входная дверь</string>
+    <string name="sensor_alerts">Оповещения датчиков</string>
+    <string name="sensor_alert_door">Когда открывается дверь</string>
+    <string name="sensor_alert_motion">Когда обнаружено движение</string>
+    <string name="sensor_alert_water">Когда обнаружена протечка</string>
+    <string name="sensor_alert_battery" formatted="false">Когда заряд ниже 15 %</string>
+    <string name="sensor_alert_range">Когда %1$s выходит за пределы</string>
+    <string name="sensor_min">Мин.</string>
+    <string name="sensor_max">Макс.</string>
+    <string name="sensor_alerts_hint">Они также есть в разделе Оповещения › Условные оповещения, где их можно настроить подробно.</string>
+    <string name="board_sensors">Датчики</string>
 </resources>

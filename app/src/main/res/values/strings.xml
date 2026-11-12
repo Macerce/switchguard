@@ -719,7 +719,7 @@
     <string name="settings_group_alerts">Alarms &amp; notifications</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Support</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Sound</string>
     <string name="settings_when_alarm">While an alarm is ringing</string>
@@ -1574,4 +1574,16 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="sensor_motion_off">No motion</string>
     <string name="sensor_water_on">Water leak!</string>
     <string name="sensor_water_off">Dry</string>
+    <string name="demo_sensor">Demo · Living room sensor</string>
+    <string name="demo_door">Demo · Front door</string>
+    <string name="sensor_alerts">Sensor alerts</string>
+    <string name="sensor_alert_door">When the door opens</string>
+    <string name="sensor_alert_motion">When motion is detected</string>
+    <string name="sensor_alert_water">When a water leak is detected</string>
+    <string name="sensor_alert_battery" formatted="false">When the battery drops below 15 %</string>
+    <string name="sensor_alert_range">When %1$s goes out of range</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Max</string>
+    <string name="sensor_alerts_hint">These also appear under Alerts › Conditional alerts, where you can edit them in detail.</string>
+    <string name="board_sensors">Sensors</string>
 </resources>

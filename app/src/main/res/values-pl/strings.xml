@@ -752,7 +752,7 @@
     <string name="settings_group_alerts">Alarmy i powiadomienia</string>
     <string name="settings_group_app">Aplikacja</string>
     <string name="settings_group_support">Wsparcie</string>
-    <string name="settings_try">Demo i Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Dźwięk</string>
     <string name="settings_when_alarm">Gdy dzwoni alarm</string>
@@ -1645,4 +1645,16 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="sensor_motion_off">Brak ruchu</string>
     <string name="sensor_water_on">Wyciek wody!</string>
     <string name="sensor_water_off">Sucho</string>
+    <string name="demo_sensor">Demo · Czujnik w salonie</string>
+    <string name="demo_door">Demo · Drzwi wejściowe</string>
+    <string name="sensor_alerts">Alerty czujników</string>
+    <string name="sensor_alert_door">Gdy drzwi się otworzą</string>
+    <string name="sensor_alert_motion">Gdy wykryto ruch</string>
+    <string name="sensor_alert_water">Gdy wykryto wyciek wody</string>
+    <string name="sensor_alert_battery" formatted="false">Gdy bateria spadnie poniżej 15 %</string>
+    <string name="sensor_alert_range">Gdy %1$s wyjdzie poza zakres</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Maks</string>
+    <string name="sensor_alerts_hint">Pojawiają się też w Alerty › Alerty warunkowe, gdzie można je szczegółowo edytować.</string>
+    <string name="board_sensors">Czujniki</string>
 </resources>

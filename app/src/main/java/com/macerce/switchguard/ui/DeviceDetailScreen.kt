@@ -52,7 +52,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import com.macerce.switchguard.core.AlertAction
+import com.macerce.switchguard.core.ActionKind
+import com.macerce.switchguard.core.SensorAlerts
+import com.macerce.switchguard.core.SensorKind
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.EventType
@@ -150,11 +157,17 @@ fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
         }
     }
 
+    val device = remember(version) { store.snapshots.firstOrNull { it.id == deviceId } }
+    // Sensör uyarıları koşullu uyarı kaydıdır: cihazın "izle" anahtarından bağımsız çalışır.
+    if (device != null && device.hasSensors) SensorAlertRules(device)
+
     if (!monitored) return
 
+    // Yalnız sensör olan cihazın rölesi yok: açıldı/kapandı olayları anlamsız.
+    val types = if (device?.sensorOnly == true) listOf(EventType.WENT_OFFLINE, EventType.CAME_ONLINE) else EventType.entries
     SectionTitle(stringResource(R.string.section_rules))
     SectionCard {
-        EventType.entries.forEachIndexed { i, type ->
+        types.forEachIndexed { i, type ->
             if (i > 0) RowDivider()
             RuleRow(type, rules.actionFor(type)) { store.setRules(deviceId, rules.with(type, it)) }
         }
@@ -186,6 +199,116 @@ fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
         }
         RowDivider()
         CategoryRow(rules) { store.setRules(deviceId, rules.copy(category = it)) }
+    }
+}
+
+/**
+ * Sensör uyarıları: kapı/hareket/su ve pil için olay başına Alarm/Bildirim/Yok; sıcaklık/nem için en az/en çok sınırı.
+ * Her biri sabit kimlikli koşullu uyarıdır ([SensorAlerts]); Uyarılar › Koşullu uyarılar'da da görünür.
+ */
+@Composable
+private fun SensorAlertRules(device: DeviceSnapshot) {
+    val context = LocalContext.current
+    val store = remember { Store.get(context) }
+    val version by store.version.collectAsStateWithLifecycle()
+    val list = remember(version) { store.automations }
+    val kinds = SensorAlerts.kinds(device)
+    if (kinds.isEmpty()) return
+    fun ActionKind?.alert() = when (this) { ActionKind.ALARM -> AlertAction.ALARM; ActionKind.NOTIFY -> AlertAction.NOTIFY; else -> AlertAction.IGNORE }
+    fun AlertAction.kind() = when (this) { AlertAction.ALARM -> ActionKind.ALARM; AlertAction.NOTIFY -> ActionKind.NOTIFY; AlertAction.IGNORE -> null }
+
+    SectionTitle(stringResource(R.string.sensor_alerts))
+    SectionCard {
+        kinds.forEachIndexed { i, kind ->
+            if (i > 0) RowDivider()
+            val name = device.name + " · " + stringResource(kind.label())
+            if (kind.binary || kind == SensorKind.BATTERY) {
+                val id = SensorAlerts.id(device.id, kind)
+                val title = when (kind) {
+                    SensorKind.DOOR -> R.string.sensor_alert_door
+                    SensorKind.MOTION -> R.string.sensor_alert_motion
+                    SensorKind.WATER -> R.string.sensor_alert_water
+                    else -> R.string.sensor_alert_battery
+                }
+                SensorRuleRow(kind.icon(), stringResource(title), SensorAlerts.actionOf(list, id).alert()) { a ->
+                    SensorAlerts.simple(device.id, name, kind, a.kind())?.let(store::saveAutomation) ?: store.deleteAutomation(id)
+                }
+            } else {
+                val loId = SensorAlerts.id(device.id, kind, SensorAlerts.Bound.MIN)
+                val hiId = SensorAlerts.id(device.id, kind, SensorAlerts.Bound.MAX)
+                // Metin yerel tutulur: her tuşta kayıt yenilenince "2," gibi yarım yazı silinmesin.
+                var lo by remember(device.id, kind) { mutableStateOf(SensorAlerts.valueOf(list, loId)?.let(::formatNumber) ?: "") }
+                var hi by remember(device.id, kind) { mutableStateOf(SensorAlerts.valueOf(list, hiId)?.let(::formatNumber) ?: "") }
+                val action = (SensorAlerts.actionOf(list, hiId) ?: SensorAlerts.actionOf(list, loId)).alert()
+                fun apply(a: AlertAction, loText: String, hiText: String) {
+                    val values = mapOf(
+                        SensorAlerts.Bound.MIN to (loId to loText.replace(',', '.').toDoubleOrNull()),
+                        SensorAlerts.Bound.MAX to (hiId to hiText.replace(',', '.').toDoubleOrNull()),
+                    )
+                    for ((bound, pair) in values) {
+                        SensorAlerts.bound(device.id, name, kind, bound, pair.second, a.kind())?.let(store::saveAutomation)
+                            ?: store.deleteAutomation(pair.first)
+                    }
+                }
+                SensorRuleRow(kind.icon(), stringResource(R.string.sensor_alert_range, stringResource(kind.label())), action, header = {
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Box(Modifier.weight(1f)) {
+                            NumberField(lo, stringResource(R.string.sensor_min), kind.unit, allowNegative = kind == SensorKind.TEMPERATURE) {
+                                lo = it; if (action != AlertAction.IGNORE) apply(action, it, hi)
+                            }
+                        }
+                        Box(Modifier.weight(1f)) {
+                            NumberField(hi, stringResource(R.string.sensor_max), kind.unit, allowNegative = kind == SensorKind.TEMPERATURE) {
+                                hi = it; if (action != AlertAction.IGNORE) apply(action, lo, it)
+                            }
+                        }
+                    }
+                }) { a ->
+                    // Sınır yazılmadan açılırsa şu anki değerin biraz üstü önerilir (boş kayıt açılmış görünmesin).
+                    if (a != AlertAction.IGNORE && lo.isBlank() && hi.isBlank()) {
+                        device.sensors[kind]?.let { v -> hi = formatNumber(Math.round(v + if (kind == SensorKind.TEMPERATURE) 3 else 15).toDouble()) }
+                    }
+                    apply(a, lo, hi)
+                }
+            }
+        }
+    }
+    Text(
+        stringResource(R.string.sensor_alerts_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SensorRuleRow(
+    icon: ImageVector,
+    title: String,
+    current: AlertAction,
+    header: (@Composable () -> Unit)? = null,
+    onChange: (AlertAction) -> Unit,
+) {
+    Column(Modifier.padding(16.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+            Spacer(Modifier.width(12.dp))
+            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+        }
+        header?.invoke()
+        Spacer(Modifier.height(10.dp))
+        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
+            AlertAction.entries.forEachIndexed { i, action ->
+                SegmentedButton(
+                    selected = current == action,
+                    onClick = { onChange(action) },
+                    shape = SegmentedButtonDefaults.itemShape(i, AlertAction.entries.size),
+                ) {
+                    Text(stringResource(action.title()), fontWeight = if (current == action) FontWeight.SemiBold else null)
+                }
+            }
+        }
     }
 }
 

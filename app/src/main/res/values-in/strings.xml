@@ -662,7 +662,7 @@
     <string name="settings_group_alerts">Alarm &amp; notifikasi</string>
     <string name="settings_group_app">Aplikasi</string>
     <string name="settings_group_support">Dukungan</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Uji</string>
     <string name="settings_sound">Suara</string>
     <string name="settings_when_alarm">Saat alarm berbunyi</string>
@@ -1466,4 +1466,16 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="sensor_motion_off">Tidak ada gerakan</string>
     <string name="sensor_water_on">Kebocoran air!</string>
     <string name="sensor_water_off">Kering</string>
+    <string name="demo_sensor">Demo · Sensor ruang tamu</string>
+    <string name="demo_door">Demo · Pintu depan</string>
+    <string name="sensor_alerts">Peringatan sensor</string>
+    <string name="sensor_alert_door">Saat pintu terbuka</string>
+    <string name="sensor_alert_motion">Saat gerakan terdeteksi</string>
+    <string name="sensor_alert_water">Saat kebocoran air terdeteksi</string>
+    <string name="sensor_alert_battery" formatted="false">Saat baterai di bawah 15 %</string>
+    <string name="sensor_alert_range">Saat %1$s keluar dari rentang</string>
+    <string name="sensor_min">Min</string>
+    <string name="sensor_max">Maks</string>
+    <string name="sensor_alerts_hint">Ini juga muncul di Peringatan › Peringatan bersyarat, tempat Anda dapat mengeditnya secara rinci.</string>
+    <string name="board_sensors">Sensor</string>
 </resources>

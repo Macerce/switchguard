@@ -701,7 +701,7 @@
     <string name="settings_group_alerts">アラームと通知</string>
     <string name="settings_group_app">アプリ</string>
     <string name="settings_group_support">サポート</string>
-    <string name="settings_try">デモとPro</string>
+    <string name="settings_try">デモ</string>
     <string name="settings_try_it">テスト</string>
     <string name="settings_sound">サウンド</string>
     <string name="settings_when_alarm">アラーム鳴動中</string>
@@ -1537,4 +1537,16 @@
     <string name="sensor_motion_off">動きなし</string>
     <string name="sensor_water_on">水漏れ！</string>
     <string name="sensor_water_off">乾燥</string>
+    <string name="demo_sensor">デモ · リビングのセンサー</string>
+    <string name="demo_door">デモ · 玄関ドア</string>
+    <string name="sensor_alerts">センサーの通知</string>
+    <string name="sensor_alert_door">ドアが開いたとき</string>
+    <string name="sensor_alert_motion">動きを検知したとき</string>
+    <string name="sensor_alert_water">水漏れを検知したとき</string>
+    <string name="sensor_alert_battery" formatted="false">電池が 15 % を下回ったとき</string>
+    <string name="sensor_alert_range">%1$sが範囲外になったとき</string>
+    <string name="sensor_min">最小</string>
+    <string name="sensor_max">最大</string>
+    <string name="sensor_alerts_hint">これらは 通知 › 条件付き通知 にも表示され、そこで詳しく編集できます。</string>
+    <string name="board_sensors">センサー</string>
 </resources>
