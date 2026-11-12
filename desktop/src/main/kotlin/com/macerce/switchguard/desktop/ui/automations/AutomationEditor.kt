@@ -1,5 +1,8 @@
 package com.macerce.switchguard.desktop.ui.automations
 
+import com.macerce.switchguard.core.SensorKind
+import androidx.compose.material.icons.rounded.SensorsOff
+import androidx.compose.material.icons.rounded.Thermostat
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -188,10 +191,35 @@ internal fun AutomationEditor(
                     ) { form = f.copy(triggerKind = it) }
                     if (f.triggerKind.usesDevice) {
                         FieldLabel(strings["automation_device"])
-                        DeviceChooser(devices, f.triggerDevice, "trigger-device") { form = f.copy(triggerDevice = it.id, triggerChannel = 0) }
+                        DeviceChooser(devices, f.triggerDevice, "trigger-device") {
+                            form = if (it.id != f.triggerDevice) f.copy(triggerDevice = it.id, triggerChannel = 0, sensorValue = "") else f
+                        }
                         if (f.triggerKind.usesChannel && src?.isMultiChannel == true) {
                             FieldLabel(strings["automation_channel"])
                             ChannelChooser(src, f.triggerChannel, "trigger-channel") { form = f.copy(triggerChannel = it) }
+                        }
+                    }
+                    if (f.triggerKind.usesSensor) {
+                        val choices = AutomationForm.sensorChoices(src, f.triggerKind)
+                        val kind = f.sensor
+                        if (choices.isNotEmpty() && kind != null) {
+                            FieldLabel(strings["sensor_choose"])
+                            OptionGrid(choices, kind, wideColumns = 4, icon = { it.icon() }, label = { strings[it.labelKey()] }, tag = { "sensor-${it.name}" }) {
+                                if (it != f.sensor) form = f.copy(sensor = it, sensorValue = "")
+                            }
+                            if (f.triggerKind.usesSensorValue) {
+                                NumberField(f.sensorValue, strings["sensor_threshold"], kind.unit, "sensor-value", allowNegative = kind == SensorKind.TEMPERATURE) {
+                                    form = f.copy(sensorValue = it)
+                                }
+                            }
+                            src?.sensors?.get(kind)?.let { v ->
+                                Text(
+                                    strings.format("automation_current_sensor", if (kind.binary) strings[kind.stateKey(v >= 0.5)] else formatSensor(kind, v)),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(top = 8.dp),
+                                )
+                            }
                         }
                     }
                     if (f.triggerKind.usesCycle) CyclePick(cycles, f.triggerCycle, strings, "trigger-cycle") { form = f.copy(triggerCycle = it) }
@@ -317,7 +345,7 @@ internal fun AutomationEditor(
                     }
                     if (f.actionKind.usesDevice) {
                         FieldLabel(strings["automation_device"])
-                        DeviceChooser(targets, f.actionDevice, "action-device") { form = f.copy(actionDevice = it.id, actionChannel = 0) }
+                        DeviceChooser(targets.filterNot { it.sensorOnly }, f.actionDevice, "action-device") { form = f.copy(actionDevice = it.id, actionChannel = 0) }
                         if (dst?.isMultiChannel == true) {
                             FieldLabel(strings["automation_channel"])
                             ChannelChooser(dst, f.actionChannel, "action-channel") { form = f.copy(actionChannel = it) }
@@ -613,7 +641,7 @@ internal fun Stepper(
 
 /** Sayı alanı (güç eşiği W, sıcaklık °C; Türkçe klavyenin virgülü de); [allowNegative] eksi değere izin verir. */
 @Composable
-private fun NumberField(value: String, label: String, suffix: String, tag: String, allowNegative: Boolean = false, onChange: (String) -> Unit) {
+internal fun NumberField(value: String, label: String, suffix: String, tag: String, allowNegative: Boolean = false, onChange: (String) -> Unit) {
     TextField(
         value = value,
         onValueChange = { v -> onChange(v.filterIndexed { i, c -> c.isDigit() || c == '.' || c == ',' || (allowNegative && c == '-' && i == 0) }) },
@@ -707,6 +735,10 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> Icons.Rounded.Place
     TriggerKind.CYCLE_STARTED -> Icons.Rounded.Repeat
     TriggerKind.CYCLE_FINISHED -> Icons.Rounded.Stop
+    TriggerKind.SENSOR_ABOVE -> Icons.Rounded.Thermostat
+    TriggerKind.SENSOR_BELOW -> Icons.Rounded.AcUnit
+    TriggerKind.SENSOR_ACTIVE -> Icons.Rounded.Sensors
+    TriggerKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -729,6 +761,10 @@ internal fun TriggerKind.shortTitleKey(): String = when (this) {
     TriggerKind.ZONE_EXIT -> "evt_zone_exit"
     TriggerKind.CYCLE_STARTED -> "evt_cycle_started"
     TriggerKind.CYCLE_FINISHED -> "evt_cycle_finished"
+    TriggerKind.SENSOR_ABOVE -> "evt_sensor_above"
+    TriggerKind.SENSOR_BELOW -> "evt_sensor_below"
+    TriggerKind.SENSOR_ACTIVE -> "evt_sensor_active"
+    TriggerKind.SENSOR_CLEAR -> "evt_sensor_clear"
 }
 
 /** İşlem kutucuklarındaki adlar: cihaz işlemleri "Cihazı aç / kapat" (kartta kısa "Aç / Kapat"). */

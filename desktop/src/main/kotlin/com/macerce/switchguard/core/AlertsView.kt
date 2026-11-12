@@ -60,12 +60,16 @@ data class DeviceAlertSummary(
     )
 
     companion object {
-        fun of(rules: DeviceRules, monitored: Boolean): DeviceAlertSummary = DeviceAlertSummary(
+        /** [sensorOnly]: rölesi olmayan sensör; açıldı/kapandı olayları yoktur, özette sayılmaz. */
+        fun of(rules: DeviceRules, monitored: Boolean, sensorOnly: Boolean = false): DeviceAlertSummary = DeviceAlertSummary(
             monitored = monitored,
-            alarm = EventType.entries.filter { rules.actionFor(it) == AlertAction.ALARM },
-            notify = EventType.entries.filter { rules.actionFor(it) == AlertAction.NOTIFY },
+            alarm = types(sensorOnly).filter { rules.actionFor(it) == AlertAction.ALARM },
+            notify = types(sensorOnly).filter { rules.actionFor(it) == AlertAction.NOTIFY },
             category = rules.effectiveCategory,
             customSound = rules.soundUri != null,
         )
+
+        private fun types(sensorOnly: Boolean) =
+            if (sensorOnly) listOf(EventType.WENT_OFFLINE, EventType.CAME_ONLINE) else EventType.entries
     }
 }

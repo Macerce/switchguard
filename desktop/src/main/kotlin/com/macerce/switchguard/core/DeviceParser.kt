@@ -20,13 +20,15 @@ object DeviceParser {
                 id = id,
                 name = item.optString("name", id),
                 online = item.optBoolean("online", false),
-                switches = DeviceSnapshot.limitChannels(uiid, parseSwitches(params)),
+                // Wi-Fi kapı sensörü kapı durumunu `switch` alanında gönderir: röle sayılmaz.
+                switches = if (uiid in Sensors.WIFI_DOOR_UIIDS) emptyMap() else DeviceSnapshot.limitChannels(uiid, parseSwitches(params)),
                 uiid = uiid,
                 power = energy?.power,
                 voltage = energy?.voltage,
                 current = energy?.current,
                 channelPower = energy?.channelPowers.orEmpty(),
                 rssi = Signal.rssiOf(params),
+                sensors = Sensors.parse(uiid, params),
             )
         }
         return result
@@ -92,6 +94,9 @@ object DeviceParser {
                 o.put("channelPower", JSONObject().apply { d.channelPower.forEach { (k, v) -> put(k.toString(), v) } })
             }
             d.rssi?.let { o.put("rssi", it) }
+            if (d.sensors.isNotEmpty()) {
+                o.put("sensors", JSONObject().apply { d.sensors.forEach { (k, v) -> put(k.name, v) } })
+            }
             if (d.cloud != Cloud.EWELINK) o.put("cloud", d.cloud.name)
             if (d.switchCodes.isNotEmpty()) {
                 o.put("switchCodes", JSONObject().apply { d.switchCodes.forEach { (k, v) -> put(k.toString(), v) } })
@@ -125,6 +130,11 @@ object DeviceParser {
                     sc.keys().asSequence().associate { it.toInt() to sc.getString(it) }
                 }.orEmpty(),
                 rssi = if (o.has("rssi")) o.optInt("rssi") else null,
+                sensors = o.optJSONObject("sensors")?.let { s ->
+                    s.keys().asSequence().mapNotNull { k ->
+                        runCatching { SensorKind.valueOf(k) }.getOrNull()?.let { it to s.getDouble(k) }
+                    }.toMap()
+                }.orEmpty(),
             )
         }
     }

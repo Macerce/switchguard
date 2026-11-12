@@ -61,9 +61,15 @@ class ChatRunner(
      */
     fun temperature(fresh: Double?): String {
         val s = strings()
-        if (store.latitude == null || store.longitude == null) return s["desktop_chat_temp_unknown"]
-        val t = fresh ?: runtime.outdoorTemp ?: return s["chat_temp_failed"]
-        return s.format("chat_temp", String.format(s.locale, "%.1f", t))
+        // Oda sensörleri (TH16, SNZB-02 ...): "Salon: 23,5 °C · 55 %".
+        val indoor = store.snapshots.filter { it.online && com.macerce.switchguard.core.SensorKind.TEMPERATURE in it.sensors }.joinToString("\n") { d ->
+            d.name + ": " + listOf(com.macerce.switchguard.core.SensorKind.TEMPERATURE, com.macerce.switchguard.core.SensorKind.HUMIDITY)
+                .mapNotNull { k -> d.sensors[k]?.let { com.macerce.switchguard.desktop.ui.automations.formatSensor(k, it) } }.joinToString(" · ")
+        }
+        fun withIndoor(outdoor: String) = if (indoor.isEmpty()) outdoor else "$indoor\n$outdoor"
+        if (store.latitude == null || store.longitude == null) return indoor.ifEmpty { s["desktop_chat_temp_unknown"] }
+        val t = fresh ?: runtime.outdoorTemp ?: return withIndoor(s["chat_temp_failed"])
+        return withIndoor(s.format("chat_temp", String.format(s.locale, "%.1f", t)))
     }
 
     private fun switch(intent: ChatCommand.Intent.Switch): String {

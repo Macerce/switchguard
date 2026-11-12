@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui.devices
 
+import com.macerce.switchguard.desktop.ui.LocalStrings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -114,7 +115,7 @@ fun DeviceTile(
 @Composable
 fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Dp = 42.dp) {
     val scheme = MaterialTheme.colorScheme
-    val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud) { DeviceKinds.of(device) }
+    val kind = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud, device.sensorOnly, com.macerce.switchguard.core.SensorKind.DOOR in device.sensors) { DeviceKinds.of(device) }
     val anyOn = device.switches.values.any { it }
     val raised = raisedOnTile()
     val (bg, tint) = when {
@@ -139,9 +140,11 @@ private fun TileStatus(
             Spacer(Modifier.width(6.dp))
         }
         val onCount = device.switches.values.count { it }
+        val sensorText = com.macerce.switchguard.desktop.ui.automations.sensorSummary(device, LocalStrings.current)
         val state = when {
             !device.online -> str("label_offline_title")
             groupCounts != null -> str("channels_on_short", groupCounts.first, groupCounts.second)
+            device.sensorOnly -> sensorText
             device.isMultiChannel -> str("channels_on_short", onCount, device.switches.size)
             onCount > 0 -> str("state_on_title")
             else -> str("state_off_title")
@@ -150,6 +153,8 @@ private fun TileStatus(
             !device.online -> state
             groupWatts != null -> state + " · " + watts(groupWatts)
             device.hasEnergy -> state + " · " + watts(device.power ?: 0.0)
+            // Röleli sensörlü cihaz (TH16, THR320): "Açık · 23.5 °C".
+            !device.sensorOnly && sensorText.isNotEmpty() -> "$state · $sensorText"
             else -> state
         }
         Text(

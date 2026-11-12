@@ -20,13 +20,14 @@ sealed interface DeviceAlertSummary {
     data class Monitored(val alarm: List<EventType>, val notify: List<EventType>) : DeviceAlertSummary
 }
 
-fun deviceAlertSummary(rules: DeviceRules): DeviceAlertSummary =
+/** [sensorOnly]: rölesi olmayan sensör; açıldı/kapandı olayları yoktur, özette sayılmaz. */
+fun deviceAlertSummary(rules: DeviceRules, sensorOnly: Boolean = false): DeviceAlertSummary =
     if (!rules.monitored) {
         DeviceAlertSummary.NotMonitored
     } else {
         DeviceAlertSummary.Monitored(
-            alarm = EventType.entries.filter { rules.actionFor(it) == AlertAction.ALARM },
-            notify = EventType.entries.filter { rules.actionFor(it) == AlertAction.NOTIFY },
+            alarm = alertTypes(sensorOnly).filter { rules.actionFor(it) == AlertAction.ALARM },
+            notify = alertTypes(sensorOnly).filter { rules.actionFor(it) == AlertAction.NOTIFY },
         )
     }
 
@@ -37,7 +38,9 @@ data class DeviceAlertLine(val text: String, val action: AlertAction?)
  * Satırın metinleri: "İzlenmiyor", "İzleniyor · alarm ya da bildirim yok" ya da "Alarm: Kapanınca, Açılınca" ve ayrı
  * satırda "Bildirim: Çevrimiçi olunca" (olayların kısa adları, virgülle).
  */
-fun deviceAlertLines(rules: DeviceRules, strings: Strings): List<DeviceAlertLine> = when (val s = deviceAlertSummary(rules)) {
+private fun alertTypes(sensorOnly: Boolean) = if (sensorOnly) listOf(EventType.WENT_OFFLINE, EventType.CAME_ONLINE) else EventType.entries
+
+fun deviceAlertLines(rules: DeviceRules, strings: Strings, sensorOnly: Boolean = false): List<DeviceAlertLine> = when (val s = deviceAlertSummary(rules, sensorOnly)) {
     DeviceAlertSummary.NotMonitored -> listOf(DeviceAlertLine(strings["device_alerts_not_monitored"], null))
     is DeviceAlertSummary.Monitored ->
         if (s.alarm.isEmpty() && s.notify.isEmpty()) {

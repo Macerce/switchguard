@@ -297,9 +297,19 @@ class Store internal constructor(
         set(v) = edit { put("demo", v) }
 
     /** Demo cihazlarını ve örnek otomasyonlarını ekler; zaten varsa dokunmaz. */
+    /** Demo açıkken sonradan eklenen demo cihazlarını (sensörler) ekler; otomasyonlara dokunmaz. */
+    fun addMissingDemoDevices(names: Demo.Names): Unit = synchronized(lock) {
+        if (!demoMode) return
+        val have = snapshots.map { it.id }.toSet()
+        val missing = Demo.devices(names).filter { it.id !in have }
+        if (missing.isNotEmpty()) snapshots = snapshots + missing
+    }
+
     fun enableDemo(names: Demo.Names): Unit = synchronized(lock) {
         demoMode = true
-        if (snapshots.none { it.cloud == Cloud.DEMO }) snapshots = snapshots + Demo.devices(names)
+        // Eksik demo cihazları eklenir (yeni sürümle gelen sensörler, demo zaten açıkken de).
+        val have = snapshots.map { it.id }.toSet()
+        Demo.devices(names).filter { it.id !in have }.takeIf { it.isNotEmpty() }?.let { snapshots = snapshots + it }
         val existing = automations.map { it.id }.toSet()
         automations = automations + Demo.automations(names).filter { it.id !in existing }
     }
@@ -309,7 +319,10 @@ class Store internal constructor(
         demoMode = false
         snapshots = snapshots.filter { it.cloud != Cloud.DEMO }
         rules = rules.filterKeys { !Demo.isDemo(it) }
-        automations = automations.filterNot { Demo.isDemoAutomation(it) }
+        // Demo cihazlarına bağlı (kullanıcının kurduğu, sensör uyarıları dahil) kurallar da gider: cihazsız kalmasınlar.
+        automations = automations.filterNot {
+            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId))
+        }
         if (freeDeviceId?.let(Demo::isDemo) == true) freeDeviceId = null
     }
 

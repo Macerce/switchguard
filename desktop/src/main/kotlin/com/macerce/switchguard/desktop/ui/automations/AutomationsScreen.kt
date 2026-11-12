@@ -310,6 +310,12 @@ internal fun describe(
     val trigger = when (t.kind) {
         TriggerKind.SUNRISE, TriggerKind.SUNSET -> strings[t.kind.titleKey()] + (if (t.minutes == 0) "" else " · " + offsetLabel(t.minutes, strings))
         TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> strings[t.kind.titleKey()] + " " + formatTemp(t.watts)
+        // "Salon sensörü · Sıcaklık > 26 °C", "Ön kapı · Kapı açık".
+        TriggerKind.SENSOR_ABOVE, TriggerKind.SENSOR_BELOW -> t.sensor?.let {
+            strings[it.labelKey()] + (if (t.kind == TriggerKind.SENSOR_ABOVE) " > " else " < ") + formatSensor(it, t.watts)
+        } ?: strings[t.kind.titleKey()]
+        TriggerKind.SENSOR_ACTIVE, TriggerKind.SENSOR_CLEAR -> t.sensor?.let { strings[it.stateKey(t.kind == TriggerKind.SENSOR_ACTIVE)] }
+            ?: strings[t.kind.titleKey()]
         TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> strings[t.kind.titleKey()] + " " + strings.plural("minutes_n", t.minutes, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> strings[t.kind.titleKey()] + " " + formatWatts(t.watts) +
             (if (t.minutes > 0) " " + strings.format("automation_power_for", holdLabel(t.minutes, strings)) else "")
@@ -401,6 +407,10 @@ internal fun TriggerKind.titleKey(): String = when (this) {
     TriggerKind.ZONE_EXIT -> "trigger_zone_exit"
     TriggerKind.CYCLE_STARTED -> "trigger_cycle_started"
     TriggerKind.CYCLE_FINISHED -> "trigger_cycle_finished"
+    TriggerKind.SENSOR_ABOVE -> "trigger_sensor_above"
+    TriggerKind.SENSOR_BELOW -> "trigger_sensor_below"
+    TriggerKind.SENSOR_ACTIVE -> "trigger_sensor_active"
+    TriggerKind.SENSOR_CLEAR -> "trigger_sensor_clear"
 }
 
 /** İşlemin kısa adı ("Aç", "Alarm çal"); kartta ve özette. */

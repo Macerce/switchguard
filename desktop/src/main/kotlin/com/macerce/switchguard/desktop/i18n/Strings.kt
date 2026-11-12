@@ -177,6 +177,8 @@ class Strings internal constructor(
         light = get("demo_light"),
         stalledPump = get("demo_auto_pump"),
         lightLeftOn = get("demo_auto_light"),
+        sensor = get("demo_sensor"),
+        door = get("demo_door"),
     )
 
     companion object {

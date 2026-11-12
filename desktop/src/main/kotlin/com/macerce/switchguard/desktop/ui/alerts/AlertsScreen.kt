@@ -507,7 +507,7 @@ private class DeviceAlertRowData(val device: DeviceSnapshot, rules: DeviceRules,
     val monitored = rules.monitored
     val category = rules.effectiveCategory
     val customSound = rules.monitored && rules.soundUri != null
-    val lines = deviceAlertLines(rules, strings)
+    val lines = deviceAlertLines(rules, strings, device.sensorOnly)
     val kind = DeviceKinds.of(device)
 }
 

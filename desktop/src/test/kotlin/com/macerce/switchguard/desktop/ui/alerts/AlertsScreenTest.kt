@@ -69,9 +69,11 @@ class AlertsScreenTest {
         compose.onNodeWithText("Monitoring is off").assertExists()
         compose.onNodeWithTag("alerts-start").assertExists()
         compose.onNodeWithTag("device-alerts-${Demo.PUMPS}").performScrollTo()
-        // Üç demo cihazı da varsayılan kurallarla: üç olayda alarm, çevrimiçi olunca bildirim.
+        // Üç röleli demo cihazı varsayılan kurallarla: üç olayda alarm; iki demo sensörünün rölesi yok, yalnız
+        // bağlantı olayları sayılır. Beşinde de çevrimiçi olunca bildirim.
         compose.onAllNodesWithText("Alarm: Turns off, Turns on, Goes offline", useUnmergedTree = true).assertCountEquals(3)
-        compose.onAllNodesWithText("Notification: Comes online", useUnmergedTree = true).assertCountEquals(3)
+        compose.onAllNodesWithText("Alarm: Goes offline", useUnmergedTree = true).assertCountEquals(2)
+        compose.onAllNodesWithText("Notification: Comes online", useUnmergedTree = true).assertCountEquals(5)
         compose.onNodeWithText(graph.strings().demoNames().stalledPump).performScrollTo()
         compose.onNodeWithText("Light on when warm").assertDoesNotExist() // otomasyon sekmesinde
         for (title in listOf("Alarm", "Quiet hours", "Tell someone else")) compose.onNodeWithText(title).performScrollTo()

@@ -13,6 +13,7 @@ import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
+import com.macerce.switchguard.core.SensorKind
 
 /**
  * Otomasyon düzenleyicisinin durumu ve kuralları; telefondaki `AutomationEditor` ile aynı varsayılanlar, olay süzme,
@@ -57,10 +58,29 @@ data class AutomationForm(
     /** Döngü tetikleyicisi / eylemi: seçili döngü. */
     val triggerCycle: String = "",
     val actionCycle: String = "",
+    /** Sensör tetikleyicisinde hangi değer ve eşik (metin). */
+    val sensor: SensorKind? = null,
+    val sensorValue: String = "",
 ) {
     /** Seçili cihaz bu olayı bildiremiyorsa (ör. güç ölçmüyor) olay "açıldı"ya döner. */
-    fun normalized(devices: List<DeviceSnapshot>): AutomationForm =
-        if (triggerKind in kindsFor(devices.firstOrNull { it.id == triggerDevice })) this else copy(triggerKind = TriggerKind.TURNED_ON)
+    fun normalized(devices: List<DeviceSnapshot>): AutomationForm {
+        val src = devices.firstOrNull { it.id == triggerDevice }
+        val kinds = kindsFor(src)
+        var f = if (triggerKind in kinds) this else copy(triggerKind = kinds.firstOrNull() ?: TriggerKind.TURNED_ON)
+        // Sensör olayında seçili değer bu cihazda yoksa ilkine geçilir; eşik boşsa şu anki değerle (yuvarlanmış) dolar.
+        if (f.triggerKind.usesSensor) {
+            val choices = sensorChoices(src, f.triggerKind)
+            if (f.sensor !in choices) f = f.copy(sensor = choices.firstOrNull(), sensorValue = "")
+            if (f.triggerKind.usesSensorValue && f.sensorValue.isBlank()) {
+                f.sensor?.let { src?.sensors?.get(it) }?.let { f = f.copy(sensorValue = Math.round(it).toString()) }
+            }
+        }
+        // Eylem hedefi açılıp kapatılabilen cihaz olmalı.
+        if (f.actionKind.usesDevice && devices.firstOrNull { it.id == f.actionDevice }?.sensorOnly == true) {
+            f = f.copy(actionDevice = devices.firstOrNull { !it.sensorOnly && !DeviceCategory.isCategory(it.id) }?.id.orEmpty())
+        }
+        return f
+    }
 
     fun isValid(devices: List<DeviceSnapshot>, scenes: List<Scene> = emptyList(), cycles: List<Cycle> = emptyList()): Boolean {
         val src = devices.firstOrNull { it.id == triggerDevice }
@@ -71,6 +91,8 @@ data class AutomationForm(
         val graceValue = grace.toIntOrNull()
         return name.isNotBlank() && (!triggerKind.usesDevice || (src != null && triggerKind in kindsFor(src))) &&
             (!triggerKind.usesTemp || tempValue() != null) &&
+            (!triggerKind.usesSensor || (sensor != null && src?.sensors?.containsKey(sensor) == true)) &&
+            (!triggerKind.usesSensorValue || sensorThreshold() != null) &&
             (!condOn || (devices.any { it.id == condDevice } && !DeviceCategory.isCategory(condDevice))) &&
             (actionKind != ActionKind.RUN_SCENE || scenes.any { it.id == sceneId }) &&
             (!triggerKind.usesCycle || cycles.any { it.id == triggerCycle }) &&
@@ -78,7 +100,7 @@ data class AutomationForm(
             (!triggerKind.usesChannelPower || (lowValue != null && lowValue >= 0 && graceValue != null && graceValue >= 0)) &&
             (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
             (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
-            (!actionKind.usesDevice || (devices.any { it.id == actionDevice } && !DeviceCategory.isCategory(actionDevice))) &&
+            (!actionKind.usesDevice || (devices.any { it.id == actionDevice && !it.sensorOnly } && !DeviceCategory.isCategory(actionDevice))) &&
             delayValue != null && delayValue >= 0
     }
 
@@ -104,9 +126,11 @@ data class AutomationForm(
             watts = when {
                 triggerKind.usesWatts -> wattsValue() ?: 0.0
                 triggerKind.usesTemp -> tempValue() ?: 0.0
+                triggerKind.usesSensorValue -> sensorThreshold() ?: 0.0
                 else -> 0.0
             },
             graceMinutes = if (triggerKind.usesChannelPower) grace.toIntOrNull() ?: 0 else 0,
+            sensor = if (triggerKind.usesSensor) sensor else null,
         ),
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
@@ -121,6 +145,8 @@ data class AutomationForm(
     )
 
     /** Sıcaklık eşiği (eksi olabilir). */
+    private fun sensorThreshold(): Double? = sensorValue.trim().replace(',', '.').toDoubleOrNull()
+
     private fun tempValue(): Double? = temp.trim().replace(',', '.').toDoubleOrNull()
 
     /** Türkçe klavyedeki virgül de kabul edilir ("1,5"). */
@@ -168,6 +194,8 @@ data class AutomationForm(
                 sceneId = if (initial.action.kind == ActionKind.RUN_SCENE) initial.action.deviceId else "",
                 triggerCycle = if (t.kind.usesCycle) t.deviceId else "",
                 actionCycle = if (initial.action.kind.usesCycle) initial.action.deviceId else "",
+                sensor = t.sensor,
+                sensorValue = if (t.kind.usesSensorValue) formatNumber(t.watts) else "",
             )
         }
 
@@ -178,9 +206,17 @@ data class AutomationForm(
                 device != null && DeviceCategory.isCategory(device.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
                 it.usesChannelPower -> device?.hasChannelPower == true
                 it.usesWatts -> device?.hasEnergy == true
+                it.usesSensorValue -> device?.sensors?.keys?.any { k -> !k.binary } == true
+                it.usesSensorState -> device?.sensors?.keys?.any { k -> k.binary } == true
+                // Yalnız sensör olan cihazın rölesi yok: aç/kapa olayları sunulmaz.
+                it.usesChannel || it.usesMinutes -> device?.sensorOnly != true
                 else -> true
             }
         }
+
+        /** Seçili olaya uyan sensörler (sayısal ya da ikili). */
+        fun sensorChoices(device: DeviceSnapshot?, kind: TriggerKind): List<SensorKind> =
+            if (!kind.usesSensor) emptyList() else device?.sensors?.keys?.filter { it.binary == kind.usesSensorState }.orEmpty()
 
         private fun formatNumber(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
     }

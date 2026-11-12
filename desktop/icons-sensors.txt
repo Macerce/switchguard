@@ -1,0 +1,14 @@
+# Sensörler (telefon 2.30): sıcaklık/nem, kapı, hareket, su, pil.
+rounded/Thermostat
+rounded/SensorsOff
+rounded/Sensors
+rounded/BatteryStd
+rounded/Water
+rounded/WaterDrop
+rounded/DoorFront
+rounded/LightMode
+automirrored/rounded/DirectionsWalk
+rounded/AcUnit
+rounded/Bolt
+rounded/NotificationsActive
+rounded/CloudOff

@@ -9,7 +9,9 @@ enum class DeviceKind { LIGHT, WATER, COLD, AIR, HEAT, DOOR, PLUG, RELAYS, SWITC
     /** Sanal cihaz: [DeviceGroup]. */
     GROUP,
     /** Otomasyon tetikleyicisindeki sanal cihaz: [DeviceCategory]. */
-    CATEGORY }
+    CATEGORY,
+    /** Rölesi olmayan sıcaklık/nem/hareket/su sensörü ([DeviceSnapshot.sensorOnly]). */
+    SENSOR }
 
 object DeviceKinds {
     /** Ad içindeki kelimenin başına bakılır: Türkçe ekler ("rögarı", "pompası") eşleşmeyi bozmasın. */
@@ -32,6 +34,8 @@ object DeviceKinds {
     fun of(device: DeviceSnapshot): DeviceKind {
         if (DeviceGroup.isGroup(device.id)) return DeviceKind.GROUP
         if (DeviceCategory.isCategory(device.id)) return DeviceKind.CATEGORY
+        // Yalnız sensör: addan bağımsız, ne ölçtüğüne göre ("Salon ışığı sensörü" lamba görünmesin).
+        if (device.sensorOnly) return if (SensorKind.DOOR in device.sensors) DeviceKind.DOOR else DeviceKind.SENSOR
         for (word in words(device.name)) {
             exact[word]?.let { return it }
             for ((kind, list) in prefixes) if (list.any { word.startsWith(it) }) return kind

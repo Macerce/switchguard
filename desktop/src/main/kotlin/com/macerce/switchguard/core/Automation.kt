@@ -27,7 +27,11 @@ enum class TriggerKind {
     /** Telefon haritada seçilen bölgeye girdi / bölgeden çıktı; [Trigger.deviceId] = bölge kimliği ([Zone]). */
     ZONE_ENTER, ZONE_EXIT,
     /** Döngü başladı / bitti ya da durduruldu; [Trigger.deviceId] = döngü kimliği ([Cycle]). */
-    CYCLE_STARTED, CYCLE_FINISHED;
+    CYCLE_STARTED, CYCLE_FINISHED,
+    /** Cihazın sensör değeri ([Trigger.sensor]) [Trigger.watts] eşiğinin üstüne çıktı / altına indi (ör. oda sıcaklığı). */
+    SENSOR_ABOVE, SENSOR_BELOW,
+    /** İkili sensör etkinleşti (kapı açıldı, hareket, su kaçağı) / durdu. */
+    SENSOR_ACTIVE, SENSOR_CLEAR;
 
     val usesChannel get() = this in setOf(TURNED_ON, TURNED_OFF, STAYED_ON, STAYED_OFF, CHANNEL_POWER_LOW)
     /** Açık/kapalı kalma süresi tetikleyicileri. */
@@ -41,6 +45,9 @@ enum class TriggerKind {
     val usesTemp get() = this == TEMP_ABOVE || this == TEMP_BELOW
     val usesZone get() = this == ZONE_ENTER || this == ZONE_EXIT
     val usesCycle get() = this == CYCLE_STARTED || this == CYCLE_FINISHED
+    val usesSensorValue get() = this == SENSOR_ABOVE || this == SENSOR_BELOW
+    val usesSensorState get() = this == SENSOR_ACTIVE || this == SENSOR_CLEAR
+    val usesSensor get() = usesSensorValue || usesSensorState
     /** Bir cihaza bağlı tetikleyici (gün doğumu, sıcaklık ve bölge değil). */
     val usesDevice get() = !isSun && !usesTemp && !usesZone && !usesCycle
 }
@@ -53,6 +60,8 @@ data class Trigger(
     val watts: Double = 0.0,
     /** [TriggerKind.CHANNEL_POWER_LOW]: kanal açıldıktan sonra güce bakılmayan süre (kalkış). */
     val graceMinutes: Int = 0,
+    /** Sensör tetikleyicilerinde hangi değer. */
+    val sensor: SensorKind? = null,
 )
 
 enum class ActionKind {
@@ -100,7 +109,8 @@ data class Automation(
                         .put("trigger", JSONObject()
                             .put("kind", a.trigger.kind.name).put("device", a.trigger.deviceId)
                             .put("channel", a.trigger.channel).put("minutes", a.trigger.minutes).put("watts", a.trigger.watts)
-                            .put("grace", a.trigger.graceMinutes))
+                            .put("grace", a.trigger.graceMinutes)
+                            .apply { a.trigger.sensor?.let { put("sensor", it.name) } })
                         .put("action", JSONObject()
                             .put("kind", a.action.kind.name).put("device", a.action.deviceId).put("channel", a.action.channel))
                         .apply {
@@ -129,6 +139,7 @@ data class Automation(
                             TriggerKind.valueOf(t.getString("kind")), t.getString("device"),
                             t.optInt("channel"), t.optInt("minutes"), t.optDouble("watts", 0.0),
                             t.optInt("grace", 0),
+                            t.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
                         ),
                         action = AutoAction(ActionKind.valueOf(a.getString("kind")), a.optString("device"), a.optInt("channel")),
                         window = o.optJSONObject("window")?.let { w ->
@@ -220,6 +231,13 @@ class AutomationEngine {
                 TriggerKind.SUNRISE, TriggerKind.SUNSET, TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> false // tick'te bakılır
                 TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> false // [onZone]
                 TriggerKind.CYCLE_STARTED, TriggerKind.CYCLE_FINISHED -> false // [onCycle]
+                TriggerKind.SENSOR_ACTIVE, TriggerKind.SENSOR_CLEAR -> {
+                    val s = t.sensor
+                    val was = s?.let { before?.sensorActive(it) }
+                    val now2 = s?.let { after.sensorActive(it) }
+                    was != null && now2 != null && was != now2 && now2 == (t.kind == TriggerKind.SENSOR_ACTIVE)
+                }
+                TriggerKind.SENSOR_ABOVE, TriggerKind.SENSOR_BELOW -> sensorHit(a, after)
             }
             if (hit) fire(a, now, fired, current)
         }
@@ -442,6 +460,26 @@ class AutomationEngine {
         } else {
             (power < t.watts) to (power > t.watts + margin)
         }
+        val armed = powerArmed[a.id] ?: true
+        return when {
+            condition && armed -> { powerArmed[a.id] = false; true }
+            rearm -> { powerArmed[a.id] = true; false }
+            else -> false
+        }
+    }
+
+    /**
+     * Sensör eşiği: bir kez tetiklenir, değer türün histerezisi kadar ([SensorKind.hysteresis]; ör. 0,5 °C) geri dönünce
+     * yeniden kurulur. Çevrimdışı cihazın eski değeri sayılmaz.
+     */
+    private fun sensorHit(a: Automation, d: DeviceSnapshot): Boolean {
+        val t = a.trigger
+        val kind = t.sensor ?: return false
+        if (!d.online) return false
+        val v = d.sensors[kind] ?: return false
+        val above = t.kind == TriggerKind.SENSOR_ABOVE
+        val condition = if (above) v > t.watts else v < t.watts
+        val rearm = if (above) v <= t.watts - kind.hysteresis else v >= t.watts + kind.hysteresis
         val armed = powerArmed[a.id] ?: true
         return when {
             condition && armed -> { powerArmed[a.id] = false; true }

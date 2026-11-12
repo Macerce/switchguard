@@ -421,6 +421,8 @@ class MonitorEngine(
 
     private fun startMonitoring() {
         store.monitoringEnabled = true
+        // Demo açıkken güncellemeyle gelen yeni demo cihazları (sensörler) da eklensin.
+        runCatching { store.addMissingDemoDevices(strings().demoNames()) }
         if (running) {
             scheduler.post { applyWakeMode() }
             return
@@ -778,7 +780,7 @@ class MonitorEngine(
         lastDemoJitterAt = wall
         val random = kotlin.random.Random(wall)
         val list = store.snapshots
-        if (list.none { it.cloud == Cloud.DEMO && it.hasEnergy }) return
+        if (list.none { it.cloud == Cloud.DEMO && (it.hasEnergy || it.hasSensors) }) return
         process(list.map {
             if (it.cloud == Cloud.DEMO && it.online) Demo.recompute(it, demoStalled[it.id].orEmpty(), random) else it
         })

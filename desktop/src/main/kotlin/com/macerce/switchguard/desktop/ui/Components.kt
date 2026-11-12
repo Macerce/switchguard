@@ -1,5 +1,6 @@
 package com.macerce.switchguard.desktop.ui
 
+import androidx.compose.material.icons.rounded.Thermostat
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -264,6 +265,7 @@ fun DeviceKind.icon(): ImageVector = when (this) {
     DeviceKind.SWITCH -> Icons.Rounded.PowerSettingsNew
     DeviceKind.GROUP -> Icons.Rounded.Workspaces
     DeviceKind.CATEGORY -> Icons.AutoMirrored.Rounded.Label
+    DeviceKind.SENSOR -> Icons.Rounded.Thermostat
 }
 
 /**
