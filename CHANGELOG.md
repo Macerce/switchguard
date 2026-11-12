@@ -6,6 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.30.6 — 2026-11-13
+**New**
+- **Sensor history**: temperature, humidity, light and battery values are saved like power readings (while monitoring is on; on change or at least every 10 minutes, kept for 400 days). The device page shows a 24 hours / 7 days / 30 days chart with lowest, highest and average; tap the chart to see that moment's value.
 ## 2.30.5 — 2026-11-13
 **New**
 - **Sensor, power and outdoor conditions**: “And only if…” now also offers sensor value above/below (room temperature, humidity, light, battery), sensor active/clear (door open, motion, water leak), device power above/below and outdoor temperature above/below.

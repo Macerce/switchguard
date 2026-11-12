@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.30.6 — 2026-11-13
+**Yenilikler**
+- **Sensör geçmişi**: sıcaklık, nem, ışık ve pil değerleri güç ölçümleri gibi kaydedilir (izleme açıkken; değişince ya da en geç 10 dakikada bir, 400 gün saklanır). Cihaz sayfasında 24 saat / 7 gün / 30 gün grafiği, en düşük, en yüksek ve ortalama; grafiğe dokununca o anın değeri görünür.
 ## 2.30.5 — 2026-11-13
 **Yenilikler**
 - **Koşullarda sensör, güç ve dış sıcaklık**: “Ve şu koşullardaysa…” artık yalnız açık/kapalı/çevrimiçi değil; sensör değeri üstünde/altında (oda sıcaklığı, nem, ışık, pil), sensör etkin/sakin (kapı açık, hareket, su kaçağı), cihaz gücü üstünde/altında ve dış sıcaklık üstünde/altında da seçilebilir.
