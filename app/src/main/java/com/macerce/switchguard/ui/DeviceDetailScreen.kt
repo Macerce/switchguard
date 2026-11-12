@@ -230,7 +230,7 @@ private fun SensorAlertRules(device: DeviceSnapshot) {
                     SensorKind.WATER -> R.string.sensor_alert_water
                     else -> R.string.sensor_alert_battery
                 }
-                SensorRuleRow(kind.icon(), stringResource(title), SensorAlerts.actionOf(list, id).alert()) { a ->
+                SensorRuleRow(kind.icon(), if (kind == SensorKind.BATTERY) stringResource(title, SensorAlerts.LOW_BATTERY.toInt()) else stringResource(title), SensorAlerts.actionOf(list, id).alert()) { a ->
                     SensorAlerts.simple(device.id, name, kind, a.kind())?.let(store::saveAutomation) ?: store.deleteAutomation(id)
                 }
             } else {

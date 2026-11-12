@@ -1580,7 +1580,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="sensor_alert_door">When the door opens</string>
     <string name="sensor_alert_motion">When motion is detected</string>
     <string name="sensor_alert_water">When a water leak is detected</string>
-    <string name="sensor_alert_battery" formatted="false">When the battery drops below 15 %</string>
+    <string name="sensor_alert_battery">When the battery drops below %1$d %%</string>
     <string name="sensor_alert_range">When %1$s goes out of range</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Max</string>

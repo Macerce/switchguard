@@ -1622,7 +1622,7 @@
     <string name="sensor_alert_door">Коли двері відчиняються</string>
     <string name="sensor_alert_motion">Коли виявлено рух</string>
     <string name="sensor_alert_water">Коли виявлено протікання</string>
-    <string name="sensor_alert_battery" formatted="false">Коли заряд нижче 15 %</string>
+    <string name="sensor_alert_battery">Коли заряд нижче %1$d %%</string>
     <string name="sensor_alert_range">Коли %1$s виходить за межі</string>
     <string name="sensor_min">Мін.</string>
     <string name="sensor_max">Макс.</string>

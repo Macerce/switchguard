@@ -1615,7 +1615,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="sensor_alert_door">Quando a porta abrir</string>
     <string name="sensor_alert_motion">Quando houver movimento</string>
     <string name="sensor_alert_water">Quando houver vazamento de água</string>
-    <string name="sensor_alert_battery" formatted="false">Quando a bateria ficar abaixo de 15 %</string>
+    <string name="sensor_alert_battery">Quando a bateria ficar abaixo de %1$d %%</string>
     <string name="sensor_alert_range">Quando %1$s sair da faixa</string>
     <string name="sensor_min">Mín.</string>
     <string name="sensor_max">Máx.</string>

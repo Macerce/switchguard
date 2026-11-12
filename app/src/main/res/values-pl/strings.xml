@@ -1651,7 +1651,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="sensor_alert_door">Gdy drzwi się otworzą</string>
     <string name="sensor_alert_motion">Gdy wykryto ruch</string>
     <string name="sensor_alert_water">Gdy wykryto wyciek wody</string>
-    <string name="sensor_alert_battery" formatted="false">Gdy bateria spadnie poniżej 15 %</string>
+    <string name="sensor_alert_battery">Gdy bateria spadnie poniżej %1$d %%</string>
     <string name="sensor_alert_range">Gdy %1$s wyjdzie poza zakres</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Maks</string>

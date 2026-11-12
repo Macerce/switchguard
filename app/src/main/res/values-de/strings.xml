@@ -1577,7 +1577,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="sensor_alert_door">Wenn die Tür geöffnet wird</string>
     <string name="sensor_alert_motion">Wenn Bewegung erkannt wird</string>
     <string name="sensor_alert_water">Wenn ein Wasserleck erkannt wird</string>
-    <string name="sensor_alert_battery" formatted="false">Wenn der Akku unter 15 % fällt</string>
+    <string name="sensor_alert_battery">Wenn der Akku unter %1$d %% fällt</string>
     <string name="sensor_alert_range">Wenn %1$s den Bereich verlässt</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Max</string>

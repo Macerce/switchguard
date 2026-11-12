@@ -1579,7 +1579,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="sensor_alert_door">Als de deur opengaat</string>
     <string name="sensor_alert_motion">Als er beweging is</string>
     <string name="sensor_alert_water">Als er een waterlek is</string>
-    <string name="sensor_alert_battery" formatted="false">Als de batterij onder 15 % komt</string>
+    <string name="sensor_alert_battery">Als de batterij onder %1$d %% komt</string>
     <string name="sensor_alert_range">Als %1$s buiten het bereik komt</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Max</string>

@@ -1542,7 +1542,7 @@
     <string name="sensor_alert_door">門開啟時</string>
     <string name="sensor_alert_motion">偵測到移動時</string>
     <string name="sensor_alert_water">偵測到漏水時</string>
-    <string name="sensor_alert_battery" formatted="false">電量低於 15 % 時</string>
+    <string name="sensor_alert_battery">電量低於 %1$d %% 時</string>
     <string name="sensor_alert_range">%1$s超出範圍時</string>
     <string name="sensor_min">最低</string>
     <string name="sensor_max">最高</string>

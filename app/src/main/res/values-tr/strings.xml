@@ -1576,7 +1576,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="sensor_alert_door">Kapı açılınca</string>
     <string name="sensor_alert_motion">Hareket algılanınca</string>
     <string name="sensor_alert_water">Su kaçağı algılanınca</string>
-    <string name="sensor_alert_battery" formatted="false">Pil %15\'in altına inince</string>
+    <string name="sensor_alert_battery">Pil %%%1$d\'in altına inince</string>
     <string name="sensor_alert_range">%1$s sınır dışına çıkınca</string>
     <string name="sensor_min">En az</string>
     <string name="sensor_max">En çok</string>

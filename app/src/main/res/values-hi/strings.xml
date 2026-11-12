@@ -1508,7 +1508,7 @@
     <string name="sensor_alert_door">जब दरवाज़ा खुले</string>
     <string name="sensor_alert_motion">जब हलचल मिले</string>
     <string name="sensor_alert_water">जब पानी का रिसाव मिले</string>
-    <string name="sensor_alert_battery" formatted="false">जब बैटरी 15 % से कम हो</string>
+    <string name="sensor_alert_battery">जब बैटरी %1$d %% से कम हो</string>
     <string name="sensor_alert_range">जब %1$s सीमा से बाहर जाए</string>
     <string name="sensor_min">न्यूनतम</string>
     <string name="sensor_max">अधिकतम</string>

@@ -236,7 +236,7 @@ private fun AlertsHome(
                 }
                 shown.forEachIndexed { i, d ->
                     if (i > 0) RowDivider(68.dp)
-                    val summary = DeviceAlertSummary.of(rules[d.id] ?: DeviceRules(), d.id in monitoredIds)
+                    val summary = DeviceAlertSummary.of(rules[d.id] ?: DeviceRules(), d.id in monitoredIds, d.sensorOnly)
                     val key = "dev:" + d.id
                     DeviceAlertRow(d, summary, modifier = focus(key)) { onOpen(AlertsRoute(AlertsRoute.Kind.DEVICE_RULES, d.id), key) }
                 }

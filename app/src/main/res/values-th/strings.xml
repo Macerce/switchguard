@@ -1514,7 +1514,7 @@
     <string name="sensor_alert_door">เมื่อประตูเปิด</string>
     <string name="sensor_alert_motion">เมื่อตรวจพบการเคลื่อนไหว</string>
     <string name="sensor_alert_water">เมื่อตรวจพบน้ำรั่ว</string>
-    <string name="sensor_alert_battery" formatted="false">เมื่อแบตเตอรี่ต่ำกว่า 15 %</string>
+    <string name="sensor_alert_battery">เมื่อแบตเตอรี่ต่ำกว่า %1$d %%</string>
     <string name="sensor_alert_range">เมื่อ%1$sออกนอกช่วง</string>
     <string name="sensor_min">ต่ำสุด</string>
     <string name="sensor_max">สูงสุด</string>

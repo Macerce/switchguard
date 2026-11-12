@@ -1514,7 +1514,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="sensor_alert_door">Khi cửa mở</string>
     <string name="sensor_alert_motion">Khi phát hiện chuyển động</string>
     <string name="sensor_alert_water">Khi phát hiện rò rỉ nước</string>
-    <string name="sensor_alert_battery" formatted="false">Khi pin dưới 15 %</string>
+    <string name="sensor_alert_battery">Khi pin dưới %1$d %%</string>
     <string name="sensor_alert_range">Khi %1$s ra ngoài phạm vi</string>
     <string name="sensor_min">Tối thiểu</string>
     <string name="sensor_max">Tối đa</string>

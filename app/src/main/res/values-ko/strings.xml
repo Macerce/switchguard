@@ -1543,7 +1543,7 @@
     <string name="sensor_alert_door">문이 열리면</string>
     <string name="sensor_alert_motion">움직임이 감지되면</string>
     <string name="sensor_alert_water">누수가 감지되면</string>
-    <string name="sensor_alert_battery" formatted="false">배터리가 15 % 미만이면</string>
+    <string name="sensor_alert_battery">배터리가 %1$d %% 미만이면</string>
     <string name="sensor_alert_range">%1$s이(가) 범위를 벗어나면</string>
     <string name="sensor_min">최소</string>
     <string name="sensor_max">최대</string>

@@ -1651,7 +1651,7 @@
     <string name="sensor_alert_door">Когда открывается дверь</string>
     <string name="sensor_alert_motion">Когда обнаружено движение</string>
     <string name="sensor_alert_water">Когда обнаружена протечка</string>
-    <string name="sensor_alert_battery" formatted="false">Когда заряд ниже 15 %</string>
+    <string name="sensor_alert_battery">Когда заряд ниже %1$d %%</string>
     <string name="sensor_alert_range">Когда %1$s выходит за пределы</string>
     <string name="sensor_min">Мин.</string>
     <string name="sensor_max">Макс.</string>

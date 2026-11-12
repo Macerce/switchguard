@@ -1472,7 +1472,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="sensor_alert_door">Saat pintu terbuka</string>
     <string name="sensor_alert_motion">Saat gerakan terdeteksi</string>
     <string name="sensor_alert_water">Saat kebocoran air terdeteksi</string>
-    <string name="sensor_alert_battery" formatted="false">Saat baterai di bawah 15 %</string>
+    <string name="sensor_alert_battery">Saat baterai di bawah %1$d %%</string>
     <string name="sensor_alert_range">Saat %1$s keluar dari rentang</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Maks</string>

@@ -1723,7 +1723,7 @@
     <string name="sensor_alert_door">عند فتح الباب</string>
     <string name="sensor_alert_motion">عند اكتشاف حركة</string>
     <string name="sensor_alert_water">عند اكتشاف تسرب مياه</string>
-    <string name="sensor_alert_battery" formatted="false">عندما تنخفض البطارية عن 15 %</string>
+    <string name="sensor_alert_battery">عندما تنخفض البطارية عن %1$d %%</string>
     <string name="sensor_alert_range">عندما تخرج %1$s عن النطاق</string>
     <string name="sensor_min">الأدنى</string>
     <string name="sensor_max">الأقصى</string>

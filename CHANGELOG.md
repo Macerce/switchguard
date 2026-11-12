@@ -6,7 +6,7 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.30.3 — unreleased
+## 2.30.4 — unreleased
 **New**
 - **eWeLink sensors**: temperature/humidity (TH16, THR316/320, SNZB-02 family), door (DW2, SNZB-04), motion/presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery are read and shown on the device card (“23.5 °C · 55 %”, “Door open”). Model table from AlexxIT/SonoffLAN (MIT).
 - **Sensor automations**: new events “Sensor above / below” (e.g. turn the AC on when the room passes 26 °C; with hysteresis, fires once) and “Sensor detects / clears” (alarm when the door opens, light on when there is motion).

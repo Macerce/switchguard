@@ -1586,7 +1586,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="sensor_alert_door">Quando la porta si apre</string>
     <string name="sensor_alert_motion">Quando viene rilevato movimento</string>
     <string name="sensor_alert_water">Quando viene rilevata una perdita d\'acqua</string>
-    <string name="sensor_alert_battery" formatted="false">Quando la batteria scende sotto il 15 %</string>
+    <string name="sensor_alert_battery">Quando la batteria scende sotto il %1$d %%</string>
     <string name="sensor_alert_range">Quando %1$s esce dall\'intervallo</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Max</string>

@@ -1543,7 +1543,7 @@
     <string name="sensor_alert_door">ドアが開いたとき</string>
     <string name="sensor_alert_motion">動きを検知したとき</string>
     <string name="sensor_alert_water">水漏れを検知したとき</string>
-    <string name="sensor_alert_battery" formatted="false">電池が 15 % を下回ったとき</string>
+    <string name="sensor_alert_battery">電池が %1$d %% を下回ったとき</string>
     <string name="sensor_alert_range">%1$sが範囲外になったとき</string>
     <string name="sensor_min">最小</string>
     <string name="sensor_max">最大</string>

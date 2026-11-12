@@ -1614,7 +1614,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="sensor_alert_door">Quand la porte s\'ouvre</string>
     <string name="sensor_alert_motion">Quand un mouvement est détecté</string>
     <string name="sensor_alert_water">Quand une fuite d\'eau est détectée</string>
-    <string name="sensor_alert_battery" formatted="false">Quand la batterie passe sous 15 %</string>
+    <string name="sensor_alert_battery">Quand la batterie passe sous %1$d %%</string>
     <string name="sensor_alert_range">Quand %1$s sort de la plage</string>
     <string name="sensor_min">Min</string>
     <string name="sensor_max">Max</string>
