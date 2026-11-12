@@ -523,23 +523,6 @@
     <string name="raw_data_desc">Copies the device’s raw data to the clipboard, useful for reporting an unsupported model</string>
     <string name="raw_data_copied">Copied</string>
     <string name="action_later">Not now</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">The free version monitors %1$d device. Pro monitors all your devices, with every feature.</string>
-    <string name="pro_once">One-time payment, no subscription. Linked to your Google account, so it moves with you to a new phone.</string>
-    <string name="pro_pending">Your payment is pending. Pro turns on as soon as Google Play confirms it.</string>
-    <string name="pro_unavailable">Google Play is not available right now. Make sure the app was installed from Google Play and you are online.</string>
-    <string name="pro_buy">Get Pro · %s</string>
-    <string name="pro_loading">Loading price…</string>
-    <string name="pro_active">Active — all devices are monitored. Thank you!</string>
-    <string name="pro_free_status">Free version: %1$d device monitored</string>
-    <string name="pro_restore">Restore</string>
-    <string name="pro_restoring">Checking your purchases…</string>
-    <string name="pro_upgrade">Get Pro</string>
-    <string name="pro_hint">Free version: only %1$d device is monitored. Get Pro to monitor them all.</string>
-    <string name="pro_limit_title">One device in the free version</string>
-    <string name="pro_limit_body">The free version monitors %1$d device, and \"%2$s\" is using it. Monitor this device instead, or get Pro to monitor all of them.</string>
-    <string name="pro_limit_switch">Monitor this one instead</string>
-    <string name="pro_limit_detail">Not monitored — the free version monitors %1$d device</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Freezer</string>
@@ -736,7 +719,7 @@
     <string name="settings_group_alerts">Alarms &amp; notifications</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Support</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Sound</string>
     <string name="settings_when_alarm">While an alarm is ringing</string>
@@ -750,7 +733,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Daily at %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · all devices monitored</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">%d permission missing</item>
@@ -759,10 +741,6 @@
     <string name="guard_ready">Ready to ring the moment something changes</string>
     <string name="monitoring_summary_now">Alerts at once when offline · %s</string>
     <string name="monitoring_summary_grace">Waits %1$s when offline · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Free · monitors %d device</item>
-        <item quantity="other">Free · monitors %d devices</item>
-    </plurals>
     <string name="auto_if">If</string>
     <string name="auto_then">Then</string>
     <string name="automation_name_hint">e.g. Pump stopped</string>

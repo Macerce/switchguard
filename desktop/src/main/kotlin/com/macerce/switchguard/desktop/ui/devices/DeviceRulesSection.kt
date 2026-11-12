@@ -28,7 +28,6 @@ import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.PowerOff
 import androidx.compose.material.icons.rounded.PowerSettingsNew
-import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,7 +37,6 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,7 +54,6 @@ import com.macerce.switchguard.core.AlertAction
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceRules
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EventType
 import com.macerce.switchguard.desktop.AppGraph
 import com.macerce.switchguard.desktop.platform.Sounds
@@ -221,7 +218,6 @@ fun DeviceRulesSection(graph: AppGraph, state: DeviceRulesState) {
                 modifier = Modifier.testTag("monitor-switch"),
             )
         }
-        if (rules.monitored) FreeLimitRow(graph, state.deviceId)
     }
 
     val version by graph.store.version.collectAsState()
@@ -354,27 +350,3 @@ private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertActio
     }
 }
 
-/**
- * Lisans yokken izlenmek istenen ama ücretsiz sürümün tek cihaz sınırına takılan cihaz: hangi cihazın izlendiği
- * söylenir ve izlenen cihaz bununla değiştirilebilir (telefondaki pro_limit penceresi).
- */
-@Composable
-private fun FreeLimitRow(graph: AppGraph, deviceId: String) {
-    val store = graph.store
-    val version by store.version.collectAsState()
-    val other = remember(version, deviceId) {
-        if (store.isPro || Demo.isDemo(deviceId) || deviceId in store.monitoredIds()) return@remember null
-        val ids = store.monitoredIds()
-        store.snapshots.firstOrNull { it.id in ids && !Demo.isDemo(it.id) }?.name ?: ""
-    } ?: return
-    RowDivider()
-    InfoRow(
-        Icons.Rounded.WorkspacePremium,
-        str("pro_limit_title"),
-        if (other.isEmpty()) str("pro_limit_detail", Entitlement.FREE_DEVICES) else str("pro_limit_body", Entitlement.FREE_DEVICES, other),
-    ) {
-        TextButton(onClick = { store.freeDeviceId = deviceId }, modifier = Modifier.testTag("free-switch")) {
-            Text(str("pro_limit_switch"))
-        }
-    }
-}

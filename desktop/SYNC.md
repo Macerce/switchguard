@@ -16,7 +16,6 @@ Kaynak: agp-9 `f848825` (telefon 2.25.0; 2026-11-06). Önceki: `cd1ec66` (2.23.2
 | DeviceSnapshot.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | DeviceTimers.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | EnergyParser.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
-| Entitlement.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | EventText.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | ExpectedChanges.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
 | Metrics.kt | app/src/main/java/com/macerce/switchguard/core/ | yok |
@@ -149,7 +148,9 @@ Farklar: `desktop_cycle_at_note` (telefon yerine bilgisayar), `desktop_board_no_
 
 Olduğu gibi kopyalanan: core/ Sensors (yeni; SonoffLAN MIT uiid tablosu), SensorAlerts (yeni), DeviceSnapshot (`sensors`), DeviceParser, WsMessages, Automation (SENSOR_ABOVE/BELOW/ACTIVE/CLEAR, `Trigger.sensor`), Demo (sıcaklık + kapı sensörü), DeviceKind (SENSOR), AlertsView (`of(..., sensorOnly)`), SensorsTest; strings.xml yeni anahtarlar (sensor_*, trigger_/evt_sensor_*, demo_sensor/door, board_sensors) 20 dile eklendi (dosyalar kopyalanmadı: telefon 2.26–2.29 metinleri masaüstünde yok).
 Masaüstüne uyarlanan: AutomationForm/Editor sensör olayı + sensör seçimi + eşik (şu anki değerle dolar), eylem hedefinde yalnız sensör olan cihaz yok; DeviceTiles durum satırında değerler; DeviceRulesSection sensör uyarıları (kapı/hareket/su/pil Alarm-Bildirim-Yok, sıcaklık/nem en az/en çok) + sensörde yalnız bağlantı olayları; AlertsLogic `deviceAlertLines(..., sensorOnly)`; StandbyWindow Sensörler bloğu + açık kurallar; ChatRunner sıcaklık oda sensörlerini de söyler; Store `addMissingDemoDevices` (MonitorEngine başlarken), demo kapanınca demo cihazlara bağlı kurallar da silinir. Simgeler `icons-sensors.txt`.
-Taşınmayan: telefon 2.26–2.29 (20 dil metin güncellemeleri, Pro kaldırma, konum onayı, sesli komut genişletmeleri) bu eşitlemenin konusu değil.
+Pro kaldırma (telefon 2.29.0) masaüstüne 0.15.1'de taşındı: Entitlement.kt, License.kt, LicenseUi.kt, Store.licenseKey/isPro/freeDeviceId ve pro_/plan_/license_ yazıları silindi; tüm izlenen cihazlar izlenir, AppCard sürümü gösterir.
+
+Taşınmayan: telefon 2.26–2.28 (20 dil metin güncellemeleri, konum onayı, sesli komut genişletmeleri) bu eşitlemenin konusu değil.
 
 ## 0.15.0 eşitlemesi (telefon 2.30.5–2.30.6, agp-9 `5e3a17e`)
 

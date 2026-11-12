@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">音声コマンド (Windows 音声入力)</string>
     <string name="desktop_chat_listening">話してください… 話し終えると送信されます</string>
     <string name="desktop_chat_welcome">こんにちは。文字でデバイスを操作できます: オン/オフ、状態、消費電力、外気温の確認。マイクをクリックすると声で言えます (「キッチンをオフ」)。Windows 音声入力が開き、返答は読み上げられます。下に定型文があります。クリックで送信、右クリックで編集。</string>
-    <string name="license_title">Pro を有効にする</string>
-    <string name="license_title_active">Pro ライセンス</string>
-    <string name="license_body">ライセンスがない場合、アプリが監視するデバイスは %1$d 台です。すべてのデバイスを監視するにはライセンスキーを入力してください。</string>
-    <string name="license_key">ライセンスキー</string>
-    <string name="license_invalid">このライセンスキーは無効です。すべてコピーしたか確認してください。</string>
-    <string name="license_activate">有効にする</string>
-    <string name="license_remove">ライセンスを削除</string>
-    <string name="license_owner">ライセンス所有者 %1$s · %2$s</string>
-    <string name="license_enter">ライセンスキーを入力</string>
     <string name="update_available">SwitchGuard %1$s が利用可能です。このバージョンに上書きインストールされ、設定とライセンスはそのまま残ります。</string>
     <string name="update_downloading">SwitchGuard %1$s をダウンロード中… アプリは終了し、更新後に再び開きます。</string>
     <string name="update_failed">更新をダウンロードできませんでした。インターネット接続を確認して、もう一度お試しください。</string>

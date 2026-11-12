@@ -1133,14 +1133,8 @@ class MonitorEngine(
                 val args = EventArgs.AutoAlert(a.name, source?.name)
                 val text = args.render(source?.name ?: a.name, eventStrings)
                 val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
-                // Ücretsiz sürümde izlenmeyen cihazın otomasyonu uyarı vermez (sınır otomasyonla aşılmasın); yalnızca kaydedilir.
-                val allowed = store.isPro || !a.trigger.kind.usesDevice || store.monitoredIds().let { ids ->
-                    a.trigger.deviceId in ids ||
-                        store.groups.firstOrNull { it.deviceId == a.trigger.deviceId }?.members?.all { it.deviceId in ids } == true
-                }
                 val rules = store.rulesFor(a.trigger.deviceId)
-                val effective = if (!allowed) AlertAction.IGNORE
-                    else RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
+                val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
                 val sound = rules.soundUri
                 // Masaüstü: önce uyarı, sonra geçmiş (bkz. [record]).
                 when (effective) {

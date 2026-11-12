@@ -8,7 +8,6 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.QuietHours
-import com.macerce.switchguard.core.TEST_LICENSE_KEY
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.Log
@@ -76,7 +75,6 @@ class StoreTest {
         assertFalse(s.tuyaLive)
         assertEquals("https://127.0.0.1", s.redirectUrl)
         assertEquals(1f, s.alarmVolume)
-        assertFalse(s.isPro)
         assertEquals("", s.language)
         assertEquals("system", s.theme)
         assertEquals(QuietHours(false, 23 * 60, 7 * 60), s.quietHours)
@@ -90,7 +88,6 @@ class StoreTest {
         assertFalse(s.hasAnyAccount)
         assertNull(s.alarmSoundUri)
         assertNull(s.historySeenId)
-        assertNull(s.freeDeviceId)
         assertTrue(s.snapshots.isEmpty())
         assertTrue(s.rules.isEmpty())
         assertTrue(s.automations.isEmpty())
@@ -247,7 +244,6 @@ class StoreTest {
         s.quietHours = QuietHours(true, 60, 120)
         s.deviceLayout = DeviceLayout(priority = setOf("x"))
         s.historySeenId = 77L
-        s.freeDeviceId = "dev"
         s.dailySummaryEnabled = true
         s.dailySummaryMinute = 600
         s.pendingAlarm = listOf("a", "b")
@@ -264,7 +260,7 @@ class StoreTest {
             "appId", "redirectUrl", "region", "email", "transferReceived", "transferSource",
             "tuyaId", "tuyaRegion", "tuyaTokenExp", "tuyaScales", "demo", "sessionLost", "onboardingDone",
             "monitoring", "alwaysAwake", "pollIntervalSec", "offlineGraceSec", "alarmSound", "alarmVolume",
-            "quietEnabled", "quietStart", "quietEnd", "layout", "historySeen", "freeDevice",
+            "quietEnabled", "quietStart", "quietEnd", "layout", "historySeen",
             "summaryEnabled", "summaryMinute", "pendingAlarm", "autostart", "tuyaLive", "language", "theme",
             "blindAlertMin", "reminderMin", "tgChats", "tgBot", "escalateMin",
         )
@@ -275,7 +271,6 @@ class StoreTest {
         assertEquals(0.5f, b.alarmVolume)
         assertEquals("file:///a.wav", b.alarmSoundUri)
         assertEquals(77L, b.historySeenId)
-        assertEquals("dev", b.freeDeviceId)
         assertFalse(b.alwaysAwake)
         assertFalse(b.autostart)
         assertTrue(b.tuyaLive)
@@ -340,14 +335,11 @@ class StoreTest {
         val s = store()
         s.alarmSoundUri = "x"
         s.historySeenId = 5L
-        s.freeDeviceId = "d"
         s.alarmSoundUri = null
         s.historySeenId = null
-        s.freeDeviceId = null
         val b = store()
         assertNull(b.alarmSoundUri)
         assertNull(b.historySeenId)
-        assertNull(b.freeDeviceId)
     }
 
     @Test
@@ -429,24 +421,17 @@ class StoreTest {
     }
 
     @Test
-    fun monitoredIdsIsLimitedWithoutALicense() {
+    fun everyMonitoredDeviceIsWatched() {
         val s = store()
         s.snapshots = listOf(
             DeviceSnapshot("a", "A", true, mapOf(0 to true)),
             DeviceSnapshot("b", "B", true, mapOf(0 to true)),
+            DeviceSnapshot("c", "C", true, mapOf(0 to true)),
         )
         s.setRules("a", s.rulesFor("a").copy(monitored = true))
         s.setRules("b", s.rulesFor("b").copy(monitored = true))
-        assertEquals(setOf("a"), s.monitoredIds())
-        s.freeDeviceId = "b"
-        assertEquals(setOf("b"), s.monitoredIds())
-        s.licenseKey = "SG1.bozuk.anahtar"
-        assertFalse(s.isPro)
-        s.licenseKey = TEST_LICENSE_KEY
-        assertEquals("Test Lisansı", s.license?.owner)
+        s.setRules("c", s.rulesFor("c").copy(monitored = false))
         assertEquals(setOf("a", "b"), s.monitoredIds())
-        // Ayar dosyasından yeniden okunduğunda lisans kalıcı.
-        assertTrue(store().isPro)
     }
 
     @Test

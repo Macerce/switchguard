@@ -522,23 +522,6 @@
     <string name="raw_data_desc">将设备的原始数据复制到剪贴板，便于反馈不受支持的型号</string>
     <string name="raw_data_copied">已复制</string>
     <string name="action_later">以后再说</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">免费版可监控 %1$d 台设备。Pro 版可监控您的所有设备，并包含全部功能。</string>
-    <string name="pro_once">一次性付费，无需订阅。与您的 Google 账号绑定，因此换新手机时可随您迁移。</string>
-    <string name="pro_pending">您的付款正在处理中。Google Play 确认后将立即开通 Pro。</string>
-    <string name="pro_unavailable">Google Play 目前不可用。请确保应用是从 Google Play 安装的，并且网络已连接。</string>
-    <string name="pro_buy">获取 Pro · %s</string>
-    <string name="pro_loading">正在加载价格…</string>
-    <string name="pro_active">已开通 — 所有设备均受监控。谢谢！</string>
-    <string name="pro_free_status">免费版：监控 %1$d 台设备</string>
-    <string name="pro_restore">恢复购买</string>
-    <string name="pro_restoring">正在检查您的购买记录…</string>
-    <string name="pro_upgrade">获取 Pro</string>
-    <string name="pro_hint">免费版：仅监控 %1$d 台设备。获取 Pro 即可监控全部设备。</string>
-    <string name="pro_limit_title">免费版只能监控一台设备</string>
-    <string name="pro_limit_body">免费版可监控 %1$d 台设备，目前“%2$s”占用了名额。您可以改为监控此设备，或获取 Pro 以监控全部设备。</string>
-    <string name="pro_limit_switch">改为监控这台</string>
-    <string name="pro_limit_detail">未监控 — 免费版可监控 %1$d 台设备</string>
 
     <!-- Demo -->
     <string name="demo_freezer">演示 · 冷冻柜</string>
@@ -718,7 +701,7 @@
     <string name="settings_group_alerts">警报与通知</string>
     <string name="settings_group_app">应用</string>
     <string name="settings_group_support">支持</string>
-    <string name="settings_try">演示与 Pro</string>
+    <string name="settings_try">演示</string>
     <string name="settings_try_it">测试</string>
     <string name="settings_sound">声音</string>
     <string name="settings_when_alarm">警报响铃时</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">每天 %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · 监控所有设备</string>
     <string name="demo_short">演示</string>
     <plurals name="perm_missing_n">
         <item quantity="other">缺少 %d 项权限</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">已就绪，一有变化立即响铃</string>
     <string name="monitoring_summary_now">离线时立即提醒 · %s</string>
     <string name="monitoring_summary_grace">离线时等待 %1$s · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">免费 · 监控 %d 台设备</item>
-    </plurals>
     <string name="auto_if">如果</string>
     <string name="auto_then">则</string>
     <string name="automation_name_hint">例如：水泵停止</string>

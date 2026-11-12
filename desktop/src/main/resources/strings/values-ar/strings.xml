@@ -522,23 +522,6 @@
     <string name="raw_data_desc">ينسخ البيانات الخام للجهاز إلى الحافظة، مفيد للإبلاغ عن طراز غير مدعوم</string>
     <string name="raw_data_copied">تم النسخ</string>
     <string name="action_later">ليس الآن</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">تراقب النسخة المجانية %1$d جهازًا. تراقب Pro جميع أجهزتك مع كل الميزات.</string>
-    <string name="pro_once">دفعة واحدة دون اشتراك. مرتبطة بحساب Google الخاص بك، فتنتقل معك إلى هاتف جديد.</string>
-    <string name="pro_pending">دفعتك قيد الانتظار. تُفعَّل Pro فور تأكيد Google Play لها.</string>
-    <string name="pro_unavailable">Google Play غير متاح حاليًا. تأكد من أن التطبيق مثبّت من Google Play وأنك متصل بالإنترنت.</string>
-    <string name="pro_buy">احصل على Pro · %s</string>
-    <string name="pro_loading">جارٍ تحميل السعر…</string>
-    <string name="pro_active">مفعّلة — تتم مراقبة جميع الأجهزة. شكرًا لك!</string>
-    <string name="pro_free_status">النسخة المجانية: عدد الأجهزة المراقَبة %1$d</string>
-    <string name="pro_restore">استعادة</string>
-    <string name="pro_restoring">جارٍ التحقق من مشترياتك…</string>
-    <string name="pro_upgrade">احصل على Pro</string>
-    <string name="pro_hint">النسخة المجانية: تتم مراقبة %1$d جهاز فقط. احصل على Pro لمراقبتها جميعًا.</string>
-    <string name="pro_limit_title">جهاز واحد في النسخة المجانية</string>
-    <string name="pro_limit_body">تراقب النسخة المجانية %1$d جهازًا، ويشغله \"%2$s\". راقب هذا الجهاز بدلًا منه، أو احصل على Pro لمراقبتها جميعًا.</string>
-    <string name="pro_limit_switch">راقب هذا الجهاز بدلًا منه</string>
-    <string name="pro_limit_detail">غير مراقَب — تراقب النسخة المجانية %1$d جهازًا</string>
 
     <!-- Demo -->
     <string name="demo_freezer">تجريبي · المجمّد</string>
@@ -803,7 +786,7 @@
     <string name="settings_group_alerts">الإنذارات والإشعارات</string>
     <string name="settings_group_app">التطبيق</string>
     <string name="settings_group_support">الدعم</string>
-    <string name="settings_try">التجريبي وPro</string>
+    <string name="settings_try">التجريبي</string>
     <string name="settings_try_it">تجربة</string>
     <string name="settings_sound">الصوت</string>
     <string name="settings_when_alarm">أثناء رنين الإنذار</string>
@@ -817,7 +800,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">يوميًا في %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · مراقبة جميع الأجهزة</string>
     <string name="demo_short">تجريبي</string>
     <plurals name="perm_missing_n">
         <item quantity="zero">%d إذن ناقص</item>
@@ -830,14 +812,6 @@
     <string name="guard_ready">جاهز للرنين لحظة حدوث أي تغيير</string>
     <string name="monitoring_summary_now">تنبيه فوري عند انقطاع الاتصال · %s</string>
     <string name="monitoring_summary_grace">ينتظر %1$s عند انقطاع الاتصال · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="zero">مجاني · يراقب %d جهاز</item>
-        <item quantity="one">مجاني · يراقب جهازًا واحدًا</item>
-        <item quantity="two">مجاني · يراقب جهازين</item>
-        <item quantity="few">مجاني · يراقب %d أجهزة</item>
-        <item quantity="many">مجاني · يراقب %d جهازًا</item>
-        <item quantity="other">مجاني · يراقب %d جهاز</item>
-    </plurals>
     <string name="auto_if">إذا</string>
     <string name="auto_then">إذًا</string>
     <string name="automation_name_hint">مثلًا: توقفت المضخة</string>

@@ -33,7 +33,7 @@ object BackupContent {
         // Tuya
         "tuyaId", "tuyaSecret", "tuyaRegion", "tuyaScales", "tuyaLive",
         // kurallar, otomasyonlar, düzen
-        "rules", "automations", "layout", "freeDevice",
+        "rules", "automations", "layout",
         // sesler
         "alarmSound", "notifySound", "alarmVolume",
         // sessiz saatler, hatırlatma

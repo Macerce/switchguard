@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Sprachbefehl (Windows-Spracheingabe)</string>
     <string name="desktop_chat_listening">Sprich… gesendet wird, wenn du aufhörst</string>
     <string name="desktop_chat_welcome">Hallo. Du kannst deine Geräte per Text steuern: ein- oder ausschalten, Status, Verbrauch oder Außentemperatur abfragen. Klicke auf das Mikrofon, um es zu sagen („Küche aus“); die Windows-Spracheingabe öffnet sich und die Antwort wird vorgelesen. Fertige Vorlagen stehen unten; Klick sendet, Rechtsklick bearbeitet.</string>
-    <string name="license_title">Pro aktivieren</string>
-    <string name="license_title_active">Pro-Lizenz</string>
-    <string name="license_body">Ohne Lizenz überwacht die App %1$d Gerät. Gib deinen Lizenzschlüssel ein, um alle Geräte zu überwachen.</string>
-    <string name="license_key">Lizenzschlüssel</string>
-    <string name="license_invalid">Dieser Lizenzschlüssel ist ungültig. Prüfe, ob du ihn vollständig kopiert hast.</string>
-    <string name="license_activate">Aktivieren</string>
-    <string name="license_remove">Lizenz entfernen</string>
-    <string name="license_owner">Lizenziert für %1$s · %2$s</string>
-    <string name="license_enter">Lizenzschlüssel eingeben</string>
     <string name="update_available">SwitchGuard %1$s ist verfügbar. Es wird über diese Version installiert; Einstellungen und Lizenz bleiben.</string>
     <string name="update_downloading">SwitchGuard %1$s wird heruntergeladen… Die App schließt sich, aktualisiert und öffnet sich wieder.</string>
     <string name="update_failed">Das Update konnte nicht heruntergeladen werden. Prüfe die Internetverbindung und versuche es erneut.</string>

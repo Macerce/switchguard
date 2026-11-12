@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">语音命令（Windows 语音输入）</string>
     <string name="desktop_chat_listening">请说话…停下后即发送</string>
     <string name="desktop_chat_welcome">你好。你可以通过输入文字管理设备：打开或关闭它们，询问状态、用电量或室外温度。点麦克风即可用说的（“关闭厨房”）；Windows 语音输入会打开，回复会被朗读出来。下方有现成模板；单击发送，右键编辑。</string>
-    <string name="license_title">激活 Pro</string>
-    <string name="license_title_active">Pro 许可证</string>
-    <string name="license_body">没有许可证时，应用可监控 %1$d 台设备。输入许可证密钥即可监控你的所有设备。</string>
-    <string name="license_key">许可证密钥</string>
-    <string name="license_invalid">此许可证密钥无效。请检查是否完整复制。</string>
-    <string name="license_activate">激活</string>
-    <string name="license_remove">移除许可证</string>
-    <string name="license_owner">授权给 %1$s · %2$s</string>
-    <string name="license_enter">输入许可证密钥</string>
     <string name="update_available">SwitchGuard %1$s 已发布。它会覆盖安装到当前版本上；你的设置和许可证会保留。</string>
     <string name="update_downloading">正在下载 SwitchGuard %1$s… 应用将关闭、更新并重新打开。</string>
     <string name="update_failed">无法下载更新。请检查网络连接后重试。</string>

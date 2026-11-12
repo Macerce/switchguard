@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Comando de voz (digitação por voz do Windows)</string>
     <string name="desktop_chat_listening">Fale… é enviado quando você para</string>
     <string name="desktop_chat_welcome">Olá. Você pode controlar seus dispositivos escrevendo: ligar ou desligar, perguntar o estado, o consumo ou a temperatura externa. Clique no microfone para falar (“Desligar cozinha”); a digitação por voz do Windows abre e a resposta é lida em voz alta. Há modelos prontos abaixo; clique para enviar, clique com o botão direito para editar.</string>
-    <string name="license_title">Ativar Pro</string>
-    <string name="license_title_active">Licença Pro</string>
-    <string name="license_body">Sem licença o app monitora %1$d dispositivo. Digite sua chave de licença para monitorar todos os seus dispositivos.</string>
-    <string name="license_key">Chave de licença</string>
-    <string name="license_invalid">Esta chave de licença não é válida. Verifique se você copiou tudo.</string>
-    <string name="license_activate">Ativar</string>
-    <string name="license_remove">Remover licença</string>
-    <string name="license_owner">Licenciado para %1$s · %2$s</string>
-    <string name="license_enter">Digitar chave de licença</string>
     <string name="update_available">O SwitchGuard %1$s está disponível. Ele é instalado sobre esta versão; seus ajustes e sua licença ficam.</string>
     <string name="update_downloading">Baixando o SwitchGuard %1$s… O app vai fechar, atualizar e abrir de novo.</string>
     <string name="update_failed">Não foi possível baixar a atualização. Verifique a conexão com a internet e tente de novo.</string>

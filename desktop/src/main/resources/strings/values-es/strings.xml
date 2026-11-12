@@ -522,23 +522,6 @@
     <string name="raw_data_desc">Copia los datos sin procesar del dispositivo al portapapeles, útil para informar de un modelo no compatible</string>
     <string name="raw_data_copied">Copiado</string>
     <string name="action_later">Ahora no</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">La versión gratuita monitorea %1$d dispositivo. Pro monitorea todos tus dispositivos, con todas las funciones.</string>
-    <string name="pro_once">Pago único, sin suscripción. Vinculado a tu cuenta de Google, así que te acompaña a un teléfono nuevo.</string>
-    <string name="pro_pending">Tu pago está pendiente. Pro se activa en cuanto Google Play lo confirme.</string>
-    <string name="pro_unavailable">Google Play no está disponible en este momento. Asegúrate de que la app se instaló desde Google Play y de que tienes conexión.</string>
-    <string name="pro_buy">Obtener Pro · %s</string>
-    <string name="pro_loading">Cargando precio…</string>
-    <string name="pro_active">Activo — se monitorean todos los dispositivos. ¡Gracias!</string>
-    <string name="pro_free_status">Versión gratuita: %1$d dispositivo monitoreado</string>
-    <string name="pro_restore">Restaurar</string>
-    <string name="pro_restoring">Comprobando tus compras…</string>
-    <string name="pro_upgrade">Obtener Pro</string>
-    <string name="pro_hint">Versión gratuita: solo se monitorea %1$d dispositivo. Obtén Pro para monitorearlos todos.</string>
-    <string name="pro_limit_title">Un dispositivo en la versión gratuita</string>
-    <string name="pro_limit_body">La versión gratuita monitorea %1$d dispositivo, y \"%2$s\" lo está usando. Monitorea este dispositivo en su lugar, u obtén Pro para monitorearlos todos.</string>
-    <string name="pro_limit_switch">Monitorear este en su lugar</string>
-    <string name="pro_limit_detail">Sin monitorear — la versión gratuita monitorea %1$d dispositivo</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Congelador</string>
@@ -752,7 +735,7 @@
     <string name="settings_group_alerts">Alarmas y notificaciones</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Soporte</string>
-    <string name="settings_try">Demo y Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Probar</string>
     <string name="settings_sound">Sonido</string>
     <string name="settings_when_alarm">Mientras suena una alarma</string>
@@ -766,7 +749,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Cada día a las %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · todos los dispositivos monitoreados</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">Falta %d permiso</item>
@@ -776,11 +758,6 @@
     <string name="guard_ready">Listo para sonar en cuanto algo cambie</string>
     <string name="monitoring_summary_now">Avisa al instante si se desconecta · %s</string>
     <string name="monitoring_summary_grace">Espera %1$s si se desconecta · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Gratis · monitorea %d dispositivo</item>
-        <item quantity="many">Gratis · monitorea %d dispositivos</item>
-        <item quantity="other">Gratis · monitorea %d dispositivos</item>
-    </plurals>
     <string name="auto_if">Si</string>
     <string name="auto_then">Entonces</string>
     <string name="automation_name_hint">p. ej., Bomba detenida</string>

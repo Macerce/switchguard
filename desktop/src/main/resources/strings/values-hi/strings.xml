@@ -522,23 +522,6 @@
     <string name="raw_data_desc">डिवाइस का रॉ डेटा क्लिपबोर्ड पर कॉपी करता है, जो किसी असमर्थित मॉडल की रिपोर्ट करने में काम आता है</string>
     <string name="raw_data_copied">कॉपी हो गया</string>
     <string name="action_later">अभी नहीं</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">मुफ़्त संस्करण %1$d डिवाइस की निगरानी करता है। Pro आपके सभी डिवाइस की निगरानी करता है, हर सुविधा के साथ।</string>
-    <string name="pro_once">एक बार का भुगतान, कोई सब्सक्रिप्शन नहीं। यह आपके Google अकाउंट से जुड़ा रहता है, इसलिए नए फ़ोन पर भी आपके साथ चलता है।</string>
-    <string name="pro_pending">आपका भुगतान लंबित है। Google Play के पुष्टि करते ही Pro चालू हो जाएगा।</string>
-    <string name="pro_unavailable">Google Play अभी उपलब्ध नहीं है। पक्का करें कि ऐप Google Play से इंस्टॉल हुआ है और आप ऑनलाइन हैं।</string>
-    <string name="pro_buy">Pro लें · %s</string>
-    <string name="pro_loading">कीमत लोड हो रही है…</string>
-    <string name="pro_active">चालू है — सभी डिवाइस की निगरानी हो रही है। धन्यवाद!</string>
-    <string name="pro_free_status">मुफ़्त संस्करण: %1$d डिवाइस की निगरानी</string>
-    <string name="pro_restore">रीस्टोर करें</string>
-    <string name="pro_restoring">आपकी खरीदारी जाँची जा रही है…</string>
-    <string name="pro_upgrade">Pro लें</string>
-    <string name="pro_hint">मुफ़्त संस्करण: सिर्फ़ %1$d डिवाइस की निगरानी होती है। सभी की निगरानी के लिए Pro लें।</string>
-    <string name="pro_limit_title">मुफ़्त संस्करण में एक डिवाइस</string>
-    <string name="pro_limit_body">मुफ़्त संस्करण %1$d डिवाइस की निगरानी करता है, और \"%2$s\" उसे इस्तेमाल कर रहा है। इसकी जगह इस डिवाइस की निगरानी करें, या सभी की निगरानी के लिए Pro लें।</string>
-    <string name="pro_limit_switch">इसकी जगह इसकी निगरानी करें</string>
-    <string name="pro_limit_detail">निगरानी में नहीं — मुफ़्त संस्करण %1$d डिवाइस की निगरानी करता है</string>
 
     <!-- Demo -->
     <string name="demo_freezer">डेमो · फ़्रीज़र</string>
@@ -735,7 +718,7 @@
     <string name="settings_group_alerts">अलार्म और सूचनाएँ</string>
     <string name="settings_group_app">ऐप</string>
     <string name="settings_group_support">सहायता</string>
-    <string name="settings_try">डेमो और Pro</string>
+    <string name="settings_try">डेमो</string>
     <string name="settings_try_it">टेस्ट</string>
     <string name="settings_sound">आवाज़</string>
     <string name="settings_when_alarm">अलार्म बजते समय</string>
@@ -749,7 +732,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">रोज़ %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · सभी डिवाइस की निगरानी</string>
     <string name="demo_short">डेमो</string>
     <plurals name="perm_missing_n">
         <item quantity="one">%d अनुमति बाकी है</item>
@@ -758,10 +740,6 @@
     <string name="guard_ready">कुछ भी बदलते ही बजने के लिए तैयार</string>
     <string name="monitoring_summary_now">ऑफ़लाइन होने पर तुरंत सूचना · %s</string>
     <string name="monitoring_summary_grace">ऑफ़लाइन होने पर %1$s रुकता है · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">मुफ़्त · %d डिवाइस की निगरानी</item>
-        <item quantity="other">मुफ़्त · %d डिवाइस की निगरानी</item>
-    </plurals>
     <string name="auto_if">अगर</string>
     <string name="auto_then">तो</string>
     <string name="automation_name_hint">जैसे पंप रुक गया</string>

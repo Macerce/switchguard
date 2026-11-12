@@ -522,23 +522,6 @@
     <string name="raw_data_desc">지원되지 않는 모델을 신고할 때 유용하도록 기기의 원시 데이터를 클립보드에 복사합니다</string>
     <string name="raw_data_copied">복사되었습니다</string>
     <string name="action_later">나중에</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">무료 버전은 기기 %1$d대를 모니터링합니다. Pro는 모든 기능과 함께 모든 기기를 모니터링합니다.</string>
-    <string name="pro_once">구독 없이 한 번만 결제합니다. Google 계정에 연결되므로 새 휴대폰으로도 그대로 이어집니다.</string>
-    <string name="pro_pending">결제가 대기 중입니다. Google Play에서 확인되는 즉시 Pro가 활성화됩니다.</string>
-    <string name="pro_unavailable">지금은 Google Play를 사용할 수 없습니다. 앱을 Google Play에서 설치했는지, 온라인 상태인지 확인하세요.</string>
-    <string name="pro_buy">Pro 구매 · %s</string>
-    <string name="pro_loading">가격 불러오는 중…</string>
-    <string name="pro_active">활성화됨 — 모든 기기를 모니터링합니다. 감사합니다!</string>
-    <string name="pro_free_status">무료 버전: 기기 %1$d대 모니터링 중</string>
-    <string name="pro_restore">복원</string>
-    <string name="pro_restoring">구매 내역 확인 중…</string>
-    <string name="pro_upgrade">Pro 구매</string>
-    <string name="pro_hint">무료 버전: 기기 %1$d대만 모니터링합니다. 모두 모니터링하려면 Pro를 구매하세요.</string>
-    <string name="pro_limit_title">무료 버전은 기기 1대까지</string>
-    <string name="pro_limit_body">무료 버전은 기기 %1$d대를 모니터링하며, 현재 \"%2$s\"이(가) 사용 중입니다. 대신 이 기기를 모니터링하거나, Pro를 구매하여 모두 모니터링하세요.</string>
-    <string name="pro_limit_switch">대신 이 기기 모니터링</string>
-    <string name="pro_limit_detail">모니터링 안 함 — 무료 버전은 기기 %1$d대를 모니터링합니다</string>
 
     <!-- Demo -->
     <string name="demo_freezer">데모 · 냉동고</string>
@@ -718,7 +701,7 @@
     <string name="settings_group_alerts">알람 및 알림</string>
     <string name="settings_group_app">앱</string>
     <string name="settings_group_support">지원</string>
-    <string name="settings_try">데모 및 Pro</string>
+    <string name="settings_try">데모</string>
     <string name="settings_try_it">테스트</string>
     <string name="settings_sound">소리</string>
     <string name="settings_when_alarm">알람이 울리는 동안</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">매일 %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · 모든 기기 모니터링 중</string>
     <string name="demo_short">데모</string>
     <plurals name="perm_missing_n">
         <item quantity="other">권한 %d개 누락</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">상태가 바뀌는 즉시 울릴 준비가 되었습니다</string>
     <string name="monitoring_summary_now">오프라인이 되면 즉시 알림 · %s</string>
     <string name="monitoring_summary_grace">오프라인 시 %1$s 대기 · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">무료 · 기기 %d대 모니터링</item>
-    </plurals>
     <string name="auto_if">만약</string>
     <string name="auto_then">그러면</string>
     <string name="automation_name_hint">예: 펌프 정지</string>

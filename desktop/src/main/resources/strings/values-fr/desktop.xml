@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Commande vocale (saisie vocale Windows)</string>
     <string name="desktop_chat_listening">Parlez… l\'envoi se fait quand vous vous arrêtez</string>
     <string name="desktop_chat_welcome">Bonjour. Vous pouvez gérer vos appareils par écrit : les allumer ou les éteindre, demander leur état, leur consommation ou la température extérieure. Cliquez sur le micro pour le dire à la place (« Éteins la cuisine ») ; la saisie vocale Windows s\'ouvre et la réponse est lue à voix haute. Des modèles prêts à l\'emploi se trouvent en bas ; cliquez pour envoyer, clic droit pour modifier.</string>
-    <string name="license_title">Activer Pro</string>
-    <string name="license_title_active">Licence Pro</string>
-    <string name="license_body">Sans licence, l\'application surveille %1$d appareil. Saisissez votre clé de licence pour surveiller tous vos appareils.</string>
-    <string name="license_key">Clé de licence</string>
-    <string name="license_invalid">Cette clé de licence n\'est pas valide. Vérifiez que vous l\'avez copiée en entier.</string>
-    <string name="license_activate">Activer</string>
-    <string name="license_remove">Supprimer la licence</string>
-    <string name="license_owner">Licence au nom de %1$s · %2$s</string>
-    <string name="license_enter">Saisir la clé de licence</string>
     <string name="update_available">SwitchGuard %1$s est disponible. Il s\'installe par-dessus cette version ; vos réglages et votre licence sont conservés.</string>
     <string name="update_downloading">Téléchargement de SwitchGuard %1$s… L\'application va se fermer, se mettre à jour et se rouvrir.</string>
     <string name="update_failed">La mise à jour n\'a pas pu être téléchargée. Vérifiez votre connexion Internet et réessayez.</string>

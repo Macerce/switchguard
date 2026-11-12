@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">أمر صوتي (الكتابة الصوتية في Windows)</string>
     <string name="desktop_chat_listening">تحدّث… يُرسل عندما تتوقف</string>
     <string name="desktop_chat_welcome">مرحبًا. يمكنك إدارة أجهزتك بالكتابة: تشغيلها أو إيقافها، والسؤال عن حالتها أو استهلاكها أو درجة الحرارة في الخارج. انقر الميكروفون لتقولها بصوتك («أطفئ المطبخ»)؛ تُفتح الكتابة الصوتية في Windows ويُقرأ الرد بصوت عالٍ. توجد قوالب جاهزة بالأسفل؛ انقر للإرسال، وانقر بزر الماوس الأيمن للتعديل.</string>
-    <string name="license_title">تفعيل Pro</string>
-    <string name="license_title_active">ترخيص Pro</string>
-    <string name="license_body">بدون ترخيص يراقب التطبيق %1$d جهاز. أدخل مفتاح الترخيص لمراقبة كل أجهزتك.</string>
-    <string name="license_key">مفتاح الترخيص</string>
-    <string name="license_invalid">مفتاح الترخيص هذا غير صالح. تأكد من أنك نسخته كاملًا.</string>
-    <string name="license_activate">تفعيل</string>
-    <string name="license_remove">إزالة الترخيص</string>
-    <string name="license_owner">مرخّص لـ %1$s · %2$s</string>
-    <string name="license_enter">إدخال مفتاح الترخيص</string>
     <string name="update_available">SwitchGuard %1$s متاح. يُثبَّت فوق هذا الإصدار؛ تبقى إعداداتك وترخيصك.</string>
     <string name="update_downloading">جارٍ تنزيل SwitchGuard %1$s… سيُغلق التطبيق ويُحدَّث ثم يُفتح من جديد.</string>
     <string name="update_failed">تعذّر تنزيل التحديث. تحقق من اتصال الإنترنت وحاول مرة أخرى.</string>

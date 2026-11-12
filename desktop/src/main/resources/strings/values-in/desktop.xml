@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Perintah suara (pengetikan suara Windows)</string>
     <string name="desktop_chat_listening">Bicaralah… dikirim saat Anda berhenti</string>
     <string name="desktop_chat_welcome">Halo. Anda dapat mengelola perangkat dengan menulis: menyalakan atau mematikan, menanyakan status, pemakaian daya, atau suhu luar. Klik mikrofon untuk mengucapkannya (\"Matikan dapur\"); pengetikan suara Windows terbuka dan balasan dibacakan. Templat siap pakai ada di bawah; klik untuk mengirim, klik kanan untuk mengedit.</string>
-    <string name="license_title">Aktifkan Pro</string>
-    <string name="license_title_active">Lisensi Pro</string>
-    <string name="license_body">Tanpa lisensi, aplikasi memantau %1$d perangkat. Masukkan kunci lisensi untuk memantau semua perangkat Anda.</string>
-    <string name="license_key">Kunci lisensi</string>
-    <string name="license_invalid">Kunci lisensi ini tidak valid. Periksa apakah Anda menyalin semuanya.</string>
-    <string name="license_activate">Aktifkan</string>
-    <string name="license_remove">Hapus lisensi</string>
-    <string name="license_owner">Dilisensikan untuk %1$s · %2$s</string>
-    <string name="license_enter">Masukkan kunci lisensi</string>
     <string name="update_available">SwitchGuard %1$s tersedia. Dipasang di atas versi ini; pengaturan dan lisensi Anda tetap ada.</string>
     <string name="update_downloading">Mengunduh SwitchGuard %1$s… Aplikasi akan ditutup, diperbarui, lalu dibuka lagi.</string>
     <string name="update_failed">Pembaruan tidak dapat diunduh. Periksa koneksi internet dan coba lagi.</string>

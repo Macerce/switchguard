@@ -522,23 +522,6 @@
     <string name="raw_data_desc">คัดลอกข้อมูลดิบของอุปกรณ์ไปยังคลิปบอร์ด มีประโยชน์เมื่อรายงานรุ่นที่ไม่รองรับ</string>
     <string name="raw_data_copied">คัดลอกแล้ว</string>
     <string name="action_later">ไว้ก่อน</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">เวอร์ชันฟรีตรวจสอบได้ %1$d อุปกรณ์ Pro ตรวจสอบได้ทุกอุปกรณ์ของคุณ พร้อมทุกฟีเจอร์</string>
-    <string name="pro_once">จ่ายครั้งเดียว ไม่มีค่าสมาชิก ผูกกับบัญชี Google ของคุณ จึงย้ายไปโทรศัพท์เครื่องใหม่ได้</string>
-    <string name="pro_pending">การชำระเงินของคุณอยู่ระหว่างดำเนินการ Pro จะเปิดใช้งานทันทีที่ Google Play ยืนยัน</string>
-    <string name="pro_unavailable">ตอนนี้ใช้ Google Play ไม่ได้ ตรวจสอบว่าติดตั้งแอปจาก Google Play และออนไลน์อยู่</string>
-    <string name="pro_buy">รับ Pro · %s</string>
-    <string name="pro_loading">กำลังโหลดราคา…</string>
-    <string name="pro_active">ใช้งานอยู่ — ตรวจสอบทุกอุปกรณ์ ขอบคุณ!</string>
-    <string name="pro_free_status">เวอร์ชันฟรี: ตรวจสอบ %1$d อุปกรณ์</string>
-    <string name="pro_restore">กู้คืน</string>
-    <string name="pro_restoring">กำลังตรวจสอบการซื้อของคุณ…</string>
-    <string name="pro_upgrade">รับ Pro</string>
-    <string name="pro_hint">เวอร์ชันฟรี: ตรวจสอบเพียง %1$d อุปกรณ์ รับ Pro เพื่อตรวจสอบทั้งหมด</string>
-    <string name="pro_limit_title">เวอร์ชันฟรีมีหนึ่งอุปกรณ์</string>
-    <string name="pro_limit_body">เวอร์ชันฟรีตรวจสอบ %1$d อุปกรณ์ และ \"%2$s\" ใช้สิทธิ์นั้นอยู่ ตรวจสอบอุปกรณ์นี้แทน หรือรับ Pro เพื่อตรวจสอบทั้งหมด</string>
-    <string name="pro_limit_switch">ตรวจสอบเครื่องนี้แทน</string>
-    <string name="pro_limit_detail">ไม่ได้ตรวจสอบ — เวอร์ชันฟรีตรวจสอบ %1$d อุปกรณ์</string>
 
     <!-- Demo -->
     <string name="demo_freezer">สาธิต · ตู้แช่แข็ง</string>
@@ -718,7 +701,7 @@
     <string name="settings_group_alerts">สัญญาณเตือนและการแจ้งเตือน</string>
     <string name="settings_group_app">แอป</string>
     <string name="settings_group_support">การสนับสนุน</string>
-    <string name="settings_try">สาธิตและ Pro</string>
+    <string name="settings_try">สาธิต</string>
     <string name="settings_try_it">ทดสอบ</string>
     <string name="settings_sound">เสียง</string>
     <string name="settings_when_alarm">ขณะสัญญาณเตือนดัง</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">ทุกวันเวลา %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · ตรวจสอบทุกอุปกรณ์</string>
     <string name="demo_short">สาธิต</string>
     <plurals name="perm_missing_n">
         <item quantity="other">ขาดสิทธิ์ %d รายการ</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">พร้อมส่งเสียงเตือนทันทีที่มีอะไรเปลี่ยนแปลง</string>
     <string name="monitoring_summary_now">แจ้งทันทีเมื่อออฟไลน์ · %s</string>
     <string name="monitoring_summary_grace">รอ %1$s เมื่อออฟไลน์ · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">ฟรี · ตรวจสอบ %d อุปกรณ์</item>
-    </plurals>
     <string name="auto_if">ถ้า</string>
     <string name="auto_then">จากนั้น</string>
     <string name="automation_name_hint">เช่น ปั๊มหยุดทำงาน</string>

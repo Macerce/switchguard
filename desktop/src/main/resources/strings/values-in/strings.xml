@@ -522,23 +522,6 @@
     <string name="raw_data_desc">Menyalin data mentah perangkat ke papan klip, berguna untuk melaporkan model yang tidak didukung</string>
     <string name="raw_data_copied">Disalin</string>
     <string name="action_later">Nanti saja</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">Versi gratis memantau %1$d perangkat. Pro memantau semua perangkat Anda, dengan semua fitur.</string>
-    <string name="pro_once">Sekali bayar, tanpa langganan. Terhubung ke akun Google Anda, sehingga ikut pindah ke ponsel baru.</string>
-    <string name="pro_pending">Pembayaran Anda sedang menunggu. Pro aktif segera setelah Google Play mengonfirmasinya.</string>
-    <string name="pro_unavailable">Google Play tidak tersedia saat ini. Pastikan aplikasi dipasang dari Google Play dan Anda sedang online.</string>
-    <string name="pro_buy">Dapatkan Pro · %s</string>
-    <string name="pro_loading">Memuat harga…</string>
-    <string name="pro_active">Aktif — semua perangkat dipantau. Terima kasih!</string>
-    <string name="pro_free_status">Versi gratis: %1$d perangkat dipantau</string>
-    <string name="pro_restore">Pulihkan</string>
-    <string name="pro_restoring">Memeriksa pembelian Anda…</string>
-    <string name="pro_upgrade">Dapatkan Pro</string>
-    <string name="pro_hint">Versi gratis: hanya %1$d perangkat yang dipantau. Dapatkan Pro untuk memantau semuanya.</string>
-    <string name="pro_limit_title">Satu perangkat di versi gratis</string>
-    <string name="pro_limit_body">Versi gratis memantau %1$d perangkat, dan \"%2$s\" sedang memakainya. Pantau perangkat ini sebagai gantinya, atau dapatkan Pro untuk memantau semuanya.</string>
-    <string name="pro_limit_switch">Pantau yang ini saja</string>
-    <string name="pro_limit_detail">Tidak dipantau — versi gratis memantau %1$d perangkat</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Freezer</string>
@@ -718,7 +701,7 @@
     <string name="settings_group_alerts">Alarm &amp; notifikasi</string>
     <string name="settings_group_app">Aplikasi</string>
     <string name="settings_group_support">Dukungan</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Uji</string>
     <string name="settings_sound">Suara</string>
     <string name="settings_when_alarm">Saat alarm berbunyi</string>
@@ -732,7 +715,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Setiap hari pukul %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · semua perangkat dipantau</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="other">%d izin belum diberikan</item>
@@ -740,9 +722,6 @@
     <string name="guard_ready">Siap berbunyi begitu ada perubahan</string>
     <string name="monitoring_summary_now">Peringatan langsung saat offline · %s</string>
     <string name="monitoring_summary_grace">Menunggu %1$s saat offline · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="other">Gratis · memantau %d perangkat</item>
-    </plurals>
     <string name="auto_if">Jika</string>
     <string name="auto_then">Maka</string>
     <string name="automation_name_hint">mis. Pompa berhenti</string>

@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Голосовая команда (голосовой ввод Windows)</string>
     <string name="desktop_chat_listening">Говорите… отправится, когда замолчите</string>
     <string name="desktop_chat_welcome">Здравствуйте. Управляйте устройствами текстом: включайте и выключайте, спрашивайте состояние, потребление или температуру на улице. Нажмите микрофон, чтобы сказать голосом («Выключи кухню»); откроется голосовой ввод Windows, а ответ будет прочитан вслух. Готовые шаблоны ниже: щелчок отправляет, правый щелчок — изменить.</string>
-    <string name="license_title">Активировать Pro</string>
-    <string name="license_title_active">Лицензия Pro</string>
-    <string name="license_body">Без лицензии приложение отслеживает устройств: %1$d. Введите лицензионный ключ, чтобы отслеживать все устройства.</string>
-    <string name="license_key">Лицензионный ключ</string>
-    <string name="license_invalid">Этот лицензионный ключ недействителен. Проверьте, что скопировали его целиком.</string>
-    <string name="license_activate">Активировать</string>
-    <string name="license_remove">Удалить лицензию</string>
-    <string name="license_owner">Лицензия: %1$s · %2$s</string>
-    <string name="license_enter">Ввести лицензионный ключ</string>
     <string name="update_available">Доступен SwitchGuard %1$s. Он устанавливается поверх этой версии; настройки и лицензия сохраняются.</string>
     <string name="update_downloading">Загрузка SwitchGuard %1$s… Приложение закроется, обновится и откроется снова.</string>
     <string name="update_failed">Не удалось загрузить обновление. Проверьте подключение к интернету и повторите попытку.</string>

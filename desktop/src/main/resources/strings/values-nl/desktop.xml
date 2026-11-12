@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Spraakopdracht (Windows-spraakinvoer)</string>
     <string name="desktop_chat_listening">Spreek… wordt verzonden als je stopt</string>
     <string name="desktop_chat_welcome">Hallo. Je kunt je apparaten bedienen door te typen: aan- of uitzetten, de status, het verbruik of de buitentemperatuur vragen. Klik op de microfoon om het te zeggen (‘Keuken uit’); Windows-spraakinvoer opent en het antwoord wordt voorgelezen. Kant-en-klare sjablonen staan hieronder; klik om te verzenden, rechtsklik om te bewerken.</string>
-    <string name="license_title">Pro activeren</string>
-    <string name="license_title_active">Pro-licentie</string>
-    <string name="license_body">Zonder licentie bewaakt de app %1$d apparaat. Voer je licentiesleutel in om al je apparaten te bewaken.</string>
-    <string name="license_key">Licentiesleutel</string>
-    <string name="license_invalid">Deze licentiesleutel is niet geldig. Controleer of je hem helemaal hebt gekopieerd.</string>
-    <string name="license_activate">Activeren</string>
-    <string name="license_remove">Licentie verwijderen</string>
-    <string name="license_owner">Gelicentieerd aan %1$s · %2$s</string>
-    <string name="license_enter">Licentiesleutel invoeren</string>
     <string name="update_available">SwitchGuard %1$s is beschikbaar. Het wordt over deze versie geïnstalleerd; je instellingen en licentie blijven.</string>
     <string name="update_downloading">SwitchGuard %1$s downloaden… De app sluit, werkt bij en opent opnieuw.</string>
     <string name="update_failed">De update kon niet worden gedownload. Controleer je internetverbinding en probeer het opnieuw.</string>

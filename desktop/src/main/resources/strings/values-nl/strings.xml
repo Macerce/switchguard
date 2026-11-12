@@ -522,23 +522,6 @@
     <string name="raw_data_desc">Kopieert de ruwe gegevens van het apparaat naar het klembord, handig om een niet-ondersteund model te melden</string>
     <string name="raw_data_copied">Gekopieerd</string>
     <string name="action_later">Niet nu</string>
-    <string name="pro_title">SwitchGuard Pro</string>
-    <string name="pro_body">De gratis versie bewaakt %1$d apparaat. Pro bewaakt al je apparaten, met alle functies.</string>
-    <string name="pro_once">Eenmalige betaling, geen abonnement. Gekoppeld aan je Google-account, dus het gaat mee naar een nieuwe telefoon.</string>
-    <string name="pro_pending">Je betaling is in behandeling. Pro gaat aan zodra Google Play die bevestigt.</string>
-    <string name="pro_unavailable">Google Play is nu niet beschikbaar. Controleer of de app via Google Play is geïnstalleerd en je online bent.</string>
-    <string name="pro_buy">Pro kopen · %s</string>
-    <string name="pro_loading">Prijs laden…</string>
-    <string name="pro_active">Actief — alle apparaten worden bewaakt. Bedankt!</string>
-    <string name="pro_free_status">Gratis versie: %1$d apparaat bewaakt</string>
-    <string name="pro_restore">Herstellen</string>
-    <string name="pro_restoring">Je aankopen controleren…</string>
-    <string name="pro_upgrade">Pro kopen</string>
-    <string name="pro_hint">Gratis versie: slechts %1$d apparaat wordt bewaakt. Koop Pro om ze allemaal te bewaken.</string>
-    <string name="pro_limit_title">Eén apparaat in de gratis versie</string>
-    <string name="pro_limit_body">De gratis versie bewaakt %1$d apparaat en \"%2$s\" gebruikt dat. Bewaak in plaats daarvan dit apparaat, of koop Pro om ze allemaal te bewaken.</string>
-    <string name="pro_limit_switch">Bewaak in plaats daarvan dit apparaat</string>
-    <string name="pro_limit_detail">Niet bewaakt — de gratis versie bewaakt %1$d apparaat</string>
 
     <!-- Demo -->
     <string name="demo_freezer">Demo · Vriezer</string>
@@ -735,7 +718,7 @@
     <string name="settings_group_alerts">Alarmen &amp; meldingen</string>
     <string name="settings_group_app">App</string>
     <string name="settings_group_support">Ondersteuning</string>
-    <string name="settings_try">Demo &amp; Pro</string>
+    <string name="settings_try">Demo</string>
     <string name="settings_try_it">Test</string>
     <string name="settings_sound">Geluid</string>
     <string name="settings_when_alarm">Terwijl een alarm afgaat</string>
@@ -749,7 +732,6 @@
     <string name="time_range">%1$s – %2$s</string>
     <string name="daily_at">Dagelijks om %s</string>
     <string name="volume_pct">%d%%</string>
-    <string name="plan_pro">Pro · alle apparaten bewaakt</string>
     <string name="demo_short">Demo</string>
     <plurals name="perm_missing_n">
         <item quantity="one">%d recht ontbreekt</item>
@@ -758,10 +740,6 @@
     <string name="guard_ready">Klaar om af te gaan zodra er iets verandert</string>
     <string name="monitoring_summary_now">Meldt direct bij offline · %s</string>
     <string name="monitoring_summary_grace">Wacht %1$s bij offline · %2$s</string>
-    <plurals name="plan_free">
-        <item quantity="one">Gratis · bewaakt %d apparaat</item>
-        <item quantity="other">Gratis · bewaakt %d apparaten</item>
-    </plurals>
     <string name="auto_if">Als</string>
     <string name="auto_then">Dan</string>
     <string name="automation_name_hint">bijv. Pomp gestopt</string>

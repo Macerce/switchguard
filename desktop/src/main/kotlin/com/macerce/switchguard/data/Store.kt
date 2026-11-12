@@ -7,11 +7,9 @@ import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceLayout
-import com.macerce.switchguard.core.License
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
-import com.macerce.switchguard.core.Entitlement
 import com.macerce.switchguard.core.EwelinkRegion
 import com.macerce.switchguard.core.Presence
 import com.macerce.switchguard.core.Scene
@@ -324,7 +322,6 @@ class Store internal constructor(
             Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId)) ||
                 it.conditions.any { c -> c.kind.usesDevice && Demo.isDemo(c.deviceId) }
         }
-        if (freeDeviceId?.let(Demo::isDemo) == true) freeDeviceId = null
     }
 
     fun disconnectTuya(): Unit = synchronized(lock) {
@@ -640,44 +637,16 @@ class Store internal constructor(
             ChatTemplate.automations(chatTemplates.orEmpty())
     }
     fun setRules(deviceId: String, r: DeviceRules): Unit = synchronized(lock) { rules = rules + (deviceId to r) }
-    /**
-     * Gerçekten izlenen cihazlar: kuralı açık olanlar, lisans yoksa ücretsiz sürümün tek cihaz sınırıyla
-     * (bkz. [Entitlement]); demo cihazları sınıra sayılmaz.
-     */
+    /** Gerçekten izlenen cihazlar: kuralı açık olanlar (tam sürüm, cihaz sınırı yok). */
     fun monitoredIds(): Set<String> {
         val all = rules
-        val wants = { id: String -> (all[id] ?: DeviceRules()).monitored }
-        val (demo, real) = snapshots.map { it.id }.partition(Demo::isDemo)
-        return demo.filter(wants).toSet() + Entitlement.monitored(real, wants, isPro, freeDeviceId)
+        return snapshots.map { it.id }.filter { (all[it] ?: DeviceRules()).monitored }.toSet()
     }
-
-    // --- Pro ---
-    /** Girilen lisans anahtarı (bkz. [License]); geçersizse saklanmaz. */
-    var licenseKey: String?
-        get() = strOrNull("licenseKey")
-        set(v) = edit { if (v == null) remove("licenseKey") else put("licenseKey", v) }
-
-    /** Geçerli lisans; anahtar değişmedikçe imza yeniden doğrulanmaz. */
-    val license: License?
-        get() {
-            val key = licenseKey
-            cachedLicense.let { if (it.first == key) return it.second }
-            return License.parse(key).also { cachedLicense = key to it }
-        }
-    @Volatile private var cachedLicense: Pair<String?, License?> = Pair("", null)
-
-    /** Masaüstünde Pro, geçerli bir lisans anahtarıyla açılır. */
-    val isPro: Boolean get() = license != null
 
     /** Geçmiş sekmesinde görülen son olayın kimliği; sonrakiler "görülmemiş" sayılır. Hiç ayarlanmadıysa null. */
     var historySeenId: Long?
         get() = synchronized(lock) { if (root.isNull("historySeen")) null else root.optLong("historySeen") }
         set(v) = edit { if (v == null) remove("historySeen") else put("historySeen", v) }
-
-    /** Ücretsiz sürümde kullanıcının izlemek için seçtiği cihaz. */
-    var freeDeviceId: String?
-        get() = strOrNull("freeDevice")
-        set(v) = edit { if (v == null) remove("freeDevice") else put("freeDevice", v) }
 
     // --- Otomasyon ---
     var automations: List<Automation>

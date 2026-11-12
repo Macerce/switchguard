@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">음성 명령(Windows 음성 입력)</string>
     <string name="desktop_chat_listening">말하세요… 멈추면 전송됩니다</string>
     <string name="desktop_chat_welcome">안녕하세요. 글로 기기를 관리할 수 있습니다: 켜거나 끄고, 상태, 전력 사용량, 바깥 온도를 물어보세요. 마이크를 클릭하면 말로 할 수 있습니다(\"주방 꺼\"). Windows 음성 입력이 열리고 답변은 소리 내어 읽어 줍니다. 아래에 준비된 템플릿이 있습니다. 클릭하면 전송, 오른쪽 클릭하면 편집합니다.</string>
-    <string name="license_title">Pro 활성화</string>
-    <string name="license_title_active">Pro 라이선스</string>
-    <string name="license_body">라이선스가 없으면 앱이 기기 %1$d대를 모니터링합니다. 모든 기기를 모니터링하려면 라이선스 키를 입력하세요.</string>
-    <string name="license_key">라이선스 키</string>
-    <string name="license_invalid">유효하지 않은 라이선스 키입니다. 전부 복사했는지 확인하세요.</string>
-    <string name="license_activate">활성화</string>
-    <string name="license_remove">라이선스 제거</string>
-    <string name="license_owner">라이선스 소유자 %1$s · %2$s</string>
-    <string name="license_enter">라이선스 키 입력</string>
     <string name="update_available">SwitchGuard %1$s을(를) 사용할 수 있습니다. 이 버전 위에 설치되며 설정과 라이선스는 유지됩니다.</string>
     <string name="update_downloading">SwitchGuard %1$s 다운로드 중… 앱이 닫히고 업데이트된 뒤 다시 열립니다.</string>
     <string name="update_failed">업데이트를 다운로드할 수 없습니다. 인터넷 연결을 확인하고 다시 시도하세요.</string>

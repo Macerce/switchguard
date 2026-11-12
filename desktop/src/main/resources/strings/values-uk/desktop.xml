@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Голосова команда (голосове введення Windows)</string>
     <string name="desktop_chat_listening">Говоріть… надішлеться, коли замовкнете</string>
     <string name="desktop_chat_welcome">Вітаю. Керуйте пристроями текстом: вмикайте й вимикайте, питайте стан, споживання чи температуру надворі. Натисніть мікрофон, щоб сказати голосом («Вимкни кухню»); відкриється голосове введення Windows, а відповідь буде прочитано вголос. Готові шаблони нижче: клацання надсилає, правий клацок — змінити.</string>
-    <string name="license_title">Активувати Pro</string>
-    <string name="license_title_active">Ліцензія Pro</string>
-    <string name="license_body">Без ліцензії застосунок відстежує пристроїв: %1$d. Введіть ліцензійний ключ, щоб відстежувати всі пристрої.</string>
-    <string name="license_key">Ліцензійний ключ</string>
-    <string name="license_invalid">Цей ліцензійний ключ недійсний. Перевірте, чи скопіювали його повністю.</string>
-    <string name="license_activate">Активувати</string>
-    <string name="license_remove">Видалити ліцензію</string>
-    <string name="license_owner">Ліцензія: %1$s · %2$s</string>
-    <string name="license_enter">Ввести ліцензійний ключ</string>
     <string name="update_available">Доступний SwitchGuard %1$s. Він встановлюється поверх цієї версії; налаштування й ліцензія зберігаються.</string>
     <string name="update_downloading">Завантаження SwitchGuard %1$s… Застосунок закриється, оновиться й відкриється знову.</string>
     <string name="update_failed">Не вдалося завантажити оновлення. Перевірте підключення до інтернету і спробуйте ще раз.</string>

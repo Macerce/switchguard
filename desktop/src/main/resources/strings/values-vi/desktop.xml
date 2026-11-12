@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Lệnh thoại (nhập bằng giọng nói của Windows)</string>
     <string name="desktop_chat_listening">Hãy nói… sẽ gửi khi bạn dừng</string>
     <string name="desktop_chat_welcome">Xin chào. Bạn có thể điều khiển thiết bị bằng cách nhắn: bật hoặc tắt, hỏi trạng thái, mức tiêu thụ điện hoặc nhiệt độ ngoài trời. Nhấp vào micrô để nói (\"Tắt bếp\"); tính năng nhập bằng giọng nói của Windows sẽ mở và câu trả lời được đọc to. Mẫu có sẵn ở bên dưới; nhấp để gửi, nhấp chuột phải để sửa.</string>
-    <string name="license_title">Kích hoạt Pro</string>
-    <string name="license_title_active">Giấy phép Pro</string>
-    <string name="license_body">Khi chưa có giấy phép, ứng dụng giám sát %1$d thiết bị. Nhập khóa giấy phép để giám sát tất cả thiết bị.</string>
-    <string name="license_key">Khóa giấy phép</string>
-    <string name="license_invalid">Khóa giấy phép này không hợp lệ. Hãy kiểm tra xem bạn đã sao chép đủ chưa.</string>
-    <string name="license_activate">Kích hoạt</string>
-    <string name="license_remove">Xóa giấy phép</string>
-    <string name="license_owner">Cấp phép cho %1$s · %2$s</string>
-    <string name="license_enter">Nhập khóa giấy phép</string>
     <string name="update_available">Đã có SwitchGuard %1$s. Bản này cài đè lên phiên bản hiện tại; cài đặt và giấy phép được giữ nguyên.</string>
     <string name="update_downloading">Đang tải SwitchGuard %1$s… Ứng dụng sẽ đóng, cập nhật rồi mở lại.</string>
     <string name="update_failed">Không tải được bản cập nhật. Kiểm tra kết nối internet rồi thử lại.</string>

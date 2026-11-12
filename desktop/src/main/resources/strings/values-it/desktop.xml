@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Comando vocale (digitazione vocale di Windows)</string>
     <string name="desktop_chat_listening">Parla… viene inviato quando ti fermi</string>
     <string name="desktop_chat_welcome">Ciao. Puoi gestire i dispositivi scrivendo: accenderli o spegnerli, chiedere lo stato, i consumi o la temperatura esterna. Fai clic sul microfono per dirlo a voce («Spegni cucina»); si apre la digitazione vocale di Windows e la risposta viene letta ad alta voce. Sotto ci sono modelli pronti; clic per inviare, clic destro per modificare.</string>
-    <string name="license_title">Attiva Pro</string>
-    <string name="license_title_active">Licenza Pro</string>
-    <string name="license_body">Senza licenza l\'app monitora %1$d dispositivo. Inserisci la chiave di licenza per monitorare tutti i dispositivi.</string>
-    <string name="license_key">Chiave di licenza</string>
-    <string name="license_invalid">Questa chiave di licenza non è valida. Controlla di averla copiata tutta.</string>
-    <string name="license_activate">Attiva</string>
-    <string name="license_remove">Rimuovi licenza</string>
-    <string name="license_owner">Licenza intestata a %1$s · %2$s</string>
-    <string name="license_enter">Inserisci chiave di licenza</string>
     <string name="update_available">SwitchGuard %1$s è disponibile. Si installa sopra questa versione; impostazioni e licenza restano.</string>
     <string name="update_downloading">Download di SwitchGuard %1$s… L\'app si chiuderà, si aggiornerà e si riaprirà.</string>
     <string name="update_failed">Impossibile scaricare l\'aggiornamento. Controlla la connessione a Internet e riprova.</string>

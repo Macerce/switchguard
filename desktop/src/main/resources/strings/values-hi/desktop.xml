@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">वॉइस कमांड (Windows वॉइस टाइपिंग)</string>
     <string name="desktop_chat_listening">बोलें… रुकने पर भेज दिया जाएगा</string>
     <string name="desktop_chat_welcome">नमस्ते। आप लिखकर अपने डिवाइस चला सकते हैं: उन्हें चालू या बंद करें, उनकी स्थिति, बिजली की खपत या बाहर का तापमान पूछें। बोलकर कहने के लिए माइक्रोफ़ोन पर क्लिक करें (\"रसोई बंद करो\"); Windows वॉइस टाइपिंग खुलती है और जवाब पढ़कर सुनाया जाता है। तैयार टेम्पलेट नीचे हैं; भेजने के लिए क्लिक करें, बदलने के लिए राइट-क्लिक करें।</string>
-    <string name="license_title">Pro सक्रिय करें</string>
-    <string name="license_title_active">Pro लाइसेंस</string>
-    <string name="license_body">लाइसेंस के बिना ऐप %1$d डिवाइस की निगरानी करता है। अपने सभी डिवाइस की निगरानी के लिए लाइसेंस कुंजी डालें।</string>
-    <string name="license_key">लाइसेंस कुंजी</string>
-    <string name="license_invalid">यह लाइसेंस कुंजी मान्य नहीं है। जांचें कि आपने पूरी कॉपी की है।</string>
-    <string name="license_activate">सक्रिय करें</string>
-    <string name="license_remove">लाइसेंस हटाएं</string>
-    <string name="license_owner">%1$s के नाम लाइसेंस · %2$s</string>
-    <string name="license_enter">लाइसेंस कुंजी डालें</string>
     <string name="update_available">SwitchGuard %1$s उपलब्ध है। यह इसी वर्ज़न के ऊपर इंस्टॉल होता है; आपकी सेटिंग और लाइसेंस बने रहते हैं।</string>
     <string name="update_downloading">SwitchGuard %1$s डाउनलोड हो रहा है… ऐप बंद होगा, अपडेट होगा और फिर खुलेगा।</string>
     <string name="update_failed">अपडेट डाउनलोड नहीं हो सका। इंटरनेट कनेक्शन जांचें और फिर कोशिश करें।</string>

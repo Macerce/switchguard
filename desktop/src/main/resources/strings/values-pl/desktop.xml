@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Polecenie głosowe (pisanie głosowe Windows)</string>
     <string name="desktop_chat_listening">Mów… wysyłam, gdy przestaniesz</string>
     <string name="desktop_chat_welcome">Cześć. Możesz sterować urządzeniami, pisząc: włączać je i wyłączać, pytać o stan, zużycie energii lub temperaturę na zewnątrz. Kliknij mikrofon, aby to powiedzieć („Wyłącz kuchnię”); otworzy się pisanie głosowe Windows, a odpowiedź zostanie przeczytana na głos. Gotowe szablony są poniżej; kliknij, aby wysłać, prawy przycisk, aby edytować.</string>
-    <string name="license_title">Aktywuj Pro</string>
-    <string name="license_title_active">Licencja Pro</string>
-    <string name="license_body">Bez licencji aplikacja monitoruje urządzenia: %1$d. Wpisz klucz licencyjny, aby monitorować wszystkie urządzenia.</string>
-    <string name="license_key">Klucz licencyjny</string>
-    <string name="license_invalid">Ten klucz licencyjny jest nieprawidłowy. Sprawdź, czy skopiowano go w całości.</string>
-    <string name="license_activate">Aktywuj</string>
-    <string name="license_remove">Usuń licencję</string>
-    <string name="license_owner">Licencja dla %1$s · %2$s</string>
-    <string name="license_enter">Wpisz klucz licencyjny</string>
     <string name="update_available">Dostępny jest SwitchGuard %1$s. Instaluje się na tę wersję; ustawienia i licencja zostają.</string>
     <string name="update_downloading">Pobieranie SwitchGuard %1$s… Aplikacja zamknie się, zaktualizuje i otworzy ponownie.</string>
     <string name="update_failed">Nie udało się pobrać aktualizacji. Sprawdź połączenie z internetem i spróbuj ponownie.</string>

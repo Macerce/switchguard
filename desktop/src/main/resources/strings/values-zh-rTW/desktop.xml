@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">語音指令（Windows 語音輸入）</string>
     <string name="desktop_chat_listening">請說話…停下後即送出</string>
     <string name="desktop_chat_welcome">你好。你可以透過輸入文字管理裝置：開啟或關閉它們，詢問狀態、用電量或室外溫度。按麥克風即可用說的（「關閉廚房」）；Windows 語音輸入會開啟，回覆會被朗讀出來。下方有現成範本；按一下送出，按右鍵編輯。</string>
-    <string name="license_title">啟用 Pro</string>
-    <string name="license_title_active">Pro 授權</string>
-    <string name="license_body">沒有授權時，應用程式可監控 %1$d 台裝置。輸入授權金鑰即可監控你的所有裝置。</string>
-    <string name="license_key">授權金鑰</string>
-    <string name="license_invalid">此授權金鑰無效。請檢查是否完整複製。</string>
-    <string name="license_activate">啟用</string>
-    <string name="license_remove">移除授權</string>
-    <string name="license_owner">授權給 %1$s · %2$s</string>
-    <string name="license_enter">輸入授權金鑰</string>
     <string name="update_available">SwitchGuard %1$s 已推出。它會覆蓋安裝到目前版本上；你的設定和授權會保留。</string>
     <string name="update_downloading">正在下載 SwitchGuard %1$s… 應用程式將關閉、更新並重新開啟。</string>
     <string name="update_failed">無法下載更新。請檢查網路連線後再試一次。</string>

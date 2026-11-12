@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">คำสั่งเสียง (การพิมพ์ด้วยเสียงของ Windows)</string>
     <string name="desktop_chat_listening">พูดได้เลย… จะส่งเมื่อคุณหยุดพูด</string>
     <string name="desktop_chat_welcome">สวัสดี คุณจัดการอุปกรณ์ได้ด้วยการพิมพ์: เปิดหรือปิด ถามสถานะ การใช้ไฟ หรืออุณหภูมิภายนอก คลิกไมโครโฟนเพื่อพูดแทน (\"ปิดครัว\") การพิมพ์ด้วยเสียงของ Windows จะเปิดขึ้นและคำตอบจะถูกอ่านออกเสียง เทมเพลตสำเร็จรูปอยู่ด้านล่าง คลิกเพื่อส่ง คลิกขวาเพื่อแก้ไข</string>
-    <string name="license_title">เปิดใช้งาน Pro</string>
-    <string name="license_title_active">ใบอนุญาต Pro</string>
-    <string name="license_body">หากไม่มีใบอนุญาต แอปจะตรวจสอบอุปกรณ์ %1$d เครื่อง ป้อนคีย์ใบอนุญาตเพื่อตรวจสอบอุปกรณ์ทั้งหมด</string>
-    <string name="license_key">คีย์ใบอนุญาต</string>
-    <string name="license_invalid">คีย์ใบอนุญาตนี้ไม่ถูกต้อง ตรวจสอบว่าคัดลอกมาครบ</string>
-    <string name="license_activate">เปิดใช้งาน</string>
-    <string name="license_remove">ลบใบอนุญาต</string>
-    <string name="license_owner">ใบอนุญาตของ %1$s · %2$s</string>
-    <string name="license_enter">ป้อนคีย์ใบอนุญาต</string>
     <string name="update_available">มี SwitchGuard %1$s แล้ว ติดตั้งทับเวอร์ชันนี้ได้ การตั้งค่าและใบอนุญาตยังอยู่</string>
     <string name="update_downloading">กำลังดาวน์โหลด SwitchGuard %1$s… แอปจะปิด อัปเดต แล้วเปิดอีกครั้ง</string>
     <string name="update_failed">ดาวน์โหลดอัปเดตไม่ได้ ตรวจสอบการเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง</string>

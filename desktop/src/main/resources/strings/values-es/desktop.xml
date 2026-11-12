@@ -120,15 +120,6 @@
     <string name="desktop_chat_voice">Comando de voz (dictado de Windows)</string>
     <string name="desktop_chat_listening">Habla… se envía cuando paras</string>
     <string name="desktop_chat_welcome">Hola. Puedes manejar tus dispositivos escribiendo: encenderlos o apagarlos, preguntar su estado, el consumo o la temperatura exterior. Pulsa el micrófono para decirlo («Apaga la cocina»); se abre el dictado de Windows y la respuesta se lee en voz alta. Abajo hay plantillas listas; haz clic para enviar, clic derecho para editar.</string>
-    <string name="license_title">Activar Pro</string>
-    <string name="license_title_active">Licencia Pro</string>
-    <string name="license_body">Sin licencia la app monitorea %1$d dispositivo. Introduce tu clave de licencia para monitorear todos tus dispositivos.</string>
-    <string name="license_key">Clave de licencia</string>
-    <string name="license_invalid">Esta clave de licencia no es válida. Comprueba que la copiaste completa.</string>
-    <string name="license_activate">Activar</string>
-    <string name="license_remove">Quitar licencia</string>
-    <string name="license_owner">Licencia a nombre de %1$s · %2$s</string>
-    <string name="license_enter">Introducir clave de licencia</string>
     <string name="update_available">SwitchGuard %1$s está disponible. Se instala sobre esta versión; tus ajustes y licencia se mantienen.</string>
     <string name="update_downloading">Descargando SwitchGuard %1$s… La app se cerrará, se actualizará y se volverá a abrir.</string>
     <string name="update_failed">No se pudo descargar la actualización. Comprueba la conexión a internet e inténtalo de nuevo.</string>
