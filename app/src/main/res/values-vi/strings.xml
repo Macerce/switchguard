@@ -962,6 +962,26 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="cond_is_off">tắt</string>
     <string name="cond_is_online">trực tuyến</string>
     <string name="cond_is_offline">ngoại tuyến</string>
+    <string name="cond_power_above">công suất trên</string>
+    <string name="cond_power_below">công suất dưới</string>
+    <string name="cond_sensor_above">cảm biến trên</string>
+    <string name="cond_sensor_below">cảm biến dưới</string>
+    <string name="cond_sensor_active">cảm biến kích hoạt</string>
+    <string name="cond_sensor_clear">cảm biến yên</string>
+    <string name="cond_temp_above">ngoài trời trên</string>
+    <string name="cond_temp_below">ngoài trời dưới</string>
+    <string name="cond_power">công suất</string>
+    <string name="cond_outdoor">nhiệt độ ngoài trời</string>
+    <string name="cond_clause_value">nếu %1$s: %2$s</string>
+    <string name="cond_clause_plain">nếu %1$s</string>
+    <string name="cond_n">Điều kiện %1$d</string>
+    <string name="cond_remove">Xóa điều kiện</string>
+    <string name="cond_add">Thêm điều kiện</string>
+    <string name="cond_match">Khi nào được đáp ứng?</string>
+    <string name="cond_match_all">Tất cả điều kiện</string>
+    <string name="cond_match_any">Chỉ cần một</string>
+    <string name="cond_join_and">và</string>
+    <string name="cond_join_or">hoặc</string>
 
     <string name="location_title">Vị trí</string>
     <string name="location_desc">Cần cho các quy tắc mặt trời mọc/lặn và nhiệt độ ngoài trời. Vị trí ở lại trên thiết bị này; với nhiệt độ, vị trí được gửi đến Open-Meteo đã làm tròn khoảng 100 m.</string>

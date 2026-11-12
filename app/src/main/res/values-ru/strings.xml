@@ -1067,6 +1067,26 @@
     <string name="cond_is_off">выключено</string>
     <string name="cond_is_online">в сети</string>
     <string name="cond_is_offline">не в сети</string>
+    <string name="cond_power_above">мощность выше</string>
+    <string name="cond_power_below">мощность ниже</string>
+    <string name="cond_sensor_above">датчик выше</string>
+    <string name="cond_sensor_below">датчик ниже</string>
+    <string name="cond_sensor_active">датчик активен</string>
+    <string name="cond_sensor_clear">датчик в покое</string>
+    <string name="cond_temp_above">снаружи выше</string>
+    <string name="cond_temp_below">снаружи ниже</string>
+    <string name="cond_power">мощность</string>
+    <string name="cond_outdoor">температура на улице</string>
+    <string name="cond_clause_value">если %1$s: %2$s</string>
+    <string name="cond_clause_plain">если %1$s</string>
+    <string name="cond_n">Условие %1$d</string>
+    <string name="cond_remove">Удалить условие</string>
+    <string name="cond_add">Добавить условие</string>
+    <string name="cond_match">Когда выполнено?</string>
+    <string name="cond_match_all">Все условия</string>
+    <string name="cond_match_any">Достаточно одного</string>
+    <string name="cond_join_and">и</string>
+    <string name="cond_join_or">или</string>
 
     <string name="location_title">Местоположение</string>
     <string name="location_desc">Нужно для правил по рассвету/закату и температуре на улице. Остаётся на этом устройстве; для температуры отправляется в Open-Meteo с округлением примерно до 100 м.</string>

@@ -962,6 +962,26 @@
     <string name="cond_is_off">ปิดอยู่</string>
     <string name="cond_is_online">ออนไลน์</string>
     <string name="cond_is_offline">ออฟไลน์</string>
+    <string name="cond_power_above">กำลังไฟสูงกว่า</string>
+    <string name="cond_power_below">กำลังไฟต่ำกว่า</string>
+    <string name="cond_sensor_above">เซ็นเซอร์สูงกว่า</string>
+    <string name="cond_sensor_below">เซ็นเซอร์ต่ำกว่า</string>
+    <string name="cond_sensor_active">เซ็นเซอร์ทำงาน</string>
+    <string name="cond_sensor_clear">เซ็นเซอร์ปกติ</string>
+    <string name="cond_temp_above">ภายนอกสูงกว่า</string>
+    <string name="cond_temp_below">ภายนอกต่ำกว่า</string>
+    <string name="cond_power">กำลังไฟ</string>
+    <string name="cond_outdoor">อุณหภูมิภายนอก</string>
+    <string name="cond_clause_value">ถ้า %1$s: %2$s</string>
+    <string name="cond_clause_plain">ถ้า %1$s</string>
+    <string name="cond_n">เงื่อนไข %1$d</string>
+    <string name="cond_remove">ลบเงื่อนไข</string>
+    <string name="cond_add">เพิ่มเงื่อนไข</string>
+    <string name="cond_match">ถือว่าเป็นจริงเมื่อใด?</string>
+    <string name="cond_match_all">ทุกเงื่อนไข</string>
+    <string name="cond_match_any">ข้อใดข้อหนึ่งก็พอ</string>
+    <string name="cond_join_and">และ</string>
+    <string name="cond_join_or">หรือ</string>
 
     <string name="location_title">ตำแหน่ง</string>
     <string name="location_desc">จำเป็นสำหรับกฎพระอาทิตย์ขึ้น/ตกและอุณหภูมิภายนอก ตำแหน่งอยู่บนอุปกรณ์นี้ สำหรับอุณหภูมิ จะส่งไปยัง Open-Meteo โดยปัดเศษประมาณ 100 ม.</string>

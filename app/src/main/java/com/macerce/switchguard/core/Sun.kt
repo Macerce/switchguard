@@ -82,19 +82,76 @@ data class ActiveWindow(val startMinute: Int = 0, val endMinute: Int = 0, val da
     }
 }
 
-/** "Ve şu koşulda": eylem ancak başka bir cihaz bu durumdaysa yapılır. */
-enum class ConditionKind { IS_ON, IS_OFF, IS_ONLINE, IS_OFFLINE }
+/** "Ve şu koşulda": eylem ancak başka bir cihaz (ya da dış sıcaklık) bu durumdaysa yapılır. */
+enum class ConditionKind {
+    IS_ON, IS_OFF, IS_ONLINE, IS_OFFLINE,
+    /** Cihazın toplam gücü [Condition.value] W'ın üstünde / altında. */
+    POWER_ABOVE, POWER_BELOW,
+    /** Sensör değeri ([Condition.sensor]) [Condition.value]'nun üstünde / altında (ör. oda sıcaklığı). */
+    SENSOR_ABOVE, SENSOR_BELOW,
+    /** İkili sensör şu an etkin (kapı açık, hareket var, su kaçağı) / sakin. */
+    SENSOR_ACTIVE, SENSOR_CLEAR,
+    /** Dış sıcaklık [Condition.value] °C'nin üstünde / altında (internetten, konum gerekir; cihaz yok). */
+    TEMP_ABOVE, TEMP_BELOW;
 
-data class Condition(val kind: ConditionKind, val deviceId: String, val channel: Int = 0) {
-    /** Cihaz yoksa koşul sağlanmamış sayılır. */
-    fun holds(devices: Map<String, DeviceSnapshot>): Boolean {
+    val usesChannel get() = this == IS_ON || this == IS_OFF
+    val usesPower get() = this == POWER_ABOVE || this == POWER_BELOW
+    val usesSensorValue get() = this == SENSOR_ABOVE || this == SENSOR_BELOW
+    val usesSensorState get() = this == SENSOR_ACTIVE || this == SENSOR_CLEAR
+    val usesSensor get() = usesSensorValue || usesSensorState
+    val usesTemp get() = this == TEMP_ABOVE || this == TEMP_BELOW
+    /** Sayısal eşik alır. */
+    val usesValue get() = usesPower || usesSensorValue || usesTemp
+    val usesDevice get() = !usesTemp
+    val above get() = this == POWER_ABOVE || this == SENSOR_ABOVE || this == TEMP_ABOVE
+}
+
+/** Birden çok koşul: hepsi (ve) ya da herhangi biri (veya) sağlanmalı. */
+enum class ConditionMatch { ALL, ANY }
+
+data class Condition(
+    val kind: ConditionKind,
+    val deviceId: String,
+    val channel: Int = 0,
+    /** Güç (W), sensör ya da dış sıcaklık eşiği. */
+    val value: Double = 0.0,
+    val sensor: SensorKind? = null,
+) {
+    /** Cihaz, değer ya da dış sıcaklık bilinmiyorsa koşul sağlanmamış sayılır; çevrimdışı cihazın eski değeri sayılmaz. */
+    fun holds(devices: Map<String, DeviceSnapshot>, outdoorTemp: Double? = null): Boolean {
+        if (kind.usesTemp) {
+            val t = outdoorTemp ?: return false
+            return if (kind.above) t > value else t < value
+        }
         val d = devices[deviceId] ?: return false
         return when (kind) {
             ConditionKind.IS_ONLINE -> d.online
             ConditionKind.IS_OFFLINE -> !d.online
             ConditionKind.IS_ON -> d.online && d.switches[channel] == true
             ConditionKind.IS_OFF -> d.online && d.switches[channel] == false
+            ConditionKind.POWER_ABOVE, ConditionKind.POWER_BELOW -> {
+                val p = d.power?.takeIf { d.online } ?: return false
+                if (kind.above) p > value else p < value
+            }
+            ConditionKind.SENSOR_ABOVE, ConditionKind.SENSOR_BELOW -> {
+                val v = sensor?.let { d.sensors[it] }?.takeIf { d.online } ?: return false
+                if (kind.above) v > value else v < value
+            }
+            ConditionKind.SENSOR_ACTIVE, ConditionKind.SENSOR_CLEAR -> {
+                val a = sensor?.let { d.sensorActive(it) }?.takeIf { d.online } ?: return false
+                a == (kind == ConditionKind.SENSOR_ACTIVE)
+            }
+            ConditionKind.TEMP_ABOVE, ConditionKind.TEMP_BELOW -> false
         }
+    }
+
+    companion object {
+        /** Boş liste = koşul yok (sağlanmış). */
+        fun allHold(list: List<Condition>, match: ConditionMatch, devices: Map<String, DeviceSnapshot>, outdoorTemp: Double? = null): Boolean =
+            list.isEmpty() || when (match) {
+                ConditionMatch.ALL -> list.all { it.holds(devices, outdoorTemp) }
+                ConditionMatch.ANY -> list.any { it.holds(devices, outdoorTemp) }
+            }
     }
 }
 

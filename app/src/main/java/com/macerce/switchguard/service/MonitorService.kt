@@ -1959,7 +1959,7 @@ class MonitorService : Service() {
         if (weatherBusy || wall < weatherAt) return
         val lat = store.latitude ?: return
         val lon = store.longitude ?: return
-        if (store.automations.none { it.enabled && it.trigger.kind.usesTemp }) return
+        if (store.automations.none { a -> a.enabled && (a.trigger.kind.usesTemp || a.conditions.any { it.kind.usesTemp }) }) return
         weatherAt = wall + WEATHER_MS
         weatherBusy = true
         telegram.execute {

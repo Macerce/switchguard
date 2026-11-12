@@ -985,6 +985,26 @@
     <string name="cond_is_off">關閉</string>
     <string name="cond_is_online">上線</string>
     <string name="cond_is_offline">離線</string>
+    <string name="cond_power_above">功率高於</string>
+    <string name="cond_power_below">功率低於</string>
+    <string name="cond_sensor_above">感測器高於</string>
+    <string name="cond_sensor_below">感測器低於</string>
+    <string name="cond_sensor_active">感測器觸發</string>
+    <string name="cond_sensor_clear">感測器正常</string>
+    <string name="cond_temp_above">室外高於</string>
+    <string name="cond_temp_below">室外低於</string>
+    <string name="cond_power">功率</string>
+    <string name="cond_outdoor">室外溫度</string>
+    <string name="cond_clause_value">若 %1$s：%2$s</string>
+    <string name="cond_clause_plain">若 %1$s</string>
+    <string name="cond_n">條件 %1$d</string>
+    <string name="cond_remove">刪除條件</string>
+    <string name="cond_add">新增條件</string>
+    <string name="cond_match">何時算符合？</string>
+    <string name="cond_match_all">全部符合</string>
+    <string name="cond_match_any">符合任一即可</string>
+    <string name="cond_join_and">且</string>
+    <string name="cond_join_or">或</string>
 
     <string name="location_title">位置</string>
     <string name="location_desc">日出 / 日落和室外溫度規則所需。位置只會保留在此裝置上；查詢溫度時，會將四捨五入到約 100 公尺的位置傳送給 Open-Meteo。</string>

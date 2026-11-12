@@ -1043,6 +1043,26 @@
     <string name="cond_is_off">вимкнений</string>
     <string name="cond_is_online">онлайн</string>
     <string name="cond_is_offline">офлайн</string>
+    <string name="cond_power_above">потужність вище</string>
+    <string name="cond_power_below">потужність нижче</string>
+    <string name="cond_sensor_above">датчик вище</string>
+    <string name="cond_sensor_below">датчик нижче</string>
+    <string name="cond_sensor_active">датчик активний</string>
+    <string name="cond_sensor_clear">датчик у спокої</string>
+    <string name="cond_temp_above">надворі вище</string>
+    <string name="cond_temp_below">надворі нижче</string>
+    <string name="cond_power">потужність</string>
+    <string name="cond_outdoor">температура надворі</string>
+    <string name="cond_clause_value">якщо %1$s: %2$s</string>
+    <string name="cond_clause_plain">якщо %1$s</string>
+    <string name="cond_n">Умова %1$d</string>
+    <string name="cond_remove">Видалити умову</string>
+    <string name="cond_add">Додати умову</string>
+    <string name="cond_match">Коли виконано?</string>
+    <string name="cond_match_all">Усі умови</string>
+    <string name="cond_match_any">Достатньо однієї</string>
+    <string name="cond_join_and">і</string>
+    <string name="cond_join_or">або</string>
 
     <string name="location_title">Місцеположення</string>
     <string name="location_desc">Потрібне для правил сходу/заходу сонця та температури надворі. Воно залишається на цьому пристрої; для температури надсилається в Open-Meteo, округлене приблизно до 100 м.</string>

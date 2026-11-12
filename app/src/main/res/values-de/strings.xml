@@ -1011,6 +1011,26 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="cond_is_off">aus</string>
     <string name="cond_is_online">online</string>
     <string name="cond_is_offline">offline</string>
+    <string name="cond_power_above">Leistung über</string>
+    <string name="cond_power_below">Leistung unter</string>
+    <string name="cond_sensor_above">Sensor über</string>
+    <string name="cond_sensor_below">Sensor unter</string>
+    <string name="cond_sensor_active">Sensor aktiv</string>
+    <string name="cond_sensor_clear">Sensor ruhig</string>
+    <string name="cond_temp_above">Außen über</string>
+    <string name="cond_temp_below">Außen unter</string>
+    <string name="cond_power">Leistung</string>
+    <string name="cond_outdoor">Außentemperatur</string>
+    <string name="cond_clause_value">wenn %1$s: %2$s</string>
+    <string name="cond_clause_plain">wenn %1$s</string>
+    <string name="cond_n">Bedingung %1$d</string>
+    <string name="cond_remove">Bedingung entfernen</string>
+    <string name="cond_add">Bedingung hinzufügen</string>
+    <string name="cond_match">Wann erfüllt?</string>
+    <string name="cond_match_all">Alle Bedingungen</string>
+    <string name="cond_match_any">Eine genügt</string>
+    <string name="cond_join_and">und</string>
+    <string name="cond_join_or">oder</string>
 
     <string name="location_title">Standort</string>
     <string name="location_desc">Erforderlich für Regeln zu Sonnenaufgang/-untergang und Außentemperatur. Er bleibt auf diesem Gerät; für die Temperatur wird er auf etwa 100 m gerundet an Open-Meteo gesendet.</string>

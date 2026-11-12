@@ -90,14 +90,16 @@ data class Automation(
     val delayMinutes: Int = 0,
     /** Yalnızca bu saatlerde/günlerde; null = her zaman. */
     val window: ActiveWindow? = null,
-    /** Ve şu koşulda; null = koşul yok. */
-    val condition: Condition? = null,
+    /** Ve şu koşullarda; boş = koşul yok. */
+    val conditions: List<Condition> = emptyList(),
+    /** Koşulların hepsi mi, herhangi biri mi sağlanmalı. */
+    val conditionMatch: ConditionMatch = ConditionMatch.ALL,
     /** Yalnızca evdeyken / dışarıdayken; null = her zaman. */
     val presence: PresenceRule? = null,
 ) {
-    /** Tetiklenen kural şimdi uygulanabilir mi (saat aralığı, ek koşul, evde/dışarıda). */
-    fun allowed(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null): Boolean =
-        (window?.contains(now) ?: true) && (condition?.holds(devices) ?: true) &&
+    /** Tetiklenen kural şimdi uygulanabilir mi (saat aralığı, ek koşullar, evde/dışarıda). */
+    fun allowed(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Boolean =
+        (window?.contains(now) ?: true) && Condition.allHold(conditions, conditionMatch, devices, outdoorTemp) &&
             (presence == null || away == null || (presence == PresenceRule.AWAY) == away)
 
     companion object {
@@ -115,7 +117,15 @@ data class Automation(
                             .put("kind", a.action.kind.name).put("device", a.action.deviceId).put("channel", a.action.channel))
                         .apply {
                             a.window?.let { put("window", JSONObject().put("start", it.startMinute).put("end", it.endMinute).put("days", it.days)) }
-                            a.condition?.let { put("cond", JSONObject().put("kind", it.kind.name).put("device", it.deviceId).put("channel", it.channel)) }
+                            if (a.conditions.isNotEmpty()) {
+                                put("conds", JSONArray().apply {
+                                    a.conditions.forEach { c ->
+                                        put(JSONObject().put("kind", c.kind.name).put("device", c.deviceId).put("channel", c.channel)
+                                            .put("value", c.value).apply { c.sensor?.let { put("sensor", it.name) } })
+                                    }
+                                })
+                                if (a.conditionMatch != ConditionMatch.ALL) put("condMatch", a.conditionMatch.name)
+                            }
                             a.presence?.let { put("presence", it.name) }
                         }
                 )
@@ -145,9 +155,16 @@ data class Automation(
                         window = o.optJSONObject("window")?.let { w ->
                             ActiveWindow(w.optInt("start"), w.optInt("end"), w.optInt("days", ActiveWindow.ALL_DAYS))
                         },
-                        condition = o.optJSONObject("cond")?.let { c ->
-                            Condition(ConditionKind.valueOf(c.getString("kind")), c.getString("device"), c.optInt("channel"))
+                        // "cond" = 2.30.5 öncesi tek koşul.
+                        conditions = (o.optJSONArray("conds")?.let { arr -> (0 until arr.length()).map { arr.getJSONObject(it) } }
+                            ?: listOfNotNull(o.optJSONObject("cond"))).map { c ->
+                            Condition(
+                                ConditionKind.valueOf(c.getString("kind")), c.optString("device"), c.optInt("channel"),
+                                c.optDouble("value", 0.0),
+                                c.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
+                            )
                         },
+                        conditionMatch = o.optString("condMatch").takeIf { it.isNotEmpty() }?.let { ConditionMatch.valueOf(it) } ?: ConditionMatch.ALL,
                         presence = o.optString("presence").takeIf { it.isNotEmpty() }?.let { PresenceRule.valueOf(it) },
                     )
                 }.getOrNull()
@@ -298,7 +315,7 @@ class AutomationEngine {
             val dk = durationKey(a)
             if (dk in durationFired || now - start < t.minutes * 60_000L) continue
             // Saat aralığı dışında ya da koşul sağlanmıyorsa harcanmaz: aralık açılınca/koşul sağlanınca tetiklenir.
-            if (!a.allowed(current, now, env.away)) continue
+            if (!a.allowed(current, now, env.away, env.outdoorTemp)) continue
             durationFired += dk
             fire(a, now, fired, current)
         }
@@ -324,7 +341,7 @@ class AutomationEngine {
             }
             if (power < t.watts) {
                 val start = lowSince.getOrPut(a.id) { now }
-                if (a.id !in lowFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away)) {
+                if (a.id !in lowFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away, env.outdoorTemp)) {
                     lowFired += a.id
                     fire(a, now, fired, current)
                 }
@@ -355,7 +372,7 @@ class AutomationEngine {
             val above = t.kind == TriggerKind.POWER_ABOVE
             if (if (above) power > t.watts else power < t.watts) {
                 val start = holdSince.getOrPut(a.id) { now }
-                if (a.id !in holdFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away)) {
+                if (a.id !in holdFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away, env.outdoorTemp)) {
                     holdFired += a.id
                     fire(a, now, fired, current)
                 }
@@ -405,7 +422,7 @@ class AutomationEngine {
             val condition = if (above) temp > t.watts else temp < t.watts
             val rearm = if (above) temp < t.watts - 1 else temp > t.watts + 1
             val armed = tempArmed[a.id] ?: true
-            if (condition && armed && a.allowed(current, now, env.away)) {
+            if (condition && armed && a.allowed(current, now, env.away, env.outdoorTemp)) {
                 tempArmed[a.id] = false
                 fire(a, now, fired, current)
             } else if (rearm) tempArmed[a.id] = true
@@ -490,7 +507,7 @@ class AutomationEngine {
 
     private fun fire(a: Automation, now: Long, out: MutableList<Automation>, current: Map<String, DeviceSnapshot>) {
         // Saat aralığı ve "ve" koşulu.
-        if (!a.allowed(current, now, env.away)) return
+        if (!a.allowed(current, now, env.away, env.outdoorTemp)) return
         // Birbirini tetikleyen otomasyonların sonsuz döngüye girmesini engeller.
         val last = lastFiredAt[a.id]
         if (last != null && now - last < MIN_INTERVAL_MS) return

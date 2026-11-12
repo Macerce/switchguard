@@ -1003,13 +1003,33 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item>Cmt</item>
         <item>Paz</item>
     </string-array>
-    <string name="cond_toggle">Ve başka bir cihaz şu durumdaysa…</string>
+    <string name="cond_toggle">Ve şu koşullardaysa…</string>
     <string name="cond_state">Durum</string>
     <string name="cond_clause">%1$s %2$s ise</string>
     <string name="cond_is_on">açık</string>
     <string name="cond_is_off">kapalı</string>
     <string name="cond_is_online">çevrimiçi</string>
     <string name="cond_is_offline">çevrimdışı</string>
+    <string name="cond_power_above">güç üstünde</string>
+    <string name="cond_power_below">güç altında</string>
+    <string name="cond_sensor_above">sensör üstünde</string>
+    <string name="cond_sensor_below">sensör altında</string>
+    <string name="cond_sensor_active">sensör etkin</string>
+    <string name="cond_sensor_clear">sensör sakin</string>
+    <string name="cond_temp_above">dış sıcaklık üstünde</string>
+    <string name="cond_temp_below">dış sıcaklık altında</string>
+    <string name="cond_power">güç</string>
+    <string name="cond_outdoor">dış sıcaklık</string>
+    <string name="cond_clause_value">%1$s: %2$s ise</string>
+    <string name="cond_clause_plain">%1$s ise</string>
+    <string name="cond_n">Koşul %1$d</string>
+    <string name="cond_remove">Koşulu sil</string>
+    <string name="cond_add">Koşul ekle</string>
+    <string name="cond_match">Ne zaman sağlanmış sayılsın?</string>
+    <string name="cond_match_all">Hepsi sağlansın</string>
+    <string name="cond_match_any">Biri yeterli</string>
+    <string name="cond_join_and">ve</string>
+    <string name="cond_join_or">veya</string>
 
     <string name="location_title">Konum</string>
     <string name="location_desc">Gün doğumu/batımı ve dış sıcaklık kuralları için gerekir. Yalnızca bu cihazda tutulur; sıcaklık için Open-Meteo\'ya ≈100 m\'ye yuvarlanarak gönderilir.</string>

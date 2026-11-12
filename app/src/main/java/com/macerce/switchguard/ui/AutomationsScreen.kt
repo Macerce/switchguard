@@ -23,10 +23,14 @@ import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material.icons.rounded.WbSunny
 import androidx.compose.material.icons.rounded.WbTwilight
 import androidx.compose.runtime.key
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.res.stringArrayResource
 import com.macerce.switchguard.core.ActiveWindow
 import com.macerce.switchguard.core.Condition
 import com.macerce.switchguard.core.ConditionKind
+import com.macerce.switchguard.core.ConditionMatch
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.DoneAll
 import com.macerce.switchguard.ui.theme.raisedOnTile
 import com.macerce.switchguard.core.DeviceKinds
 import androidx.compose.ui.text.style.TextOverflow
@@ -398,12 +402,7 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String
     val delay = if (a.delayMinutes > 0) " · " + stringResource(R.string.automation_after, a.delayMinutes) else ""
     val extras = buildList {
         a.window?.let { add(windowText(it)) }
-        a.condition?.let { c ->
-            val d = devices.firstOrNull { it.id == c.deviceId }
-            val name = d?.let { channelLabel(it, c.channel, c.kind == ConditionKind.IS_ON || c.kind == ConditionKind.IS_OFF) }
-                ?: stringResource(R.string.device_missing)
-            add(stringResource(R.string.cond_clause, name, stringResource(c.kind.title())))
-        }
+        if (a.conditions.isNotEmpty()) add(conditionsText(a.conditions, a.conditionMatch, devices))
         a.presence?.let { add(stringResource(if (it == PresenceRule.AWAY) R.string.presence_only_away else R.string.presence_only_home)) }
     }.joinToString("") { " · $it" }
     return (if (srcName != null) "$srcName · $trigger" else trigger) + extras to "$action$delay"
@@ -476,6 +475,14 @@ fun ConditionKind.title(): Int = when (this) {
     ConditionKind.IS_OFF -> R.string.cond_is_off
     ConditionKind.IS_ONLINE -> R.string.cond_is_online
     ConditionKind.IS_OFFLINE -> R.string.cond_is_offline
+    ConditionKind.POWER_ABOVE -> R.string.cond_power_above
+    ConditionKind.POWER_BELOW -> R.string.cond_power_below
+    ConditionKind.SENSOR_ABOVE -> R.string.cond_sensor_above
+    ConditionKind.SENSOR_BELOW -> R.string.cond_sensor_below
+    ConditionKind.SENSOR_ACTIVE -> R.string.cond_sensor_active
+    ConditionKind.SENSOR_CLEAR -> R.string.cond_sensor_clear
+    ConditionKind.TEMP_ABOVE -> R.string.cond_temp_above
+    ConditionKind.TEMP_BELOW -> R.string.cond_temp_below
 }
 
 /** "45 dk", "6 sa", "1 sa 30 dk". */
@@ -562,10 +569,8 @@ fun AutomationEditor(
     val cycleList = Store.get(LocalContext.current).cycles.let { remember(it) { it } }
     var triggerCycle by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesCycle }?.deviceId ?: cycleList.firstOrNull()?.id.orEmpty()) }
     var actionCycle by rememberSaveable { mutableStateOf(initial?.action?.takeIf { it.kind.usesCycle }?.deviceId ?: cycleList.firstOrNull()?.id.orEmpty()) }
-    var condOn by rememberSaveable { mutableStateOf(initial?.condition != null) }
-    var condKind by rememberSaveable { mutableStateOf(initial?.condition?.kind ?: ConditionKind.IS_ON) }
-    var condDevice by rememberSaveable { mutableStateOf(initial?.condition?.deviceId ?: first?.id.orEmpty()) }
-    var condChannel by rememberSaveable { mutableStateOf(initial?.condition?.channel ?: 0) }
+    var conds by rememberSaveable(stateSaver = CondDraft.ListSaver) { mutableStateOf(initial?.conditions.orEmpty().map(CondDraft::of)) }
+    var condMatch by rememberSaveable { mutableStateOf(initial?.conditionMatch ?: ConditionMatch.ALL) }
     var locationVersion by remember { mutableStateOf(0) }
     var zoneId by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesZone }?.deviceId ?: "") }
     var zonesVersion by remember { mutableStateOf(0) }
@@ -632,14 +637,13 @@ fun AutomationEditor(
     // Eylem hedefi açılıp kapatılabilen cihaz olmalı (yalnız sensör olanlar değil).
     val actionTargets = remember(targets) { targets.filterNot { it.sensorOnly } }
     if (dst?.sensorOnly == true) actionDevice = actionTargets.firstOrNull()?.id.orEmpty()
-    val condSrc = targets.firstOrNull { it.id == condDevice }
     val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
         (!triggerKind.usesTemp || tempValue != null) &&
         (!triggerKind.usesSensor || sensorKind != null) &&
         (!triggerKind.usesSensorValue || sensorThreshold != null) &&
         (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
-        (!condOn || condSrc != null) &&
+        conds.all { it.valid(targets) } &&
         (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
         (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
@@ -684,7 +688,8 @@ fun AutomationEditor(
         delayMinutes = delay,
         window = if (windowOn) ActiveWindow(windowStart, windowEnd, windowDays) else null,
         presence = presenceRule,
-        condition = if (condOn) Condition(condKind, condDevice, if (condKind == ConditionKind.IS_ON || condKind == ConditionKind.IS_OFF) condChannel else 0) else null,
+        conditions = conds.map { it.toCondition() },
+        conditionMatch = condMatch,
     )
 
     Column(modifier.fillMaxSize()) {
@@ -846,17 +851,33 @@ fun AutomationEditor(
                     OptionGrid(PresenceRule.entries, rule, { if (it == PresenceRule.AWAY) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home },
                         { stringResource(if (it == PresenceRule.AWAY) R.string.presence_away else R.string.presence_home) }) { presenceRule = it }
                 }
-                ToggleLine(stringResource(R.string.cond_toggle), condOn) { condOn = it }
-                if (condOn) {
-                    FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(targets, condDevice) { condDevice = it.id; condChannel = 0 }
-                    val needsChannel = condKind == ConditionKind.IS_ON || condKind == ConditionKind.IS_OFF
-                    if (needsChannel && condSrc?.isMultiChannel == true) {
-                        FieldLabel(stringResource(R.string.automation_channel))
-                        ChannelChooser(condSrc, condChannel) { condChannel = it }
+                fun newCond() = CondDraft(ConditionKind.IS_ON, targets.firstOrNull { !it.sensorOnly }?.id ?: targets.first().id)
+                ToggleLine(stringResource(R.string.cond_toggle), conds.isNotEmpty()) { conds = if (it) listOf(newCond()) else emptyList() }
+                if (conds.isNotEmpty()) {
+                    if (conds.size > 1) {
+                        FieldLabel(stringResource(R.string.cond_match))
+                        OptionGrid(ConditionMatch.entries, condMatch, { if (it == ConditionMatch.ALL) Icons.Rounded.DoneAll else Icons.Rounded.Done },
+                            { stringResource(if (it == ConditionMatch.ALL) R.string.cond_match_all else R.string.cond_match_any) }) { condMatch = it }
                     }
-                    FieldLabel(stringResource(R.string.cond_state))
-                    OptionChips(ConditionKind.entries, condKind, { it.icon() }, { stringResource(it.title()) }) { condKind = it }
+                    conds.forEachIndexed { i, c ->
+                        key(i) {
+                            ConditionBlock(i, c, targets, locationVersion,
+                                onChange = { n -> conds = conds.toMutableList().also { it[i] = n } },
+                                onRemove = { conds = conds.filterIndexed { j, _ -> j != i } })
+                        }
+                    }
+                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = { conds = conds + newCond() }) {
+                        Icon(Icons.Rounded.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.cond_add))
+                    }
+                    if (conds.any { it.kind.usesTemp }) {
+                        val context = LocalContext.current
+                        val store = remember { Store.get(context) }
+                        key(locationVersion) {
+                            LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
+                        }
+                    }
                 }
             }
 
@@ -1266,6 +1287,162 @@ private fun ConditionKind.icon(): ImageVector = when (this) {
     ConditionKind.IS_OFF -> Icons.Rounded.PowerOff
     ConditionKind.IS_ONLINE -> Icons.Rounded.Cloud
     ConditionKind.IS_OFFLINE -> Icons.Rounded.CloudOff
+    ConditionKind.POWER_ABOVE -> Icons.AutoMirrored.Rounded.TrendingUp
+    ConditionKind.POWER_BELOW -> Icons.AutoMirrored.Rounded.TrendingDown
+    ConditionKind.SENSOR_ABOVE -> Icons.Rounded.Thermostat
+    ConditionKind.SENSOR_BELOW -> Icons.Rounded.AcUnit
+    ConditionKind.SENSOR_ACTIVE -> Icons.Rounded.Sensors
+    ConditionKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
+    ConditionKind.TEMP_ABOVE -> Icons.Rounded.WbSunny
+    ConditionKind.TEMP_BELOW -> Icons.Rounded.AcUnit
+}
+
+/** Düzenleyicideki bir koşul; eşik yazıldığı gibi tutulur. */
+internal data class CondDraft(
+    val kind: ConditionKind,
+    val deviceId: String,
+    val channel: Int = 0,
+    val value: String = "",
+    val sensor: SensorKind? = null,
+) {
+    fun number(): Double? = value.replace(',', '.').toDoubleOrNull()
+    fun toCondition() = Condition(
+        kind, if (kind.usesDevice) deviceId else "", if (kind.usesChannel) channel else 0,
+        if (kind.usesValue) number() ?: 0.0 else 0.0, if (kind.usesSensor) sensor else null,
+    )
+
+    companion object {
+        fun of(c: Condition) = CondDraft(c.kind, c.deviceId, c.channel, if (c.kind.usesValue) formatNumber(c.value) else "", c.sensor)
+
+        val ListSaver = androidx.compose.runtime.saveable.listSaver<List<CondDraft>, String>(
+            save = { list -> list.map { d -> org.json.JSONObject().put("k", d.kind.name).put("d", d.deviceId).put("c", d.channel).put("v", d.value).put("s", d.sensor?.name ?: "").toString() } },
+            restore = { list ->
+                list.map { s ->
+                    val o = org.json.JSONObject(s)
+                    CondDraft(ConditionKind.valueOf(o.getString("k")), o.getString("d"), o.getInt("c"), o.getString("v"),
+                        o.getString("s").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) })
+                }
+            },
+        )
+    }
+}
+
+/** Seçili cihazda anlamlı koşul türleri (dış sıcaklık her zaman). */
+internal fun conditionKinds(d: DeviceSnapshot?): List<ConditionKind> = ConditionKind.entries.filter {
+    when {
+        it.usesTemp -> true
+        d == null -> !it.usesPower && !it.usesSensor
+        it.usesChannel -> !d.sensorOnly && d.switches.isNotEmpty()
+        it.usesPower -> d.hasEnergy
+        it.usesSensorValue -> d.sensors.keys.any { k -> !k.binary }
+        it.usesSensorState -> d.sensors.keys.any { k -> k.binary }
+        else -> true
+    }
+}
+
+/** Koşul hatasız mı (cihaz var, eşik yazılı, sensör seçili). */
+internal fun CondDraft.valid(targets: List<DeviceSnapshot>): Boolean =
+    (!kind.usesDevice || targets.any { it.id == deviceId }) && (!kind.usesValue || number() != null) && (!kind.usesSensor || sensor != null)
+
+/** Bir koşulun düzenleme kutusu: cihaz, durum, kanal/sensör, eşik. */
+@Composable
+internal fun ConditionBlock(
+    index: Int,
+    raw: CondDraft,
+    targets: List<DeviceSnapshot>,
+    locationVersion: Int,
+    onChange: (CondDraft) -> Unit,
+    onRemove: () -> Unit,
+) {
+    val d = targets.firstOrNull { it.id == raw.deviceId }
+    val kinds = conditionKinds(d)
+    // Cihaz değişince seçili tür artık uymuyorsa düzeltilir (sensör cihazında önce sensör eşiği); sensör türü de uyacak
+    // şekilde seçilir, boş eşik şu anki değerle dolar. Düzeltme aynı karede gösterilir, kayda SideEffect ile yazılır.
+    var draft = raw
+    if (draft.kind !in kinds) {
+        draft = draft.copy(kind = kinds.firstOrNull { it.usesSensorValue } ?: kinds.firstOrNull { it.usesSensorState } ?: kinds.first(), value = "", sensor = null)
+    }
+    val sensorChoices = d?.sensors?.keys?.filter { draft.kind.usesSensor && it.binary == draft.kind.usesSensorState }.orEmpty()
+    if (draft.kind.usesSensor && draft.sensor !in sensorChoices) draft = draft.copy(sensor = sensorChoices.firstOrNull(), value = "")
+    if (draft.kind.usesValue && draft.value.isEmpty()) {
+        val now = when {
+            draft.kind.usesPower -> d?.power
+            draft.kind.usesSensorValue -> draft.sensor?.let { d?.sensors?.get(it) }
+            else -> null
+        }
+        (now?.let { formatNumber(Math.round(it).toDouble()) } ?: if (draft.kind.usesTemp) "20" else null)?.let { draft = draft.copy(value = it) }
+    }
+    if (draft != raw) { val fixed = draft; SideEffect { onChange(fixed) } }
+    val shape = RoundedCornerShape(18.dp)
+    Column(Modifier.fillMaxWidth().padding(top = 10.dp).clip(shape).border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape).padding(12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(stringResource(R.string.cond_n, index + 1), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+            IconButton(modifier = Modifier.tvFocusRing(), onClick = onRemove) { Icon(Icons.Rounded.Delete, stringResource(R.string.cond_remove)) }
+        }
+        if (draft.kind.usesDevice || draft.kind.usesTemp) {
+            FieldLabel(stringResource(R.string.automation_device))
+            DeviceChooser(targets, if (draft.kind.usesTemp) "" else draft.deviceId) {
+                onChange(draft.copy(deviceId = it.id, channel = 0, value = "", sensor = null, kind = if (draft.kind.usesTemp) ConditionKind.IS_ON else draft.kind))
+            }
+        }
+        FieldLabel(stringResource(R.string.cond_state))
+        OptionChips(kinds, draft.kind, { it.icon() }, { stringResource(it.title()) }) { if (it != draft.kind) onChange(draft.copy(kind = it, value = "")) }
+        if (draft.kind.usesChannel && d?.isMultiChannel == true) {
+            FieldLabel(stringResource(R.string.automation_channel))
+            ChannelChooser(d, draft.channel) { onChange(draft.copy(channel = it)) }
+        }
+        if (draft.kind.usesSensor && sensorChoices.size > 1) {
+            FieldLabel(stringResource(R.string.sensor_choose))
+            OptionChips(sensorChoices, draft.sensor ?: sensorChoices.first(), { it.icon() }, { stringResource(it.label()) }) {
+                if (it != draft.sensor) onChange(draft.copy(sensor = it, value = ""))
+            }
+        }
+        when {
+            draft.kind.usesPower -> NumberField(draft.value, stringResource(R.string.automation_watts), "W") { onChange(draft.copy(value = it)) }
+            draft.kind.usesSensorValue -> draft.sensor?.let { k ->
+                NumberField(draft.value, stringResource(R.string.sensor_threshold), k.unit, allowNegative = k == SensorKind.TEMPERATURE) { onChange(draft.copy(value = it)) }
+            }
+            draft.kind.usesTemp -> NumberField(draft.value, stringResource(R.string.automation_temp), "°C", allowNegative = true) { onChange(draft.copy(value = it)) }
+        }
+        val current: String? = when {
+            draft.kind.usesPower -> d?.power?.let { stringResource(R.string.automation_current_power, formatWatts(it)) }
+            draft.kind.usesSensor -> draft.sensor?.let { k -> d?.sensors?.get(k)?.let { v ->
+                stringResource(R.string.automation_current_sensor, if (k.binary) stringResource(k.stateLabel(v >= 0.5)) else formatSensor(k, v))
+            } }
+            draft.kind.usesTemp -> runtimeTemp(locationVersion)?.let { stringResource(R.string.automation_current_temp, formatTemp(it)) }
+            else -> null
+        }
+        if (current != null) {
+            Text(current, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+        }
+    }
+}
+
+/** Özet ve kart metni: "Salon sensörü sıcaklık < 20 °C", "Kombi açık", "Dış sıcaklık > 25 °C". */
+@Composable
+internal fun conditionText(c: Condition, devices: List<DeviceSnapshot>): String {
+    val name = if (c.kind.usesTemp) null else devices.firstOrNull { it.id == c.deviceId }?.let { channelLabel(it, c.channel, c.kind.usesChannel) }
+        ?: stringResource(R.string.device_missing)
+    val cmp = if (c.kind.above) " > " else " < "
+    val state = when {
+        c.kind.usesPower -> stringResource(R.string.cond_power) + cmp + formatWatts(c.value)
+        c.kind.usesSensorValue -> c.sensor?.let { stringResource(it.label()) + cmp + formatSensor(it, c.value) } ?: stringResource(c.kind.title())
+        c.kind.usesSensorState -> c.sensor?.let { stringResource(it.stateLabel(c.kind == ConditionKind.SENSOR_ACTIVE)) } ?: stringResource(c.kind.title())
+        c.kind.usesTemp -> stringResource(R.string.cond_outdoor) + cmp + formatTemp(c.value)
+        else -> stringResource(c.kind.title())
+    }
+    return when {
+        name == null -> stringResource(R.string.cond_clause_plain, state)
+        c.kind.usesChannel || c.kind == ConditionKind.IS_ONLINE || c.kind == ConditionKind.IS_OFFLINE -> stringResource(R.string.cond_clause, name, state)
+        else -> stringResource(R.string.cond_clause_value, name, state)
+    }
+}
+
+/** Birden çok koşul "ve" / "veya" ile tek cümlede. */
+@Composable
+internal fun conditionsText(list: List<Condition>, match: ConditionMatch, devices: List<DeviceSnapshot>): String {
+    val join = " " + stringResource(if (match == ConditionMatch.ANY) R.string.cond_join_or else R.string.cond_join_and) + " "
+    return list.map { conditionText(it, devices) }.joinToString(join)
 }
 
 private fun TriggerKind.icon(): ImageVector = when (this) {

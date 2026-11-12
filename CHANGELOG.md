@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.30.5 — unreleased
+**New**
+- **Sensor, power and outdoor conditions**: “And only if…” now also offers sensor value above/below (room temperature, humidity, light, battery), sensor active/clear (door open, motion, water leak), device power above/below and outdoor temperature above/below.
+- **Multiple conditions**: add as many conditions as you like to a rule and choose “All conditions” (and) or “Any one is enough” (or). E.g. “At sunset, if the living room is below 20 °C and it is below 5 °C outside, turn the boiler on”.
+- An offline device's last sensor/power value never satisfies a condition; existing single-condition rules keep working.
 ## 2.30.4 — unreleased
 **New**
 - **eWeLink sensors**: temperature/humidity (TH16, THR316/320, SNZB-02 family), door (DW2, SNZB-04), motion/presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery are read and shown on the device card (“23.5 °C · 55 %”, “Door open”). Model table from AlexxIT/SonoffLAN (MIT).

@@ -962,6 +962,26 @@
     <string name="cond_is_off">处于关闭</string>
     <string name="cond_is_online">在线</string>
     <string name="cond_is_offline">离线</string>
+    <string name="cond_power_above">功率高于</string>
+    <string name="cond_power_below">功率低于</string>
+    <string name="cond_sensor_above">传感器高于</string>
+    <string name="cond_sensor_below">传感器低于</string>
+    <string name="cond_sensor_active">传感器触发</string>
+    <string name="cond_sensor_clear">传感器正常</string>
+    <string name="cond_temp_above">室外高于</string>
+    <string name="cond_temp_below">室外低于</string>
+    <string name="cond_power">功率</string>
+    <string name="cond_outdoor">室外温度</string>
+    <string name="cond_clause_value">如果 %1$s：%2$s</string>
+    <string name="cond_clause_plain">如果 %1$s</string>
+    <string name="cond_n">条件 %1$d</string>
+    <string name="cond_remove">删除条件</string>
+    <string name="cond_add">添加条件</string>
+    <string name="cond_match">何时算满足？</string>
+    <string name="cond_match_all">全部满足</string>
+    <string name="cond_match_any">满足任一即可</string>
+    <string name="cond_join_and">且</string>
+    <string name="cond_join_or">或</string>
 
     <string name="location_title">位置</string>
     <string name="location_desc">日出/日落和室外温度规则需要此信息。它保存在此设备上；用于温度查询时，会以约 100 米的精度取整后发送到 Open-Meteo。</string>

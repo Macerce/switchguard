@@ -1007,13 +1007,33 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item>Sat</item>
         <item>Sun</item>
     </string-array>
-    <string name="cond_toggle">And only if another device…</string>
+    <string name="cond_toggle">And only if…</string>
     <string name="cond_state">State</string>
     <string name="cond_clause">if %1$s is %2$s</string>
     <string name="cond_is_on">on</string>
     <string name="cond_is_off">off</string>
     <string name="cond_is_online">online</string>
     <string name="cond_is_offline">offline</string>
+    <string name="cond_power_above">power above</string>
+    <string name="cond_power_below">power below</string>
+    <string name="cond_sensor_above">sensor above</string>
+    <string name="cond_sensor_below">sensor below</string>
+    <string name="cond_sensor_active">sensor active</string>
+    <string name="cond_sensor_clear">sensor clear</string>
+    <string name="cond_temp_above">outdoor above</string>
+    <string name="cond_temp_below">outdoor below</string>
+    <string name="cond_power">power</string>
+    <string name="cond_outdoor">outdoor temperature</string>
+    <string name="cond_clause_value">if %1$s: %2$s</string>
+    <string name="cond_clause_plain">if %1$s</string>
+    <string name="cond_n">Condition %1$d</string>
+    <string name="cond_remove">Remove condition</string>
+    <string name="cond_add">Add condition</string>
+    <string name="cond_match">When is it met?</string>
+    <string name="cond_match_all">All conditions</string>
+    <string name="cond_match_any">Any one is enough</string>
+    <string name="cond_join_and">and</string>
+    <string name="cond_join_or">or</string>
 
     <string name="location_title">Location</string>
     <string name="location_desc">Needed for sunrise/sunset and outside temperature rules. It stays on this device; for the temperature it is sent to Open-Meteo rounded to about 100 m.</string>

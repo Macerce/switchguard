@@ -1015,6 +1015,26 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="cond_is_off">apagado</string>
     <string name="cond_is_online">en línea</string>
     <string name="cond_is_offline">sin conexión</string>
+    <string name="cond_power_above">potencia por encima</string>
+    <string name="cond_power_below">potencia por debajo</string>
+    <string name="cond_sensor_above">sensor por encima</string>
+    <string name="cond_sensor_below">sensor por debajo</string>
+    <string name="cond_sensor_active">sensor activo</string>
+    <string name="cond_sensor_clear">sensor en reposo</string>
+    <string name="cond_temp_above">exterior por encima</string>
+    <string name="cond_temp_below">exterior por debajo</string>
+    <string name="cond_power">potencia</string>
+    <string name="cond_outdoor">temperatura exterior</string>
+    <string name="cond_clause_value">si %1$s: %2$s</string>
+    <string name="cond_clause_plain">si %1$s</string>
+    <string name="cond_n">Condición %1$d</string>
+    <string name="cond_remove">Quitar condición</string>
+    <string name="cond_add">Añadir condición</string>
+    <string name="cond_match">¿Cuándo se cumple?</string>
+    <string name="cond_match_all">Todas las condiciones</string>
+    <string name="cond_match_any">Basta con una</string>
+    <string name="cond_join_and">y</string>
+    <string name="cond_join_or">o</string>
 
     <string name="location_title">Ubicación</string>
     <string name="location_desc">Necesaria para las reglas de amanecer/atardecer y de temperatura exterior. Permanece en este dispositivo; para la temperatura se envía a Open-Meteo redondeada a unos 100 m.</string>

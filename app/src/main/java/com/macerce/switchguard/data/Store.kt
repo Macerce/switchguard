@@ -179,7 +179,8 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         rules = rules.filterKeys { !Demo.isDemo(it) }
         // Demo cihazlarına bağlı (kullanıcının sonradan kurduğu, sensör uyarıları dahil) kurallar da gider: cihazsız kalmasınlar.
         automations = automations.filterNot {
-            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId))
+            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId)) ||
+                it.conditions.any { c -> c.kind.usesDevice && Demo.isDemo(c.deviceId) }
         }
     }
 

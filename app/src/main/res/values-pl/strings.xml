@@ -1067,6 +1067,26 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="cond_is_off">wyłączone</string>
     <string name="cond_is_online">online</string>
     <string name="cond_is_offline">offline</string>
+    <string name="cond_power_above">moc powyżej</string>
+    <string name="cond_power_below">moc poniżej</string>
+    <string name="cond_sensor_above">czujnik powyżej</string>
+    <string name="cond_sensor_below">czujnik poniżej</string>
+    <string name="cond_sensor_active">czujnik aktywny</string>
+    <string name="cond_sensor_clear">czujnik spoczynek</string>
+    <string name="cond_temp_above">na zewnątrz powyżej</string>
+    <string name="cond_temp_below">na zewnątrz poniżej</string>
+    <string name="cond_power">moc</string>
+    <string name="cond_outdoor">temperatura zewnętrzna</string>
+    <string name="cond_clause_value">jeśli %1$s: %2$s</string>
+    <string name="cond_clause_plain">jeśli %1$s</string>
+    <string name="cond_n">Warunek %1$d</string>
+    <string name="cond_remove">Usuń warunek</string>
+    <string name="cond_add">Dodaj warunek</string>
+    <string name="cond_match">Kiedy jest spełniony?</string>
+    <string name="cond_match_all">Wszystkie warunki</string>
+    <string name="cond_match_any">Wystarczy jeden</string>
+    <string name="cond_join_and">i</string>
+    <string name="cond_join_or">lub</string>
 
     <string name="location_title">Lokalizacja</string>
     <string name="location_desc">Potrzebna do reguł wschodu/zachodu słońca i temperatury na zewnątrz. Pozostaje na tym urządzeniu; w przypadku temperatury jest wysyłana do Open-Meteo, zaokrąglona do około 100 m.</string>
