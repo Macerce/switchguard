@@ -1005,6 +1005,14 @@
     <string name="cond_match_any">符合任一即可</string>
     <string name="cond_join_and">且</string>
     <string name="cond_join_or">或</string>
+    <string name="sensor_history">感測器歷史</string>
+    <string name="sensor_range_day">24 小時</string>
+    <string name="sensor_range_week">7 天</string>
+    <string name="sensor_range_month">30 天</string>
+    <string name="sensor_hist_min">最低</string>
+    <string name="sensor_hist_max">最高</string>
+    <string name="sensor_hist_avg">平均</string>
+    <string name="sensor_history_empty">尚無讀數。監控開啟時會儲存數值。</string>
 
     <string name="location_title">位置</string>
     <string name="location_desc">日出 / 日落和室外溫度規則所需。位置只會保留在此裝置上；查詢溫度時，會將四捨五入到約 100 公尺的位置傳送給 Open-Meteo。</string>

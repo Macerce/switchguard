@@ -982,6 +982,14 @@
     <string name="cond_match_any">ข้อใดข้อหนึ่งก็พอ</string>
     <string name="cond_join_and">และ</string>
     <string name="cond_join_or">หรือ</string>
+    <string name="sensor_history">ประวัติเซ็นเซอร์</string>
+    <string name="sensor_range_day">24 ชั่วโมง</string>
+    <string name="sensor_range_week">7 วัน</string>
+    <string name="sensor_range_month">30 วัน</string>
+    <string name="sensor_hist_min">ต่ำสุด</string>
+    <string name="sensor_hist_max">สูงสุด</string>
+    <string name="sensor_hist_avg">เฉลี่ย</string>
+    <string name="sensor_history_empty">ยังไม่มีข้อมูล ระบบบันทึกค่าขณะเปิดการตรวจสอบ</string>
 
     <string name="location_title">ตำแหน่ง</string>
     <string name="location_desc">จำเป็นสำหรับกฎพระอาทิตย์ขึ้น/ตกและอุณหภูมิภายนอก ตำแหน่งอยู่บนอุปกรณ์นี้ สำหรับอุณหภูมิ จะส่งไปยัง Open-Meteo โดยปัดเศษประมาณ 100 ม.</string>

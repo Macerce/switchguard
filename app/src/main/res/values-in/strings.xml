@@ -958,6 +958,14 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="cond_match_any">Satu saja cukup</string>
     <string name="cond_join_and">dan</string>
     <string name="cond_join_or">atau</string>
+    <string name="sensor_history">Riwayat sensor</string>
+    <string name="sensor_range_day">24 jam</string>
+    <string name="sensor_range_week">7 hari</string>
+    <string name="sensor_range_month">30 hari</string>
+    <string name="sensor_hist_min">Terendah</string>
+    <string name="sensor_hist_max">Tertinggi</string>
+    <string name="sensor_hist_avg">Rata-rata</string>
+    <string name="sensor_history_empty">Belum ada data. Nilai disimpan selama pemantauan aktif.</string>
     <string name="location_title">Lokasi</string>
     <string name="location_desc">Diperlukan untuk aturan matahari terbit/terbenam dan suhu luar. Tetap di perangkat ini; untuk suhu, dikirim ke Open-Meteo dengan pembulatan sekitar 100 m.</string>
     <string name="location_needed">Belum ada lokasi: aturan matahari terbit, terbenam, dan suhu memerlukannya.</string>

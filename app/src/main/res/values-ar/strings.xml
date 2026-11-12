@@ -1141,6 +1141,14 @@
     <string name="cond_match_any">يكفي شرط واحد</string>
     <string name="cond_join_and">و</string>
     <string name="cond_join_or">أو</string>
+    <string name="sensor_history">سجل المستشعر</string>
+    <string name="sensor_range_day">24 ساعة</string>
+    <string name="sensor_range_week">7 أيام</string>
+    <string name="sensor_range_month">30 يومًا</string>
+    <string name="sensor_hist_min">الأدنى</string>
+    <string name="sensor_hist_max">الأعلى</string>
+    <string name="sensor_hist_avg">المتوسط</string>
+    <string name="sensor_history_empty">لا توجد قراءات بعد. تُحفظ القيم أثناء تشغيل المراقبة.</string>
 
     <string name="location_title">الموقع</string>
     <string name="location_desc">مطلوب لقواعد الشروق/الغروب ودرجة الحرارة الخارجية. يبقى على هذا الجهاز؛ وبالنسبة إلى درجة الحرارة يُرسَل إلى Open-Meteo بعد تقريبه إلى نحو 100 م.</string>

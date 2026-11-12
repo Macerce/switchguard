@@ -106,6 +106,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
             if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
             if (device.hasEnergy && device.cloud != Cloud.DEMO) StandbyCard(device)
+            SensorHistorySection(device)
 
             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
             if (device.cloud == Cloud.EWELINK) TimersSection(device)

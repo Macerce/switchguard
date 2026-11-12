@@ -982,6 +982,14 @@
     <string name="cond_match_any">满足任一即可</string>
     <string name="cond_join_and">且</string>
     <string name="cond_join_or">或</string>
+    <string name="sensor_history">传感器历史</string>
+    <string name="sensor_range_day">24 小时</string>
+    <string name="sensor_range_week">7 天</string>
+    <string name="sensor_range_month">30 天</string>
+    <string name="sensor_hist_min">最低</string>
+    <string name="sensor_hist_max">最高</string>
+    <string name="sensor_hist_avg">平均</string>
+    <string name="sensor_history_empty">暂无读数。监控开启时会保存数值。</string>
 
     <string name="location_title">位置</string>
     <string name="location_desc">日出/日落和室外温度规则需要此信息。它保存在此设备上；用于温度查询时，会以约 100 米的精度取整后发送到 Open-Meteo。</string>

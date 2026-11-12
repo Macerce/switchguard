@@ -1031,6 +1031,14 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="cond_match_any">Eine genügt</string>
     <string name="cond_join_and">und</string>
     <string name="cond_join_or">oder</string>
+    <string name="sensor_history">Sensorverlauf</string>
+    <string name="sensor_range_day">24 Stunden</string>
+    <string name="sensor_range_week">7 Tage</string>
+    <string name="sensor_range_month">30 Tage</string>
+    <string name="sensor_hist_min">Niedrigster</string>
+    <string name="sensor_hist_max">Höchster</string>
+    <string name="sensor_hist_avg">Durchschnitt</string>
+    <string name="sensor_history_empty">Noch keine Messwerte. Werte werden gespeichert, solange die Überwachung läuft.</string>
 
     <string name="location_title">Standort</string>
     <string name="location_desc">Erforderlich für Regeln zu Sonnenaufgang/-untergang und Außentemperatur. Er bleibt auf diesem Gerät; für die Temperatur wird er auf etwa 100 m gerundet an Open-Meteo gesendet.</string>

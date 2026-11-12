@@ -1006,6 +1006,14 @@
     <string name="cond_match_any">いずれか1つで可</string>
     <string name="cond_join_and">かつ</string>
     <string name="cond_join_or">または</string>
+    <string name="sensor_history">センサー履歴</string>
+    <string name="sensor_range_day">24時間</string>
+    <string name="sensor_range_week">7日間</string>
+    <string name="sensor_range_month">30日間</string>
+    <string name="sensor_hist_min">最低</string>
+    <string name="sensor_hist_max">最高</string>
+    <string name="sensor_hist_avg">平均</string>
+    <string name="sensor_history_empty">まだ記録がありません。監視中に値が保存されます。</string>
 
     <string name="location_title">位置情報</string>
     <string name="location_desc">日の出・日の入りや外気温のルールに必要です。位置情報はこのデバイス内に保存され、気温の取得時のみ約100 m単位に丸めてOpen-Meteoに送信されます。</string>

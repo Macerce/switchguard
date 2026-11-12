@@ -10,6 +10,11 @@ import com.macerce.switchguard.core.EnergyPeriod
 import com.macerce.switchguard.core.EnergyReport
 import com.macerce.switchguard.core.EnergySummary
 import com.macerce.switchguard.core.PowerSample
+import com.macerce.switchguard.core.SensorHistory
+import com.macerce.switchguard.core.SensorKind
+import com.macerce.switchguard.core.SensorRange
+import com.macerce.switchguard.core.SensorSample
+import com.macerce.switchguard.core.SensorStats
 import com.macerce.switchguard.core.StateSample
 import com.macerce.switchguard.core.Tariff
 import com.macerce.switchguard.core.Usage
@@ -22,22 +27,33 @@ import kotlinx.coroutines.flow.StateFlow
  * Yalnızca izleme açıkken kayıt yapılır; [KEEP_DAYS] günden eski kayıtlar silinir.
  */
 class MetricsLog private constructor(context: Context) :
-    SQLiteOpenHelper(context.applicationContext, "metrics.db", null, 1) {
+    SQLiteOpenHelper(context.applicationContext, "metrics.db", null, 2) {
 
     private val _version = MutableStateFlow(0)
     val version: StateFlow<Int> = _version
 
     /** cihaz → son yazılan ölçüm; gereksiz satır yazmamak için. */
     private val lastPower = mutableMapOf<String, PowerSample>()
+    /** "cihaz/sensör" → son yazılan sensör ölçümü. */
+    private val lastSensor = mutableMapOf<String, SensorSample>()
 
     override fun onCreate(db: SQLiteDatabase) {
         db.execSQL("CREATE TABLE power(ts INTEGER NOT NULL, device_id TEXT NOT NULL, watts REAL NOT NULL)")
         db.execSQL("CREATE INDEX idx_power ON power(device_id, ts)")
         db.execSQL("CREATE TABLE state(ts INTEGER NOT NULL, device_id TEXT NOT NULL, channel INTEGER NOT NULL, is_on INTEGER NOT NULL)")
         db.execSQL("CREATE INDEX idx_state ON state(device_id, channel, ts)")
+        createSensorTable(db)
     }
 
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) = Unit
+    /** Sürüm 2 (2.30.6): sıcaklık/nem/ışık/pil geçmişi. */
+    private fun createSensorTable(db: SQLiteDatabase) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS sensor(ts INTEGER NOT NULL, device_id TEXT NOT NULL, kind TEXT NOT NULL, value REAL NOT NULL)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_sensor ON sensor(device_id, kind, ts)")
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion < 2) createSensorTable(db)
+    }
 
     /**
      * Yeni durumları kaydeder: değişen kanallar ve güç ölçümleri.
@@ -67,6 +83,17 @@ class MetricsLog private constructor(context: Context) :
                         lastPower[d.id] = PowerSample(now, watts)
                         changed = true
                     }
+                    // Sensör değerleri: yalnız çevrimiçiyken (eski değer yeniden yazılmasın).
+                    if (d.online) for ((kind, value) in d.sensors) {
+                        if (!SensorHistory.recordable(kind)) continue
+                        val key = "${d.id}/${kind.name}"
+                        if (!SensorHistory.shouldWrite(kind, lastSensor[key], value, now)) continue
+                        insert("sensor", null, ContentValues().apply {
+                            put("ts", now); put("device_id", d.id); put("kind", kind.name); put("value", value)
+                        })
+                        lastSensor[key] = SensorSample(now, value)
+                        changed = true
+                    }
                 }
                 setTransactionSuccessful()
             } finally {
@@ -94,6 +121,17 @@ class MetricsLog private constructor(context: Context) :
             arrayOf(deviceId, from.toString(), to.toString()),
         ).use { c -> buildList { while (c.moveToNext()) add(PowerSample(c.getLong(0), c.getDouble(1))) } }
         return listOfNotNull(before) + list
+    }
+
+    fun sensorSamples(deviceId: String, kind: SensorKind, from: Long, to: Long): List<SensorSample> = readableDatabase.rawQuery(
+        "SELECT ts, value FROM sensor WHERE device_id=? AND kind=? AND ts>=? AND ts<? ORDER BY ts",
+        arrayOf(deviceId, kind.name, from.toString(), to.toString()),
+    ).use { c -> buildList { while (c.moveToNext()) add(SensorSample(c.getLong(0), c.getDouble(1))) } }
+
+    /** Son [range] için sensör özeti; kayıt yoksa null. */
+    fun sensorStats(deviceId: String, kind: SensorKind, range: SensorRange, now: Long = System.currentTimeMillis()): SensorStats? {
+        val from = now - range.ms
+        return SensorHistory.stats(sensorSamples(deviceId, kind, from, now + 1), from, now + 1, range.buckets)
     }
 
     fun kwh(deviceId: String, from: Long, to: Long): Double = EnergyMath.kwh(powerSamples(deviceId, from, to), from, to)
@@ -148,12 +186,14 @@ class MetricsLog private constructor(context: Context) :
         writableDatabase.apply {
             delete("power", "ts<?", arrayOf(cutoff))
             delete("state", "ts<?", arrayOf(cutoff))
+            delete("sensor", "ts<?", arrayOf(cutoff))
         }
     }
 
     fun clear() {
-        writableDatabase.apply { delete("power", null, null); delete("state", null, null) }
+        writableDatabase.apply { delete("power", null, null); delete("state", null, null); delete("sensor", null, null) }
         lastPower.clear()
+        lastSensor.clear()
         _version.value++
     }
 

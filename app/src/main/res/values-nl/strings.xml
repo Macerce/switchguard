@@ -1033,6 +1033,14 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="cond_match_any">Eén is genoeg</string>
     <string name="cond_join_and">en</string>
     <string name="cond_join_or">of</string>
+    <string name="sensor_history">Sensorgeschiedenis</string>
+    <string name="sensor_range_day">24 uur</string>
+    <string name="sensor_range_week">7 dagen</string>
+    <string name="sensor_range_month">30 dagen</string>
+    <string name="sensor_hist_min">Laagste</string>
+    <string name="sensor_hist_max">Hoogste</string>
+    <string name="sensor_hist_avg">Gemiddeld</string>
+    <string name="sensor_history_empty">Nog geen metingen. Waarden worden opgeslagen zolang bewaking aan staat.</string>
 
     <string name="location_title">Locatie</string>
     <string name="location_desc">Nodig voor regels met zonsopgang/zonsondergang en buitentemperatuur. Blijft op dit apparaat; voor de temperatuur wordt ze op ongeveer 100 m afgerond naar Open-Meteo gestuurd.</string>

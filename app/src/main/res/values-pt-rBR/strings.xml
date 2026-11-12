@@ -1060,6 +1060,14 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="cond_match_any">Basta uma</string>
     <string name="cond_join_and">e</string>
     <string name="cond_join_or">ou</string>
+    <string name="sensor_history">Histórico do sensor</string>
+    <string name="sensor_range_day">24 horas</string>
+    <string name="sensor_range_week">7 dias</string>
+    <string name="sensor_range_month">30 dias</string>
+    <string name="sensor_hist_min">Mínimo</string>
+    <string name="sensor_hist_max">Máximo</string>
+    <string name="sensor_hist_avg">Média</string>
+    <string name="sensor_history_empty">Ainda sem leituras. Os valores são salvos enquanto o monitoramento está ativo.</string>
 
     <string name="location_title">Localização</string>
     <string name="location_desc">Necessária para as regras de nascer/pôr do sol e temperatura externa. Fica neste dispositivo; para a temperatura, é enviada ao Open-Meteo arredondada para cerca de 100 m.</string>

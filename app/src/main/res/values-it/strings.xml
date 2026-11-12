@@ -1036,6 +1036,14 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="cond_match_any">Ne basta una</string>
     <string name="cond_join_and">e</string>
     <string name="cond_join_or">o</string>
+    <string name="sensor_history">Cronologia sensore</string>
+    <string name="sensor_range_day">24 ore</string>
+    <string name="sensor_range_week">7 giorni</string>
+    <string name="sensor_range_month">30 giorni</string>
+    <string name="sensor_hist_min">Minimo</string>
+    <string name="sensor_hist_max">Massimo</string>
+    <string name="sensor_hist_avg">Media</string>
+    <string name="sensor_history_empty">Nessuna lettura per ora. I valori vengono salvati mentre il monitoraggio è attivo.</string>
 
     <string name="location_title">Posizione</string>
     <string name="location_desc">Necessaria per le regole di alba/tramonto e temperatura esterna. Resta su questo dispositivo; per la temperatura viene inviata a Open-Meteo arrotondata a circa 100 m.</string>

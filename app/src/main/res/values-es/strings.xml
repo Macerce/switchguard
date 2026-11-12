@@ -1035,6 +1035,14 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="cond_match_any">Basta con una</string>
     <string name="cond_join_and">y</string>
     <string name="cond_join_or">o</string>
+    <string name="sensor_history">Historial del sensor</string>
+    <string name="sensor_range_day">24 horas</string>
+    <string name="sensor_range_week">7 días</string>
+    <string name="sensor_range_month">30 días</string>
+    <string name="sensor_hist_min">Mínimo</string>
+    <string name="sensor_hist_max">Máximo</string>
+    <string name="sensor_hist_avg">Promedio</string>
+    <string name="sensor_history_empty">Aún no hay lecturas. Los valores se guardan mientras la supervisión está activa.</string>
 
     <string name="location_title">Ubicación</string>
     <string name="location_desc">Necesaria para las reglas de amanecer/atardecer y de temperatura exterior. Permanece en este dispositivo; para la temperatura se envía a Open-Meteo redondeada a unos 100 m.</string>

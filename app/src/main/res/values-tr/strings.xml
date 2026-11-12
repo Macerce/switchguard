@@ -1030,6 +1030,14 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="cond_match_any">Biri yeterli</string>
     <string name="cond_join_and">ve</string>
     <string name="cond_join_or">veya</string>
+    <string name="sensor_history">Sensör geçmişi</string>
+    <string name="sensor_range_day">24 saat</string>
+    <string name="sensor_range_week">7 gün</string>
+    <string name="sensor_range_month">30 gün</string>
+    <string name="sensor_hist_min">En düşük</string>
+    <string name="sensor_hist_max">En yüksek</string>
+    <string name="sensor_hist_avg">Ortalama</string>
+    <string name="sensor_history_empty">Henüz kayıt yok. Değerler izleme açıkken kaydedilir.</string>
 
     <string name="location_title">Konum</string>
     <string name="location_desc">Gün doğumu/batımı ve dış sıcaklık kuralları için gerekir. Yalnızca bu cihazda tutulur; sıcaklık için Open-Meteo\'ya ≈100 m\'ye yuvarlanarak gönderilir.</string>

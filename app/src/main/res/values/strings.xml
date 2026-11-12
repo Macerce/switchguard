@@ -1034,6 +1034,14 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="cond_match_any">Any one is enough</string>
     <string name="cond_join_and">and</string>
     <string name="cond_join_or">or</string>
+    <string name="sensor_history">Sensor history</string>
+    <string name="sensor_range_day">24 hours</string>
+    <string name="sensor_range_week">7 days</string>
+    <string name="sensor_range_month">30 days</string>
+    <string name="sensor_hist_min">Lowest</string>
+    <string name="sensor_hist_max">Highest</string>
+    <string name="sensor_hist_avg">Average</string>
+    <string name="sensor_history_empty">No readings yet. Values are saved while monitoring is on.</string>
 
     <string name="location_title">Location</string>
     <string name="location_desc">Needed for sunrise/sunset and outside temperature rules. It stays on this device; for the temperature it is sent to Open-Meteo rounded to about 100 m.</string>

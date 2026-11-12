@@ -1006,6 +1006,14 @@
     <string name="cond_match_any">하나만 충족</string>
     <string name="cond_join_and">그리고</string>
     <string name="cond_join_or">또는</string>
+    <string name="sensor_history">센서 기록</string>
+    <string name="sensor_range_day">24시간</string>
+    <string name="sensor_range_week">7일</string>
+    <string name="sensor_range_month">30일</string>
+    <string name="sensor_hist_min">최저</string>
+    <string name="sensor_hist_max">최고</string>
+    <string name="sensor_hist_avg">평균</string>
+    <string name="sensor_history_empty">아직 기록이 없습니다. 모니터링이 켜져 있는 동안 값이 저장됩니다.</string>
 
     <string name="location_title">위치</string>
     <string name="location_desc">일출/일몰 및 실외 온도 규칙에 필요합니다. 위치는 이 기기에만 남으며, 온도 조회 시에는 약 100 m 단위로 반올림하여 Open-Meteo로 전송됩니다.</string>

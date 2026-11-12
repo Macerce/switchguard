@@ -1063,6 +1063,14 @@
     <string name="cond_match_any">Достатньо однієї</string>
     <string name="cond_join_and">і</string>
     <string name="cond_join_or">або</string>
+    <string name="sensor_history">Історія датчика</string>
+    <string name="sensor_range_day">24 години</string>
+    <string name="sensor_range_week">7 днів</string>
+    <string name="sensor_range_month">30 днів</string>
+    <string name="sensor_hist_min">Мінімум</string>
+    <string name="sensor_hist_max">Максимум</string>
+    <string name="sensor_hist_avg">Середнє</string>
+    <string name="sensor_history_empty">Поки немає даних. Значення зберігаються, доки увімкнено моніторинг.</string>
 
     <string name="location_title">Місцеположення</string>
     <string name="location_desc">Потрібне для правил сходу/заходу сонця та температури надворі. Воно залишається на цьому пристрої; для температури надсилається в Open-Meteo, округлене приблизно до 100 м.</string>

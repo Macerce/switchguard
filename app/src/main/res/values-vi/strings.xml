@@ -982,6 +982,14 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="cond_match_any">Chỉ cần một</string>
     <string name="cond_join_and">và</string>
     <string name="cond_join_or">hoặc</string>
+    <string name="sensor_history">Lịch sử cảm biến</string>
+    <string name="sensor_range_day">24 giờ</string>
+    <string name="sensor_range_week">7 ngày</string>
+    <string name="sensor_range_month">30 ngày</string>
+    <string name="sensor_hist_min">Thấp nhất</string>
+    <string name="sensor_hist_max">Cao nhất</string>
+    <string name="sensor_hist_avg">Trung bình</string>
+    <string name="sensor_history_empty">Chưa có dữ liệu. Giá trị được lưu khi đang giám sát.</string>
 
     <string name="location_title">Vị trí</string>
     <string name="location_desc">Cần cho các quy tắc mặt trời mọc/lặn và nhiệt độ ngoài trời. Vị trí ở lại trên thiết bị này; với nhiệt độ, vị trí được gửi đến Open-Meteo đã làm tròn khoảng 100 m.</string>

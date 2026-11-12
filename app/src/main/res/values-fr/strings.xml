@@ -1059,6 +1059,14 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="cond_match_any">Une seule suffit</string>
     <string name="cond_join_and">et</string>
     <string name="cond_join_or">ou</string>
+    <string name="sensor_history">Historique du capteur</string>
+    <string name="sensor_range_day">24 heures</string>
+    <string name="sensor_range_week">7 jours</string>
+    <string name="sensor_range_month">30 jours</string>
+    <string name="sensor_hist_min">Minimum</string>
+    <string name="sensor_hist_max">Maximum</string>
+    <string name="sensor_hist_avg">Moyenne</string>
+    <string name="sensor_history_empty">Aucune mesure pour le moment. Les valeurs sont enregistrées pendant la surveillance.</string>
 
     <string name="location_title">Position</string>
     <string name="location_desc">Nécessaire pour les règles de lever/coucher du soleil et de température extérieure. Elle reste sur cet appareil ; pour la température, elle est envoyée à Open-Meteo arrondie à environ 100 m.</string>

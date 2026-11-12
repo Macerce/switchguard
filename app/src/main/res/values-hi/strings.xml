@@ -985,6 +985,14 @@
     <string name="cond_match_any">कोई एक काफ़ी</string>
     <string name="cond_join_and">और</string>
     <string name="cond_join_or">या</string>
+    <string name="sensor_history">सेंसर इतिहास</string>
+    <string name="sensor_range_day">24 घंटे</string>
+    <string name="sensor_range_week">7 दिन</string>
+    <string name="sensor_range_month">30 दिन</string>
+    <string name="sensor_hist_min">सबसे कम</string>
+    <string name="sensor_hist_max">सबसे ज़्यादा</string>
+    <string name="sensor_hist_avg">औसत</string>
+    <string name="sensor_history_empty">अभी कोई रीडिंग नहीं। निगरानी चालू रहने पर मान सहेजे जाते हैं।</string>
     <string name="location_title">लोकेशन</string>
     <string name="location_desc">सूर्योदय/सूर्यास्त और बाहर के तापमान वाले नियमों के लिए ज़रूरी है। यह इसी डिवाइस पर रहती है; तापमान के लिए इसे करीब 100 मीटर तक राउंड करके Open-Meteo को भेजा जाता है।</string>
     <string name="location_needed">अभी कोई लोकेशन नहीं: सूर्योदय, सूर्यास्त और तापमान वाले नियमों के लिए एक चाहिए।</string>
