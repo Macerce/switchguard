@@ -6,12 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## 2.30.5 — yayınlanmadı
+## 2.30.5 — 2026-11-13
 **Yenilikler**
 - **Koşullarda sensör, güç ve dış sıcaklık**: “Ve şu koşullardaysa…” artık yalnız açık/kapalı/çevrimiçi değil; sensör değeri üstünde/altında (oda sıcaklığı, nem, ışık, pil), sensör etkin/sakin (kapı açık, hareket, su kaçağı), cihaz gücü üstünde/altında ve dış sıcaklık üstünde/altında da seçilebilir.
 - **Birden çok koşul**: bir kurala istediğin kadar koşul eklenir; “Hepsi sağlansın” (ve) ya da “Biri yeterli” (veya). Ör. “Gün batınca, salon 20 °C altındaysa ve dışarısı 5 °C altındaysa kombiyi aç”.
 - Çevrimdışı cihazın eski sensör/güç değeri koşulu sağlamaz; eski tek koşullu kurallar olduğu gibi çalışır.
-## 2.30.4 — yayınlanmadı
+## 2.30.4 — 2026-11-13
 **Yenilikler**
 - **eWeLink sensörleri**: sıcaklık/nem (TH16, THR316/320, SNZB-02 ailesi), kapı (DW2, SNZB-04), hareket/varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri okunur; cihaz kartında görünür (“23,5 °C · 55 %”, “Kapı açık”). Model tablosu AlexxIT/SonoffLAN'dan (MIT).
 - **Sensörlü otomasyon**: yeni olaylar “Sensör üstünde / altında” (ör. oda 26 °C'yi geçince klimayı aç; histerezisli, bir kez tetiklenir) ve “Sensör algıladı / normal” (kapı açılınca alarm, hareket olunca ışığı aç).
