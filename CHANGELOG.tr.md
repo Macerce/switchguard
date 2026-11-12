@@ -6,6 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## Sonraki sürüm — yayınlanmadı
+**Yenilikler**
+- **eWeLink sensörleri**: sıcaklık/nem (TH16, THR316/320, SNZB-02 ailesi), kapı (DW2, SNZB-04), hareket/varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri okunur; cihaz kartında görünür (“23,5 °C · 55 %”, “Kapı açık”). Model tablosu AlexxIT/SonoffLAN'dan (MIT).
+- **Sensörlü otomasyon**: yeni olaylar “Sensör üstünde / altında” (ör. oda 26 °C'yi geçince klimayı aç; histerezisli, bir kez tetiklenir) ve “Sensör algıladı / normal” (kapı açılınca alarm, hareket olunca ışığı aç).
+- Wi-Fi kapı sensörü (DW2) artık yanlışlıkla aç/kapa düğmeli röle gibi görünmez.
+
 ## 2.29.1 — 2026-11-10
 **Değişiklikler**
 - **Konum onayı**: herhangi bir konum izni istenmeden önce (bölgeler, “Bu cihazın konumunu kullan”, haritada “Bulunduğum yer”) konumun ne için kullanıldığını anlatan ayrı bir pencere açılır; sistem izin penceresi yalnızca “Kabul ediyorum”a dokununca gelir. “Hayır, teşekkürler” hiçbir izin istemez.

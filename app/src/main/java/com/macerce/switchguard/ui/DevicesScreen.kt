@@ -118,6 +118,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Demo
+import com.macerce.switchguard.core.SensorKind
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceLayout
@@ -715,6 +716,19 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
     IconBadge(if (device.online) kind.icon() else Icons.Rounded.CloudOff, tint, bg, size)
 }
 
+/**
+ * Sensör değerlerinin kısa özeti: "23,5 °C · 55 %", "Kapı açık". Pil ve ışık yalnızca başka değer yoksa gösterilir.
+ */
+@Composable
+fun sensorSummary(device: DeviceSnapshot): String {
+    if (device.sensors.isEmpty()) return ""
+    val main = device.sensors.filterKeys { it != SensorKind.BATTERY && it != SensorKind.ILLUMINANCE }.ifEmpty { device.sensors }
+    val res = LocalContext.current.resources
+    return main.entries.joinToString(" · ") { (k, v) ->
+        if (k.binary) res.getString(k.stateLabel(v >= 0.5)) else formatSensor(k, v)
+    }
+}
+
 /** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı". */
 @Composable
 private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
@@ -725,17 +739,21 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
             Spacer(Modifier.width(6.dp))
         }
         val onCount = device.switches.values.count { it }
+        val sensorText = sensorSummary(device)
         val text = buildString {
             append(
                 when {
                     !device.online -> stringResource(R.string.label_offline_title)
                     groupCounts != null -> stringResource(R.string.channels_on_short, groupCounts.first, groupCounts.second)
+                    device.sensorOnly -> sensorText
                     device.isMultiChannel -> stringResource(R.string.channels_on_short, onCount, device.switches.size)
                     onCount > 0 -> stringResource(R.string.state_on_title)
                     else -> stringResource(R.string.state_off_title)
                 }
             )
             if (device.online && device.hasEnergy) append(" · ").append(formatWatts(device.power ?: 0.0))
+            // Röleli sensörlü cihaz (TH16, THR320): "Açık · 23,5 °C".
+            if (device.online && !device.sensorOnly && sensorText.isNotEmpty()) append(" · ").append(sensorText)
         }
         Text(
             text,

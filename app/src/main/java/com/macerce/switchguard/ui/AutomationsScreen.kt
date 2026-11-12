@@ -1,6 +1,14 @@
 package com.macerce.switchguard.ui
 
 import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Thermostat
+import androidx.compose.material.icons.rounded.SensorsOff
+import androidx.compose.material.icons.rounded.WaterDrop
+import androidx.compose.material.icons.rounded.BatteryStd
+import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material.icons.rounded.DoorFront
+import androidx.compose.material.icons.rounded.Water
+import com.macerce.switchguard.core.SensorKind
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Repeat
 import androidx.compose.material.icons.rounded.Place
@@ -355,6 +363,12 @@ private fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String,
     val trigger = when (t.kind) {
         TriggerKind.SUNRISE, TriggerKind.SUNSET -> stringResource(t.kind.title()) + offsetSuffix(t.minutes)
         TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> stringResource(t.kind.title()) + " " + formatTemp(t.watts)
+        // "Salon sensörü · Sıcaklık > 26 °C", "Ön kapı · Kapı açık".
+        TriggerKind.SENSOR_ABOVE, TriggerKind.SENSOR_BELOW -> t.sensor?.let {
+            stringResource(it.label()) + (if (t.kind == TriggerKind.SENSOR_ABOVE) " > " else " < ") + formatSensor(it, t.watts)
+        } ?: stringResource(t.kind.title())
+        TriggerKind.SENSOR_ACTIVE, TriggerKind.SENSOR_CLEAR -> t.sensor?.let { stringResource(it.stateLabel(t.kind == TriggerKind.SENSOR_ACTIVE)) }
+            ?: stringResource(t.kind.title())
         TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF -> stringResource(t.kind.title()) + " " + pluralStringResource(R.plurals.minutes_n, t.minutes, t.minutes)
         TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> stringResource(t.kind.title()) + " " + formatWatts(t.watts) +
             (if (t.minutes > 0) " " + stringResource(R.string.automation_power_for, holdLabel(t.minutes)) else "")
@@ -411,6 +425,37 @@ private fun offsetLabel(minutes: Int): String = when {
 
 private fun formatTemp(v: Double): String = formatNumber(v) + " °C"
 
+/** "23,5 °C", "55 %", "120 lx". */
+fun formatSensor(kind: SensorKind, v: Double): String = formatNumber(v) + " " + kind.unit
+
+fun SensorKind.label(): Int = when (this) {
+    SensorKind.TEMPERATURE -> R.string.sensor_temperature
+    SensorKind.HUMIDITY -> R.string.sensor_humidity
+    SensorKind.BATTERY -> R.string.sensor_battery
+    SensorKind.ILLUMINANCE -> R.string.sensor_illuminance
+    SensorKind.DOOR -> R.string.sensor_door
+    SensorKind.MOTION -> R.string.sensor_motion
+    SensorKind.WATER -> R.string.sensor_water
+}
+
+/** İkili sensörün durumu: "Kapı açık" / "Kapı kapalı". */
+fun SensorKind.stateLabel(active: Boolean): Int = when (this) {
+    SensorKind.DOOR -> if (active) R.string.sensor_door_open else R.string.sensor_door_closed
+    SensorKind.MOTION -> if (active) R.string.sensor_motion_on else R.string.sensor_motion_off
+    SensorKind.WATER -> if (active) R.string.sensor_water_on else R.string.sensor_water_off
+    else -> label()
+}
+
+fun SensorKind.icon(): ImageVector = when (this) {
+    SensorKind.TEMPERATURE -> Icons.Rounded.Thermostat
+    SensorKind.HUMIDITY -> Icons.Rounded.WaterDrop
+    SensorKind.BATTERY -> Icons.Rounded.BatteryStd
+    SensorKind.ILLUMINANCE -> Icons.Rounded.LightMode
+    SensorKind.DOOR -> Icons.Rounded.DoorFront
+    SensorKind.MOTION -> Icons.AutoMirrored.Rounded.DirectionsWalk
+    SensorKind.WATER -> Icons.Rounded.Water
+}
+
 /** "22:00–06:00, hafta içi". */
 @Composable
 private fun windowText(w: ActiveWindow): String {
@@ -463,6 +508,10 @@ fun TriggerKind.title(): Int = when (this) {
     TriggerKind.ZONE_EXIT -> R.string.trigger_zone_exit
     TriggerKind.CYCLE_STARTED -> R.string.trigger_cycle_started
     TriggerKind.CYCLE_FINISHED -> R.string.trigger_cycle_finished
+    TriggerKind.SENSOR_ABOVE -> R.string.trigger_sensor_above
+    TriggerKind.SENSOR_BELOW -> R.string.trigger_sensor_below
+    TriggerKind.SENSOR_ACTIVE -> R.string.trigger_sensor_active
+    TriggerKind.SENSOR_CLEAR -> R.string.trigger_sensor_clear
 }
 
 fun ActionKind.title(): Int = when (this) {
@@ -501,6 +550,8 @@ fun AutomationEditor(
     var watts by rememberSaveable { mutableStateOf(initial?.trigger?.watts?.takeIf { it > 0 }?.let(::formatNumber) ?: "1000") }
     var offset by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.isSun }?.minutes ?: 0) }
     var temp by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesTemp }?.watts?.let(::formatNumber) ?: "5") }
+    var sensorKind by rememberSaveable { mutableStateOf(initial?.trigger?.sensor) }
+    var sensorValue by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesSensorValue }?.watts?.let(::formatNumber) ?: "") }
     var windowOn by rememberSaveable { mutableStateOf(initial?.window != null) }
     var windowStart by rememberSaveable { mutableStateOf(initial?.window?.startMinute ?: 22 * 60) }
     var windowEnd by rememberSaveable { mutableStateOf(initial?.window?.endMinute ?: 6 * 60) }
@@ -557,22 +608,35 @@ fun AutomationEditor(
             src != null && DeviceCategory.isCategory(src.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
             it.usesChannelPower -> src?.hasChannelPower == true
             it.usesWatts -> src?.hasEnergy == true
+            it.usesSensorValue -> src?.sensors?.keys?.any { k -> !k.binary } == true
+            it.usesSensorState -> src?.sensors?.keys?.any { k -> k.binary } == true
+            // Yalnız sensör olan cihazın rölesi yok: aç/kapa olayları sunulmaz.
+            it.usesChannel || it.usesMinutes -> src?.sensorOnly != true
             else -> true
         }
     }
-    if (triggerKind !in kinds) triggerKind = TriggerKind.TURNED_ON
+    if (triggerKind !in kinds) triggerKind = kinds.firstOrNull() ?: TriggerKind.TURNED_ON
+    // Seçili olaya uyan sensörler (sayısal ya da ikili); seçim uymuyorsa ilkine geçilir.
+    val sensorChoices = src?.sensors?.keys?.filter { triggerKind.usesSensor && it.binary == triggerKind.usesSensorState }.orEmpty()
+    if (triggerKind.usesSensor && sensorKind !in sensorChoices) sensorKind = sensorChoices.firstOrNull()
+    val sensorThreshold = sensorValue.replace(',', '.').toDoubleOrNull()
 
     val wattsValue = watts.replace(',', '.').toDoubleOrNull()
     val tempValue = temp.replace(',', '.').toDoubleOrNull()
     // Kategoriler yalnız tetikleyicide seçilir; koşul ve hedef gerçek cihaz (ya da grup) ister.
     val targets = remember(devices) { devices.filterNot { DeviceCategory.isCategory(it.id) } }
+    // Eylem hedefi açılıp kapatılabilen cihaz olmalı (yalnız sensör olanlar değil).
+    val actionTargets = remember(targets) { targets.filterNot { it.sensorOnly } }
+    if (dst?.sensorOnly == true) actionDevice = actionTargets.firstOrNull()?.id.orEmpty()
     val condSrc = targets.firstOrNull { it.id == condDevice }
     val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
         (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
         (!triggerKind.usesTemp || tempValue != null) &&
+        (!triggerKind.usesSensor || sensorKind != null) &&
+        (!triggerKind.usesSensorValue || sensorThreshold != null) &&
         (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
         (!condOn || condSrc != null) &&
-        (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id))) &&
+        (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
         (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
         (!actionKind.usesCycle || cycleList.any { it.id == actionCycle })
@@ -601,9 +665,11 @@ fun AutomationEditor(
             watts = when {
                 triggerKind.usesWatts -> wattsValue ?: 0.0
                 triggerKind.usesTemp -> tempValue ?: 0.0
+                triggerKind.usesSensorValue -> sensorThreshold ?: 0.0
                 else -> 0.0
             },
             graceMinutes = if (triggerKind.usesChannelPower) grace else 0,
+            sensor = if (triggerKind.usesSensor) sensorKind else null,
         ),
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
@@ -667,6 +733,26 @@ fun AutomationEditor(
                     if (triggerKind.usesChannel && src?.isMultiChannel == true) {
                         FieldLabel(stringResource(R.string.automation_channel))
                         ChannelChooser(src, triggerChannel) { triggerChannel = it }
+                    }
+                }
+                if (triggerKind.usesSensor && sensorChoices.isNotEmpty()) {
+                    FieldLabel(stringResource(R.string.sensor_choose))
+                    OptionChips(sensorChoices, sensorKind ?: sensorChoices.first(), { it.icon() }, { stringResource(it.label()) }) { sensorKind = it }
+                    val kind = sensorKind
+                    if (triggerKind.usesSensorValue && kind != null) {
+                        NumberField(sensorValue, stringResource(R.string.sensor_threshold), kind.unit, allowNegative = kind == SensorKind.TEMPERATURE) { sensorValue = it }
+                    }
+                    val current = kind?.let { src?.sensors?.get(it) }
+                    if (kind != null && current != null) {
+                        Text(
+                            stringResource(
+                                R.string.automation_current_sensor,
+                                if (kind.binary) stringResource(kind.stateLabel(current >= 0.5)) else formatSensor(kind, current),
+                            ),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 8.dp),
+                        )
                     }
                 }
                 if (triggerKind.isSun) {
@@ -785,7 +871,7 @@ fun AutomationEditor(
                 }
                 if (actionKind.usesDevice) {
                     FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(targets, actionDevice) { actionDevice = it.id; actionChannel = 0 }
+                    DeviceChooser(actionTargets, actionDevice) { actionDevice = it.id; actionChannel = 0 }
                     if (dst?.isMultiChannel == true) {
                         FieldLabel(stringResource(R.string.automation_channel))
                         ChannelChooser(dst, actionChannel) { actionChannel = it }
@@ -1196,6 +1282,10 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.ZONE_EXIT -> Icons.AutoMirrored.Rounded.Logout
     TriggerKind.CYCLE_STARTED -> Icons.Rounded.Repeat
     TriggerKind.CYCLE_FINISHED -> Icons.Rounded.Stop
+    TriggerKind.SENSOR_ABOVE -> Icons.Rounded.Thermostat
+    TriggerKind.SENSOR_BELOW -> Icons.Rounded.AcUnit
+    TriggerKind.SENSOR_ACTIVE -> Icons.Rounded.Sensors
+    TriggerKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -1217,6 +1307,10 @@ fun TriggerKind.shortTitle(): Int = when (this) {
     TriggerKind.ZONE_EXIT -> R.string.evt_zone_exit
     TriggerKind.CYCLE_STARTED -> R.string.evt_cycle_started
     TriggerKind.CYCLE_FINISHED -> R.string.evt_cycle_finished
+    TriggerKind.SENSOR_ABOVE -> R.string.evt_sensor_above
+    TriggerKind.SENSOR_BELOW -> R.string.evt_sensor_below
+    TriggerKind.SENSOR_ACTIVE -> R.string.evt_sensor_active
+    TriggerKind.SENSOR_CLEAR -> R.string.evt_sensor_clear
 }
 
 private fun ActionKind.icon(): ImageVector = when (this) {

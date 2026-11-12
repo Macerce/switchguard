@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## Next version — unreleased
+**New**
+- **eWeLink sensors**: temperature/humidity (TH16, THR316/320, SNZB-02 family), door (DW2, SNZB-04), motion/presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery are read and shown on the device card (“23.5 °C · 55 %”, “Door open”). Model table from AlexxIT/SonoffLAN (MIT).
+- **Sensor automations**: new events “Sensor above / below” (e.g. turn the AC on when the room passes 26 °C; with hysteresis, fires once) and “Sensor detects / clears” (alarm when the door opens, light on when there is motion).
+- The Wi-Fi door sensor (DW2) no longer shows up as a switchable relay.
+
 ## 2.29.1 — 2026-11-10
 **Changes**
 - **Location consent**: before any location permission is requested (zones, “Use this device's location”, “My current location” on the map) a separate window explains what the location is used for; the system prompt opens only after you tap “Agree”. “No thanks” asks for nothing.

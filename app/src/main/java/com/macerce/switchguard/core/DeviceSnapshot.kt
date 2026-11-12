@@ -25,8 +25,14 @@ data class DeviceSnapshot(
     val switchCodes: Map<Int, String> = emptyMap(),
     /** Wi-Fi sinyal gücü (dBm, ör. -62); cihaz bildirmiyorsa null (eWeLink "rssi"). */
     val rssi: Int? = null,
+    /** Sensör değerleri (sıcaklık, nem, kapı ...); ikili olanlarda 1.0 = etkin. Bkz. [Sensors]. */
+    val sensors: Map<SensorKind, Double> = emptyMap(),
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
+    val hasSensors: Boolean get() = sensors.isNotEmpty()
+    /** Yalnızca sensör: açılıp kapatılacak rölesi yok (kapı, hareket, sıcaklık sensörü). */
+    val sensorOnly: Boolean get() = switches.isEmpty() && sensors.isNotEmpty()
+    fun sensorActive(kind: SensorKind): Boolean? = sensors[kind]?.let { it >= 0.5 }
     /** Komutlar `switches` dizisiyle gider (tek kanallı olsa da diziyle çalışan modeller dahil). */
     val usesSwitchArray: Boolean get() = isMultiChannel || uiid in CHANNEL_LIMITS || uiid in SWITCH_ARRAY_UIIDS
     val hasEnergy: Boolean get() = power != null

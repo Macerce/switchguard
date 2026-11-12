@@ -48,9 +48,11 @@ object WsMessages {
 
     fun apply(snapshot: DeviceSnapshot, update: WsEvent.Update): DeviceSnapshot {
         val energy = update.params?.let { EnergyParser.parse(snapshot.uiid, it) }
+        val sensors = Sensors.parse(snapshot.uiid, update.params)
         return snapshot.copy(
             online = update.online ?: snapshot.online,
-            switches = if (update.switches.isEmpty()) snapshot.switches
+            // Wi-Fi kapı sensörünün `switch` alanı kapı durumudur (sensors içinde), röle değil.
+            switches = if (update.switches.isEmpty() || snapshot.uiid in Sensors.WIFI_DOOR_UIIDS) snapshot.switches
             else DeviceSnapshot.limitChannels(snapshot.uiid, (snapshot.switches + update.switches).toSortedMap()),
             power = energy?.power ?: snapshot.power,
             voltage = energy?.voltage ?: snapshot.voltage,
@@ -59,6 +61,7 @@ object WsMessages {
             else snapshot.channelPower + energy.channelPowers,
             // Sinyal anlık iletide sık ve küçük oynar: her oynama kaydı yeniden yazmasın, yalnızca belirgin değişim.
             rssi = Signal.rssiOf(update.params)?.takeIf { snapshot.rssi == null || kotlin.math.abs(it - snapshot.rssi) >= RSSI_STEP } ?: snapshot.rssi,
+            sensors = if (sensors.isEmpty()) snapshot.sensors else snapshot.sensors + sensors,
         )
     }
 
