@@ -128,6 +128,7 @@ fun DeviceDetailScreen(graph: AppGraph, deviceId: String, onBack: () -> Unit, ac
                             if (device.hasEnergy && device.cloud != Cloud.DEMO) {
                                 com.macerce.switchguard.desktop.ui.devices.StandbyCard(device, graph.metrics, store)
                             }
+                            com.macerce.switchguard.desktop.ui.devices.SensorHistorySection(device, graph.metrics)
 
                             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
                             if (device.cloud == Cloud.EWELINK) TimersSection(device, actions)

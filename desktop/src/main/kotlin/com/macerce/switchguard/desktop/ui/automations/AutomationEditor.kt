@@ -79,6 +79,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.ConditionKind
+import com.macerce.switchguard.core.ConditionMatch
 import com.macerce.switchguard.core.PresenceRule
 import com.macerce.switchguard.core.Scene
 import com.macerce.switchguard.data.Store
@@ -307,20 +308,79 @@ internal fun AutomationEditor(
                             label = { strings[if (it == PresenceRule.AWAY) "presence_away" else "presence_home"] }, tag = { "presence-${it.name}" },
                         ) { form = f.copy(presence = it) }
                     }
-                    ToggleLine(strings["cond_toggle"], f.condOn, "cond") { form = f.copy(condOn = it) }
-                    if (f.condOn) {
-                        val condSrc = devices.firstOrNull { it.id == f.condDevice }
-                        FieldLabel(strings["automation_device"])
-                        DeviceChooser(targets, f.condDevice, "cond-device") { form = f.copy(condDevice = it.id, condChannel = 0) }
-                        if (f.condKind.usesChannel && condSrc?.isMultiChannel == true) {
-                            FieldLabel(strings["automation_channel"])
-                            ChannelChooser(condSrc, f.condChannel, "cond-channel") { form = f.copy(condChannel = it) }
+                    ToggleLine(strings["cond_toggle"], f.conds.isNotEmpty(), "cond") {
+                        form = f.copy(conds = if (it) listOf(CondDraft.new(devices)) else emptyList())
+                    }
+                    if (f.conds.isNotEmpty()) {
+                        fun set(i: Int, c: CondDraft) { form = f.copy(conds = f.conds.toMutableList().also { it[i] = c }) }
+                        if (f.conds.size > 1) {
+                            FieldLabel(strings["cond_match"])
+                            OptionGrid(
+                                ConditionMatch.entries, f.condMatch, wideColumns = 2,
+                                icon = { if (it == ConditionMatch.ALL) Icons.Rounded.Check else Icons.Rounded.Tune },
+                                label = { strings[if (it == ConditionMatch.ALL) "cond_match_all" else "cond_match_any"] }, tag = { "cond-match-${it.name}" },
+                            ) { form = f.copy(condMatch = it) }
                         }
-                        FieldLabel(strings["cond_state"])
-                        OptionGrid(
-                            ConditionKind.entries, f.condKind, wideColumns = 4,
-                            icon = { it.icon() }, label = { strings[it.titleKey()] }, tag = { "cond-${it.name}" },
-                        ) { form = f.copy(condKind = it) }
+                        f.conds.forEachIndexed { i, c ->
+                            val condSrc = devices.firstOrNull { it.id == c.deviceId }
+                            val shape = RoundedCornerShape(16.dp)
+                            Column(Modifier.fillMaxWidth().padding(top = 10.dp).clip(shape).border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape).padding(12.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(strings.format("cond_n", i + 1), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                                    IconButton(onClick = { form = f.copy(conds = f.conds.filterIndexed { j, _ -> j != i }) }, modifier = Modifier.testTag("cond-remove-$i")) {
+                                        Icon(Icons.Rounded.Delete, strings["cond_remove"])
+                                    }
+                                }
+                                FieldLabel(strings["automation_device"])
+                                DeviceChooser(targets, if (c.kind.usesTemp) "" else c.deviceId, "cond-device-$i") {
+                                    set(i, c.copy(deviceId = it.id, channel = 0, value = "", sensor = null, kind = if (c.kind.usesTemp) ConditionKind.IS_ON else c.kind))
+                                }
+                                FieldLabel(strings["cond_state"])
+                                OptionGrid(
+                                    CondDraft.kindsFor(condSrc), c.kind, wideColumns = 4,
+                                    icon = { it.icon() }, label = { strings[it.titleKey()] }, tag = { "cond-$i-${it.name}" },
+                                ) { if (it != c.kind) set(i, c.copy(kind = it, value = "")) }
+                                if (c.kind.usesChannel && condSrc?.isMultiChannel == true) {
+                                    FieldLabel(strings["automation_channel"])
+                                    ChannelChooser(condSrc, c.channel, "cond-channel-$i") { set(i, c.copy(channel = it)) }
+                                }
+                                val choices = CondDraft.sensorChoices(condSrc, c.kind)
+                                val sk = c.sensor
+                                if (choices.size > 1 && sk != null) {
+                                    FieldLabel(strings["sensor_choose"])
+                                    OptionGrid(choices, sk, wideColumns = 4, icon = { it.icon() }, label = { strings[it.labelKey()] }, tag = { "cond-sensor-$i-${it.name}" }) {
+                                        if (it != c.sensor) set(i, c.copy(sensor = it, value = ""))
+                                    }
+                                }
+                                when {
+                                    c.kind.usesPower -> NumberField(c.value, strings["automation_watts"], "W", "cond-value-$i") { set(i, c.copy(value = it)) }
+                                    c.kind.usesSensorValue && sk != null ->
+                                        NumberField(c.value, strings["sensor_threshold"], sk.unit, "cond-value-$i", allowNegative = sk == SensorKind.TEMPERATURE) { set(i, c.copy(value = it)) }
+                                    c.kind.usesTemp -> NumberField(c.value, strings["automation_temp"], "°C", "cond-value-$i", allowNegative = true) { set(i, c.copy(value = it)) }
+                                }
+                                val current = when {
+                                    c.kind.usesPower -> condSrc?.power?.let { strings.format("automation_current_power", formatWatts(it)) }
+                                    c.kind.usesSensor && sk != null -> condSrc?.sensors?.get(sk)?.let { v ->
+                                        strings.format("automation_current_sensor", if (sk.binary) strings[sk.stateKey(v >= 0.5)] else formatSensor(sk, v))
+                                    }
+                                    c.kind.usesTemp -> outdoorTemp?.let { strings.format("automation_current_temp", formatTemp(it)) }
+                                    else -> null
+                                }
+                                if (current != null) {
+                                    Text(current, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 8.dp))
+                                }
+                            }
+                        }
+                        TextButton(onClick = { form = f.copy(conds = f.conds + CondDraft.new(devices)) }, modifier = Modifier.padding(top = 4.dp).testTag("cond-add")) {
+                            Icon(Icons.Rounded.Add, null)
+                            Spacer(Modifier.width(8.dp))
+                            Text(strings["cond_add"])
+                        }
+                        if (f.conds.any { it.kind.usesTemp } && store != null) {
+                            androidx.compose.runtime.key(locationVersion) {
+                                LocationSetup(store, strings, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
+                            }
+                        }
                     }
                 }
 
@@ -716,6 +776,14 @@ private fun ConditionKind.icon(): ImageVector = when (this) {
     ConditionKind.IS_OFF -> Icons.Rounded.PowerOff
     ConditionKind.IS_ONLINE -> Icons.Rounded.Cloud
     ConditionKind.IS_OFFLINE -> Icons.Rounded.CloudOff
+    ConditionKind.POWER_ABOVE -> Icons.AutoMirrored.Rounded.TrendingUp
+    ConditionKind.POWER_BELOW -> Icons.AutoMirrored.Rounded.TrendingDown
+    ConditionKind.SENSOR_ABOVE -> Icons.Rounded.Thermostat
+    ConditionKind.SENSOR_BELOW -> Icons.Rounded.AcUnit
+    ConditionKind.SENSOR_ACTIVE -> Icons.Rounded.Sensors
+    ConditionKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
+    ConditionKind.TEMP_ABOVE -> Icons.Rounded.WbSunny
+    ConditionKind.TEMP_BELOW -> Icons.Rounded.AcUnit
 }
 
 private fun TriggerKind.icon(): ImageVector = when (this) {

@@ -10,6 +10,11 @@ import com.macerce.switchguard.core.EnergyWatch
 import com.macerce.switchguard.core.Standby
 import com.macerce.switchguard.core.Tariff
 import com.macerce.switchguard.core.PowerSample
+import com.macerce.switchguard.core.SensorHistory
+import com.macerce.switchguard.core.SensorKind
+import com.macerce.switchguard.core.SensorRange
+import com.macerce.switchguard.core.SensorSample
+import com.macerce.switchguard.core.SensorStats
 import com.macerce.switchguard.core.StateSample
 import com.macerce.switchguard.core.Usage
 import com.macerce.switchguard.core.UsageMath
@@ -33,6 +38,8 @@ class MetricsLog(file: Path) : AutoCloseable {
 
     /** cihaz → son yazılan ölçüm; gereksiz satır yazmamak için. */
     private val lastPower = mutableMapOf<String, PowerSample>()
+    /** "cihaz/sensör" → son yazılan sensör ölçümü. */
+    private val lastSensor = mutableMapOf<String, SensorSample>()
 
     private val db: Connection = open(file)
 
@@ -66,6 +73,21 @@ class MetricsLog(file: Path) : AutoCloseable {
                     }
                 }
             }
+            // Sensör değerleri (telefon 2.30.6): yalnız çevrimiçiyken (eski değer yeniden yazılmasın).
+            db.prepareStatement("INSERT INTO sensor(ts, device_id, kind, value) VALUES (?, ?, ?, ?)").use { sensor ->
+                for (d in current) {
+                    if (!d.online) continue
+                    for ((kind, value) in d.sensors) {
+                        if (!SensorHistory.recordable(kind)) continue
+                        val key = "${d.id}/${kind.name}"
+                        if (!SensorHistory.shouldWrite(kind, lastSensor[key], value, now)) continue
+                        sensor.setLong(1, now); sensor.setString(2, d.id); sensor.setString(3, kind.name); sensor.setDouble(4, value)
+                        sensor.executeUpdate()
+                        lastSensor[key] = SensorSample(now, value)
+                        changed = true
+                    }
+                }
+            }
             db.commit()
         } catch (e: Throwable) {
             runCatching { db.rollback() }
@@ -95,6 +117,19 @@ class MetricsLog(file: Path) : AutoCloseable {
             ps.executeQuery().use { rs -> buildList { while (rs.next()) add(PowerSample(rs.getLong(1), rs.getDouble(2))) } }
         }
         return listOfNotNull(before) + list
+    }
+
+    @Synchronized
+    fun sensorSamples(deviceId: String, kind: SensorKind, from: Long, to: Long): List<SensorSample> =
+        db.prepareStatement("SELECT ts, value FROM sensor WHERE device_id=? AND kind=? AND ts>=? AND ts<? ORDER BY ts").use { ps ->
+            ps.setString(1, deviceId); ps.setString(2, kind.name); ps.setLong(3, from); ps.setLong(4, to)
+            ps.executeQuery().use { rs -> buildList { while (rs.next()) add(SensorSample(rs.getLong(1), rs.getDouble(2))) } }
+        }
+
+    /** Son [range] için sensör özeti; kayıt yoksa null. */
+    fun sensorStats(deviceId: String, kind: SensorKind, range: SensorRange, now: Long = System.currentTimeMillis()): SensorStats? {
+        val from = now - range.ms
+        return SensorHistory.stats(sensorSamples(deviceId, kind, from, now + 1), from, now + 1, range.buckets)
     }
 
     @Synchronized
@@ -158,7 +193,7 @@ class MetricsLog(file: Path) : AutoCloseable {
     @Synchronized
     fun prune(now: Long = System.currentTimeMillis()) {
         val cutoff = now - KEEP_DAYS * 86_400_000L
-        for (table in listOf("power", "state")) {
+        for (table in listOf("power", "state", "sensor")) {
             db.prepareStatement("DELETE FROM $table WHERE ts<?").use { ps ->
                 ps.setLong(1, cutoff)
                 ps.executeUpdate()
@@ -168,8 +203,9 @@ class MetricsLog(file: Path) : AutoCloseable {
 
     @Synchronized
     fun clear() {
-        db.createStatement().use { st -> st.executeUpdate("DELETE FROM power"); st.executeUpdate("DELETE FROM state") }
+        db.createStatement().use { st -> st.executeUpdate("DELETE FROM power"); st.executeUpdate("DELETE FROM state"); st.executeUpdate("DELETE FROM sensor") }
         lastPower.clear()
+        lastSensor.clear()
         _version.value++
     }
 
@@ -180,7 +216,8 @@ class MetricsLog(file: Path) : AutoCloseable {
     companion object {
         const val POWER_EVERY_MS = 60_000L
         const val KEEP_DAYS = 400
-        private const val SCHEMA_VERSION = 1
+        /** 2 = sensör tablosu (telefon metrics.db sürüm 2 ile aynı). */
+        private const val SCHEMA_VERSION = 2
 
         private fun open(file: Path): Connection {
             val abs = file.toAbsolutePath()
@@ -193,7 +230,9 @@ class MetricsLog(file: Path) : AutoCloseable {
                     st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_power ON power(device_id, ts)")
                     st.executeUpdate("CREATE TABLE IF NOT EXISTS state(ts INTEGER NOT NULL, device_id TEXT NOT NULL, channel INTEGER NOT NULL, is_on INTEGER NOT NULL)")
                     st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_state ON state(device_id, channel, ts)")
-                    if (st.executeQuery("PRAGMA user_version").use { it.next() && it.getInt(1) == 0 }) st.execute("PRAGMA user_version=$SCHEMA_VERSION")
+                    st.executeUpdate("CREATE TABLE IF NOT EXISTS sensor(ts INTEGER NOT NULL, device_id TEXT NOT NULL, kind TEXT NOT NULL, value REAL NOT NULL)")
+                    st.executeUpdate("CREATE INDEX IF NOT EXISTS idx_sensor ON sensor(device_id, kind, ts)")
+                    if (st.executeQuery("PRAGMA user_version").use { it.next() && it.getInt(1) < SCHEMA_VERSION }) st.execute("PRAGMA user_version=$SCHEMA_VERSION")
                 }
             } catch (e: Throwable) {
                 db.close()

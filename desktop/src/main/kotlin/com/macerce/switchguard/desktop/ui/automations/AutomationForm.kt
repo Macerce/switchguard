@@ -5,6 +5,7 @@ import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.ActiveWindow
 import com.macerce.switchguard.core.Condition
 import com.macerce.switchguard.core.ConditionKind
+import com.macerce.switchguard.core.ConditionMatch
 import com.macerce.switchguard.core.PresenceRule
 import com.macerce.switchguard.core.Scene
 import com.macerce.switchguard.core.Cycle
@@ -48,11 +49,9 @@ data class AutomationForm(
     val windowDays: Int = ActiveWindow.ALL_DAYS,
     /** Yalnızca evdeyken / dışarıdayken; null = her zaman. */
     val presence: PresenceRule? = null,
-    /** Ve başka bir cihaz şu durumdaysa. */
-    val condOn: Boolean = false,
-    val condKind: ConditionKind = ConditionKind.IS_ON,
-    val condDevice: String = "",
-    val condChannel: Int = 0,
+    /** Ve şu koşullarda (telefon 2.30.5): boş = koşul yok; hepsi mi biri mi. */
+    val conds: List<CondDraft> = emptyList(),
+    val condMatch: ConditionMatch = ConditionMatch.ALL,
     /** [ActionKind.RUN_SCENE]: çalıştırılacak sahne. */
     val sceneId: String = "",
     /** Döngü tetikleyicisi / eylemi: seçili döngü. */
@@ -76,6 +75,7 @@ data class AutomationForm(
             }
         }
         // Eylem hedefi açılıp kapatılabilen cihaz olmalı.
+        f = f.copy(conds = f.conds.map { it.normalized(devices) })
         if (f.actionKind.usesDevice && devices.firstOrNull { it.id == f.actionDevice }?.sensorOnly == true) {
             f = f.copy(actionDevice = devices.firstOrNull { !it.sensorOnly && !DeviceCategory.isCategory(it.id) }?.id.orEmpty())
         }
@@ -93,7 +93,7 @@ data class AutomationForm(
             (!triggerKind.usesTemp || tempValue() != null) &&
             (!triggerKind.usesSensor || (sensor != null && src?.sensors?.containsKey(sensor) == true)) &&
             (!triggerKind.usesSensorValue || sensorThreshold() != null) &&
-            (!condOn || (devices.any { it.id == condDevice } && !DeviceCategory.isCategory(condDevice))) &&
+            conds.all { it.valid(devices) } &&
             (actionKind != ActionKind.RUN_SCENE || scenes.any { it.id == sceneId }) &&
             (!triggerKind.usesCycle || cycles.any { it.id == triggerCycle }) &&
             (!actionKind.usesCycle || cycles.any { it.id == actionCycle }) &&
@@ -140,7 +140,8 @@ data class AutomationForm(
         },
         delayMinutes = delay.toIntOrNull() ?: 0,
         window = if (windowOn) ActiveWindow(windowStart, windowEnd, windowDays) else null,
-        condition = if (condOn) Condition(condKind, condDevice, if (condKind.usesChannel) condChannel else 0) else null,
+        conditions = conds.map { it.toCondition() },
+        conditionMatch = condMatch,
         presence = presence,
     )
 
@@ -162,7 +163,7 @@ data class AutomationForm(
          */
         fun from(initial: Automation?, devices: List<DeviceSnapshot>, mode: AutomationMode = AutomationMode.ALERT): AutomationForm {
             val first = devices.firstOrNull()?.id.orEmpty()
-            if (initial == null) return AutomationForm(triggerDevice = first, actionKind = mode.defaultAction, actionDevice = first, condDevice = first)
+            if (initial == null) return AutomationForm(triggerDevice = first, actionKind = mode.defaultAction, actionDevice = first)
             val t = initial.trigger
             return AutomationForm(
                 name = initial.name,
@@ -187,10 +188,8 @@ data class AutomationForm(
                 windowEnd = initial.window?.endMinute ?: 6 * 60,
                 windowDays = initial.window?.days ?: ActiveWindow.ALL_DAYS,
                 presence = initial.presence,
-                condOn = initial.condition != null,
-                condKind = initial.condition?.kind ?: ConditionKind.IS_ON,
-                condDevice = initial.condition?.deviceId ?: first,
-                condChannel = initial.condition?.channel ?: 0,
+                conds = initial.conditions.map(CondDraft::of),
+                condMatch = initial.conditionMatch,
                 sceneId = if (initial.action.kind == ActionKind.RUN_SCENE) initial.action.deviceId else "",
                 triggerCycle = if (t.kind.usesCycle) t.deviceId else "",
                 actionCycle = if (initial.action.kind.usesCycle) initial.action.deviceId else "",
@@ -218,7 +217,77 @@ data class AutomationForm(
         fun sensorChoices(device: DeviceSnapshot?, kind: TriggerKind): List<SensorKind> =
             if (!kind.usesSensor) emptyList() else device?.sensors?.keys?.filter { it.binary == kind.usesSensorState }.orEmpty()
 
-        private fun formatNumber(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
+        internal fun formatNumber(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
+    }
+}
+
+/** Düzenleyicideki bir koşul (telefon `CondDraft` ile aynı); eşik yazıldığı gibi tutulur. */
+data class CondDraft(
+    val kind: ConditionKind,
+    val deviceId: String,
+    val channel: Int = 0,
+    val value: String = "",
+    val sensor: SensorKind? = null,
+) {
+    fun number(): Double? = value.trim().replace(',', '.').toDoubleOrNull()
+
+    fun toCondition() = Condition(
+        kind, if (kind.usesDevice) deviceId else "", if (kind.usesChannel) channel else 0,
+        if (kind.usesValue) number() ?: 0.0 else 0.0, if (kind.usesSensor) sensor else null,
+    )
+
+    fun valid(devices: List<DeviceSnapshot>): Boolean =
+        (!kind.usesDevice || devices.any { it.id == deviceId && !DeviceCategory.isCategory(it.id) }) &&
+            (!kind.usesValue || number() != null) && (!kind.usesSensor || sensor != null)
+
+    /**
+     * Cihaza uymayan tür düzeltilir (sensör cihazında önce sensör eşiği), sensör uyacak şekilde seçilir, boş eşik
+     * şu anki değerle (dış sıcaklıkta 20) dolar.
+     */
+    fun normalized(devices: List<DeviceSnapshot>): CondDraft {
+        val d = devices.firstOrNull { it.id == deviceId }
+        val kinds = kindsFor(d)
+        var c = this
+        if (c.kind !in kinds) {
+            c = c.copy(kind = kinds.firstOrNull { it.usesSensorValue } ?: kinds.firstOrNull { it.usesSensorState } ?: kinds.first(), value = "", sensor = null)
+        }
+        val choices = sensorChoices(d, c.kind)
+        if (c.kind.usesSensor && c.sensor !in choices) c = c.copy(sensor = choices.firstOrNull(), value = "")
+        if (c.kind.usesValue && c.value.isBlank()) {
+            val now = when {
+                c.kind.usesPower -> d?.power
+                c.kind.usesSensorValue -> c.sensor?.let { d?.sensors?.get(it) }
+                else -> null
+            }
+            (now?.let { Math.round(it).toString() } ?: if (c.kind.usesTemp) "20" else null)?.let { c = c.copy(value = it) }
+        }
+        return c
+    }
+
+    companion object {
+        fun of(c: Condition) = CondDraft(c.kind, c.deviceId, c.channel, if (c.kind.usesValue) AutomationForm.formatNumber(c.value) else "", c.sensor)
+
+        /** Yeni koşul: ilk açılıp kapatılabilen cihazın "açık" durumu. */
+        fun new(devices: List<DeviceSnapshot>): CondDraft {
+            val targets = devices.filterNot { DeviceCategory.isCategory(it.id) }
+            return CondDraft(ConditionKind.IS_ON, (targets.firstOrNull { !it.sensorOnly } ?: targets.firstOrNull())?.id.orEmpty())
+        }
+
+        /** Seçili cihazda anlamlı koşul türleri (dış sıcaklık her zaman). */
+        fun kindsFor(d: DeviceSnapshot?): List<ConditionKind> = ConditionKind.entries.filter {
+            when {
+                it.usesTemp -> true
+                d == null -> !it.usesPower && !it.usesSensor
+                it.usesChannel -> !d.sensorOnly && d.switches.isNotEmpty()
+                it.usesPower -> d.hasEnergy
+                it.usesSensorValue -> d.sensors.keys.any { k -> !k.binary }
+                it.usesSensorState -> d.sensors.keys.any { k -> k.binary }
+                else -> true
+            }
+        }
+
+        fun sensorChoices(d: DeviceSnapshot?, kind: ConditionKind): List<SensorKind> =
+            if (!kind.usesSensor) emptyList() else d?.sensors?.keys?.filter { it.binary == kind.usesSensorState }.orEmpty()
     }
 }
 
@@ -246,6 +315,3 @@ internal object Steps {
     /** + düğmesinin gideceği değer; daha büyük adım yoksa null (düğme pasif). */
     fun higher(value: Int, steps: List<Int>): Int? = steps.firstOrNull { it > value }
 }
-
-/** Koşulun kanalı var mı (açık/kapalı); bağlantı koşulları cihazın tamamına bakar. */
-internal val ConditionKind.usesChannel: Boolean get() = this == ConditionKind.IS_ON || this == ConditionKind.IS_OFF

@@ -321,7 +321,8 @@ class Store internal constructor(
         rules = rules.filterKeys { !Demo.isDemo(it) }
         // Demo cihazlarına bağlı (kullanıcının kurduğu, sensör uyarıları dahil) kurallar da gider: cihazsız kalmasınlar.
         automations = automations.filterNot {
-            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId))
+            Demo.isDemoAutomation(it) || Demo.isDemo(it.trigger.deviceId) || (it.action.kind.usesDevice && Demo.isDemo(it.action.deviceId)) ||
+                it.conditions.any { c -> c.kind.usesDevice && Demo.isDemo(c.deviceId) }
         }
         if (freeDeviceId?.let(Demo::isDemo) == true) freeDeviceId = null
     }

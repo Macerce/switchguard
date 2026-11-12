@@ -2097,7 +2097,7 @@ class MonitorEngine(
         if (weatherBusy || wall < weatherAt) return
         val lat = store.latitude ?: return
         val lon = store.longitude ?: return
-        if (store.engineAutomations().none { it.enabled && it.trigger.kind.usesTemp }) return
+        if (store.engineAutomations().none { a -> a.enabled && (a.trigger.kind.usesTemp || a.conditions.any { it.kind.usesTemp }) }) return
         weatherAt = wall + WEATHER_MS
         weatherBusy = true
         telegramRunner {

@@ -339,9 +339,9 @@ internal fun describe(
     val delay = if (a.delayMinutes > 0) " · " + strings.format("automation_after", a.delayMinutes) else ""
     val extras = buildList {
         a.window?.let { add(windowText(it, strings)) }
-        a.condition?.let { c ->
-            val name = devices.firstOrNull { it.id == c.deviceId }?.let { channelLabel(it, c.channel, c.kind.usesChannel, strings) } ?: strings["device_missing"]
-            add(strings.format("cond_clause", name, strings[c.kind.titleKey()]))
+        if (a.conditions.isNotEmpty()) {
+            val join = " " + strings[if (a.conditionMatch == com.macerce.switchguard.core.ConditionMatch.ANY) "cond_join_or" else "cond_join_and"] + " "
+            add(a.conditions.joinToString(join) { conditionText(it, devices, strings) })
         }
         a.presence?.let { add(strings[if (it == PresenceRule.AWAY) "presence_only_away" else "presence_only_home"]) }
     }.joinToString("") { " · $it" }
@@ -383,6 +383,33 @@ internal fun ConditionKind.titleKey(): String = when (this) {
     ConditionKind.IS_OFF -> "cond_is_off"
     ConditionKind.IS_ONLINE -> "cond_is_online"
     ConditionKind.IS_OFFLINE -> "cond_is_offline"
+    ConditionKind.POWER_ABOVE -> "cond_power_above"
+    ConditionKind.POWER_BELOW -> "cond_power_below"
+    ConditionKind.SENSOR_ABOVE -> "cond_sensor_above"
+    ConditionKind.SENSOR_BELOW -> "cond_sensor_below"
+    ConditionKind.SENSOR_ACTIVE -> "cond_sensor_active"
+    ConditionKind.SENSOR_CLEAR -> "cond_sensor_clear"
+    ConditionKind.TEMP_ABOVE -> "cond_temp_above"
+    ConditionKind.TEMP_BELOW -> "cond_temp_below"
+}
+
+/** "Salon: Sıcaklık < 20 °C ise", "Kombi açık ise", "dış sıcaklık > 25 °C ise" (telefon `conditionText`). */
+internal fun conditionText(c: com.macerce.switchguard.core.Condition, devices: List<DeviceSnapshot>, strings: Strings): String {
+    val name = if (c.kind.usesTemp) null
+        else devices.firstOrNull { it.id == c.deviceId }?.let { channelLabel(it, c.channel, c.kind.usesChannel, strings) } ?: strings["device_missing"]
+    val cmp = if (c.kind.above) " > " else " < "
+    val state = when {
+        c.kind.usesPower -> strings["cond_power"] + cmp + formatWatts(c.value)
+        c.kind.usesSensorValue -> c.sensor?.let { strings[it.labelKey()] + cmp + formatSensor(it, c.value) } ?: strings[c.kind.titleKey()]
+        c.kind.usesSensorState -> c.sensor?.let { strings[it.stateKey(c.kind == ConditionKind.SENSOR_ACTIVE)] } ?: strings[c.kind.titleKey()]
+        c.kind.usesTemp -> strings["cond_outdoor"] + cmp + formatTemp(c.value)
+        else -> strings[c.kind.titleKey()]
+    }
+    return when {
+        name == null -> strings.format("cond_clause_plain", state)
+        c.kind.usesChannel || c.kind == ConditionKind.IS_ONLINE || c.kind == ConditionKind.IS_OFFLINE -> strings.format("cond_clause", name, state)
+        else -> strings.format("cond_clause_value", name, state)
+    }
 }
 
 private fun channelLabel(d: DeviceSnapshot, channel: Int, withChannel: Boolean, strings: Strings): String =

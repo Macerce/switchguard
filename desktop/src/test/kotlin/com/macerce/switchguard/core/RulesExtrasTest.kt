@@ -86,7 +86,7 @@ class ConditionAndGateTest {
     @Test fun conditionBlocksInstantTrigger() {
         val a = Automation(
             "a", "Pompa açılınca", true, Trigger(TriggerKind.TURNED_ON, "p", channel = 1), AutoAction(ActionKind.NOTIFY),
-            condition = Condition(ConditionKind.IS_ONLINE, "x"),
+            conditions = listOf(Condition(ConditionKind.IS_ONLINE, "x")),
         )
         val e = AutomationEngine()
         val off = devices
@@ -114,12 +114,77 @@ class ConditionAndGateTest {
     @Test fun jsonRoundTripKeepsWindowAndCondition() {
         val a = Automation(
             "a", "x", true, Trigger(TriggerKind.SUNSET, "", minutes = -15), AutoAction(ActionKind.TURN_ON, "p", 1),
-            window = ActiveWindow(60, 120, 0b0011111), condition = Condition(ConditionKind.IS_OFF, "p", 1),
+            window = ActiveWindow(60, 120, 0b0011111), conditions = listOf(Condition(ConditionKind.IS_OFF, "p", 1)),
         )
         assertEquals(listOf(a), Automation.listFromJson(Automation.listToJson(listOf(a))))
         // Eski kayıt (alanlar yok) olduğu gibi okunur.
         val old = Automation("b", "y", true, Trigger(TriggerKind.TURNED_ON, "p"), AutoAction(ActionKind.ALARM))
         assertEquals(listOf(old), Automation.listFromJson(Automation.listToJson(listOf(old))))
+        // Çoklu koşul + "veya" + sensör/güç/dış sıcaklık eşikleri.
+        val multi = a.copy(
+            conditionMatch = ConditionMatch.ANY,
+            conditions = listOf(
+                Condition(ConditionKind.SENSOR_BELOW, "s", value = 19.5, sensor = SensorKind.TEMPERATURE),
+                Condition(ConditionKind.SENSOR_ACTIVE, "d", sensor = SensorKind.DOOR),
+                Condition(ConditionKind.POWER_ABOVE, "p", value = 1500.0),
+                Condition(ConditionKind.TEMP_BELOW, "", value = -2.0),
+            ),
+        )
+        assertEquals(listOf(multi), Automation.listFromJson(Automation.listToJson(listOf(multi))))
+    }
+
+    @Test fun legacySingleConditionIsRead() {
+        val json = """[{"id":"a","name":"x","enabled":true,"trigger":{"kind":"TURNED_ON","device":"p"},
+            "action":{"kind":"ALARM"},"cond":{"kind":"IS_OFF","device":"p","channel":1}}]"""
+        assertEquals(listOf(Condition(ConditionKind.IS_OFF, "p", 1)), Automation.listFromJson(json).single().conditions)
+    }
+}
+
+class SensorConditionTest {
+    private val devices = mapOf(
+        "s" to DeviceSnapshot("s", "Salon", true, emptyMap(), sensors = mapOf(SensorKind.TEMPERATURE to 18.0, SensorKind.HUMIDITY to 60.0)),
+        "d" to DeviceSnapshot("d", "Kapı", true, emptyMap(), sensors = mapOf(SensorKind.DOOR to 1.0)),
+        "k" to DeviceSnapshot("k", "Kombi", true, mapOf(0 to false), power = 1200.0),
+        "z" to DeviceSnapshot("z", "Eski", false, emptyMap(), sensors = mapOf(SensorKind.TEMPERATURE to 10.0)),
+    )
+
+    @Test fun sensorPowerAndOutdoor() {
+        assertTrue(Condition(ConditionKind.SENSOR_BELOW, "s", value = 20.0, sensor = SensorKind.TEMPERATURE).holds(devices))
+        assertFalse(Condition(ConditionKind.SENSOR_ABOVE, "s", value = 20.0, sensor = SensorKind.TEMPERATURE).holds(devices))
+        assertTrue(Condition(ConditionKind.SENSOR_ABOVE, "s", value = 55.0, sensor = SensorKind.HUMIDITY).holds(devices))
+        // Cihazda olmayan sensör sağlanmaz.
+        assertFalse(Condition(ConditionKind.SENSOR_BELOW, "s", value = 99.0, sensor = SensorKind.ILLUMINANCE).holds(devices))
+        assertTrue(Condition(ConditionKind.SENSOR_ACTIVE, "d", sensor = SensorKind.DOOR).holds(devices))
+        assertFalse(Condition(ConditionKind.SENSOR_CLEAR, "d", sensor = SensorKind.DOOR).holds(devices))
+        assertTrue(Condition(ConditionKind.POWER_ABOVE, "k", value = 1000.0).holds(devices))
+        assertFalse(Condition(ConditionKind.POWER_BELOW, "k", value = 1000.0).holds(devices))
+        // Çevrimdışı cihazın eski değeri sayılmaz.
+        assertFalse(Condition(ConditionKind.SENSOR_BELOW, "z", value = 20.0, sensor = SensorKind.TEMPERATURE).holds(devices))
+        // Dış sıcaklık: bilinmiyorsa sağlanmaz.
+        assertTrue(Condition(ConditionKind.TEMP_BELOW, "", value = 5.0).holds(devices, outdoorTemp = 2.0))
+        assertFalse(Condition(ConditionKind.TEMP_BELOW, "", value = 5.0).holds(devices, outdoorTemp = null))
+    }
+
+    @Test fun allAndAnyCombinations() {
+        val cold = Condition(ConditionKind.SENSOR_BELOW, "s", value = 20.0, sensor = SensorKind.TEMPERATURE)
+        val doorClosed = Condition(ConditionKind.SENSOR_CLEAR, "d", sensor = SensorKind.DOOR)
+        assertFalse(Condition.allHold(listOf(cold, doorClosed), ConditionMatch.ALL, devices))
+        assertTrue(Condition.allHold(listOf(cold, doorClosed), ConditionMatch.ANY, devices))
+        assertTrue(Condition.allHold(emptyList(), ConditionMatch.ANY, devices))
+    }
+
+    @Test fun engineUsesOutdoorTempInConditions() {
+        // "Gün batınca, oda soğuksa VE dışarısı 5 °C altındaysa kombiyi aç".
+        val a = Automation(
+            "a", "Kombi", true, Trigger(TriggerKind.TURNED_OFF, "k"), AutoAction(ActionKind.TURN_ON, "k"),
+            conditions = listOf(
+                Condition(ConditionKind.SENSOR_BELOW, "s", value = 20.0, sensor = SensorKind.TEMPERATURE),
+                Condition(ConditionKind.TEMP_BELOW, "", value = 5.0),
+            ),
+        )
+        val before = devices + ("k" to devices["k"]!!.copy(switches = mapOf(0 to true)))
+        assertTrue(AutomationEngine().onStates(before, devices, listOf(a), 0, Environment(outdoorTemp = 8.0)).isEmpty())
+        assertEquals(listOf(a), AutomationEngine().onStates(before, devices, listOf(a), 0, Environment(outdoorTemp = 1.0)))
     }
 }
 
