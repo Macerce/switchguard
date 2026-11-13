@@ -162,6 +162,7 @@ import com.macerce.switchguard.ui.theme.tileColor
 import java.util.Calendar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.ui.focus.onFocusChanged
 
 /**
  * Ayarlar alt sayfaları. Ana sayfa yalnızca bunların listesidir; her biri dokununca açılır.
@@ -432,6 +433,8 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
     val tv = LocalIsTv.current
     // Kumanda: sayfa açılınca odak içerikteki ilk öğeye.
     val content = remember { FocusRequester() }
+    val scroll = rememberScrollState()
+    val scope = rememberCoroutineScope()
     LaunchedEffect(page) {
         if (!tv) return@LaunchedEffect
         for (attempt in 1..20) {
@@ -439,12 +442,21 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
             if (ok != null && ok != false) break
             delay(50)
         }
+        // İlk öğeye odaklanmak sayfayı kaydırabilir; üstteki (odaklanamayan) bilgi kartı başlığın altında kalmasın.
+        delay(120)
+        scroll.animateScrollTo(0)
     }
     Column(Modifier.fillMaxSize()) {
-        AppTopBar(stringResource(page.title), navigationIcon = { BackButton(onBack) }, small = true)
+        // Kumanda yukarı çıkıp geri okuna gelince sayfa en başa döner: odaklanamayan açıklama kartları da okunur.
+        AppTopBar(
+            stringResource(page.title),
+            navigationIcon = { BackButton(onBack) },
+            small = true,
+            modifier = Modifier.onFocusChanged { if (tv && it.hasFocus) scope.launch { scroll.animateScrollTo(0) } },
+        )
         Column(
             Modifier.focusRequester(content).focusGroup()
-                .verticalScroll(rememberScrollState()).padding(bottom = 24.dp),
+                .verticalScroll(scroll).padding(bottom = 24.dp),
         ) {
             when (page) {
                 SettingsPage.ACCOUNTS -> AccountsPage(showDialog)

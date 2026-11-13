@@ -184,6 +184,11 @@ class StandbyActivity : ComponentActivity() {
             hide(WindowInsetsCompat.Type.systemBars())
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
+        // TV: yeni pano (kumandayla OK + onay ile aç/kapat); Geri bu ekranı kapatır, TV kaldığı ekrana döner.
+        if (FormFactor.isTv(this)) {
+            setContent { SwitchGuardTheme { TvStandby() } }
+            return
+        }
         setContent {
             SwitchGuardTheme {
                 StandbyBoardScreen(
@@ -609,7 +614,7 @@ private fun WeatherLine(w: WeatherClient.Today?, hasLocation: Boolean) {
 }
 
 /** WMO hava kodu → simge + kısa açıklama. */
-private fun weatherLook(code: Int, day: Boolean): Pair<ImageVector, Int> = when (code) {
+internal fun weatherLook(code: Int, day: Boolean): Pair<ImageVector, Int> = when (code) {
     0 -> (if (day) Icons.Rounded.WbSunny else Icons.Rounded.NightsStay) to R.string.weather_clear
     1, 2 -> (if (day) Icons.Rounded.WbCloudy else Icons.Rounded.NightsStay) to R.string.weather_partly
     3 -> Icons.Rounded.Cloud to R.string.weather_cloudy

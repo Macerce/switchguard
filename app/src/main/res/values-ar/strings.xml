@@ -1757,4 +1757,8 @@
     <string name="sensor_max">الأقصى</string>
     <string name="sensor_alerts_hint">تظهر أيضًا في التنبيهات › التنبيهات المشروطة، حيث يمكن تعديلها بالتفصيل.</string>
     <string name="board_sensors">المستشعرات</string>
+    <string name="tv_home_hint">OK  تشغيل/إيقاف   ·   اضغط مطولاً على OK  التفاصيل</string>
+    <string name="tv_confirm_on">تشغيل؟</string>
+    <string name="tv_confirm_off">إيقاف؟</string>
+    <string name="tv_standby_hint">OK  تشغيل/إيقاف   ·   رجوع  إغلاق</string>
 </resources>

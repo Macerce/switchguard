@@ -1548,4 +1548,8 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="sensor_max">Tối đa</string>
     <string name="sensor_alerts_hint">Chúng cũng xuất hiện trong Cảnh báo › Cảnh báo có điều kiện, nơi bạn có thể chỉnh chi tiết.</string>
     <string name="board_sensors">Cảm biến</string>
+    <string name="tv_home_hint">OK  bật/tắt   ·   giữ OK  chi tiết</string>
+    <string name="tv_confirm_on">Bật?</string>
+    <string name="tv_confirm_off">Tắt?</string>
+    <string name="tv_standby_hint">OK  bật/tắt   ·   Quay lại  đóng</string>
 </resources>

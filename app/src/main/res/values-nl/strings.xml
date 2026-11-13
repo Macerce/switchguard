@@ -1613,4 +1613,8 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">Deze staan ook onder Meldingen › Voorwaardelijke meldingen, waar je ze uitgebreid kunt bewerken.</string>
     <string name="board_sensors">Sensoren</string>
+    <string name="tv_home_hint">OK  aan/uit   ·   OK ingedrukt houden  details</string>
+    <string name="tv_confirm_on">Aanzetten?</string>
+    <string name="tv_confirm_off">Uitzetten?</string>
+    <string name="tv_standby_hint">OK  aan/uit   ·   Terug  sluiten</string>
 </resources>

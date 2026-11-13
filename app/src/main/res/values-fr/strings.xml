@@ -1648,4 +1648,8 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">Elles apparaissent aussi dans Alertes › Alertes conditionnelles, où vous pouvez les modifier en détail.</string>
     <string name="board_sensors">Capteurs</string>
+    <string name="tv_home_hint">OK  allumer/éteindre   ·   maintenir OK  détails</string>
+    <string name="tv_confirm_on">Allumer ?</string>
+    <string name="tv_confirm_off">Éteindre ?</string>
+    <string name="tv_standby_hint">OK  allumer/éteindre   ·   Retour  fermer</string>
 </resources>

@@ -1685,4 +1685,8 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="sensor_max">Maks</string>
     <string name="sensor_alerts_hint">Pojawiają się też w Alerty › Alerty warunkowe, gdzie można je szczegółowo edytować.</string>
     <string name="board_sensors">Czujniki</string>
+    <string name="tv_home_hint">OK  włącz/wyłącz   ·   przytrzymaj OK  szczegóły</string>
+    <string name="tv_confirm_on">Włączyć?</string>
+    <string name="tv_confirm_off">Wyłączyć?</string>
+    <string name="tv_standby_hint">OK  włącz/wyłącz   ·   Wstecz  zamknij</string>
 </resources>

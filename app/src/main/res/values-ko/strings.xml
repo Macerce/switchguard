@@ -1577,4 +1577,8 @@
     <string name="sensor_max">최대</string>
     <string name="sensor_alerts_hint">이 항목은 알림 › 조건부 알림에도 표시되며 거기서 자세히 편집할 수 있습니다.</string>
     <string name="board_sensors">센서</string>
+    <string name="tv_home_hint">OK  켜기/끄기   ·   OK 길게 누르기  세부정보</string>
+    <string name="tv_confirm_on">켤까요?</string>
+    <string name="tv_confirm_off">끌까요?</string>
+    <string name="tv_standby_hint">OK  켜기/끄기   ·   뒤로  닫기</string>
 </resources>

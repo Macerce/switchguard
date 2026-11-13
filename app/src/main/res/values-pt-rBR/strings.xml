@@ -1649,4 +1649,8 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="sensor_max">Máx.</string>
     <string name="sensor_alerts_hint">Eles também aparecem em Alertas › Alertas condicionais, onde podem ser editados em detalhe.</string>
     <string name="board_sensors">Sensores</string>
+    <string name="tv_home_hint">OK  ligar/desligar   ·   segure OK  detalhes</string>
+    <string name="tv_confirm_on">Ligar?</string>
+    <string name="tv_confirm_off">Desligar?</string>
+    <string name="tv_standby_hint">OK  ligar/desligar   ·   Voltar  fechar</string>
 </resources>

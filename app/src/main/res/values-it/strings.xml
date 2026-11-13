@@ -1620,4 +1620,8 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">Compaiono anche in Avvisi › Avvisi condizionali, dove puoi modificarli in dettaglio.</string>
     <string name="board_sensors">Sensori</string>
+    <string name="tv_home_hint">OK  accendi/spegni   ·   tieni premuto OK  dettagli</string>
+    <string name="tv_confirm_on">Accendere?</string>
+    <string name="tv_confirm_off">Spegnere?</string>
+    <string name="tv_standby_hint">OK  accendi/spegni   ·   Indietro  chiudi</string>
 </resources>

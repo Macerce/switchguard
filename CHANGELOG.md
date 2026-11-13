@@ -6,6 +6,14 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.31.0 — 2026-11-14
+**New (Android TV)**
+- **New TV home screen**: a calm, read-from-the-sofa dashboard — large clock and date, today's weather (Settings › Location), live status, devices as glass cards you browse with the remote, the last event, and an icon-only bar whose items show their name when focused. A slow, soft light in the background shows the status (teal all good, amber attention, red alarm/problem, grey monitoring off).
+- **OK asks first**: pressing OK on a device asks “Turn off?” / “Turn on?”; focus starts on Cancel, so a stray double press never switches a freezer or pump. Hold OK for device details.
+- **Standby screen and screensaver on TV** use the same dashboard (without the bar): devices can be switched with OK + confirm; Back closes it and the TV returns to whatever it was showing. Choose SwitchGuard under TV Settings › Screensaver.
+- The old devices grid is no longer shown on TV (arranging and groups stay on the phone).
+- Settings pages on TV scroll back to the top when you move up to the back arrow, so info cards at the top are readable.
+- The phone layout is unchanged.
 ## 2.30.6 — 2026-11-13
 **New**
 - **Sensor history**: temperature, humidity, light and battery values are saved like power readings (while monitoring is on; on change or at least every 10 minutes, kept for 400 days). The device page shows a 24 hours / 7 days / 30 days chart with lowest, highest and average; tap the chart to see that moment's value.

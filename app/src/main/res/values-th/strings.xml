@@ -1548,4 +1548,8 @@
     <string name="sensor_max">สูงสุด</string>
     <string name="sensor_alerts_hint">รายการเหล่านี้จะแสดงใน การแจ้งเตือน › การแจ้งเตือนแบบมีเงื่อนไข ด้วย ซึ่งแก้ไขรายละเอียดได้</string>
     <string name="board_sensors">เซ็นเซอร์</string>
+    <string name="tv_home_hint">OK  เปิด/ปิด   ·   กด OK ค้างไว้  รายละเอียด</string>
+    <string name="tv_confirm_on">เปิดหรือไม่</string>
+    <string name="tv_confirm_off">ปิดหรือไม่</string>
+    <string name="tv_standby_hint">OK  เปิด/ปิด   ·   ย้อนกลับ  ปิด</string>
 </resources>

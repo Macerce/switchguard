@@ -1685,4 +1685,8 @@
     <string name="sensor_max">Макс.</string>
     <string name="sensor_alerts_hint">Они также есть в разделе Оповещения › Условные оповещения, где их можно настроить подробно.</string>
     <string name="board_sensors">Датчики</string>
+    <string name="tv_home_hint">OK  вкл/выкл   ·   удерживайте OK  подробности</string>
+    <string name="tv_confirm_on">Включить?</string>
+    <string name="tv_confirm_off">Выключить?</string>
+    <string name="tv_standby_hint">OK  вкл/выкл   ·   Назад  закрыть</string>
 </resources>

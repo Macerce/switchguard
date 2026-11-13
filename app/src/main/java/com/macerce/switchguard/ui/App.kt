@@ -78,16 +78,22 @@ fun App() {
     }
 
     var tab by rememberSaveable { mutableStateOf(Tab.DEVICES) }
+    var tvHome by rememberSaveable { mutableStateOf(true) }
     // Seçili sekmeye yeniden dokunmak o sekmenin başına döner (Ayarlar: alt sayfadan listeye).
     var settingsHome by rememberSaveable { mutableIntStateOf(0) }
     val select: (Tab) -> Unit = { t ->
         if (t == tab && t == Tab.SETTINGS) settingsHome++
         tab = t
+        if (t == Tab.DEVICES) tvHome = true
     }
     // Uyarılar'daki durum kartından Ayarlar › İzinler'e geçiş; Ayarlar o sayfayla açılınca söner.
     var openPermissions by rememberSaveable { mutableStateOf(false) }
     var openDeviceId by rememberSaveable { mutableStateOf<String?>(null) }
     var chatOpen by rememberSaveable { mutableStateOf(false) }
+    // TV: klasik Cihazlar ızgarası yok; cihazların yeri sade pano (TvHome). Diğer sekmeler alt çubuktan açılır,
+    // Geri ya da yan menüdeki Cihazlar panoya döner.
+    val tv = LocalIsTv.current
+    val showTvHome = tv && (tvHome || tab == Tab.DEVICES)
     // Detaydan dönünce kumandanın odağı açılan karta geri verilir (yoksa yan menüye düşer).
     var returnFocusTo by remember { mutableStateOf<String?>(null) }
     val closeDevice = {
@@ -100,6 +106,7 @@ fun App() {
     // Geri: önce cihaz detayını kapat, sonra diğer sekmelerden Cihazlar'a dön; yalnızca Cihazlar'dan çık.
     // Sıra önemli: sonra kaydedilen BackHandler önce çalışır.
     BackHandler(enabled = tab != Tab.DEVICES) { tab = Tab.DEVICES }
+    BackHandler(enabled = tv && !tvHome) { tvHome = true; tab = Tab.DEVICES }
     BackHandler(enabled = openDeviceId != null) { closeDevice() }
     BackHandler(enabled = chatOpen) { chatOpen = false }
 
@@ -172,6 +179,23 @@ fun App() {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
                 Box(Modifier.readableWidth()) { DeviceDetailScreen(deviceId = deviceId, onBack = closeDevice) }
             }
+        } else if (showTvHome) {
+            TvHome(
+                onOpenDevice = { openDeviceId = it },
+                onOpen = { dest ->
+                    tab = when (dest) {
+                        TvDest.ALERTS -> Tab.ALERTS
+                        TvDest.AUTOMATIONS -> Tab.AUTOMATIONS
+                        TvDest.HISTORY -> Tab.HISTORY
+                        TvDest.SETTINGS -> Tab.SETTINGS
+                    }
+                    tvHome = false
+                },
+                onOpenChat = { chatOpen = true },
+                unseenHistory = unseen,
+                restoreFocusTo = returnFocusTo,
+                onFocusRestored = { returnFocusTo = null },
+            )
         } else listState.SaveableStateProvider("tabs") {
             if (wide) {
                 // Tablet, Chromebook ve TV: alt menü yerine yan menü, içerik okunabilir genişlikte ortada.

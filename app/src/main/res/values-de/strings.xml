@@ -1611,4 +1611,8 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">Diese erscheinen auch unter Warnungen › Bedingte Warnungen und lassen sich dort genauer bearbeiten.</string>
     <string name="board_sensors">Sensoren</string>
+    <string name="tv_home_hint">OK  ein/aus   ·   OK halten  Details</string>
+    <string name="tv_confirm_on">Einschalten?</string>
+    <string name="tv_confirm_off">Ausschalten?</string>
+    <string name="tv_standby_hint">OK  ein/aus   ·   Zurück  schließen</string>
 </resources>

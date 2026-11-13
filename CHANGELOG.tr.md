@@ -6,6 +6,14 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.31.0 — 2026-11-14
+**Yenilikler (Android TV)**
+- **Yeni TV ana ekranı**: koltuktan okunan sade bir pano — büyük saat ve tarih, günün havası (Ayarlar › Konum), canlı durum, kumandayla gezilen cam cihaz kartları, son olay ve odaklanınca adı açılan yalnız simgeli bir çubuk. Zemindeki yavaş, yumuşak ışık durumu söyler (turkuaz her şey yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı).
+- **OK önce sorar**: cihazda OK'a basınca “Kapatılsın mı?” / “Açılsın mı?” çıkar; odak İptal'de başlar, yanlışlıkla iki kez basmak dondurucu ya da pompayı değiştirmez. Ayrıntı için OK'u basılı tutun.
+- **TV'de bekleme ekranı ve ekran koruyucu** aynı panoyu (çubuksuz) kullanır: cihazlar OK + onayla açılıp kapanır; Geri kapatır ve TV kaldığı ekrana döner. TV Ayarları › Ekran koruyucu'dan SwitchGuard seçilir.
+- Eski cihaz ızgarası TV'de artık gösterilmez (sıralama ve gruplar telefonda).
+- TV'de Ayarlar sayfaları geri okuna çıkınca başa kayar; üstteki bilgi kartları okunur.
+- Telefon arayüzü değişmedi.
 ## 2.30.6 — 2026-11-13
 **Yenilikler**
 - **Sensör geçmişi**: sıcaklık, nem, ışık ve pil değerleri güç ölçümleri gibi kaydedilir (izleme açıkken; değişince ya da en geç 10 dakikada bir, 400 gün saklanır). Cihaz sayfasında 24 saat / 7 gün / 30 gün grafiği, en düşük, en yüksek ve ortalama; grafiğe dokununca o anın değeri görünür.

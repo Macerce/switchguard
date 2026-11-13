@@ -1506,4 +1506,8 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="sensor_max">Maks</string>
     <string name="sensor_alerts_hint">Ini juga muncul di Peringatan › Peringatan bersyarat, tempat Anda dapat mengeditnya secara rinci.</string>
     <string name="board_sensors">Sensor</string>
+    <string name="tv_home_hint">OK  nyala/mati   ·   tahan OK  detail</string>
+    <string name="tv_confirm_on">Nyalakan?</string>
+    <string name="tv_confirm_off">Matikan?</string>
+    <string name="tv_standby_hint">OK  nyala/mati   ·   Kembali  tutup</string>
 </resources>

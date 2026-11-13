@@ -1577,4 +1577,8 @@
     <string name="sensor_max">最大</string>
     <string name="sensor_alerts_hint">これらは 通知 › 条件付き通知 にも表示され、そこで詳しく編集できます。</string>
     <string name="board_sensors">センサー</string>
+    <string name="tv_home_hint">OK  オン/オフ   ·   OK長押し  詳細</string>
+    <string name="tv_confirm_on">オンにしますか？</string>
+    <string name="tv_confirm_off">オフにしますか？</string>
+    <string name="tv_standby_hint">OK  オン/オフ   ·   戻る  閉じる</string>
 </resources>

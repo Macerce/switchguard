@@ -1555,4 +1555,8 @@
     <string name="sensor_max">最高</string>
     <string name="sensor_alerts_hint">这些也会显示在 提醒 › 条件提醒 中，可在那里详细编辑。</string>
     <string name="board_sensors">传感器</string>
+    <string name="tv_home_hint">OK  开/关   ·   按住 OK  详情</string>
+    <string name="tv_confirm_on">要打开吗？</string>
+    <string name="tv_confirm_off">要关闭吗？</string>
+    <string name="tv_standby_hint">OK  开/关   ·   返回  关闭</string>
 </resources>

@@ -1542,4 +1542,8 @@
     <string name="sensor_max">अधिकतम</string>
     <string name="sensor_alerts_hint">ये अलर्ट › शर्तों वाले अलर्ट में भी दिखते हैं, जहाँ इन्हें विस्तार से बदला जा सकता है।</string>
     <string name="board_sensors">सेंसर</string>
+    <string name="tv_home_hint">OK  चालू/बंद   ·   OK दबाए रखें  विवरण</string>
+    <string name="tv_confirm_on">चालू करें?</string>
+    <string name="tv_confirm_off">बंद करें?</string>
+    <string name="tv_standby_hint">OK  चालू/बंद   ·   वापस  बंद करें</string>
 </resources>

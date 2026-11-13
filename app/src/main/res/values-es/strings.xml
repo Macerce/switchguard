@@ -1619,4 +1619,8 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="sensor_max">Máx.</string>
     <string name="sensor_alerts_hint">También aparecen en Alertas › Alertas condicionales, donde puedes editarlas en detalle.</string>
     <string name="board_sensors">Sensores</string>
+    <string name="tv_home_hint">OK  encender/apagar   ·   mantén OK  detalles</string>
+    <string name="tv_confirm_on">¿Encender?</string>
+    <string name="tv_confirm_off">¿Apagar?</string>
+    <string name="tv_standby_hint">OK  encender/apagar   ·   Atrás  cerrar</string>
 </resources>

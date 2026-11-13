@@ -42,14 +42,17 @@ class StandbyDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner, Vi
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        isInteractive = false
+        // TV: ekran koruyucu kumandayla kullanılabilir (OK + onay ile aç/kapat). Geri ya da Ana ekran tuşu onu kapatır ve
+        // sistem TV'yi kaldığı ekrana döndürür. Telefonda dokunuş eskisi gibi ekran koruyucuyu kapatır.
+        val tv = com.macerce.switchguard.ui.FormFactor.isTv(this)
+        isInteractive = tv
         isFullscreen = true
         isScreenBright = true
         val view = ComposeView(this).apply {
             setViewTreeLifecycleOwner(this@StandbyDream)
             setViewTreeSavedStateRegistryOwner(this@StandbyDream)
             setViewTreeViewModelStoreOwner(this@StandbyDream)
-            setContent { SwitchGuardTheme { StandbyBoardScreen(onOpenApp = null, onClose = null) } }
+            setContent { SwitchGuardTheme { if (tv) com.macerce.switchguard.ui.TvStandby() else StandbyBoardScreen(onOpenApp = null, onClose = null) } }
         }
         window?.decorView?.let {
             it.setViewTreeLifecycleOwner(this)

@@ -1614,4 +1614,8 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">These also appear under Alerts › Conditional alerts, where you can edit them in detail.</string>
     <string name="board_sensors">Sensors</string>
+    <string name="tv_home_hint">OK  turn on/off   ·   hold OK  details</string>
+    <string name="tv_confirm_on">Turn on?</string>
+    <string name="tv_confirm_off">Turn off?</string>
+    <string name="tv_standby_hint">OK  turn on/off   ·   Back  close</string>
 </resources>

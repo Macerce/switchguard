@@ -1610,4 +1610,8 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="sensor_max">En çok</string>
     <string name="sensor_alerts_hint">Bunlar Uyarılar › Koşullu uyarılar\'da da görünür; oradan ayrıntılı düzenlenebilir.</string>
     <string name="board_sensors">Sensörler</string>
+    <string name="tv_home_hint">OK  aç/kapat   ·   OK basılı tut  ayrıntı</string>
+    <string name="tv_confirm_on">Açılsın mı?</string>
+    <string name="tv_confirm_off">Kapatılsın mı?</string>
+    <string name="tv_standby_hint">OK  aç/kapat   ·   Geri  kapat</string>
 </resources>

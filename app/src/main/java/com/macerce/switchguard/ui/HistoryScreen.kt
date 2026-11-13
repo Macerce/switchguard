@@ -235,7 +235,7 @@ private fun rangeLabel(r: HistoryRange): String = stringResource(
 
 /** Seçili dildeki olay kalıpları; dil değişince yeniden oluşturulur. */
 @Composable
-private fun eventStrings(): EventStrings {
+internal fun eventStrings(): EventStrings {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
     return remember(context, configuration) { EventLog.strings(context) }
