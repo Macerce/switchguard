@@ -70,9 +70,10 @@ class Updater(private val currentVersion: String?, private val tempDir: Path) {
                 script,
                 "@echo off\r\ntimeout /t 3 /nobreak >nul\r\n" +
                     "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$uninstall\"\r\n" +
-                    "\"$exe\"\r\nif %errorlevel%==0 start \"\" \"$app\"\r\n",
+                    "\"$exe\"\r\nif %errorlevel%==0 start \"\" \"$app\"\r\nexit\r\n",
             )
-            ProcessBuilder("cmd", "/c", "start", "\"\"", "/min", script.toString()).start()
+            // .cmd'yi doğrudan "start" ile açmak cmd /K kullanır ve pencere açık kalır; /c ile iş bitince kapanır.
+            ProcessBuilder("cmd", "/c", "start", "\"\"", "/min", "cmd", "/c", script.toString()).start()
             Log.i(TAG, "update ${release.version} downloaded, installer started")
             true
         }.getOrElse {

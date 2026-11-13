@@ -1060,6 +1060,73 @@ class MonitorEngineTest {
     }
 
     @Test
+    fun chatEverythingOffAsksFirstThenSwitchesOnYes() {
+        startWith(pump(on = true), light(on = true), rules = emptyMap())
+        var ask: com.macerce.switchguard.desktop.engine.ChatRunner.Reply? = null
+        var done: String? = null
+
+        engine.chatReply("turn everything off", "Chat") { ask = it }
+        scheduler.advance(0)
+        assertTrue("confirmation is a question", ask!!.ask)
+        assertTrue("nothing switched before yes", ewelink.switched.isEmpty())
+
+        engine.chat("yes", "Chat") { done = it }
+        scheduler.advance(10_000)
+        assertEquals(setOf(Triple(id, 0, false), Triple(lightId, 0, false)), ewelink.switched.toSet())
+        assertTrue(done!!, done!!.contains("✅"))
+    }
+
+    @Test
+    fun chatTimedCommandRunsAsOneShotCycleAndCleansUp() {
+        startWith(pump(on = true), rules = emptyMap())
+        var answer: String? = null
+
+        engine.chat("turn off pump in 10 minutes", "Chat") { answer = it }
+        scheduler.advance(0)
+        assertTrue(answer!!, answer!!.startsWith("⏱"))
+        assertTrue("not switched yet", ewelink.switched.isEmpty())
+        assertEquals(1, store.cycles.count { it.id.startsWith(ChatRunner.ONCE_PREFIX) })
+
+        clock.wallMs += 11 * 60_000L
+        clock.elapsedMs += 11 * 60_000L
+        scheduler.advance(11 * 60_000L)
+        assertTrue(ewelink.switched.contains(Triple(id, 0, false)))
+        assertTrue("one-shot cycle removed", store.cycles.none { it.id.startsWith(ChatRunner.ONCE_PREFIX) })
+    }
+
+    @Test
+    fun chatSensorsAndWhatsOn() {
+        val salon = DeviceSnapshot("th", "Salon", true, emptyMap(),
+            sensors = mapOf(com.macerce.switchguard.core.SensorKind.TEMPERATURE to 23.5, com.macerce.switchguard.core.SensorKind.HUMIDITY to 55.0))
+        val door = DeviceSnapshot("dw", "Front door", true, emptyMap(), sensors = mapOf(com.macerce.switchguard.core.SensorKind.DOOR to 1.0))
+        startWith(pump(on = true), light(on = false), salon, door, rules = emptyMap())
+        var all: String? = null
+        var humidity: String? = null
+        var on: String? = null
+
+        engine.chat("sensors", "Chat") { all = it }
+        engine.chat("salon humidity", "Chat") { humidity = it }
+        engine.chat("what is on", "Chat") { on = it }
+        scheduler.advance(0)
+
+        assertTrue(all!!, all!!.contains("Salon") && all!!.contains("23.5 °C") && all!!.contains("Front door"))
+        assertTrue(humidity!!, humidity!!.contains("55 %") && !humidity!!.contains("°C") && !humidity!!.contains("Front door"))
+        assertTrue(on!!, on!!.contains("Pump") && !on!!.contains("Light"))
+    }
+
+    @Test
+    fun chatBriefingWithoutLocationListsStateAndSensors() {
+        val door = DeviceSnapshot("dw", "Front door", true, emptyMap(), sensors = mapOf(com.macerce.switchguard.core.SensorKind.DOOR to 1.0))
+        startWith(pump(on = true), door, rules = emptyMap())
+        var answer: String? = null
+
+        engine.chat("briefing", "Chat") { answer = it }
+        scheduler.advance(0)
+
+        assertTrue(answer!!, answer!!.contains("Pump") && answer!!.contains("Front door") && answer!!.contains(strings["board_sensors"]))
+    }
+
+    @Test
     fun chatTemperatureWithoutLocationSaysWhereToSetIt() {
         startWith(pump(), rules = emptyMap())
         var answer: String? = null

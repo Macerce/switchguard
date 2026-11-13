@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">Озвучить состояние</string>
+    <string name="chat_all_already_on">Всё уже включено.</string>
+    <string name="chat_cancelled">Отменено.</string>
+    <string name="chat_confirm_all_off">Будет выключено переключателей: %1$d. Скажите или напишите «Yes» для подтверждения, «No» для отмены.</string>
+    <string name="chat_confirm_all_on">Будет включено переключателей: %1$d. Скажите или напишите «Yes» для подтверждения, «No» для отмены.</string>
+    <string name="chat_cycle_not_found">Нет единственного цикла, подходящего под «%1$s». Циклы: %2$s</string>
+    <string name="chat_cycle_started">Запущено: %1$s.</string>
+    <string name="chat_cycle_stopped">Остановлено: %1$s.</string>
+    <string name="chat_none_on">Ничего не включено.</string>
+    <string name="chat_nothing_pending">Нечего подтверждать.</string>
+    <string name="chat_timer_for">%1$s: %2$s на %3$s.</string>
+    <string name="chat_timer_later">%1$s: %2$s через %3$s.</string>
+    <string name="chat_tpl_all_off">Выключить всё</string>
+    <string name="chat_tpl_brief">Сводка состояния</string>
+    <string name="chat_tpl_lights_off">Выключить свет</string>
+    <string name="chat_tpl_lights_on">Включить свет</string>
+    <string name="chat_tpl_whats_on">Что включено</string>
+    <string name="summary_yesterday">Вчера к этому времени: %1$s.</string>
+    <string name="chat_sensors_none">Показания датчиков не найдены.</string>
+    <string name="desktop_chat_read_aloud">Прочитать вслух</string>
+    <string name="desktop_chat_stop_speaking">Остановить чтение</string>
+    <string name="desktop_chat_now">Сейчас</string>
+    <string name="desktop_chat_help_sensors">• Датчики · Влажность в гостиной? · Двери открыты? · Заряд батареи</string>
+</resources>

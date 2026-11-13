@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">Status vorlesen</string>
+    <string name="chat_all_already_on">Alles ist bereits an.</string>
+    <string name="chat_cancelled">Abgebrochen.</string>
+    <string name="chat_confirm_all_off">Damit werden %1$d Schalter ausgeschaltet. Sag oder schreib „Yes“ zum Bestätigen, „No“ zum Abbrechen.</string>
+    <string name="chat_confirm_all_on">Damit werden %1$d Schalter eingeschaltet. Sag oder schreib „Yes“ zum Bestätigen, „No“ zum Abbrechen.</string>
+    <string name="chat_cycle_not_found">Kein eindeutiger Zyklus passt zu „%1$s“. Zyklen: %2$s</string>
+    <string name="chat_cycle_started">%1$s gestartet.</string>
+    <string name="chat_cycle_stopped">%1$s gestoppt.</string>
+    <string name="chat_none_on">Nichts ist an.</string>
+    <string name="chat_nothing_pending">Es gibt nichts zu bestätigen.</string>
+    <string name="chat_timer_for">%1$s: %2$s für %3$s.</string>
+    <string name="chat_timer_later">%1$s: %2$s in %3$s.</string>
+    <string name="chat_tpl_all_off">Alles aus</string>
+    <string name="chat_tpl_brief">Lagebericht</string>
+    <string name="chat_tpl_lights_off">Lichter aus</string>
+    <string name="chat_tpl_lights_on">Lichter an</string>
+    <string name="chat_tpl_whats_on">Was ist an</string>
+    <string name="summary_yesterday">Gestern bis zu dieser Uhrzeit: %1$s.</string>
+    <string name="chat_sensors_none">Keine Sensorwerte gefunden.</string>
+    <string name="desktop_chat_read_aloud">Vorlesen</string>
+    <string name="desktop_chat_stop_speaking">Vorlesen beenden</string>
+    <string name="desktop_chat_now">Gerade jetzt</string>
+    <string name="desktop_chat_help_sensors">• Sensoren · Luftfeuchtigkeit im Wohnzimmer? · Sind die Türen offen? · Batteriestand</string>
+</resources>

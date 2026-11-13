@@ -155,7 +155,7 @@
     <string name="desktop_chat_temp_unknown">Dış sıcaklığı gösterebilmem için konum gerekli. Konumu bilgisayardaki uygulamada Uyarılar → Akıllı uyarılar → Konum bölümünden ayarlayabilirsiniz.</string>
     <string name="desktop_chat_voice">Sesle komut (Windows sesle yazma)</string>
     <string name="desktop_chat_listening">Konuşun… bitince kendiliğinden gönderilir</string>
-    <string name="desktop_chat_welcome">Merhaba. Cihazlarınızı yazarak yönetebilirsiniz: açıp kapatma, durum, güç tüketimi ve dış sıcaklık. Yazmak yerine mikrofona tıklayıp söyleyebilirsiniz (“Mutfağı kapat”); Windows sesle yazma açılır, yanıt sesli okunur. Hazır şablonlar aşağıdadır; şablona tıkladığınızda gönderilir, düzenlemek için sağ tıklayın.</string>
+    <string name="desktop_chat_welcome">Merhaba. Cihazlarınızı yazarak ya da konuşarak yönetebilirsiniz: açıp kapatma (hemen ya da bir süre sonra), durum, güç tüketimi, sensör okumaları, sıcaklık ve durum özeti. Konuşmak için mikrofona tıklayın (“Mutfağı kapat”); Windows sesle yazma açılır, yanıt sesli okunur. Yukarı ok önceki mesajlarınızı geri getirir. Şablonlar aşağıdadır; tıklayınca gönderilir, düzenlemek için sağ tıklayın.</string>
     <!-- Masaüstüne özgü: lisans ve güncelleme (0.9.0 telefon kopyasında strings.xml'den düşmüştü) -->
     <string name="update_available">SwitchGuard %1$s çıktı. Bu sürümün üstüne kurulur; ayarlarınız ve lisansınız korunur.</string>
     <string name="update_downloading">SwitchGuard %1$s indiriliyor… Uygulama kapanıp güncellenecek ve yeniden açılacak.</string>

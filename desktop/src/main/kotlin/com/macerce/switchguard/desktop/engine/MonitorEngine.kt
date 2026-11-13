@@ -104,10 +104,11 @@ class MonitorEngine(
     private val labels: ChangeLabels get() = eventStrings.labels
     private var automations = AutomationEngine()
     private val chatRunner = ChatRunner(
-        store, metrics, runtime, strings, clock::wall,
+        store, metrics, runtime, log, strings, clock::wall,
         switchNow = { d, ch, on -> if (DeviceGroup.isGroup(d.id)) controlGroupNow(d.id, on) else controlNow(d, ch, on) },
         sceneNow = ::sceneNow,
         awayNow = ::awayNow,
+        cycleNow = { id, start -> cycleButton(id, start, strings()["chat_title"]) },
     )
 
     private val blindWatch = BlindWatch()
@@ -275,15 +276,24 @@ class MonitorEngine(
      * Uygulama içi sohbet (telefondaki `ChatRunner.answer`): mesaj komuta çevrilip yürütülür, yanıt [onResult]'a
      * motor iş parçacığında verilir; anlaşılmadıysa null.
      */
-    fun chat(text: String, by: String?, onResult: (String?) -> Unit) {
+    fun chat(text: String, by: String?, onResult: (String?) -> Unit) = chatReply(text, by) { onResult(it?.text) }
+
+    /**
+     * [chat] gibi; yanıt bir soruysa ([ChatRunner.Reply.ask]: hangi kanal, emin misiniz) sesli kullanımda dinleme
+     * yeniden açılır. Komut olarak anlaşılmayan mesaj bekleyen sorunun yanıtı olabilir ("iki", "evet").
+     */
+    fun chatReply(text: String, by: String?, onResult: (ChatRunner.Reply?) -> Unit) {
         scheduler.post {
-            val intent = ChatCommand.parse(text) ?: return@post onResult(null)
-            chatNow(intent, by, control = true, onResult)
+            val intent = ChatCommand.parse(text) ?: chatRunner.followUp(text, by) ?: return@post onResult(null)
+            chatNow(intent, by, control = true) { onResult(ChatRunner.Reply(it, ask = chatRunner.asking(by))) }
         }
     }
 
     /** Sohbet şablonlarının listesi değişince motor iş parçacığında yazılır. */
-    fun saveChatTemplates(list: List<ChatTemplate>) = scheduler.post { store.chatTemplates = list }
+    fun saveChatTemplates(list: List<ChatTemplate>) = scheduler.post { ChatRunner.saveTemplates(store, strings(), list) }
+
+    /** Şablon kullanıldı: en çok kullanılanlar başa gelir. */
+    fun countTemplateUse(id: String) = scheduler.post { ChatRunner.countUse(store, id) }
 
     /** Evde / Dışarıda (telefondaki `Actions.setAway`): değişiklik geçmişe yazılır. */
     fun setAway(away: Boolean, by: String? = null) = scheduler.post { awayNow(away, by) }
@@ -1665,7 +1675,7 @@ class MonitorEngine(
      */
     private fun onTelegramText(u: TelegramBot.Update, text: String, now: Long) {
         val age = now - u.date
-        val intent = ChatCommand.parse(text)
+        val intent = ChatCommand.parse(text) ?: chatRunner.followUp(text, u.from)
         if (intent == null) {
             if (u.chatId > 0 && age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, strings()["chat_not_understood"])
             return
@@ -1984,9 +1994,21 @@ class MonitorEngine(
      * okunur (telefonda sohbet her soruda anlık okur), motor beklemez.
      */
     private fun chatNow(intent: ChatCommand.Intent, by: String?, control: Boolean, onResult: (String) -> Unit) {
-        if (intent != ChatCommand.Intent.Temperature) return onResult(chatRunner.run(intent, by, control))
         val lat = store.latitude
         val lon = store.longitude
+        if (intent == ChatCommand.Intent.Briefing) {
+            // Brifing günün havasıyla başlar: ağdan okunur, motor beklemez.
+            if (lat == null || lon == null) return onResult(chatRunner.run(intent, by, control))
+            telegramRunner {
+                val today = runCatching { sources.weatherToday(lat, lon) }.getOrNull()
+                scheduler.post {
+                    if (today != null) runtime.outdoorTemp = today.temp
+                    onResult(chatRunner.run(intent, by, control, today))
+                }
+            }
+            return
+        }
+        if (intent != ChatCommand.Intent.Temperature) return onResult(chatRunner.run(intent, by, control))
         if (lat == null || lon == null) return onResult(chatRunner.temperature(null))
         telegramRunner {
             val fresh = runCatching { sources.weather(lat, lon) }.getOrNull()
@@ -2035,6 +2057,10 @@ class MonitorEngine(
     private fun applyCycles(r: CycleResult, before: Map<String, CycleRun>, by: String?) {
         if (r.runs != before) store.cycleRuns = r.runs
         if (r.done != store.cycleDone) store.cycleDone = r.done
+        // Süreli sesli/yazılı komutların tek kullanımlık döngüleri bitince listeden kalkar.
+        for (e in r.events) {
+            if (e.kind != CycleEventKind.STARTED && e.cycle.id.startsWith(ChatRunner.ONCE_PREFIX)) store.deleteCycle(e.cycle.id)
+        }
         for (e in r.events) {
             val args = EventArgs.CycleState(e.cycle.name, e.kind.name, by)
             record(CYCLE_LOG_PREFIX + e.cycle.id, e.cycle.name, EventKind.AUTOMATION, args.render(e.cycle.name, eventStrings), "", args)

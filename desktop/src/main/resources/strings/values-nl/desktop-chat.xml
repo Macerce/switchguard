@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">Status voorlezen</string>
+    <string name="chat_all_already_on">Alles staat al aan.</string>
+    <string name="chat_cancelled">Geannuleerd.</string>
+    <string name="chat_confirm_all_off">Hiermee worden %1$d schakelaars uitgezet. Zeg of typ “Yes” om te bevestigen, “No” om te annuleren.</string>
+    <string name="chat_confirm_all_on">Hiermee worden %1$d schakelaars aangezet. Zeg of typ “Yes” om te bevestigen, “No” om te annuleren.</string>
+    <string name="chat_cycle_not_found">Geen enkele cyclus komt eenduidig overeen met “%1$s”. Cycli: %2$s</string>
+    <string name="chat_cycle_started">%1$s gestart.</string>
+    <string name="chat_cycle_stopped">%1$s gestopt.</string>
+    <string name="chat_none_on">Er staat niets aan.</string>
+    <string name="chat_nothing_pending">Er is niets om te bevestigen.</string>
+    <string name="chat_timer_for">%1$s: %2$s gedurende %3$s.</string>
+    <string name="chat_timer_later">%1$s: %2$s over %3$s.</string>
+    <string name="chat_tpl_all_off">Alles uit</string>
+    <string name="chat_tpl_brief">Statusoverzicht</string>
+    <string name="chat_tpl_lights_off">Lichten uit</string>
+    <string name="chat_tpl_lights_on">Lichten aan</string>
+    <string name="chat_tpl_whats_on">Wat staat aan</string>
+    <string name="summary_yesterday">Gisteren tot dit tijdstip: %1$s.</string>
+    <string name="chat_sensors_none">Geen sensormetingen gevonden.</string>
+    <string name="desktop_chat_read_aloud">Voorlezen</string>
+    <string name="desktop_chat_stop_speaking">Voorlezen stoppen</string>
+    <string name="desktop_chat_now">Op dit moment</string>
+    <string name="desktop_chat_help_sensors">• Sensoren · Luchtvochtigheid woonkamer? · Staan de deuren open? · Batterijniveau</string>
+</resources>

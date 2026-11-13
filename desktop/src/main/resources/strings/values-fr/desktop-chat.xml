@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">Lire l\'état à voix haute</string>
+    <string name="chat_all_already_on">Tout est déjà allumé.</string>
+    <string name="chat_cancelled">Annulé.</string>
+    <string name="chat_confirm_all_off">%1$d interrupteurs vont être éteints. Dites ou écrivez “Yes” pour confirmer, “No” pour annuler.</string>
+    <string name="chat_confirm_all_on">%1$d interrupteurs vont être allumés. Dites ou écrivez “Yes” pour confirmer, “No” pour annuler.</string>
+    <string name="chat_cycle_not_found">Aucun cycle unique ne correspond à “%1$s”. Cycles : %2$s</string>
+    <string name="chat_cycle_started">%1$s démarré.</string>
+    <string name="chat_cycle_stopped">%1$s arrêté.</string>
+    <string name="chat_none_on">Rien n\'est allumé.</string>
+    <string name="chat_nothing_pending">Il n\'y a rien à confirmer.</string>
+    <string name="chat_timer_for">%1$s : %2$s pendant %3$s.</string>
+    <string name="chat_timer_later">%1$s : %2$s dans %3$s.</string>
+    <string name="chat_tpl_all_off">Tout éteindre</string>
+    <string name="chat_tpl_brief">Point de situation</string>
+    <string name="chat_tpl_lights_off">Éteindre les lumières</string>
+    <string name="chat_tpl_lights_on">Allumer les lumières</string>
+    <string name="chat_tpl_whats_on">Ce qui est allumé</string>
+    <string name="summary_yesterday">Hier à la même heure : %1$s.</string>
+    <string name="chat_sensors_none">Aucune mesure de capteur trouvée.</string>
+    <string name="desktop_chat_read_aloud">Lire à voix haute</string>
+    <string name="desktop_chat_stop_speaking">Arrêter la lecture</string>
+    <string name="desktop_chat_now">En ce moment</string>
+    <string name="desktop_chat_help_sensors">• Capteurs · Humidité du salon ? · Les portes sont-elles ouvertes ? · Niveau des piles</string>
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">Leggi lo stato ad alta voce</string>
+    <string name="chat_all_already_on">È già tutto acceso.</string>
+    <string name="chat_cancelled">Annullato.</string>
+    <string name="chat_confirm_all_off">Verranno spenti %1$d interruttori. Di\' o scrivi “Yes” per confermare, “No” per annullare.</string>
+    <string name="chat_confirm_all_on">Verranno accesi %1$d interruttori. Di\' o scrivi “Yes” per confermare, “No” per annullare.</string>
+    <string name="chat_cycle_not_found">Nessun ciclo corrisponde in modo univoco a “%1$s”. Cicli: %2$s</string>
+    <string name="chat_cycle_started">%1$s avviato.</string>
+    <string name="chat_cycle_stopped">%1$s fermato.</string>
+    <string name="chat_none_on">Non c\'è niente di acceso.</string>
+    <string name="chat_nothing_pending">Non c\'è nulla da confermare.</string>
+    <string name="chat_timer_for">%1$s: %2$s per %3$s.</string>
+    <string name="chat_timer_later">%1$s: %2$s tra %3$s.</string>
+    <string name="chat_tpl_all_off">Spegni tutto</string>
+    <string name="chat_tpl_brief">Riepilogo stato</string>
+    <string name="chat_tpl_lights_off">Spegni le luci</string>
+    <string name="chat_tpl_lights_on">Accendi le luci</string>
+    <string name="chat_tpl_whats_on">Cosa è acceso</string>
+    <string name="summary_yesterday">Ieri fino a quest\'ora: %1$s.</string>
+    <string name="chat_sensors_none">Nessuna lettura dei sensori trovata.</string>
+    <string name="desktop_chat_read_aloud">Leggi ad alta voce</string>
+    <string name="desktop_chat_stop_speaking">Interrompi lettura</string>
+    <string name="desktop_chat_now">In questo momento</string>
+    <string name="desktop_chat_help_sensors">• Sensori · Umidità del soggiorno? · Le porte sono aperte? · Livello batteria</string>
+</resources>

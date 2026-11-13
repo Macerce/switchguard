@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">朗读状态</string>
+    <string name="chat_all_already_on">所有设备都已打开。</string>
+    <string name="chat_cancelled">已取消。</string>
+    <string name="chat_confirm_all_off">将关闭 %1$d 个开关。说出或输入“Yes”确认，“No”取消。</string>
+    <string name="chat_confirm_all_on">将打开 %1$d 个开关。说出或输入“Yes”确认，“No”取消。</string>
+    <string name="chat_cycle_not_found">没有唯一匹配“%1$s”的循环。循环：%2$s</string>
+    <string name="chat_cycle_started">%1$s 已启动。</string>
+    <string name="chat_cycle_stopped">%1$s 已停止。</string>
+    <string name="chat_none_on">没有设备处于打开状态。</string>
+    <string name="chat_nothing_pending">没有需要确认的操作。</string>
+    <string name="chat_timer_for">%1$s：%2$s，持续%3$s。</string>
+    <string name="chat_timer_later">%1$s：%3$s后%2$s。</string>
+    <string name="chat_tpl_all_off">全部关闭</string>
+    <string name="chat_tpl_brief">状态简报</string>
+    <string name="chat_tpl_lights_off">关灯</string>
+    <string name="chat_tpl_lights_on">开灯</string>
+    <string name="chat_tpl_whats_on">哪些开着</string>
+    <string name="summary_yesterday">昨天截至此时：%1$s。</string>
+    <string name="chat_sensors_none">未找到传感器读数。</string>
+    <string name="desktop_chat_read_aloud">朗读</string>
+    <string name="desktop_chat_stop_speaking">停止朗读</string>
+    <string name="desktop_chat_now">当前</string>
+    <string name="desktop_chat_help_sensors">• 传感器 · 客厅湿度？ · 门开着吗？ · 电池电量</string>
+</resources>

@@ -187,7 +187,7 @@ class Strings internal constructor(
          * Telefonun metinleri + masaüstüne özgüler. Masaüstü metinleri ekran grubuna göre ayrı dosyalarda (birlikte
          * çalışılırken aynı dosyaya yazılıp çakışmasın); hiçbiri telefon anahtarını gölgeleyemez (StringsTest).
          */
-        internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml", "desktop-v06.xml")
+        internal val FILES = listOf("strings.xml", "desktop.xml", "desktop-devices.xml", "desktop-settings.xml", "desktop-alerts.xml", "desktop-v06.xml", "desktop-chat.xml")
 
         /** Seçilebilen diller (telefondaki `AppLanguage.options`; "" = sistem dili ayrıca). */
         val LANGUAGES = listOf(

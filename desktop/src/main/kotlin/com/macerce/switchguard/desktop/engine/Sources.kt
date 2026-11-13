@@ -76,6 +76,9 @@ class Sources(
     val telegram: TelegramApi = TelegramApi.Real,
     /** Dış sıcaklık (°C), Open-Meteo'dan. */
     val weather: (lat: Double, lon: Double) -> Double = { lat, lon -> com.macerce.switchguard.api.WeatherClient.temperature(lat, lon) },
+    /** Günün havası (durum, en düşük/en yüksek, yağış olasılığı): sohbet brifingi için. */
+    val weatherToday: (lat: Double, lon: Double) -> com.macerce.switchguard.api.WeatherClient.Today =
+        { lat, lon -> com.macerce.switchguard.api.WeatherClient.today(lat, lon) },
 ) {
     companion object {
         fun real(store: Store): Sources {

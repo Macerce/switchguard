@@ -16,6 +16,9 @@ import java.util.Locale
 object Speech {
     @Volatile private var speaking: Process? = null
 
+    /** Okuma sürüyor mu (arayüzde "okumayı durdur" düğmesi için). */
+    val speakingNow = kotlinx.coroutines.flow.MutableStateFlow(false)
+
     /** Sesle yazmayı açar (Win+H); yazı kutusu önceden odaklanmış olmalı. */
     fun startDictation(): Boolean = runCatching {
         Robot().apply {
@@ -31,11 +34,15 @@ object Speech {
     fun speakable(text: String): String =
         text.replace(Regex("[\\p{So}\\p{Cn}\\p{Cs}\\uFE0F\\u200D•·]"), " ").replace(Regex("\\s+"), " ").trim()
 
-    /** Yanıtı arka planda okur; önceki okuma sürüyorsa kesilir. */
-    fun say(text: String, locale: Locale) {
+    /**
+     * Yanıtı arka planda okur; önceki okuma sürüyorsa kesilir. [onDone] okuma kendiliğinden bitince (kesilmeden)
+     * "speech" iş parçacığında çağrılır: soru yanıtından sonra dinlemeyi yeniden açmak için.
+     */
+    fun say(text: String, locale: Locale, onDone: (() -> Unit)? = null) {
         val clean = speakable(text)
         if (clean.isEmpty()) return
         stop()
+        speakingNow.value = true
         Thread({
             runCatching {
                 val p = ProcessBuilder("powershell.exe", "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script().toString())
@@ -48,13 +55,20 @@ object Speech {
                 speaking = p
                 p.inputStream.readAllBytes()
                 p.waitFor()
-            }.onFailure { Log.w("Speech", "okunamadı", it) }
+                // stop() ile kesildiyse speaking başka sürece geçmiş ya da boşalmıştır.
+                if (speaking === p) {
+                    speaking = null
+                    speakingNow.value = false
+                    onDone?.invoke()
+                }
+            }.onFailure { Log.w("Speech", "okunamadı", it); speakingNow.value = false }
         }, "speech").apply { isDaemon = true }.start()
     }
 
     fun stop() {
         speaking?.let { p -> runCatching { p.descendants().forEach { it.destroy() }; p.destroy() } }
         speaking = null
+        speakingNow.value = false
     }
 
     @Volatile private var scriptPath: Path? = null

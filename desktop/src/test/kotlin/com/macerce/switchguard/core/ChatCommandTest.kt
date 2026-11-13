@@ -47,6 +47,91 @@ class ChatCommandTest {
     }
 
     @Test
+    fun spokenSentences() {
+        fun on(vararg t: String) = ChatCommand.Intent.Switch(true, t.toList())
+        fun off(vararg t: String) = ChatCommand.Intent.Switch(false, t.toList())
+        assertEquals(off("mutfagin isigini"), ChatCommand.parse("Mutfağın ışığını kapat"))
+        assertEquals(off("mutfaktaki isigi"), ChatCommand.parse("mutfaktaki ışığı kapatır mısın"))
+        assertEquals(on("pompayi"), ChatCommand.parse("pompayı çalıştır"))
+        assertEquals(off("pompayi"), ChatCommand.parse("lütfen pompayı durdur"))
+        assertEquals(off("kitchen light"), ChatCommand.parse("Turn off the kitchen light"))
+        assertEquals(off("kitchen light"), ChatCommand.parse("turn the kitchen light off"))
+        assertEquals(on("pompa bir"), ChatCommand.parse("pompa bir aç"))
+        assertEquals(on("salonu bir"), ChatCommand.parse("şu salonu bir aç"))
+        // Tek cümlede aç ve kapat.
+        assertEquals(ChatCommand.Intent.Batch(listOf(on("mutfagi"), off("salonu", "klimayi"))), ChatCommand.parse("mutfağı aç, salonu ve klimayı kapat"))
+        assertEquals(ChatCommand.Intent.Batch(listOf(off("salon"), on("mutfak"))), ChatCommand.parse("salon kapat mutfak aç"))
+        assertEquals(
+            ChatCommand.Intent.Batch(listOf(on("garden"), off("garage"))),
+            ChatCommand.parse("Turn on the garden and turn off the garage"),
+        )
+        assertEquals(ChatCommand.Intent.Batch(listOf(on("kitchen"), off("garden"))), ChatCommand.parse("turn the kitchen on and the garden off"))
+        // Aynı yöndeki adımlar birleşir.
+        assertEquals(on("salonu", "mutfagi"), ChatCommand.parse("salonu aç mutfağı aç"))
+        assertNull(ChatCommand.parse("aç kapat"))
+    }
+
+    @Test
+    fun timedAllCycleAndSummaries() {
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("mutfagi"), 600, hold = false), ChatCommand.parse("Mutfağı 10 dakika sonra kapat"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("pompayi"), 1200, hold = true), ChatCommand.parse("pompayı 20 dakikalığına aç"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("klimayi"), 1800, hold = false), ChatCommand.parse("klimayı yarım saat sonra kapat"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("salonu", "mutfagi"), 3600, hold = true), ChatCommand.parse("salonu ve mutfağı 1 saat boyunca aç"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("kitchen"), 600, hold = false), ChatCommand.parse("turn off the kitchen in 10 minutes"))
+        assertEquals(ChatCommand.Intent.Timed(true, listOf("pump"), 1200, hold = true), ChatCommand.parse("turn on pump for 20 minutes"))
+        assertEquals(ChatCommand.Intent.Timed(false, listOf("heater"), 1800, hold = false), ChatCommand.parse("turn off heater in half an hour"))
+        // Süresi olan karışık komut anlaşılmaz sayılır (yanlışlıkla hemen yürütülmesin).
+        assertNull(ChatCommand.parse("mutfağı aç salonu 10 dakika sonra kapat"))
+
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("hepsini kapat"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("her şeyi kapat"))
+        assertEquals(ChatCommand.Intent.SwitchAll(true), ChatCommand.parse("tüm cihazları aç"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("turn everything off"))
+        assertEquals(ChatCommand.Intent.SwitchAll(false), ChatCommand.parse("turn off all devices"))
+        assertEquals(ChatCommand.Intent.Switch(false, listOf("tum isiklari")), ChatCommand.parse("tüm ışıkları kapat"))
+        assertEquals(ChatCommand.Intent.Confirm(true), ChatCommand.parse("Evet"))
+        assertEquals(ChatCommand.Intent.Confirm(false), ChatCommand.parse("hayır"))
+        assertEquals(ChatCommand.Intent.Confirm(false), ChatCommand.parse("cancel"))
+
+        assertEquals(ChatCommand.Intent.RunCycle(true, "sulama"), ChatCommand.parse("sulama döngüsünü başlat"))
+        assertEquals(ChatCommand.Intent.RunCycle(false, "bahce isiklari"), ChatCommand.parse("bahçe ışıkları döngüsünü durdur"))
+        assertEquals(ChatCommand.Intent.RunCycle(true, "garden"), ChatCommand.parse("start the garden cycle"))
+
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("neler açık"))
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("hangi cihazlar açık"))
+        assertEquals(ChatCommand.Intent.WhatsOn, ChatCommand.parse("what is on?"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("durum özeti"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("neler oluyor"))
+        assertEquals(ChatCommand.Intent.Briefing, ChatCommand.parse("briefing"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("günün özeti"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("bugün ne oldu"))
+        assertEquals(ChatCommand.Intent.Summary, ChatCommand.parse("daily summary"))
+        assertEquals(ChatCommand.Intent.Status(""), ChatCommand.parse("durum"))
+    }
+
+    @Test
+    fun resolvesSpokenTargets() {
+        val oda = DeviceSnapshot("o", "Yatak Odası", online = true, switches = mapOf(0 to false))
+        val isitici = DeviceSnapshot("i", "Isıtıcı", online = true, switches = mapOf(0 to false))
+        val all = devices + oda + isitici
+        assertEquals(ChatCommand.Target.One(mutfak, 0), ChatCommand.resolve("mutfagin isigini", all))
+        assertEquals(ChatCommand.Target.One(mutfak, 0), ChatCommand.resolve("mutfaktaki isigi", all))
+        // Adında "ışık" geçmeyen cihaz: genel söz atılır.
+        assertEquals(ChatCommand.Target.One(oda, 0), ChatCommand.resolve("yatak odasinin isigini", all))
+        assertEquals(ChatCommand.Target.One(klima, 0), ChatCommand.resolve("klimanin lambasini", all))
+        // "ısıtıcı" ile "ışık" aynı kök değil.
+        assertEquals(ChatCommand.Target.One(isitici, 0), ChatCommand.resolve("isiticiyi", all))
+        assertEquals(ChatCommand.Target.NotFound, ChatCommand.resolve("isiticiyi", devices))
+        // Kanal: sözle, sıra sayısıyla, "kanal" sözüyle.
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pompa iki", all))
+        assertEquals(ChatCommand.Target.One(pompa, 0), ChatCommand.resolve("pompa bir", all))
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pompanin ikinci kanalini", all))
+        assertEquals(ChatCommand.Target.One(pompa, 1), ChatCommand.resolve("pump second channel".replace("pump", "pompa"), all))
+        assertEquals(ChatCommand.Target.One(salon, 0), ChatCommand.resolve("salonu bir", all))
+        assertEquals(ChatCommand.Target.NotFound, ChatCommand.resolve("kanal", all))
+    }
+
+    @Test
     fun typicalWattsIgnoresStandby() {
         val samples = listOf(0.5, 1.0, 850.0, 900.0, 950.0, 2.0, 880.0, 920.0).mapIndexed { i, w -> PowerSample(i.toLong(), w) }
         assertEquals(900.0, ChatCommand.typicalWatts(samples)!!, 0.01)
@@ -85,5 +170,22 @@ class ChatCommandTest {
         assertEquals("tpl:b", autos[0].id)
         assertEquals(AutoAction(ActionKind.RUN_SCENE, "tpl:b"), autos[0].action)
         assertNull(ChatTemplate.listFromJson(null))
+    }
+
+    /** Masaüstü: sensör soruları (telefonda yok). */
+    @Test
+    fun sensorQuestions() {
+        fun sensors(q: String, vararg k: SensorKind) = ChatCommand.Intent.Sensors(q, k.toSet())
+        assertEquals(sensors(""), ChatCommand.parse("Sensörler"))
+        assertEquals(sensors("", SensorKind.HUMIDITY), ChatCommand.parse("Nem kaç?"))
+        assertEquals(sensors("salonun", SensorKind.HUMIDITY), ChatCommand.parse("Salonun nemi ne?"))
+        assertEquals(sensors("", SensorKind.DOOR), ChatCommand.parse("Kapılar açık mı?"))
+        assertEquals(sensors("", SensorKind.BATTERY), ChatCommand.parse("Pil durumu"))
+        assertEquals(sensors("", SensorKind.WATER), ChatCommand.parse("Su kaçağı var mı?"))
+        assertEquals(sensors("living room", SensorKind.HUMIDITY), ChatCommand.parse("living room humidity"))
+        assertEquals(sensors("", SensorKind.DOOR), ChatCommand.parse("are the doors open?"))
+        // Komut sözü varsa aç/kapat: "kapıyı aç" kapı adlı rölenin komutu.
+        assertEquals(ChatCommand.Intent.Switch(true, listOf("kapiyi")), ChatCommand.parse("Kapıyı aç"))
+        assertEquals(ChatCommand.Intent.Temperature, ChatCommand.parse("Kaç derece?"))
     }
 }

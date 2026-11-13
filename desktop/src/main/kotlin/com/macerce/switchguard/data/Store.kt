@@ -498,6 +498,21 @@ class Store internal constructor(
         get() = ChatTemplate.listFromJson(strOrNull("chatTemplates"))
         set(v) = edit { if (v == null) remove("chatTemplates") else put("chatTemplates", ChatTemplate.listToJson(v)) }
 
+    /** Şablon kimliği → kaç kez kullanıldığı; en çok kullanılan şablon en başta gösterilir. */
+    var chatTemplateUses: Map<String, Int>
+        get() = runCatching { JSONObject(strOrNull("chatTemplateUses") ?: "{}").let { o -> o.keys().asSequence().associateWith { o.optInt(it) } } }
+            .getOrDefault(emptyMap())
+        set(v) = edit { put("chatTemplateUses", JSONObject(v as Map<*, *>).toString()) }
+
+    /**
+     * Kullanıcıya daha önce sunulmuş hazır şablonlar; listede yoksa silinmiştir, geri eklenmez. İlk altısı 0.9.0'dan
+     * beri vardı: şablonlarını düzenlemiş eski kullanıcıda onlar "görülmüş" sayılır.
+     */
+    var chatDefaultsSeen: Set<String>
+        get() = strOrNull("chatDefaultsSeen")?.let { runCatching { org.json.JSONArray(it).let { a -> (0 until a.length()).map(a::getString).toSet() } }.getOrNull() }
+            ?: setOf("d-status", "d-power", "d-temp", "d-home", "d-away", "d-help")
+        set(v) = edit { put("chatDefaultsSeen", org.json.JSONArray(v.toList()).toString()) }
+
     /** Sohbette sesle verilen komutun yanıtı sesli okunsun. */
     var chatSpeak: Boolean
         get() = bool("chatSpeak", true)

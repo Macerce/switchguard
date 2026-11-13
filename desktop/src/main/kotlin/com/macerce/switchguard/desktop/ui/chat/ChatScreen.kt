@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,6 +39,7 @@ import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -60,6 +63,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
@@ -73,6 +77,7 @@ import com.macerce.switchguard.core.ActiveWindow
 import com.macerce.switchguard.core.ChatCommand
 import com.macerce.switchguard.core.ChatTemplate
 import com.macerce.switchguard.core.DeviceGroup
+import com.macerce.switchguard.core.SensorKind
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.desktop.AppGraph
@@ -85,6 +90,8 @@ import com.macerce.switchguard.desktop.ui.PageHeader
 import com.macerce.switchguard.desktop.ui.TextButton
 import com.macerce.switchguard.desktop.ui.automations.DayChips
 import com.macerce.switchguard.desktop.ui.automations.LocationSetup
+import com.macerce.switchguard.desktop.ui.automations.formatSensor
+import com.macerce.switchguard.desktop.ui.automations.stateKey
 import com.macerce.switchguard.desktop.ui.automations.shortTitleKey
 import com.macerce.switchguard.desktop.ui.raisedOnTile
 import com.macerce.switchguard.desktop.ui.readableWidth
@@ -115,6 +122,10 @@ private fun sentence(text: String, locale: Locale): String = text.replaceFirstCh
 /** Sekme değişip dönülünce konuşma kaybolmasın (uygulama açık kaldıkça). */
 private val lines = mutableStateListOf<ChatLine>()
 
+/** Gönderilen mesajlar (yukarı/aşağı okla geri çağrılır), en yenisi sonda. */
+private val sent = mutableStateListOf<String>()
+private const val MAX_SENT = 50
+
 /**
  * Uygulama içi sohbet (telefondaki `ui/ChatScreen.kt`): yazarak cihazları açıp kapatma, durum/güç/sıcaklık sorma;
  * altta hazır şablonlar. Masaüstü farkları: kenar çubuğunda ayrı sekme (telefonda Cihazlar'ın üst çubuğundan açılır),
@@ -137,24 +148,45 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
     var speak by remember { mutableStateOf(store.chatSpeak) }
     // Sesle yazma açıkken: Windows yazı kutusuna yazar, söz bitince (yazı 2 sn değişmeyince) kendiliğinden gönderilir.
     var listening by remember { mutableStateOf(false) }
+    val speaking by Speech.speakingNow.collectAsState()
+    // Yukarı okla geri çağrılan mesajın sırası; -1 = yeni yazı.
+    var recall by remember { mutableStateOf(-1) }
+
+    fun listen() {
+        Speech.stop()
+        runCatching { inputFocus.requestFocus() }
+        scope.launch {
+            delay(150) // odak yazı kutusuna geçsin, sesle yazma oraya yazsın
+            listening = Speech.startDictation()
+        }
+    }
 
     fun send(text: String, spoken: Boolean = false) {
         val t = text.trim()
         if (t.isEmpty() || busy) return
         lines += ChatLine(true, sentence(t, strings.locale))
+        if (sent.lastOrNull() != t) sent += t
+        while (sent.size > MAX_SENT) sent.removeAt(0)
+        recall = -1
         input = ""
         busy = true
         val intent = ChatCommand.parse(t)
-        graph.engine.chat(t, strings["chat_title"]) { answer ->
+        graph.engine.chatReply(t, strings["chat_title"]) { reply ->
             scope.launch {
+                val answer = reply?.text ?: strings["chat_not_understood"]
                 // Konum yoksa sıcaklık yanıtının altında doğrudan konum seçme düğmesi.
                 val needsLocation = intent == ChatCommand.Intent.Temperature && (store.latitude == null || store.longitude == null)
                 lines += ChatLine(
-                    false, answer ?: strings["chat_not_understood"],
+                    false, answer,
                     action = if (needsLocation) ChatAction.SET_LOCATION else null, retry = if (needsLocation) t else null,
                 )
                 busy = false
-                if (spoken && speak) Speech.say(answer ?: strings["chat_not_understood"], strings.locale)
+                // Sesle sorulan soru ("hangi kanal?", "emin misiniz?"): yanıt okununca dinleme yeniden açılır.
+                val ask = spoken && reply?.ask == true
+                when {
+                    spoken && speak -> Speech.say(answer, strings.locale, onDone = if (ask) ({ scope.launch { listen() } }) else null)
+                    ask -> listen()
+                }
             }
         }
     }
@@ -177,6 +209,9 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         Column(Modifier.readableWidth(860.dp).fillMaxSize()) {
             PageHeader(strings["chat_title"], actions = {
+                if (speaking) IconButton(onClick = { Speech.stop() }, modifier = Modifier.testTag("chat-stop-speaking")) {
+                    Icon(Icons.Rounded.Stop, strings["desktop_chat_stop_speaking"], tint = MaterialTheme.colorScheme.primary)
+                }
                 IconButton(onClick = {
                     speak = !speak
                     store.chatSpeak = speak
@@ -191,6 +226,7 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                     Icon(Icons.Rounded.DeleteSweep, strings["chat_clear"])
                 }
             })
+            LiveStrip(graph, strings, version) { send(it) }
             LazyColumn(
                 Modifier.weight(1f).fillMaxWidth().testTag("chat-lines"),
                 state = listState,
@@ -198,7 +234,9 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 item { Bubble(remember(strings) { ChatLine(false, strings["desktop_chat_welcome"], at = 0) }, strings) }
-                items(lines) { line -> Bubble(line, strings, onAction = { locationFor = line.retry ?: "" }) }
+                items(lines) { line ->
+                    Bubble(line, strings, onAction = { locationFor = line.retry ?: "" }, onRead = { Speech.say(line.text, strings.locale) })
+                }
                 if (busy) item { Typing(strings) }
             }
             Text(
@@ -217,7 +255,10 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                     Row(
                         Modifier.background(raisedOnTile(), shape)
                             .onClick(matcher = PointerMatcher.mouse(PointerButton.Secondary)) { editing = t }
-                            .clickable { send(t.text) }
+                            .clickable {
+                                graph.engine.countTemplateUse(t.id)
+                                send(t.text)
+                            }
                             .padding(horizontal = 14.dp, vertical = 7.dp)
                             .testTag("chat-tpl-${t.id}"),
                         verticalAlignment = Alignment.CenterVertically,
@@ -251,12 +292,30 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                     onValueChange = { input = it },
                     placeholder = { Text(strings[if (listening) "desktop_chat_listening" else "chat_hint"]) },
                     modifier = Modifier.weight(1f).focusRequester(inputFocus).testTag("chat-input").onPreviewKeyEvent {
-                        if (it.type == KeyEventType.KeyDown && (it.key == Key.Enter || it.key == Key.NumPadEnter) && !it.isShiftPressed) {
-                            listening = false
-                            send(input)
-                            true
-                        } else {
-                            false
+                        if (it.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                        when {
+                            (it.key == Key.Enter || it.key == Key.NumPadEnter) && !it.isShiftPressed -> {
+                                listening = false
+                                send(input)
+                                true
+                            }
+                            // Önceki mesajlar: yukarı ok bir öncekini, aşağı ok bir sonrakini getirir.
+                            it.key == Key.DirectionUp && sent.isNotEmpty() && (input.isBlank() || recall >= 0) -> {
+                                recall = if (recall < 0) sent.lastIndex else (recall - 1).coerceAtLeast(0)
+                                input = sent[recall]
+                                true
+                            }
+                            it.key == Key.DirectionDown && recall >= 0 -> {
+                                recall = if (recall < sent.lastIndex) recall + 1 else -1
+                                input = if (recall >= 0) sent[recall] else ""
+                                true
+                            }
+                            it.key == Key.Escape && (speaking || listening) -> {
+                                Speech.stop()
+                                listening = false
+                                true
+                            }
+                            else -> false
                         }
                     },
                     singleLine = true,
@@ -264,14 +323,7 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
                 )
                 // Yazı yokken mikrofon (Windows sesle yazma), yazı varken gönder.
                 if (input.isBlank() && !listening) {
-                    IconButton(onClick = {
-                        Speech.stop()
-                        runCatching { inputFocus.requestFocus() }
-                        scope.launch {
-                            delay(150) // odak yazı kutusuna geçsin, sesle yazma oraya yazsın
-                            listening = Speech.startDictation()
-                        }
-                    }, enabled = !busy, modifier = Modifier.testTag("chat-mic")) {
+                    IconButton(onClick = { listen() }, enabled = !busy, modifier = Modifier.testTag("chat-mic")) {
                         Icon(Icons.Rounded.Mic, strings["desktop_chat_voice"], tint = MaterialTheme.colorScheme.primary)
                     }
                 } else {
@@ -323,16 +375,24 @@ fun ChatScreen(graph: AppGraph, strings: Strings, modifier: Modifier = Modifier)
 
 /** Mesaj balonu: üstte gönderen ve saat, gönderen tarafın köşesi sivri; yanıtta varsa düğme. */
 @Composable
-private fun Bubble(line: ChatLine, strings: Strings, onAction: () -> Unit = {}) {
+private fun Bubble(line: ChatLine, strings: Strings, onAction: () -> Unit = {}, onRead: (() -> Unit)? = null) {
     val scheme = MaterialTheme.colorScheme
     val shape = if (line.mine) RoundedCornerShape(18.dp, 18.dp, 4.dp, 18.dp) else RoundedCornerShape(18.dp, 18.dp, 18.dp, 4.dp)
     Column(Modifier.fillMaxWidth(), horizontalAlignment = if (line.mine) Alignment.End else Alignment.Start) {
-        Text(
-            strings[if (line.mine) "chat_you" else "app_name"] + if (line.at > 0) " · " + strings.time(line.at) else "",
-            style = MaterialTheme.typography.labelSmall,
-            color = scheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                strings[if (line.mine) "chat_you" else "app_name"] + if (line.at > 0) " · " + strings.time(line.at) else "",
+                style = MaterialTheme.typography.labelSmall,
+                color = scheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp),
+            )
+            // Yanıtı sonradan da dinleyebilmek için (sesli yanıt kapalıyken ya da yazıyla sorulduysa).
+            if (!line.mine && onRead != null) {
+                IconButton(onClick = onRead, modifier = Modifier.size(22.dp).testTag("chat-read")) {
+                    Icon(Icons.AutoMirrored.Rounded.VolumeUp, strings["desktop_chat_read_aloud"], Modifier.size(15.dp), tint = scheme.onSurfaceVariant)
+                }
+            }
+        }
         Column(
             Modifier.widthIn(max = 520.dp)
                 .background(if (line.mine) scheme.primary else tileColor(), shape)
@@ -351,6 +411,70 @@ private fun Bubble(line: ChatLine, strings: Strings, onAction: () -> Unit = {}) 
         }
     }
 }
+
+/**
+ * Sohbetin üstünde canlı özet şeridi: açık cihaz sayısı, anlık toplam güç, dış sıcaklık ve sensör okumaları
+ * (dikkat isteyenler önde: su kaçağı, açık kapı, hareket). Tıklanınca ilgili soru sohbete gönderilir.
+ */
+@Composable
+private fun LiveStrip(graph: AppGraph, strings: Strings, version: Any?, onAsk: (String) -> Unit) {
+    val store = graph.store
+    val tr = strings.language == "tr"
+    fun cmd(trText: String, enText: String) = if (tr) trText else enText
+    val chips = remember(version, strings) {
+        val devices = store.snapshots.filterNot { DeviceGroup.isGroup(it.id) }
+        val labels = strings.eventStrings().labels
+        buildList {
+            val on = devices.count { it.online && it.switches.values.any { v -> v } }
+            val onWord = labels.on.lowercase(strings.locale).replaceFirstChar { it.titlecase(strings.locale) }
+            add(Chip("🟢 $onWord $on", cmd("Neler açık?", "What is on?")))
+            val energy = devices.filter { it.online && it.hasEnergy }
+            if (energy.isNotEmpty()) {
+                val w = energy.sumOf { it.power ?: 0.0 }
+                add(Chip("⚡ " + (if (w >= 100) w.toInt().toString() else String.format(strings.locale, "%.1f", w)) + " W", cmd("Güç", "Power")))
+            }
+            graph.runtime.outdoorTemp?.takeIf { store.latitude != null }?.let { t ->
+                add(Chip("🌤 " + String.format(strings.locale, "%.1f", t) + " °C", cmd("Kaç derece?", "Temperature?")))
+            }
+            val sensors = devices.filter { it.online && it.hasSensors }
+            val alert = listOf(SensorKind.WATER, SensorKind.DOOR, SensorKind.MOTION)
+            sensors.flatMap { d -> alert.filter { d.sensorActive(it) == true }.map { k -> d to k } }.forEach { (d, k) ->
+                val icon = when (k) {
+                    SensorKind.WATER -> "🚨 "
+                    SensorKind.DOOR -> "🚪 "
+                    else -> "🏃 "
+                }
+                add(Chip(icon + d.name + ": " + strings[k.stateKey(true)], cmd("Sensörler", "Sensors"), warn = k == SensorKind.WATER))
+            }
+            sensors.filter { SensorKind.TEMPERATURE in it.sensors || SensorKind.HUMIDITY in it.sensors }.forEach { d ->
+                val v = listOf(SensorKind.TEMPERATURE, SensorKind.HUMIDITY).mapNotNull { k -> d.sensors[k]?.let { formatSensor(k, it) } }
+                add(Chip("🌡 " + d.name + " " + v.joinToString(" · "), cmd("Sensörler", "Sensors")))
+            }
+        }
+    }
+    Row(
+        Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 24.dp, vertical = 4.dp).testTag("chat-live"),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(strings["desktop_chat_now"], style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        chips.forEach { c ->
+            Text(
+                c.text,
+                style = MaterialTheme.typography.labelLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = if (c.warn) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.height(30.dp)
+                    .background(if (c.warn) MaterialTheme.colorScheme.errorContainer else tileColor(), RoundedCornerShape(15.dp))
+                    .clickable { onAsk(c.ask) }
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
+            )
+        }
+    }
+}
+
+private data class Chip(val text: String, val ask: String, val warn: Boolean = false)
 
 /** Yanıt beklenirken: "Yanıt hazırlanıyor…". */
 @Composable

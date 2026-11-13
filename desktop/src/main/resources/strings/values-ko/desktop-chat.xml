@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">상태 읽어 주기</string>
+    <string name="chat_all_already_on">모두 이미 켜져 있습니다.</string>
+    <string name="chat_cancelled">취소했습니다.</string>
+    <string name="chat_confirm_all_off">스위치 %1$d개를 끕니다. 확인하려면 “Yes”, 취소하려면 “No”라고 말하거나 입력하세요.</string>
+    <string name="chat_confirm_all_on">스위치 %1$d개를 켭니다. 확인하려면 “Yes”, 취소하려면 “No”라고 말하거나 입력하세요.</string>
+    <string name="chat_cycle_not_found">“%1$s”에 해당하는 사이클을 하나로 정할 수 없습니다. 사이클: %2$s</string>
+    <string name="chat_cycle_started">%1$s 시작됨.</string>
+    <string name="chat_cycle_stopped">%1$s 중지됨.</string>
+    <string name="chat_none_on">켜져 있는 기기가 없습니다.</string>
+    <string name="chat_nothing_pending">확인할 작업이 없습니다.</string>
+    <string name="chat_timer_for">%1$s: %3$s 동안 %2$s.</string>
+    <string name="chat_timer_later">%1$s: %3$s 후 %2$s.</string>
+    <string name="chat_tpl_all_off">모두 끄기</string>
+    <string name="chat_tpl_brief">상태 요약</string>
+    <string name="chat_tpl_lights_off">조명 끄기</string>
+    <string name="chat_tpl_lights_on">조명 켜기</string>
+    <string name="chat_tpl_whats_on">켜져 있는 기기</string>
+    <string name="summary_yesterday">어제 이 시각까지: %1$s.</string>
+    <string name="chat_sensors_none">센서 값을 찾을 수 없습니다.</string>
+    <string name="desktop_chat_read_aloud">소리 내어 읽기</string>
+    <string name="desktop_chat_stop_speaking">읽기 중지</string>
+    <string name="desktop_chat_now">현재</string>
+    <string name="desktop_chat_help_sensors">• 센서 · 거실 습도는? · 문이 열려 있나요? · 배터리 잔량</string>
+</resources>

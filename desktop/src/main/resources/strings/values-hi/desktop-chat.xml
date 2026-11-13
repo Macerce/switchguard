@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">स्थिति पढ़कर सुनाएँ</string>
+    <string name="chat_all_already_on">सब कुछ पहले से चालू है।</string>
+    <string name="chat_cancelled">रद्द किया गया।</string>
+    <string name="chat_confirm_all_off">%1$d स्विच बंद किए जाएँगे। पुष्टि के लिए “Yes”, रद्द करने के लिए “No” बोलें या लिखें।</string>
+    <string name="chat_confirm_all_on">%1$d स्विच चालू किए जाएँगे। पुष्टि के लिए “Yes”, रद्द करने के लिए “No” बोलें या लिखें।</string>
+    <string name="chat_cycle_not_found">“%1$s” से कोई एक साइकल मेल नहीं खाता। साइकल: %2$s</string>
+    <string name="chat_cycle_started">%1$s शुरू हुआ।</string>
+    <string name="chat_cycle_stopped">%1$s रोका गया।</string>
+    <string name="chat_none_on">कुछ भी चालू नहीं है।</string>
+    <string name="chat_nothing_pending">पुष्टि के लिए कुछ नहीं है।</string>
+    <string name="chat_timer_for">%1$s: %3$s के लिए %2$s।</string>
+    <string name="chat_timer_later">%1$s: %3$s बाद %2$s।</string>
+    <string name="chat_tpl_all_off">सब बंद</string>
+    <string name="chat_tpl_brief">स्थिति सारांश</string>
+    <string name="chat_tpl_lights_off">लाइटें बंद</string>
+    <string name="chat_tpl_lights_on">लाइटें चालू</string>
+    <string name="chat_tpl_whats_on">क्या चालू है</string>
+    <string name="summary_yesterday">कल इस समय तक: %1$s।</string>
+    <string name="chat_sensors_none">कोई सेंसर रीडिंग नहीं मिली।</string>
+    <string name="desktop_chat_read_aloud">ज़ोर से पढ़ें</string>
+    <string name="desktop_chat_stop_speaking">पढ़ना रोकें</string>
+    <string name="desktop_chat_now">अभी</string>
+    <string name="desktop_chat_help_sensors">• सेंसर · लिविंग रूम की नमी? · क्या दरवाज़े खुले हैं? · बैटरी स्तर</string>
+</resources>

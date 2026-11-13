@@ -155,7 +155,7 @@
     <string name="desktop_chat_temp_unknown">I need a location to show the outdoor temperature. Set it in the desktop app under Alerts → Smart alerts → Location.</string>
     <string name="desktop_chat_voice">Voice command (Windows voice typing)</string>
     <string name="desktop_chat_listening">Speak… it is sent when you stop</string>
-    <string name="desktop_chat_welcome">Hello. You can manage your devices by writing: switch them on or off, ask their status, power use or the outdoor temperature. Click the microphone to say it instead (“Turn off kitchen”); Windows voice typing opens and the reply is read aloud. Ready-made templates are below; click one to send it, right-click to edit.</string>
+    <string name="desktop_chat_welcome">Hello. Manage your devices by writing or speaking: switch them on or off (now or after a while), ask their status, power use, sensor readings or the temperature, or ask for a briefing. Click the microphone to speak (“Turn off kitchen”); Windows voice typing opens and the reply is read aloud. Up arrow brings back your last messages. Templates are below; click to send, right-click to edit.</string>
     <!-- Masaüstüne özgü: lisans ve güncelleme (0.9.0 telefon kopyasında strings.xml'den düşmüştü) -->
     <string name="update_available">SwitchGuard %1$s is available. It installs over this version; your settings and license stay.</string>
     <string name="update_downloading">Downloading SwitchGuard %1$s… The app will close, update and reopen.</string>

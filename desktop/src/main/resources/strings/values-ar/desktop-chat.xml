@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Telefon 2.27-2.28 sohbet metinleri (sesli komut genişletmeleri) + masaüstü sensör/arayüz metinleri. -->
+<resources>
+    <string name="board_brief">قراءة الحالة بصوت عالٍ</string>
+    <string name="chat_all_already_on">كل شيء يعمل بالفعل.</string>
+    <string name="chat_cancelled">تم الإلغاء.</string>
+    <string name="chat_confirm_all_off">سيتم إيقاف %1$d من المفاتيح. قل أو اكتب “Yes” للتأكيد، أو “No” للإلغاء.</string>
+    <string name="chat_confirm_all_on">سيتم تشغيل %1$d من المفاتيح. قل أو اكتب “Yes” للتأكيد، أو “No” للإلغاء.</string>
+    <string name="chat_cycle_not_found">لا توجد دورة واحدة تطابق “%1$s”. الدورات: %2$s</string>
+    <string name="chat_cycle_started">تم بدء %1$s.</string>
+    <string name="chat_cycle_stopped">تم إيقاف %1$s.</string>
+    <string name="chat_none_on">لا يوجد شيء يعمل.</string>
+    <string name="chat_nothing_pending">لا يوجد ما يحتاج إلى تأكيد.</string>
+    <string name="chat_timer_for">%1$s: %2$s لمدة %3$s.</string>
+    <string name="chat_timer_later">%1$s: %2$s بعد %3$s.</string>
+    <string name="chat_tpl_all_off">إيقاف الكل</string>
+    <string name="chat_tpl_brief">ملخص الحالة</string>
+    <string name="chat_tpl_lights_off">إطفاء الأضواء</string>
+    <string name="chat_tpl_lights_on">تشغيل الأضواء</string>
+    <string name="chat_tpl_whats_on">ما الذي يعمل</string>
+    <string name="summary_yesterday">أمس حتى هذا الوقت: %1$s.</string>
+    <string name="chat_sensors_none">لم يتم العثور على قراءات للمستشعرات.</string>
+    <string name="desktop_chat_read_aloud">اقرأ بصوت عالٍ</string>
+    <string name="desktop_chat_stop_speaking">إيقاف القراءة</string>
+    <string name="desktop_chat_now">الآن</string>
+    <string name="desktop_chat_help_sensors">• المستشعرات · رطوبة غرفة المعيشة؟ · هل الأبواب مفتوحة؟ · مستوى البطارية</string>
+</resources>
