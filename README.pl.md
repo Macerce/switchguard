@@ -11,7 +11,7 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarm urządzenia">
 </p>
 
-> **Języki:** aplikacja na Windows jest dostępna w 20 językach od wersji 0.13.0. Na Androidzie wybór języka w aplikacji (20 języków) pojawi się w wersji **2.26**; najnowsza wersja na Androida to 2.25.0.
+> **Języki:** aplikacja na Androida (2.26+) i aplikacja na Windows (0.13+) są dostępne w 20 językach — Ustawienia → Język.
 
 ## Pobierz
 
@@ -22,10 +22,8 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 ### Windows 10 / 11
 - **Instalator**: [wersje na Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — pobierz `SwitchGuard-x.y.z-Kurulum.exe` z najnowszej i uruchom. Aplikacja sama szuka nowych wersji i aktualizuje się jednym kliknięciem; ustawienia zostają.
 
-### Za darmo i Pro
-- Android: całkowicie za darmo — wszystkie funkcje, wszystkie urządzenia monitorowane, bez zakupów. Urządzenia demo pozwalają wypróbować wszystko bez sprzętu.
-- Windows za darmo: wszystkie funkcje dla 1 monitorowanego urządzenia.
-- Windows: klucz licencyjny Pro (Ustawienia → karta planu) monitoruje wszystkie urządzenia. Po klucz napisz na **switchguardapp@gmail.com**
+### Za darmo
+- Całkowicie za darmo na Androidzie i Windows — wszystkie funkcje, wszystkie urządzenia monitorowane, bez zakupów i kluczy licencyjnych. Urządzenia demo pozwalają wypróbować wszystko bez sprzętu.
 
 ## Wymagania
 
@@ -68,6 +66,12 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 - Strona urządzenia: reguły, własny dźwięk alarmu, kategoria alertu, historia energii i koszt, timery eWeLink, sygnał Wi-Fi i diagnoza zerwań, zużycie w czuwaniu i ostatnie zdarzenia.
 - **Rozmieść urządzenia**: Gwiazdka = zawsze na górze · strzałki = przesuń · rozmiar karty = mała lub duża · etykieta = kategoria. Przytrzymaj kartę, aby tu wrócić.
 
+### Czujniki (eWeLink)
+
+- Temperatura / wilgotność (TH16, THR316/320, SNZB-02), drzwi (DW2, SNZB-04), ruch / obecność (SNZB-03, SNZB-06P), wyciek wody (SNZB-05) i bateria na kafelkach urządzeń, na ekranie czuwania i w Czacie.
+- Wyzwalacze czujników w automatyzacjach (wartość powyżej / poniżej, otwarcie drzwi, ruch, wyciek wody) oraz alerty czujników jednym dotknięciem na stronie urządzenia.
+- Historia czujników: temperatura, wilgotność, światło i bateria są zapisywane, gdy monitorowanie jest włączone; strona urządzenia pokazuje wykres z 24 godzin / 7 dni / 30 dni z minimum, maksimum i średnią.
+
 ### Alerty
 
 - Alerty urządzeń i alerty warunkowe w jednym miejscu, z filtrem kategorii alertu (Krytyczne / Ważne / Zwykłe).
@@ -77,9 +81,9 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 ### Automatyzacje
 
 - **Reguły** — automatyczne działania: *Jeśli* coś się stanie, *to* zrób coś, z opcjonalnym opóźnieniem.
-- Wyzwalacze: włączy się, wyłączy się, pozostaje włączone przez, pozostaje wyłączone przez, przejdzie w tryb offline, wróci online, moc przekroczy, moc spadnie poniżej, o wschodzie słońca, o zachodzie słońca, gdy temperatura na zewnątrz wzrośnie powyżej, gdy temperatura na zewnątrz spadnie poniżej, po przybyciu, po wyjściu.
+- Wyzwalacze: włączy się, wyłączy się, pozostaje włączone przez, pozostaje wyłączone przez, przejdzie w tryb offline, wróci online, moc przekroczy, moc spadnie poniżej, o wschodzie słońca, o zachodzie słońca, gdy temperatura na zewnątrz wzrośnie powyżej, gdy temperatura na zewnątrz spadnie poniżej, po przybyciu, po wyjściu. Wyzwalacze czujników: wartość powyżej / poniżej, drzwi otwarte / zamknięte, ruch, wyciek wody.
 - Działania: Włącz, Wyłącz, Uruchom alarm, Wyślij powiadomienie, Uruchom scenę, Uruchom cykl, Zatrzymaj cykl.
-- **Tylko gdy**: Tylko w tych godzinach, I tylko jeśli inne urządzenie…, Tylko w domu / poza domem.
+- **Tylko gdy**: Tylko w tych godzinach, I tylko jeśli inne urządzenie…, Tylko w domu / poza domem. Warunki mogą też sprawdzać wartość czujnika, stan czujnika (drzwi otwarte, ruch, wyciek), moc urządzenia lub temperaturę na zewnątrz; dodaj kilka i wybierz „Wszystkie warunki” (i) albo „Wystarczy jeden” (lub).
 - **Sceny** — Wybierz, co ma się stać z każdym urządzeniem po uruchomieniu sceny. Urządzenia ustawione na „Pomiń” nie są ruszane.
 - **Grupy** — Wybierz urządzenia w grupie. Grupa pojawia się na ekranie Urządzenia jak urządzenie: jej przycisk włącza lub wyłącza wszystkie naraz, a możesz jej używać w automatyzacjach.
 - **Cykle i timery** — Odliczanie, Włącz, potem wyłącz, Cykl wł./wył., Po kolei, Własne kroki. Start przyciskiem, o ustalonej godzinie w wybrane dni lub w przedziale godzin; opcjonalna losowa zmienność (dom wygląda na zamieszkany) i „zatrzymaj po ręcznej zmianie”.
@@ -319,6 +323,8 @@ Alerty, które patrzą na wszystkie urządzenia razem: awarie zasilania, nietypo
 | Timery (w urządzeniu) | Brak timerów. Timery działają w samym urządzeniu, nawet gdy telefon jest wyłączony. (Urządzenia eWeLink: dodawaj i edytuj timery włącz/wyłącz o danej godzinie w wybrane dni.) |
 | Połączenie | dBm to siła sygnału: im bliżej 0, tym lepiej. Powyżej -55 doskonały, do -67 dobry, do -75 średni, poniżej słaby. |
 | Zużycie w trybie czuwania | Najniższa średnia godzinowa z ostatnich 7 dni: moc, poniżej której to urządzenie (i wszystko, co do niego podłączono) nigdy nie schodzi, nawet gdy „nic nie robi”. Telewizory, routery i ładowarki często pobierają tyle w trybie czuwania. |
+| Alerty czujników | Dla czujników: alerty jednym dotknięciem, np. za gorąco / za zimno, otwarte drzwi, ruch lub wyciek wody. |
+| Historia czujnika | Wykres odczytów czujnika z 24 godzin / 7 dni / 30 dni z minimum, maksimum i średnią. |
 | Kopiuj dane urządzenia | Kopiuje surowe dane urządzenia do schowka, co przydaje się przy zgłaszaniu nieobsługiwanego modelu |
 
 ## Polecenia Telegrama
@@ -363,7 +369,7 @@ Działają zarówno angielskie, jak i tureckie nazwy poleceń (np. /status = /du
 
 ## Prywatność
 
-- Brak własnego serwera, analityki, reklam i śledzenia. Nic nie jest sprzedawane ani udostępniane.
+- Brak własnego serwera, analityki, reklam i śledzenia. Nic nie jest sprzedawane ani udostępniane. Odczyty czujników i ich historia również zostają tylko na Twoim urządzeniu i nigdzie nie są wysyłane.
 - Klucze, tokeny, urządzenia, reguły, ustawienia i historia (maks. 2000 zdarzeń) są przechowywane tylko na Twoim urządzeniu.
 - Aplikacja łączy się tylko z podłączonymi chmurami (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) oraz — tylko jeśli ich używasz — z Telegramem, Open-Meteo (temperatura i pogoda; lokalizacja zaokrąglona do ok. 100 m) i kafelkami map OpenStreetMap.
 - Hasło eWeLink wpisujesz na własnej stronie eWeLink; aplikacja nigdy go nie widzi.
@@ -432,7 +438,8 @@ SwitchGuard dla Windows (10 / 11) monitoruje tak samo na komputerze: siedzi w za
 - Okno alarmu na pełnym ekranie, wbudowane dźwięki (Syrena, Pisk, Puls, Kurant) lub własny WAV / MP3.
 - Ekran czuwania i wygaszacz ekranu Windows: tablica otwiera się, gdy komputer jest bezczynny.
 - Laptop pozostawiony na ładowarce działa jako czujnik zaniku prądu.
-- Aktualizacje z GitHuba jednym kliknięciem; ustawienia i licencja zostają. Kopia w pliku chronionym hasłem (nie da się jej przywrócić na telefonie).
+- Czujniki eWeLink, warunki czujników i historia czujników — jak w telefonie.
+- Aktualizacje z GitHub jednym kliknięciem; ustawienia zostają zachowane. Kopia zapasowa w pliku chronionym hasłem (nie można jej przywrócić na telefonie).
 
 ### Ustawienia tylko w Windows
 
@@ -452,7 +459,6 @@ SwitchGuard dla Windows (10 / 11) monitoruje tak samo na komputerze: siedzi w za
 | Ten komputer jest na tym samym zasilaniu co urządzenia | Dopóki działa z sieci, nie ma przerwy w dostawie prądu, więc urządzenie, które się rozłączy, jest zgłaszane od razu, a nie po nawet 90 sekundach. |
 | Wczytaj z pliku… | Użyj własnego pliku WAV lub MP3 dla alarmu lub powiadomienia (pierwsze 60 sekund, maks. 20 MB). |
 | Kopia do pliku… | Wszystkie ustawienia, klucze kont i dźwięki w jednym pliku chronionym hasłem |
-| Aktywuj Pro | Bez licencji aplikacja monitoruje urządzenia: 1. Wpisz klucz licencyjny, aby monitorować wszystkie urządzenia. |
 
 ### Instalacja w Windows
 

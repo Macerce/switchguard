@@ -11,7 +11,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Device alarm">
 </p>
 
-> **Languages:** the Windows app is available in 20 languages from 0.13.0. On Android, the in-app language choice (20 languages) comes with **2.26**; the latest Android release is 2.25.0.
+> **Languages:** the Android app (2.26+) and the Windows app (0.13+) are both available in 20 languages — Settings → Language.
 
 ## Download
 
@@ -22,10 +22,8 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 ### Windows 10 / 11
 - **Installer**: [Windows releases](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — download `SwitchGuard-x.y.z-Kurulum.exe` from the newest one and run it. The app checks for new versions and updates itself with one click; settings are kept.
 
-### Free and Pro
-- Android: completely free — every feature, all devices monitored, no purchases. Demo devices let you try everything without hardware.
-- Windows free version: every feature, for 1 monitored device.
-- Windows: a Pro license key (Settings → plan card) monitors all devices. For a key, contact **switchguardapp@gmail.com**
+### Free
+- Completely free on Android and Windows — every feature, all devices monitored, no purchases, no license keys. Demo devices let you try everything without hardware.
 
 ## Requirements
 
@@ -68,6 +66,12 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - Device page: rules, own alarm sound, alert category, energy history and cost, eWeLink device timers, Wi-Fi signal and drop diagnosis, standby consumption and recent events.
 - **Arrange devices**: Star = keep at the top · arrows = move · card size = small or large · tag = category. Long-press a card to come back here.
 
+### Sensors (eWeLink)
+
+- Temperature / humidity (TH16, THR316/320, SNZB-02), door (DW2, SNZB-04), motion / presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery readings on device tiles, on the standby screen and in Chat.
+- Sensor triggers in automations (value above / below, door opened, motion, water leak) and one-tap sensor alerts on the device page.
+- Sensor history: temperature, humidity, light and battery readings are saved while monitoring is on; the device page shows a 24 hours / 7 days / 30 days chart with lowest, highest and average.
+
 ### Alerts
 
 - Device alerts and conditional alerts in one place, with filters by alert category (Critical / Important / Normal).
@@ -77,9 +81,9 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 ### Automations
 
 - **Rules** — automatic actions: *If* something happens, *then* do something, with an optional delay.
-- Triggers: turns on, turns off, stays on for, stays off for, goes offline, comes back online, power goes above, power drops below, at sunrise, at sunset, when outside temperature rises above, when outside temperature drops below, on arrival, on leaving.
+- Triggers: turns on, turns off, stays on for, stays off for, goes offline, comes back online, power goes above, power drops below, at sunrise, at sunset, when outside temperature rises above, when outside temperature drops below, on arrival, on leaving. Sensor triggers: value above / below, door opened / closed, motion, water leak.
 - Actions: Turn on, Turn off, Ring alarm, Send notification, Run scene, Start cycle, Stop cycle.
-- **Only when**: Only during these hours, And only if another device…, Only when at home / away.
+- **Only when**: Only during these hours, And only if another device…, Only when at home / away. Conditions can also check a sensor value, a sensor state (door open, motion, leak), device power or the outdoor temperature; add several and choose “All conditions” (and) or “Any one is enough” (or).
 - **Scenes** — Choose what happens to each device when the scene runs. Devices left on “Skip” are not touched.
 - **Groups** — Pick the devices in the group. The group shows up on the Devices screen like a device: its button turns them all on or off together, and you can use it in automations.
 - **Cycles & timers** — Countdown, On, then off, On/off cycle, One by one, Custom steps. Start with a button, at a set time on chosen days or during a time window; optional random variation (lived-in look) and "stop when changed by hand".
@@ -319,6 +323,8 @@ Alerts that look at all your devices together: power outages, unusual consumptio
 | Timers (on the device) | No timers. Timers run on the device itself, even when your phone is off. (eWeLink devices: add or edit on/off timers at a set time on chosen days.) |
 | Connection | dBm is signal strength: closer to 0 is better. Above -55 excellent, down to -67 good, down to -75 fair, below that weak. |
 | Standby consumption | The lowest hourly average of the last 7 days: the power this device (and anything plugged into it) never goes below, even when "doing nothing". TVs, modems and chargers often draw this in standby. |
+| Sensor alerts | For sensors: one-tap alerts such as too hot / too cold, door opened, motion or water leak. |
+| Sensor history | 24 hours / 7 days / 30 days chart of the sensor’s readings with lowest, highest and average. |
 | Copy device data | Copies the device’s raw data to the clipboard, useful for reporting an unsupported model |
 
 ## Telegram commands
@@ -363,7 +369,7 @@ English and Turkish command names both work (e.g. /status = /durum, /on = /ac). 
 
 ## Privacy
 
-- No server of its own, no analytics, no ads, no tracking. Nothing is sold or shared.
+- No server of its own, no analytics, no ads, no tracking. Nothing is sold or shared. Sensor readings and their history also stay on your device and are never sent anywhere.
 - Keys, tokens, devices, rules, settings and history (max. 2,000 events) are stored only on your device.
 - The app talks only to the clouds you connect (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) and, only if you use them, Telegram, Open-Meteo (temperature and weather, location rounded to about 100 m) and OpenStreetMap map tiles.
 - Your eWeLink password is typed on eWeLink's own page; the app never sees it.
@@ -432,7 +438,8 @@ SwitchGuard for Windows (10 / 11) does the same monitoring on a PC: it sits in t
 - Full-screen alarm window, built-in sounds (Siren, Beep, Pulse, Chime) or your own WAV / MP3.
 - Standby screen and Windows screen saver: the board opens when the PC is idle.
 - A laptop left on the charger works as a power-cut sensor.
-- One-click updates from GitHub; settings and license are kept. Backup to a password-protected file (cannot be restored on a phone).
+- eWeLink sensors, sensor conditions and sensor history, as on the phone.
+- One-click updates from GitHub; settings are kept. Backup to a password-protected file (cannot be restored on a phone).
 
 ### Windows-only settings
 
@@ -452,7 +459,6 @@ SwitchGuard for Windows (10 / 11) does the same monitoring on a PC: it sits in t
 | This computer is on the same power as the devices | While it runs on mains power there is no power cut, so a device that drops is reported right away instead of after up to 90 seconds. |
 | Load from file… | Use your own WAV or MP3 for the alarm or notification (first 60 seconds, max 20 MB). |
 | Back up to a file… | All settings, account keys and sounds in one password-protected file |
-| Activate Pro | Without a license the app monitors 1 device. Enter your license key to monitor all your devices. |
 
 ### Installing on Windows
 

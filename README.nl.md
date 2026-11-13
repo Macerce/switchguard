@@ -11,7 +11,7 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Apparaatalarm">
 </p>
 
-> **Talen:** de Windows-app is vanaf 0.13.0 beschikbaar in 20 talen. Op Android komt de taalkeuze in de app (20 talen) met **2.26**; de nieuwste Android-versie is 2.25.0.
+> **Talen:** de Android-app (2.26+) en de Windows-app (0.13+) zijn beschikbaar in 20 talen — Instellingen → Taal.
 
 ## Downloaden
 
@@ -22,10 +22,8 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 ### Windows 10 / 11
 - **Installatieprogramma**: [Windows-versies](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — download `SwitchGuard-x.y.z-Kurulum.exe` van de nieuwste en voer het uit. De app zoekt zelf naar nieuwe versies en werkt zich met één klik bij; instellingen blijven bewaard.
 
-### Gratis en Pro
-- Android: helemaal gratis — alle functies, alle apparaten bewaakt, geen aankopen. Met demo-apparaten probeer je alles zonder hardware.
-- Windows gratis: alle functies, voor 1 bewaakt apparaat.
-- Windows: een Pro-licentiesleutel (Instellingen → abonnementskaart) bewaakt alle apparaten. Voor een sleutel: **switchguardapp@gmail.com**
+### Gratis
+- Helemaal gratis op Android en Windows — alle functies, alle apparaten bewaakt, geen aankopen, geen licentiesleutels. Met demo-apparaten probeer je alles uit zonder hardware.
 
 ## Vereisten
 
@@ -68,6 +66,12 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 - Apparaatpagina: regels, eigen alarmgeluid, waarschuwingscategorie, energiegeschiedenis en kosten, eWeLink-timers, wifi-signaal en diagnose van onderbrekingen, sluimerverbruik en recente gebeurtenissen.
 - **Apparaten indelen**: Ster = bovenaan houden · pijlen = verplaatsen · kaartgrootte = klein of groot · label = categorie. Houd een kaart lang ingedrukt om hier terug te komen.
 
+### Sensoren (eWeLink)
+
+- Temperatuur / luchtvochtigheid (TH16, THR316/320, SNZB-02), deur (DW2, SNZB-04), beweging / aanwezigheid (SNZB-03, SNZB-06P), waterlek (SNZB-05) en batterij op de apparaattegels, op het standby-scherm en in Chat.
+- Sensortriggers in automatiseringen (waarde boven / onder, deur geopend, beweging, waterlek) en sensormeldingen met één tik op de apparaatpagina.
+- Sensorgeschiedenis: temperatuur, luchtvochtigheid, licht en batterij worden opgeslagen zolang bewaking aan staat; de apparaatpagina toont een grafiek van 24 uur / 7 dagen / 30 dagen met laagste, hoogste en gemiddelde waarde.
+
 ### Waarschuwingen
 
 - Apparaatwaarschuwingen en voorwaardelijke waarschuwingen op één plek, met filter op waarschuwingscategorie (Kritiek / Belangrijk / Normaal).
@@ -77,9 +81,9 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 ### Automatiseringen
 
 - **Regels** — automatische acties: *Als* er iets gebeurt, *dan* iets doen, met optionele vertraging.
-- Triggers: aangaat, uitgaat, aan blijft gedurende, uit blijft gedurende, offline gaat, weer online komt, vermogen boven, vermogen daalt onder, bij zonsopgang, bij zonsondergang, wanneer de buitentemperatuur stijgt boven, wanneer de buitentemperatuur daalt onder, bij aankomst, bij vertrek.
+- Triggers: aangaat, uitgaat, aan blijft gedurende, uit blijft gedurende, offline gaat, weer online komt, vermogen boven, vermogen daalt onder, bij zonsopgang, bij zonsondergang, wanneer de buitentemperatuur stijgt boven, wanneer de buitentemperatuur daalt onder, bij aankomst, bij vertrek. Sensortriggers: waarde boven / onder, deur geopend / gesloten, beweging, waterlek.
 - Acties: Aanzetten, Uitzetten, Alarm laten afgaan, Melding sturen, Scène uitvoeren, Cyclus starten, Cyclus stoppen.
-- **Alleen wanneer**: Alleen tijdens deze uren, En alleen als een ander apparaat…, Alleen als ik thuis / weg ben.
+- **Alleen wanneer**: Alleen tijdens deze uren, En alleen als een ander apparaat…, Alleen als ik thuis / weg ben. Voorwaarden kunnen ook een sensorwaarde, een sensorstatus (deur open, beweging, lek), het vermogen van een apparaat of de buitentemperatuur controleren; voeg er meerdere toe en kies „Alle voorwaarden” (en) of „Eén is genoeg” (of).
 - **Scènes** — Kies wat er met elk apparaat gebeurt als de scène wordt uitgevoerd. Apparaten die op “Overslaan” blijven staan, worden niet aangeraakt.
 - **Groepen** — Kies de apparaten in de groep. De groep verschijnt op het scherm Apparaten als een apparaat: met de knop zet je ze allemaal tegelijk aan of uit, en je kunt hem in automatiseringen gebruiken.
 - **Cycli & timers** — Aftellen, Aan, dan uit, Aan/uit-cyclus, Een voor een, Eigen stappen. Start met een knop, op een vast tijdstip op gekozen dagen of tijdens een tijdvenster; optionele willekeurige variatie (bewoonde indruk) en ‘stoppen bij handmatige wijziging’.
@@ -319,6 +323,8 @@ Waarschuwingen die al je apparaten samen bekijken: stroomstoringen, ongebruikeli
 | Timers (op het apparaat) | Geen timers. Timers draaien op het apparaat zelf, ook als je telefoon uit staat. (eWeLink-apparaten: aan/uit-timers op een tijdstip op gekozen dagen toevoegen of bewerken.) |
 | Verbinding | dBm is de signaalsterkte: dichter bij 0 is beter. Boven -55 uitstekend, tot -67 goed, tot -75 redelijk, daaronder zwak. |
 | Verbruik in stand-by | Het laagste uurgemiddelde van de afgelopen 7 dagen: het vermogen waar dit apparaat (en alles wat erop is aangesloten) nooit onder komt, zelfs als het “niets doet”. Tv's, modems en opladers gebruiken dit vaak in stand-by. |
+| Sensormeldingen | Voor sensoren: meldingen met één tik, zoals te warm / te koud, deur geopend, beweging of waterlek. |
+| Sensorgeschiedenis | Grafiek van 24 uur / 7 dagen / 30 dagen van de sensorwaarden met laagste, hoogste en gemiddelde waarde. |
 | Apparaatgegevens kopiëren | Kopieert de ruwe gegevens van het apparaat naar het klembord, handig om een niet-ondersteund model te melden |
 
 ## Telegram-opdrachten
@@ -363,7 +369,7 @@ Zowel Engelse als Turkse opdrachtnamen werken (bijv. /status = /durum, /on = /ac
 
 ## Privacy
 
-- Geen eigen server, geen analyse, geen advertenties, geen tracking. Er wordt niets verkocht of gedeeld.
+- Geen eigen server, geen analyse, geen advertenties, geen tracking. Er wordt niets verkocht of gedeeld. Ook sensorwaarden en hun geschiedenis blijven op je apparaat en worden nergens naartoe gestuurd.
 - Sleutels, tokens, apparaten, regels, instellingen en geschiedenis (max. 2.000 gebeurtenissen) worden alleen op je apparaat bewaard.
 - De app praat alleen met de clouds die je koppelt (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) en, alleen als je ze gebruikt, met Telegram, Open-Meteo (temperatuur en weer; locatie afgerond op ongeveer 100 m) en OpenStreetMap-kaarttegels.
 - Je eWeLink-wachtwoord typ je op de eigen pagina van eWeLink; de app ziet het nooit.
@@ -432,7 +438,8 @@ SwitchGuard voor Windows (10 / 11) bewaakt op dezelfde manier op een pc: hij zit
 - Schermvullend alarmvenster, ingebouwde geluiden (Sirene, Piep, Puls, Klokkenspel) of je eigen WAV / MP3.
 - Standby-scherm en Windows-schermbeveiliging: het bord opent als de pc inactief is.
 - Een laptop die aan de lader blijft, werkt als stroomuitvalsensor.
-- Updates van GitHub met één klik; instellingen en licentie blijven. Back-up naar een met wachtwoord beveiligd bestand (niet terug te zetten op een telefoon).
+- eWeLink-sensoren, sensorvoorwaarden en sensorgeschiedenis, net als op de telefoon.
+- Updates vanaf GitHub met één klik; instellingen blijven behouden. Back-up naar een met wachtwoord beveiligd bestand (niet op een telefoon terug te zetten).
 
 ### Alleen in Windows
 
@@ -452,7 +459,6 @@ SwitchGuard voor Windows (10 / 11) bewaakt op dezelfde manier op een pc: hij zit
 | Deze computer zit op dezelfde stroom als de apparaten | Zolang hij op netstroom draait is er geen stroomstoring, dus een apparaat dat wegvalt wordt meteen gemeld in plaats van na maximaal 90 seconden. |
 | Laden uit bestand… | Gebruik je eigen WAV of MP3 voor het alarm of de melding (eerste 60 seconden, max. 20 MB). |
 | Back-up naar bestand… | Alle instellingen, accountsleutels en geluiden in één met een wachtwoord beveiligd bestand |
-| Pro activeren | Zonder licentie bewaakt de app 1 apparaat. Voer je licentiesleutel in om al je apparaten te bewaken. |
 
 ### Installeren op Windows
 

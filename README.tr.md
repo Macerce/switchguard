@@ -11,7 +11,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Cihaz alarmı">
 </p>
 
-> **Diller:** Windows uygulaması 0.13.0'dan itibaren 20 dilde. Android'de uygulama içi dil seçimi (20 dil) **2.26** ile geliyor; son Android sürümü 2.25.0.
+> **Diller:** Android uygulaması (2.26+) ve Windows uygulaması (0.13+) 20 dilde kullanılabilir — Ayarlar → Dil.
 
 ## İndir
 
@@ -22,10 +22,8 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 ### Windows 10 / 11
 - **Kurulum**: [Windows sürümleri](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — en yenisinin `SwitchGuard-x.y.z-Kurulum.exe` dosyasını indirip çalıştırın. Uygulama yeni sürümleri kendisi bulur ve tek tıkla günceller; ayarlar korunur.
 
-### Ücretsiz ve Pro
-- Android: tamamen ücretsiz — tüm özellikler, tüm cihazlar izlenir, satın alma yok. Demo cihazlarla donanım olmadan her şeyi deneyebilirsiniz.
-- Windows ücretsiz sürüm: tüm özellikler, 1 izlenen cihaz için.
-- Windows: Pro lisans anahtarı (Ayarlar → plan kartı) tüm cihazları izler. Anahtar için: **switchguardapp@gmail.com**
+### Ücretsiz
+- Android'de ve Windows'ta tamamen ücretsiz — tüm özellikler, tüm cihazlar izlenir, satın alma yok, lisans anahtarı yok. Demo cihazlarla donanım olmadan her şeyi deneyebilirsiniz.
 
 ## Gereksinimler
 
@@ -68,6 +66,12 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - Cihaz sayfası: kurallar, kendi alarm sesi, uyarı kategorisi, enerji geçmişi ve maliyet, eWeLink cihaz zamanlayıcıları, Wi-Fi sinyali ve kopma teşhisi, bekleme tüketimi ve son olaylar.
 - **Cihazları düzenle**: Yıldız = en üstte tut · oklar = taşı · kart boyutu = küçük ya da büyük · etiket = kategori. Buraya dönmek için bir karta uzun basın.
 
+### Sensörler (eWeLink)
+
+- Sıcaklık / nem (TH16, THR316/320, SNZB-02), kapı (DW2, SNZB-04), hareket / varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri cihaz kutucuklarında, bekleme ekranında ve Sohbet'te.
+- Otomasyonlarda sensör tetikleyicileri (değer üstünde / altında, kapı açıldı, hareket, su kaçağı) ve cihaz sayfasında tek dokunuşla sensör uyarıları.
+- Sensör geçmişi: sıcaklık, nem, ışık ve pil değerleri izleme açıkken kaydedilir; cihaz sayfasında en düşük, en yüksek ve ortalamayla 24 saat / 7 gün / 30 gün grafiği.
+
 ### Uyarılar
 
 - Cihaz uyarıları ve koşullu uyarılar tek yerde; uyarı kategorisine göre filtre (Kritik / Önemli / Normal).
@@ -77,9 +81,9 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 ### Otomasyon
 
 - **Kurallar** — otomatik işlemler: *Eğer* bir şey olursa *o zaman* bir şey yap; isteğe bağlı gecikmeyle.
-- Tetikleyiciler: açılınca, kapanınca, şu süre açık kalınca:, şu süre kapalı kalınca:, çevrimdışı olunca, tekrar çevrimiçi olunca, güç şunu aşınca:, güç şunun altına inince:, gün doğunca, gün batınca, dış sıcaklık şunu aşınca:, dış sıcaklık şunun altına inince:, bölgesine girince, bölgesinden çıkınca.
+- Tetikleyiciler: açılınca, kapanınca, şu süre açık kalınca:, şu süre kapalı kalınca:, çevrimdışı olunca, tekrar çevrimiçi olunca, güç şunu aşınca:, güç şunun altına inince:, gün doğunca, gün batınca, dış sıcaklık şunu aşınca:, dış sıcaklık şunun altına inince:, bölgesine girince, bölgesinden çıkınca. Sensör tetikleyicileri: değer üstünde / altında, kapı açıldı / kapandı, hareket, su kaçağı.
 - İşlemler: Aç, Kapat, Alarm çal, Bildirim gönder, Sahneyi çalıştır, Döngüyü başlat, Döngüyü durdur.
-- **Yalnızca**: Yalnızca şu saatlerde, Ve başka bir cihaz şu durumdaysa…, Yalnızca evdeyken / dışarıdayken.
+- **Yalnızca**: Yalnızca şu saatlerde, Ve başka bir cihaz şu durumdaysa…, Yalnızca evdeyken / dışarıdayken. Koşullar sensör değerine, sensör durumuna (kapı açık, hareket, su kaçağı), cihaz gücüne veya dış sıcaklığa da bakabilir; birden çok koşul ekleyip “Hepsi sağlansın” (ve) ya da “Biri yeterli” (veya) seçin.
 - **Sahneler** — Sahne çalışınca her cihaza ne olacağını seçin. "Dokunma"da bırakılan cihazlar değişmez.
 - **Gruplar** — Gruptaki cihazları seçin. Grup, Cihazlar ekranında bir cihaz gibi görünür: düğmesi hepsini birlikte açar ya da kapatır; otomasyonlarda da seçilebilir.
 - **Döngü ve zamanlayıcılar** — Geri sayım, Aç, sonra kapat, Aç/kapa döngüsü, Sırayla, Özel adımlar. Düğmeyle, seçilen günlerde belirli saatte ya da bir saat aralığında başlar; isteğe bağlı rastgele değişim (evde biri var görünümü) ve "elle değiştirilince dur".
@@ -319,6 +323,8 @@ Tüm cihazlarınıza birlikte bakan uyarılar: elektrik kesintisi, anormal tüke
 | Zamanlayıcılar (cihazda) | Zamanlayıcı yok. Zamanlayıcılar cihazın kendisinde çalışır, telefon kapalıyken bile. (eWeLink cihazları: seçilen günlerde belirli saatte aç/kapa zamanlayıcısı ekleyin ya da düzenleyin.) |
 | Bağlantı | dBm sinyal gücüdür: 0'a yakın olan daha iyi. -55 üstü çok iyi, -67'ye kadar iyi, -75'e kadar orta, altı zayıf. |
 | Bekleme tüketimi | Son 7 günün en düşük saatlik ortalaması: bu cihazın (ve ona takılı olanların) "hiçbir şey yapmıyorken" bile altına inmediği güç. TV, modem ve şarj aletleri beklemede genellikle bu kadar çeker. |
+| Sensör uyarıları | Sensörlerde tek dokunuşla uyarılar: çok sıcak / çok soğuk, kapı açıldı, hareket veya su kaçağı. |
+| Sensör geçmişi | Sensör değerlerinin en düşük, en yüksek ve ortalamayla 24 saat / 7 gün / 30 gün grafiği. |
 | Cihaz verisini kopyala | Cihazın ham verisini panoya kopyalar; desteklenmeyen bir modeli bildirmek için |
 
 ## Telegram komutları
@@ -363,7 +369,7 @@ Türkçe ve İngilizce komut adlarının ikisi de çalışır (ör. /durum = /st
 
 ## Gizlilik
 
-- Kendi sunucusu yok; analiz, reklam ve izleme yok. Hiçbir veri satılmaz veya paylaşılmaz.
+- Kendi sunucusu yok; analiz, reklam ve izleme yok. Hiçbir veri satılmaz veya paylaşılmaz. Sensör değerleri ve geçmişi de yalnızca cihazınızda kalır, hiçbir yere gönderilmez.
 - Anahtarlar, token'lar, cihazlar, kurallar, ayarlar ve geçmiş (en fazla 2.000 olay) yalnızca cihazınızda saklanır.
 - Uygulama yalnızca bağladığınız bulutlarla (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) ve yalnızca kullanırsanız Telegram, Open-Meteo (sıcaklık ve hava durumu; konum yaklaşık 100 m'ye yuvarlanır) ve OpenStreetMap harita karolarıyla konuşur.
 - eWeLink şifreniz eWeLink'in kendi sayfasına yazılır; uygulama onu hiç görmez.
@@ -432,7 +438,8 @@ SwitchGuard for Windows (10 / 11) aynı izlemeyi bilgisayarda yapar: tepside dur
 - Tam ekran alarm penceresi, hazır sesler (Siren, Bip, Nabız, Çan) ya da kendi WAV / MP3 dosyanız.
 - Bekleme ekranı ve Windows ekran koruyucusu: bilgisayar boştayken pano açılır.
 - Şarja takılı bırakılan dizüstü bilgisayar elektrik kesintisi algılayıcısı olur.
-- GitHub'dan tek tıkla güncelleme; ayarlar ve lisans korunur. Şifreli dosyaya yedekleme (telefona geri yüklenemez).
+- Telefondaki gibi eWeLink sensörleri, sensör koşulları ve sensör geçmişi.
+- GitHub'dan tek tıkla güncelleme; ayarlar korunur. Parola korumalı dosyaya yedekleme (telefona geri yüklenemez).
 
 ### Yalnızca Windows'taki ayarlar
 
@@ -452,7 +459,6 @@ SwitchGuard for Windows (10 / 11) aynı izlemeyi bilgisayarda yapar: tepside dur
 | Bu bilgisayar cihazlarla aynı elektrikte | Bilgisayar prizden çalıştıkça elektrik var demektir: kopan cihaz 90 saniyeye kadar beklemeden hemen bildirilir. |
 | Dosyadan yükle… | Alarm ya da bildirim için kendi WAV veya MP3 dosyanızı kullanın (ilk 60 saniye, en fazla 20 MB). |
 | Dosyaya yedekle… | Tüm ayarlar, hesap anahtarları ve sesler tek bir şifreli dosyada |
-| Pro'yu etkinleştir | Lisans olmadan uygulama 1 cihazı izler. Tüm cihazlarınızı izlemek için lisans anahtarınızı girin. |
 
 ### Windows'a kurulum
 

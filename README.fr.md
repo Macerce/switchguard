@@ -11,7 +11,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarme d'appareil">
 </p>
 
-> **Langues :** l'application Windows est disponible en 20 langues depuis la 0.13.0. Sur Android, le choix de la langue dans l'application (20 langues) arrive avec la **2.26** ; la dernière version Android est la 2.25.0.
+> **Langues :** l’app Android (2.26+) et l’app Windows (0.13+) sont disponibles en 20 langues — Paramètres → Langue.
 
 ## Télécharger
 
@@ -22,10 +22,8 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 ### Windows 10 / 11
 - **Programme d'installation**: [versions Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — téléchargez `SwitchGuard-x.y.z-Kurulum.exe` de la plus récente et lancez-le. L'application cherche elle-même les nouvelles versions et se met à jour en un clic ; les réglages sont conservés.
 
-### Gratuit et Pro
-- Android : entièrement gratuit — toutes les fonctions, tous les appareils surveillés, sans achat. Les appareils de démonstration permettent de tout essayer sans matériel.
-- Windows gratuit : toutes les fonctions, pour 1 appareil surveillé.
-- Windows : une clé de licence Pro (Paramètres → carte de l'offre) surveille tous les appareils. Pour obtenir une clé : **switchguardapp@gmail.com**
+### Gratuit
+- Entièrement gratuit sur Android et Windows — toutes les fonctions, tous les appareils surveillés, sans achat ni clé de licence. Les appareils de démo permettent de tout essayer sans matériel.
 
 ## Configuration requise
 
@@ -68,6 +66,12 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 - Page de l'appareil : règles, son d'alarme propre, catégorie d'alerte, historique d'énergie et coût, minuteries eWeLink, signal Wi-Fi et diagnostic des coupures, consommation en veille et événements récents.
 - **Organiser les appareils**: Étoile = garder en haut · flèches = déplacer · taille de la carte = petite ou grande · étiquette = catégorie. Appuyez longuement sur une carte pour revenir ici.
 
+### Capteurs (eWeLink)
+
+- Température / humidité (TH16, THR316/320, SNZB-02), porte (DW2, SNZB-04), mouvement / présence (SNZB-03, SNZB-06P), fuite d’eau (SNZB-05) et batterie sur les tuiles d’appareil, sur l’écran de veille et dans le Chat.
+- Déclencheurs de capteur dans les automatisations (valeur au-dessus / en dessous, porte ouverte, mouvement, fuite d’eau) et alertes de capteur en un geste sur la page de l’appareil.
+- Historique des capteurs : température, humidité, luminosité et batterie sont enregistrées pendant la surveillance ; la page de l’appareil affiche un graphique sur 24 heures / 7 jours / 30 jours avec minimum, maximum et moyenne.
+
 ### Alertes
 
 - Alertes d'appareil et alertes conditionnelles au même endroit, avec filtre par catégorie d'alerte (Critique / Important / Normal).
@@ -77,9 +81,9 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 ### Automatisations
 
 - **Règles** — actions automatiques : *Si* quelque chose arrive, *alors* faire quelque chose, avec délai facultatif.
-- Déclencheurs: s'allume, s'éteint, reste allumé pendant, reste éteint pendant, passe hors ligne, revient en ligne, la puissance dépasse, la puissance tombe sous, au lever du soleil, au coucher du soleil, quand la température extérieure dépasse, quand la température extérieure passe sous, à l'arrivée, au départ.
+- Déclencheurs: s'allume, s'éteint, reste allumé pendant, reste éteint pendant, passe hors ligne, revient en ligne, la puissance dépasse, la puissance tombe sous, au lever du soleil, au coucher du soleil, quand la température extérieure dépasse, quand la température extérieure passe sous, à l'arrivée, au départ. Déclencheurs de capteur : valeur au-dessus / en dessous, porte ouverte / fermée, mouvement, fuite d’eau.
 - Actions: Allumer, Éteindre, Déclencher l'alarme, Envoyer une notification, Lancer une scène, Démarrer un cycle, Arrêter un cycle.
-- **Seulement quand**: Seulement à ces heures, Et seulement si un autre appareil…, Seulement à la maison / absent.
+- **Seulement quand**: Seulement à ces heures, Et seulement si un autre appareil…, Seulement à la maison / absent. Les conditions peuvent aussi vérifier une valeur de capteur, un état de capteur (porte ouverte, mouvement, fuite), la puissance de l’appareil ou la température extérieure ; ajoutez-en plusieurs et choisissez « Toutes les conditions » (et) ou « Une seule suffit » (ou).
 - **Scènes** — Choisissez ce qui arrive à chaque appareil quand la scène s'exécute. Les appareils laissés sur « Ignorer » ne sont pas touchés.
 - **Groupes** — Choisissez les appareils du groupe. Le groupe apparaît sur l'écran Appareils comme un appareil : son bouton les allume ou les éteint tous ensemble, et vous pouvez l'utiliser dans les automatisations.
 - **Cycles et minuteries** — Compte à rebours, Allumé, puis éteint, Cycle allumé/éteint, Un par un, Étapes personnalisées. Démarrage par bouton, à une heure fixe les jours choisis ou pendant une plage horaire ; variation aléatoire facultative (maison qui semble habitée) et « arrêter si modifié à la main ».
@@ -319,6 +323,8 @@ Des alertes qui regardent tous vos appareils ensemble : coupures de courant, con
 | Minuteries (sur l'appareil) | Aucune minuterie. Les minuteries s'exécutent sur l'appareil lui-même, même téléphone éteint. (Appareils eWeLink : ajoutez ou modifiez des minuteries marche/arrêt à une heure fixe les jours choisis.) |
 | Connexion | Le dBm mesure la force du signal : plus proche de 0, mieux c'est. Au-dessus de -55 excellent, jusqu'à -67 bon, jusqu'à -75 correct, en dessous faible. |
 | Consommation en veille | La moyenne horaire la plus basse des 7 derniers jours : la puissance sous laquelle cet appareil (et tout ce qui y est branché) ne descend jamais, même en « ne faisant rien ». Les téléviseurs, modems et chargeurs consomment souvent cela en veille. |
+| Alertes de capteur | Pour les capteurs : alertes en un geste, par ex. trop chaud / trop froid, porte ouverte, mouvement ou fuite d’eau. |
+| Historique du capteur | Graphique sur 24 heures / 7 jours / 30 jours des mesures du capteur avec minimum, maximum et moyenne. |
 | Copier les données de l'appareil | Copie les données brutes de l'appareil dans le presse-papiers, utile pour signaler un modèle non pris en charge |
 
 ## Commandes Telegram
@@ -363,7 +369,7 @@ Les noms de commande anglais et turcs fonctionnent tous les deux (p. ex. /status
 
 ## Confidentialité
 
-- Pas de serveur propre, pas d'analyse, pas de publicité, pas de pistage. Rien n'est vendu ni partagé.
+- Pas de serveur propre, pas d'analyse, pas de publicité, pas de pistage. Rien n'est vendu ni partagé. Les mesures des capteurs et leur historique restent aussi sur votre appareil et ne sont jamais envoyés ailleurs.
 - Clés, jetons, appareils, règles, réglages et historique (2 000 événements max.) sont stockés uniquement sur votre appareil.
 - L'application ne communique qu'avec les clouds que vous connectez (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) et, seulement si vous les utilisez, avec Telegram, Open-Meteo (température et météo ; position arrondie à environ 100 m) et les tuiles de carte OpenStreetMap.
 - Votre mot de passe eWeLink se saisit sur la page d'eWeLink elle-même ; l'application ne le voit jamais.
@@ -432,7 +438,8 @@ SwitchGuard pour Windows (10 / 11) assure la même surveillance sur un PC : il r
 - Fenêtre d'alarme plein écran, sons intégrés (Sirène, Bip, Pulsation, Carillon) ou votre propre WAV / MP3.
 - Écran de veille SwitchGuard et économiseur d'écran Windows : le tableau s'ouvre quand le PC est inactif.
 - Un portable laissé sur secteur sert de détecteur de coupure de courant.
-- Mises à jour depuis GitHub en un clic ; réglages et licence conservés. Sauvegarde dans un fichier protégé par mot de passe (non restaurable sur un téléphone).
+- Capteurs eWeLink, conditions de capteur et historique des capteurs, comme sur le téléphone.
+- Mises à jour GitHub en un clic ; les paramètres sont conservés. Sauvegarde dans un fichier protégé par mot de passe (non restaurable sur un téléphone).
 
 ### Réglages propres à Windows
 
@@ -452,7 +459,6 @@ SwitchGuard pour Windows (10 / 11) assure la même surveillance sur un PC : il r
 | Cet ordinateur est sur la même alimentation que les appareils | Tant qu'il est sur secteur, il n'y a pas de coupure de courant : un appareil qui décroche est donc signalé immédiatement au lieu d'après jusqu'à 90 secondes. |
 | Charger depuis un fichier… | Utilisez votre propre WAV ou MP3 pour l'alarme ou la notification (60 premières secondes, 20 Mo max.). |
 | Sauvegarder dans un fichier… | Tous les réglages, clés de compte et sons dans un fichier protégé par mot de passe |
-| Activer Pro | Sans licence, l'application surveille 1 appareil. Saisissez votre clé de licence pour surveiller tous vos appareils. |
 
 ### Installation sous Windows
 

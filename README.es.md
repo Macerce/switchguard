@@ -11,7 +11,7 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarma de dispositivo">
 </p>
 
-> **Idiomas:** la app de Windows está disponible en 20 idiomas desde la 0.13.0. En Android, la elección de idioma dentro de la app (20 idiomas) llega con la **2.26**; la última versión de Android es la 2.25.0.
+> **Idiomas:** la app de Android (2.26+) y la de Windows (0.13+) están disponibles en 20 idiomas — Ajustes → Idioma.
 
 ## Descargar
 
@@ -22,10 +22,8 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 ### Windows 10 / 11
 - **Instalador**: [versiones de Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — descarga `SwitchGuard-x.y.z-Kurulum.exe` de la más reciente y ejecútalo. La app busca nuevas versiones y se actualiza con un clic; los ajustes se conservan.
 
-### Gratis y Pro
-- Android: totalmente gratis — todas las funciones, todos los dispositivos vigilados, sin compras. Los dispositivos de demostración permiten probarlo todo sin hardware.
-- Windows gratis: todas las funciones, para 1 dispositivo vigilado.
-- Windows: una clave de licencia Pro (Ajustes → tarjeta del plan) vigila todos los dispositivos. Para obtener una clave: **switchguardapp@gmail.com**
+### Gratis
+- Totalmente gratis en Android y Windows: todas las funciones, todos los dispositivos vigilados, sin compras ni claves de licencia. Con los dispositivos de demostración puedes probarlo todo sin hardware.
 
 ## Requisitos
 
@@ -68,6 +66,12 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 - Página del dispositivo: reglas, sonido de alarma propio, categoría de alerta, historial de energía y coste, temporizadores de eWeLink, señal Wi-Fi y diagnóstico de cortes, consumo en espera y eventos recientes.
 - **Organizar dispositivos**: Estrella = mantener arriba · flechas = mover · tamaño de tarjeta = pequeña o grande · etiqueta = categoría. Mantén pulsada una tarjeta para volver aquí.
 
+### Sensores (eWeLink)
+
+- Temperatura / humedad (TH16, THR316/320, SNZB-02), puerta (DW2, SNZB-04), movimiento / presencia (SNZB-03, SNZB-06P), fuga de agua (SNZB-05) y batería en las tarjetas de dispositivo, en la pantalla de espera y en el Chat.
+- Disparadores de sensor en las automatizaciones (valor por encima / por debajo, puerta abierta, movimiento, fuga de agua) y alertas de sensor con un toque en la página del dispositivo.
+- Historial de sensores: temperatura, humedad, luz y batería se guardan mientras la vigilancia está activa; la página del dispositivo muestra un gráfico de 24 horas / 7 días / 30 días con mínimo, máximo y media.
+
 ### Alertas
 
 - Alertas de dispositivo y alertas condicionales en un solo lugar, con filtro por categoría de alerta (Crítico / Importante / Normal).
@@ -77,9 +81,9 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 ### Automatizaciones
 
 - **Reglas** — acciones automáticas: *Si* pasa algo, *entonces* haz algo, con retraso opcional.
-- Disparadores: se enciende, se apaga, permanece encendido durante, permanece apagado durante, se desconecta, vuelve a conectarse, la potencia supera, la potencia cae por debajo de, al amanecer, al atardecer, cuando la temperatura exterior sube por encima de, cuando la temperatura exterior baja por debajo de, al llegar, al salir.
+- Disparadores: se enciende, se apaga, permanece encendido durante, permanece apagado durante, se desconecta, vuelve a conectarse, la potencia supera, la potencia cae por debajo de, al amanecer, al atardecer, cuando la temperatura exterior sube por encima de, cuando la temperatura exterior baja por debajo de, al llegar, al salir. Disparadores de sensor: valor por encima / por debajo, puerta abierta / cerrada, movimiento, fuga de agua.
 - Acciones: Encender, Apagar, Hacer sonar la alarma, Enviar notificación, Ejecutar escena, Iniciar ciclo, Detener ciclo.
-- **Solo cuando**: Solo durante estas horas, Y solo si otro dispositivo…, Solo cuando estoy en casa / fuera.
+- **Solo cuando**: Solo durante estas horas, Y solo si otro dispositivo…, Solo cuando estoy en casa / fuera. Las condiciones también pueden comprobar un valor de sensor, un estado de sensor (puerta abierta, movimiento, fuga), la potencia del dispositivo o la temperatura exterior; añade varias y elige «Todas las condiciones» (y) o «Basta con una» (o).
 - **Escenas** — Elige qué ocurre con cada dispositivo cuando se ejecuta la escena. Los dispositivos en “Omitir” no se tocan.
 - **Grupos** — Elige los dispositivos del grupo. El grupo aparece en la pantalla Dispositivos como un dispositivo más: su botón los enciende o apaga todos a la vez, y puedes usarlo en automatizaciones.
 - **Ciclos y temporizadores** — Cuenta atrás, Encender y luego apagar, Ciclo encendido/apagado, Uno por uno, Pasos personalizados. Inicio con un botón, a una hora fija en los días elegidos o durante una franja horaria; variación aleatoria opcional (aspecto de casa habitada) y «detener si se cambia a mano».
@@ -319,6 +323,8 @@ Alertas que observan todos tus dispositivos en conjunto: cortes de luz, consumo 
 | Temporizadores (en el dispositivo) | No hay temporizadores. Los temporizadores se ejecutan en el propio dispositivo, incluso con el teléfono apagado. (Dispositivos eWeLink: añade o edita temporizadores de encendido/apagado a una hora en los días elegidos.) |
 | Conexión | dBm es la intensidad de la señal: cuanto más cerca de 0, mejor. Por encima de -55 excelente, hasta -67 buena, hasta -75 aceptable, por debajo débil. |
 | Consumo en espera | La media por hora más baja de los últimos 7 días: la potencia por debajo de la cual este dispositivo (y lo que tenga enchufado) nunca baja, incluso “sin hacer nada”. Los televisores, módems y cargadores suelen consumir esto en espera. |
+| Alertas de sensor | Para sensores: alertas con un toque, como demasiado calor / frío, puerta abierta, movimiento o fuga de agua. |
+| Historial del sensor | Gráfico de 24 horas / 7 días / 30 días de las lecturas del sensor con mínimo, máximo y media. |
 | Copiar datos del dispositivo | Copia los datos sin procesar del dispositivo al portapapeles, útil para informar de un modelo no compatible |
 
 ## Comandos de Telegram
@@ -363,7 +369,7 @@ Funcionan tanto los nombres de comando en inglés como en turco (p. ej. /status 
 
 ## Privacidad
 
-- Sin servidor propio, sin analíticas, sin anuncios, sin rastreo. No se vende ni se comparte nada.
+- Sin servidor propio, sin analíticas, sin anuncios, sin rastreo. No se vende ni se comparte nada. Las lecturas de los sensores y su historial también se quedan en tu dispositivo y nunca se envían a ningún sitio.
 - Claves, tokens, dispositivos, reglas, ajustes e historial (máx. 2.000 eventos) se guardan solo en tu dispositivo.
 - La app solo habla con las nubes que conectas (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) y, solo si los usas, con Telegram, Open-Meteo (temperatura y tiempo; ubicación redondeada a unos 100 m) y los mosaicos de mapa de OpenStreetMap.
 - Tu contraseña de eWeLink se escribe en la propia página de eWeLink; la app nunca la ve.
@@ -432,7 +438,8 @@ SwitchGuard para Windows (10 / 11) hace la misma vigilancia en un PC: se queda e
 - Ventana de alarma a pantalla completa, sonidos integrados (Sirena, Pitido, Pulso, Campanilla) o tu propio WAV / MP3.
 - Pantalla de espera y protector de pantalla de Windows: el panel se abre cuando el PC está inactivo.
 - Un portátil enchufado sirve como sensor de cortes de luz.
-- Actualizaciones desde GitHub con un clic; se conservan ajustes y licencia. Copia en un archivo protegido con contraseña (no se puede restaurar en un teléfono).
+- Sensores eWeLink, condiciones de sensor e historial de sensores, como en el móvil.
+- Actualizaciones desde GitHub con un clic; los ajustes se conservan. Copia de seguridad en un archivo protegido con contraseña (no se puede restaurar en un móvil).
 
 ### Ajustes solo de Windows
 
@@ -452,7 +459,6 @@ SwitchGuard para Windows (10 / 11) hace la misma vigilancia en un PC: se queda e
 | Este ordenador está en la misma red eléctrica que los dispositivos | Mientras funciona con la red eléctrica no hay corte de luz, así que un dispositivo que se cae se avisa de inmediato en lugar de tras hasta 90 segundos. |
 | Cargar desde archivo… | Usa tu propio WAV o MP3 para la alarma o la notificación (primeros 60 segundos, máx. 20 MB). |
 | Copia en un archivo… | Todos los ajustes, claves de cuenta y sonidos en un archivo protegido con contraseña |
-| Activar Pro | Sin licencia la app monitorea 1 dispositivo. Introduce tu clave de licencia para monitorear todos tus dispositivos. |
 
 ### Instalar en Windows
 

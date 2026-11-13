@@ -11,7 +11,7 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Geräte-Alarm">
 </p>
 
-> **Sprachen:** Die Windows-App gibt es ab 0.13.0 in 20 Sprachen. Unter Android kommt die Sprachauswahl in der App (20 Sprachen) mit **2.26**; die neueste Android-Version ist 2.25.0.
+> **Sprachen:** Die Android-App (ab 2.26) und die Windows-App (ab 0.13) gibt es in 20 Sprachen — Einstellungen → Sprache.
 
 ## Download
 
@@ -22,10 +22,8 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 ### Windows 10 / 11
 - **Installationsprogramm**: [Windows-Versionen](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — lade `SwitchGuard-x.y.z-Kurulum.exe` der neuesten Version herunter und starte sie. Die App sucht selbst nach neuen Versionen und aktualisiert sich mit einem Klick; die Einstellungen bleiben erhalten.
 
-### Kostenlos und Pro
-- Android: komplett kostenlos — alle Funktionen, alle Geräte überwacht, keine Käufe. Mit Demo-Geräten kannst du alles ohne Hardware ausprobieren.
-- Windows kostenlos: alle Funktionen für 1 überwachtes Gerät.
-- Windows: Ein Pro-Lizenzschlüssel (Einstellungen → Tarifkarte) überwacht alle Geräte. Schlüssel gibt es über **switchguardapp@gmail.com**
+### Kostenlos
+- Unter Android und Windows völlig kostenlos — alle Funktionen, alle Geräte überwacht, keine Käufe, keine Lizenzschlüssel. Mit Demo-Geräten lässt sich alles ohne Hardware ausprobieren.
 
 ## Voraussetzungen
 
@@ -68,6 +66,12 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 - Geräteseite: Regeln, eigener Alarmton, Warnkategorie, Energieverlauf und Kosten, eWeLink-Gerätetimer, WLAN-Signal und Abbruch-Diagnose, Standby-Verbrauch und letzte Ereignisse.
 - **Geräte anordnen**: Stern = oben halten · Pfeile = verschieben · Kartengröße = klein oder groß · Tag = Kategorie. Halte eine Karte gedrückt, um hierher zurückzukehren.
 
+### Sensoren (eWeLink)
+
+- Temperatur / Luftfeuchte (TH16, THR316/320, SNZB-02), Tür (DW2, SNZB-04), Bewegung / Anwesenheit (SNZB-03, SNZB-06P), Wasserleck (SNZB-05) und Batteriestand auf den Gerätekacheln, im Standby-Bildschirm und im Chat.
+- Sensor-Auslöser in Automationen (Wert über / unter, Tür geöffnet, Bewegung, Wasserleck) und Sensor-Warnungen mit einem Tipp auf der Geräteseite.
+- Sensorverlauf: Temperatur, Luftfeuchte, Licht und Batterie werden bei aktiver Überwachung gespeichert; die Geräteseite zeigt ein Diagramm für 24 Stunden / 7 Tage / 30 Tage mit Minimum, Maximum und Durchschnitt.
+
 ### Warnungen
 
 - Gerätewarnungen und bedingte Warnungen an einem Ort, Filter nach Warnkategorie (Kritisch / Wichtig / Normal).
@@ -77,9 +81,9 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 ### Automationen
 
 - **Regeln** — automatische Aktionen: *Wenn* etwas passiert, *dann* tue etwas, optional mit Verzögerung.
-- Auslöser: einschaltet, ausschaltet, an bleibt für, aus bleibt für, offline geht, wieder online kommt, die Leistung steigt über, die Leistung fällt unter, bei Sonnenaufgang, bei Sonnenuntergang, wenn die Außentemperatur steigt über, wenn die Außentemperatur fällt unter, bei Ankunft, beim Verlassen.
+- Auslöser: einschaltet, ausschaltet, an bleibt für, aus bleibt für, offline geht, wieder online kommt, die Leistung steigt über, die Leistung fällt unter, bei Sonnenaufgang, bei Sonnenuntergang, wenn die Außentemperatur steigt über, wenn die Außentemperatur fällt unter, bei Ankunft, beim Verlassen. Sensor-Auslöser: Wert über / unter, Tür geöffnet / geschlossen, Bewegung, Wasserleck.
 - Aktionen: Einschalten, Ausschalten, Alarm läuten, Benachrichtigung senden, Szene starten, Zyklus starten, Zyklus stoppen.
-- **Nur wenn**: Nur in diesen Stunden, Und nur wenn ein anderes Gerät …, Nur bei Zuhause / Abwesend.
+- **Nur wenn**: Nur in diesen Stunden, Und nur wenn ein anderes Gerät …, Nur bei Zuhause / Abwesend. Bedingungen können auch einen Sensorwert, einen Sensorzustand (Tür offen, Bewegung, Leck), die Geräteleistung oder die Außentemperatur prüfen; mehrere hinzufügen und „Alle Bedingungen“ (und) oder „Eine genügt“ (oder) wählen.
 - **Szenen** — Lege fest, was mit jedem Gerät passiert, wenn die Szene läuft. Geräte auf „Überspringen“ bleiben unberührt.
 - **Gruppen** — Wähle die Geräte der Gruppe. Die Gruppe erscheint auf dem Bildschirm „Geräte“ wie ein Gerät: Ihre Taste schaltet alle gemeinsam ein oder aus, und du kannst sie in Automationen verwenden.
 - **Zyklen & Timer** — Countdown, An, dann aus, An/Aus-Zyklus, Nacheinander, Eigene Schritte. Start per Knopf, zu einer festen Uhrzeit an gewählten Tagen oder in einem Zeitfenster; optional zufällige Abweichung (bewohnt wirken) und „bei Handbedienung stoppen“.
@@ -319,6 +323,8 @@ Warnungen, die alle deine Geräte gemeinsam betrachten: Stromausfälle, ungewöh
 | Timer (auf dem Gerät) | Keine Timer. Timer laufen auf dem Gerät selbst, auch bei ausgeschaltetem Handy. (eWeLink-Geräte: Ein/Aus-Timer zu einer Uhrzeit an gewählten Tagen hinzufügen oder bearbeiten.) |
 | Verbindung | dBm ist die Signalstärke: je näher an 0, desto besser. Über -55 ausgezeichnet, bis -67 gut, bis -75 mittelmäßig, darunter schwach. |
 | Standby-Verbrauch | Der niedrigste Stundendurchschnitt der letzten 7 Tage: die Leistung, die dieses Gerät (und alles, was daran angeschlossen ist) nie unterschreitet, auch wenn es „nichts tut“. Fernseher, Router und Ladegeräte ziehen im Standby oft so viel. |
+| Sensor-Warnungen | Für Sensoren: Warnungen mit einem Tipp, z. B. zu warm / zu kalt, Tür geöffnet, Bewegung oder Wasserleck. |
+| Sensorverlauf | Diagramm der Sensorwerte für 24 Stunden / 7 Tage / 30 Tage mit Minimum, Maximum und Durchschnitt. |
 | Gerätedaten kopieren | Kopiert die Rohdaten des Geräts in die Zwischenablage, nützlich, um ein nicht unterstütztes Modell zu melden |
 
 ## Telegram-Befehle
@@ -363,7 +369,7 @@ Englische und türkische Befehlsnamen funktionieren beide (z. B. /status = /duru
 
 ## Datenschutz
 
-- Kein eigener Server, keine Analyse, keine Werbung, kein Tracking. Nichts wird verkauft oder weitergegeben.
+- Kein eigener Server, keine Analyse, keine Werbung, kein Tracking. Nichts wird verkauft oder weitergegeben. Auch Sensorwerte und ihr Verlauf bleiben nur auf Ihrem Gerät und werden nirgendwohin gesendet.
 - Schlüssel, Tokens, Geräte, Regeln, Einstellungen und Verlauf (max. 2.000 Ereignisse) werden nur auf deinem Gerät gespeichert.
 - Die App spricht nur mit den verbundenen Clouds (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) und, nur wenn du sie nutzt, mit Telegram, Open-Meteo (Temperatur und Wetter, Standort auf ca. 100 m gerundet) und OpenStreetMap-Kartenkacheln.
 - Dein eWeLink-Passwort gibst du auf der eigenen Seite von eWeLink ein; die App sieht es nie.
@@ -432,7 +438,8 @@ SwitchGuard für Windows (10 / 11) überwacht genauso auf dem PC: Es sitzt im In
 - Vollbild-Alarmfenster, eingebaute Töne (Sirene, Piepton, Puls, Glockenspiel) oder eigene WAV / MP3.
 - Standby-Bildschirm und Windows-Bildschirmschoner: Das Board öffnet sich, wenn der PC im Leerlauf ist.
 - Ein am Netzteil gelassener Laptop dient als Stromausfall-Sensor.
-- Updates von GitHub mit einem Klick; Einstellungen und Lizenz bleiben. Sicherung in eine passwortgeschützte Datei (nicht auf einem Handy wiederherstellbar).
+- eWeLink-Sensoren, Sensor-Bedingungen und Sensorverlauf wie auf dem Handy.
+- Updates von GitHub mit einem Klick; Einstellungen bleiben erhalten. Sicherung in eine passwortgeschützte Datei (nicht auf dem Handy wiederherstellbar).
 
 ### Nur unter Windows
 
@@ -452,7 +459,6 @@ SwitchGuard für Windows (10 / 11) überwacht genauso auf dem PC: Es sitzt im In
 | Dieser Computer hängt am selben Strom wie die Geräte | Solange er am Netz läuft, gibt es keinen Stromausfall; ein ausfallendes Gerät wird daher sofort gemeldet statt nach bis zu 90 Sekunden. |
 | Aus Datei laden… | Eigene WAV- oder MP3-Datei für Alarm oder Benachrichtigung (erste 60 Sekunden, max. 20 MB). |
 | In Datei sichern… | Alle Einstellungen, Kontoschlüssel und Töne in einer passwortgeschützten Datei |
-| Pro aktivieren | Ohne Lizenz überwacht die App 1 Gerät. Gib deinen Lizenzschlüssel ein, um alle Geräte zu überwachen. |
 
 ### Installation unter Windows
 

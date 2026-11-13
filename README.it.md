@@ -11,7 +11,7 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Allarme dispositivo">
 </p>
 
-> **Lingue:** l'app per Windows è disponibile in 20 lingue dalla 0.13.0. Su Android la scelta della lingua nell'app (20 lingue) arriva con la **2.26**; l'ultima versione Android è la 2.25.0.
+> **Lingue:** l’app Android (2.26+) e l’app Windows (0.13+) sono disponibili in 20 lingue — Impostazioni → Lingua.
 
 ## Download
 
@@ -22,10 +22,8 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 ### Windows 10 / 11
 - **Programma di installazione**: [versioni per Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — scarica `SwitchGuard-x.y.z-Kurulum.exe` dalla più recente ed eseguilo. L'app cerca da sola le nuove versioni e si aggiorna con un clic; le impostazioni restano.
 
-### Gratis e Pro
-- Android: completamente gratis — tutte le funzioni, tutti i dispositivi monitorati, nessun acquisto. I dispositivi demo permettono di provare tutto senza hardware.
-- Windows gratis: tutte le funzioni, per 1 dispositivo monitorato.
-- Windows: una chiave di licenza Pro (Impostazioni → scheda del piano) monitora tutti i dispositivi. Per una chiave: **switchguardapp@gmail.com**
+### Gratis
+- Completamente gratis su Android e Windows: tutte le funzioni, tutti i dispositivi monitorati, nessun acquisto, nessuna chiave di licenza. Con i dispositivi demo puoi provare tutto senza hardware.
 
 ## Requisiti
 
@@ -68,6 +66,12 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 - Pagina del dispositivo: regole, suono d'allarme proprio, categoria di avviso, cronologia energia e costo, timer eWeLink, segnale Wi-Fi e diagnosi delle cadute, consumo in standby ed eventi recenti.
 - **Disponi i dispositivi**: Stella = tieni in alto · frecce = sposta · dimensione scheda = piccola o grande · etichetta = categoria. Tieni premuta una scheda per tornare qui.
 
+### Sensori (eWeLink)
+
+- Temperatura / umidità (TH16, THR316/320, SNZB-02), porta (DW2, SNZB-04), movimento / presenza (SNZB-03, SNZB-06P), perdita d’acqua (SNZB-05) e batteria sulle schede dei dispositivi, nella schermata di attesa e nella Chat.
+- Attivatori dei sensori nelle automazioni (valore sopra / sotto, porta aperta, movimento, perdita d’acqua) e avvisi dei sensori con un tocco nella pagina del dispositivo.
+- Cronologia dei sensori: temperatura, umidità, luce e batteria vengono salvate mentre il monitoraggio è attivo; la pagina del dispositivo mostra un grafico di 24 ore / 7 giorni / 30 giorni con minimo, massimo e media.
+
 ### Avvisi
 
 - Avvisi dei dispositivi e avvisi condizionali in un unico posto, con filtro per categoria (Critico / Importante / Normale).
@@ -77,9 +81,9 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 ### Automazioni
 
 - **Regole** — azioni automatiche: *Se* succede qualcosa, *allora* fai qualcosa, con ritardo facoltativo.
-- Attivatori: si accende, si spegne, resta acceso per, resta spento per, va offline, torna online, la potenza supera, la potenza scende sotto, all'alba, al tramonto, quando la temperatura esterna sale sopra, quando la temperatura esterna scende sotto, all'arrivo, alla partenza.
+- Attivatori: si accende, si spegne, resta acceso per, resta spento per, va offline, torna online, la potenza supera, la potenza scende sotto, all'alba, al tramonto, quando la temperatura esterna sale sopra, quando la temperatura esterna scende sotto, all'arrivo, alla partenza. Attivatori dei sensori: valore sopra / sotto, porta aperta / chiusa, movimento, perdita d’acqua.
 - Azioni: Accendi, Spegni, Fai suonare l'allarme, Invia notifica, Esegui scena, Avvia ciclo, Ferma ciclo.
-- **Solo quando**: Solo in queste ore, E solo se un altro dispositivo…, Solo quando in casa / fuori casa.
+- **Solo quando**: Solo in queste ore, E solo se un altro dispositivo…, Solo quando in casa / fuori casa. Le condizioni possono anche controllare un valore del sensore, uno stato del sensore (porta aperta, movimento, perdita), la potenza del dispositivo o la temperatura esterna; aggiungine più di una e scegli «Tutte le condizioni» (e) o «Ne basta una» (o).
 - **Scene** — Scegli cosa succede a ogni dispositivo quando la scena viene eseguita. I dispositivi lasciati su “Salta” non vengono toccati.
 - **Gruppi** — Scegli i dispositivi del gruppo. Il gruppo compare nella schermata Dispositivi come un dispositivo: il suo pulsante li accende o li spegne tutti insieme, e puoi usarlo nelle automazioni.
 - **Cicli e timer** — Conto alla rovescia, Acceso, poi spento, Ciclo acceso/spento, Uno alla volta, Passaggi personalizzati. Avvio con un pulsante, a un orario nei giorni scelti o durante una fascia oraria; variazione casuale facoltativa (casa che sembra abitata) e «ferma se cambiato a mano».
@@ -319,6 +323,8 @@ Avvisi che guardano tutti i tuoi dispositivi insieme: interruzioni di corrente, 
 | Timer (sul dispositivo) | Nessun timer. I timer vengono eseguiti sul dispositivo stesso, anche a telefono spento. (Dispositivi eWeLink: aggiungi o modifica timer di accensione/spegnimento a un orario nei giorni scelti.) |
 | Connessione | dBm è l'intensità del segnale: più vicino a 0 è meglio. Sopra -55 eccellente, fino a -67 buono, fino a -75 discreto, sotto debole. |
 | Consumo in standby | La media oraria più bassa degli ultimi 7 giorni: la potenza sotto la quale questo dispositivo (e qualunque cosa vi sia collegata) non scende mai, anche quando “non fa nulla”. TV, modem e caricabatterie spesso assorbono questo in standby. |
+| Avvisi dei sensori | Per i sensori: avvisi con un tocco, ad es. troppo caldo / troppo freddo, porta aperta, movimento o perdita d’acqua. |
+| Cronologia del sensore | Grafico di 24 ore / 7 giorni / 30 giorni delle letture del sensore con minimo, massimo e media. |
 | Copia dati del dispositivo | Copia negli appunti i dati grezzi del dispositivo, utile per segnalare un modello non supportato |
 
 ## Comandi Telegram
@@ -363,7 +369,7 @@ Funzionano sia i nomi dei comandi in inglese sia quelli in turco (es. /status = 
 
 ## Privacy
 
-- Nessun server proprio, nessuna analisi, nessuna pubblicità, nessun tracciamento. Niente viene venduto o condiviso.
+- Nessun server proprio, nessuna analisi, nessuna pubblicità, nessun tracciamento. Niente viene venduto o condiviso. Anche le letture dei sensori e la loro cronologia restano sul tuo dispositivo e non vengono mai inviate altrove.
 - Chiavi, token, dispositivi, regole, impostazioni e cronologia (max. 2.000 eventi) restano solo sul tuo dispositivo.
 - L'app parla solo con i cloud che colleghi (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) e, solo se li usi, con Telegram, Open-Meteo (temperatura e meteo; posizione arrotondata a circa 100 m) e le tessere mappa di OpenStreetMap.
 - La password eWeLink si inserisce nella pagina di eWeLink; l'app non la vede mai.
@@ -432,7 +438,8 @@ SwitchGuard per Windows (10 / 11) fa lo stesso monitoraggio su un PC: resta nell
 - Finestra d'allarme a schermo intero, suoni integrati (Sirena, Bip, Impulso, Carillon) o un tuo WAV / MP3.
 - Schermata di standby e salvaschermo di Windows: il pannello si apre quando il PC è inattivo.
 - Un portatile lasciato in carica funziona da sensore di blackout.
-- Aggiornamenti da GitHub con un clic; impostazioni e licenza restano. Backup su file protetto da password (non ripristinabile su un telefono).
+- Sensori eWeLink, condizioni dei sensori e cronologia dei sensori, come sul telefono.
+- Aggiornamenti da GitHub con un clic; le impostazioni vengono mantenute. Backup in un file protetto da password (non ripristinabile su un telefono).
 
 ### Impostazioni solo di Windows
 
@@ -452,7 +459,6 @@ SwitchGuard per Windows (10 / 11) fa lo stesso monitoraggio su un PC: resta nell
 | Questo computer è sulla stessa alimentazione dei dispositivi | Finché è collegato alla rete non c'è interruzione di corrente, quindi un dispositivo che cade viene segnalato subito invece che dopo fino a 90 secondi. |
 | Carica da file… | Usa un tuo WAV o MP3 per l'allarme o la notifica (primi 60 secondi, max. 20 MB). |
 | Backup su file… | Tutte le impostazioni, le chiavi degli account e i suoni in un file protetto da password |
-| Attiva Pro | Senza licenza l'app monitora 1 dispositivo. Inserisci la chiave di licenza per monitorare tutti i dispositivi. |
 
 ### Installazione su Windows
 

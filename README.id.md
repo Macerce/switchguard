@@ -11,7 +11,7 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarm perangkat">
 </p>
 
-> **Bahasa:** aplikasi Windows tersedia dalam 20 bahasa sejak 0.13.0. Di Android, pilihan bahasa di dalam aplikasi (20 bahasa) hadir di **2.26**; rilis Android terbaru adalah 2.25.0.
+> **Bahasa:** aplikasi Android (2.26+) dan aplikasi Windows (0.13+) tersedia dalam 20 bahasa — Setelan → Bahasa.
 
 ## Unduh
 
@@ -22,10 +22,8 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 ### Windows 10 / 11
 - **Penginstal**: [rilis Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — unduh `SwitchGuard-x.y.z-Kurulum.exe` dari rilis terbaru lalu jalankan. Aplikasi mencari versi baru sendiri dan memperbarui diri dengan satu klik; pengaturan tetap tersimpan.
 
-### Gratis dan Pro
-- Android: sepenuhnya gratis — semua fitur, semua perangkat dipantau, tanpa pembelian. Perangkat demo memungkinkan Anda mencoba semuanya tanpa perangkat keras.
-- Windows gratis: semua fitur, untuk 1 perangkat yang dipantau.
-- Windows: kunci lisensi Pro (Setelan → kartu paket) memantau semua perangkat. Untuk mendapatkan kunci, hubungi **switchguardapp@gmail.com**
+### Gratis
+- Sepenuhnya gratis di Android dan Windows — semua fitur, semua perangkat dipantau, tanpa pembelian, tanpa kunci lisensi. Dengan perangkat demo Anda bisa mencoba semuanya tanpa perangkat keras.
 
 ## Persyaratan
 
@@ -68,6 +66,12 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 - Halaman perangkat: aturan, suara alarm sendiri, kategori peringatan, riwayat energi dan biaya, timer eWeLink, sinyal Wi-Fi dan diagnosis putus koneksi, konsumsi siaga, dan peristiwa terbaru.
 - **Atur perangkat**: Bintang = tetap di atas · panah = pindahkan · ukuran kartu = kecil atau besar · tag = kategori. Tekan lama kartu untuk kembali ke sini.
 
+### Sensor (eWeLink)
+
+- Suhu / kelembapan (TH16, THR316/320, SNZB-02), pintu (DW2, SNZB-04), gerakan / kehadiran (SNZB-03, SNZB-06P), kebocoran air (SNZB-05) dan baterai di kartu perangkat, di layar siaga, dan di Chat.
+- Pemicu sensor di otomatisasi (nilai di atas / di bawah, pintu terbuka, gerakan, kebocoran air) dan peringatan sensor sekali ketuk di halaman perangkat.
+- Riwayat sensor: suhu, kelembapan, cahaya, dan baterai disimpan selama pemantauan aktif; halaman perangkat menampilkan grafik 24 jam / 7 hari / 30 hari dengan nilai terendah, tertinggi, dan rata-rata.
+
 ### Peringatan
 
 - Peringatan perangkat dan peringatan bersyarat di satu tempat, dengan filter kategori peringatan (Kritis / Penting / Normal).
@@ -77,9 +81,9 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 ### Otomatisasi
 
 - **Aturan** — tindakan otomatis: *Jika* sesuatu terjadi, *maka* lakukan sesuatu, dengan jeda opsional.
-- Pemicu: menyala, mati, tetap menyala selama, tetap mati selama, menjadi offline, kembali online, daya melebihi, daya turun di bawah, saat matahari terbit, saat matahari terbenam, saat suhu luar naik di atas, saat suhu luar turun di bawah, saat tiba, saat pergi.
+- Pemicu: menyala, mati, tetap menyala selama, tetap mati selama, menjadi offline, kembali online, daya melebihi, daya turun di bawah, saat matahari terbit, saat matahari terbenam, saat suhu luar naik di atas, saat suhu luar turun di bawah, saat tiba, saat pergi. Pemicu sensor: nilai di atas / di bawah, pintu terbuka / tertutup, gerakan, kebocoran air.
 - Tindakan: Nyalakan, Matikan, Bunyikan alarm, Kirim notifikasi, Jalankan skenario, Mulai siklus, Hentikan siklus.
-- **Hanya jika**: Hanya pada jam ini, Dan hanya jika perangkat lain…, Hanya saat di rumah / bepergian.
+- **Hanya jika**: Hanya pada jam ini, Dan hanya jika perangkat lain…, Hanya saat di rumah / bepergian. Kondisi juga dapat memeriksa nilai sensor, status sensor (pintu terbuka, gerakan, bocor), daya perangkat, atau suhu luar; tambahkan beberapa dan pilih “Semua kondisi” (dan) atau “Satu saja cukup” (atau).
 - **Skenario** — Pilih apa yang terjadi pada setiap perangkat saat skenario dijalankan. Perangkat yang dibiarkan di “Lewati” tidak disentuh.
 - **Grup** — Pilih perangkat dalam grup. Grup muncul di layar Perangkat seperti perangkat: tombolnya menyalakan atau mematikan semuanya sekaligus, dan Anda dapat memakainya di otomatisasi.
 - **Siklus & timer** — Hitung mundur, Nyala, lalu mati, Siklus nyala/mati, Satu per satu, Langkah kustom. Mulai dengan tombol, pada jam tertentu di hari yang dipilih, atau selama rentang jam; variasi acak opsional (rumah terlihat berpenghuni) dan "berhenti jika diubah manual".
@@ -319,6 +323,8 @@ Peringatan yang melihat semua perangkat Anda sekaligus: pemadaman listrik, konsu
 | Timer (di perangkat) | Tidak ada timer. Timer berjalan di perangkat itu sendiri, bahkan saat ponsel Anda mati. (Perangkat eWeLink: tambah atau ubah timer nyala/mati pada jam tertentu di hari yang dipilih.) |
 | Koneksi | dBm adalah kekuatan sinyal: makin mendekati 0 makin baik. Di atas -55 sangat baik, hingga -67 baik, hingga -75 cukup, di bawahnya lemah. |
 | Konsumsi siaga | Rata-rata per jam terendah dalam 7 hari terakhir: daya yang tidak pernah turun di bawahnya pada perangkat ini (dan apa pun yang tercolok padanya), bahkan saat "tidak melakukan apa-apa". TV, modem, dan pengisi daya sering menarik daya sebesar ini saat siaga. |
+| Peringatan sensor | Untuk sensor: peringatan sekali ketuk, misalnya terlalu panas / dingin, pintu terbuka, gerakan, atau kebocoran air. |
+| Riwayat sensor | Grafik 24 jam / 7 hari / 30 hari dari pembacaan sensor dengan nilai terendah, tertinggi, dan rata-rata. |
 | Salin data perangkat | Menyalin data mentah perangkat ke papan klip, berguna untuk melaporkan model yang tidak didukung |
 
 ## Perintah Telegram
@@ -363,7 +369,7 @@ Nama perintah bahasa Inggris dan Turki sama-sama berfungsi (mis. /status = /duru
 
 ## Privasi
 
-- Tanpa server sendiri, tanpa analitik, iklan, atau pelacakan. Tidak ada yang dijual atau dibagikan.
+- Tanpa server sendiri, tanpa analitik, iklan, atau pelacakan. Tidak ada yang dijual atau dibagikan. Pembacaan sensor dan riwayatnya juga tetap di perangkat Anda dan tidak pernah dikirim ke mana pun.
 - Kunci, token, perangkat, aturan, setelan, dan riwayat (maks. 2.000 peristiwa) hanya disimpan di perangkat Anda.
 - Aplikasi hanya berkomunikasi dengan cloud yang Anda hubungkan (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) dan, hanya jika Anda memakainya, dengan Telegram, Open-Meteo (suhu dan cuaca; lokasi dibulatkan sekitar 100 m), dan ubin peta OpenStreetMap.
 - Kata sandi eWeLink Anda diketik di halaman eWeLink sendiri; aplikasi tidak pernah melihatnya.
@@ -432,7 +438,8 @@ SwitchGuard untuk Windows (10 / 11) melakukan pemantauan yang sama di PC: berada
 - Jendela alarm layar penuh, suara bawaan (Sirene, Bip, Denyut, Lonceng) atau WAV / MP3 milik Anda.
 - Layar siaga dan screen saver Windows: papan terbuka saat PC menganggur.
 - Laptop yang dibiarkan tercolok berfungsi sebagai sensor pemadaman listrik.
-- Pembaruan dari GitHub dengan satu klik; setelan dan lisensi tetap. Cadangan ke file berkata sandi (tidak bisa dipulihkan di ponsel).
+- Sensor eWeLink, kondisi sensor, dan riwayat sensor, seperti di ponsel.
+- Pembaruan dari GitHub sekali klik; setelan tetap tersimpan. Cadangan ke file yang dilindungi kata sandi (tidak dapat dipulihkan di ponsel).
 
 ### Setelan khusus Windows
 
@@ -452,7 +459,6 @@ SwitchGuard untuk Windows (10 / 11) melakukan pemantauan yang sama di PC: berada
 | Komputer ini memakai listrik yang sama dengan perangkat | Selama berjalan dengan listrik dari stopkontak tidak ada pemadaman, jadi perangkat yang terputus langsung dilaporkan, bukan setelah hingga 90 detik. |
 | Muat dari file… | Pakai WAV atau MP3 Anda sendiri untuk alarm atau notifikasi (60 detik pertama, maks. 20 MB). |
 | Cadangkan ke file… | Semua pengaturan, kunci akun, dan suara dalam satu file yang dilindungi kata sandi |
-| Aktifkan Pro | Tanpa lisensi, aplikasi memantau 1 perangkat. Masukkan kunci lisensi untuk memantau semua perangkat Anda. |
 
 ### Memasang di Windows
 

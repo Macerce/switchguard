@@ -11,7 +11,7 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
   <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Báo động thiết bị">
 </p>
 
-> **Ngôn ngữ:** ứng dụng Windows có 20 ngôn ngữ từ bản 0.13.0. Trên Android, chọn ngôn ngữ trong ứng dụng (20 ngôn ngữ) sẽ có ở bản **2.26**; bản Android mới nhất là 2.25.0.
+> **Ngôn ngữ:** ứng dụng Android (2.26+) và ứng dụng Windows (0.13+) đều có 20 ngôn ngữ — Cài đặt → Ngôn ngữ.
 
 ## Tải về
 
@@ -22,10 +22,8 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 ### Windows 10 / 11
 - **Trình cài đặt**: [các bản Windows](https://github.com/Macerce/switchguard/releases?q=Windows&expanded=true) — tải `SwitchGuard-x.y.z-Kurulum.exe` của bản mới nhất rồi chạy. Ứng dụng tự tìm bản mới và cập nhật chỉ với một cú nhấp; cài đặt được giữ nguyên.
 
-### Miễn phí và Pro
-- Android: hoàn toàn miễn phí — mọi tính năng, theo dõi mọi thiết bị, không cần mua. Thiết bị demo cho phép thử mọi thứ mà không cần phần cứng.
-- Windows miễn phí: mọi tính năng, cho 1 thiết bị được theo dõi.
-- Windows: khóa giấy phép Pro (Cài đặt → thẻ gói) theo dõi mọi thiết bị. Để nhận khóa, liên hệ **switchguardapp@gmail.com**
+### Miễn phí
+- Hoàn toàn miễn phí trên Android và Windows — mọi tính năng, giám sát mọi thiết bị, không mua hàng, không cần khóa giấy phép. Thiết bị demo cho phép thử mọi thứ mà không cần phần cứng.
 
 ## Yêu cầu
 
@@ -68,6 +66,12 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 - Trang thiết bị: quy tắc, âm báo động riêng, danh mục cảnh báo, lịch sử năng lượng và chi phí, hẹn giờ eWeLink, tín hiệu Wi-Fi và chẩn đoán mất kết nối, điện năng chờ và sự kiện gần đây.
 - **Sắp xếp thiết bị**: Ngôi sao = giữ ở trên cùng · mũi tên = di chuyển · kích thước thẻ = nhỏ hoặc lớn · nhãn = danh mục. Nhấn giữ một thẻ để quay lại đây.
 
+### Cảm biến (eWeLink)
+
+- Nhiệt độ / độ ẩm (TH16, THR316/320, SNZB-02), cửa (DW2, SNZB-04), chuyển động / hiện diện (SNZB-03, SNZB-06P), rò rỉ nước (SNZB-05) và pin trên ô thiết bị, trên màn hình chờ và trong Trò chuyện.
+- Trình kích hoạt cảm biến trong tự động hóa (giá trị trên / dưới, cửa mở, chuyển động, rò rỉ nước) và cảnh báo cảm biến một chạm trên trang thiết bị.
+- Lịch sử cảm biến: nhiệt độ, độ ẩm, ánh sáng và pin được lưu khi đang giám sát; trang thiết bị hiển thị biểu đồ 24 giờ / 7 ngày / 30 ngày với giá trị thấp nhất, cao nhất và trung bình.
+
 ### Cảnh báo
 
 - Cảnh báo thiết bị và cảnh báo có điều kiện ở một nơi, lọc theo danh mục cảnh báo (Rất quan trọng / Quan trọng / Bình thường).
@@ -77,9 +81,9 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 ### Tự động hóa
 
 - **Quy tắc** — hành động tự động: *Nếu* có chuyện xảy ra, *thì* làm gì đó, có độ trễ tùy chọn.
-- Điều kiện kích hoạt: bật, tắt, vẫn bật trong, vẫn tắt trong, chuyển sang ngoại tuyến, trực tuyến trở lại, công suất vượt quá, công suất giảm xuống dưới, lúc mặt trời mọc, lúc mặt trời lặn, khi nhiệt độ ngoài trời tăng lên trên, khi nhiệt độ ngoài trời giảm xuống dưới, khi đến, khi rời đi.
+- Điều kiện kích hoạt: bật, tắt, vẫn bật trong, vẫn tắt trong, chuyển sang ngoại tuyến, trực tuyến trở lại, công suất vượt quá, công suất giảm xuống dưới, lúc mặt trời mọc, lúc mặt trời lặn, khi nhiệt độ ngoài trời tăng lên trên, khi nhiệt độ ngoài trời giảm xuống dưới, khi đến, khi rời đi. Trình kích hoạt cảm biến: giá trị trên / dưới, cửa mở / đóng, chuyển động, rò rỉ nước.
 - Hành động: Bật, Tắt, Phát báo động, Gửi thông báo, Chạy kịch bản, Bắt đầu chu kỳ, Dừng chu kỳ.
-- **Chỉ khi**: Chỉ trong những giờ này, Và chỉ khi một thiết bị khác…, Chỉ khi ở nhà / vắng nhà.
+- **Chỉ khi**: Chỉ trong những giờ này, Và chỉ khi một thiết bị khác…, Chỉ khi ở nhà / vắng nhà. Điều kiện cũng có thể kiểm tra giá trị cảm biến, trạng thái cảm biến (cửa mở, chuyển động, rò rỉ), công suất thiết bị hoặc nhiệt độ ngoài trời; thêm nhiều điều kiện và chọn “Tất cả điều kiện” (và) hoặc “Chỉ cần một” (hoặc).
 - **Kịch bản** — Chọn điều gì xảy ra với từng thiết bị khi kịch bản chạy. Các thiết bị để ở “Bỏ qua” sẽ không bị tác động.
 - **Nhóm** — Chọn các thiết bị trong nhóm. Nhóm hiện trên màn hình Thiết bị như một thiết bị: nút của nó bật hoặc tắt tất cả cùng lúc, và bạn có thể dùng nó trong tự động hóa.
 - **Chu kỳ & hẹn giờ** — Đếm ngược, Bật rồi tắt, Chu kỳ bật/tắt, Lần lượt từng cái, Các bước tùy chỉnh. Bắt đầu bằng nút, vào giờ cố định ngày đã chọn hoặc trong một khung giờ; tùy chọn dao động ngẫu nhiên (như có người ở nhà) và "dừng khi đổi bằng tay".
@@ -319,6 +323,8 @@ Các cảnh báo xem xét tất cả thiết bị của bạn cùng lúc: mất 
 | Hẹn giờ (trên thiết bị) | Chưa có hẹn giờ. Hẹn giờ chạy ngay trên thiết bị, kể cả khi điện thoại của bạn tắt. (Thiết bị eWeLink: thêm hoặc sửa hẹn giờ bật/tắt vào giờ cố định ngày đã chọn.) |
 | Kết nối | dBm là cường độ tín hiệu: càng gần 0 càng tốt. Trên -55 là rất tốt, đến -67 là tốt, đến -75 là khá, thấp hơn là yếu. |
 | Tiêu thụ ở chế độ chờ | Mức trung bình theo giờ thấp nhất trong 7 ngày qua: công suất mà thiết bị này (và mọi thứ cắm vào nó) không bao giờ xuống dưới, kể cả khi “không làm gì”. TV, modem và bộ sạc thường tiêu thụ mức này khi ở chế độ chờ. |
+| Cảnh báo cảm biến | Với cảm biến: cảnh báo một chạm như quá nóng / quá lạnh, cửa mở, chuyển động hoặc rò rỉ nước. |
+| Lịch sử cảm biến | Biểu đồ 24 giờ / 7 ngày / 30 ngày của các số đo cảm biến với giá trị thấp nhất, cao nhất và trung bình. |
 | Sao chép dữ liệu thiết bị | Sao chép dữ liệu thô của thiết bị vào bộ nhớ tạm, hữu ích để báo cáo model chưa được hỗ trợ |
 
 ## Lệnh Telegram
@@ -363,7 +369,7 @@ Cả tên lệnh tiếng Anh và tiếng Thổ Nhĩ Kỳ đều dùng được (
 
 ## Quyền riêng tư
 
-- Không có máy chủ riêng, không phân tích, không quảng cáo, không theo dõi. Không bán hay chia sẻ dữ liệu.
+- Không có máy chủ riêng, không phân tích, không quảng cáo, không theo dõi. Không bán hay chia sẻ dữ liệu. Số đo cảm biến và lịch sử của chúng cũng chỉ nằm trên thiết bị của bạn và không bao giờ được gửi đi đâu.
 - Khóa, token, thiết bị, quy tắc, cài đặt và lịch sử (tối đa 2.000 sự kiện) chỉ lưu trên thiết bị của bạn.
 - Ứng dụng chỉ kết nối với các đám mây bạn liên kết (eWeLink `*.coolkit.cc` / `*.coolkit.cn`, Tuya `openapi.tuya*.com`) và, chỉ khi bạn dùng, với Telegram, Open-Meteo (nhiệt độ và thời tiết; vị trí làm tròn khoảng 100 m) và ô bản đồ OpenStreetMap.
 - Mật khẩu eWeLink được nhập trên trang của chính eWeLink; ứng dụng không bao giờ thấy nó.
@@ -432,7 +438,8 @@ SwitchGuard cho Windows (10 / 11) theo dõi tương tự trên PC: nằm ở kha
 - Cửa sổ báo động toàn màn hình, âm có sẵn (Còi hú, Bíp, Nhịp, Chuông) hoặc WAV / MP3 của riêng bạn.
 - Màn hình chờ và trình bảo vệ màn hình Windows: bảng hiện ra khi PC rảnh.
 - Laptop cắm sạc có thể làm cảm biến mất điện.
-- Cập nhật từ GitHub bằng một cú nhấp; giữ nguyên cài đặt và giấy phép. Sao lưu ra tệp có mật khẩu (không khôi phục được trên điện thoại).
+- Cảm biến eWeLink, điều kiện cảm biến và lịch sử cảm biến, như trên điện thoại.
+- Cập nhật từ GitHub bằng một cú nhấp; cài đặt được giữ nguyên. Sao lưu vào tệp có mật khẩu (không khôi phục được trên điện thoại).
 
 ### Cài đặt chỉ có trên Windows
 
@@ -452,7 +459,6 @@ SwitchGuard cho Windows (10 / 11) theo dõi tương tự trên PC: nằm ở kha
 | Máy tính này dùng chung nguồn điện với các thiết bị | Khi máy đang chạy bằng điện lưới thì không mất điện, nên thiết bị bị rớt sẽ được báo ngay thay vì sau tối đa 90 giây. |
 | Tải từ tệp… | Dùng WAV hoặc MP3 của bạn cho báo động hoặc thông báo (60 giây đầu, tối đa 20 MB). |
 | Sao lưu ra tệp… | Toàn bộ cài đặt, khóa tài khoản và âm thanh trong một tệp được bảo vệ bằng mật khẩu |
-| Kích hoạt Pro | Khi chưa có giấy phép, ứng dụng giám sát 1 thiết bị. Nhập khóa giấy phép để giám sát tất cả thiết bị. |
 
 ### Cài đặt trên Windows
 
