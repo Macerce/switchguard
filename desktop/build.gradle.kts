@@ -41,6 +41,20 @@ val slimIcons by tasks.registering(Jar::class) {
     }
 }
 
+// sqlite-jdbc ~11 MB, çoğu 20+ platformun yerel kütüphanesi. Paketlenen JVM yalnızca Windows x64 olduğundan
+// diğerleri çıkarılmış ince jar kullanılır (META-INF/services sürücü kaydı korunur).
+val sqliteJdbc: Configuration by configurations.creating { isTransitive = false }
+
+val slimSqlite by tasks.registering(Jar::class) {
+    archiveFileName.set("sqlite-jdbc-win64.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("sqlite"))
+    manifest { attributes("Multi-Release" to "true") } // asıl jar çoklu sürüm (META-INF/versions/9)
+    from({ zipTree(sqliteJdbc.singleFile) }) {
+        exclude("META-INF/MANIFEST.MF")
+        exclude { e -> e.path.startsWith("org/sqlite/native/") && !e.path.startsWith("org/sqlite/native/Windows/x86_64") && !e.isDirectory }
+    }
+}
+
 dependencies {
     implementation(compose.desktop.currentOs)
     implementation(compose.material3)
@@ -52,7 +66,8 @@ dependencies {
     implementation("net.java.dev.jna:jna:5.19.1")
     implementation("net.java.dev.jna:jna-platform:5.19.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.xerial:sqlite-jdbc:3.53.4.0")
+    sqliteJdbc("org.xerial:sqlite-jdbc:3.53.4.0")
+    implementation(files(slimSqlite))
     // MP3 → PCM çözümü yalnızca ses yüklerken (sound/SoundImport); LGPL, ayrı jar olarak paketlenir.
     implementation("com.googlecode.soundlibs:mp3spi:1.9.5.4") { exclude(group = "junit") }
     // Cihaz kartlarını basılı tutup sürükleyerek sıralama (Apache-2.0).
@@ -69,10 +84,19 @@ compose.desktop {
     application {
         mainClass = "com.macerce.switchguard.desktop.MainKt"
 
+        // Bellek: tepside canlı yığın ~15 MB iken varsayılan G1 ~150 MB yığın + ~55 MB GC yükü ayırıp geri vermiyordu
+        // (özel bellek ~370 MB). Serial GC + küçük başlangıç yığını + sıkı boş oran ölçümde ~150 MB (0.15.2, 13 Kas 2026).
+        // C1-only (TieredStopAtLevel=1) kod önbelleğini ve derleyici iş parçacıklarını küçültür; arayüz için hız yeterli.
+        jvmArgs += listOf(
+            "-XX:+UseSerialGC", "-Xms8m", "-Xmx256m",
+            "-XX:MinHeapFreeRatio=10", "-XX:MaxHeapFreeRatio=20",
+            "-XX:TieredStopAtLevel=1",
+        )
+
         nativeDistributions {
             targetFormats(TargetFormat.Exe)
             packageName = "SwitchGuard"
-            packageVersion = "0.15.1"
+            packageVersion = "0.15.2"
             vendor = "Macerce"
             description = "SwitchGuard"
 
