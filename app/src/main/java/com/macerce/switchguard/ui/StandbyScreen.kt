@@ -402,6 +402,8 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
     var grid by remember { mutableStateOf(StandbyGrid.parse(store.standbyGrid)) }
     var editing by remember { mutableStateOf(false) }
     var adding by remember { mutableStateOf(false) }
+    // Son yerleşim ("Ekle" mevcutları ekrandaki yerlerinde sabitler).
+    val lastPlaced = remember { object { var value: List<StandbyGrid.Placed> = emptyList() } }
     val available = remember(tiles, sensors, energyIds, rules.isNotEmpty()) {
         buildList {
             add(StandbyGrid.CLOCK); add(StandbyGrid.WEATHER); add(StandbyGrid.STATUS)
@@ -459,14 +461,14 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             val cols = maxOf(8, ((maxWidth + Gap) / (CellTarget + Gap)).toInt())
             val cell = (maxWidth - Gap * (cols - 1)) / cols
             val placed = remember(shown, cols) { StandbyGrid.pack(shown, cols) }
+            lastPlaced.value = placed
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
                 if (editing) Spacer(Modifier.height(64.dp))
                 WidgetGrid(
                     placed, cols, cell, editing, canEdit,
                     onStartEdit = { menu = false; panel = null; Speaker.stop(); editing = true },
-                    onMove = { id, target -> save(if (target == null) StandbyGrid.moveToEnd(shown, id) else StandbyGrid.move(shown, id, target)) },
-                    onResize = { id, w, h -> save(StandbyGrid.resize(shown, id, w, h, cols)) },
-                    onRemove = { id -> save(shown.filter { it.id != id }, grid.removed + id) },
+                    onPlace = { id, x, y, w, h -> StandbyGrid.place(placed, id, x, y, w, h, cols)?.let { save(it) } },
+                    onRemove = { id -> save(StandbyGrid.freeze(placed).filter { it.id != id }, grid.removed + id) },
                 ) { id, w, h ->
                     when (id) {
                         StandbyGrid.CLOCK -> ClockWidget(now, w, h)
@@ -517,7 +519,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     for (id in addable) {
                         Row(
                             Modifier.fillMaxWidth().clip(RoundedCornerShape(14.dp))
-                                .clickable { save(shown + StandbyGrid.item(id), grid.removed - id); if (addable.size == 1) adding = false }
+                                .clickable { save(lastPlaced.value.let { StandbyGrid.freeze(it) } + StandbyGrid.item(id), grid.removed - id); if (addable.size == 1) adding = false }
                                 .padding(horizontal = 12.dp, vertical = 12.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -576,8 +578,9 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
 private fun rowsFor(h: Dp): Int = maxOf(1, ((h - 46.dp) / 50.dp).toInt())
 
 /**
- * Widget ızgarası. Basılı tutunca düzenleme açılır ve widget sürüklenir; parmağın altındaki widget'ın yerine geçer
- * (boş yere bırakılırsa sona). Düzenlemede sol üstte × (kaldır), sağ altta boyut tutamağı (sürükle → hücreye oturur).
+ * Widget ızgarası. Basılı tutunca düzenleme açılır ve widget sürüklenir; diğer widget'lar yerinden oynamaz. Bırakılacak
+ * yer çerçeveyle gösterilir (boşsa yeşil, doluysa kırmızı); dolu yere bırakılan widget eski yerine döner.
+ * Düzenlemede sol üstte × (kaldır), sağ altta boyut tutamağı (yalnız boş alana doğru büyür).
  */
 @Composable
 private fun WidgetGrid(
@@ -587,40 +590,65 @@ private fun WidgetGrid(
     editing: Boolean,
     canEdit: Boolean,
     onStartEdit: () -> Unit,
-    onMove: (String, String?) -> Unit,
-    onResize: (String, Int, Int) -> Unit,
+    onPlace: (String, Int, Int, Int, Int) -> Unit,
     onRemove: (String) -> Unit,
     body: @Composable (String, Dp, Dp) -> Unit,
 ) {
     val density = LocalDensity.current
     val step = with(density) { (cell + Gap).toPx() }
+    val gapPx = with(density) { Gap.toPx() }
     val latest = rememberUpdatedState(placed)
-    val move = rememberUpdatedState(onMove)
-    val resize = rememberUpdatedState(onResize)
+    val place = rememberUpdatedState(onPlace)
     val startEdit = rememberUpdatedState(onStartEdit)
     var dragId by remember { mutableStateOf<String?>(null) }
     var dragPos by remember { mutableStateOf(Offset.Zero) }
     // Boyutlanan widget'ın canlı (henüz hücreye oturmamış) boyutu.
     var sizing by remember { mutableStateOf<Triple<String, Float, Float>?>(null) }
-    val rows = (placed.maxOfOrNull { it.y + it.h } ?: 0) + if (editing) 2 else 0
+    // Bırakılacak yer: (id, x, y, w, h).
+    fun target(id: String): IntArray? {
+        val me = latest.value.firstOrNull { it.item.id == id } ?: return null
+        val s = sizing?.takeIf { it.first == id }
+        return if (s != null) {
+            val (w, h) = StandbyGrid.clampSize(id, ((s.second + gapPx) / step).roundToInt(), ((s.third + gapPx) / step).roundToInt(), cols)
+            intArrayOf(me.x, me.y, w, h)
+        } else if (dragId == id) {
+            intArrayOf(
+                (dragPos.x / step).roundToInt().coerceIn(0, maxOf(0, cols - me.w)),
+                (dragPos.y / step).roundToInt().coerceAtLeast(0), me.w, me.h,
+            )
+        } else null
+    }
+    val active = dragId ?: sizing?.first
+    val ghost = active?.let { id -> target(id)?.let { id to it } }
+    val rows = maxOf(
+        placed.maxOfOrNull { it.y + it.h } ?: 0,
+        ghost?.second?.let { it[1] + it[3] } ?: 0,
+    ) + if (editing) 3 else 0
     fun span(n: Int) = cell * n + Gap * (n - 1)
     Box(Modifier.fillMaxWidth().height(if (rows == 0) 0.dp else span(rows))) {
+        ghost?.let { (id, t) ->
+            val ok = StandbyGrid.canPlace(latest.value, id, t[0], t[1], t[2], t[3], cols)
+            Box(
+                Modifier.offset { IntOffset((t[0] * step).roundToInt(), (t[1] * step).roundToInt()) }.size(span(t[2]), span(t[3]))
+                    .clip(RoundedCornerShape(22.dp)).background((if (ok) Teal else Red).copy(alpha = 0.12f))
+                    .border(2.dp, (if (ok) Teal else Red).copy(alpha = 0.8f), RoundedCornerShape(22.dp)),
+            )
+        }
         for (p in placed) key(p.item.id) {
             val id = p.item.id
-            val anim by animateIntOffsetAsState(IntOffset((p.x * step).roundToInt(), (p.y * step).roundToInt()), label = "pos")
             val dragging = dragId == id
             val live = sizing?.takeIf { it.first == id }
             val w = if (live != null) with(density) { live.second.toDp() } else span(p.w)
             val h = if (live != null) with(density) { live.third.toDp() } else span(p.h)
             Box(
                 Modifier
-                    .offset { if (dragging) IntOffset(dragPos.x.roundToInt(), dragPos.y.roundToInt()) else anim }
+                    .offset { if (dragging) IntOffset(dragPos.x.roundToInt(), dragPos.y.roundToInt()) else IntOffset((p.x * step).roundToInt(), (p.y * step).roundToInt()) }
                     .size(w, h)
                     .zIndex(if (dragging || live != null) 1f else 0f)
                     .graphicsLayer {
                         val s = if (dragging) 1.04f else 1f
                         scaleX = s; scaleY = s
-                        alpha = if (dragging) 0.88f else 1f
+                        alpha = if (dragging) 0.85f else 1f
                     }
                     .then(
                         if (!canEdit) Modifier
@@ -633,18 +661,12 @@ private fun WidgetGrid(
                                 },
                                 onDrag = { change, amount ->
                                     change.consume()
-                                    if (dragId != id) return@detectDragGesturesAfterLongPress
-                                    dragPos += amount
-                                    val now = latest.value
-                                    val me = now.firstOrNull { it.item.id == id } ?: return@detectDragGesturesAfterLongPress
-                                    val cx = ((dragPos.x + me.w * step / 2) / step).toInt().coerceIn(0, cols - 1)
-                                    val cy = ((dragPos.y + me.h * step / 2) / step).toInt().coerceAtLeast(0)
-                                    val hit = StandbyGrid.at(now, cx, cy)
-                                    val bottom = now.maxOfOrNull { it.y + it.h } ?: 0
-                                    if (hit != null && hit.item.id != id) move.value(id, hit.item.id)
-                                    else if (hit == null && cy >= bottom && now.lastOrNull()?.item?.id != id) move.value(id, null)
+                                    if (dragId == id) dragPos += amount
                                 },
-                                onDragEnd = { dragId = null },
+                                onDragEnd = {
+                                    target(id)?.let { t -> place.value(id, t[0], t[1], t[2], t[3]) }
+                                    dragId = null
+                                },
                                 onDragCancel = { dragId = null },
                             )
                         },
@@ -654,21 +676,21 @@ private fun WidgetGrid(
                 if (editing) {
                     Box(Modifier.matchParentSize().border(1.5.dp, Teal.copy(alpha = if (dragging) 0.9f else 0.5f), RoundedCornerShape(22.dp)))
                     EditKey(Icons.Rounded.Close, stringResource(R.string.board_hide), Modifier.align(Alignment.TopStart)) { onRemove(id) }
-                    // Boyut tutamağı: sürükledikçe canlı büyür, bırakınca en yakın hücre sayısına oturur.
+                    // Boyut tutamağı: sürükledikçe canlı büyür, bırakınca en yakın hücre sayısına oturur (alan boşsa).
                     EditKey(
                         Icons.Rounded.OpenInFull, stringResource(R.string.board_edit),
                         Modifier.align(Alignment.BottomEnd).pointerInput(id) {
                             detectDragGestures(
                                 onDragStart = {
                                     val me = latest.value.firstOrNull { it.item.id == id }
-                                    if (me != null) sizing = Triple(id, me.w * step - Gap.toPx(), me.h * step - Gap.toPx())
+                                    if (me != null) sizing = Triple(id, me.w * step - gapPx, me.h * step - gapPx)
                                 },
                                 onDrag = { change, amount ->
                                     change.consume()
                                     sizing = sizing?.let { (i, sw, sh) -> Triple(i, (sw + amount.x).coerceAtLeast(step), (sh + amount.y).coerceAtLeast(step)) }
                                 },
                                 onDragEnd = {
-                                    sizing?.let { (i, sw, sh) -> resize.value(i, ((sw + Gap.toPx()) / step).roundToInt(), ((sh + Gap.toPx()) / step).roundToInt()) }
+                                    target(id)?.let { t -> place.value(id, t[0], t[1], t[2], t[3]) }
                                     sizing = null
                                 },
                                 onDragCancel = { sizing = null },
