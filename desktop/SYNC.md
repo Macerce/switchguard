@@ -169,3 +169,8 @@ Taşınmayan: bekleme ekranındaki mikrofon / durumu sesli oku / günün özeti 
 Olduğu gibi kopyalanan: core/ StandbyGrid (+ StandbyGridTest); strings.xml yeni anahtarlar (board_edit, board_edit_hint, board_reset, board_add, board_sec_clock/weather/status/power, board_hide, board_show) 20 dile eklendi.
 Masaüstüne uyarlanan: `desktop/ui/StandbyWindow.kt` TV görünümü (aurora zemin kendi kopyası 20 fps, PulseDot, cam kartlar) + widget ızgarası (hücre ~44 dp; düzenleme kipinde fareyle doğrudan sürükleme, kapalıyken basılı tut; köşe tutamağı; × / Ekle / Varsayılana dön; menüde Düzenle), cihaz widget'ı `rememberSwitchControl` ile, fare üstünde kenar aydınlanır. Store `standbyGrid`. Simge `icons-standby.txt` (OpenInFull).
 Taşınmayan: bekleme ekranı mikrofon/sesli oku/günün özeti düğmeleri (önceki gibi).
+
+## 0.17.1 eşitlemesi (telefon 2.31.4, agp-9 `6b0a649`)
+
+Olduğu gibi kopyalanan: core/ StandbyGrid (serbest konum: Item x,y; pack konumluları yerinde tutar; canPlace/place/freeze) + StandbyGridTest.
+Masaüstüne uyarlanan: StandbyWindow WidgetGrid sürükle-bırak artık yer değiştirmez; bırakma çerçevesi yeşil/kırmızı, dolu yere bırakınca geri döner; `StandbyGridUiTest` (taşı/dolu yer/kaldır).
