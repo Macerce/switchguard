@@ -1592,8 +1592,8 @@
     <string name="tv_standby_hint">OK  開/關   ·   返回  關閉</string>
     <string name="ai_help">AI 協助</string>
     <string name="ai_help_desc">適用於 ChatGPT、Gemini、Claude… 的現成提示詞：尋找設定、取得設定步驟、產生指令</string>
-    <string name="ai_help_intro">選擇一個提示詞，在方括號中寫下你的需求，然後傳送到你喜歡的 AI 聊天。提示詞包含應用程式說明和你的裝置名稱，因此 AI 能正確描述設定，並準備好可貼到聊天中的指令。</string>
-    <string name="ai_help_privacy">只會加入裝置、群組、情境和循環的名稱；不含帳號、密碼、金鑰或位置。在你複製或分享之前，任何內容都不會離開手機。</string>
+    <string name="ai_help_intro">選擇一個提示詞，在方括號中寫下你的需求，然後傳送到你喜歡的 AI 聊天。提示詞介紹了應用程式的選單和功能，因此 AI 能正確描述設定，並準備好可貼到聊天中的指令。</string>
+    <string name="ai_help_privacy">提示詞只介紹應用程式本身；不會加入你的裝置、帳號或其他個人資料。</string>
     <string name="ai_prompt_hint">複製或分享後，在聊天中把[方括號]部分換成你的需求。</string>
     <string name="ai_copy">複製</string>
     <string name="ai_share">分享</string>

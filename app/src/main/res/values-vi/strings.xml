@@ -1564,8 +1564,8 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="tv_standby_hint">OK  bật/tắt   ·   Quay lại  đóng</string>
     <string name="ai_help">Trợ giúp bằng AI</string>
     <string name="ai_help_desc">Lời nhắc có sẵn cho ChatGPT, Gemini, Claude…: tìm cài đặt, xem các bước thiết lập, viết lệnh</string>
-    <string name="ai_help_intro">Chọn một lời nhắc, viết yêu cầu của bạn trong ngoặc vuông rồi gửi tới cuộc trò chuyện AI bạn thích. Lời nhắc có mô tả ứng dụng và tên thiết bị của bạn, nên AI giải thích đúng cài đặt và soạn sẵn lệnh để dán vào Trò chuyện.</string>
-    <string name="ai_help_privacy">Chỉ thêm tên thiết bị, nhóm, cảnh và chu trình; không có tài khoản, mật khẩu, khóa hay vị trí. Không gì rời điện thoại cho đến khi bạn sao chép hoặc chia sẻ.</string>
+    <string name="ai_help_intro">Chọn một lời nhắc, viết yêu cầu của bạn trong ngoặc vuông rồi gửi tới cuộc trò chuyện AI bạn thích. Lời nhắc mô tả menu và tính năng của ứng dụng, nên AI giải thích đúng cài đặt và soạn sẵn lệnh để dán vào Trò chuyện.</string>
+    <string name="ai_help_privacy">Lời nhắc chỉ mô tả ứng dụng; không thêm thiết bị, tài khoản hay dữ liệu cá nhân nào khác của bạn.</string>
     <string name="ai_prompt_hint">Sao chép hoặc chia sẻ, rồi trong cuộc trò chuyện thay phần [trong ngoặc] bằng yêu cầu của bạn.</string>
     <string name="ai_copy">Sao chép</string>
     <string name="ai_share">Chia sẻ</string>

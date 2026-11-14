@@ -1636,8 +1636,8 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="tv_standby_hint">OK  accendi/spegni   ·   Indietro  chiudi</string>
     <string name="ai_help">Aiuto con l\'IA</string>
     <string name="ai_help_desc">Prompt pronti per ChatGPT, Gemini, Claude…: trovare un\'impostazione, passaggi di configurazione, scrivere comandi</string>
-    <string name="ai_help_intro">Scegli un prompt, scrivi la tua richiesta tra le parentesi quadre e invialo alla chat IA che preferisci. Il prompt contiene una descrizione dell\'app e i nomi dei tuoi dispositivi, così l\'IA spiega bene le impostazioni e prepara comandi da incollare nella Chat.</string>
-    <string name="ai_help_privacy">Vengono aggiunti solo i nomi di dispositivi, gruppi, scene e cicli; mai account, password, chiavi o posizione. Nulla lascia il telefono finché non lo copi o condividi.</string>
+    <string name="ai_help_intro">Scegli un prompt, scrivi la tua richiesta tra le parentesi quadre e invialo alla chat IA che preferisci. Il prompt descrive i menu e le funzioni dell\'app, così l\'IA spiega bene le impostazioni e prepara comandi da incollare nella Chat.</string>
+    <string name="ai_help_privacy">Il prompt descrive solo l\'app; i tuoi dispositivi, il tuo account o altri dati personali non vengono aggiunti.</string>
     <string name="ai_prompt_hint">Copialo o condividilo, poi nella chat sostituisci la parte [tra parentesi] con la tua richiesta.</string>
     <string name="ai_copy">Copia</string>
     <string name="ai_share">Condividi</string>

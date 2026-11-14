@@ -42,14 +42,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.BuildConfig
 import com.macerce.switchguard.R
-import com.macerce.switchguard.data.Store
 import java.util.Locale
 
 /**
  * Yardım → "Yapay zekâ ile yardım": ChatGPT/Gemini/Claude'a yapıştırılacak hazır istemler.
- * Her istem = uygulamanın tarifi (menüler, özellikler, Sohbet komutları) + kullanıcının cihaz/grup/sahne/döngü adları
- * + görev. "Sohbet komutu" istemi yapay zekâya uygulamanın Sohbet'inin anladığı komutları yazdırır; kullanıcı onları
- * Sohbet'e yapıştırarak işlemi yaptırır. Hesap bilgisi, anahtar, konum eklenmez.
+ * Her istem = uygulamanın tarifi (menüler, özellikler, Sohbet komutları) + görev; herkese aynıdır. Cihaz adlarını
+ * kullanıcı kendisi yazar, yapay zekâ gerekirse sorar. "Sohbet komutu" istemi Sohbet'in anladığı komutları yazdırır;
+ * kullanıcı onları Sohbet'e yapıştırarak işlemi yaptırır.
  */
 private enum class AiPrompt(val icon: ImageVector, val title: Int, val desc: Int, val body: Int) {
     ASK(Icons.Rounded.Search, R.string.ai_p_ask, R.string.ai_p_ask_desc, R.string.ai_p_ask_body),
@@ -65,37 +64,14 @@ private fun appLanguage(context: Context): String {
     return locale.getDisplayLanguage(locale).replaceFirstChar { it.titlecase(locale) }
 }
 
-/** Kullanıcının kurulumu: yalnız adlar ve yetenekler (kimlik, anahtar, konum yok). */
-private fun setupContext(context: Context, store: Store): String {
+/** Herkese aynı istem: uygulamanın tarifi + görev. Kullanıcının cihazları ya da kişisel bilgisi eklenmez. */
+private fun buildPrompt(context: Context, p: AiPrompt): String {
     val r = context.resources
-    val none = r.getString(R.string.ai_ctx_none)
-    val devices = store.snapshots.joinToString("\n") { d ->
-        buildList {
-            if (d.isMultiChannel) add(r.getString(R.string.ai_ctx_channels, d.switches.size))
-            if (d.sensorOnly) add(r.getString(R.string.ai_ctx_sensor_only))
-            if (d.hasEnergy) add(r.getString(R.string.ai_ctx_power))
-            if (d.hasSensors) add(d.sensors.keys.joinToString { it.name.lowercase() })
-        }.let { extra -> "• ${d.name}" + if (extra.isEmpty()) "" else " (${extra.joinToString(", ")})" }
-    }.ifEmpty { none }
-    fun names(list: List<String>) = list.joinToString(", ").ifEmpty { none }
-    return r.getString(
-        R.string.ai_ctx,
-        devices,
-        names(store.groups.map { it.name }),
-        names(store.scenes.map { it.name }),
-        names(store.cycles.map { it.name }),
-    )
-}
-
-private fun buildPrompt(context: Context, store: Store, p: AiPrompt): String {
-    val r = context.resources
-    return r.getString(R.string.ai_guide, appLanguage(context), BuildConfig.VERSION_NAME) +
-        "\n\n" + setupContext(context, store) +
-        "\n\n" + r.getString(p.body)
+    return r.getString(R.string.ai_guide, appLanguage(context), BuildConfig.VERSION_NAME) + "\n\n" + r.getString(p.body)
 }
 
 @Composable
-internal fun AiHelpDialog(store: Store, close: () -> Unit) {
+internal fun AiHelpDialog(close: () -> Unit) {
     val context = LocalContext.current
     var open by remember { mutableStateOf<AiPrompt?>(null) }
     val current = open
@@ -139,7 +115,7 @@ internal fun AiHelpDialog(store: Store, close: () -> Unit) {
             confirmButton = { TextButton(onClick = close) { Text(stringResource(R.string.action_done)) } },
         )
     } else {
-        val text = remember(current) { buildPrompt(context, store, current) }
+        val text = remember(current) { buildPrompt(context, current) }
         val copied = stringResource(R.string.ai_copied)
         AlertDialog(
             onDismissRequest = { open = null },

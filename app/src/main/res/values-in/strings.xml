@@ -1522,8 +1522,8 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="tv_standby_hint">OK  nyala/mati   ·   Kembali  tutup</string>
     <string name="ai_help">Bantuan AI</string>
     <string name="ai_help_desc">Prompt siap pakai untuk ChatGPT, Gemini, Claude…: temukan pengaturan, dapatkan langkah penyiapan, tulis perintah</string>
-    <string name="ai_help_intro">Pilih prompt, tulis permintaan Anda di dalam kurung siku, lalu kirim ke chat AI favorit Anda. Prompt berisi deskripsi aplikasi dan nama perangkat Anda, sehingga AI menjelaskan pengaturan dengan benar dan menyiapkan perintah untuk ditempel di Chat.</string>
-    <string name="ai_help_privacy">Hanya nama perangkat, grup, adegan, dan siklus yang ditambahkan; tanpa akun, sandi, kunci, atau lokasi. Tidak ada yang keluar dari ponsel sampai Anda menyalin atau membagikannya.</string>
+    <string name="ai_help_intro">Pilih prompt, tulis permintaan Anda di dalam kurung siku, lalu kirim ke chat AI favorit Anda. Prompt menjelaskan menu dan fitur aplikasi, sehingga AI menjelaskan pengaturan dengan benar dan menyiapkan perintah untuk ditempel di Chat.</string>
+    <string name="ai_help_privacy">Prompt hanya menjelaskan aplikasi; perangkat, akun, atau data pribadi lain Anda tidak ditambahkan.</string>
     <string name="ai_prompt_hint">Salin atau bagikan, lalu di chat ganti bagian [dalam kurung] dengan permintaan Anda.</string>
     <string name="ai_copy">Salin</string>
     <string name="ai_share">Bagikan</string>

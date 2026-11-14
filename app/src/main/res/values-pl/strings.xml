@@ -1701,8 +1701,8 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tv_standby_hint">OK  włącz/wyłącz   ·   Wstecz  zamknij</string>
     <string name="ai_help">Pomoc AI</string>
     <string name="ai_help_desc">Gotowe prompty dla ChatGPT, Gemini, Claude…: znajdź ustawienie, kroki konfiguracji, napisz polecenia</string>
-    <string name="ai_help_intro">Wybierz prompt, wpisz swoją prośbę w nawiasy kwadratowe i wyślij do ulubionego czatu AI. Prompt zawiera opis aplikacji i nazwy Twoich urządzeń, więc AI poprawnie opisze ustawienia i przygotuje polecenia do wklejenia w Czacie.</string>
-    <string name="ai_help_privacy">Dodawane są tylko nazwy urządzeń, grup, scen i cykli; nigdy konto, hasło, klucze ani lokalizacja. Nic nie opuszcza telefonu, dopóki tego nie skopiujesz lub nie udostępnisz.</string>
+    <string name="ai_help_intro">Wybierz prompt, wpisz swoją prośbę w nawiasy kwadratowe i wyślij do ulubionego czatu AI. Prompt opisuje menu i funkcje aplikacji, więc AI poprawnie opisze ustawienia i przygotuje polecenia do wklejenia w Czacie.</string>
+    <string name="ai_help_privacy">Prompt opisuje tylko aplikację; Twoje urządzenia, konto ani inne dane osobowe nie są dodawane.</string>
     <string name="ai_prompt_hint">Skopiuj lub udostępnij, a w czacie zastąp część [w nawiasach] swoją prośbą.</string>
     <string name="ai_copy">Kopiuj</string>
     <string name="ai_share">Udostępnij</string>

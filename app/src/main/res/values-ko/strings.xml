@@ -1593,8 +1593,8 @@
     <string name="tv_standby_hint">OK  켜기/끄기   ·   뒤로  닫기</string>
     <string name="ai_help">AI 도움받기</string>
     <string name="ai_help_desc">ChatGPT, Gemini, Claude…용 준비된 프롬프트: 설정 찾기, 설정 단계 받기, 명령 작성</string>
-    <string name="ai_help_intro">프롬프트를 고르고 대괄호 안에 원하는 내용을 쓴 뒤 좋아하는 AI 채팅으로 보내세요. 프롬프트에 앱 설명과 기기 이름이 들어 있어 AI가 설정을 정확히 안내하고 채팅에 붙여 넣을 명령을 준비합니다.</string>
-    <string name="ai_help_privacy">기기, 그룹, 장면, 사이클 이름만 추가되며 계정, 비밀번호, 키, 위치는 포함되지 않습니다. 복사하거나 공유하기 전에는 아무것도 휴대폰 밖으로 나가지 않습니다.</string>
+    <string name="ai_help_intro">프롬프트를 고르고 대괄호 안에 원하는 내용을 쓴 뒤 좋아하는 AI 채팅으로 보내세요. 프롬프트에 앱 메뉴와 기능 설명이 들어 있어 AI가 설정을 정확히 안내하고 채팅에 붙여 넣을 명령을 준비합니다.</string>
+    <string name="ai_help_privacy">프롬프트에는 앱 설명만 들어 있으며 기기, 계정 등 개인 정보는 추가되지 않습니다.</string>
     <string name="ai_prompt_hint">복사하거나 공유한 뒤 채팅에서 [대괄호] 부분을 원하는 내용으로 바꾸세요.</string>
     <string name="ai_copy">복사</string>
     <string name="ai_share">공유</string>

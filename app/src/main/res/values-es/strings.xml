@@ -1635,8 +1635,8 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="tv_standby_hint">OK  encender/apagar   ·   Atrás  cerrar</string>
     <string name="ai_help">Ayuda con IA</string>
     <string name="ai_help_desc">Prompts listos para ChatGPT, Gemini, Claude…: encontrar un ajuste, pasos de configuración, escribir comandos</string>
-    <string name="ai_help_intro">Elige un prompt, escribe tu petición entre los corchetes y envíalo al chat de IA que prefieras. El prompt incluye una descripción de la app y los nombres de tus dispositivos, así la IA explica bien los ajustes y prepara comandos para pegar en el Chat.</string>
-    <string name="ai_help_privacy">Solo se añaden nombres de dispositivos, grupos, escenas y ciclos; nunca cuenta, contraseña, claves ni ubicación. Nada sale del teléfono hasta que lo copias o compartes.</string>
+    <string name="ai_help_intro">Elige un prompt, escribe tu petición entre los corchetes y envíalo al chat de IA que prefieras. El prompt describe los menús y funciones de la app, así la IA explica bien los ajustes y prepara comandos para pegar en el Chat.</string>
+    <string name="ai_help_privacy">El prompt solo describe la app; no se añaden tus dispositivos, tu cuenta ni otros datos personales.</string>
     <string name="ai_prompt_hint">Cópialo o compártelo y en el chat sustituye la parte [entre corchetes] por tu petición.</string>
     <string name="ai_copy">Copiar</string>
     <string name="ai_share">Compartir</string>

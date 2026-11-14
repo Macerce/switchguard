@@ -1627,8 +1627,8 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="tv_standby_hint">OK  ein/aus   ·   Zurück  schließen</string>
     <string name="ai_help">Hilfe mit KI</string>
     <string name="ai_help_desc">Fertige Prompts für ChatGPT, Gemini, Claude…: Einstellung finden, Einrichtung erklären lassen, Befehle schreiben</string>
-    <string name="ai_help_intro">Wählen Sie einen Prompt, schreiben Sie Ihren Wunsch in die eckigen Klammern und senden Sie ihn an Ihren KI-Chat. Der Prompt enthält eine Beschreibung der App und Ihre Gerätenamen – so erklärt die KI die Einstellungen richtig und bereitet Befehle für den Chat vor.</string>
-    <string name="ai_help_privacy">Nur Geräte-, Gruppen-, Szenen- und Zyklusnamen werden eingefügt; kein Konto, Passwort, Schlüssel oder Standort. Nichts verlässt das Telefon, bevor Sie es kopieren oder teilen.</string>
+    <string name="ai_help_intro">Wählen Sie einen Prompt, schreiben Sie Ihren Wunsch in die eckigen Klammern und senden Sie ihn an Ihren KI-Chat. Der Prompt beschreibt die Menüs und Funktionen der App – so erklärt die KI die Einstellungen richtig und bereitet Befehle für den Chat vor.</string>
+    <string name="ai_help_privacy">Der Prompt beschreibt nur die App; Ihre Geräte, Ihr Konto oder andere persönliche Daten werden nicht eingefügt.</string>
     <string name="ai_prompt_hint">Kopieren oder teilen Sie ihn und ersetzen Sie im Chat den [eingeklammerten] Teil durch Ihren Wunsch.</string>
     <string name="ai_copy">Kopieren</string>
     <string name="ai_share">Teilen</string>

@@ -1593,8 +1593,8 @@
     <string name="tv_standby_hint">OK  オン/オフ   ·   戻る  閉じる</string>
     <string name="ai_help">AI でヘルプ</string>
     <string name="ai_help_desc">ChatGPT・Gemini・Claude… 用のプロンプト：設定を探す、設定手順を聞く、コマンドを書かせる</string>
-    <string name="ai_help_intro">プロンプトを選び、角かっこの中に要望を書いて、お好みの AI チャットに送ってください。プロンプトにはアプリの説明とデバイス名が含まれるので、AI が設定を正しく案内し、チャットに貼り付けるコマンドを用意します。</string>
-    <string name="ai_help_privacy">追加されるのはデバイス・グループ・シーン・サイクルの名前だけで、アカウント、パスワード、キー、位置情報は含まれません。コピーや共有をするまで、何も端末の外に出ません。</string>
+    <string name="ai_help_intro">プロンプトを選び、角かっこの中に要望を書いて、お好みの AI チャットに送ってください。プロンプトにはアプリのメニューと機能の説明が含まれるので、AI が設定を正しく案内し、チャットに貼り付けるコマンドを用意します。</string>
+    <string name="ai_help_privacy">プロンプトにはアプリの説明だけが含まれ、デバイス、アカウント、その他の個人情報は追加されません。</string>
     <string name="ai_prompt_hint">コピーまたは共有し、チャットで［角かっこ］の部分を要望に置き換えてください。</string>
     <string name="ai_copy">コピー</string>
     <string name="ai_share">共有</string>

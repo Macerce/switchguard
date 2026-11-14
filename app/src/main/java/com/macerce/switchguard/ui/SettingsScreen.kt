@@ -1351,7 +1351,7 @@ private fun AboutPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
             Divider()
             InfoRow(
                 Icons.Rounded.AutoAwesome, stringResource(R.string.ai_help), stringResource(R.string.ai_help_desc),
-                Modifier.clickable { showDialog { AiHelpDialog(store) { showDialog(null) } } },
+                Modifier.clickable { showDialog { AiHelpDialog { showDialog(null) } } },
             )
         }
     }

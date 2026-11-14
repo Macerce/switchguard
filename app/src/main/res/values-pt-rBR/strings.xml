@@ -1665,8 +1665,8 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="tv_standby_hint">OK  ligar/desligar   ·   Voltar  fechar</string>
     <string name="ai_help">Ajuda com IA</string>
     <string name="ai_help_desc">Prompts prontos para ChatGPT, Gemini, Claude…: achar um ajuste, passos de configuração, escrever comandos</string>
-    <string name="ai_help_intro">Escolha um prompt, escreva seu pedido entre os colchetes e envie ao chat de IA que preferir. O prompt traz uma descrição do app e os nomes dos seus dispositivos, assim a IA explica os ajustes corretamente e prepara comandos para colar no Chat.</string>
-    <string name="ai_help_privacy">Só nomes de dispositivos, grupos, cenas e ciclos são incluídos; nada de conta, senha, chaves ou localização. Nada sai do celular até você copiar ou compartilhar.</string>
+    <string name="ai_help_intro">Escolha um prompt, escreva seu pedido entre os colchetes e envie ao chat de IA que preferir. O prompt descreve os menus e recursos do app, assim a IA explica os ajustes corretamente e prepara comandos para colar no Chat.</string>
+    <string name="ai_help_privacy">O prompt só descreve o app; seus dispositivos, sua conta ou outros dados pessoais não são incluídos.</string>
     <string name="ai_prompt_hint">Copie ou compartilhe e, no chat, troque a parte [entre colchetes] pelo seu pedido.</string>
     <string name="ai_copy">Copiar</string>
     <string name="ai_share">Compartilhar</string>

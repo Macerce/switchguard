@@ -1629,8 +1629,8 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tv_standby_hint">OK  aan/uit   ·   Terug  sluiten</string>
     <string name="ai_help">Hulp van AI</string>
     <string name="ai_help_desc">Kant-en-klare prompts voor ChatGPT, Gemini, Claude…: instelling vinden, stappen voor instellen, opdrachten schrijven</string>
-    <string name="ai_help_intro">Kies een prompt, schrijf je verzoek tussen de vierkante haken en stuur hem naar je favoriete AI-chat. De prompt bevat een beschrijving van de app en je apparaatnamen, zodat de AI de instellingen goed uitlegt en opdrachten voor de Chat klaarzet.</string>
-    <string name="ai_help_privacy">Alleen namen van apparaten, groepen, scènes en cycli worden toegevoegd; geen account, wachtwoord, sleutel of locatie. Er gaat niets van de telefoon af tot je het kopieert of deelt.</string>
+    <string name="ai_help_intro">Kies een prompt, schrijf je verzoek tussen de vierkante haken en stuur hem naar je favoriete AI-chat. De prompt beschrijft de menu\'s en functies van de app, zodat de AI de instellingen goed uitlegt en opdrachten voor de Chat klaarzet.</string>
+    <string name="ai_help_privacy">De prompt beschrijft alleen de app; je apparaten, account of andere persoonlijke gegevens worden niet toegevoegd.</string>
     <string name="ai_prompt_hint">Kopieer of deel hem en vervang in de chat het deel [tussen haken] door je verzoek.</string>
     <string name="ai_copy">Kopiëren</string>
     <string name="ai_share">Delen</string>
