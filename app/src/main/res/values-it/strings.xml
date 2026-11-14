@@ -1634,4 +1634,22 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="tv_confirm_on">Accendere?</string>
     <string name="tv_confirm_off">Spegnere?</string>
     <string name="tv_standby_hint">OK  accendi/spegni   ·   Indietro  chiudi</string>
+    <string name="ai_help">Aiuto con l\'IA</string>
+    <string name="ai_help_desc">Prompt pronti per ChatGPT, Gemini, Claude…: trovare un\'impostazione, passaggi di configurazione, scrivere comandi</string>
+    <string name="ai_help_intro">Scegli un prompt, scrivi la tua richiesta tra le parentesi quadre e invialo alla chat IA che preferisci. Il prompt contiene una descrizione dell\'app e i nomi dei tuoi dispositivi, così l\'IA spiega bene le impostazioni e prepara comandi da incollare nella Chat.</string>
+    <string name="ai_help_privacy">Vengono aggiunti solo i nomi di dispositivi, gruppi, scene e cicli; mai account, password, chiavi o posizione. Nulla lascia il telefono finché non lo copi o condividi.</string>
+    <string name="ai_prompt_hint">Copialo o condividilo, poi nella chat sostituisci la parte [tra parentesi] con la tua richiesta.</string>
+    <string name="ai_copy">Copia</string>
+    <string name="ai_share">Condividi</string>
+    <string name="ai_copied">Prompt copiato</string>
+    <string name="ai_p_ask">Dov\'è l\'impostazione?</string>
+    <string name="ai_p_ask_desc">Chiedi di un\'impostazione o funzione e ottieni il percorso del menu</string>
+    <string name="ai_p_setup">Configuralo per me</string>
+    <string name="ai_p_setup_desc">Descrivi cosa vuoi; passo passo per allarmi, regole, cicli</string>
+    <string name="ai_p_commands">Scrivi comandi Chat</string>
+    <string name="ai_p_commands_desc">La tua richiesta diventa comandi che la Chat capisce; incollali e l\'app li esegue</string>
+    <string name="ai_p_ideas">Idee per casa mia</string>
+    <string name="ai_p_ideas_desc">Idee di allarmi, automazioni e risparmio in base ai tuoi dispositivi</string>
+    <string name="ai_p_fix">Risolvi un problema</string>
+    <string name="ai_p_fix_desc">Allarme muto, notifiche assenti, dispositivo offline…</string>
 </resources>

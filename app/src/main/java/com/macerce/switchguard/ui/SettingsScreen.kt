@@ -57,6 +57,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.HelpOutline
+import androidx.compose.material.icons.rounded.AutoAwesome
 import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
@@ -469,7 +470,7 @@ internal fun SettingsSubPage(page: SettingsPage, onBack: () -> Unit, showDialog:
                 SettingsPage.MONITORING -> MonitoringPage(showDialog)
                 SettingsPage.PERMISSIONS -> PermissionsPage()
                 SettingsPage.BACKUP -> BackupPage(showDialog)
-                SettingsPage.ABOUT -> AboutPage()
+                SettingsPage.ABOUT -> AboutPage(showDialog)
             }
         }
     }
@@ -1324,7 +1325,7 @@ private fun BackupPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
 // ---------------------------------------------------------------- Yardım ve hakkında
 
 @Composable
-private fun AboutPage() {
+private fun AboutPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val (store, _) = settingsState()
@@ -1345,6 +1346,14 @@ private fun AboutPage() {
             Icons.AutoMirrored.Rounded.MenuBook, stringResource(R.string.guide_tuya), stringResource(R.string.guide_desc),
             Modifier.clickable { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
         ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+        // TV'de sohbet uygulaması/pano yok: yalnız telefonda.
+        if (!LocalIsTv.current) {
+            Divider()
+            InfoRow(
+                Icons.Rounded.AutoAwesome, stringResource(R.string.ai_help), stringResource(R.string.ai_help_desc),
+                Modifier.clickable { showDialog { AiHelpDialog(store) { showDialog(null) } } },
+            )
+        }
     }
 
     SectionTitle(stringResource(R.string.settings_contact))

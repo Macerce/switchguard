@@ -1771,4 +1771,22 @@
     <string name="tv_confirm_on">تشغيل؟</string>
     <string name="tv_confirm_off">إيقاف؟</string>
     <string name="tv_standby_hint">OK  تشغيل/إيقاف   ·   رجوع  إغلاق</string>
+    <string name="ai_help">مساعدة بالذكاء الاصطناعي</string>
+    <string name="ai_help_desc">طلبات جاهزة لـ ChatGPT وGemini وClaude…: اعثر على إعداد، احصل على خطوات الإعداد، اكتب الأوامر</string>
+    <string name="ai_help_intro">اختر طلبًا، واكتب ما تريده بين القوسين المربعين، ثم أرسله إلى محادثة الذكاء الاصطناعي التي تفضلها. يتضمن الطلب وصفًا للتطبيق وأسماء أجهزتك، فيشرح الذكاء الاصطناعي الإعدادات بدقة ويجهّز أوامر للصقها في الدردشة.</string>
+    <string name="ai_help_privacy">تُضاف أسماء الأجهزة والمجموعات والمشاهد والدورات فقط؛ دون حساب أو كلمة مرور أو مفاتيح أو موقع. لا يغادر شيء الهاتف حتى تنسخه أو تشاركه.</string>
+    <string name="ai_prompt_hint">انسخه أو شاركه، ثم استبدل الجزء [بين القوسين] بطلبك في المحادثة.</string>
+    <string name="ai_copy">نسخ</string>
+    <string name="ai_share">مشاركة</string>
+    <string name="ai_copied">تم نسخ الطلب</string>
+    <string name="ai_p_ask">أين الإعداد؟</string>
+    <string name="ai_p_ask_desc">اسأل عن إعداد أو ميزة واحصل على مسار القائمة</string>
+    <string name="ai_p_setup">اضبطه لي</string>
+    <string name="ai_p_setup_desc">صف ما تريد؛ خطوات للإنذارات والقواعد والدورات</string>
+    <string name="ai_p_commands">اكتب أوامر الدردشة</string>
+    <string name="ai_p_commands_desc">يتحول طلبك إلى أوامر تفهمها الدردشة؛ الصقها وسينفذها التطبيق</string>
+    <string name="ai_p_ideas">أفكار لمنزلي</string>
+    <string name="ai_p_ideas_desc">أفكار للإنذارات والأتمتة والتوفير حسب أجهزتك</string>
+    <string name="ai_p_fix">حل مشكلة</string>
+    <string name="ai_p_fix_desc">لا إنذار، لا إشعار، الجهاز غير متصل…</string>
 </resources>

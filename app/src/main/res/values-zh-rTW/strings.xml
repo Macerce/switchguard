@@ -1590,4 +1590,22 @@
     <string name="tv_confirm_on">要開啟嗎？</string>
     <string name="tv_confirm_off">要關閉嗎？</string>
     <string name="tv_standby_hint">OK  開/關   ·   返回  關閉</string>
+    <string name="ai_help">AI 協助</string>
+    <string name="ai_help_desc">適用於 ChatGPT、Gemini、Claude… 的現成提示詞：尋找設定、取得設定步驟、產生指令</string>
+    <string name="ai_help_intro">選擇一個提示詞，在方括號中寫下你的需求，然後傳送到你喜歡的 AI 聊天。提示詞包含應用程式說明和你的裝置名稱，因此 AI 能正確描述設定，並準備好可貼到聊天中的指令。</string>
+    <string name="ai_help_privacy">只會加入裝置、群組、情境和循環的名稱；不含帳號、密碼、金鑰或位置。在你複製或分享之前，任何內容都不會離開手機。</string>
+    <string name="ai_prompt_hint">複製或分享後，在聊天中把[方括號]部分換成你的需求。</string>
+    <string name="ai_copy">複製</string>
+    <string name="ai_share">分享</string>
+    <string name="ai_copied">已複製提示詞</string>
+    <string name="ai_p_ask">設定在哪裡？</string>
+    <string name="ai_p_ask_desc">詢問某項設定或功能，取得選單路徑</string>
+    <string name="ai_p_setup">幫我設定</string>
+    <string name="ai_p_setup_desc">描述需求；取得警報、規則、循環的逐步說明</string>
+    <string name="ai_p_commands">產生聊天指令</string>
+    <string name="ai_p_commands_desc">把需求轉成聊天能理解的指令；貼上後應用程式就會執行</string>
+    <string name="ai_p_ideas">我家的建議</string>
+    <string name="ai_p_ideas_desc">依你的裝置提供警報、自動化和節能建議</string>
+    <string name="ai_p_fix">解決問題</string>
+    <string name="ai_p_fix_desc">警報不響、收不到通知、裝置離線…</string>
 </resources>

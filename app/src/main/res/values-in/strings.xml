@@ -1520,4 +1520,22 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="tv_confirm_on">Nyalakan?</string>
     <string name="tv_confirm_off">Matikan?</string>
     <string name="tv_standby_hint">OK  nyala/mati   ·   Kembali  tutup</string>
+    <string name="ai_help">Bantuan AI</string>
+    <string name="ai_help_desc">Prompt siap pakai untuk ChatGPT, Gemini, Claude…: temukan pengaturan, dapatkan langkah penyiapan, tulis perintah</string>
+    <string name="ai_help_intro">Pilih prompt, tulis permintaan Anda di dalam kurung siku, lalu kirim ke chat AI favorit Anda. Prompt berisi deskripsi aplikasi dan nama perangkat Anda, sehingga AI menjelaskan pengaturan dengan benar dan menyiapkan perintah untuk ditempel di Chat.</string>
+    <string name="ai_help_privacy">Hanya nama perangkat, grup, adegan, dan siklus yang ditambahkan; tanpa akun, sandi, kunci, atau lokasi. Tidak ada yang keluar dari ponsel sampai Anda menyalin atau membagikannya.</string>
+    <string name="ai_prompt_hint">Salin atau bagikan, lalu di chat ganti bagian [dalam kurung] dengan permintaan Anda.</string>
+    <string name="ai_copy">Salin</string>
+    <string name="ai_share">Bagikan</string>
+    <string name="ai_copied">Prompt disalin</string>
+    <string name="ai_p_ask">Di mana pengaturannya?</string>
+    <string name="ai_p_ask_desc">Tanyakan pengaturan atau fitur, dapatkan jalur menunya</string>
+    <string name="ai_p_setup">Siapkan untuk saya</string>
+    <string name="ai_p_setup_desc">Jelaskan keinginan Anda; langkah demi langkah untuk alarm, aturan, siklus</string>
+    <string name="ai_p_commands">Tulis perintah Chat</string>
+    <string name="ai_p_commands_desc">Permintaan Anda diubah jadi perintah yang dipahami Chat; tempel dan aplikasi menjalankannya</string>
+    <string name="ai_p_ideas">Ide untuk rumah saya</string>
+    <string name="ai_p_ideas_desc">Ide alarm, otomatisasi, dan penghematan sesuai perangkat Anda</string>
+    <string name="ai_p_fix">Atasi masalah</string>
+    <string name="ai_p_fix_desc">Alarm tidak berbunyi, notifikasi tidak datang, perangkat offline…</string>
 </resources>

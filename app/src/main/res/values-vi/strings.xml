@@ -1562,4 +1562,22 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="tv_confirm_on">Bật?</string>
     <string name="tv_confirm_off">Tắt?</string>
     <string name="tv_standby_hint">OK  bật/tắt   ·   Quay lại  đóng</string>
+    <string name="ai_help">Trợ giúp bằng AI</string>
+    <string name="ai_help_desc">Lời nhắc có sẵn cho ChatGPT, Gemini, Claude…: tìm cài đặt, xem các bước thiết lập, viết lệnh</string>
+    <string name="ai_help_intro">Chọn một lời nhắc, viết yêu cầu của bạn trong ngoặc vuông rồi gửi tới cuộc trò chuyện AI bạn thích. Lời nhắc có mô tả ứng dụng và tên thiết bị của bạn, nên AI giải thích đúng cài đặt và soạn sẵn lệnh để dán vào Trò chuyện.</string>
+    <string name="ai_help_privacy">Chỉ thêm tên thiết bị, nhóm, cảnh và chu trình; không có tài khoản, mật khẩu, khóa hay vị trí. Không gì rời điện thoại cho đến khi bạn sao chép hoặc chia sẻ.</string>
+    <string name="ai_prompt_hint">Sao chép hoặc chia sẻ, rồi trong cuộc trò chuyện thay phần [trong ngoặc] bằng yêu cầu của bạn.</string>
+    <string name="ai_copy">Sao chép</string>
+    <string name="ai_share">Chia sẻ</string>
+    <string name="ai_copied">Đã sao chép lời nhắc</string>
+    <string name="ai_p_ask">Cài đặt ở đâu?</string>
+    <string name="ai_p_ask_desc">Hỏi về một cài đặt hay tính năng, nhận đường dẫn menu</string>
+    <string name="ai_p_setup">Thiết lập giúp tôi</string>
+    <string name="ai_p_setup_desc">Mô tả điều bạn muốn; từng bước cho báo động, quy tắc, chu trình</string>
+    <string name="ai_p_commands">Viết lệnh Trò chuyện</string>
+    <string name="ai_p_commands_desc">Yêu cầu của bạn thành lệnh mà Trò chuyện hiểu; dán vào và ứng dụng sẽ làm</string>
+    <string name="ai_p_ideas">Gợi ý cho nhà tôi</string>
+    <string name="ai_p_ideas_desc">Gợi ý báo động, tự động hóa và tiết kiệm theo thiết bị của bạn</string>
+    <string name="ai_p_fix">Khắc phục sự cố</string>
+    <string name="ai_p_fix_desc">Không có báo động, không có thông báo, thiết bị ngoại tuyến…</string>
 </resources>

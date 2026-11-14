@@ -1627,4 +1627,22 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tv_confirm_on">Aanzetten?</string>
     <string name="tv_confirm_off">Uitzetten?</string>
     <string name="tv_standby_hint">OK  aan/uit   ·   Terug  sluiten</string>
+    <string name="ai_help">Hulp van AI</string>
+    <string name="ai_help_desc">Kant-en-klare prompts voor ChatGPT, Gemini, Claude…: instelling vinden, stappen voor instellen, opdrachten schrijven</string>
+    <string name="ai_help_intro">Kies een prompt, schrijf je verzoek tussen de vierkante haken en stuur hem naar je favoriete AI-chat. De prompt bevat een beschrijving van de app en je apparaatnamen, zodat de AI de instellingen goed uitlegt en opdrachten voor de Chat klaarzet.</string>
+    <string name="ai_help_privacy">Alleen namen van apparaten, groepen, scènes en cycli worden toegevoegd; geen account, wachtwoord, sleutel of locatie. Er gaat niets van de telefoon af tot je het kopieert of deelt.</string>
+    <string name="ai_prompt_hint">Kopieer of deel hem en vervang in de chat het deel [tussen haken] door je verzoek.</string>
+    <string name="ai_copy">Kopiëren</string>
+    <string name="ai_share">Delen</string>
+    <string name="ai_copied">Prompt gekopieerd</string>
+    <string name="ai_p_ask">Waar zit de instelling?</string>
+    <string name="ai_p_ask_desc">Vraag naar een instelling of functie en krijg het menupad</string>
+    <string name="ai_p_setup">Stel het voor me in</string>
+    <string name="ai_p_setup_desc">Beschrijf wat je wilt; stap voor stap voor alarmen, regels, cycli</string>
+    <string name="ai_p_commands">Chat-opdrachten schrijven</string>
+    <string name="ai_p_commands_desc">Je verzoek wordt opdrachten die de Chat begrijpt; plak ze en de app doet het</string>
+    <string name="ai_p_ideas">Ideeën voor mijn huis</string>
+    <string name="ai_p_ideas_desc">Ideeën voor alarmen, automatiseringen en besparing op basis van je apparaten</string>
+    <string name="ai_p_fix">Probleem oplossen</string>
+    <string name="ai_p_fix_desc">Geen alarm, geen melding, apparaat offline…</string>
 </resources>

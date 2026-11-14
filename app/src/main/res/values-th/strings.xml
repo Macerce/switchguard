@@ -1562,4 +1562,22 @@
     <string name="tv_confirm_on">เปิดหรือไม่</string>
     <string name="tv_confirm_off">ปิดหรือไม่</string>
     <string name="tv_standby_hint">OK  เปิด/ปิด   ·   ย้อนกลับ  ปิด</string>
+    <string name="ai_help">ความช่วยเหลือจาก AI</string>
+    <string name="ai_help_desc">พรอมต์สำเร็จรูปสำหรับ ChatGPT, Gemini, Claude…: หาการตั้งค่า ขอขั้นตอนตั้งค่า ให้เขียนคำสั่ง</string>
+    <string name="ai_help_intro">เลือกพรอมต์ เขียนคำขอของคุณในวงเล็บเหลี่ยม แล้วส่งไปยังแชต AI ที่คุณชอบ พรอมต์มีคำอธิบายแอปและชื่ออุปกรณ์ของคุณ AI จึงอธิบายการตั้งค่าได้ถูกต้องและเตรียมคำสั่งไว้วางในแชท</string>
+    <string name="ai_help_privacy">เพิ่มเฉพาะชื่ออุปกรณ์ กลุ่ม ฉาก และรอบการทำงาน ไม่มีบัญชี รหัสผ่าน คีย์ หรือตำแหน่ง ไม่มีอะไรออกจากโทรศัพท์จนกว่าคุณจะคัดลอกหรือแชร์</string>
+    <string name="ai_prompt_hint">คัดลอกหรือแชร์ แล้วแทนที่ส่วน [ในวงเล็บ] ด้วยคำขอของคุณในแชต</string>
+    <string name="ai_copy">คัดลอก</string>
+    <string name="ai_share">แชร์</string>
+    <string name="ai_copied">คัดลอกพรอมต์แล้ว</string>
+    <string name="ai_p_ask">การตั้งค่าอยู่ที่ไหน</string>
+    <string name="ai_p_ask_desc">ถามเรื่องการตั้งค่าหรือฟีเจอร์ แล้วรับเส้นทางเมนู</string>
+    <string name="ai_p_setup">ตั้งค่าให้ฉัน</string>
+    <string name="ai_p_setup_desc">บอกสิ่งที่ต้องการ รับขั้นตอนสำหรับสัญญาณเตือน กฎ และรอบการทำงาน</string>
+    <string name="ai_p_commands">เขียนคำสั่งแชท</string>
+    <string name="ai_p_commands_desc">เปลี่ยนคำขอเป็นคำสั่งที่แชทเข้าใจ วางแล้วแอปจะทำให้</string>
+    <string name="ai_p_ideas">ไอเดียสำหรับบ้านฉัน</string>
+    <string name="ai_p_ideas_desc">ไอเดียสัญญาณเตือน ระบบอัตโนมัติ และการประหยัดตามอุปกรณ์ของคุณ</string>
+    <string name="ai_p_fix">แก้ปัญหา</string>
+    <string name="ai_p_fix_desc">ไม่มีเสียงเตือน ไม่มีการแจ้งเตือน อุปกรณ์ออฟไลน์…</string>
 </resources>

@@ -1670,4 +1670,22 @@
     <string name="tv_confirm_on">Увімкнути?</string>
     <string name="tv_confirm_off">Вимкнути?</string>
     <string name="tv_standby_hint">OK  увімк/вимк   ·   Назад  закрити</string>
+    <string name="ai_help">Допомога ШІ</string>
+    <string name="ai_help_desc">Готові запити для ChatGPT, Gemini, Claude…: знайти налаштування, отримати кроки, написати команди</string>
+    <string name="ai_help_intro">Виберіть запит, впишіть своє побажання у квадратні дужки й надішліть в улюблений ШІ-чат. У запиті є опис застосунку та назви ваших пристроїв, тож ШІ правильно пояснить налаштування й підготує команди для Чату.</string>
+    <string name="ai_help_privacy">Додаються лише назви пристроїв, груп, сцен і циклів; жодних акаунтів, паролів, ключів і розташування. Нічого не залишає телефон, доки ви не скопіюєте або не поділитеся.</string>
+    <string name="ai_prompt_hint">Скопіюйте або поділіться, потім у чаті замініть частину [у дужках] своїм побажанням.</string>
+    <string name="ai_copy">Копіювати</string>
+    <string name="ai_share">Поділитися</string>
+    <string name="ai_copied">Запит скопійовано</string>
+    <string name="ai_p_ask">Де це налаштування?</string>
+    <string name="ai_p_ask_desc">Запитайте про налаштування чи функцію й отримайте шлях у меню</string>
+    <string name="ai_p_setup">Налаштуй за мене</string>
+    <string name="ai_p_setup_desc">Опишіть задачу; покроково для тривог, правил, циклів</string>
+    <string name="ai_p_commands">Написати команди для Чату</string>
+    <string name="ai_p_commands_desc">Ваш запит стане командами, які розуміє Чат; вставте їх — застосунок виконає</string>
+    <string name="ai_p_ideas">Ідеї для мого дому</string>
+    <string name="ai_p_ideas_desc">Ідеї тривог, автоматизацій і економії для ваших пристроїв</string>
+    <string name="ai_p_fix">Розв\'язати проблему</string>
+    <string name="ai_p_fix_desc">Немає тривоги, немає сповіщень, пристрій не в мережі…</string>
 </resources>

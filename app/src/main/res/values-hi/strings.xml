@@ -1556,4 +1556,22 @@
     <string name="tv_confirm_on">चालू करें?</string>
     <string name="tv_confirm_off">बंद करें?</string>
     <string name="tv_standby_hint">OK  चालू/बंद   ·   वापस  बंद करें</string>
+    <string name="ai_help">AI से मदद</string>
+    <string name="ai_help_desc">ChatGPT, Gemini, Claude… के लिए तैयार प्रॉम्प्ट: सेटिंग ढूँढें, सेटअप के चरण पाएँ, कमांड लिखवाएँ</string>
+    <string name="ai_help_intro">कोई प्रॉम्प्ट चुनें, वर्गाकार कोष्ठक में अपना अनुरोध लिखें और अपनी पसंद की AI चैट में भेजें। प्रॉम्प्ट में ऐप का विवरण और आपके डिवाइस के नाम हैं, इसलिए AI सेटिंग्स सही बताता है और चैट में चिपकाने लायक कमांड तैयार करता है।</string>
+    <string name="ai_help_privacy">केवल डिवाइस, समूह, सीन और साइकिल के नाम जोड़े जाते हैं; खाता, पासवर्ड, कुंजी या स्थान नहीं। जब तक आप कॉपी या शेयर न करें, कुछ भी फ़ोन से बाहर नहीं जाता।</string>
+    <string name="ai_prompt_hint">कॉपी या शेयर करें, फिर चैट में [कोष्ठक वाले] हिस्से को अपने अनुरोध से बदलें।</string>
+    <string name="ai_copy">कॉपी करें</string>
+    <string name="ai_share">शेयर करें</string>
+    <string name="ai_copied">प्रॉम्प्ट कॉपी हुआ</string>
+    <string name="ai_p_ask">सेटिंग कहाँ है?</string>
+    <string name="ai_p_ask_desc">किसी सेटिंग या सुविधा के बारे में पूछें, मेनू का रास्ता पाएँ</string>
+    <string name="ai_p_setup">मेरे लिए सेट करें</string>
+    <string name="ai_p_setup_desc">बताएँ क्या चाहिए; अलार्म, नियम, साइकिल के लिए चरण-दर-चरण</string>
+    <string name="ai_p_commands">चैट कमांड लिखवाएँ</string>
+    <string name="ai_p_commands_desc">आपका अनुरोध चैट द्वारा समझे जाने वाले कमांड में बदलेगा; चिपकाएँ और ऐप कर देगा</string>
+    <string name="ai_p_ideas">मेरे घर के लिए सुझाव</string>
+    <string name="ai_p_ideas_desc">आपके डिवाइस के अनुसार अलार्म, ऑटोमेशन और बचत के सुझाव</string>
+    <string name="ai_p_fix">समस्या हल करें</string>
+    <string name="ai_p_fix_desc">अलार्म नहीं बजता, सूचना नहीं आती, डिवाइस ऑफ़लाइन…</string>
 </resources>

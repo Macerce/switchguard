@@ -1699,4 +1699,22 @@
     <string name="tv_confirm_on">Включить?</string>
     <string name="tv_confirm_off">Выключить?</string>
     <string name="tv_standby_hint">OK  вкл/выкл   ·   Назад  закрыть</string>
+    <string name="ai_help">Помощь ИИ</string>
+    <string name="ai_help_desc">Готовые запросы для ChatGPT, Gemini, Claude…: найти настройку, получить шаги, написать команды</string>
+    <string name="ai_help_intro">Выберите запрос, впишите своё пожелание в квадратные скобки и отправьте в любимый ИИ-чат. В запросе есть описание приложения и названия ваших устройств, поэтому ИИ правильно объяснит настройки и подготовит команды для Чата.</string>
+    <string name="ai_help_privacy">Добавляются только названия устройств, групп, сцен и циклов; никаких аккаунтов, паролей, ключей и местоположения. Ничего не уходит с телефона, пока вы не скопируете или не поделитесь.</string>
+    <string name="ai_prompt_hint">Скопируйте или поделитесь, затем в чате замените часть [в скобках] своим пожеланием.</string>
+    <string name="ai_copy">Копировать</string>
+    <string name="ai_share">Поделиться</string>
+    <string name="ai_copied">Запрос скопирован</string>
+    <string name="ai_p_ask">Где эта настройка?</string>
+    <string name="ai_p_ask_desc">Спросите о настройке или функции и получите путь в меню</string>
+    <string name="ai_p_setup">Настрой за меня</string>
+    <string name="ai_p_setup_desc">Опишите задачу; пошагово для тревог, правил, циклов</string>
+    <string name="ai_p_commands">Написать команды для Чата</string>
+    <string name="ai_p_commands_desc">Ваш запрос превратится в команды, понятные Чату; вставьте их — приложение выполнит</string>
+    <string name="ai_p_ideas">Идеи для моего дома</string>
+    <string name="ai_p_ideas_desc">Идеи тревог, автоматизаций и экономии для ваших устройств</string>
+    <string name="ai_p_fix">Решить проблему</string>
+    <string name="ai_p_fix_desc">Нет тревоги, нет уведомлений, устройство не в сети…</string>
 </resources>

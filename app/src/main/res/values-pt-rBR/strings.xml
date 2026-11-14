@@ -1663,4 +1663,22 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="tv_confirm_on">Ligar?</string>
     <string name="tv_confirm_off">Desligar?</string>
     <string name="tv_standby_hint">OK  ligar/desligar   ·   Voltar  fechar</string>
+    <string name="ai_help">Ajuda com IA</string>
+    <string name="ai_help_desc">Prompts prontos para ChatGPT, Gemini, Claude…: achar um ajuste, passos de configuração, escrever comandos</string>
+    <string name="ai_help_intro">Escolha um prompt, escreva seu pedido entre os colchetes e envie ao chat de IA que preferir. O prompt traz uma descrição do app e os nomes dos seus dispositivos, assim a IA explica os ajustes corretamente e prepara comandos para colar no Chat.</string>
+    <string name="ai_help_privacy">Só nomes de dispositivos, grupos, cenas e ciclos são incluídos; nada de conta, senha, chaves ou localização. Nada sai do celular até você copiar ou compartilhar.</string>
+    <string name="ai_prompt_hint">Copie ou compartilhe e, no chat, troque a parte [entre colchetes] pelo seu pedido.</string>
+    <string name="ai_copy">Copiar</string>
+    <string name="ai_share">Compartilhar</string>
+    <string name="ai_copied">Prompt copiado</string>
+    <string name="ai_p_ask">Onde fica o ajuste?</string>
+    <string name="ai_p_ask_desc">Pergunte sobre um ajuste ou recurso e receba o caminho no menu</string>
+    <string name="ai_p_setup">Configure para mim</string>
+    <string name="ai_p_setup_desc">Descreva o que quer; passo a passo para alarmes, regras, ciclos</string>
+    <string name="ai_p_commands">Escrever comandos do Chat</string>
+    <string name="ai_p_commands_desc">Seu pedido vira comandos que o Chat entende; cole e o app faz</string>
+    <string name="ai_p_ideas">Ideias para minha casa</string>
+    <string name="ai_p_ideas_desc">Ideias de alarmes, automações e economia para seus dispositivos</string>
+    <string name="ai_p_fix">Resolver um problema</string>
+    <string name="ai_p_fix_desc">Alarme não toca, notificação não chega, dispositivo offline…</string>
 </resources>

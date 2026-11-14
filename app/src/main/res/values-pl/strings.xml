@@ -1699,4 +1699,22 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tv_confirm_on">Włączyć?</string>
     <string name="tv_confirm_off">Wyłączyć?</string>
     <string name="tv_standby_hint">OK  włącz/wyłącz   ·   Wstecz  zamknij</string>
+    <string name="ai_help">Pomoc AI</string>
+    <string name="ai_help_desc">Gotowe prompty dla ChatGPT, Gemini, Claude…: znajdź ustawienie, kroki konfiguracji, napisz polecenia</string>
+    <string name="ai_help_intro">Wybierz prompt, wpisz swoją prośbę w nawiasy kwadratowe i wyślij do ulubionego czatu AI. Prompt zawiera opis aplikacji i nazwy Twoich urządzeń, więc AI poprawnie opisze ustawienia i przygotuje polecenia do wklejenia w Czacie.</string>
+    <string name="ai_help_privacy">Dodawane są tylko nazwy urządzeń, grup, scen i cykli; nigdy konto, hasło, klucze ani lokalizacja. Nic nie opuszcza telefonu, dopóki tego nie skopiujesz lub nie udostępnisz.</string>
+    <string name="ai_prompt_hint">Skopiuj lub udostępnij, a w czacie zastąp część [w nawiasach] swoją prośbą.</string>
+    <string name="ai_copy">Kopiuj</string>
+    <string name="ai_share">Udostępnij</string>
+    <string name="ai_copied">Prompt skopiowany</string>
+    <string name="ai_p_ask">Gdzie jest ustawienie?</string>
+    <string name="ai_p_ask_desc">Zapytaj o ustawienie lub funkcję i dostań ścieżkę w menu</string>
+    <string name="ai_p_setup">Skonfiguruj za mnie</string>
+    <string name="ai_p_setup_desc">Opisz, czego chcesz; krok po kroku dla alarmów, reguł, cykli</string>
+    <string name="ai_p_commands">Napisz polecenia Czatu</string>
+    <string name="ai_p_commands_desc">Twoja prośba zamienia się w polecenia, które Czat rozumie; wklej je, a aplikacja je wykona</string>
+    <string name="ai_p_ideas">Pomysły dla mojego domu</string>
+    <string name="ai_p_ideas_desc">Pomysły na alarmy, automatyzacje i oszczędności dla Twoich urządzeń</string>
+    <string name="ai_p_fix">Rozwiąż problem</string>
+    <string name="ai_p_fix_desc">Brak alarmu, brak powiadomień, urządzenie offline…</string>
 </resources>
