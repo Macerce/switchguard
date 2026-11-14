@@ -17,6 +17,11 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.draw.drawBehind
+import com.macerce.switchguard.core.DeviceKinds
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -53,7 +58,6 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.NightsStay
 import androidx.compose.material.icons.rounded.NotificationsActive
-import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.Thunderstorm
 import androidx.compose.material.icons.rounded.Today
@@ -222,14 +226,26 @@ class StandbyActivity : ComponentActivity() {
     }
 }
 
-// Ekran hep koyu: OLED'de siyah piksel yanmaz, gece gözü almaz.
-private val Bg = Color(0xFF000000)
-private val Ink = Color(0xFFE8EEED)
-private val Dim = Color(0xFF8A9895)
-private val Faint = Color(0xFF26302E)
-private val Teal = Color(0xFF26A69A)
-private val Amber = Color(0xFFFFB300)
-private val Red = Color(0xFFEF5350)
+// TV panosuyla aynı görünüm: koyu zemin, yavaş süzülen ışıklar, cam kartlar (bkz. TvHome).
+private val Bg = Tv.ink
+private val Ink = Tv.text
+private val Dim = Tv.muted
+private val Faint = Tv.glass
+private val Edge = Tv.edge
+private val Teal = Tv.ok
+private val Amber = Tv.warn
+private val Red = Tv.bad
+private val Sheet = Color(0xF2101619)
+
+/** Cam kart: hafif beyaz zemin + ince kenar; [tint] verilirse o renkte yatay ışık (uyarı/alarm). */
+private fun Modifier.glass(radius: Int = 22, tint: Color? = null): Modifier {
+    val shape = RoundedCornerShape(radius.dp)
+    val c = clip(shape)
+    return if (tint != null) {
+        c.background(Brush.horizontalGradient(listOf(tint.copy(alpha = 0.22f), tint.copy(alpha = 0.06f))), shape)
+            .border(1.dp, tint.copy(alpha = 0.4f), shape)
+    } else c.background(Faint, shape).border(1.dp, Edge, shape)
+}
 
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 
@@ -347,6 +363,19 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
     var menu by remember { mutableStateOf(false) }
     LaunchedEffect(menu) { if (menu) { delay(6000); menu = false } }
 
+    // Zemindeki ışık durumu söyler (TV'deki gibi): turkuaz yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı.
+    val offlineWatched = snapshots.count { it.id in monitored && !it.online }
+    val accent by animateColorAsState(
+        when {
+            alarmLines.isNotEmpty() || conn.state in setOf(ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR) -> Red
+            conn.state == ConnState.STOPPED -> Tv.idle
+            offlineWatched > 0 || conn.state != ConnState.LIVE -> Amber
+            else -> Teal
+        },
+        tween(900),
+        label = "accent",
+    )
+
     Box(
         Modifier.fillMaxSize().background(Bg)
             .then(
@@ -356,6 +385,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 else Modifier
             ),
     ) {
+        Box(Modifier.fillMaxSize().alpha(if (night) 0.45f else 1f).aurora(accent, frameMs = 60))
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 24.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f),
         ) {
@@ -366,11 +396,11 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             val next = upcoming.take(if (compact) 2 else 4)
             val lines = if (compact) 1 else 2
             val status: @Composable () -> Unit = {
-                StatusPill(alarmLines, conn.state, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away)
+                StatusPill(alarmLines, conn.state, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away, accent)
             }
             val devices: @Composable () -> Unit = {
                 if (tiles.isNotEmpty()) DeviceTiles(
-                    tiles,
+                    tiles, accent,
                     onToggle = host?.let { h ->
                         { d, ch, on ->
                             h.unlocked {
@@ -387,7 +417,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             val ruleBlock: @Composable (Int) -> Unit = { n -> if (rules.isNotEmpty()) Rules(rules, ruleDevices, n) }
             val gauge: @Composable (Dp) -> Unit = { w ->
                 val p = power
-                if (p != null) PowerGauge(livePower, p.series, p.todayKwh, w)
+                if (p != null) Box(Modifier.glass(26).padding(20.dp)) { PowerGauge(livePower, p.series, p.todayKwh, w) }
             }
             if (wide) {
                 Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.spacedBy(32.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -426,8 +456,9 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
         }
         if (host != null) {
             Row(
-                Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f),
-                horizontalArrangement = Arrangement.spacedBy(14.dp),
+                Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f)
+                    .clip(CircleShape).background(Color.White.copy(alpha = 0.05f)).border(1.dp, Edge, CircleShape).padding(6.dp),
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 BoardAction(Icons.Rounded.Mic, stringResource(R.string.chat_voice)) { host.unlocked { host.listen() } }
                 BoardAction(Icons.Rounded.RecordVoiceOver, stringResource(R.string.board_brief)) { read { Briefing.status(context) } }
@@ -439,7 +470,8 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 enter = fadeIn(), exit = fadeOut(),
             ) {
                 Column(
-                    Modifier.widthIn(max = 560.dp).heightIn(max = 380.dp).clip(RoundedCornerShape(20.dp)).background(Color(0xFF1B2422))
+                    Modifier.widthIn(max = 560.dp).heightIn(max = 380.dp).clip(RoundedCornerShape(22.dp)).background(Sheet)
+                        .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(22.dp))
                         .clickable { panel = null; Speaker.stop() }
                         .verticalScroll(rememberScrollState()).padding(horizontal = 18.dp, vertical = 14.dp),
                 ) {
@@ -452,7 +484,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             Modifier.align(Alignment.BottomCenter).padding(bottom = if (host != null) 88.dp else 24.dp), enter = fadeIn(), exit = fadeOut(),
         ) {
             Row(
-                Modifier.clip(RoundedCornerShape(28.dp)).background(Color(0xFF1B2422)).padding(horizontal = 8.dp),
+                Modifier.clip(RoundedCornerShape(28.dp)).background(Sheet).border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(28.dp)).padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 onOpenApp?.let { TextButton(onClick = it) { Text(stringResource(R.string.board_open_app), color = Teal) } }
@@ -466,9 +498,9 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
 @Composable
 private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
     Box(
-        Modifier.size(52.dp).clip(CircleShape).background(Color(0xFF1B2422)).clickable(onClick = onClick),
+        Modifier.size(48.dp).clip(CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, label, tint = Ink, modifier = Modifier.size(26.dp)) }
+    ) { Icon(icon, label, tint = Ink.copy(alpha = 0.85f), modifier = Modifier.size(24.dp)) }
 }
 
 /**
@@ -477,38 +509,58 @@ private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun DeviceTiles(devices: List<DeviceSnapshot>, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
+private fun DeviceTiles(devices: List<DeviceSnapshot>, accent: Color, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         BoardTitle(stringResource(R.string.tab_devices))
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             for (d in devices) {
                 val channels = if (d.isMultiChannel) d.switches.keys.sorted() else listOf(d.switches.keys.minOrNull() ?: 0)
-                for (ch in channels) {
-                    val on = d.online && d.switches[ch] == true
-                    val shape = RoundedCornerShape(14.dp)
-                    Row(
-                        Modifier.clip(shape).background(if (on) Teal.copy(alpha = 0.24f) else Faint)
-                            .then(if (onToggle != null && d.online) Modifier.clickable { onToggle(d, ch, !on) } else Modifier)
-                            .alpha(if (d.online) 1f else 0.5f)
-                            .padding(horizontal = 12.dp, vertical = 10.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    ) {
-                        Icon(
-                            if (d.online) Icons.Rounded.PowerSettingsNew else Icons.Rounded.CloudOff, null,
-                            tint = if (on) Teal else Dim, modifier = Modifier.size(18.dp),
-                        )
-                        Text(
-                            d.name,
-                            color = if (on) Ink else Dim, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                            modifier = Modifier.widthIn(max = 150.dp),
-                        )
-                        // Kanal numarası ayrı yazılır ki uzun adda kesilmesin.
-                        if (channels.size > 1) Text((ch + 1).toString(), color = if (on) Teal else Dim, fontSize = 14.sp, fontWeight = FontWeight.Medium)
-                    }
-                }
+                val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud, d.sensorOnly) { DeviceKinds.of(d) }
+                for (ch in channels) DeviceCard(d, ch, channels.size > 1, kind.icon(), accent, onToggle)
             }
         }
+    }
+}
+
+/** TV'deki cihaz kartının dokunmatik eşi: açıkken altından vurgu renginde ışık yükselir, simge dolu daire olur. */
+@Composable
+private fun DeviceCard(d: DeviceSnapshot, ch: Int, multi: Boolean, icon: ImageVector, accent: Color, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
+    val on = d.online && d.switches[ch] == true
+    val lit = if (d.online) accent else Tv.faint
+    val shape = RoundedCornerShape(22.dp)
+    Column(
+        Modifier.width(146.dp).height(118.dp).clip(shape)
+            .drawBehind {
+                if (on) drawRect(Brush.verticalGradient(listOf(Color.Transparent, lit.copy(alpha = 0.24f)), startY = size.height * 0.3f))
+            }
+            .background(Faint, shape)
+            .border(1.dp, if (on) lit.copy(alpha = 0.45f) else Edge, shape)
+            .then(if (onToggle != null && d.online) Modifier.clickable { onToggle(d, ch, !on) } else Modifier)
+            .padding(14.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier.size(38.dp)
+                    .drawBehind { if (on) drawCircle(lit.copy(alpha = 0.22f), radius = size.minDimension * 0.66f) }
+                    .background(if (on) lit else Color.White.copy(alpha = 0.07f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    if (d.online) icon else Icons.Rounded.CloudOff, null,
+                    tint = if (on) Tv.ink else if (d.online) Ink else Tv.faint, modifier = Modifier.size(20.dp),
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            // Kanal numarası ayrı yazılır ki uzun adda kesilmesin.
+            if (multi) Text((ch + 1).toString(), color = if (on) lit else Dim, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+        }
+        Spacer(Modifier.weight(1f))
+        Text(
+            stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title),
+            color = when { !d.online -> Red.copy(alpha = 0.85f); on -> lit; else -> Ink },
+            fontSize = 19.sp, fontWeight = FontWeight.Light, maxLines = 1, overflow = TextOverflow.Ellipsis,
+        )
+        Text(d.name, color = Ink.copy(alpha = 0.92f), fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -529,7 +581,7 @@ private fun SensorReadings(devices: List<DeviceSnapshot>) {
                 val busy = d.online && d.sensorActive(SensorKind.MOTION) == true
                 val accent = when { alert -> Color(0xFFFF6B6B); busy -> Amber; else -> Teal }
                 Column(
-                    Modifier.clip(RoundedCornerShape(16.dp)).background(if (alert) accent.copy(alpha = 0.18f) else Faint)
+                    Modifier.glass(20, tint = if (alert) accent else null)
                         .alpha(if (d.online) 1f else 0.5f).padding(horizontal = 14.dp, vertical = 10.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -557,7 +609,7 @@ private fun SensorReadings(devices: List<DeviceSnapshot>) {
 /** Açık kurallar: ad ve "Eğer → O zaman" özeti; uyarılar zil, otomasyonlar şimşek simgesiyle. */
 @Composable
 private fun Rules(list: List<Automation>, devices: List<DeviceSnapshot>, max: Int) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         BoardTitle(stringResource(R.string.automations_rules_title) + " · " + list.size)
         for (a in list.take(max)) {
             val (cond, act) = describe(a, devices)
@@ -584,8 +636,14 @@ private fun Clock(now: Long, big: Boolean) {
         android.text.format.DateFormat.format(android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM"), now).toString()
     }
     Column {
-        Text(time, color = Ink, fontSize = if (big) 104.sp else 80.sp, fontWeight = FontWeight.Light, lineHeight = if (big) 108.sp else 84.sp)
-        Text(date, color = Dim, fontSize = 20.sp)
+        Text(
+            time, color = Ink, fontSize = if (big) 104.sp else 80.sp, fontWeight = FontWeight.Thin,
+            letterSpacing = (-3).sp, lineHeight = if (big) 108.sp else 84.sp,
+        )
+        Text(
+            date.uppercase(locale), color = Dim, fontSize = 14.sp, fontWeight = FontWeight.Medium, letterSpacing = 3.sp,
+            modifier = Modifier.padding(start = 4.dp),
+        )
     }
 }
 
@@ -601,7 +659,7 @@ private fun WeatherLine(w: WeatherClient.Today?, hasLocation: Boolean) {
     val (icon, label) = weatherLook(w.code, w.isDay)
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
         Icon(icon, null, tint = if (w.code == 0 && w.isDay) Amber else Ink, modifier = Modifier.size(40.dp))
-        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = 40.sp, fontWeight = FontWeight.Light)
+        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = 42.sp, fontWeight = FontWeight.Thin)
         Column {
             Text(stringResource(label), color = Ink, fontSize = 16.sp)
             val parts = listOfNotNull(
@@ -629,7 +687,7 @@ internal fun weatherLook(code: Int, day: Boolean): Pair<ImageVector, Int> = when
 
 /** Kritik durum: alarm > bağlantı sorunu > çevrimdışı cihaz > her şey yolunda. */
 @Composable
-private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean) {
+private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean, accent: Color) {
     val (color, icon, title, detail) = when {
         alarm.isNotEmpty() -> Quad(Red, Icons.Rounded.NotificationsActive, stringResource(R.string.board_alarm), alarm.last())
         conn == ConnState.NO_INTERNET -> Quad(Amber, Icons.Rounded.CloudOff, stringResource(R.string.board_no_internet), null)
@@ -639,14 +697,15 @@ private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<Strin
         offline.isNotEmpty() -> Quad(Amber, Icons.Rounded.CloudOff, stringResource(R.string.board_offline, offline.size), offline.joinToString(", "))
         else -> Quad(Teal, Icons.Rounded.CheckCircle, stringResource(R.string.board_all_ok), stringResource(R.string.board_watching, watched))
     }
+    val ok = color == Teal
     Row(
-        Modifier.clip(RoundedCornerShape(20.dp)).background(color.copy(alpha = 0.14f)).padding(horizontal = 16.dp, vertical = 12.dp),
+        Modifier.glass(22, tint = if (ok) null else color).padding(horizontal = 18.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Icon(icon, null, tint = color, modifier = Modifier.size(28.dp))
+        Box(Modifier.size(28.dp), contentAlignment = Alignment.Center) { PulseDot(if (ok) accent else color, pulsing = ok || alarm.isNotEmpty()) }
         Column(Modifier.weight(1f, fill = false)) {
-            Text(title, color = color, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+            Text(title, color = Ink, fontSize = 19.sp, fontWeight = FontWeight.Light)
             if (detail != null) Text(detail, color = Dim, fontSize = 14.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Row(Modifier.padding(top = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Icon(if (away) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home, null, tint = Dim, modifier = Modifier.size(16.dp))
@@ -682,7 +741,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(boardWatts(watts), color = Ink, fontSize = 34.sp, fontWeight = FontWeight.Light)
+                Text(boardWatts(watts), color = Ink, fontSize = 34.sp, fontWeight = FontWeight.Thin)
                 Text(stringResource(R.string.board_power_now, boardWatts(max)), color = Dim, fontSize = 12.sp)
             }
         }
@@ -721,7 +780,7 @@ private fun BoardTitle(text: String) {
 private fun Recent(list: List<LoggedEvent>, lines: Int) {
     val context = LocalContext.current
     val strings = remember(context) { EventLog.strings(context) }
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         BoardTitle(stringResource(R.string.board_recent))
         if (list.isEmpty()) Text(stringResource(R.string.board_no_recent), color = Dim, fontSize = 15.sp)
         for (e in list) {
@@ -752,7 +811,7 @@ private fun eventTime(t: Long): String {
 private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long) {
     val context = LocalContext.current
     val durations = remember(context) { EventLog.durations(context) }
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         BoardTitle(stringResource(R.string.board_upcoming))
         if (list.isEmpty()) Text(stringResource(R.string.board_no_upcoming), color = Dim, fontSize = 15.sp)
         for (u in list) {

@@ -112,7 +112,7 @@ import kotlin.math.roundToInt
 enum class TvDest { ALERTS, AUTOMATIONS, HISTORY, SETTINGS }
 
 /** TV ana ekranının renkleri: koyu zemin, cam kartlar, tek vurgu rengi (durumla değişir). */
-private object Tv {
+internal object Tv {
     val ink = Color(0xFF04070A)
     val glass = Color.White.copy(alpha = 0.055f)
     val glassFocus = Color.White.copy(alpha = 0.13f)
@@ -214,11 +214,15 @@ fun TvHome(
  * Geçişler çok duraklı ve aynı rengin saydamına iner: koyu halka ve bantlanma olmaz. Kenar boşluğunun dışına da taşar.
  */
 @Composable
-private fun Modifier.aurora(accent: Color): Modifier {
+internal fun Modifier.aurora(accent: Color, frameMs: Long = 0): Modifier {
     val time = remember { mutableFloatStateOf(0f) }
-    LaunchedEffect(Unit) {
+    LaunchedEffect(frameMs) {
         val start = withFrameNanos { it }
-        while (true) withFrameNanos { time.floatValue = (it - start) / 1_000_000_000f }
+        while (true) {
+            withFrameNanos { time.floatValue = (it - start) / 1_000_000_000f }
+            // Bekleme ekranında ışıklar çok yavaş süzülür: saniyede birkaç kare yeter, pil ve işlemci yorulmaz.
+            if (frameMs > 0) delay(frameMs)
+        }
     }
     val tint = rememberUpdatedState(accent)
     return this.drawBehind {
@@ -292,7 +296,7 @@ private fun TopBand(state: ConnState, detail: String, monitoring: Boolean, devic
 }
 
 @Composable
-private fun PulseDot(color: Color, pulsing: Boolean) {
+internal fun PulseDot(color: Color, pulsing: Boolean) {
     val t = rememberInfiniteTransition(label = "pulse")
     val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2_200, easing = LinearEasing)), label = "p")
     Box(
