@@ -6,6 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.31.4 — 2026-11-14
+**Changes**
+- Standby widgets stay exactly where you put them: moving, resizing or removing one no longer shifts the others to fill gaps. While dragging, the drop spot is outlined (green = free, red = taken); dropping on a taken spot puts the widget back. Resizing only grows into free space. New devices go to the first free spot.
 ## 2.31.3 — 2026-11-14
 **New (phone and tablet)**
 - **Standby screen as a widget grid**, like a phone home screen: clock, weather, status, power, recent events, coming up, rules — and every device (each channel) and every sensor as its own widget.

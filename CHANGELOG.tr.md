@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.31.4 — 2026-11-14
+**Değişiklikler**
+- Bekleme ekranı widget'ları tam koyduğunuz yerde kalır: birini taşımak, boyutlandırmak ya da kaldırmak artık diğerlerini boşluk doldurmak için kaydırmaz. Sürüklerken bırakılacak yer çerçeveyle gösterilir (yeşil = boş, kırmızı = dolu); dolu yere bırakılan widget eski yerine döner. Boyutlandırma yalnız boş alana doğru büyür. Yeni cihazlar ilk boş yere gelir.
 ## 2.31.3 — 2026-11-14
 **Yeni (telefon ve tablet)**
 - **Bekleme ekranı artık widget ızgarası**, telefon ana ekranı gibi: saat, hava, durum, güç, son hareketler, yakında, kurallar — ve her cihaz (her kanal) ile her sensör ayrı bir widget.
