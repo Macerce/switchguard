@@ -6,6 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.32.0 — 2026-11-14
+**New**
+- Settings → Help & about → **Get help from AI**: five ready prompts (Where is a setting?, Set it up for me, Write Chat commands, Ideas for my home, Fix a problem) for ChatGPT, Gemini, Claude or any AI chat. Each prompt contains a description of the app's menus and features plus your device, group, scene and cycle names (no account, password, key or location), so the AI explains settings correctly and can write commands you paste into Chat to get things done. Copy or share in one tap. Not on TV.
 ## 2.31.4 — 2026-11-14
 **Changes**
 - Standby widgets stay exactly where you put them: moving, resizing or removing one no longer shifts the others to fill gaps. While dragging, the drop spot is outlined (green = free, red = taken); dropping on a taken spot puts the widget back. Resizing only grows into free space. New devices go to the first free spot.

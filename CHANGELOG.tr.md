@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.32.0 — 2026-11-14
+**Yeni**
+- Ayarlar → Yardım ve hakkında → **Yapay zekâ ile yardım**: ChatGPT, Gemini, Claude ya da herhangi bir yapay zekâ sohbeti için beş hazır istem (Ayar nerede?, Benim için kur, Sohbet komutu yazdır, Evime öneri, Sorun çöz). İstemde uygulamanın menü ve özelliklerinin tarifi ile cihaz, grup, sahne ve döngü adlarınız var (hesap, şifre, anahtar, konum yok); böylece yapay zekâ ayarları doğru tarif eder ve Sohbet'e yapıştırıp işlem yaptıracağınız komutları yazar. Tek dokunuşla kopyala ya da paylaş. TV'de yok.
 ## 2.31.4 — 2026-11-14
 **Değişiklikler**
 - Bekleme ekranı widget'ları tam koyduğunuz yerde kalır: birini taşımak, boyutlandırmak ya da kaldırmak artık diğerlerini boşluk doldurmak için kaydırmaz. Sürüklerken bırakılacak yer çerçeveyle gösterilir (yeşil = boş, kırmızı = dolu); dolu yere bırakılan widget eski yerine döner. Boyutlandırma yalnız boş alana doğru büyür. Yeni cihazlar ilk boş yere gelir.
