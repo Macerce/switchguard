@@ -6,6 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.31.1 — 2026-11-14
+**Fixes**
+- TV home screen: the clock and date now follow a language change right away (no app restart needed).
 ## 2.31.0 — 2026-11-14
 **New (Android TV)**
 - **New TV home screen**: a calm, read-from-the-sofa dashboard — large clock and date, today's weather (Settings › Location), live status, devices as glass cards you browse with the remote, the last event, and an icon-only bar whose items show their name when focused. A slow, soft light in the background shows the status (teal all good, amber attention, red alarm/problem, grey monitoring off).

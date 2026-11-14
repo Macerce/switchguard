@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.31.1 — 2026-11-14
+**Düzeltmeler**
+- TV ana ekranı: saat ve tarih, dil değiştirilince uygulama yeniden başlatılmadan hemen yeni dile geçer.
 ## 2.31.0 — 2026-11-14
 **Yenilikler (Android TV)**
 - **Yeni TV ana ekranı**: koltuktan okunan sade bir pano — büyük saat ve tarih, günün havası (Ayarlar › Konum), canlı durum, kumandayla gezilen cam cihaz kartları, son olay ve odaklanınca adı açılan yalnız simgeli bir çubuk. Zemindeki yavaş, yumuşak ışık durumu söyler (turkuaz her şey yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı).
