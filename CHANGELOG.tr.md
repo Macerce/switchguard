@@ -6,6 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.31.3 — 2026-11-14
+**Yeni (telefon ve tablet)**
+- **Bekleme ekranı artık widget ızgarası**, telefon ana ekranı gibi: saat, hava, durum, güç, son hareketler, yakında, kurallar — ve her cihaz (her kanal) ile her sensör ayrı bir widget.
+- **İstediğiniz gibi dizin**: bir widget'a basılı tutunca düzenleme açılır, sürükleyip yerini değiştirin; köşedeki tutamağı sürükleyerek boyutlandırın (küçük = simge ve ad, geniş = simge yanında durum, büyük = TV kartı); × kaldırır, "Ekle" geri getirir, "Varsayılana dön" ilk düzene döner. Yeni eklenen cihazlar kendiliğinden sona gelir.
+- İnce ızgara (yaklaşık 40 dp hücre: dikey telefonda 8 sütun, yatay telefonda ve tablette daha fazla).
+- **TV ile aynı yeni görünüm**: zemindeki yavaş ışık durumu gösterir (turkuaz yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı), cam kartlar, ince büyük saat.
 ## 2.31.1 — 2026-11-14
 **Düzeltmeler**
 - TV ana ekranı: saat ve tarih, dil değiştirilince uygulama yeniden başlatılmadan hemen yeni dile geçer.

@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.31.3 — 2026-11-14
+**New (phone and tablet)**
+- **Standby screen as a widget grid**, like a phone home screen: clock, weather, status, power, recent events, coming up, rules — and every device (each channel) and every sensor as its own widget.
+- **Arrange it your way**: hold a widget to start editing and drag it to a new place; drag the corner handle to resize it (small = icon and name, wide = icon with state, large = TV-style card); × removes a widget, “Add” brings it back, “Reset” restores the default. Newly added devices appear at the end automatically.
+- A fine grid (about 40 dp cells: 8 columns on a portrait phone, more on landscape phones and tablets).
+- **New look** shared with the TV: a slow, soft light in the background shows the status (teal all good, amber attention, red alarm/problem, grey monitoring off), glass cards and a thin large clock.
 ## 2.31.1 — 2026-11-14
 **Fixes**
 - TV home screen: the clock and date now follow a language change right away (no app restart needed).
