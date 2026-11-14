@@ -10,7 +10,23 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.withFrameNanos
+import androidx.compose.ui.draw.drawBehind
+import com.macerce.switchguard.core.DeviceKinds
+import kotlin.math.cos
+import kotlin.math.sin
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -108,7 +124,6 @@ import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.material.icons.rounded.PowerSettingsNew
 import com.macerce.switchguard.desktop.ui.devices.DeviceUi
 import com.macerce.switchguard.desktop.ui.devices.LocalDeviceUi
 import com.macerce.switchguard.desktop.ui.devices.rememberSwitchControl
@@ -160,14 +175,75 @@ fun StandbyWindow(graph: AppGraph) {
     }
 }
 
-// Ekran hep koyu: OLED'de siyah piksel yanmaz, gece gözü almaz (telefondakiyle aynı renkler).
-private val Bg = Color(0xFF000000)
-private val Ink = Color(0xFFE8EEED)
-private val Dim = Color(0xFF8A9895)
-private val Faint = Color(0xFF26302E)
-private val Teal = Color(0xFF26A69A)
-private val Amber = Color(0xFFFFB300)
-private val Red = Color(0xFFEF5350)
+// Telefon 2.31 TV panosuyla aynı görünüm: koyu zemin, yavaş süzülen ışıklar, cam kartlar, durumla değişen tek vurgu rengi.
+private val Bg = Color(0xFF04070A)
+private val Ink = Color(0xFFEAF2F2)
+private val Dim = Color(0xFF8A9A9C)
+private val Faint = Color.White.copy(alpha = 0.055f)
+private val Edge = Color.White.copy(alpha = 0.08f)
+private val Muted = Color(0xFF55646A)
+private val Teal = Color(0xFF2EE6C0)
+private val Deep = Color(0xFF1B6DFF)
+private val Amber = Color(0xFFFFB648)
+private val Red = Color(0xFFFF5A5F)
+private val Idle = Color(0xFF7D8A90)
+private val Sheet = Color(0xF2101619)
+
+/** Cam kart: hafif beyaz zemin + ince kenar; [tint] verilirse o renkte yatay ışık (uyarı/alarm). */
+private fun Modifier.glass(radius: Int = 22, tint: Color? = null): Modifier {
+    val shape = RoundedCornerShape(radius.dp)
+    val c = clip(shape)
+    return if (tint != null) {
+        c.background(Brush.horizontalGradient(listOf(tint.copy(alpha = 0.22f), tint.copy(alpha = 0.06f))), shape)
+            .border(1.dp, tint.copy(alpha = 0.4f), shape)
+    } else c.background(Faint, shape).border(1.dp, Edge, shape)
+}
+
+/**
+ * Zemin: üç yumuşak ışık farklı hız ve yönlerde yavaşça süzülür (telefon TvHome `aurora`). Işıklar çok yavaş hareket
+ * ettiğinden saniyede ~20 kare yeter: işlemci yorulmaz. Zaman yalnız çizimde okunur, ekran yeniden oluşturulmaz.
+ */
+@Composable
+private fun Modifier.aurora(accent: Color): Modifier {
+    val time = remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(Unit) {
+        val start = withFrameNanos { it }
+        while (true) {
+            withFrameNanos { time.floatValue = (it - start) / 1_000_000_000f }
+            delay(50)
+        }
+    }
+    val tint = rememberUpdatedState(accent)
+    return this.drawBehind {
+        val t = time.floatValue
+        drawRect(Bg)
+        val w = size.width
+        val h = size.height
+        fun glow(color: Color, alpha: Float, cx: Float, cy: Float, r: Float) {
+            val c = Offset(cx, cy)
+            val stops = listOf(1f, 0.72f, 0.42f, 0.18f, 0.05f, 0f).map { color.copy(alpha = alpha * it) }
+            drawCircle(Brush.radialGradient(stops, center = c, radius = r), radius = r, center = c)
+        }
+        val breathe = 0.85f + 0.15f * sin(t * 0.7f)
+        glow(tint.value, 0.26f * breathe, w * (0.22f + 0.16f * sin(t * 0.061f)), h * (0.18f + 0.14f * cos(t * 0.047f)), w * 0.62f)
+        glow(Deep, 0.17f, w * (0.82f + 0.12f * sin(t * 0.039f + 1.7f)), h * (0.92f + 0.12f * cos(t * 0.053f + 0.6f)), w * 0.55f)
+        glow(Color(0xFF7A5CFF), 0.09f, w * (0.55f + 0.28f * sin(t * 0.027f + 3.1f)), h * (0.55f + 0.22f * sin(t * 0.044f + 0.9f)), w * 0.45f)
+    }
+}
+
+/** Durum noktası: canlıyken dışa doğru yayılan halka. */
+@Composable
+private fun PulseDot(color: Color, pulsing: Boolean) {
+    val t = rememberInfiniteTransition(label = "pulse")
+    val p by t.animateFloat(0f, 1f, infiniteRepeatable(tween(2_200, easing = LinearEasing)), label = "p")
+    Box(
+        Modifier.size(12.dp).drawBehind {
+            if (pulsing) drawCircle(color.copy(alpha = 0.45f * (1f - p)), radius = size.minDimension / 2 * (1f + 1.6f * p))
+            drawCircle(color.copy(alpha = 0.35f), radius = size.minDimension)
+            drawCircle(color)
+        },
+    )
+}
 
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 
@@ -254,11 +330,26 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
     var menu by remember { mutableStateOf(false) }
     LaunchedEffect(menu) { if (menu) { delay(6000); menu = false } }
 
+    // Zemindeki ışık durumu söyler: turkuaz yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı.
+    val conn = status.first
+    val offlineWatched = snapshots.count { it.id in monitored && !it.online }
+    val accent by animateColorAsState(
+        when {
+            alarmLines.isNotEmpty() || conn in setOf(ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR) -> Red
+            conn == ConnState.STOPPED -> Idle
+            offlineWatched > 0 || conn != ConnState.LIVE -> Amber
+            else -> Teal
+        },
+        tween(900),
+        label = "accent",
+    )
+
     Box(
         Modifier.fillMaxSize().background(Bg)
             .clickable(remember { MutableInteractionSource() }, indication = null) { menu = !menu }
             .testTag("standby"),
     ) {
+        Box(Modifier.fillMaxSize().alpha(if (night) 0.45f else 1f).aurora(accent))
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(horizontal = 48.dp, vertical = 40.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f),
         ) {
@@ -268,7 +359,7 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
             val next = upcoming.take(if (compact) 2 else 4)
             val lines = if (compact) 1 else 2
             val statusPill: @Composable () -> Unit = {
-                StatusPill(alarmLines, status.first, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away, strings)
+                StatusPill(alarmLines, status.first, snapshots.filter { it.id in monitored && !it.online }.map { it.name }, monitored.size, away, accent, strings)
             }
             val panelH = if (controls.isEmpty()) 0.dp else if (wide) maxHeight * 0.42f else maxHeight * 0.38f
             Column(Modifier.fillMaxSize()) {
@@ -283,7 +374,7 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
                     }
                     power?.let { p ->
                         Box(Modifier.weight(0.8f), contentAlignment = Alignment.Center) {
-                            PowerGauge(livePower, p.series, p.todayKwh, if (compact) 260.dp else 360.dp, strings)
+                            Box(Modifier.glass(26).padding(24.dp)) { PowerGauge(livePower, p.series, p.todayKwh, if (compact) 260.dp else 360.dp, strings) }
                         }
                     }
                     Column(Modifier.weight(1.1f), verticalArrangement = Arrangement.spacedBy(20.dp)) {
@@ -298,7 +389,7 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
                     WeatherLine(weather, lat != null, strings)
                     if (sensors.isNotEmpty()) SensorReadings(sensors, strings)
                     statusPill()
-                    power?.let { p -> Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { PowerGauge(livePower, p.series, p.todayKwh, 320.dp, strings) } }
+                    power?.let { p -> Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) { Box(Modifier.glass(26).padding(24.dp)) { PowerGauge(livePower, p.series, p.todayKwh, 320.dp, strings) } } }
                     Recent(events, lines, strings, eventStrings)
                     Upcoming(next, now, strings)
                     if (rules.isNotEmpty()) Rules(rules, ruleDevices, ruleScenes, ruleCycles, 4, strings)
@@ -307,7 +398,7 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
             }
             if (controls.isNotEmpty()) {
                 CompositionLocalProvider(LocalDeviceUi provides deviceUi, LocalStrings provides strings) {
-                    ControlPanel(controls, strings, Modifier.fillMaxWidth().height(panelH).padding(top = 20.dp))
+                    ControlPanel(controls, accent, strings, Modifier.fillMaxWidth().height(panelH).padding(top = 20.dp))
                 }
             }
             }
@@ -321,7 +412,7 @@ internal fun StandbyBoardScreen(graph: AppGraph, strings: Strings, onOpenApp: ()
         }
         AnimatedVisibility(menu, Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp), enter = fadeIn(), exit = fadeOut()) {
             Row(
-                Modifier.clip(RoundedCornerShape(28.dp)).background(Color(0xFF1B2422)).padding(horizontal = 8.dp),
+                Modifier.clip(RoundedCornerShape(28.dp)).background(Sheet).border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(28.dp)).padding(horizontal = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -343,58 +434,78 @@ private fun boardSwitches(devices: List<DeviceSnapshot>): List<BoardSwitch> = de
     d.switches.entries.sortedBy { it.key }.map { (ch, on) -> BoardSwitch(d, ch, on, d.isMultiChannel) }
 }
 
-/** Akıllı ev paneli: cihazlar kullanıcının sırasıyla, dokununca aç/kapa (Cihazlar ekranıyla aynı komut yolu). */
+/** Akıllı ev paneli: cihazlar kullanıcının sırasıyla, tıklayınca aç/kapa (Cihazlar ekranıyla aynı komut yolu). */
 @Composable
-private fun ControlPanel(list: List<BoardSwitch>, strings: Strings, modifier: Modifier) {
+private fun ControlPanel(list: List<BoardSwitch>, accent: Color, strings: Strings, modifier: Modifier) {
     Column(modifier) {
         BoardTitle(strings["tab_devices"], strings)
         androidx.compose.foundation.lazy.grid.LazyVerticalGrid(
-            androidx.compose.foundation.lazy.grid.GridCells.Adaptive(190.dp),
+            androidx.compose.foundation.lazy.grid.GridCells.Adaptive(176.dp),
             Modifier.fillMaxSize().padding(top = 10.dp).testTag("standby-controls"),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            items(list.size, key = { "${list[it].device.id}/${list[it].channel}" }) { i -> ControlTile(list[i], strings) }
+            items(list.size, key = { "${list[it].device.id}/${list[it].channel}" }) { i -> ControlTile(list[i], accent, strings) }
         }
     }
 }
 
+/**
+ * Cihaz kartı (telefon TV panosundaki kartın masaüstü eşi): koyu cam; açıkken altından vurgu renginde ışık yükselir,
+ * simge dolu daireye döner. Fare üstüne gelince kenar aydınlanır.
+ */
 @Composable
-private fun ControlTile(s: BoardSwitch, strings: Strings) {
+private fun ControlTile(s: BoardSwitch, accent: Color, strings: Strings) {
     val control = rememberSwitchControl(s.device, s.channel, s.on)
     val online = s.device.online
-    val lit = control.shown && online
-    val bg = when {
-        !online -> Color(0xFF141A19)
-        lit -> Color(0xFF103B36)
-        else -> Color(0xFF1B2422)
-    }
-    Row(
-        Modifier.fillMaxWidth().height(76.dp).clip(RoundedCornerShape(18.dp)).background(bg)
+    val on = control.shown && online
+    val lit = if (online) accent else Muted
+    val kind = remember(s.device.name, s.device.isMultiChannel, s.device.hasEnergy, s.device.cloud, s.device.sensorOnly) { DeviceKinds.of(s.device) }
+    val hover = remember { MutableInteractionSource() }
+    val hovered by hover.collectIsHoveredAsState()
+    val shape = RoundedCornerShape(24.dp)
+    Column(
+        Modifier.fillMaxWidth().height(132.dp).clip(shape)
+            .drawBehind {
+                if (on) drawRect(Brush.verticalGradient(listOf(Color.Transparent, lit.copy(alpha = 0.24f)), startY = size.height * 0.3f))
+            }
+            .background(if (hovered) Color.White.copy(alpha = 0.10f) else Faint, shape)
+            .border(
+                if (hovered) 1.5.dp else 1.dp,
+                when { hovered -> Color.White.copy(alpha = 0.6f); on -> lit.copy(alpha = 0.45f); else -> Edge },
+                shape,
+            )
+            .hoverable(hover)
             .clickable(enabled = online && !control.busy) { control.toggle(!control.shown) }
-            .padding(horizontal = 16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(16.dp),
     ) {
-        Icon(
-            Icons.Rounded.PowerSettingsNew, null, Modifier.size(28.dp),
-            tint = when { !online -> Faint; lit -> Teal; else -> Dim },
-        )
-        Column(Modifier.weight(1f)) {
-            Text(s.device.name, color = if (online) Ink else Dim, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            val sub = buildString {
-                if (s.multi) append(strings.format("channel_n", s.channel + 1)).append(" · ")
-                append(
-                    when {
-                        !online -> strings["label_offline_title"]
-                        control.busy -> "…"
-                        control.shown -> strings["state_on_title"]
-                        else -> strings["state_off_title"]
-                    },
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier.size(42.dp)
+                    .drawBehind { if (on) drawCircle(lit.copy(alpha = 0.22f), radius = size.minDimension * 0.66f) }
+                    .background(if (on) lit else Color.White.copy(alpha = 0.07f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    if (online) kind.icon() else Icons.Rounded.CloudOff, null, Modifier.size(22.dp),
+                    tint = if (on) Bg else if (online) Ink else Muted,
                 )
             }
-            Text(sub, color = if (lit) Teal else Dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Spacer(Modifier.weight(1f))
+            if (s.multi) Text((s.channel + 1).toString(), color = if (on) lit else Dim, fontSize = 15.sp, fontWeight = FontWeight.Medium)
         }
+        Spacer(Modifier.weight(1f))
+        Text(
+            when {
+                !online -> strings["label_offline_title"]
+                control.busy -> "…"
+                control.shown -> strings["state_on_title"]
+                else -> strings["state_off_title"]
+            },
+            color = when { !online -> Red.copy(alpha = 0.85f); on -> lit; else -> Ink },
+            fontSize = 22.sp, fontWeight = FontWeight.Light, maxLines = 1, overflow = TextOverflow.Ellipsis,
+        )
+        Text(s.device.name, color = Ink.copy(alpha = 0.92f), fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
@@ -406,8 +517,14 @@ private fun Clock(now: Long, strings: Strings, big: Boolean) {
         java.text.SimpleDateFormat(if (locale.language == "tr") "d MMMM EEEE" else "EEEE, d MMMM", locale).format(Date(now))
     }
     Column {
-        Text(time, color = Ink, fontSize = if (big) 120.sp else 92.sp, fontWeight = FontWeight.Light, lineHeight = if (big) 124.sp else 96.sp)
-        Text(date, color = Dim, fontSize = 22.sp)
+        Text(
+            time, color = Ink, fontSize = if (big) 120.sp else 92.sp, fontWeight = FontWeight.Thin,
+            letterSpacing = (-3).sp, lineHeight = if (big) 124.sp else 96.sp,
+        )
+        Text(
+            date.uppercase(locale), color = Dim, fontSize = 15.sp, fontWeight = FontWeight.Medium, letterSpacing = 3.sp,
+            modifier = Modifier.padding(start = 6.dp),
+        )
     }
 }
 
@@ -420,7 +537,7 @@ private fun WeatherLine(w: WeatherClient.Today?, hasLocation: Boolean, strings: 
     val (icon, label) = weatherLook(w.code, w.isDay)
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
         Icon(icon, null, tint = if (w.code == 0 && w.isDay) Amber else Ink, modifier = Modifier.size(44.dp))
-        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = 44.sp, fontWeight = FontWeight.Light)
+        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = 46.sp, fontWeight = FontWeight.Thin)
         Column {
             Text(strings[label], color = Ink, fontSize = 17.sp)
             val parts = listOfNotNull(
@@ -450,7 +567,7 @@ private data class Look(val color: Color, val icon: ImageVector, val title: Stri
 
 /** Kritik durum: alarm > bağlantı sorunu > çevrimdışı cihaz > her şey yolunda; altında evde/dışarıda. */
 @Composable
-private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean, strings: Strings) {
+private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean, accent: Color, strings: Strings) {
     val look = when {
         alarm.isNotEmpty() -> Look(Red, Icons.Rounded.NotificationsActive, strings["board_alarm"], alarm.last())
         conn == ConnState.NO_INTERNET -> Look(Amber, Icons.Rounded.CloudOff, strings["board_no_internet"], null)
@@ -460,14 +577,15 @@ private fun StatusPill(alarm: List<String>, conn: ConnState, offline: List<Strin
         offline.isNotEmpty() -> Look(Amber, Icons.Rounded.CloudOff, strings.format("board_offline", offline.size), offline.joinToString(", "))
         else -> Look(Teal, Icons.Rounded.CheckCircle, strings["board_all_ok"], strings.format("board_watching", watched))
     }
+    val ok = look.color == Teal
     Row(
-        Modifier.clip(RoundedCornerShape(20.dp)).background(look.color.copy(alpha = 0.14f)).padding(horizontal = 18.dp, vertical = 14.dp),
+        Modifier.glass(22, tint = if (ok) null else look.color).padding(horizontal = 20.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Icon(look.icon, null, tint = look.color, modifier = Modifier.size(30.dp))
+        Box(Modifier.size(30.dp), contentAlignment = Alignment.Center) { PulseDot(if (ok) accent else look.color, pulsing = ok || alarm.isNotEmpty()) }
         Column(Modifier.widthIn(max = 520.dp)) {
-            Text(look.title, color = look.color, fontSize = 19.sp, fontWeight = FontWeight.Medium)
+            Text(look.title, color = Ink, fontSize = 20.sp, fontWeight = FontWeight.Light)
             if (look.detail != null) Text(look.detail, color = Dim, fontSize = 15.sp, maxLines = 2, overflow = TextOverflow.Ellipsis)
             Row(Modifier.padding(top = 2.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 Icon(if (away) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home, null, tint = Dim, modifier = Modifier.size(16.dp))
@@ -499,7 +617,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
                 if (frac > 0f) drawArc(arcColor, 180f, 180f * frac, false, topLeft, arc, style = Stroke(stroke, cap = StrokeCap.Round))
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(boardWatts(watts), color = Ink, fontSize = 38.sp, fontWeight = FontWeight.Light)
+                Text(boardWatts(watts), color = Ink, fontSize = 38.sp, fontWeight = FontWeight.Thin)
                 Text(strings.format("board_power_now", boardWatts(max)), color = Dim, fontSize = 13.sp)
             }
         }
@@ -545,7 +663,7 @@ private fun SensorReadings(devices: List<DeviceSnapshot>, strings: Strings) {
                 val busy = d.online && d.sensorActive(SensorKind.MOTION) == true
                 val accent = when { alert -> Color(0xFFFF6B6B); busy -> Amber; else -> Teal }
                 Column(
-                    Modifier.clip(RoundedCornerShape(16.dp)).background(if (alert) accent.copy(alpha = 0.18f) else Faint)
+                    Modifier.glass(20, tint = if (alert) accent else null)
                         .alpha(if (d.online) 1f else 0.5f).padding(horizontal = 16.dp, vertical = 12.dp),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -578,7 +696,7 @@ private fun Rules(
     list: List<com.macerce.switchguard.core.Automation>, devices: List<DeviceSnapshot>, scenes: List<com.macerce.switchguard.core.Scene>,
     cycles: List<com.macerce.switchguard.core.Cycle>, max: Int, strings: Strings,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         BoardTitle(strings["automations_rules_title"] + " · " + list.size, strings)
         for (a in list.take(max)) {
             val (cond, act) = com.macerce.switchguard.desktop.ui.automations.describe(a, devices, strings, scenes, cycles)
@@ -600,7 +718,7 @@ private fun BoardTitle(text: String, strings: Strings) {
 
 @Composable
 private fun Recent(list: List<LoggedEvent>, lines: Int, strings: Strings, eventStrings: com.macerce.switchguard.core.EventStrings) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         BoardTitle(strings["board_recent"], strings)
         if (list.isEmpty()) Text(strings["board_no_recent"], color = Dim, fontSize = 16.sp)
         for (e in list) {
@@ -628,7 +746,7 @@ private fun eventTime(t: Long, strings: Strings): String {
 @Composable
 private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, strings: Strings) {
     val durations = remember(strings) { strings.durations() }
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxWidth().glass(22).padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         BoardTitle(strings["board_upcoming"], strings)
         if (list.isEmpty()) Text(strings["board_no_upcoming"], color = Dim, fontSize = 16.sp)
         for (u in list) {
