@@ -428,6 +428,11 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = prefs.getBoolean("standbyDim", true)
         set(v) = put { putBoolean("standbyDim", v) }
 
+    /** Bekleme ekranı widget düzeni ([com.macerce.switchguard.core.StandbyGrid] metni); null = varsayılan. */
+    var standbyGrid: String?
+        get() = prefs.getString("standbyGrid", null)
+        set(v) = put { putString("standbyGrid", v) }
+
     /** Bölgeler: girince/çıkınca otomasyon çalıştıran haritada seçilmiş alanlar (bkz. [com.macerce.switchguard.core.Zone]). */
     var zones: List<com.macerce.switchguard.core.Zone>
         get() = parsed.get("zones", prefs.getString("zones", null)) { com.macerce.switchguard.core.Zone.listFromJson(it) }

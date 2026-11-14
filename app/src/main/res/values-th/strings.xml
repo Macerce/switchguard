@@ -1453,6 +1453,16 @@
     <string name="board_dim_desc">ข้อความจางลงระหว่าง 23:00 ถึง 07:00</string>
     <string name="board_open_app">เปิดแอป</string>
     <string name="board_close">ปิด</string>
+    <string name="board_edit">แก้ไขเลย์เอาต์</string>
+    <string name="board_edit_hint">กดค้างแล้วลากเพื่อย้าย ลากมุมเพื่อปรับขนาด × เพื่อนำออก</string>
+    <string name="board_reset">รีเซ็ต</string>
+    <string name="board_add">เพิ่ม</string>
+    <string name="board_sec_clock">นาฬิกา</string>
+    <string name="board_sec_weather">สภาพอากาศ</string>
+    <string name="board_sec_status">สถานะ</string>
+    <string name="board_sec_power">กำลังไฟ</string>
+    <string name="board_hide">นำออก</string>
+    <string name="board_show">เพิ่มกลับ</string>
     <string name="board_all_ok">ปกติดี</string>
     <string name="board_watching">กำลังดู %1$d อุปกรณ์</string>
     <string name="board_alarm">สัญญาณเตือนทำงานอยู่</string>

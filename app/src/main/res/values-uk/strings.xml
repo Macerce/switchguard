@@ -1561,6 +1561,16 @@
     <string name="board_dim_desc">Текст тьмяніє з 23:00 до 07:00</string>
     <string name="board_open_app">Відкрити застосунок</string>
     <string name="board_close">Закрити</string>
+    <string name="board_edit">Змінити макет</string>
+    <string name="board_edit_hint">Утримуйте й перетягуйте, щоб перемістити; тягніть кут, щоб змінити розмір; × прибирає</string>
+    <string name="board_reset">Скинути</string>
+    <string name="board_add">Додати</string>
+    <string name="board_sec_clock">Годинник</string>
+    <string name="board_sec_weather">Погода</string>
+    <string name="board_sec_status">Стан</string>
+    <string name="board_sec_power">Потужність</string>
+    <string name="board_hide">Прибрати</string>
+    <string name="board_show">Повернути</string>
     <string name="board_all_ok">Усе гаразд</string>
     <string name="board_watching">Стежимо за пристроями: %1$d</string>
     <string name="board_alarm">Тривога активна</string>

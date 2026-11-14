@@ -1554,6 +1554,16 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="board_dim_desc">O texto esmaece entre 23:00 e 07:00</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Fechar</string>
+    <string name="board_edit">Editar layout</string>
+    <string name="board_edit_hint">Toque e segure e arraste para mover, arraste o canto para redimensionar, × remove</string>
+    <string name="board_reset">Redefinir</string>
+    <string name="board_add">Adicionar</string>
+    <string name="board_sec_clock">Relógio</string>
+    <string name="board_sec_weather">Clima</string>
+    <string name="board_sec_status">Status</string>
+    <string name="board_sec_power">Potência</string>
+    <string name="board_hide">Remover</string>
+    <string name="board_show">Adicionar de volta</string>
     <string name="board_all_ok">Tudo bem</string>
     <string name="board_watching">Vigiando %1$d dispositivos</string>
     <string name="board_alarm">Alarme ativo</string>

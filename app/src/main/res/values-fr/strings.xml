@@ -1553,6 +1553,16 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="board_dim_desc">Le texte s\'estompe entre 23:00 et 07:00</string>
     <string name="board_open_app">Ouvrir l\'application</string>
     <string name="board_close">Fermer</string>
+    <string name="board_edit">Modifier la disposition</string>
+    <string name="board_edit_hint">Maintenez et faites glisser pour déplacer, tirez le coin pour redimensionner, × retire</string>
+    <string name="board_reset">Réinitialiser</string>
+    <string name="board_add">Ajouter</string>
+    <string name="board_sec_clock">Horloge</string>
+    <string name="board_sec_weather">Météo</string>
+    <string name="board_sec_status">État</string>
+    <string name="board_sec_power">Puissance</string>
+    <string name="board_hide">Retirer</string>
+    <string name="board_show">Rajouter</string>
     <string name="board_all_ok">Tout va bien</string>
     <string name="board_watching">%1$d appareils surveillés</string>
     <string name="board_alarm">Alarme active</string>
