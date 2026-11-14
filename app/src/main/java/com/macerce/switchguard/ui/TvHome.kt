@@ -104,7 +104,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import java.util.Date
-import java.util.Locale
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.roundToInt
@@ -245,7 +244,7 @@ private fun Modifier.aurora(accent: Color): Modifier {
 @Composable
 private fun TopBand(state: ConnState, detail: String, monitoring: Boolean, devices: List<DeviceSnapshot>, accent: Color) {
     val context = LocalContext.current
-    val locale = LocalConfiguration.current.locales[0] ?: Locale.getDefault()
+    val locale = LocalConfiguration.current.locales[0]
     // Saat dakika başında güncellenir.
     val now by produceState(System.currentTimeMillis()) {
         while (true) {
