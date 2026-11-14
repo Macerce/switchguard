@@ -1489,6 +1489,16 @@
     <string name="board_dim_desc">23:00 至 07:00 文字变暗</string>
     <string name="board_open_app">打开应用</string>
     <string name="board_close">关闭</string>
+    <string name="board_edit">编辑布局</string>
+    <string name="board_edit_hint">长按拖动可移动，拖动角落可调整大小，× 移除</string>
+    <string name="board_reset">恢复默认</string>
+    <string name="board_add">添加</string>
+    <string name="board_sec_clock">时钟</string>
+    <string name="board_sec_weather">天气</string>
+    <string name="board_sec_status">状态</string>
+    <string name="board_sec_power">功率</string>
+    <string name="board_hide">移除</string>
+    <string name="board_show">重新添加</string>
     <string name="board_all_ok">一切正常</string>
     <string name="board_watching">正在监控 %1$d 台设备</string>
     <string name="board_alarm">警报触发中</string>

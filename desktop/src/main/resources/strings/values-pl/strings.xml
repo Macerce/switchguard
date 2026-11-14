@@ -1590,6 +1590,16 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="board_dim_desc">Tekst przygasa między 23:00 a 07:00</string>
     <string name="board_open_app">Otwórz aplikację</string>
     <string name="board_close">Zamknij</string>
+    <string name="board_edit">Edytuj układ</string>
+    <string name="board_edit_hint">Przytrzymaj i przeciągnij, aby przesunąć, przeciągnij róg, aby zmienić rozmiar, × usuwa</string>
+    <string name="board_reset">Przywróć</string>
+    <string name="board_add">Dodaj</string>
+    <string name="board_sec_clock">Zegar</string>
+    <string name="board_sec_weather">Pogoda</string>
+    <string name="board_sec_status">Stan</string>
+    <string name="board_sec_power">Moc</string>
+    <string name="board_hide">Usuń</string>
+    <string name="board_show">Dodaj ponownie</string>
     <string name="board_all_ok">Wszystko w porządku</string>
     <string name="board_watching">Obserwuje urządzenia: %1$d</string>
     <string name="board_alarm">Alarm aktywny</string>

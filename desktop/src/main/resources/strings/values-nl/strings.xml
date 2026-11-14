@@ -1518,6 +1518,16 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_dim_desc">Tekst vervaagt tussen 23:00 en 07:00</string>
     <string name="board_open_app">App openen</string>
     <string name="board_close">Sluiten</string>
+    <string name="board_edit">Indeling bewerken</string>
+    <string name="board_edit_hint">Houd vast en sleep om te verplaatsen, sleep de hoek om te schalen, × verwijdert</string>
+    <string name="board_reset">Herstellen</string>
+    <string name="board_add">Toevoegen</string>
+    <string name="board_sec_clock">Klok</string>
+    <string name="board_sec_weather">Weer</string>
+    <string name="board_sec_status">Status</string>
+    <string name="board_sec_power">Vermogen</string>
+    <string name="board_hide">Verwijderen</string>
+    <string name="board_show">Weer toevoegen</string>
     <string name="board_all_ok">Alles in orde</string>
     <string name="board_watching">%1$d apparaten in de gaten</string>
     <string name="board_alarm">Alarm actief</string>

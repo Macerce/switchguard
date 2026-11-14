@@ -1,0 +1,2 @@
+# Bekleme ekranı widget ızgarası (telefon 2.31.3): boyut tutamağı.
+rounded/OpenInFull

@@ -1554,6 +1554,16 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_dim_desc">Il testo si attenua tra le 23:00 e le 07:00</string>
     <string name="board_open_app">Apri app</string>
     <string name="board_close">Chiudi</string>
+    <string name="board_edit">Modifica layout</string>
+    <string name="board_edit_hint">Tieni premuto e trascina per spostare, trascina l\'angolo per ridimensionare, × rimuove</string>
+    <string name="board_reset">Ripristina</string>
+    <string name="board_add">Aggiungi</string>
+    <string name="board_sec_clock">Orologio</string>
+    <string name="board_sec_weather">Meteo</string>
+    <string name="board_sec_status">Stato</string>
+    <string name="board_sec_power">Potenza</string>
+    <string name="board_hide">Rimuovi</string>
+    <string name="board_show">Aggiungi di nuovo</string>
     <string name="board_all_ok">Tutto bene</string>
     <string name="board_watching">%1$d dispositivi sotto controllo</string>
     <string name="board_alarm">Allarme attivo</string>

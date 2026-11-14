@@ -1590,6 +1590,16 @@
     <string name="board_dim_desc">Текст тускнеет с 23:00 до 07:00</string>
     <string name="board_open_app">Открыть приложение</string>
     <string name="board_close">Закрыть</string>
+    <string name="board_edit">Изменить макет</string>
+    <string name="board_edit_hint">Удерживайте и перетаскивайте, чтобы переместить; тяните угол, чтобы изменить размер; × убирает</string>
+    <string name="board_reset">Сбросить</string>
+    <string name="board_add">Добавить</string>
+    <string name="board_sec_clock">Часы</string>
+    <string name="board_sec_weather">Погода</string>
+    <string name="board_sec_status">Состояние</string>
+    <string name="board_sec_power">Мощность</string>
+    <string name="board_hide">Убрать</string>
+    <string name="board_show">Вернуть</string>
     <string name="board_all_ok">Всё в порядке</string>
     <string name="board_watching">Под наблюдением: %1$d</string>
     <string name="board_alarm">Тревога активна</string>

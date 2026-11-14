@@ -550,6 +550,11 @@ class Store internal constructor(
         get() = bool("standbyDim", true)
         set(v) = edit { put("standbyDim", v) }
 
+    /** Bekleme ekranı widget düzeni ([com.macerce.switchguard.core.StandbyGrid] metni); null = varsayılan. */
+    var standbyGrid: String?
+        get() = strOrNull("standbyGrid")
+        set(v) = edit { put("standbyGrid", v ?: JSONObject.NULL) }
+
     /** Gerçek cihazlar + grupların sanal cihazları (otomasyon, Cihazlar ekranı, Telegram). */
     val snapshotsWithGroups: List<DeviceSnapshot>
         get() = DeviceGroup.withGroups(snapshots, groups)

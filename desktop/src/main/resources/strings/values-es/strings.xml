@@ -1554,6 +1554,16 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_dim_desc">El texto se atenúa entre las 23:00 y las 07:00</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Cerrar</string>
+    <string name="board_edit">Editar diseño</string>
+    <string name="board_edit_hint">Mantén pulsado y arrastra para mover, arrastra la esquina para cambiar el tamaño, × quita</string>
+    <string name="board_reset">Restablecer</string>
+    <string name="board_add">Añadir</string>
+    <string name="board_sec_clock">Reloj</string>
+    <string name="board_sec_weather">Tiempo</string>
+    <string name="board_sec_status">Estado</string>
+    <string name="board_sec_power">Potencia</string>
+    <string name="board_hide">Quitar</string>
+    <string name="board_show">Volver a añadir</string>
     <string name="board_all_ok">Todo en orden</string>
     <string name="board_watching">Vigilando %1$d dispositivos</string>
     <string name="board_alarm">Alarma activa</string>
