@@ -1,6 +1,6 @@
 # SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-_Last updated / Son güncelleme: 13 November 2026 / 13 Kasım 2026_
+_Last updated / Son güncelleme: 15 November 2026 / 15 Kasım 2026_
 
 ## English
 
@@ -11,9 +11,9 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink and/or Tu
 - The access/refresh tokens eWeLink issues after you sign in, your eWeLink user key and email address.
 - If you connect Tuya: the Access ID and Access Secret of your own Tuya Cloud project and the temporary access token Tuya issues.
 - The names and on/off/online states of your devices, energy readings of power-metering devices, readings of your eWeLink sensors (temperature, humidity, light, door, motion, water leak, battery) and their history, your alert rules, automations and settings (including the alarm sounds you pick).
-- A history of device events (at most 2,000 entries).
+- A history of device events (at most 2,000 entries) and power/sensor readings (kept for up to 400 days).
 
-**Who the app talks to:** only the official servers of the platforms you connect — eWeLink (`*.coolkit.cc` / `*.coolkit.cn`) and Tuya (`openapi.tuya*.com`, message service `mqe.tuya*.com`) — to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. If you turn on "Tell someone else", it also talks to Telegram (`api.telegram.org`); if you use temperature rules, it asks Open-Meteo (`api.open-meteo.com`) for the outside temperature; zones use OpenStreetMap map tiles and Open-Meteo place search (see below). The app has **no server of its own**, and contains **no analytics, advertising or tracking SDKs**. No data is sold or shared with third parties.
+**Who the app talks to:** only the official servers of the platforms you connect — eWeLink (`*.coolkit.cc` / `*.coolkit.cn`) and Tuya (`openapi.tuya*.com`, message service `mqe.tuya*.com`) — to sign you in, read your devices' states, receive live updates and switch devices on or off when you ask it to. If you turn on "Tell someone else", it also talks to Telegram (`api.telegram.org`); if you use temperature rules, it asks Open-Meteo (`api.open-meteo.com`) for the outside temperature; zones use OpenStreetMap map tiles and Open-Meteo place search (see below). Copies installed outside Google Play check GitHub (`api.github.com`) for new versions; this request contains nothing about you or your devices. The app has **no server of its own**, and contains **no analytics, advertising or tracking SDKs**. No data is sold or shared with third parties.
 
 **No purchases:** the app is free with every feature, on Android and Windows. It has no in-app purchases, subscriptions, license keys or payment code, and collects no payment information.
 
@@ -37,6 +37,8 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink and/or Tu
 
 **Entering keys from your phone (TV):** on a TV, "Enter from phone" shows a QR code that opens a page served by the TV itself on your home network. What you type there is encrypted in your phone's browser with a one-time key from the QR code and goes straight to the TV; it never leaves your home network.
 
+**Voice commands (optional):** when you tap the microphone, speech is recognised by your device's built-in speech service (for example Google's on Android); the app receives only the recognised text and handles it on the device. Spoken answers use the device's text-to-speech.
+
 **Backups:** app data is excluded from Android cloud backup and device transfer.
 
 **Deleting your data:** sign out in Settings, clear the history, or uninstall the app — all data is removed from the device. You can also revoke access at any time from your eWeLink developer account or by deleting your Tuya Cloud project / unlinking your app account from it.
@@ -54,9 +56,9 @@ SwitchGuard ("uygulama"), **size ait** eWeLink ve/veya Tuya (Smart Life) hesabı
 - Girişten sonra eWeLink'in verdiği erişim/yenileme token'ları, eWeLink kullanıcı anahtarınız ve e-posta adresiniz.
 - Tuya bağlarsanız: size ait Tuya Cloud projesinin Access ID ve Access Secret bilgileri ile Tuya'nın verdiği geçici erişim token'ı.
 - Cihazlarınızın adları, açık/kapalı/çevrimiçi durumları, enerji ölçen cihazların ölçümleri, eWeLink sensörlerinizin değerleri (sıcaklık, nem, ışık, kapı, hareket, su kaçağı, pil) ve geçmişleri, alarm kurallarınız, otomasyonlarınız ve ayarlarınız (seçtiğiniz alarm sesleri dahil).
-- Cihaz olaylarının geçmişi (en fazla 2.000 kayıt).
+- Cihaz olaylarının geçmişi (en fazla 2.000 kayıt) ve güç/sensör ölçümleri (en fazla 400 gün).
 
-**Uygulamanın iletişim kurduğu yerler:** yalnızca bağladığınız platformların resmi sunucuları: eWeLink (`*.coolkit.cc` / `*.coolkit.cn`) ve Tuya (`openapi.tuya*.com`, mesaj servisi `mqe.tuya*.com`). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. "İkinci kişiye haber ver" özelliğini açarsanız Telegram'a (`api.telegram.org`), sıcaklık kuralı kullanırsanız dış sıcaklık için Open-Meteo'ya (`api.open-meteo.com`) da bağlanır; bölgeler OpenStreetMap harita karolarını ve Open-Meteo yer aramasını kullanır (aşağıya bakın). Uygulamanın **kendi sunucusu yoktur**; **analiz, reklam veya izleme kütüphanesi içermez**. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.
+**Uygulamanın iletişim kurduğu yerler:** yalnızca bağladığınız platformların resmi sunucuları: eWeLink (`*.coolkit.cc` / `*.coolkit.cn`) ve Tuya (`openapi.tuya*.com`, mesaj servisi `mqe.tuya*.com`). Bu bağlantı giriş yapmak, cihaz durumlarını okumak, anlık güncellemeleri almak ve istediğinizde cihazları açıp kapatmak için kullanılır. "İkinci kişiye haber ver" özelliğini açarsanız Telegram'a (`api.telegram.org`), sıcaklık kuralı kullanırsanız dış sıcaklık için Open-Meteo'ya (`api.open-meteo.com`) da bağlanır; bölgeler OpenStreetMap harita karolarını ve Open-Meteo yer aramasını kullanır (aşağıya bakın). Google Play dışından kurulan kopyalar yeni sürüm için GitHub'a (`api.github.com`) bakar; bu istek sizinle veya cihazlarınızla ilgili hiçbir bilgi içermez. Uygulamanın **kendi sunucusu yoktur**; **analiz, reklam veya izleme kütüphanesi içermez**. Hiçbir veri satılmaz veya üçüncü taraflarla paylaşılmaz.
 
 **Satın alma yok:** uygulama Android'de ve Windows'ta tüm özellikleriyle ücretsizdir. Uygulama içi satın alma, abonelik, lisans anahtarı veya ödeme kodu içermez; hiçbir ödeme bilgisi toplamaz.
 
@@ -79,6 +81,8 @@ SwitchGuard ("uygulama"), **size ait** eWeLink ve/veya Tuya (Smart Life) hesabı
 **Şarjı elektrik algılayıcısı olarak kullanma (isteğe bağlı):** uygulama bu telefonun ya da tabletin şarj olup olmadığını yalnızca cihazda okur.
 
 **Anahtarları telefondan girme (TV):** TV'de "Telefondan gir", TV'nin ev ağınızda kendisinin sunduğu bir sayfayı açan QR kodu gösterir. Oraya yazdıklarınız telefonunuzun tarayıcısında QR koddaki tek seferlik anahtarla şifrelenir ve doğrudan TV'ye gider; ev ağınızdan çıkmaz.
+
+**Sesli komut (isteğe bağlı):** mikrofona dokunduğunuzda konuşma, cihazınızın yerleşik konuşma tanıma servisiyle (ör. Android'de Google'ınki) tanınır; uygulamaya yalnızca tanınan metin gelir ve cihazda işlenir. Sesli yanıtlar cihazın metin okuma özelliğiyle verilir.
 
 **Yedekleme:** Uygulama verileri Android bulut yedeğine ve cihaz aktarımına dahil edilmez.
 
