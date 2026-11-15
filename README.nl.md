@@ -15,6 +15,8 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 
 ## Downloaden
 
+**Website:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (telefoon, tablet, tv)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [nieuwste Android-versie](https://github.com/Macerce/switchguard/releases/latest) — download `SwitchGuard-x.y.z.apk` en open het op de telefoon. Is SwitchGuard al via Google Play geïnstalleerd, verwijder het dan eerst (andere handtekening). De GitHub-versie meldt het als er een nieuwere is.

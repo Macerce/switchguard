@@ -15,6 +15,8 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 
 ## Descargar
 
+**Sitio web:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (teléfono, tableta, TV)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [última versión de Android](https://github.com/Macerce/switchguard/releases/latest) — descarga `SwitchGuard-x.y.z.apk` y ábrelo en el teléfono. Si SwitchGuard ya está instalado desde Google Play, desinstálalo primero (firma distinta). La versión de GitHub te avisa cuando sale una nueva.

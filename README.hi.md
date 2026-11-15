@@ -15,6 +15,8 @@ SwitchGuard आपके अपने **eWeLink / SONOFF** और **Tuya / Smart
 
 ## डाउनलोड
 
+**वेबसाइट:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (फ़ोन, टैबलेट, TV)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [नवीनतम Android रिलीज़](https://github.com/Macerce/switchguard/releases/latest) — `SwitchGuard-x.y.z.apk` डाउनलोड करें और फ़ोन पर खोलें। अगर SwitchGuard पहले से Google Play से इंस्टॉल है, तो पहले उसे अनइंस्टॉल करें (हस्ताक्षर अलग है)। नया संस्करण आने पर GitHub संस्करण आपको बताता है।

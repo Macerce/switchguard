@@ -15,6 +15,8 @@ SwitchGuard стежить за розумними розетками й вим�
 
 ## Завантажити
 
+**Сайт:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (телефон, планшет, ТБ)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [остання версія для Android](https://github.com/Macerce/switchguard/releases/latest) — завантажте `SwitchGuard-x.y.z.apk` і відкрийте його на телефоні. Якщо SwitchGuard уже встановлено з Google Play, спершу видаліть його (інший підпис). Версія з GitHub повідомить, коли вийде новіша.

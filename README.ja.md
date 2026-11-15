@@ -15,6 +15,8 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 ## ダウンロード
 
+**ウェブサイト:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (スマートフォン、タブレット、テレビ)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [最新の Android リリース](https://github.com/Macerce/switchguard/releases/latest) — `SwitchGuard-x.y.z.apk` をダウンロードしてスマートフォンで開きます。Google Play から SwitchGuard をインストール済みの場合は、先にアンインストールしてください（署名が異なります）。GitHub 版は新しいバージョンが出ると知らせてくれます。

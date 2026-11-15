@@ -15,6 +15,8 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 
 ## Download
 
+**Website:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (Handy, Tablet, TV)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [neueste Android-Version](https://github.com/Macerce/switchguard/releases/latest) — `SwitchGuard-x.y.z.apk` herunterladen und auf dem Handy öffnen. Ist SwitchGuard bereits aus Google Play installiert, deinstalliere es zuerst (andere Signatur). Die GitHub-Version meldet sich, wenn es eine neuere gibt.

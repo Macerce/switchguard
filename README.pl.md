@@ -15,6 +15,8 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 
 ## Pobierz
 
+**Strona internetowa:** https://switchguard.macerce.workers.dev/en/
+
 ### Android (telefon, tablet, TV)
 - **Google Play**: https://play.google.com/store/apps/details?id=com.macerce.switchguard
 - **APK**: [najnowsza wersja na Androida](https://github.com/Macerce/switchguard/releases/latest) — pobierz `SwitchGuard-x.y.z.apk` i otwórz na telefonie. Jeśli SwitchGuard jest już zainstalowany z Google Play, najpierw go odinstaluj (inny podpis). Wersja z GitHuba powiadomi Cię o nowszej.
