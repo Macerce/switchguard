@@ -5,10 +5,14 @@
 SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan **Tuya / Smart Life** milik Anda sendiri dan membunyikan alarm sungguhan begitu ada yang berubah — pompa yang berhenti, colokan freezer yang mati, perangkat yang kehilangan koneksi. Berjalan di ponsel dan tablet Android, Android TV, dan jam tangan Wear OS, serta tersedia juga aplikasi Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Perangkat">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energi">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Otomatisasi">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarm perangkat">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Bahasa:** aplikasi Android (2.26+) dan aplikasi Windows (0.13+) tersedia dalam 20 bahasa — Setelan → Bahasa.

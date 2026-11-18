@@ -5,10 +5,14 @@
 SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarındaki akıllı priz ve anahtarları izler; bir şey değiştiği anda gerçek bir alarm çalar — duran bir pompa, kapanan bir dondurucu prizi, bağlantısı kopan bir cihaz. Android telefon, tablet, Android TV ve Wear OS saatlerde çalışır; Windows uygulaması da vardır.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Cihazlar">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Enerji">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Otomasyon">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Cihaz alarmı">
+  <img src="docs/screenshots/readme/tr/01-devices.png" width="200" alt="Cihazlar">
+  <img src="docs/screenshots/readme/tr/02-standby.png" width="200" alt="Bekleme ekranı">
+  <img src="docs/screenshots/readme/tr/03-chat.png" width="200" alt="Sohbet">
+  <img src="docs/screenshots/readme/tr/04-ai-help.png" width="200" alt="Yapay zekâ yardımı">
+</p>
+<p>
+  <img src="docs/screenshots/readme/tr/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/tr/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Diller:** Android uygulaması (2.26+) ve Windows uygulaması (0.13+) 20 dilde kullanılabilir — Ayarlar → Dil.

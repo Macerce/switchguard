@@ -5,10 +5,14 @@
 SwitchGuard เฝ้าดูปลั๊กและสวิตช์อัจฉริยะในบัญชี **eWeLink / SONOFF** และ **Tuya / Smart Life** ของคุณเอง และส่งเสียงเตือนจริงทันทีที่มีอะไรเปลี่ยนไป ไม่ว่าจะเป็นปั๊มที่หยุดทำงาน ปลั๊กตู้แช่ที่ถูกปิด หรืออุปกรณ์ที่ขาดการเชื่อมต่อ ใช้งานได้บนโทรศัพท์และแท็บเล็ต Android, Android TV และนาฬิกา Wear OS และยังมีแอปสำหรับ Windows ด้วย
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="อุปกรณ์">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="พลังงาน">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="ระบบอัตโนมัติ">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="สัญญาณเตือนอุปกรณ์">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **ภาษา:** แอป Android (2.26+) และแอป Windows (0.13+) มีให้ใช้ 20 ภาษา — การตั้งค่า → ภาษา

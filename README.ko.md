@@ -5,10 +5,14 @@
 SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스마트 플러그와 스위치를 지켜보다가, 무언가 바뀌는 순간 진짜 알람을 울립니다. 멈춘 펌프, 꺼진 냉동고 플러그, 연결이 끊긴 기기 등. Android 휴대폰, 태블릿, Android TV, Wear OS 시계에서 실행되며 Windows 앱도 있습니다.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="기기">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="에너지">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="자동화">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="기기 알람">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **언어:** Android 앱(2.26 이상)과 Windows 앱(0.13 이상) 모두 20개 언어를 지원합니다 — 설정 → 언어.

@@ -5,10 +5,14 @@
 SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF** and **Tuya / Smart Life** accounts and rings a real alarm the moment something changes — a pump that stopped, a freezer plug switched off, a device that lost its connection. It runs on Android phones, tablets, Android TV and Wear OS watches, and there is a Windows app too.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Devices">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energy">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Automations">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Device alarm">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Languages:** the Android app (2.26+) and the Windows app (0.13+) are both available in 20 languages — Settings → Language.

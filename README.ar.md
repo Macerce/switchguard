@@ -7,10 +7,14 @@
 يراقب SwitchGuard المقابس والمفاتيح الذكية في حساباتك الخاصة على **eWeLink / SONOFF** و**Tuya / Smart Life**، ويُطلق إنذارًا حقيقيًا لحظة تغيّر أي شيء: مضخة توقفت، أو مجمّد انقطعت عنه الكهرباء، أو جهاز فقد اتصاله. يعمل على هواتف Android وأجهزته اللوحية وAndroid TV وساعات Wear OS، ويتوفر أيضًا تطبيق لنظام Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="الأجهزة">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="الطاقة">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="الأتمتة">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="إنذار الجهاز">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **اللغات:** تطبيق Android (2.26+) وتطبيق Windows (0.13+) متاحان بـ 20 لغة — الإعدادات ← اللغة.

@@ -5,10 +5,14 @@
 SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Life** アカウントにあるスマートプラグやスイッチを見守り、何かが変わった瞬間に本物のアラームを鳴らします。止まったポンプ、電源が切れた冷凍庫、接続が切れたデバイスなど。Android スマートフォン・タブレット、Android TV、Wear OS ウォッチで動作し、Windows 版アプリもあります。
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="デバイス">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="エネルギー">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="オートメーション">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="デバイスアラーム">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **言語:** Android アプリ（2.26 以降）と Windows アプリ（0.13 以降）はどちらも 20 言語に対応しています — 設定 → 言語。

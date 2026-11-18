@@ -5,10 +5,14 @@
 SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własnych kontach **eWeLink / SONOFF** i **Tuya / Smart Life** i włącza prawdziwy alarm, gdy tylko coś się zmieni — pompa stanęła, zamrażarka została wyłączona, urządzenie straciło połączenie. Działa na telefonach i tabletach z Androidem, Android TV i zegarkach Wear OS; jest też aplikacja na Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Urządzenia">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energia">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Automatyzacje">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Alarm urządzenia">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Języki:** aplikacja na Androida (2.26+) i aplikacja na Windows (0.13+) są dostępne w 20 językach — Ustawienia → Język.

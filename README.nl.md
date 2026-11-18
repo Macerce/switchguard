@@ -5,10 +5,14 @@
 SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SONOFF**- en **Tuya / Smart Life**-accounts en laat een echt alarm afgaan zodra er iets verandert — een pomp die stilvalt, een vriezer die uitgeschakeld is, een apparaat zonder verbinding. Werkt op Android-telefoons, tablets, Android TV en Wear OS-horloges, en er is ook een Windows-app.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Apparaten">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energie">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Automatiseringen">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Apparaatalarm">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Talen:** de Android-app (2.26+) en de Windows-app (0.13+) zijn beschikbaar in 20 talen — Instellingen → Taal.

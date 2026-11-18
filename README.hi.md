@@ -5,10 +5,14 @@
 SwitchGuard आपके अपने **eWeLink / SONOFF** और **Tuya / Smart Life** खातों के स्मार्ट प्लग और स्विच पर नज़र रखता है और कुछ भी बदलते ही असली अलार्म बजाता है — रुका हुआ पंप, बंद हुआ फ़्रीज़र प्लग, कनेक्शन खो चुका डिवाइस। यह Android फ़ोन, टैबलेट, Android TV और Wear OS घड़ियों पर चलता है, और Windows ऐप भी है।
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="डिवाइस">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="ऊर्जा">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="ऑटोमेशन">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="डिवाइस अलार्म">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **भाषाएँ:** Android ऐप (2.26+) और Windows ऐप (0.13+) दोनों 20 भाषाओं में उपलब्ध हैं — सेटिंग्स → भाषा।

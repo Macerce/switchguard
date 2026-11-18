@@ -5,10 +5,14 @@
 SwitchGuard 會監控你自己的 **eWeLink / SONOFF** 與 **Tuya / Smart Life** 帳號中的智慧插座和開關，一有變化就立即發出真正的警報——抽水馬達停了、冷凍櫃插座被關掉、裝置斷線了。可在 Android 手機、平板、Android TV 與 Wear OS 手錶上執行，另外也有 Windows 應用程式。
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="裝置">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="電能">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="自動化">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="裝置警報">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **語言：** Android 應用程式（2.26+）和 Windows 應用程式（0.13+）皆支援 20 種語言 — 設定 → 語言。

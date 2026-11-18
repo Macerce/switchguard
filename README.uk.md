@@ -5,10 +5,14 @@
 SwitchGuard стежить за розумними розетками й вимикачами у ваших власних акаунтах **eWeLink / SONOFF** і **Tuya / Smart Life** та вмикає справжню тривогу, щойно щось змінюється: зупинився насос, вимкнулася морозильна камера, пристрій втратив зв'язок. Працює на Android-телефонах, планшетах, Android TV і годинниках Wear OS; є й застосунок для Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Пристрої">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Енергія">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Автоматизації">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Тривога пристрою">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Мови:** застосунок для Android (2.26+) і застосунок для Windows (0.13+) доступні 20 мовами — Налаштування → Мова.

@@ -5,10 +5,14 @@
 SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài khoản **eWeLink / SONOFF** và **Tuya / Smart Life** của bạn, và phát báo động thật ngay khi có thay đổi — máy bơm ngừng chạy, tủ đông bị ngắt, thiết bị mất kết nối. Ứng dụng chạy trên điện thoại, máy tính bảng Android, Android TV và đồng hồ Wear OS; ngoài ra còn có ứng dụng Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Thiết bị">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Năng lượng">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Tự động hóa">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Báo động thiết bị">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Ngôn ngữ:** ứng dụng Android (2.26+) và ứng dụng Windows (0.13+) đều có 20 ngôn ngữ — Cài đặt → Ngôn ngữ.

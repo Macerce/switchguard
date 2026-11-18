@@ -5,10 +5,14 @@
 SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **eWeLink / SONOFF**- und **Tuya / Smart Life**-Konten und löst einen echten Alarm aus, sobald sich etwas ändert — eine Pumpe, die stehen bleibt, eine abgeschaltete Gefriertruhe, ein Gerät ohne Verbindung. Läuft auf Android-Handys, Tablets, Android TV und Wear-OS-Uhren; außerdem gibt es eine Windows-App.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Geräte">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energie">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Automationen">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Geräte-Alarm">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Sprachen:** Die Android-App (ab 2.26) und die Windows-App (ab 0.13) gibt es in 20 Sprachen — Einstellungen → Sprache.

@@ -5,10 +5,14 @@
 SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLink / SONOFF** e **Tuya / Smart Life** e fa suonare un vero allarme appena qualcosa cambia: una pompa che si è fermata, un congelatore spento, un dispositivo che ha perso la connessione. Funziona su telefoni e tablet Android, Android TV e smartwatch Wear OS, e c'è anche un'app per Windows.
 
 <p>
-  <img src="docs/screenshots/play/en/v215/01-devices.png" width="200" alt="Dispositivi">
-  <img src="docs/screenshots/play/en/v215/02-energy.png" width="200" alt="Energia">
-  <img src="docs/screenshots/play/en/v215/05-automations.png" width="200" alt="Automazioni">
-  <img src="docs/screenshots/play/en/v215/08-alarm.png" width="200" alt="Allarme dispositivo">
+  <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
+  <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
+  <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+  <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+</p>
+<p>
+  <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">
+  <img src="docs/screenshots/readme/en/06-tv.png" width="320" alt="Android TV">
 </p>
 
 > **Lingue:** l’app Android (2.26+) e l’app Windows (0.13+) sono disponibili in 20 lingue — Impostazioni → Lingua.
