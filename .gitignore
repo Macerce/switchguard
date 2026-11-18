@@ -10,3 +10,6 @@ keystore.properties
 
 # Tuya Cloud geliştirme kimlik bilgileri (yalnızca yerel test için)
 tuya.properties
+
+__pycache__/
+*.pyc

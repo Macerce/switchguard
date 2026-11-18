@@ -9,7 +9,7 @@ import org.junit.Test
 class TuyaTest {
     private val secret = "0123456789abcdef0123456789abcdef"
 
-    // Vektörler Python'daki çalışan araçla (tools/tuya_probe.py ile aynı algoritma) üretildi.
+    // Vektörler Python'daki çalışan araçla (aynı algoritma) üretildi.
     @Test fun signsLikeReferenceImplementation() {
         assertEquals(
             "5774CB7B23AE37DBFA51A1E0D4EE4B4DFC4E579F61D304EF0E485DAE238520F9",
