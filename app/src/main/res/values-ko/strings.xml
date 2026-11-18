@@ -1042,7 +1042,6 @@
     <string name="tariff_three_text">kWh당 주간 %1$s · 피크 %2$s · 야간 %3$s</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">분</string>
-    <string name="wear_source">워치</string>
 
     <string name="connection_title">연결</string>
     <string name="signal_value">Wi-Fi 신호: %1$s (%2$d dBm)</string>
@@ -1067,7 +1066,7 @@
     <string name="presence_section">재택 / 외출</string>
     <string name="presence_home">재택</string>
     <string name="presence_away">외출</string>
-    <string name="presence_home_desc">\"외출 시에만\"으로 표시된 규칙은 실행되지 않습니다. 외출할 때 외출로 바꾸세요 (위젯, 워치 또는 Telegram /away로도 가능).</string>
+    <string name="presence_home_desc">\"외출 시에만\"으로 표시된 규칙은 실행되지 않습니다. 외출할 때 외출로 바꾸세요 (위젯 또는 Telegram /away로도 가능).</string>
     <string name="presence_away_desc">외출 중입니다. \"외출 시에만\"으로 표시된 규칙이 활성화됩니다.</string>
     <string name="presence_soften">재택 시 알림 완화</string>
     <string name="presence_soften_desc">집에 있는 동안에는 긴급이 아닌 기기의 알람이 알림으로 바뀝니다 (방해 금지 시간처럼). 긴급 기기는 항상 울립니다.</string>
@@ -1175,7 +1174,7 @@
     </plurals>
     <string name="kpi_outage_caption">모니터링 중인 모든 기기가 동시에 오프라인이 된 횟수와 총 시간입니다.</string>
     <string name="kpi_alarms">알람</string>
-    <string name="kpi_alarms_caption">울렸다가 해제된 알람입니다 (휴대폰, 워치 또는 Telegram에서).</string>
+    <string name="kpi_alarms_caption">울렸다가 해제된 알람입니다 (휴대폰 또는 Telegram에서).</string>
     <string name="kpi_alarms_today_caption">오늘 해제된 알람입니다.</string>
     <string name="kpi_response">평균 응답</string>
     <string name="kpi_response_caption">알람이 시작된 후 누군가 해제할 때까지의 시간입니다. 짧을수록 좋으며, 10분을 넘으면 확인해 볼 만합니다.</string>

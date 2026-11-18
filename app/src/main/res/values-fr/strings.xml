@@ -1095,7 +1095,6 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="tariff_three_text">Jour %1$s · Pointe %2$s · Nuit %3$s par kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">min</string>
-    <string name="wear_source">Montre</string>
 
     <string name="connection_title">Connexion</string>
     <string name="signal_value">Signal Wi-Fi : %1$s (%2$d dBm)</string>
@@ -1122,7 +1121,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="presence_section">À la maison / Absent</string>
     <string name="presence_home">À la maison</string>
     <string name="presence_away">Absent</string>
-    <string name="presence_home_desc">Les règles marquées « seulement si absent » ne s\'exécutent pas. Passez sur Absent quand vous partez (aussi depuis le widget, la montre ou la commande Telegram /away).</string>
+    <string name="presence_home_desc">Les règles marquées « seulement si absent » ne s\'exécutent pas. Passez sur Absent quand vous partez (aussi depuis le widget ou la commande Telegram /away).</string>
     <string name="presence_away_desc">Vous êtes absent : les règles marquées « seulement si absent » sont actives.</string>
     <string name="presence_soften">Alertes plus douces à la maison</string>
     <string name="presence_soften_desc">À la maison, les alarmes des appareils non critiques deviennent des notifications (comme les heures calmes). Les appareils critiques sonnent toujours.</string>
@@ -1238,7 +1237,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     </plurals>
     <string name="kpi_outage_caption">Fois où tous les appareils surveillés sont passés hors ligne en même temps, et leur durée totale.</string>
     <string name="kpi_alarms">Alarmes</string>
-    <string name="kpi_alarms_caption">Alarmes qui ont sonné et ont été arrêtées (sur le téléphone, la montre ou Telegram).</string>
+    <string name="kpi_alarms_caption">Alarmes qui ont sonné et ont été arrêtées (sur le téléphone ou Telegram).</string>
     <string name="kpi_alarms_today_caption">Alarmes arrêtées aujourd\'hui.</string>
     <string name="kpi_response">Réaction moyenne</string>
     <string name="kpi_response_caption">Temps entre le début de l\'alarme et son arrêt par quelqu\'un. Plus c\'est court, mieux c\'est ; au-delà de 10 minutes, cela mérite d\'être vérifié.</string>

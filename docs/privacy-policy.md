@@ -1,6 +1,6 @@
 # SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-_Last updated / Son güncelleme: 15 November 2026 / 15 Kasım 2026_
+_Last updated / Son güncelleme: 18 November 2026 / 18 Kasım 2026_
 
 ## English
 
@@ -28,8 +28,6 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink and/or Tu
 **Zones (optional):** if you create a zone (an area on a map, e.g. your home) and use it in an automation, the app asks for precise location "all the time" (background location), after explaining why in its own window shown before Android's permission request. Android's geofencing (Google Play services) then tells the app when you enter or leave your zones, even while the app is closed; the app does not track or record your route. The map's "My current location" button asks the same way. Zones and your location stay only on your device and are never sent to us. To draw the map, the app downloads map tiles of the area you are looking at from OpenStreetMap (`tile.openstreetmap.org`); place names you search for are sent to Open-Meteo's place search (`geocoding-api.open-meteo.com`). You can delete zones or revoke the permission at any time.
 
 **Phone calls on a critical alarm (optional):** if you set a phone number for a person under "Call on critical alarm", the app calls that number from this phone's own line (phone call permission) when a critical alarm isn't dismissed. The number is stored only on your device. The call is placed by your phone carrier like any normal call; nothing else is sent.
-
-**Watch (Wear OS):** if you install the SwitchGuard watch app, the phone sends device names, states and alarms to your own watch over the Wear OS connection, and the watch sends back your taps (dismiss, switch, scene, home/away).
 
 **Sensor readings:** values from your eWeLink sensors (temperature, humidity, light, door, motion, water leak, battery) come from your own eWeLink account like any other device state. The app keeps their history to draw charts and evaluate your rules; it is stored only on your device and is never sent anywhere.
 
@@ -73,8 +71,6 @@ SwitchGuard ("uygulama"), **size ait** eWeLink ve/veya Tuya (Smart Life) hesabı
 **Bölgeler (isteğe bağlı):** bir bölge oluşturup (haritada bir alan, ör. eviniz) bir otomasyonda kullanırsanız uygulama, Android'in izin isteğinden önce kendi penceresinde nedenini açıkladıktan sonra "her zaman" kesin konum izni (arka planda konum) ister. Android'in bölge izlemesi (Google Play hizmetleri) bölgelerinize girip çıktığınızda, uygulama kapalıyken de uygulamaya haber verir; uygulama yolunuzu izlemez ve kaydetmez. Haritadaki "Şu anki konumum" düğmesi de aynı şekilde sorar. Bölgeler ve konumunuz yalnızca cihazınızda kalır, bize hiç gönderilmez. Haritayı çizmek için uygulama baktığınız alanın harita karolarını OpenStreetMap'ten (`tile.openstreetmap.org`) indirir; aradığınız yer adları Open-Meteo'nun yer aramasına (`geocoding-api.open-meteo.com`) gönderilir. Bölgeleri silebilir ya da izni dilediğiniz zaman geri alabilirsiniz.
 
 **Kritik alarmda telefonla arama (isteğe bağlı):** "Kritik alarmda ara" bölümünde bir kişiye telefon numarası girerseniz, kritik alarm kapatılmadığında uygulama bu telefonun kendi hattından o numarayı arar (telefon araması izni). Numara yalnızca cihazınızda saklanır. Arama, her normal arama gibi operatörünüz üzerinden yapılır; başka hiçbir şey gönderilmez.
-
-**Saat (Wear OS):** SwitchGuard saat uygulamasını kurarsanız telefon cihaz adlarını, durumlarını ve alarmları Wear OS bağlantısı üzerinden kendi saatinize gönderir; saat de dokunuşlarınızı (alarmı kapatma, açıp kapatma, sahne, evde/dışarıda) geri gönderir.
 
 **Sensör değerleri:** eWeLink sensörlerinizin değerleri (sıcaklık, nem, ışık, kapı, hareket, su kaçağı, pil) diğer cihaz durumları gibi kendi eWeLink hesabınızdan gelir. Uygulama grafik çizmek ve kurallarınızı değerlendirmek için geçmişlerini tutar; bunlar yalnızca cihazınızda saklanır ve hiçbir yere gönderilmez.
 

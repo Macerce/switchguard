@@ -19,8 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 71
-        versionName = "2.33.0"
+        versionCode = 72
+        versionName = "2.33.1"
         // Cihaz üstü testler (Keystore, bildirimler, ses): ./gradlew connectedDebugAndroidTest
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,8 +91,6 @@ dependencies {
     // Uygulama içinden Play değerlendirme penceresi (bir kez, uygun anda).
     implementation("com.google.android.play:review:2.0.2")
     implementation("com.google.android.play:app-update:2.1.0")
-    // Saat uygulamasıyla (Wear OS) veri alışverişi.
-    implementation("com.google.android.gms:play-services-wearable:20.0.1")
     // Bölge otomasyonları: alana giriş/çıkış bildirimi (pil dostu, sistem izler).
     implementation("com.google.android.gms:play-services-location:21.3.0")
 

@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Life** アカウントにあるスマートプラグやスイッチを見守り、何かが変わった瞬間に本物のアラームを鳴らします。止まったポンプ、電源が切れた冷凍庫、接続が切れたデバイスなど。Android スマートフォン・タブレット、Android TV、Wear OS ウォッチで動作し、Windows 版アプリもあります。
+SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Life** アカウントにあるスマートプラグやスイッチを見守り、何かが変わった瞬間に本物のアラームを鳴らします。止まったポンプ、電源が切れた冷凍庫、接続が切れたデバイスなど。Android スマートフォン・タブレット、Android TV で動作し、Windows 版アプリもあります。
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 ## 動作要件
 
-- Android 8.0 以上（API 26）。ウォッチアプリには Wear OS
+- Android 8.0 以上（API 26）
 - eWeLink：無料の eWeLink 開発者アプリ（App ID + App Secret）。アプリ内ガイドが手順を案内します。eWeLink はアカウントと App ID ごとに 1 セッションしか許可しないため、スマートフォン・タブレット・テレビ・PC ごとに、デバイスを共有した専用の eWeLink アカウントが必要です ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life：Smart Life / Tuya アプリのアカウントと連携した、あなた自身の無料 Tuya Cloud プロジェクトの Access ID と Access Secret ([platform.tuya.com](https://platform.tuya.com))
 - Windows 版アプリには Windows 10 / 11（64 ビット）
@@ -130,13 +130,9 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 ### 在宅 / 外出
 
-- **在宅 / 外出** — 「外出中のみ」に設定したルールは実行されません。外出するときは外出に切り替えてください（ウィジェット、ウォッチ、Telegramの /away からも可能です）。
+- **在宅 / 外出** — 「外出中のみ」に設定したルールは実行されません。外出するときは外出に切り替えてください（ウィジェットやTelegramの /away からも可能です）。
 - **バケーションモード** — 外出扱いになり、サイレント時間はオフになり、毎朝9:00にレポートが届きます。自動的に終了します。
 - **ゾーン** — 地図上でエリアを選ぶと、スマートフォンがそのエリアに入ったとき、または出たときにオートメーションが実行されます（例: 帰宅したら庭の照明をつける、外出したらすべて消す）。地図画像はOpenStreetMapからダウンロードされ、位置情報はこのスマートフォン内でのみ使用されます。
-
-### Wear OS
-
-- SwitchGuard のウォッチアプリは、アラーム（手首から停止）、デバイス（オン/オフ）、シーン、在宅 / 外出 を表示し、スマートフォンのアプリと接続します。
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Tuya Cloudのトライアルが期限切れのため、Tuyaデバイスは監視
 
 ## Windows 版アプリ
 
-SwitchGuard for Windows（10 / 11）は PC で同じ監視を行います。タスクトレイに常駐し、PC 上で全画面アラームを鳴らし、同じルール、オートメーション、Telegram 機能を共有します。ゾーン、ウィジェット、ウォッチ、電話発信はスマートフォンのみです。
+SwitchGuard for Windows（10 / 11）は PC で同じ監視を行います。タスクトレイに常駐し、PC 上で全画面アラームを鳴らし、同じルール、オートメーション、Telegram 機能を共有します。ゾーン、ウィジェット、電話発信はスマートフォンのみです。
 
 ### 機能
 

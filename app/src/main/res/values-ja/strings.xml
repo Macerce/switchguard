@@ -1042,7 +1042,6 @@
     <string name="tariff_three_text">1kWhあたり 昼間 %1$s · ピーク %2$s · 夜間 %3$s</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">分</string>
-    <string name="wear_source">ウォッチ</string>
 
     <string name="connection_title">接続</string>
     <string name="signal_value">Wi-Fi信号: %1$s（%2$d dBm）</string>
@@ -1067,7 +1066,7 @@
     <string name="presence_section">在宅 / 外出</string>
     <string name="presence_home">在宅</string>
     <string name="presence_away">外出</string>
-    <string name="presence_home_desc">「外出中のみ」に設定したルールは実行されません。外出するときは外出に切り替えてください（ウィジェット、ウォッチ、Telegramの /away からも可能です）。</string>
+    <string name="presence_home_desc">「外出中のみ」に設定したルールは実行されません。外出するときは外出に切り替えてください（ウィジェットやTelegramの /away からも可能です）。</string>
     <string name="presence_away_desc">外出中です。「外出中のみ」に設定したルールが有効です。</string>
     <string name="presence_soften">在宅中はアラートを控えめに</string>
     <string name="presence_soften_desc">在宅中は、重要でないデバイスのアラームが通知になります（サイレント時間と同様）。重要なデバイスは常に鳴動します。</string>
@@ -1175,7 +1174,7 @@
     </plurals>
     <string name="kpi_outage_caption">監視中のすべてのデバイスが同時にオフラインになった回数と、その合計時間です。</string>
     <string name="kpi_alarms">アラーム</string>
-    <string name="kpi_alarms_caption">鳴動して止められたアラーム（スマートフォン、ウォッチ、Telegramから）です。</string>
+    <string name="kpi_alarms_caption">鳴動して止められたアラーム（スマートフォンやTelegramから）です。</string>
     <string name="kpi_alarms_today_caption">今日止められたアラームです。</string>
     <string name="kpi_response">平均応答時間</string>
     <string name="kpi_response_caption">アラームが始まってから誰かが止めるまでの時間です。短いほど良く、10分を超える場合は確認をおすすめします。</string>

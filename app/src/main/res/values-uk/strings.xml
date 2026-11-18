@@ -1098,7 +1098,6 @@
     <string name="tariff_night">Ніч (22–06)</string>
     <string name="tariff_three_text">День %1$s · Пік %2$s · Ніч %3$s за кВт·год</string>
     <string name="min_short">хв</string>
-    <string name="wear_source">Годинник</string>
 
     <string name="connection_title">Зв\'язок</string>
     <string name="signal_value">Сигнал Wi-Fi: %1$s (%2$d дБм)</string>
@@ -1126,7 +1125,7 @@
     <string name="presence_section">Вдома / Не вдома</string>
     <string name="presence_home">Вдома</string>
     <string name="presence_away">Не вдома</string>
-    <string name="presence_home_desc">Правила з позначкою «лише коли не вдома» не виконуються. Перемкніться на «Не вдома», коли йдете (також з віджета, годинника або командою Telegram /away).</string>
+    <string name="presence_home_desc">Правила з позначкою «лише коли не вдома» не виконуються. Перемкніться на «Не вдома», коли йдете (також з віджета або командою Telegram /away).</string>
     <string name="presence_away_desc">Вас немає вдома: правила з позначкою «лише коли не вдома» активні.</string>
     <string name="presence_soften">М\'якші сповіщення вдома</string>
     <string name="presence_soften_desc">Поки ви вдома, тривоги некритичних пристроїв стають сповіщеннями (як у тихі години). Критичні пристрої дзвонять завжди.</string>
@@ -1245,7 +1244,7 @@
     </plurals>
     <string name="kpi_outage_caption">Випадки, коли всі пристрої під наглядом разом переходили в офлайн, і їхня загальна тривалість.</string>
     <string name="kpi_alarms">Тривоги</string>
-    <string name="kpi_alarms_caption">Тривоги, що лунали й були вимкнені (на телефоні, годиннику або в Telegram).</string>
+    <string name="kpi_alarms_caption">Тривоги, що лунали й були вимкнені (на телефоні або в Telegram).</string>
     <string name="kpi_alarms_today_caption">Тривоги, вимкнені сьогодні.</string>
     <string name="kpi_response">Середня реакція</string>
     <string name="kpi_response_caption">Час від початку тривоги до її вимкнення. Чим коротше, тим краще; понад 10 хвилин — привід перевірити.</string>

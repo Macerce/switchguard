@@ -1067,7 +1067,6 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="tariff_three_text">Tag %1$s · Spitze %2$s · Nacht %3$s pro kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">min</string>
-    <string name="wear_source">Uhr</string>
 
     <string name="connection_title">Verbindung</string>
     <string name="signal_value">WLAN-Signal: %1$s (%2$d dBm)</string>
@@ -1093,7 +1092,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="presence_section">Zuhause / Abwesend</string>
     <string name="presence_home">Zuhause</string>
     <string name="presence_away">Abwesend</string>
-    <string name="presence_home_desc">Regeln mit „nur bei Abwesenheit“ laufen nicht. Wechsle auf Abwesend, wenn du gehst (auch über das Widget, die Uhr oder Telegram /away).</string>
+    <string name="presence_home_desc">Regeln mit „nur bei Abwesenheit“ laufen nicht. Wechsle auf Abwesend, wenn du gehst (auch über das Widget oder Telegram /away).</string>
     <string name="presence_away_desc">Du bist abwesend: Regeln mit „nur bei Abwesenheit“ sind aktiv.</string>
     <string name="presence_soften">Sanftere Warnungen zu Hause</string>
     <string name="presence_soften_desc">Zu Hause werden Alarme nicht kritischer Geräte zu Benachrichtigungen (wie in den Ruhezeiten). Kritische Geräte läuten immer.</string>
@@ -1205,7 +1204,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     </plurals>
     <string name="kpi_outage_caption">Wie oft alle überwachten Geräte gleichzeitig offline gingen, und ihre Gesamtdauer.</string>
     <string name="kpi_alarms">Alarme</string>
-    <string name="kpi_alarms_caption">Alarme, die geläutet haben und beendet wurden (am Handy, an der Uhr oder in Telegram).</string>
+    <string name="kpi_alarms_caption">Alarme, die geläutet haben und beendet wurden (am Handy oder in Telegram).</string>
     <string name="kpi_alarms_today_caption">Heute beendete Alarme.</string>
     <string name="kpi_response">Durchschnittliche Reaktion</string>
     <string name="kpi_response_caption">Zeit vom Beginn des Alarms, bis jemand ihn beendet hat. Kürzer ist besser; über 10 Minuten lohnt eine Prüfung.</string>

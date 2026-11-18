@@ -1123,7 +1123,6 @@
     <string name="tariff_three_text">День %1$s · Пик %2$s · Ночь %3$s за кВт·ч</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">мин</string>
-    <string name="wear_source">Часы</string>
 
     <string name="connection_title">Соединение</string>
     <string name="signal_value">Сигнал Wi-Fi: %1$s (%2$d дБм)</string>
@@ -1151,7 +1150,7 @@
     <string name="presence_section">Дома / Нет дома</string>
     <string name="presence_home">Дома</string>
     <string name="presence_away">Нет дома</string>
-    <string name="presence_home_desc">Правила с пометкой «только когда нет дома» не выполняются. Переключайтесь на «Нет дома», когда уходите (также из виджета, с часов или командой Telegram /away).</string>
+    <string name="presence_home_desc">Правила с пометкой «только когда нет дома» не выполняются. Переключайтесь на «Нет дома», когда уходите (также из виджета или командой Telegram /away).</string>
     <string name="presence_away_desc">Вас нет дома: правила с пометкой «только когда нет дома» активны.</string>
     <string name="presence_soften">Более мягкие оповещения дома</string>
     <string name="presence_soften_desc">Пока вы дома, тревоги некритичных устройств превращаются в уведомления (как в тихие часы). Критичные устройства звонят всегда.</string>
@@ -1271,7 +1270,7 @@
     </plurals>
     <string name="kpi_outage_caption">Сколько раз все отслеживаемые устройства одновременно пропадали из сети, и их общая длительность.</string>
     <string name="kpi_alarms">Тревоги</string>
-    <string name="kpi_alarms_caption">Тревоги, которые прозвучали и были отключены (на телефоне, часах или в Telegram).</string>
+    <string name="kpi_alarms_caption">Тревоги, которые прозвучали и были отключены (на телефоне или в Telegram).</string>
     <string name="kpi_alarms_today_caption">Тревоги, отключённые сегодня.</string>
     <string name="kpi_response">Средняя реакция</string>
     <string name="kpi_response_caption">Время от начала тревоги до её отключения. Чем короче, тем лучше; больше 10 минут — повод проверить.</string>

@@ -1123,7 +1123,6 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tariff_three_text">Dzień %1$s · Szczyt %2$s · Noc %3$s za kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">min</string>
-    <string name="wear_source">Zegarek</string>
 
     <string name="connection_title">Połączenie</string>
     <string name="signal_value">Sygnał Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1151,7 +1150,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="presence_section">W domu / Poza domem</string>
     <string name="presence_home">W domu</string>
     <string name="presence_away">Poza domem</string>
-    <string name="presence_home_desc">Reguły oznaczone „tylko poza domem” nie działają. Przełącz na Poza domem, gdy wychodzisz (także z widżetu, zegarka lub przez Telegram /away).</string>
+    <string name="presence_home_desc">Reguły oznaczone „tylko poza domem” nie działają. Przełącz na Poza domem, gdy wychodzisz (także z widżetu lub przez Telegram /away).</string>
     <string name="presence_away_desc">Jesteś poza domem: reguły oznaczone „tylko poza domem” są aktywne.</string>
     <string name="presence_soften">Łagodniejsze alerty w domu</string>
     <string name="presence_soften_desc">Gdy jesteś w domu, alarmy urządzeń niekrytycznych zamieniają się w powiadomienia (jak w godzinach ciszy). Urządzenia krytyczne zawsze dzwonią.</string>
@@ -1271,7 +1270,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     </plurals>
     <string name="kpi_outage_caption">Przypadki, gdy wszystkie monitorowane urządzenia przeszły w tryb offline jednocześnie, oraz ich łączny czas.</string>
     <string name="kpi_alarms">Alarmy</string>
-    <string name="kpi_alarms_caption">Alarmy, które zadzwoniły i zostały wyłączone (na telefonie, zegarku lub w Telegramie).</string>
+    <string name="kpi_alarms_caption">Alarmy, które zadzwoniły i zostały wyłączone (na telefonie lub w Telegramie).</string>
     <string name="kpi_alarms_today_caption">Alarmy wyłączone dzisiaj.</string>
     <string name="kpi_response">Średni czas reakcji</string>
     <string name="kpi_response_caption">Czas od rozpoczęcia alarmu do jego wyłączenia przez kogoś. Im krócej, tym lepiej; powyżej 10 minut warto to sprawdzić.</string>

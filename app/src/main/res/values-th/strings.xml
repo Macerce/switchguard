@@ -1017,7 +1017,6 @@
     <string name="tariff_night">กลางคืน (22–06)</string>
     <string name="tariff_three_text">กลางวัน %1$s · พีค %2$s · กลางคืน %3$s ต่อ kWh</string>
     <string name="min_short">นาที</string>
-    <string name="wear_source">นาฬิกา</string>
 
     <string name="connection_title">การเชื่อมต่อ</string>
     <string name="signal_value">สัญญาณ Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1042,7 +1041,7 @@
     <string name="presence_section">อยู่บ้าน / ไม่อยู่</string>
     <string name="presence_home">อยู่บ้าน</string>
     <string name="presence_away">ไม่อยู่</string>
-    <string name="presence_home_desc">กฎที่ทำเครื่องหมาย “เฉพาะเมื่อไม่อยู่” จะไม่ทำงาน สลับเป็นไม่อยู่เมื่อคุณออกไป (ทำได้จากวิดเจ็ต นาฬิกา หรือ Telegram /away)</string>
+    <string name="presence_home_desc">กฎที่ทำเครื่องหมาย “เฉพาะเมื่อไม่อยู่” จะไม่ทำงาน สลับเป็นไม่อยู่เมื่อคุณออกไป (ทำได้จากวิดเจ็ต หรือ Telegram /away)</string>
     <string name="presence_away_desc">คุณไม่อยู่: กฎที่ทำเครื่องหมาย “เฉพาะเมื่อไม่อยู่” ทำงานอยู่</string>
     <string name="presence_soften">การแจ้งเตือนเบาลงเมื่ออยู่บ้าน</string>
     <string name="presence_soften_desc">ขณะอยู่บ้าน สัญญาณเตือนของอุปกรณ์ที่ไม่สำคัญจะกลายเป็นการแจ้งเตือน (เหมือนช่วงเวลาเงียบ) อุปกรณ์สำคัญยังคงดังเสมอ</string>
@@ -1149,7 +1148,7 @@
     </plurals>
     <string name="kpi_outage_caption">จำนวนครั้งที่อุปกรณ์ที่ตรวจสอบทั้งหมดออฟไลน์พร้อมกัน และระยะเวลารวม</string>
     <string name="kpi_alarms">สัญญาณเตือน</string>
-    <string name="kpi_alarms_caption">สัญญาณเตือนที่ดังและถูกปิด (บนโทรศัพท์ นาฬิกา หรือ Telegram)</string>
+    <string name="kpi_alarms_caption">สัญญาณเตือนที่ดังและถูกปิด (บนโทรศัพท์ หรือ Telegram)</string>
     <string name="kpi_alarms_today_caption">สัญญาณเตือนที่ปิดแล้ววันนี้</string>
     <string name="kpi_response">การตอบสนองเฉลี่ย</string>
     <string name="kpi_response_caption">เวลาตั้งแต่สัญญาณเตือนเริ่มจนมีคนปิด ยิ่งสั้นยิ่งดี เกิน 10 นาทีควรตรวจสอบ</string>

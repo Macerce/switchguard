@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarındaki akıllı priz ve anahtarları izler; bir şey değiştiği anda gerçek bir alarm çalar — duran bir pompa, kapanan bir dondurucu prizi, bağlantısı kopan bir cihaz. Android telefon, tablet, Android TV ve Wear OS saatlerde çalışır; Windows uygulaması da vardır.
+SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarındaki akıllı priz ve anahtarları izler; bir şey değiştiği anda gerçek bir alarm çalar — duran bir pompa, kapanan bir dondurucu prizi, bağlantısı kopan bir cihaz. Android telefon, tablet ve Android TV'de çalışır; Windows uygulaması da vardır.
 
 <p>
   <img src="docs/screenshots/readme/tr/01-devices.png" width="200" alt="Cihazlar">
@@ -33,7 +33,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 
 ## Gereksinimler
 
-- Android 8.0+ (API 26); saat uygulaması için Wear OS
+- Android 8.0+ (API 26)
 - eWeLink: ücretsiz bir eWeLink geliştirici uygulaması (App ID + App Secret) — uygulama içi rehber adım adım anlatır. eWeLink her hesap ve App ID için tek oturuma izin verir; bu yüzden her telefon, tablet, TV veya bilgisayarın cihazların paylaşıldığı kendi eWeLink hesabı olmalı ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Smart Life / Tuya uygulama hesabınıza bağlı, size ait ücretsiz Tuya Cloud projesinin Access ID ve Access Secret bilgileri ([platform.tuya.com](https://platform.tuya.com))
 - Windows uygulaması için Windows 10 / 11 (64 bit)
@@ -130,13 +130,9 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 
 ### Evde / Dışarıda
 
-- **Evdeyim / Dışarıdayım** — "Yalnızca dışarıdayken" kuralları çalışmaz. Çıkarken Dışarıdayım'a geçin (widget, saat ya da Telegram /disarida ile de olur).
+- **Evdeyim / Dışarıdayım** — "Yalnızca dışarıdayken" kuralları çalışmaz. Çıkarken Dışarıdayım'a geçin (widget ya da Telegram /disarida ile de olur).
 - **Tatil modu** — Dışarıda sayılıyorsunuz, sessiz saatler kapalı ve her sabah 09:00'da rapor geliyor. Kendiliğinden biter.
 - **Bölgeler** — Haritada bir alan seçin; telefonunuz bu alana girince ya da çıkınca otomasyon çalışsın (ör. eve yaklaşınca bahçe ışığını aç, evden çıkınca tüm cihazları kapat). Harita görüntüleri OpenStreetMap'ten indirilir; konumunuz yalnızca bu telefonda kullanılır.
-
-### Wear OS
-
-- SwitchGuard saat uygulaması alarmları (bilekten kapatma), cihazları (aç/kapa), sahneleri ve Evdeyim / Dışarıdayım modunu gösterir; telefondaki uygulamaya bağlanır.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafında
 
 ## Windows uygulaması
 
-SwitchGuard for Windows (10 / 11) aynı izlemeyi bilgisayarda yapar: tepside durur, bilgisayarda tam ekran alarm çalar; aynı kuralları, otomasyonları ve Telegram özelliklerini paylaşır. Bölgeler, widget'lar, saat ve telefonla arama yalnızca telefonda.
+SwitchGuard for Windows (10 / 11) aynı izlemeyi bilgisayarda yapar: tepside durur, bilgisayarda tam ekran alarm çalar; aynı kuralları, otomasyonları ve Telegram özelliklerini paylaşır. Bölgeler, widget'lar ve telefonla arama yalnızca telefonda.
 
 ### Özellikler
 

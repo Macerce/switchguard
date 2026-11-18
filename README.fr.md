@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard surveille les prises et interrupteurs connectés de vos propres comptes **eWeLink / SONOFF** et **Tuya / Smart Life** et déclenche une vraie alarme dès que quelque chose change : une pompe arrêtée, un congélateur débranché, un appareil qui a perdu la connexion. Il fonctionne sur téléphones et tablettes Android, Android TV et montres Wear OS, et il existe aussi une application Windows.
+SwitchGuard surveille les prises et interrupteurs connectés de vos propres comptes **eWeLink / SONOFF** et **Tuya / Smart Life** et déclenche une vraie alarme dès que quelque chose change : une pompe arrêtée, un congélateur débranché, un appareil qui a perdu la connexion. Il fonctionne sur téléphones et tablettes Android et Android TV, et il existe aussi une application Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 
 ## Configuration requise
 
-- Android 8.0+ (API 26) ; Wear OS pour l'application montre
+- Android 8.0+ (API 26)
 - eWeLink : une application développeur eWeLink gratuite (App ID + App Secret) — le guide intégré vous accompagne pas à pas. eWeLink n'autorise qu'une session par compte et par App ID : chaque téléphone, tablette, TV ou PC a donc besoin de son propre compte eWeLink avec les appareils partagés ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life : l'Access ID et l'Access Secret de votre propre projet Tuya Cloud gratuit, lié à votre compte de l'application Smart Life / Tuya ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64 bits) pour l'application Windows
@@ -130,13 +130,9 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 
 ### À la maison / Absent
 
-- **À la maison / Absent** — Les règles marquées « seulement si absent » ne s'exécutent pas. Passez sur Absent quand vous partez (aussi depuis le widget, la montre ou la commande Telegram /away).
+- **À la maison / Absent** — Les règles marquées « seulement si absent » ne s'exécutent pas. Passez sur Absent quand vous partez (aussi depuis le widget ou la commande Telegram /away).
 - **Mode vacances** — Vous comptez comme absent, les heures calmes sont désactivées et un rapport arrive chaque matin à 09:00. Il se termine tout seul.
 - **Zones** — Choisissez une zone sur la carte ; les automatisations s'exécutent quand votre téléphone y entre ou en sort (p. ex. allumer la lumière du jardin en rentrant, tout éteindre en partant). Les images de la carte sont téléchargées depuis OpenStreetMap ; votre position n'est utilisée que sur ce téléphone.
-
-### Wear OS
-
-- L'application montre SwitchGuard affiche les alarmes (à arrêter depuis le poignet), les appareils (allumer/éteindre), les scènes et À la maison / Absent ; elle se connecte à l'application du téléphone.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ La consommation est calculée par SwitchGuard à partir des mesures de puissance
 
 ## Application Windows
 
-SwitchGuard pour Windows (10 / 11) assure la même surveillance sur un PC : il reste dans la zone de notification, déclenche une alarme plein écran sur l'ordinateur et partage les mêmes règles, automatisations et fonctions Telegram. Zones, widgets, montre et appels téléphoniques sont réservés au téléphone.
+SwitchGuard pour Windows (10 / 11) assure la même surveillance sur un PC : il reste dans la zone de notification, déclenche une alarme plein écran sur l'ordinateur et partage les mêmes règles, automatisations et fonctions Telegram. Zones, widgets et appels téléphoniques sont réservés au téléphone.
 
 ### Fonctions
 

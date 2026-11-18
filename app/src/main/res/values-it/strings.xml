@@ -1071,7 +1071,6 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="tariff_night">Notte (22–06)</string>
     <string name="tariff_three_text">Giorno %1$s · Punta %2$s · Notte %3$s per kWh</string>
     <string name="min_short">min</string>
-    <string name="wear_source">Orologio</string>
 
     <string name="connection_title">Connessione</string>
     <string name="signal_value">Segnale Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1098,7 +1097,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="presence_section">In casa / Fuori casa</string>
     <string name="presence_home">In casa</string>
     <string name="presence_away">Fuori casa</string>
-    <string name="presence_home_desc">Le regole contrassegnate “solo quando fuori casa” non vengono eseguite. Passa a Fuori casa quando esci (anche dal widget, dall\'orologio o con /away su Telegram).</string>
+    <string name="presence_home_desc">Le regole contrassegnate “solo quando fuori casa” non vengono eseguite. Passa a Fuori casa quando esci (anche dal widget o con /away su Telegram).</string>
     <string name="presence_away_desc">Sei fuori casa: le regole contrassegnate “solo quando fuori casa” sono attive.</string>
     <string name="presence_soften">Avvisi più leggeri in casa</string>
     <string name="presence_soften_desc">Quando sei in casa, gli allarmi dei dispositivi non critici diventano notifiche (come nelle ore di silenzio). I dispositivi critici suonano sempre.</string>
@@ -1213,7 +1212,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     </plurals>
     <string name="kpi_outage_caption">Volte in cui tutti i dispositivi monitorati sono andati offline insieme, e la loro durata totale.</string>
     <string name="kpi_alarms">Allarmi</string>
-    <string name="kpi_alarms_caption">Allarmi che hanno suonato e sono stati silenziati (sul telefono, sull\'orologio o su Telegram).</string>
+    <string name="kpi_alarms_caption">Allarmi che hanno suonato e sono stati silenziati (sul telefono o su Telegram).</string>
     <string name="kpi_alarms_today_caption">Allarmi silenziati oggi.</string>
     <string name="kpi_response">Risposta media</string>
     <string name="kpi_response_caption">Tempo dall\'inizio dell\'allarme a quando qualcuno lo ha silenziato. Più breve è meglio; oltre i 10 minuti vale la pena controllare.</string>

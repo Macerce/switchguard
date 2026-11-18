@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLink / SONOFF** e **Tuya / Smart Life** e fa suonare un vero allarme appena qualcosa cambia: una pompa che si è fermata, un congelatore spento, un dispositivo che ha perso la connessione. Funziona su telefoni e tablet Android, Android TV e smartwatch Wear OS, e c'è anche un'app per Windows.
+SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLink / SONOFF** e **Tuya / Smart Life** e fa suonare un vero allarme appena qualcosa cambia: una pompa che si è fermata, un congelatore spento, un dispositivo che ha perso la connessione. Funziona su telefoni e tablet Android e Android TV, e c'è anche un'app per Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 
 ## Requisiti
 
-- Android 8.0+ (API 26); Wear OS per l'app per orologio
+- Android 8.0+ (API 26)
 - eWeLink: un'app sviluppatore eWeLink gratuita (App ID + App Secret) — la guida nell'app ti accompagna passo passo. eWeLink consente una sola sessione per account e App ID, quindi ogni telefono, tablet, TV o PC ha bisogno di un proprio account eWeLink con i dispositivi condivisi ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Access ID e Access Secret del tuo progetto Tuya Cloud gratuito, collegato al tuo account dell'app Smart Life / Tuya ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64 bit) per l'app Windows
@@ -130,13 +130,9 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 
 ### In casa / Fuori casa
 
-- **In casa / Fuori casa** — Le regole contrassegnate “solo quando fuori casa” non vengono eseguite. Passa a Fuori casa quando esci (anche dal widget, dall'orologio o con /away su Telegram).
+- **In casa / Fuori casa** — Le regole contrassegnate “solo quando fuori casa” non vengono eseguite. Passa a Fuori casa quando esci (anche dal widget o con /away su Telegram).
 - **Modalità vacanza** — Risulti fuori casa, le ore di silenzio sono disattivate e ogni mattina alle 09:00 arriva un report. Termina da sola.
 - **Zone** — Scegli un'area sulla mappa; le automazioni vengono eseguite quando il telefono vi entra o ne esce (ad es. accendi la luce del giardino quando torni a casa, spegni tutto quando esci). Le immagini della mappa vengono scaricate da OpenStreetMap; la tua posizione è usata solo su questo telefono.
-
-### Wear OS
-
-- L'app per orologio SwitchGuard mostra gli allarmi (spegnili dal polso), i dispositivi (accendi/spegni), le scene e In casa / Fuori casa; si collega all'app del telefono.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Il consumo viene calcolato da SwitchGuard in base alle letture di potenza effett
 
 ## App per Windows
 
-SwitchGuard per Windows (10 / 11) fa lo stesso monitoraggio su un PC: resta nell'area di notifica, fa suonare un allarme a schermo intero sul computer e condivide le stesse regole, automazioni e funzioni Telegram. Zone, widget, orologio e chiamate telefoniche sono solo sul telefono.
+SwitchGuard per Windows (10 / 11) fa lo stesso monitoraggio su un PC: resta nell'area di notifica, fa suonare un allarme a schermo intero sul computer e condivide le stesse regole, automazioni e funzioni Telegram. Zone, widget e chiamate telefoniche sono solo sul telefono.
 
 ### Funzioni
 

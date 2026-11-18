@@ -1017,7 +1017,6 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="tariff_night">Ban đêm (22–06)</string>
     <string name="tariff_three_text">Ban ngày %1$s · Cao điểm %2$s · Ban đêm %3$s mỗi kWh</string>
     <string name="min_short">phút</string>
-    <string name="wear_source">Đồng hồ</string>
 
     <string name="connection_title">Kết nối</string>
     <string name="signal_value">Tín hiệu Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1042,7 +1041,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="presence_section">Ở nhà / Vắng nhà</string>
     <string name="presence_home">Ở nhà</string>
     <string name="presence_away">Vắng nhà</string>
-    <string name="presence_home_desc">Các quy tắc đánh dấu “chỉ khi vắng nhà” sẽ không chạy. Hãy chuyển sang Vắng nhà khi bạn ra ngoài (cũng có thể từ widget, đồng hồ hoặc lệnh /away trên Telegram).</string>
+    <string name="presence_home_desc">Các quy tắc đánh dấu “chỉ khi vắng nhà” sẽ không chạy. Hãy chuyển sang Vắng nhà khi bạn ra ngoài (cũng có thể từ widget hoặc lệnh /away trên Telegram).</string>
     <string name="presence_away_desc">Bạn đang vắng nhà: các quy tắc đánh dấu “chỉ khi vắng nhà” đang hoạt động.</string>
     <string name="presence_soften">Cảnh báo nhẹ hơn khi ở nhà</string>
     <string name="presence_soften_desc">Khi ở nhà, báo động của các thiết bị không quan trọng chuyển thành thông báo (như giờ yên tĩnh). Thiết bị quan trọng luôn kêu.</string>
@@ -1149,7 +1148,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     </plurals>
     <string name="kpi_outage_caption">Số lần tất cả thiết bị được giám sát cùng ngoại tuyến, và tổng thời lượng.</string>
     <string name="kpi_alarms">Báo động</string>
-    <string name="kpi_alarms_caption">Các báo động đã kêu và đã được tắt (trên điện thoại, đồng hồ hoặc Telegram).</string>
+    <string name="kpi_alarms_caption">Các báo động đã kêu và đã được tắt (trên điện thoại hoặc Telegram).</string>
     <string name="kpi_alarms_today_caption">Các báo động đã được tắt hôm nay.</string>
     <string name="kpi_response">Phản hồi trung bình</string>
     <string name="kpi_response_caption">Thời gian từ khi báo động bắt đầu đến khi có người tắt. Càng ngắn càng tốt; trên 10 phút là đáng kiểm tra.</string>

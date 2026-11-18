@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** 账户中的智能插座和开关，一旦有变化就立即发出真正的警报——水泵停了、冰柜插座被关了、设备断开了连接。它可在 Android 手机、平板、Android TV 和 Wear OS 手表上运行，另外还有 Windows 应用。
+SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** 账户中的智能插座和开关，一旦有变化就立即发出真正的警报——水泵停了、冰柜插座被关了、设备断开了连接。它可在 Android 手机、平板和 Android TV 上运行，另外还有 Windows 应用。
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** �
 
 ## 系统要求
 
-- Android 8.0+（API 26）；手表应用需要 Wear OS
+- Android 8.0+（API 26）
 - eWeLink：一个免费的 eWeLink 开发者应用（App ID + App Secret）——应用内指南会一步步带你完成。eWeLink 每个账户和 App ID 只允许一个会话，因此每台手机、平板、电视或电脑都需要自己的 eWeLink 账户，并把设备共享给它 ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life：你自己的免费 Tuya Cloud 项目的 Access ID 和 Access Secret，并已关联你的 Smart Life / Tuya 应用账户 ([platform.tuya.com](https://platform.tuya.com))
 - Windows 应用需要 Windows 10 / 11（64 位）
@@ -130,13 +130,9 @@ SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** �
 
 ### 在家 / 离家
 
-- **在家 / 离家** — 标有“仅离家时”的规则不会运行。离家时请切换为“离家”（也可通过小组件、手表或 Telegram 的 /away）。
+- **在家 / 离家** — 标有“仅离家时”的规则不会运行。离家时请切换为“离家”（也可通过小组件或 Telegram 的 /away）。
 - **度假模式** — 视为离家，免打扰时段关闭，每天早上 09:00 收到一份报告。到期后自动结束。
 - **区域** — 在地图上选择一个区域；当您的手机进入或离开该区域时运行自动化（例如到家时打开庭院灯，离开时关闭所有设备）。地图图片从 OpenStreetMap 下载；您的位置仅在此手机上使用。
-
-### Wear OS
-
-- SwitchGuard 手表应用显示警报（在手腕上关闭）、设备（开关）、场景以及 在家 / 离家；它与手机应用相连。
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Tuya Cloud 试用已到期，因此不会监控 Tuya 设备。请在 platform.tu
 
 ## Windows 应用
 
-SwitchGuard for Windows（10 / 11）在电脑上进行同样的监控：常驻系统托盘，在电脑上全屏响起警报，并共享相同的规则、自动化和 Telegram 功能。区域、小部件、手表和电话呼叫仅限手机。
+SwitchGuard for Windows（10 / 11）在电脑上进行同样的监控：常驻系统托盘，在电脑上全屏响起警报，并共享相同的规则、自动化和 Telegram 功能。区域、小部件和电话呼叫仅限手机。
 
 ### 功能
 

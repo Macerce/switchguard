@@ -1017,7 +1017,6 @@
     <string name="tariff_night">夜间（22–06）</string>
     <string name="tariff_three_text">白天 %1$s · 高峰 %2$s · 夜间 %3$s 每千瓦时</string>
     <string name="min_short">分钟</string>
-    <string name="wear_source">手表</string>
 
     <string name="connection_title">连接</string>
     <string name="signal_value">Wi-Fi 信号：%1$s（%2$d dBm）</string>
@@ -1042,7 +1041,7 @@
     <string name="presence_section">在家 / 离家</string>
     <string name="presence_home">在家</string>
     <string name="presence_away">离家</string>
-    <string name="presence_home_desc">标有“仅离家时”的规则不会运行。离家时请切换为“离家”（也可通过小组件、手表或 Telegram 的 /away）。</string>
+    <string name="presence_home_desc">标有“仅离家时”的规则不会运行。离家时请切换为“离家”（也可通过小组件或 Telegram 的 /away）。</string>
     <string name="presence_away_desc">您已离家：标有“仅离家时”的规则已生效。</string>
     <string name="presence_soften">在家时降低提醒强度</string>
     <string name="presence_soften_desc">在家时，非关键设备的警报会变为通知（类似免打扰时段）。关键设备始终会响铃。</string>
@@ -1149,7 +1148,7 @@
     </plurals>
     <string name="kpi_outage_caption">所有受监控设备同时离线的次数及总时长。</string>
     <string name="kpi_alarms">警报</string>
-    <string name="kpi_alarms_caption">已响铃并被关闭的警报（在手机、手表或 Telegram 上）。</string>
+    <string name="kpi_alarms_caption">已响铃并被关闭的警报（在手机或 Telegram 上）。</string>
     <string name="kpi_alarms_today_caption">今天已关闭的警报。</string>
     <string name="kpi_response">平均响应时间</string>
     <string name="kpi_response_caption">从警报开始到有人关闭所用的时间。越短越好；超过 10 分钟值得检查。</string>

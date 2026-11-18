@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스마트 플러그와 스위치를 지켜보다가, 무언가 바뀌는 순간 진짜 알람을 울립니다. 멈춘 펌프, 꺼진 냉동고 플러그, 연결이 끊긴 기기 등. Android 휴대폰, 태블릿, Android TV, Wear OS 시계에서 실행되며 Windows 앱도 있습니다.
+SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스마트 플러그와 스위치를 지켜보다가, 무언가 바뀌는 순간 진짜 알람을 울립니다. 멈춘 펌프, 꺼진 냉동고 플러그, 연결이 끊긴 기기 등. Android 휴대폰, 태블릿, Android TV에서 실행되며 Windows 앱도 있습니다.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 
 ## 요구 사항
 
-- Android 8.0 이상(API 26), 시계 앱은 Wear OS
+- Android 8.0 이상(API 26)
 - eWeLink: 무료 eWeLink 개발자 앱(App ID + App Secret) — 앱 내 가이드가 단계별로 안내합니다. eWeLink는 계정과 App ID마다 세션을 하나만 허용하므로, 휴대폰·태블릿·TV·PC마다 기기를 공유받은 별도의 eWeLink 계정이 필요합니다 ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Smart Life / Tuya 앱 계정에 연결된, 내 무료 Tuya Cloud 프로젝트의 Access ID와 Access Secret ([platform.tuya.com](https://platform.tuya.com))
 - Windows 앱은 Windows 10 / 11(64비트)
@@ -130,13 +130,9 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 
 ### 재택 / 외출
 
-- **재택 / 외출** — "외출 시에만"으로 표시된 규칙은 실행되지 않습니다. 외출할 때 외출로 바꾸세요 (위젯, 워치 또는 Telegram /away로도 가능).
+- **재택 / 외출** — "외출 시에만"으로 표시된 규칙은 실행되지 않습니다. 외출할 때 외출로 바꾸세요 (위젯 또는 Telegram /away로도 가능).
 - **휴가 모드** — 외출로 간주되고, 방해 금지 시간이 꺼지며, 매일 아침 09:00에 보고서가 옵니다. 자동으로 종료됩니다.
 - **구역** — 지도에서 영역을 선택하세요. 휴대폰이 그 영역에 들어가거나 나올 때 자동화가 실행됩니다 (예: 집에 도착하면 정원 조명 켜기, 외출하면 모두 끄기). 지도 이미지는 OpenStreetMap에서 다운로드되며, 위치 정보는 이 휴대폰에서만 사용됩니다.
-
-### Wear OS
-
-- SwitchGuard 시계 앱은 알람(손목에서 끄기), 기기(켜기/끄기), 장면, 재택 / 외출를 보여 주며 휴대폰 앱과 연결됩니다.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Tuya Cloud 체험 기간이 만료되어 Tuya 기기를 모니터링하지 않�
 
 ## Windows 앱
 
-Windows용 SwitchGuard(10 / 11)는 PC에서 같은 모니터링을 합니다. 시스템 트레이에 머물며 컴퓨터에서 전체 화면 알람을 울리고, 같은 규칙·자동화·Telegram 기능을 공유합니다. 구역, 위젯, 시계, 전화 걸기는 휴대폰 전용입니다.
+Windows용 SwitchGuard(10 / 11)는 PC에서 같은 모니터링을 합니다. 시스템 트레이에 머물며 컴퓨터에서 전체 화면 알람을 울리고, 같은 규칙·자동화·Telegram 기능을 공유합니다. 구역, 위젯, 전화 걸기는 휴대폰 전용입니다.
 
 ### 기능
 

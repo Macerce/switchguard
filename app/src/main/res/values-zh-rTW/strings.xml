@@ -1041,7 +1041,6 @@
     <string name="tariff_three_text">每度電 日間 %1$s · 尖峰 %2$s · 夜間 %3$s</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">分</string>
-    <string name="wear_source">手錶</string>
 
     <string name="connection_title">連線</string>
     <string name="signal_value">Wi-Fi 訊號：%1$s（%2$d dBm）</string>
@@ -1066,7 +1065,7 @@
     <string name="presence_section">在家 / 外出</string>
     <string name="presence_home">在家</string>
     <string name="presence_away">外出</string>
-    <string name="presence_home_desc">標示為「僅外出時」的規則不會執行。離開時請切換為外出（也可從小工具、手錶或 Telegram 的 /away 切換）。</string>
+    <string name="presence_home_desc">標示為「僅外出時」的規則不會執行。離開時請切換為外出（也可從小工具或 Telegram 的 /away 切換）。</string>
     <string name="presence_away_desc">您目前外出：標示為「僅外出時」的規則已啟用。</string>
     <string name="presence_soften">在家時降低提醒強度</string>
     <string name="presence_soften_desc">在家時，非重要裝置的警報會變成通知（類似勿擾時段）。重要裝置仍一律響鈴。</string>
@@ -1174,7 +1173,7 @@
     </plurals>
     <string name="kpi_outage_caption">所有受監控裝置同時離線的次數及其總時間長度。</string>
     <string name="kpi_alarms">警報</string>
-    <string name="kpi_alarms_caption">已響鈴並被解除的警報（在手機、手錶或 Telegram 上）。</string>
+    <string name="kpi_alarms_caption">已響鈴並被解除的警報（在手機或 Telegram 上）。</string>
     <string name="kpi_alarms_today_caption">今天已解除的警報。</string>
     <string name="kpi_response">平均回應時間</string>
     <string name="kpi_response_caption">從警報開始到有人解除所經過的時間。越短越好；超過 10 分鐘就值得檢查。</string>

@@ -991,7 +991,6 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="tariff_night">Malam (22–06)</string>
     <string name="tariff_three_text">Siang %1$s · Puncak %2$s · Malam %3$s per kWh</string>
     <string name="min_short">mnt</string>
-    <string name="wear_source">Jam tangan</string>
     <string name="connection_title">Koneksi</string>
     <string name="signal_value">Sinyal Wi-Fi: %1$s (%2$d dBm)</string>
     <string name="signal_unknown">Perangkat ini tidak melaporkan sinyal Wi-Fi-nya</string>
@@ -1013,7 +1012,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="presence_section">Di rumah / Bepergian</string>
     <string name="presence_home">Di rumah</string>
     <string name="presence_away">Bepergian</string>
-    <string name="presence_home_desc">Aturan yang ditandai "hanya saat bepergian" tidak berjalan. Beralih ke Bepergian saat Anda pergi (juga dari widget, jam tangan, atau /away di Telegram).</string>
+    <string name="presence_home_desc">Aturan yang ditandai "hanya saat bepergian" tidak berjalan. Beralih ke Bepergian saat Anda pergi (juga dari widget atau /away di Telegram).</string>
     <string name="presence_away_desc">Anda sedang bepergian: aturan yang ditandai "hanya saat bepergian" aktif.</string>
     <string name="presence_soften">Peringatan lebih lembut saat di rumah</string>
     <string name="presence_soften_desc">Saat di rumah, alarm perangkat non-kritis menjadi notifikasi (seperti jam tenang). Perangkat kritis selalu berbunyi.</string>
@@ -1114,7 +1113,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     </plurals>
     <string name="kpi_outage_caption">Berapa kali semua perangkat yang dipantau menjadi offline bersamaan, dan total lamanya.</string>
     <string name="kpi_alarms">Alarm</string>
-    <string name="kpi_alarms_caption">Alarm yang berbunyi dan dimatikan (di ponsel, jam tangan, atau Telegram).</string>
+    <string name="kpi_alarms_caption">Alarm yang berbunyi dan dimatikan (di ponsel atau Telegram).</string>
     <string name="kpi_alarms_today_caption">Alarm yang dimatikan hari ini.</string>
     <string name="kpi_response">Respons rata-rata</string>
     <string name="kpi_response_caption">Waktu dari alarm mulai hingga seseorang mematikannya. Makin singkat makin baik; di atas 10 menit perlu diperiksa.</string>

@@ -1070,7 +1070,6 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="tariff_night">Noche (22–06)</string>
     <string name="tariff_three_text">Día %1$s · Punta %2$s · Noche %3$s por kWh</string>
     <string name="min_short">min</string>
-    <string name="wear_source">Reloj</string>
 
     <string name="connection_title">Conexión</string>
     <string name="signal_value">Señal Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1097,7 +1096,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="presence_section">En casa / Fuera</string>
     <string name="presence_home">En casa</string>
     <string name="presence_away">Fuera</string>
-    <string name="presence_home_desc">Las reglas marcadas “solo cuando estoy fuera” no se ejecutan. Cambia a Fuera cuando salgas (también desde el widget, el reloj o el /away de Telegram).</string>
+    <string name="presence_home_desc">Las reglas marcadas “solo cuando estoy fuera” no se ejecutan. Cambia a Fuera cuando salgas (también desde el widget o el /away de Telegram).</string>
     <string name="presence_away_desc">Estás fuera: las reglas marcadas “solo cuando estoy fuera” están activas.</string>
     <string name="presence_soften">Alertas más suaves en casa</string>
     <string name="presence_soften_desc">Mientras estás en casa, las alarmas de los dispositivos no críticos se convierten en notificaciones (como en las horas de silencio). Los dispositivos críticos siempre suenan.</string>
@@ -1212,7 +1211,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     </plurals>
     <string name="kpi_outage_caption">Veces en que todos los dispositivos monitoreados se desconectaron a la vez, y su duración total.</string>
     <string name="kpi_alarms">Alarmas</string>
-    <string name="kpi_alarms_caption">Alarmas que sonaron y se silenciaron (en el teléfono, el reloj o Telegram).</string>
+    <string name="kpi_alarms_caption">Alarmas que sonaron y se silenciaron (en el teléfono o Telegram).</string>
     <string name="kpi_alarms_today_caption">Alarmas silenciadas hoy.</string>
     <string name="kpi_response">Respuesta media</string>
     <string name="kpi_response_caption">Tiempo desde que empieza la alarma hasta que alguien la silencia. Cuanto menos, mejor; más de 10 minutos merece una revisión.</string>

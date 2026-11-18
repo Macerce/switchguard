@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài khoản **eWeLink / SONOFF** và **Tuya / Smart Life** của bạn, và phát báo động thật ngay khi có thay đổi — máy bơm ngừng chạy, tủ đông bị ngắt, thiết bị mất kết nối. Ứng dụng chạy trên điện thoại, máy tính bảng Android, Android TV và đồng hồ Wear OS; ngoài ra còn có ứng dụng Windows.
+SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài khoản **eWeLink / SONOFF** và **Tuya / Smart Life** của bạn, và phát báo động thật ngay khi có thay đổi — máy bơm ngừng chạy, tủ đông bị ngắt, thiết bị mất kết nối. Ứng dụng chạy trên điện thoại, máy tính bảng Android và Android TV; ngoài ra còn có ứng dụng Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 
 ## Yêu cầu
 
-- Android 8.0+ (API 26); Wear OS cho ứng dụng đồng hồ
+- Android 8.0+ (API 26)
 - eWeLink: một ứng dụng nhà phát triển eWeLink miễn phí (App ID + App Secret) — hướng dẫn trong ứng dụng chỉ từng bước. eWeLink chỉ cho một phiên trên mỗi tài khoản và App ID, nên mỗi điện thoại, máy tính bảng, TV hoặc PC cần tài khoản eWeLink riêng được chia sẻ thiết bị ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Access ID và Access Secret của dự án Tuya Cloud miễn phí của riêng bạn, đã liên kết với tài khoản ứng dụng Smart Life / Tuya ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64-bit) cho ứng dụng Windows
@@ -130,13 +130,9 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 
 ### Ở nhà / Vắng nhà
 
-- **Ở nhà / Vắng nhà** — Các quy tắc đánh dấu “chỉ khi vắng nhà” sẽ không chạy. Hãy chuyển sang Vắng nhà khi bạn ra ngoài (cũng có thể từ widget, đồng hồ hoặc lệnh /away trên Telegram).
+- **Ở nhà / Vắng nhà** — Các quy tắc đánh dấu “chỉ khi vắng nhà” sẽ không chạy. Hãy chuyển sang Vắng nhà khi bạn ra ngoài (cũng có thể từ widget hoặc lệnh /away trên Telegram).
 - **Chế độ kỳ nghỉ** — Bạn được tính là vắng nhà, giờ yên tĩnh tắt và mỗi sáng lúc 09:00 có một báo cáo. Chế độ này tự kết thúc.
 - **Khu vực** — Chọn một vùng trên bản đồ; tự động hóa chạy khi điện thoại của bạn vào hoặc rời vùng đó (ví dụ: bật đèn sân vườn khi bạn về nhà, tắt mọi thứ khi bạn rời đi). Hình ảnh bản đồ được tải từ OpenStreetMap; vị trí của bạn chỉ được dùng trên điện thoại này.
-
-### Wear OS
-
-- Ứng dụng đồng hồ SwitchGuard hiển thị báo động (tắt ngay trên cổ tay), thiết bị (bật/tắt), kịch bản và Ở nhà / Vắng nhà; kết nối với ứng dụng trên điện thoại.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Mức tiêu thụ do SwitchGuard tính từ các số đo công suất được 
 
 ## Ứng dụng Windows
 
-SwitchGuard cho Windows (10 / 11) theo dõi tương tự trên PC: nằm ở khay hệ thống, phát báo động toàn màn hình trên máy tính và dùng chung quy tắc, tự động hóa và tính năng Telegram. Khu vực, tiện ích, đồng hồ và cuộc gọi điện thoại chỉ có trên điện thoại.
+SwitchGuard cho Windows (10 / 11) theo dõi tương tự trên PC: nằm ở khay hệ thống, phát báo động toàn màn hình trên máy tính và dùng chung quy tắc, tự động hóa và tính năng Telegram. Khu vực, tiện ích và cuộc gọi điện thoại chỉ có trên điện thoại.
 
 ### Tính năng
 

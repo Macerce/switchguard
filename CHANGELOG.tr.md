@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.33.1 — 2026-11-18
+**Değişiklikler**
+- Wear OS saat uygulaması sonlandırıldı ve kaldırıldı. Telefon artık saate hiçbir şey göndermiyor; uygulama Wear OS bağlantı kütüphanesini de içermiyor.
 ## 2.33.0 — 2026-11-18
 **Yeni**
 - Uygulama beklenmedik şekilde kapandıysa bir sonraki açılışta bir kez sorun raporu gönderilsin mi diye sorar. Siz göndermedikçe hiçbir şey paylaşılmaz.

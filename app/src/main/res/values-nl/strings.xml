@@ -1069,7 +1069,6 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tariff_three_text">Dag %1$s · Piek %2$s · Nacht %3$s per kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">min</string>
-    <string name="wear_source">Horloge</string>
 
     <string name="connection_title">Verbinding</string>
     <string name="signal_value">Wi-Fi-signaal: %1$s (%2$d dBm)</string>
@@ -1095,7 +1094,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="presence_section">Thuis / Weg</string>
     <string name="presence_home">Thuis</string>
     <string name="presence_away">Weg</string>
-    <string name="presence_home_desc">Regels die zijn gemarkeerd als “alleen als ik weg ben” worden niet uitgevoerd. Schakel over naar Weg als je vertrekt (ook via de widget, het horloge of Telegram /away).</string>
+    <string name="presence_home_desc">Regels die zijn gemarkeerd als “alleen als ik weg ben” worden niet uitgevoerd. Schakel over naar Weg als je vertrekt (ook via de widget of Telegram /away).</string>
     <string name="presence_away_desc">Je bent weg: regels die zijn gemarkeerd als “alleen als ik weg ben” zijn actief.</string>
     <string name="presence_soften">Zachtere waarschuwingen thuis</string>
     <string name="presence_soften_desc">Terwijl je thuis bent, worden alarmen van niet-kritieke apparaten meldingen (zoals bij stille uren). Kritieke apparaten gaan altijd af.</string>
@@ -1207,7 +1206,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     </plurals>
     <string name="kpi_outage_caption">Momenten waarop alle bewaakte apparaten tegelijk offline gingen, en de totale duur.</string>
     <string name="kpi_alarms">Alarmen</string>
-    <string name="kpi_alarms_caption">Alarmen die zijn afgegaan en uitgezet (op de telefoon, het horloge of via Telegram).</string>
+    <string name="kpi_alarms_caption">Alarmen die zijn afgegaan en uitgezet (op de telefoon of via Telegram).</string>
     <string name="kpi_alarms_today_caption">Alarmen die vandaag zijn uitgezet.</string>
     <string name="kpi_response">Gemiddelde reactietijd</string>
     <string name="kpi_response_caption">Tijd vanaf het begin van het alarm tot iemand het uitzette. Korter is beter; meer dan 10 minuten is het controleren waard.</string>

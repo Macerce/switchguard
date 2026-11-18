@@ -817,7 +817,6 @@ class MonitorService : Service() {
         // Cihaz düğmesi widget'ları açık/kapalı ve bağlantı değişince tazelenir.
         if (current.any { d -> previous[d.id]?.let { it.online != d.online || it.switches != d.switches } != false }) {
             DeviceWidget.updateAll(this)
-            WearBridge.publish(this)
             lastWidgetPower = wall
         } else if (wall - lastWidgetPower >= WIDGET_POWER_EVERY_MS &&
             current.any { d -> previous[d.id]?.let { it.power != d.power || it.channelPower != d.channelPower } == true }

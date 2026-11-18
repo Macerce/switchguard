@@ -1177,7 +1177,6 @@
     <string name="tariff_three_text">نهار %1$s · ذروة %2$s · ليل %3$s لكل kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">د</string>
-    <string name="wear_source">الساعة</string>
 
     <string name="connection_title">الاتصال</string>
     <string name="signal_value">إشارة Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1207,7 +1206,7 @@
     <string name="presence_section">في المنزل / خارج المنزل</string>
     <string name="presence_home">في المنزل</string>
     <string name="presence_away">خارج المنزل</string>
-    <string name="presence_home_desc">القواعد المحددة «فقط عند الخروج» لا تعمل. بدّل إلى «خارج المنزل» عند مغادرتك (ومن الأداة أو الساعة أو Telegram /away أيضًا).</string>
+    <string name="presence_home_desc">القواعد المحددة «فقط عند الخروج» لا تعمل. بدّل إلى «خارج المنزل» عند مغادرتك (ومن الأداة أو Telegram /away أيضًا).</string>
     <string name="presence_away_desc">أنت خارج المنزل: القواعد المحددة «فقط عند الخروج» نشطة.</string>
     <string name="presence_soften">تنبيهات أخفّ في المنزل</string>
     <string name="presence_soften_desc">أثناء وجودك في المنزل تتحول إنذارات الأجهزة غير الحرجة إلى إشعارات (مثل ساعات الهدوء). الأجهزة الحرجة ترنّ دائمًا.</string>
@@ -1335,7 +1334,7 @@
     </plurals>
     <string name="kpi_outage_caption">المرات التي انقطع فيها اتصال جميع الأجهزة المراقَبة معًا، ومجموع مدتها.</string>
     <string name="kpi_alarms">الإنذارات</string>
-    <string name="kpi_alarms_caption">الإنذارات التي رنّت وأُوقفت (على الهاتف أو الساعة أو Telegram).</string>
+    <string name="kpi_alarms_caption">الإنذارات التي رنّت وأُوقفت (على الهاتف أو Telegram).</string>
     <string name="kpi_alarms_today_caption">الإنذارات التي أُوقفت اليوم.</string>
     <string name="kpi_response">متوسط الاستجابة</string>
     <string name="kpi_response_caption">الزمن من بدء الإنذار حتى أوقفه أحدهم. الأقصر أفضل؛ وما يزيد على 10 دقائق يستحق التحقق.</string>

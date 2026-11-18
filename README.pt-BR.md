@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-O SwitchGuard monitora as tomadas e interruptores inteligentes das suas próprias contas **eWeLink / SONOFF** e **Tuya / Smart Life** e toca um alarme de verdade assim que algo muda — uma bomba que parou, um freezer desligado, um dispositivo que perdeu a conexão. Funciona em celulares e tablets Android, Android TV e relógios Wear OS, e também há um app para Windows.
+O SwitchGuard monitora as tomadas e interruptores inteligentes das suas próprias contas **eWeLink / SONOFF** e **Tuya / Smart Life** e toca um alarme de verdade assim que algo muda — uma bomba que parou, um freezer desligado, um dispositivo que perdeu a conexão. Funciona em celulares e tablets Android e Android TV, e também há um app para Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 
 ## Requisitos
 
-- Android 8.0+ (API 26); Wear OS para o app do relógio
+- Android 8.0+ (API 26)
 - eWeLink: um app de desenvolvedor eWeLink gratuito (App ID + App Secret) — o guia do app mostra passo a passo. A eWeLink permite uma sessão por conta e App ID, então cada celular, tablet, TV ou PC precisa da própria conta eWeLink com os dispositivos compartilhados ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: o Access ID e o Access Secret do seu próprio projeto gratuito no Tuya Cloud, vinculado à sua conta do app Smart Life / Tuya ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64 bits) para o app do Windows
@@ -130,13 +130,9 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 
 ### Em casa / Ausente
 
-- **Em casa / Ausente** — As regras marcadas como "somente quando ausente" não rodam. Mude para Ausente quando sair (também pelo widget, pelo relógio ou pelo /away do Telegram).
+- **Em casa / Ausente** — As regras marcadas como "somente quando ausente" não rodam. Mude para Ausente quando sair (também pelo widget ou pelo /away do Telegram).
 - **Modo férias** — Você conta como ausente, o horário de silêncio fica desativado e um relatório chega toda manhã às 09:00. Termina sozinho.
 - **Zonas** — Escolha uma área no mapa; as automações rodam quando seu celular entra ou sai dela (por exemplo, ligar a luz do jardim quando você chega em casa, desligar tudo quando sai). As imagens do mapa são baixadas do OpenStreetMap; sua localização é usada apenas neste celular.
-
-### Wear OS
-
-- O app de relógio SwitchGuard mostra alarmes (desligue no pulso), dispositivos (ligar/desligar), cenas e Em casa / Ausente; conecta-se ao app do celular.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ O consumo é calculado pelo SwitchGuard a partir de leituras de potência feitas
 
 ## App para Windows
 
-O SwitchGuard para Windows (10 / 11) faz o mesmo monitoramento em um PC: fica na bandeja do sistema, toca um alarme em tela cheia no computador e compartilha as mesmas regras, automações e recursos de Telegram. Zonas, widgets, relógio e chamadas telefônicas são só do celular.
+O SwitchGuard para Windows (10 / 11) faz o mesmo monitoramento em um PC: fica na bandeja do sistema, toca um alarme em tela cheia no computador e compartilha as mesmas regras, automações e recursos de Telegram. Zonas, widgets e chamadas telefônicas são só do celular.
 
 ### Recursos
 

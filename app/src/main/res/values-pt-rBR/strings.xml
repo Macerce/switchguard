@@ -1096,7 +1096,6 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="tariff_three_text">Dia %1$s · Ponta %2$s · Noite %3$s por kWh</string>
     <!-- 2.15: sinyal, evde/dışarıda, kademeli haber, bekleme, sahneler, tatil, raporlar -->
     <string name="min_short">min</string>
-    <string name="wear_source">Relógio</string>
 
     <string name="connection_title">Conexão</string>
     <string name="signal_value">Sinal Wi-Fi: %1$s (%2$d dBm)</string>
@@ -1123,7 +1122,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="presence_section">Em casa / Ausente</string>
     <string name="presence_home">Em casa</string>
     <string name="presence_away">Ausente</string>
-    <string name="presence_home_desc">As regras marcadas como \"somente quando ausente\" não rodam. Mude para Ausente quando sair (também pelo widget, pelo relógio ou pelo /away do Telegram).</string>
+    <string name="presence_home_desc">As regras marcadas como \"somente quando ausente\" não rodam. Mude para Ausente quando sair (também pelo widget ou pelo /away do Telegram).</string>
     <string name="presence_away_desc">Você está ausente: as regras marcadas como \"somente quando ausente\" estão ativas.</string>
     <string name="presence_soften">Alertas mais suaves em casa</string>
     <string name="presence_soften_desc">Em casa, os alarmes de dispositivos não críticos viram notificações (como no horário de silêncio). Dispositivos críticos sempre tocam.</string>
@@ -1239,7 +1238,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     </plurals>
     <string name="kpi_outage_caption">Vezes em que todos os dispositivos monitorados ficaram offline juntos e a duração total.</string>
     <string name="kpi_alarms">Alarmes</string>
-    <string name="kpi_alarms_caption">Alarmes que tocaram e foram desligados (no celular, no relógio ou pelo Telegram).</string>
+    <string name="kpi_alarms_caption">Alarmes que tocaram e foram desligados (no celular ou pelo Telegram).</string>
     <string name="kpi_alarms_today_caption">Alarmes desligados hoje.</string>
     <string name="kpi_response">Resposta média</string>
     <string name="kpi_response_caption">Tempo desde o início do alarme até alguém desligá-lo. Menos é melhor; acima de 10 minutos vale conferir.</string>

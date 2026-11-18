@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF** and **Tuya / Smart Life** accounts and rings a real alarm the moment something changes — a pump that stopped, a freezer plug switched off, a device that lost its connection. It runs on Android phones, tablets, Android TV and Wear OS watches, and there is a Windows app too.
+SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF** and **Tuya / Smart Life** accounts and rings a real alarm the moment something changes — a pump that stopped, a freezer plug switched off, a device that lost its connection. It runs on Android phones, tablets and Android TV, and there is a Windows app too.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 
 ## Requirements
 
-- Android 8.0+ (API 26); Wear OS for the watch app
+- Android 8.0+ (API 26)
 - eWeLink: a free eWeLink developer app (App ID + App Secret) — the in-app guide walks you through it. eWeLink allows one session per account and App ID, so each phone, tablet, TV or PC needs its own eWeLink account with the devices shared to it ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: the Access ID and Access Secret of your own free Tuya Cloud project, linked to your Smart Life / Tuya app account ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64-bit) for the Windows app
@@ -130,13 +130,9 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 
 ### At home / Away
 
-- **At home / Away** — Rules marked "only when away" do not run. Switch to Away when you leave (also from the widget, the watch or Telegram /away).
+- **At home / Away** — Rules marked "only when away" do not run. Switch to Away when you leave (also from the widget or Telegram /away).
 - **Vacation mode** — You count as away, quiet hours are off and a report arrives every morning at 09:00. It ends by itself.
 - **Zones** — Pick an area on the map; automations run when your phone enters or leaves it (e.g. turn on the garden light when you get home, turn everything off when you leave). Map images are downloaded from OpenStreetMap; your location is only used on this phone.
-
-### Wear OS
-
-- The SwitchGuard watch app shows alarms (dismiss from the wrist), devices (switch them), scenes and At home / Away; it connects to the phone app.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Consumption is calculated by SwitchGuard from power readings taken while monitor
 
 ## Windows app
 
-SwitchGuard for Windows (10 / 11) does the same monitoring on a PC: it sits in the tray, rings a full-screen alarm on the computer and shares the same rules, automations and Telegram features. Zones, widgets, the watch and phone calls are phone-only.
+SwitchGuard for Windows (10 / 11) does the same monitoring on a PC: it sits in the tray, rings a full-screen alarm on the computer and shares the same rules, automations and Telegram features. Zones, widgets and phone calls are phone-only.
 
 ### Features
 

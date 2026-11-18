@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **eWeLink / SONOFF**- und **Tuya / Smart Life**-Konten und löst einen echten Alarm aus, sobald sich etwas ändert — eine Pumpe, die stehen bleibt, eine abgeschaltete Gefriertruhe, ein Gerät ohne Verbindung. Läuft auf Android-Handys, Tablets, Android TV und Wear-OS-Uhren; außerdem gibt es eine Windows-App.
+SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **eWeLink / SONOFF**- und **Tuya / Smart Life**-Konten und löst einen echten Alarm aus, sobald sich etwas ändert — eine Pumpe, die stehen bleibt, eine abgeschaltete Gefriertruhe, ein Gerät ohne Verbindung. Läuft auf Android-Handys, Tablets und Android TV; außerdem gibt es eine Windows-App.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 
 ## Voraussetzungen
 
-- Android 8.0+ (API 26); Wear OS für die Uhren-App
+- Android 8.0+ (API 26)
 - eWeLink: eine kostenlose eWeLink-Entwickler-App (App ID + App Secret) — die Anleitung in der App führt Schritt für Schritt. eWeLink erlaubt nur eine Sitzung pro Konto und App ID, daher braucht jedes Handy, Tablet, jeder TV oder PC ein eigenes eWeLink-Konto, für das die Geräte freigegeben sind ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Access ID und Access Secret deines eigenen kostenlosen Tuya-Cloud-Projekts, verknüpft mit deinem Smart-Life- / Tuya-App-Konto ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64 Bit) für die Windows-App
@@ -130,13 +130,9 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 
 ### Zuhause / Abwesend
 
-- **Zuhause / Abwesend** — Regeln mit „nur bei Abwesenheit“ laufen nicht. Wechsle auf Abwesend, wenn du gehst (auch über das Widget, die Uhr oder Telegram /away).
+- **Zuhause / Abwesend** — Regeln mit „nur bei Abwesenheit“ laufen nicht. Wechsle auf Abwesend, wenn du gehst (auch über das Widget oder Telegram /away).
 - **Urlaubsmodus** — Du giltst als abwesend, Ruhezeiten sind aus und jeden Morgen um 09:00 kommt ein Bericht. Er endet von selbst.
 - **Zonen** — Wähle einen Bereich auf der Karte; Automationen laufen, wenn dein Handy ihn betritt oder verlässt (z. B. das Gartenlicht einschalten, wenn du nach Hause kommst, alles ausschalten, wenn du gehst). Kartenbilder werden von OpenStreetMap geladen; dein Standort wird nur auf diesem Handy verwendet.
-
-### Wear OS
-
-- Die SwitchGuard-Uhren-App zeigt Alarme (am Handgelenk beenden), Geräte (schalten), Szenen und Zuhause / Abwesend; sie verbindet sich mit der Handy-App.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Der Verbrauch wird von SwitchGuard aus Leistungsmesswerten berechnet, die bei ei
 
 ## Windows-App
 
-SwitchGuard für Windows (10 / 11) überwacht genauso auf dem PC: Es sitzt im Infobereich, löst einen Vollbild-Alarm am Computer aus und teilt dieselben Regeln, Automatisierungen und Telegram-Funktionen. Zonen, Widgets, die Uhr und Telefonanrufe gibt es nur am Handy.
+SwitchGuard für Windows (10 / 11) überwacht genauso auf dem PC: Es sitzt im Infobereich, löst einen Vollbild-Alarm am Computer aus und teilt dieselben Regeln, Automatisierungen und Telegram-Funktionen. Zonen, Widgets und Telefonanrufe gibt es nur am Handy.
 
 ### Funktionen
 

@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan **Tuya / Smart Life** milik Anda sendiri dan membunyikan alarm sungguhan begitu ada yang berubah — pompa yang berhenti, colokan freezer yang mati, perangkat yang kehilangan koneksi. Berjalan di ponsel dan tablet Android, Android TV, dan jam tangan Wear OS, serta tersedia juga aplikasi Windows.
+SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan **Tuya / Smart Life** milik Anda sendiri dan membunyikan alarm sungguhan begitu ada yang berubah — pompa yang berhenti, colokan freezer yang mati, perangkat yang kehilangan koneksi. Berjalan di ponsel dan tablet Android dan Android TV, serta tersedia juga aplikasi Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 
 ## Persyaratan
 
-- Android 8.0+ (API 26); Wear OS untuk aplikasi jam
+- Android 8.0+ (API 26)
 - eWeLink: aplikasi developer eWeLink gratis (App ID + App Secret) — panduan di aplikasi menuntun langkah demi langkah. eWeLink hanya mengizinkan satu sesi per akun dan App ID, jadi setiap ponsel, tablet, TV, atau PC memerlukan akun eWeLink sendiri yang dibagikan perangkatnya ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Access ID dan Access Secret dari proyek Tuya Cloud gratis milik Anda, yang ditautkan ke akun aplikasi Smart Life / Tuya Anda ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64-bit) untuk aplikasi Windows
@@ -130,13 +130,9 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 
 ### Di rumah / Bepergian
 
-- **Di rumah / Bepergian** — Aturan yang ditandai "hanya saat bepergian" tidak berjalan. Beralih ke Bepergian saat Anda pergi (juga dari widget, jam tangan, atau /away di Telegram).
+- **Di rumah / Bepergian** — Aturan yang ditandai "hanya saat bepergian" tidak berjalan. Beralih ke Bepergian saat Anda pergi (juga dari widget atau /away di Telegram).
 - **Mode liburan** — Anda dianggap bepergian, jam tenang nonaktif, dan laporan tiba setiap pagi pukul 09:00. Berakhir dengan sendirinya.
 - **Zona** — Pilih area di peta; otomatisasi berjalan saat ponsel Anda memasuki atau meninggalkannya (mis. nyalakan lampu taman saat Anda tiba di rumah, matikan semuanya saat Anda pergi). Gambar peta diunduh dari OpenStreetMap; lokasi Anda hanya dipakai di ponsel ini.
-
-### Wear OS
-
-- Aplikasi jam SwitchGuard menampilkan alarm (matikan dari pergelangan), perangkat (nyalakan/matikan), skenario, dan Di rumah / Bepergian; terhubung ke aplikasi ponsel.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Konsumsi dihitung oleh SwitchGuard dari pembacaan daya selama pemantauan aktif, 
 
 ## Aplikasi Windows
 
-SwitchGuard untuk Windows (10 / 11) melakukan pemantauan yang sama di PC: berada di baki sistem, membunyikan alarm layar penuh di komputer, dan berbagi aturan, otomatisasi, serta fitur Telegram yang sama. Zona, widget, jam tangan, dan panggilan telepon hanya ada di ponsel.
+SwitchGuard untuk Windows (10 / 11) melakukan pemantauan yang sama di PC: berada di baki sistem, membunyikan alarm layar penuh di komputer, dan berbagi aturan, otomatisasi, serta fitur Telegram yang sama. Zona, widget, dan panggilan telepon hanya ada di ponsel.
 
 ### Fitur
 

@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własnych kontach **eWeLink / SONOFF** i **Tuya / Smart Life** i włącza prawdziwy alarm, gdy tylko coś się zmieni — pompa stanęła, zamrażarka została wyłączona, urządzenie straciło połączenie. Działa na telefonach i tabletach z Androidem, Android TV i zegarkach Wear OS; jest też aplikacja na Windows.
+SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własnych kontach **eWeLink / SONOFF** i **Tuya / Smart Life** i włącza prawdziwy alarm, gdy tylko coś się zmieni — pompa stanęła, zamrażarka została wyłączona, urządzenie straciło połączenie. Działa na telefonach i tabletach z Androidem oraz Android TV; jest też aplikacja na Windows.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 
 ## Wymagania
 
-- Android 8.0+ (API 26); Wear OS dla aplikacji na zegarek
+- Android 8.0+ (API 26)
 - eWeLink: darmowa aplikacja deweloperska eWeLink (App ID + App Secret) — przewodnik w aplikacji prowadzi krok po kroku. eWeLink pozwala na jedną sesję na konto i App ID, więc każdy telefon, tablet, TV lub komputer potrzebuje własnego konta eWeLink z udostępnionymi urządzeniami ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: Access ID i Access Secret Twojego własnego darmowego projektu Tuya Cloud, powiązanego z kontem aplikacji Smart Life / Tuya ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64-bit) dla aplikacji na Windows
@@ -130,13 +130,9 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 
 ### W domu / Poza domem
 
-- **W domu / Poza domem** — Reguły oznaczone „tylko poza domem” nie działają. Przełącz na Poza domem, gdy wychodzisz (także z widżetu, zegarka lub przez Telegram /away).
+- **W domu / Poza domem** — Reguły oznaczone „tylko poza domem” nie działają. Przełącz na Poza domem, gdy wychodzisz (także z widżetu lub przez Telegram /away).
 - **Tryb wakacyjny** — Jesteś traktowany jako poza domem, godziny ciszy są wyłączone, a każdego ranka o 09:00 przychodzi raport. Kończy się sam.
 - **Strefy** — Wybierz obszar na mapie; automatyzacje uruchamiają się, gdy telefon wejdzie do niego lub go opuści (np. włącz lampę w ogrodzie, gdy wrócisz do domu, wyłącz wszystko, gdy wyjdziesz). Obrazy map są pobierane z OpenStreetMap; Twoja lokalizacja jest używana tylko na tym telefonie.
-
-### Wear OS
-
-- Aplikacja SwitchGuard na zegarek pokazuje alarmy (wyłączanie z nadgarstka), urządzenia (przełączanie), sceny oraz W domu / Poza domem; łączy się z aplikacją na telefonie.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Zużycie jest obliczane przez SwitchGuard na podstawie odczytów mocy wykonywany
 
 ## Aplikacja na Windows
 
-SwitchGuard dla Windows (10 / 11) monitoruje tak samo na komputerze: siedzi w zasobniku systemowym, włącza alarm na pełnym ekranie komputera i współdzieli te same reguły, automatyzacje i funkcje Telegrama. Strefy, widżety, zegarek i połączenia telefoniczne są tylko w telefonie.
+SwitchGuard dla Windows (10 / 11) monitoruje tak samo na komputerze: siedzi w zasobniku systemowym, włącza alarm na pełnym ekranie komputera i współdzieli te same reguły, automatyzacje i funkcje Telegrama. Strefy, widżety i połączenia telefoniczne są tylko w telefonie.
 
 ### Funkcje
 

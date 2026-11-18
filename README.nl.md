@@ -2,7 +2,7 @@
 
 # SwitchGuard
 
-SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SONOFF**- en **Tuya / Smart Life**-accounts en laat een echt alarm afgaan zodra er iets verandert — een pomp die stilvalt, een vriezer die uitgeschakeld is, een apparaat zonder verbinding. Werkt op Android-telefoons, tablets, Android TV en Wear OS-horloges, en er is ook een Windows-app.
+SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SONOFF**- en **Tuya / Smart Life**-accounts en laat een echt alarm afgaan zodra er iets verandert — een pomp die stilvalt, een vriezer die uitgeschakeld is, een apparaat zonder verbinding. Werkt op Android-telefoons, tablets en Android TV, en er is ook een Windows-app.
 
 <p>
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
@@ -33,7 +33,7 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 
 ## Vereisten
 
-- Android 8.0+ (API 26); Wear OS voor de horloge-app
+- Android 8.0+ (API 26)
 - eWeLink: een gratis eWeLink-ontwikkelaarsapp (App ID + App Secret) — de handleiding in de app helpt stap voor stap. eWeLink staat één sessie per account en App ID toe, dus elke telefoon, tablet, tv of pc heeft een eigen eWeLink-account nodig waarmee de apparaten gedeeld zijn ([dev.ewelink.cc](https://dev.ewelink.cc))
 - Tuya / Smart Life: de Access ID en Access Secret van je eigen gratis Tuya Cloud-project, gekoppeld aan je Smart Life- / Tuya-appaccount ([platform.tuya.com](https://platform.tuya.com))
 - Windows 10 / 11 (64-bit) voor de Windows-app
@@ -130,13 +130,9 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 
 ### Thuis / Weg
 
-- **Thuis / Weg** — Regels die zijn gemarkeerd als “alleen als ik weg ben” worden niet uitgevoerd. Schakel over naar Weg als je vertrekt (ook via de widget, het horloge of Telegram /away).
+- **Thuis / Weg** — Regels die zijn gemarkeerd als “alleen als ik weg ben” worden niet uitgevoerd. Schakel over naar Weg als je vertrekt (ook via de widget of Telegram /away).
 - **Vakantiemodus** — Je telt als weg, stille uren staan uit en elke ochtend om 09:00 komt er een rapport. Het eindigt vanzelf.
 - **Zones** — Kies een gebied op de kaart; automatiseringen draaien wanneer je telefoon het binnengaat of verlaat (bijv. de tuinlamp aanzetten als je thuiskomt, alles uitzetten als je weggaat). Kaartafbeeldingen worden gedownload van OpenStreetMap; je locatie wordt alleen op deze telefoon gebruikt.
-
-### Wear OS
-
-- De SwitchGuard-horloge-app toont alarmen (uitzetten vanaf je pols), apparaten (schakelen), scènes en Thuis / Weg; hij verbindt met de telefoon-app.
 
 ### Android TV
 
@@ -435,7 +431,7 @@ Het verbruik wordt door SwitchGuard berekend uit vermogensmetingen die zijn geda
 
 ## Windows-app
 
-SwitchGuard voor Windows (10 / 11) bewaakt op dezelfde manier op een pc: hij zit in het systeemvak, laat een schermvullend alarm afgaan op de computer en deelt dezelfde regels, automatiseringen en Telegram-functies. Zones, widgets, het horloge en telefoongesprekken zijn alleen voor de telefoon.
+SwitchGuard voor Windows (10 / 11) bewaakt op dezelfde manier op een pc: hij zit in het systeemvak, laat een schermvullend alarm afgaan op de computer en deelt dezelfde regels, automatiseringen en Telegram-functies. Zones, widgets en telefoongesprekken zijn alleen voor de telefoon.
 
 ### Functies
 
