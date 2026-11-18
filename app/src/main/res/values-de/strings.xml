@@ -75,6 +75,9 @@
     <string name="crash_report_subject">SwitchGuard %s Problembericht</string>
     <string name="crash_report_clear">Gespeicherte Absturzberichte löschen</string>
     <string name="crash_report_no_mail">Keine E-Mail-App gefunden</string>
+    <string name="crash_prompt_title">SwitchGuard wurde unerwartet beendet</string>
+    <string name="crash_prompt_text">Ein Fehler hat die App beim letzten Mal beendet. Problembericht senden, damit er behoben werden kann? Es wird nichts geteilt, solange du es nicht sendest.</string>
+    <string name="crash_prompt_send">Bericht senden</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Benachrichtigen</string>

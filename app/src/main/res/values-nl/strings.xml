@@ -76,6 +76,9 @@
     <string name="crash_report_subject">SwitchGuard %s probleemrapport</string>
     <string name="crash_report_clear">Opgeslagen crashrapporten verwijderen</string>
     <string name="crash_report_no_mail">Geen e-mailapp gevonden</string>
+    <string name="crash_prompt_title">SwitchGuard is onverwacht gesloten</string>
+    <string name="crash_prompt_text">Een fout heeft de app de vorige keer gesloten. Probleemrapport sturen zodat het opgelost kan worden? Er wordt niets gedeeld tenzij je het verstuurt.</string>
+    <string name="crash_prompt_send">Rapport sturen</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Melding</string>

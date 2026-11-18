@@ -6,6 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.33.0 — 2026-11-18
+**New**
+- If the app closed unexpectedly, it asks once on the next start whether to send a problem report. Nothing is shared unless you send it.
 ## 2.32.1 — 2026-11-15
 **Changes**
 - Get help from AI: prompts are now the same for everyone and contain only the app description; your device names are no longer added. The AI asks for device names when it needs them.

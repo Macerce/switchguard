@@ -76,6 +76,9 @@
     <string name="crash_report_subject">تقرير مشكلة SwitchGuard %s</string>
     <string name="crash_report_clear">حذف تقارير الأعطال المحفوظة</string>
     <string name="crash_report_no_mail">لم يتم العثور على تطبيق بريد إلكتروني</string>
+    <string name="crash_prompt_title">أُغلق SwitchGuard بشكل غير متوقع</string>
+    <string name="crash_prompt_text">أدى خطأ إلى إغلاق التطبيق في المرة الأخيرة. هل تريد إرسال تقرير مشكلة لإصلاحه؟ لا تتم مشاركة أي شيء ما لم ترسله.</string>
+    <string name="crash_prompt_send">إرسال التقرير</string>
     <!-- Rule actions -->
     <string name="action_alarm">إنذار</string>
     <string name="action_notify">إشعار</string>

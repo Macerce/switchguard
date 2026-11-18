@@ -73,6 +73,9 @@
     <string name="crash_report_subject">Звіт про проблему SwitchGuard %s</string>
     <string name="crash_report_clear">Видалити збережені звіти про збої</string>
     <string name="crash_report_no_mail">Не знайдено поштового застосунку</string>
+    <string name="crash_prompt_title">SwitchGuard неочікувано закрився</string>
+    <string name="crash_prompt_text">Минулого разу застосунок закрився через помилку. Надіслати звіт про проблему, щоб її виправили? Нічого не передається, доки ви самі не надішлете.</string>
+    <string name="crash_prompt_send">Надіслати звіт</string>
     <string name="action_alarm">Тривога</string>
     <string name="action_notify">Сповіщення</string>
     <string name="action_ignore">Нічого</string>

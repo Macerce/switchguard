@@ -163,6 +163,8 @@ fun App() {
         }
     }
 
+    CrashPromptHost()
+
     if (chatOpen) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
             Box(Modifier.readableWidth()) { ChatScreen(onBack = { chatOpen = false }) }

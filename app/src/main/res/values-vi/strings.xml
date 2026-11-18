@@ -73,6 +73,9 @@
     <string name="crash_report_subject">Báo cáo sự cố SwitchGuard %s</string>
     <string name="crash_report_clear">Xóa các báo cáo sự cố đã lưu</string>
     <string name="crash_report_no_mail">Không tìm thấy ứng dụng email</string>
+    <string name="crash_prompt_title">SwitchGuard đã đóng đột ngột</string>
+    <string name="crash_prompt_text">Lần trước một lỗi đã khiến ứng dụng đóng. Gửi báo cáo sự cố để được khắc phục? Không có gì được chia sẻ trừ khi bạn gửi.</string>
+    <string name="crash_prompt_send">Gửi báo cáo</string>
     <string name="action_alarm">Báo động</string>
     <string name="action_notify">Thông báo</string>
     <string name="action_ignore">Không</string>

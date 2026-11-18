@@ -6,6 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.33.0 — 2026-11-18
+**Yeni**
+- Uygulama beklenmedik şekilde kapandıysa bir sonraki açılışta bir kez sorun raporu gönderilsin mi diye sorar. Siz göndermedikçe hiçbir şey paylaşılmaz.
 ## 2.32.1 — 2026-11-15
 **Değişiklikler**
 - Yapay zekâ ile yardım: istemler artık herkese aynı ve yalnız uygulamanın tarifini içeriyor; cihaz adlarınız eklenmiyor. Yapay zekâ gerektiğinde cihaz adlarını soruyor.

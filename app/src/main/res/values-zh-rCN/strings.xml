@@ -73,6 +73,9 @@
     <string name="crash_report_subject">SwitchGuard %s 问题报告</string>
     <string name="crash_report_clear">删除已保存的崩溃报告</string>
     <string name="crash_report_no_mail">未找到邮件应用</string>
+    <string name="crash_prompt_title">SwitchGuard 意外关闭</string>
+    <string name="crash_prompt_text">上次应用因错误而关闭。要发送问题报告以便修复吗？除非你发送，否则不会共享任何内容。</string>
+    <string name="crash_prompt_send">发送报告</string>
     <string name="action_alarm">警报</string>
     <string name="action_notify">通知</string>
     <string name="action_ignore">无</string>

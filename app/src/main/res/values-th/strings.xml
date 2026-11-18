@@ -73,6 +73,9 @@
     <string name="crash_report_subject">รายงานปัญหา SwitchGuard %s</string>
     <string name="crash_report_clear">ลบรายงานข้อขัดข้องที่บันทึกไว้</string>
     <string name="crash_report_no_mail">ไม่พบแอปอีเมล</string>
+    <string name="crash_prompt_title">SwitchGuard ปิดตัวโดยไม่คาดคิด</string>
+    <string name="crash_prompt_text">ครั้งที่แล้วแอปปิดตัวเพราะข้อผิดพลาด ส่งรายงานปัญหาเพื่อให้แก้ไขได้ไหม ไม่มีอะไรถูกแชร์จนกว่าคุณจะส่ง</string>
+    <string name="crash_prompt_send">ส่งรายงาน</string>
     <string name="action_alarm">สัญญาณเตือน</string>
     <string name="action_notify">แจ้งเตือน</string>
     <string name="action_ignore">ไม่ทำอะไร</string>

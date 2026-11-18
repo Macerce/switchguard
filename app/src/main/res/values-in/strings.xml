@@ -71,6 +71,9 @@
     <string name="crash_report_subject">Laporan masalah SwitchGuard %s</string>
     <string name="crash_report_clear">Hapus laporan error tersimpan</string>
     <string name="crash_report_no_mail">Aplikasi email tidak ditemukan</string>
+    <string name="crash_prompt_title">SwitchGuard tertutup tiba-tiba</string>
+    <string name="crash_prompt_text">Sebuah galat menutup aplikasi terakhir kali. Kirim laporan masalah agar bisa diperbaiki? Tidak ada yang dibagikan kecuali Anda mengirimnya.</string>
+    <string name="crash_prompt_send">Kirim laporan</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notifikasi</string>
     <string name="action_ignore">Tidak ada</string>

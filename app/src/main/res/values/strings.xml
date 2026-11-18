@@ -77,6 +77,9 @@
     <string name="crash_report_subject">SwitchGuard %s problem report</string>
     <string name="crash_report_clear">Delete saved crash reports</string>
     <string name="crash_report_no_mail">No email app found</string>
+    <string name="crash_prompt_title">SwitchGuard closed unexpectedly</string>
+    <string name="crash_prompt_text">An error closed the app last time. Send a problem report so it can be fixed? Nothing is shared unless you send it.</string>
+    <string name="crash_prompt_send">Send report</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Notify</string>

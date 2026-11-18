@@ -75,6 +75,9 @@
     <string name="crash_report_subject">SwitchGuard %s hata raporu</string>
     <string name="crash_report_clear">Kayıtlı hataları sil</string>
     <string name="crash_report_no_mail">E-posta uygulaması bulunamadı</string>
+    <string name="crash_prompt_title">SwitchGuard beklenmedik şekilde kapandı</string>
+    <string name="crash_prompt_text">Uygulama son açılışta bir hata yüzünden kapandı. Düzeltilebilmesi için sorun raporu gönderilsin mi? Siz göndermedikçe hiçbir şey paylaşılmaz.</string>
+    <string name="crash_prompt_send">Rapor gönder</string>
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Bildirim</string>
     <string name="action_ignore">Yok</string>

@@ -71,6 +71,9 @@
     <string name="crash_report_subject">SwitchGuard %s समस्या रिपोर्ट</string>
     <string name="crash_report_clear">सेव की गई क्रैश रिपोर्ट हटाएँ</string>
     <string name="crash_report_no_mail">कोई ईमेल ऐप नहीं मिला</string>
+    <string name="crash_prompt_title">SwitchGuard अचानक बंद हो गया</string>
+    <string name="crash_prompt_text">पिछली बार एक त्रुटि के कारण ऐप बंद हो गया। इसे ठीक करने के लिए समस्या रिपोर्ट भेजें? जब तक आप नहीं भेजते, कुछ भी साझा नहीं होता।</string>
+    <string name="crash_prompt_send">रिपोर्ट भेजें</string>
     <string name="action_alarm">अलार्म</string>
     <string name="action_notify">सूचना</string>
     <string name="action_ignore">कुछ नहीं</string>

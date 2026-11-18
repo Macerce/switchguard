@@ -73,6 +73,9 @@
     <string name="crash_report_subject">Segnalazione problema SwitchGuard %s</string>
     <string name="crash_report_clear">Elimina le segnalazioni di arresto salvate</string>
     <string name="crash_report_no_mail">Nessuna app di posta trovata</string>
+    <string name="crash_prompt_title">SwitchGuard si è chiuso in modo imprevisto</string>
+    <string name="crash_prompt_text">Un errore ha chiuso l\'app l\'ultima volta. Inviare una segnalazione per correggerlo? Nulla viene condiviso se non lo invii tu.</string>
+    <string name="crash_prompt_send">Invia segnalazione</string>
     <string name="action_alarm">Allarme</string>
     <string name="action_notify">Notifica</string>
     <string name="action_ignore">Nessuna</string>

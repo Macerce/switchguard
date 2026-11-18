@@ -76,6 +76,9 @@
     <string name="crash_report_subject">Zgłoszenie problemu SwitchGuard %s</string>
     <string name="crash_report_clear">Usuń zapisane raporty awarii</string>
     <string name="crash_report_no_mail">Nie znaleziono aplikacji poczty</string>
+    <string name="crash_prompt_title">SwitchGuard nieoczekiwanie się zamknął</string>
+    <string name="crash_prompt_text">Ostatnio błąd zamknął aplikację. Wysłać raport o problemie, aby można go było naprawić? Nic nie zostanie udostępnione, dopóki go nie wyślesz.</string>
+    <string name="crash_prompt_send">Wyślij raport</string>
     <!-- Rule actions -->
     <string name="action_alarm">Alarm</string>
     <string name="action_notify">Powiadomienie</string>

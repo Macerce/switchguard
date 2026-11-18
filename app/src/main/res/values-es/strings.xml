@@ -73,6 +73,9 @@
     <string name="crash_report_subject">Informe de problema de SwitchGuard %s</string>
     <string name="crash_report_clear">Eliminar informes de fallos guardados</string>
     <string name="crash_report_no_mail">No se encontró ninguna app de correo</string>
+    <string name="crash_prompt_title">SwitchGuard se cerró inesperadamente</string>
+    <string name="crash_prompt_text">Un error cerró la app la última vez. ¿Enviar un informe del problema para poder corregirlo? No se comparte nada a menos que lo envíes.</string>
+    <string name="crash_prompt_send">Enviar informe</string>
     <string name="action_alarm">Alarma</string>
     <string name="action_notify">Notificar</string>
     <string name="action_ignore">Ninguna</string>

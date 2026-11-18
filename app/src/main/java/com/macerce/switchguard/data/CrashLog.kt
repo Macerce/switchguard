@@ -46,6 +46,9 @@ object CrashLog {
     fun reports(context: Context): List<String> =
         dir(context).listFiles().orEmpty().sortedBy { it.name }.mapNotNull { runCatching { it.readText() }.getOrNull() }
 
+    /** En yeni çökme dosyasının adı (adlar zamana göre sıralanır). */
+    fun latestName(context: Context): String? = dir(context).list()?.maxOrNull()
+
     fun count(context: Context): Int = dir(context).listFiles()?.size ?: 0
 
     fun clear(context: Context) {

@@ -76,6 +76,9 @@
     <string name="crash_report_subject">SwitchGuard %s 문제 보고서</string>
     <string name="crash_report_clear">저장된 충돌 보고서 삭제</string>
     <string name="crash_report_no_mail">이메일 앱을 찾을 수 없습니다</string>
+    <string name="crash_prompt_title">SwitchGuard가 예기치 않게 종료됨</string>
+    <string name="crash_prompt_text">지난번에 오류로 앱이 종료되었습니다. 수정할 수 있도록 문제 보고서를 보낼까요? 직접 보내지 않으면 아무것도 공유되지 않습니다.</string>
+    <string name="crash_prompt_send">보고서 보내기</string>
     <!-- Rule actions -->
     <string name="action_alarm">알람</string>
     <string name="action_notify">알림</string>

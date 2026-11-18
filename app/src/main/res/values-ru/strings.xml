@@ -76,6 +76,9 @@
     <string name="crash_report_subject">Отчёт о проблеме SwitchGuard %s</string>
     <string name="crash_report_clear">Удалить сохранённые отчёты о сбоях</string>
     <string name="crash_report_no_mail">Почтовое приложение не найдено</string>
+    <string name="crash_prompt_title">SwitchGuard неожиданно закрылся</string>
+    <string name="crash_prompt_text">В прошлый раз приложение закрылось из-за ошибки. Отправить отчёт о проблеме, чтобы её исправили? Ничего не передаётся, пока вы сами не отправите.</string>
+    <string name="crash_prompt_send">Отправить отчёт</string>
     <!-- Rule actions -->
     <string name="action_alarm">Тревога</string>
     <string name="action_notify">Уведомить</string>

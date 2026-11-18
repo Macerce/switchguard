@@ -76,6 +76,9 @@
     <string name="crash_report_subject">SwitchGuard %s 問題レポート</string>
     <string name="crash_report_clear">保存済みのクラッシュレポートを削除</string>
     <string name="crash_report_no_mail">メールアプリが見つかりません</string>
+    <string name="crash_prompt_title">SwitchGuard が予期せず終了しました</string>
+    <string name="crash_prompt_text">前回、エラーによりアプリが終了しました。修正のために問題レポートを送信しますか？送信しない限り何も共有されません。</string>
+    <string name="crash_prompt_send">レポートを送信</string>
     <!-- Rule actions -->
     <string name="action_alarm">アラーム</string>
     <string name="action_notify">通知</string>
