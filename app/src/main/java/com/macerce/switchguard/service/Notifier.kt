@@ -18,6 +18,7 @@ import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import com.macerce.switchguard.core.EventNotifyIds
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AlarmVolume
 import com.macerce.switchguard.data.RuntimeState
@@ -66,13 +67,21 @@ class Notifier(private val context: Context, private val store: Store) {
      * Cihaza özel ses varsa bildirim sessiz kanala gider ve ses bir kez elle çalınır:
      * Android'de kanal sesi sonradan değiştirilemediği için cihaz başına ses ancak böyle olur.
      */
-    fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null) {
+    fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null, key: String? = null) {
         val custom = deviceSound?.let(Uri::parse)
         if (custom != null) playOnce(custom)
+        // Aynı cihazın aynı olayı öncekinin yerine geçer ([key]); anahtarsızlar dönen aralıktan kimlik alır.
+        val id = if (key != null) EventNotifyIds.keyed(key) else EventNotifyIds.rotating(System.currentTimeMillis())
+        // Android'in uygulama başına bildirim sınırı dolmasın: en eski olay bildirimleri kaldırılır.
+        // Yalnızca olay aralığındaki kimlikler seçilir; alarm ve uyarı bildirimlerine dokunulmaz.
+        runCatching {
+            val active = nm.activeNotifications.map { it.id to it.postTime }
+            EventNotifyIds.toCancel(active, id).forEach(nm::cancel)
+        }
         // Özeti olan grup "seyrek" sayılmaz; Android 16 onu (ve yanındaki alarmı) kendi grubuna toplamaz.
         nm.notify(ID_EVENTS_SUMMARY, groupSummary(CH_EVENTS, GROUP_EVENTS, context.getString(R.string.channel_events)))
         nm.notify(
-            (System.currentTimeMillis() % Int.MAX_VALUE).toInt(),
+            id,
             Notification.Builder(context, if (custom != null) CH_EVENTS_CUSTOM else CH_EVENTS)
                 .setSmallIcon(R.drawable.ic_stat_guard)
                 .setContentTitle(title ?: context.getString(R.string.notif_event_title))

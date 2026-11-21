@@ -1064,7 +1064,7 @@ class MonitorService : Service() {
                 val sound = rules.soundUri
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound, critical = isCritical(a.trigger.deviceId))
-                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
+                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = "auto/" + a.id)
                     AlertAction.IGNORE -> Unit
                 }
             }
@@ -1210,7 +1210,7 @@ class MonitorService : Service() {
                 // Hatırlatma kapalıyken kayıt tutulmaz: sonradan açılınca eski olaylar birden çalmasın.
                 if (store.reminderMin > 0) reminders.onAlarm(change, System.currentTimeMillis())
             }
-            AlertAction.NOTIFY -> notifier.notifyEvent(text, sound)
+            AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = change.deviceId + "/" + change.eventType.name)
             AlertAction.IGNORE -> Unit
         }
     }
@@ -1236,7 +1236,7 @@ class MonitorService : Service() {
             val effective = RuleEngine.effective(AlertAction.ALARM, quiet, store.bypassesQuiet(r.change.deviceId))
             log.add(r.change.deviceId, r.change.name, EventKind.REMINDER, text, effective.name, args)
             if (effective == AlertAction.ALARM) addAlarm(text, rules.soundUri, critical = isCritical(r.change.deviceId))
-            else notifier.notifyEvent(text, rules.soundUri)
+            else notifier.notifyEvent(text, rules.soundUri, key = r.change.deviceId + "/reminder")
         }
         // Hiç alarm çalmadıysa (hepsi bildirime düştü) kapatılacak bir şey yok: hatırlatmalar yeniden kurulur.
         if (store.pendingAlarm.isEmpty()) reminders.onDismiss(wall)
