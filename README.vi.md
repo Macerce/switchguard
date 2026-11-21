@@ -72,7 +72,7 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 - Trang thiết bị: quy tắc, âm báo động riêng, danh mục cảnh báo, lịch sử năng lượng và chi phí, hẹn giờ eWeLink, tín hiệu Wi-Fi và chẩn đoán mất kết nối, điện năng chờ và sự kiện gần đây.
 - **Sắp xếp thiết bị**: Ngôi sao = giữ ở trên cùng · mũi tên = di chuyển · kích thước thẻ = nhỏ hoặc lớn · nhãn = danh mục. Nhấn giữ một thẻ để quay lại đây.
 
-### Cảm biến (eWeLink)
+### Cảm biến (eWeLink, Tuya)
 
 - Nhiệt độ / độ ẩm (TH16, THR316/320, SNZB-02), cửa (DW2, SNZB-04), chuyển động / hiện diện (SNZB-03, SNZB-06P), rò rỉ nước (SNZB-05) và pin trên ô thiết bị, trên màn hình chờ và trong Trò chuyện.
 - Trình kích hoạt cảm biến trong tự động hóa (giá trị trên / dưới, cửa mở, chuyển động, rò rỉ nước) và cảnh báo cảm biến một chạm trên trang thiết bị.

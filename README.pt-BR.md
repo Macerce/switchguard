@@ -72,7 +72,7 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 - Página do dispositivo: regras, som de alarme próprio, categoria de alerta, histórico de energia e custo, timers eWeLink, sinal Wi-Fi e diagnóstico de quedas, consumo em espera e eventos recentes.
 - **Organizar dispositivos**: Estrela = manter no topo · setas = mover · tamanho do cartão = pequeno ou grande · etiqueta = categoria. Mantenha um cartão pressionado para voltar aqui.
 
-### Sensores (eWeLink)
+### Sensores (eWeLink, Tuya)
 
 - Temperatura / umidade (TH16, THR316/320, SNZB-02), porta (DW2, SNZB-04), movimento / presença (SNZB-03, SNZB-06P), vazamento de água (SNZB-05) e bateria nos blocos de dispositivo, na tela de espera e no Chat.
 - Gatilhos de sensor nas automações (valor acima / abaixo, porta aberta, movimento, vazamento) e alertas de sensor com um toque na página do dispositivo.

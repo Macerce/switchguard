@@ -72,7 +72,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 - Page de l'appareil : règles, son d'alarme propre, catégorie d'alerte, historique d'énergie et coût, minuteries eWeLink, signal Wi-Fi et diagnostic des coupures, consommation en veille et événements récents.
 - **Organiser les appareils**: Étoile = garder en haut · flèches = déplacer · taille de la carte = petite ou grande · étiquette = catégorie. Appuyez longuement sur une carte pour revenir ici.
 
-### Capteurs (eWeLink)
+### Capteurs (eWeLink, Tuya)
 
 - Température / humidité (TH16, THR316/320, SNZB-02), porte (DW2, SNZB-04), mouvement / présence (SNZB-03, SNZB-06P), fuite d’eau (SNZB-05) et batterie sur les tuiles d’appareil, sur l’écran de veille et dans le Chat.
 - Déclencheurs de capteur dans les automatisations (valeur au-dessus / en dessous, porte ouverte, mouvement, fuite d’eau) et alertes de capteur en un geste sur la page de l’appareil.

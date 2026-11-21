@@ -72,7 +72,7 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 - Pagina del dispositivo: regole, suono d'allarme proprio, categoria di avviso, cronologia energia e costo, timer eWeLink, segnale Wi-Fi e diagnosi delle cadute, consumo in standby ed eventi recenti.
 - **Disponi i dispositivi**: Stella = tieni in alto · frecce = sposta · dimensione scheda = piccola o grande · etichetta = categoria. Tieni premuta una scheda per tornare qui.
 
-### Sensori (eWeLink)
+### Sensori (eWeLink, Tuya)
 
 - Temperatura / umidità (TH16, THR316/320, SNZB-02), porta (DW2, SNZB-04), movimento / presenza (SNZB-03, SNZB-06P), perdita d’acqua (SNZB-05) e batteria sulle schede dei dispositivi, nella schermata di attesa e nella Chat.
 - Attivatori dei sensori nelle automazioni (valore sopra / sotto, porta aperta, movimento, perdita d’acqua) e avvisi dei sensori con un tocco nella pagina del dispositivo.

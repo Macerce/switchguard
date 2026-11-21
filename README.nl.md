@@ -72,7 +72,7 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 - Apparaatpagina: regels, eigen alarmgeluid, waarschuwingscategorie, energiegeschiedenis en kosten, eWeLink-timers, wifi-signaal en diagnose van onderbrekingen, sluimerverbruik en recente gebeurtenissen.
 - **Apparaten indelen**: Ster = bovenaan houden · pijlen = verplaatsen · kaartgrootte = klein of groot · label = categorie. Houd een kaart lang ingedrukt om hier terug te komen.
 
-### Sensoren (eWeLink)
+### Sensoren (eWeLink, Tuya)
 
 - Temperatuur / luchtvochtigheid (TH16, THR316/320, SNZB-02), deur (DW2, SNZB-04), beweging / aanwezigheid (SNZB-03, SNZB-06P), waterlek (SNZB-05) en batterij op de apparaattegels, op het standby-scherm en in Chat.
 - Sensortriggers in automatiseringen (waarde boven / onder, deur geopend, beweging, waterlek) en sensormeldingen met één tik op de apparaatpagina.

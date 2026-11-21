@@ -72,7 +72,7 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 - Halaman perangkat: aturan, suara alarm sendiri, kategori peringatan, riwayat energi dan biaya, timer eWeLink, sinyal Wi-Fi dan diagnosis putus koneksi, konsumsi siaga, dan peristiwa terbaru.
 - **Atur perangkat**: Bintang = tetap di atas · panah = pindahkan · ukuran kartu = kecil atau besar · tag = kategori. Tekan lama kartu untuk kembali ke sini.
 
-### Sensor (eWeLink)
+### Sensor (eWeLink, Tuya)
 
 - Suhu / kelembapan (TH16, THR316/320, SNZB-02), pintu (DW2, SNZB-04), gerakan / kehadiran (SNZB-03, SNZB-06P), kebocoran air (SNZB-05) dan baterai di kartu perangkat, di layar siaga, dan di Chat.
 - Pemicu sensor di otomatisasi (nilai di atas / di bawah, pintu terbuka, gerakan, kebocoran air) dan peringatan sensor sekali ketuk di halaman perangkat.

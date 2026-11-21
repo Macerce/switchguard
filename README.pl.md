@@ -72,7 +72,7 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 - Strona urządzenia: reguły, własny dźwięk alarmu, kategoria alertu, historia energii i koszt, timery eWeLink, sygnał Wi-Fi i diagnoza zerwań, zużycie w czuwaniu i ostatnie zdarzenia.
 - **Rozmieść urządzenia**: Gwiazdka = zawsze na górze · strzałki = przesuń · rozmiar karty = mała lub duża · etykieta = kategoria. Przytrzymaj kartę, aby tu wrócić.
 
-### Czujniki (eWeLink)
+### Czujniki (eWeLink, Tuya)
 
 - Temperatura / wilgotność (TH16, THR316/320, SNZB-02), drzwi (DW2, SNZB-04), ruch / obecność (SNZB-03, SNZB-06P), wyciek wody (SNZB-05) i bateria na kafelkach urządzeń, na ekranie czuwania i w Czacie.
 - Wyzwalacze czujników w automatyzacjach (wartość powyżej / poniżej, otwarcie drzwi, ruch, wyciek wody) oraz alerty czujników jednym dotknięciem na stronie urządzenia.

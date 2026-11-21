@@ -72,7 +72,7 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 - Página del dispositivo: reglas, sonido de alarma propio, categoría de alerta, historial de energía y coste, temporizadores de eWeLink, señal Wi-Fi y diagnóstico de cortes, consumo en espera y eventos recientes.
 - **Organizar dispositivos**: Estrella = mantener arriba · flechas = mover · tamaño de tarjeta = pequeña o grande · etiqueta = categoría. Mantén pulsada una tarjeta para volver aquí.
 
-### Sensores (eWeLink)
+### Sensores (eWeLink, Tuya)
 
 - Temperatura / humedad (TH16, THR316/320, SNZB-02), puerta (DW2, SNZB-04), movimiento / presencia (SNZB-03, SNZB-06P), fuga de agua (SNZB-05) y batería en las tarjetas de dispositivo, en la pantalla de espera y en el Chat.
 - Disparadores de sensor en las automatizaciones (valor por encima / por debajo, puerta abierta, movimiento, fuga de agua) y alertas de sensor con un toque en la página del dispositivo.

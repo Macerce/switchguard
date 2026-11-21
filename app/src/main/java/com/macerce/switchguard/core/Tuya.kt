@@ -100,7 +100,54 @@ object TuyaParser {
             voltage = scaled("cur_voltage") ?: before.voltage,
             // cur_current mA cinsinden gelir.
             current = scaled("cur_current")?.let { it / 1000.0 } ?: before.current,
+            // Mesaj servisindeki iletiler kısmidir: yalnız gelen sensör değerleri öncekilerin üstüne yazılır.
+            sensors = before.sensors + sensors(values, scales),
         )
+    }
+
+    /** Ürün tanımında ölçeği olmayan sensör kodlarının olağan ölçeği (sıcaklık onda bir derece). */
+    private val SENSOR_DEFAULT_SCALES = mapOf("va_temperature" to 1, "temp_current" to 1)
+
+    /**
+     * Tuya standart durum kodlarından sensör değerleri (Tuya Standard Status Set; sıcaklık-nem wsdcg, kapı mcs,
+     * su sj, hareket pir kategorileri). Sayısal değerler ürün tanımındaki ölçekle bölünür. Yalnızca gelen kodlar döner.
+     * Kaynak: developer.tuya.com "Standard Status Set" sayfaları (va_temperature, va_humidity, battery_percentage,
+     * battery_state, doorcontact_state, watersensor_state, pir).
+     */
+    fun sensors(values: Map<String, Any?>, scales: Map<String, Int>): Map<SensorKind, Double> {
+        fun number(code: String): Double? {
+            val raw = (values[code] as? Number)?.toDouble() ?: (values[code] as? String)?.toDoubleOrNull() ?: return null
+            val scale = scales[code] ?: SENSOR_DEFAULT_SCALES[code] ?: 0
+            return raw / Math.pow(10.0, scale.toDouble())
+        }
+        fun text(code: String): String? = values[code]?.toString()?.lowercase()
+        val out = linkedMapOf<SensorKind, Double>()
+        listOf("va_temperature", "temp_current").firstNotNullOfOrNull(::number)
+            ?.takeIf { it > -60 && it < 150 }?.let { out[SensorKind.TEMPERATURE] = Math.round(it * 10) / 10.0 }
+        listOf("va_humidity", "humidity_value").firstNotNullOfOrNull(::number)
+            // Ölçeği tanımda olmayan ürün onda bir gönderiyor olabilir (535 = %53,5).
+            ?.let { if (it > 100 && it <= 1000) it / 10 else it }
+            ?.takeIf { it in 0.0..100.0 }?.let { out[SensorKind.HUMIDITY] = Math.round(it * 10) / 10.0 }
+        val battery = listOf("battery_percentage", "va_battery").firstNotNullOfOrNull(::number)?.takeIf { it in 0.0..100.0 }
+            ?: when (text("battery_state")) {
+                "high" -> 100.0
+                "middle", "medium" -> 50.0
+                "low" -> 10.0
+                "poweroff" -> 0.0
+                else -> null
+            }
+        battery?.let { out[SensorKind.BATTERY] = it }
+        number("illuminance_value")?.takeIf { it >= 0 }?.let { out[SensorKind.ILLUMINANCE] = it }
+        (values["doorcontact_state"] as? Boolean)?.let { out[SensorKind.DOOR] = if (it) 1.0 else 0.0 }
+        when (text("watersensor_state")) {
+            "alarm", "water_leak_sensor", "1" -> out[SensorKind.WATER] = 1.0
+            "normal", "2" -> out[SensorKind.WATER] = 0.0
+        }
+        when (text("pir") ?: text("pir_state") ?: text("presence_state")) {
+            "pir", "presence" -> out[SensorKind.MOTION] = 1.0
+            "none" -> out[SensorKind.MOTION] = 0.0
+        }
+        return out
     }
 }
 

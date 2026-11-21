@@ -72,7 +72,7 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 - Geräteseite: Regeln, eigener Alarmton, Warnkategorie, Energieverlauf und Kosten, eWeLink-Gerätetimer, WLAN-Signal und Abbruch-Diagnose, Standby-Verbrauch und letzte Ereignisse.
 - **Geräte anordnen**: Stern = oben halten · Pfeile = verschieben · Kartengröße = klein oder groß · Tag = Kategorie. Halte eine Karte gedrückt, um hierher zurückzukehren.
 
-### Sensoren (eWeLink)
+### Sensoren (eWeLink, Tuya)
 
 - Temperatur / Luftfeuchte (TH16, THR316/320, SNZB-02), Tür (DW2, SNZB-04), Bewegung / Anwesenheit (SNZB-03, SNZB-06P), Wasserleck (SNZB-05) und Batteriestand auf den Gerätekacheln, im Standby-Bildschirm und im Chat.
 - Sensor-Auslöser in Automationen (Wert über / unter, Tür geöffnet, Bewegung, Wasserleck) und Sensor-Warnungen mit einem Tipp auf der Geräteseite.

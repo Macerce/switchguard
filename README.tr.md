@@ -72,9 +72,9 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - Cihaz sayfası: kurallar, kendi alarm sesi, uyarı kategorisi, enerji geçmişi ve maliyet, eWeLink cihaz zamanlayıcıları, Wi-Fi sinyali ve kopma teşhisi, bekleme tüketimi ve son olaylar.
 - **Cihazları düzenle**: Yıldız = en üstte tut · oklar = taşı · kart boyutu = küçük ya da büyük · etiket = kategori. Buraya dönmek için bir karta uzun basın.
 
-### Sensörler (eWeLink)
+### Sensörler (eWeLink, Tuya)
 
-- Sıcaklık / nem (TH16, THR316/320, SNZB-02), kapı (DW2, SNZB-04), hareket / varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri cihaz kutucuklarında, bekleme ekranında ve Sohbet'te.
+- Sıcaklık / nem (TH16, THR316/320, SNZB-02), kapı (DW2, SNZB-04), hareket / varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri cihaz kutucuklarında, bekleme ekranında ve Sohbet'te. Tuya'nın standart kodlarını kullanan Tuya / Smart Life sensörleri (sıcaklık-nem, kapı, su kaçağı, hareket, pil) de okunur.
 - Otomasyonlarda sensör tetikleyicileri (değer üstünde / altında, kapı açıldı, hareket, su kaçağı) ve cihaz sayfasında tek dokunuşla sensör uyarıları.
 - Sensör geçmişi: sıcaklık, nem, ışık ve pil değerleri izleme açıkken kaydedilir; cihaz sayfasında en düşük, en yüksek ve ortalamayla 24 saat / 7 gün / 30 gün grafiği.
 

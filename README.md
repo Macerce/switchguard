@@ -72,9 +72,9 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - Device page: rules, own alarm sound, alert category, energy history and cost, eWeLink device timers, Wi-Fi signal and drop diagnosis, standby consumption and recent events.
 - **Arrange devices**: Star = keep at the top · arrows = move · card size = small or large · tag = category. Long-press a card to come back here.
 
-### Sensors (eWeLink)
+### Sensors (eWeLink, Tuya)
 
-- Temperature / humidity (TH16, THR316/320, SNZB-02), door (DW2, SNZB-04), motion / presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery readings on device tiles, on the standby screen and in Chat.
+- Temperature / humidity (TH16, THR316/320, SNZB-02), door (DW2, SNZB-04), motion / presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery readings on device tiles, on the standby screen and in Chat. Tuya / Smart Life sensors that use Tuya's standard codes (temperature-humidity, door, water leak, motion, battery) are read too.
 - Sensor triggers in automations (value above / below, door opened, motion, water leak) and one-tap sensor alerts on the device page.
 - Sensor history: temperature, humidity, light and battery readings are saved while monitoring is on; the device page shows a 24 hours / 7 days / 30 days chart with lowest, highest and average.
 
