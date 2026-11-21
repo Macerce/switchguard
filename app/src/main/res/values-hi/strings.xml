@@ -1584,4 +1584,10 @@
     <string name="action_share">शेयर करें</string>
     <string name="location_outside">बाहर</string>
     <string name="location_private">आपकी लोकेशन सिर्फ़ इसी फ़ोन में सेव रहती है</string>
+    <string name="tuya_live_title">इस डिवाइस पर Tuya के लाइव अपडेट</string>
+    <string name="tuya_live_desc">अगर एक ही Tuya कुंजियाँ कई डिवाइसों पर इस्तेमाल हों, तो लाइव संदेश सिर्फ़ एक को मिलते हैं। बंद होने पर यह डिवाइस हर 5 मिनट में Tuya जाँचता है।</string>
+    <string name="tuya_standby_detail">Tuya के लाइव संदेश किसी दूसरे डिवाइस पर जा रहे हैं; हर 5 मिनट में जाँच हो रही है</string>
+    <string name="tuya_live_off_detail">इस डिवाइस पर Tuya के लाइव अपडेट बंद हैं; हर 5 मिनट में जाँच हो रही है</string>
+    <string name="tuya_standby_notice">Tuya के लाइव संदेश उन्हीं Tuya कुंजियों वाले दूसरे डिवाइस पर जा रहे हैं। यह डिवाइस हर 5 मिनट में Tuya जाँचेगा। लाइव अपडेट किसे मिलें, यह सेटिंग → निगरानी में चुनें।</string>
+    <string name="transfer_tuya_note">ध्यान दें: Tuya के लाइव संदेश सिर्फ़ एक डिवाइस को मिलते हैं। कौन-सा, यह सेटिंग → निगरानी → Tuya लाइव अपडेट में चुनें; दूसरा हर 5 मिनट में जाँचता है।</string>
 </resources>

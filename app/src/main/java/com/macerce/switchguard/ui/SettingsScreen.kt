@@ -599,6 +599,15 @@ private fun MonitoringPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
                 if (store.monitoringEnabled) Actions.startMonitoring(context)
             })
         }
+        if (s.hasTuya) {
+            Divider()
+            InfoRow(Icons.Rounded.Bolt, stringResource(R.string.tuya_live_title), stringResource(R.string.tuya_live_desc)) {
+                Switch(checked = s.tuyaLive, onCheckedChange = {
+                    store.tuyaLive = it
+                    if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
+                })
+            }
+        }
         Divider()
         val graceOptions = listOf(0, 30, 60, 120, 300)
         InfoRow(

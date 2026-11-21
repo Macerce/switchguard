@@ -1655,4 +1655,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="action_share">Delen</string>
     <string name="location_outside">Buiten</string>
     <string name="location_private">Je locatie wordt alleen op deze telefoon opgeslagen</string>
+    <string name="tuya_live_title">Live Tuya-updates op dit apparaat</string>
+    <string name="tuya_live_desc">Worden dezelfde Tuya-sleutels op meerdere apparaten gebruikt, dan gaan live berichten naar slechts één ervan. Uit: dit apparaat controleert Tuya elke 5 minuten.</string>
+    <string name="tuya_standby_detail">Live Tuya-berichten gaan naar een ander apparaat; controle elke 5 minuten</string>
+    <string name="tuya_live_off_detail">Live Tuya-updates staan uit op dit apparaat; controle elke 5 minuten</string>
+    <string name="tuya_standby_notice">Live Tuya-berichten gaan naar een ander apparaat met dezelfde Tuya-sleutels. Dit apparaat controleert Tuya elke 5 minuten. Kies in Instellingen → Bewaking welk apparaat live updates krijgt.</string>
+    <string name="transfer_tuya_note">Let op: live Tuya-berichten gaan naar maar één apparaat. Kies welk via Instellingen → Bewaking → Live Tuya-updates; het andere controleert elke 5 minuten.</string>
 </resources>

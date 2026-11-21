@@ -1799,4 +1799,10 @@
     <string name="action_share">مشاركة</string>
     <string name="location_outside">في الخارج</string>
     <string name="location_private">يُحفظ موقعك على هذا الهاتف فقط</string>
+    <string name="tuya_live_title">تحديثات Tuya الفورية على هذا الجهاز</string>
+    <string name="tuya_live_desc">إذا استُخدمت مفاتيح Tuya نفسها على عدة أجهزة، فلن تصل الرسائل الفورية إلا إلى واحد منها. عند الإيقاف يتحقق هذا الجهاز من Tuya كل 5 دقائق.</string>
+    <string name="tuya_standby_detail">رسائل Tuya الفورية تذهب إلى جهاز آخر؛ يتم التحقق كل 5 دقائق</string>
+    <string name="tuya_live_off_detail">تحديثات Tuya الفورية متوقفة على هذا الجهاز؛ يتم التحقق كل 5 دقائق</string>
+    <string name="tuya_standby_notice">رسائل Tuya الفورية تذهب إلى جهاز آخر يستخدم مفاتيح Tuya نفسها. سيتحقق هذا الجهاز من Tuya كل 5 دقائق. اختر الجهاز الذي يتلقى التحديثات الفورية من الإعدادات ← المراقبة.</string>
+    <string name="transfer_tuya_note">ملاحظة: رسائل Tuya الفورية تصل إلى جهاز واحد فقط. اختر أيّها من الإعدادات ← المراقبة ← تحديثات Tuya الفورية؛ والآخر يتحقق كل 5 دقائق.</string>
 </resources>

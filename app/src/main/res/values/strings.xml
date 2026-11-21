@@ -1662,4 +1662,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="action_share">Share</string>
     <string name="location_outside">Outside</string>
     <string name="location_private">Your location is stored only on this phone</string>
+    <string name="tuya_live_title">Tuya live updates on this device</string>
+    <string name="tuya_live_desc">If the same Tuya keys are used on several devices, live messages go to only one of them. When off, this device checks Tuya every 5 minutes.</string>
+    <string name="tuya_standby_detail">Tuya live messages are going to another device; checking every 5 minutes</string>
+    <string name="tuya_live_off_detail">Tuya live updates are off on this device; checking every 5 minutes</string>
+    <string name="tuya_standby_notice">Tuya live messages are going to another device that uses the same Tuya keys. This device will check Tuya every 5 minutes. Choose which device gets live updates in Settings → Monitoring.</string>
+    <string name="transfer_tuya_note">Note: Tuya live messages go to only one device. Choose which one in Settings → Monitoring → Tuya live updates; the other checks every 5 minutes.</string>
 </resources>

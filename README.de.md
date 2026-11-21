@@ -142,7 +142,7 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 
 ### Mehrere Geräte
 
-Handy, Tablet, Android TV und PC: **Jedes Gerät braucht ein eigenes eWeLink-Konto mit freigeschalteter Entwicklerfunktion und den eigenen API-Schlüsseln dieses Kontos (App ID / Secret)** — eWeLink erlaubt pro Konto nur ein angemeldetes Gerät. Gib deine Geräte in der eWeLink-App für das zusätzliche Konto frei. Tuya-Schlüssel können auf mehreren Geräten genutzt werden. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Handy, Tablet, Android TV und PC: **Jedes Gerät braucht ein eigenes eWeLink-Konto mit freigeschalteter Entwicklerfunktion und den eigenen API-Schlüsseln dieses Kontos (App ID / Secret)** — eWeLink erlaubt pro Konto nur ein angemeldetes Gerät. Gib deine Geräte in der eWeLink-App für das zusätzliche Konto frei. Tuya-Schlüssel können auf mehreren Geräten genutzt werden, Tuya schickt Live-Nachrichten aber nur an eines davon; welches, wählen Sie unter **Einstellungen → Überwachung → Tuya-Live-Updates auf diesem Gerät** (die anderen fragen alle 5 Minuten ab). Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

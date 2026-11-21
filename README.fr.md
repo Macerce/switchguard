@@ -142,7 +142,7 @@ SwitchGuard surveille les prises et interrupteurs connectés de vos propres comp
 
 ### Plusieurs appareils
 
-Téléphone, tablette, Android TV et PC : **chaque appareil a besoin de son propre compte eWeLink avec la fonction développeur approuvée, et des clés API de ce compte (App ID / Secret)** — eWeLink n'autorise qu'un appareil connecté par compte. Partagez vos appareils avec le compte supplémentaire depuis l'application eWeLink. Les clés Tuya peuvent servir sur plusieurs appareils. Détails : [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Téléphone, tablette, Android TV et PC : **chaque appareil a besoin de son propre compte eWeLink avec la fonction développeur approuvée, et des clés API de ce compte (App ID / Secret)** — eWeLink n'autorise qu'un appareil connecté par compte. Partagez vos appareils avec le compte supplémentaire depuis l'application eWeLink. Les clés Tuya peuvent servir sur plusieurs appareils, mais Tuya n'envoie les messages en direct qu'à un seul ; choisissez lequel dans **Réglages → Surveillance → Mises à jour Tuya en direct sur cet appareil** (les autres vérifient toutes les 5 minutes). Détails : [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Démo
 

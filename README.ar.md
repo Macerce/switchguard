@@ -144,7 +144,7 @@
 
 ### عدة أجهزة
 
-الهاتف والجهاز اللوحي وAndroid TV والحاسوب: **يحتاج كل جهاز إلى حساب eWeLink خاص به مع الموافقة على ميزة المطوّر، وإلى مفاتيح API الخاصة بذلك الحساب (App ID / Secret)** — إذ يسمح eWeLink بجهاز واحد مسجَّل الدخول لكل حساب. شارك أجهزتك مع الحساب الإضافي من تطبيق eWeLink. يمكن استخدام مفاتيح Tuya على عدة أجهزة. التفاصيل: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+الهاتف والجهاز اللوحي وAndroid TV والحاسوب: **يحتاج كل جهاز إلى حساب eWeLink خاص به مع الموافقة على ميزة المطوّر، وإلى مفاتيح API الخاصة بذلك الحساب (App ID / Secret)** — إذ يسمح eWeLink بجهاز واحد مسجَّل الدخول لكل حساب. شارك أجهزتك مع الحساب الإضافي من تطبيق eWeLink. يمكن استخدام مفاتيح Tuya على عدة أجهزة، لكن Tuya ترسل الرسائل الفورية إلى جهاز واحد فقط؛ اختر أيّها من **الإعدادات ← المراقبة ← تحديثات Tuya الفورية على هذا الجهاز** (تتحقق الأجهزة الأخرى كل 5 دقائق). التفاصيل: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### التجريبي
 

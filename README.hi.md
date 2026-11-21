@@ -142,7 +142,7 @@ SwitchGuard आपके अपने **eWeLink / SONOFF** और **Tuya / Smart
 
 ### कई डिवाइस
 
-फ़ोन, टैबलेट, Android TV और PC: **हर डिवाइस को डेवलपर सुविधा स्वीकृत अपना अलग eWeLink खाता और उसी खाते की API कुंजियाँ (App ID / Secret) चाहिए** — eWeLink हर खाते में एक ही साइन-इन डिवाइस की अनुमति देता है। eWeLink ऐप से अपने डिवाइस अतिरिक्त खाते के साथ साझा करें। Tuya कुंजियाँ कई डिवाइसों पर इस्तेमाल हो सकती हैं। विवरण: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+फ़ोन, टैबलेट, Android TV और PC: **हर डिवाइस को डेवलपर सुविधा स्वीकृत अपना अलग eWeLink खाता और उसी खाते की API कुंजियाँ (App ID / Secret) चाहिए** — eWeLink हर खाते में एक ही साइन-इन डिवाइस की अनुमति देता है। eWeLink ऐप से अपने डिवाइस अतिरिक्त खाते के साथ साझा करें। Tuya कुंजियाँ कई डिवाइसों पर इस्तेमाल हो सकती हैं, पर Tuya लाइव संदेश सिर्फ़ एक को भेजता है; कौन-सा, यह **सेटिंग → निगरानी → इस डिवाइस पर Tuya के लाइव अपडेट** में चुनें (बाकी हर 5 मिनट में जाँचते हैं)। विवरण: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### डेमो
 

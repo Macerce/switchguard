@@ -142,7 +142,7 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 
 ### Nhiều thiết bị
 
-Điện thoại, máy tính bảng, Android TV và PC: **mỗi thiết bị cần một tài khoản eWeLink riêng đã được duyệt tính năng nhà phát triển, và khóa API riêng của tài khoản đó (App ID / Secret)** — eWeLink chỉ cho một thiết bị đăng nhập trên mỗi tài khoản. Hãy chia sẻ thiết bị cho tài khoản bổ sung trong ứng dụng eWeLink. Khóa Tuya có thể dùng trên nhiều thiết bị. Chi tiết: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Điện thoại, máy tính bảng, Android TV và PC: **mỗi thiết bị cần một tài khoản eWeLink riêng đã được duyệt tính năng nhà phát triển, và khóa API riêng của tài khoản đó (App ID / Secret)** — eWeLink chỉ cho một thiết bị đăng nhập trên mỗi tài khoản. Hãy chia sẻ thiết bị cho tài khoản bổ sung trong ứng dụng eWeLink. Khóa Tuya có thể dùng trên nhiều thiết bị, nhưng Tuya chỉ gửi tin nhắn tức thì đến một thiết bị; chọn thiết bị trong **Cài đặt → Giám sát → Cập nhật Tuya tức thì trên thiết bị này** (các thiết bị khác kiểm tra mỗi 5 phút). Chi tiết: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

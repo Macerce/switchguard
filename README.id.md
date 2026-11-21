@@ -142,7 +142,7 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 
 ### Beberapa perangkat
 
-Ponsel, tablet, Android TV, dan PC: **setiap perangkat memerlukan akun eWeLink sendiri dengan fitur developer yang disetujui, dan kunci API milik akun itu (App ID / Secret)** — eWeLink hanya mengizinkan satu perangkat masuk per akun. Bagikan perangkat Anda ke akun tambahan dari aplikasi eWeLink. Kunci Tuya bisa dipakai di beberapa perangkat. Detail: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Ponsel, tablet, Android TV, dan PC: **setiap perangkat memerlukan akun eWeLink sendiri dengan fitur developer yang disetujui, dan kunci API milik akun itu (App ID / Secret)** — eWeLink hanya mengizinkan satu perangkat masuk per akun. Bagikan perangkat Anda ke akun tambahan dari aplikasi eWeLink. Kunci Tuya bisa dipakai di beberapa perangkat, tetapi Tuya mengirim pesan langsung hanya ke salah satunya; pilih yang mana di **Pengaturan → Pemantauan → Pembaruan langsung Tuya di perangkat ini** (yang lain memeriksa setiap 5 menit). Detail: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

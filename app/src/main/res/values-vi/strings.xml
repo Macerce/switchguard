@@ -1590,4 +1590,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="action_share">Chia sẻ</string>
     <string name="location_outside">Ngoài trời</string>
     <string name="location_private">Vị trí của bạn chỉ được lưu trên điện thoại này</string>
+    <string name="tuya_live_title">Cập nhật Tuya tức thì trên thiết bị này</string>
+    <string name="tuya_live_desc">Nếu cùng khóa Tuya được dùng trên nhiều thiết bị, tin nhắn tức thì chỉ đến một thiết bị. Khi tắt, thiết bị này kiểm tra Tuya mỗi 5 phút.</string>
+    <string name="tuya_standby_detail">Tin nhắn tức thì của Tuya đang đến thiết bị khác; kiểm tra mỗi 5 phút</string>
+    <string name="tuya_live_off_detail">Cập nhật Tuya tức thì đang tắt trên thiết bị này; kiểm tra mỗi 5 phút</string>
+    <string name="tuya_standby_notice">Tin nhắn tức thì của Tuya đang đến một thiết bị khác dùng cùng khóa Tuya. Thiết bị này sẽ kiểm tra Tuya mỗi 5 phút. Chọn thiết bị nhận cập nhật tức thì trong Cài đặt → Giám sát.</string>
+    <string name="transfer_tuya_note">Lưu ý: tin nhắn tức thì của Tuya chỉ đến một thiết bị. Chọn thiết bị trong Cài đặt → Giám sát → Cập nhật Tuya tức thì; thiết bị kia kiểm tra mỗi 5 phút.</string>
 </resources>

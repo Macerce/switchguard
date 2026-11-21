@@ -1619,4 +1619,10 @@
     <string name="action_share">共有</string>
     <string name="location_outside">屋外</string>
     <string name="location_private">位置情報はこのスマホにのみ保存されます</string>
+    <string name="tuya_live_title">この端末で Tuya のリアルタイム更新を受け取る</string>
+    <string name="tuya_live_desc">同じ Tuya キーを複数の端末で使うと、リアルタイムのメッセージはそのうち 1 台にしか届きません。オフにすると、この端末は 5 分ごとに Tuya を確認します。</string>
+    <string name="tuya_standby_detail">Tuya のリアルタイムメッセージは別の端末に届いています。5 分ごとに確認中</string>
+    <string name="tuya_live_off_detail">この端末では Tuya のリアルタイム更新がオフです。5 分ごとに確認中</string>
+    <string name="tuya_standby_notice">Tuya のリアルタイムメッセージは、同じ Tuya キーを使う別の端末に届いています。この端末は 5 分ごとに Tuya を確認します。どの端末で受け取るかは 設定 → 監視 で選べます。</string>
+    <string name="transfer_tuya_note">注意: Tuya のリアルタイムメッセージは 1 台の端末にしか届きません。どれにするかは 設定 → 監視 → Tuya のリアルタイム更新 で選べます。もう一方は 5 分ごとに確認します。</string>
 </resources>

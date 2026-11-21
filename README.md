@@ -142,7 +142,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 
 ### Several devices
 
-Phone, tablet, Android TV and PC: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account. Share your devices to the extra account in the eWeLink app. Tuya keys can be used on several devices. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Phone, tablet, Android TV and PC: **each device needs its own eWeLink account with the developer feature approved, and that account's own API keys (App ID / Secret)** — eWeLink allows one signed-in device per account. Share your devices to the extra account in the eWeLink app. Tuya keys can be used on several devices, but Tuya sends live messages to only one of them; choose which with **Settings → Monitoring → Tuya live updates on this device** (the others check every 5 minutes). Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

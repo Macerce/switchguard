@@ -142,7 +142,7 @@ SwitchGuard 监控你自己的 **eWeLink / SONOFF** 和 **Tuya / Smart Life** �
 
 ### 多台设备
 
-手机、平板、Android TV 和电脑：**每台设备都需要自己的 eWeLink 账户（已批准开发者功能）以及该账户自己的 API 密钥（App ID / Secret）**——eWeLink 每个账户只允许一台设备登录。请在 eWeLink 应用中把设备共享给额外的账户。Tuya 密钥可以在多台设备上使用。详情： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+手机、平板、Android TV 和电脑：**每台设备都需要自己的 eWeLink 账户（已批准开发者功能）以及该账户自己的 API 密钥（App ID / Secret）**——eWeLink 每个账户只允许一台设备登录。请在 eWeLink 应用中把设备共享给额外的账户。Tuya 密钥可以在多台设备上使用，但 Tuya 只会把实时消息发送到其中一台；可在 **设置 → 监控 → 在此设备上接收 Tuya 实时更新** 中选择（其他设备每 5 分钟查询一次）。详情： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### 演示
 

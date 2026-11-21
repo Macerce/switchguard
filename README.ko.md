@@ -142,7 +142,7 @@ SwitchGuard는 내 **eWeLink / SONOFF** 및 **Tuya / Smart Life** 계정의 스�
 
 ### 여러 기기
 
-휴대폰, 태블릿, Android TV, PC: **기기마다 개발자 기능이 승인된 별도의 eWeLink 계정과 그 계정 자체의 API 키(App ID / Secret)가 필요합니다** — eWeLink는 계정당 로그인 기기를 하나만 허용합니다. eWeLink 앱에서 추가 계정에 기기를 공유하세요. Tuya 키는 여러 기기에서 쓸 수 있습니다. 자세히: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+휴대폰, 태블릿, Android TV, PC: **기기마다 개발자 기능이 승인된 별도의 eWeLink 계정과 그 계정 자체의 API 키(App ID / Secret)가 필요합니다** — eWeLink는 계정당 로그인 기기를 하나만 허용합니다. eWeLink 앱에서 추가 계정에 기기를 공유하세요. Tuya 키는 여러 기기에서 쓸 수 있지만 Tuya는 실시간 메시지를 한 기기로만 보냅니다. **설정 → 모니터링 → 이 기기에서 Tuya 실시간 업데이트**에서 어느 기기가 받을지 고르세요(다른 기기는 5분마다 확인합니다). 자세히: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### 데모
 

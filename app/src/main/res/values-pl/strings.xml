@@ -1727,4 +1727,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="action_share">Udostępnij</string>
     <string name="location_outside">Na zewnątrz</string>
     <string name="location_private">Twoja lokalizacja jest zapisana tylko w tym telefonie</string>
+    <string name="tuya_live_title">Aktualizacje Tuya na żywo na tym urządzeniu</string>
+    <string name="tuya_live_desc">Jeśli te same klucze Tuya są używane na kilku urządzeniach, wiadomości na żywo trafiają tylko do jednego. Po wyłączeniu to urządzenie sprawdza Tuya co 5 minut.</string>
+    <string name="tuya_standby_detail">Wiadomości Tuya na żywo trafiają do innego urządzenia; sprawdzanie co 5 minut</string>
+    <string name="tuya_live_off_detail">Aktualizacje Tuya na żywo są wyłączone na tym urządzeniu; sprawdzanie co 5 minut</string>
+    <string name="tuya_standby_notice">Wiadomości Tuya na żywo trafiają do innego urządzenia z tymi samymi kluczami. To urządzenie będzie sprawdzać Tuya co 5 minut. Wybierz, które urządzenie ma je otrzymywać, w Ustawienia → Monitorowanie.</string>
+    <string name="transfer_tuya_note">Uwaga: wiadomości Tuya na żywo trafiają tylko do jednego urządzenia. Wybierz które w Ustawienia → Monitorowanie → Aktualizacje Tuya na żywo; drugie sprawdza co 5 minut.</string>
 </resources>

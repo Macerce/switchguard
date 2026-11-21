@@ -206,6 +206,13 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var alwaysAwake: Boolean
         get() = prefs.getBoolean("alwaysAwake", false)
         set(v) = put { putBoolean("alwaysAwake", v) }
+    /**
+     * Bu cihaz Tuya mesaj servisine bağlanıp anlık güncelleme alsın mı. Aynı Tuya projesi birden çok cihazdaysa mesajlar
+     * yalnızca birine gider; kapalıyken bu cihaz 5 dakikada bir yoklar. Cihaza özel: yedeğe ve aktarıma girmez.
+     */
+    var tuyaLive: Boolean
+        get() = prefs.getBoolean("tuyaLive", true)
+        set(v) = put { putBoolean("tuyaLive", v) }
     /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
     var energyPrice: Double
         get() = str("energyPrice").toDoubleOrNull() ?: 0.0

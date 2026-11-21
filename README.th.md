@@ -142,7 +142,7 @@ SwitchGuard เฝ้าดูปลั๊กและสวิตช์อั�
 
 ### หลายอุปกรณ์
 
-โทรศัพท์ แท็บเล็ต Android TV และ PC: **แต่ละเครื่องต้องมีบัญชี eWeLink ของตัวเองที่ได้รับอนุมัติฟีเจอร์นักพัฒนา และคีย์ API ของบัญชีนั้นเอง (App ID / Secret)** — eWeLink อนุญาตอุปกรณ์ที่ลงชื่อเข้าใช้เพียงหนึ่งเครื่องต่อบัญชี แชร์อุปกรณ์ของคุณให้บัญชีเพิ่มเติมจากแอป eWeLink คีย์ Tuya ใช้บนหลายอุปกรณ์ได้ รายละเอียด: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+โทรศัพท์ แท็บเล็ต Android TV และ PC: **แต่ละเครื่องต้องมีบัญชี eWeLink ของตัวเองที่ได้รับอนุมัติฟีเจอร์นักพัฒนา และคีย์ API ของบัญชีนั้นเอง (App ID / Secret)** — eWeLink อนุญาตอุปกรณ์ที่ลงชื่อเข้าใช้เพียงหนึ่งเครื่องต่อบัญชี แชร์อุปกรณ์ของคุณให้บัญชีเพิ่มเติมจากแอป eWeLink คีย์ Tuya ใช้บนหลายอุปกรณ์ได้ แต่ Tuya ส่งข้อความแบบทันทีไปที่เครื่องเดียว เลือกเครื่องได้ที่ **การตั้งค่า → การตรวจสอบ → อัปเดต Tuya แบบทันทีบนอุปกรณ์นี้** (เครื่องอื่นตรวจสอบทุก 5 นาที) รายละเอียด: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### สาธิต
 

@@ -142,7 +142,7 @@ SwitchGuard следит за умными розетками и выключа�
 
 ### Несколько устройств
 
-Телефон, планшет, Android TV и ПК: **каждому устройству нужен свой аккаунт eWeLink с одобренной функцией разработчика и собственные API-ключи этого аккаунта (App ID / Secret)** — eWeLink допускает одно вошедшее устройство на аккаунт. Откройте доступ к устройствам дополнительному аккаунту в приложении eWeLink. Ключи Tuya можно использовать на нескольких устройствах. Подробнее: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Телефон, планшет, Android TV и ПК: **каждому устройству нужен свой аккаунт eWeLink с одобренной функцией разработчика и собственные API-ключи этого аккаунта (App ID / Secret)** — eWeLink допускает одно вошедшее устройство на аккаунт. Откройте доступ к устройствам дополнительному аккаунту в приложении eWeLink. Ключи Tuya можно использовать на нескольких устройствах, но мгновенные сообщения Tuya отправляет только на одно; выберите какое в **Настройки → Мониторинг → Мгновенные обновления Tuya на этом устройстве** (остальные опрашивают каждые 5 минут). Подробнее: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Демо
 

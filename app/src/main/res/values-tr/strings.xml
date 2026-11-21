@@ -1658,4 +1658,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="action_share">Paylaş</string>
     <string name="location_outside">Dışarısı</string>
     <string name="location_private">Konumunuz yalnızca bu telefonda saklanır</string>
+    <string name="tuya_live_title">Bu cihazda Tuya anlık güncellemeleri</string>
+    <string name="tuya_live_desc">Aynı Tuya anahtarları birden çok cihazda kullanılıyorsa anlık mesajlar yalnızca birine gider. Kapalıyken bu cihaz Tuya\'yı 5 dakikada bir yoklar.</string>
+    <string name="tuya_standby_detail">Tuya anlık mesajları başka bir cihaza gidiyor; 5 dakikada bir yoklanıyor</string>
+    <string name="tuya_live_off_detail">Tuya anlık güncellemeleri bu cihazda kapalı; 5 dakikada bir yoklanıyor</string>
+    <string name="tuya_standby_notice">Tuya anlık mesajları aynı Tuya anahtarlarını kullanan başka bir cihaza gidiyor. Bu cihaz Tuya\'yı 5 dakikada bir yoklayacak. Anlık güncellemeyi hangi cihazın alacağını Ayarlar → İzleme\'den seçin.</string>
+    <string name="transfer_tuya_note">Not: Tuya anlık mesajları yalnızca bir cihaza gider. Hangisinin alacağını Ayarlar → İzleme → Tuya anlık güncellemeleri ile seçin; diğeri 5 dakikada bir yoklar.</string>
 </resources>

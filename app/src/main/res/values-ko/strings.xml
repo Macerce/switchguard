@@ -1619,4 +1619,10 @@
     <string name="action_share">공유</string>
     <string name="location_outside">실외</string>
     <string name="location_private">위치 정보는 이 휴대폰에만 저장됩니다</string>
+    <string name="tuya_live_title">이 기기에서 Tuya 실시간 업데이트</string>
+    <string name="tuya_live_desc">같은 Tuya 키를 여러 기기에서 쓰면 실시간 메시지는 그중 한 기기로만 갑니다. 끄면 이 기기는 5분마다 Tuya를 확인합니다.</string>
+    <string name="tuya_standby_detail">Tuya 실시간 메시지가 다른 기기로 가고 있어 5분마다 확인 중</string>
+    <string name="tuya_live_off_detail">이 기기에서 Tuya 실시간 업데이트가 꺼져 있어 5분마다 확인 중</string>
+    <string name="tuya_standby_notice">Tuya 실시간 메시지가 같은 Tuya 키를 쓰는 다른 기기로 가고 있습니다. 이 기기는 5분마다 Tuya를 확인합니다. 어느 기기가 실시간 업데이트를 받을지 설정 → 모니터링에서 고르세요.</string>
+    <string name="transfer_tuya_note">참고: Tuya 실시간 메시지는 한 기기로만 갑니다. 설정 → 모니터링 → Tuya 실시간 업데이트에서 고르세요. 다른 기기는 5분마다 확인합니다.</string>
 </resources>

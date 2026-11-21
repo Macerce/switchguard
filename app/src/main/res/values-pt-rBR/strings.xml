@@ -1691,4 +1691,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="action_share">Compartilhar</string>
     <string name="location_outside">Lá fora</string>
     <string name="location_private">Sua localização fica salva só neste celular</string>
+    <string name="tuya_live_title">Atualizações ao vivo da Tuya neste dispositivo</string>
+    <string name="tuya_live_desc">Se as mesmas chaves da Tuya forem usadas em vários dispositivos, as mensagens ao vivo vão para apenas um. Desligado, este dispositivo consulta a Tuya a cada 5 minutos.</string>
+    <string name="tuya_standby_detail">As mensagens ao vivo da Tuya estão indo para outro dispositivo; consultando a cada 5 minutos</string>
+    <string name="tuya_live_off_detail">As atualizações ao vivo da Tuya estão desligadas neste dispositivo; consultando a cada 5 minutos</string>
+    <string name="tuya_standby_notice">As mensagens ao vivo da Tuya estão indo para outro dispositivo com as mesmas chaves. Este dispositivo vai consultar a Tuya a cada 5 minutos. Escolha qual dispositivo recebe as atualizações em Ajustes → Monitoramento.</string>
+    <string name="transfer_tuya_note">Observação: as mensagens ao vivo da Tuya vão para um só dispositivo. Escolha qual em Ajustes → Monitoramento → Atualizações ao vivo da Tuya; o outro consulta a cada 5 minutos.</string>
 </resources>

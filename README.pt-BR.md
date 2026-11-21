@@ -142,7 +142,7 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 
 ### Vários dispositivos
 
-Celular, tablet, Android TV e PC: **cada dispositivo precisa da própria conta eWeLink com o recurso de desenvolvedor aprovado e das chaves de API dessa conta (App ID / Secret)** — a eWeLink permite um dispositivo conectado por conta. Compartilhe seus dispositivos com a conta extra no app eWeLink. As chaves Tuya podem ser usadas em vários dispositivos. Detalhes: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Celular, tablet, Android TV e PC: **cada dispositivo precisa da própria conta eWeLink com o recurso de desenvolvedor aprovado e das chaves de API dessa conta (App ID / Secret)** — a eWeLink permite um dispositivo conectado por conta. Compartilhe seus dispositivos com a conta extra no app eWeLink. As chaves Tuya podem ser usadas em vários dispositivos, mas a Tuya envia mensagens ao vivo para apenas um; escolha qual em **Ajustes → Monitoramento → Atualizações ao vivo da Tuya neste dispositivo** (os outros consultam a cada 5 minutos). Detalhes: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

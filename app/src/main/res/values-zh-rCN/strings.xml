@@ -1597,4 +1597,10 @@
     <string name="action_share">分享</string>
     <string name="location_outside">室外</string>
     <string name="location_private">您的位置仅保存在这部手机上</string>
+    <string name="tuya_live_title">在此设备上接收 Tuya 实时更新</string>
+    <string name="tuya_live_desc">如果多台设备使用同一组 Tuya 密钥，实时消息只会发送到其中一台。关闭后，此设备每 5 分钟查询一次 Tuya。</string>
+    <string name="tuya_standby_detail">Tuya 实时消息正发往另一台设备；每 5 分钟查询一次</string>
+    <string name="tuya_live_off_detail">此设备已关闭 Tuya 实时更新；每 5 分钟查询一次</string>
+    <string name="tuya_standby_notice">Tuya 实时消息正发往另一台使用相同 Tuya 密钥的设备。此设备将每 5 分钟查询一次 Tuya。可在 设置 → 监控 中选择由哪台设备接收实时更新。</string>
+    <string name="transfer_tuya_note">注意：Tuya 实时消息只会发送到一台设备。可在 设置 → 监控 → Tuya 实时更新 中选择；另一台每 5 分钟查询一次。</string>
 </resources>

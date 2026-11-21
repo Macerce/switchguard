@@ -142,7 +142,7 @@ SwitchGuard は、あなた自身の **eWeLink / SONOFF** と **Tuya / Smart Lif
 
 ### 複数のデバイス
 
-スマートフォン、タブレット、Android TV、PC：**各端末には、開発者機能が承認された専用の eWeLink アカウントと、そのアカウント自身の API キー（App ID / Secret）が必要です**。eWeLink は 1 アカウントにつき 1 台しかログインできません。eWeLink アプリで追加アカウントにデバイスを共有してください。Tuya のキーは複数の端末で使えます。詳細： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+スマートフォン、タブレット、Android TV、PC：**各端末には、開発者機能が承認された専用の eWeLink アカウントと、そのアカウント自身の API キー（App ID / Secret）が必要です**。eWeLink は 1 アカウントにつき 1 台しかログインできません。eWeLink アプリで追加アカウントにデバイスを共有してください。Tuya のキーは複数の端末で使えますが、Tuya はリアルタイムのメッセージを 1 台にしか送りません。どれにするかは **設定 → 監視 → この端末で Tuya のリアルタイム更新を受け取る** で選びます（ほかの端末は 5 分ごとに確認します）。詳細： [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### デモ
 

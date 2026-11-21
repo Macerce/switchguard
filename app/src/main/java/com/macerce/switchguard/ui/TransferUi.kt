@@ -85,6 +85,11 @@ fun ReceiveTransferPanel(onReceived: () -> Unit) {
             Spacer(Modifier.width(10.dp))
             Text(stringResource(R.string.transfer_received), style = MaterialTheme.typography.titleMedium)
         }
+        if (store.hasTuya) {
+            // Failover: aynı Tuya anahtarlarıyla anlık mesajlar yalnızca bir cihaza gider.
+            Spacer(Modifier.height(12.dp))
+            Text(stringResource(R.string.transfer_tuya_note), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
         if (store.transferSource.isNotEmpty()) {
             Spacer(Modifier.height(12.dp))
             SameAccountWarning(store)

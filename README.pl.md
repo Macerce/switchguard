@@ -142,7 +142,7 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 
 ### Kilka urządzeń
 
-Telefon, tablet, Android TV i komputer: **każde urządzenie potrzebuje własnego konta eWeLink z zatwierdzoną funkcją deweloperską oraz kluczy API tego konta (App ID / Secret)** — eWeLink pozwala na jedno zalogowane urządzenie na konto. Udostępnij swoje urządzenia dodatkowemu kontu w aplikacji eWeLink. Klucze Tuya można używać na kilku urządzeniach. Szczegóły: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefon, tablet, Android TV i komputer: **każde urządzenie potrzebuje własnego konta eWeLink z zatwierdzoną funkcją deweloperską oraz kluczy API tego konta (App ID / Secret)** — eWeLink pozwala na jedno zalogowane urządzenie na konto. Udostępnij swoje urządzenia dodatkowemu kontu w aplikacji eWeLink. Klucze Tuya można używać na kilku urządzeniach, ale Tuya wysyła wiadomości na żywo tylko do jednego; wybierz które w **Ustawienia → Monitorowanie → Aktualizacje Tuya na żywo na tym urządzeniu** (pozostałe sprawdzają co 5 minut). Szczegóły: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

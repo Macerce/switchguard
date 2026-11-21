@@ -1548,4 +1548,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="action_share">Bagikan</string>
     <string name="location_outside">Di luar</string>
     <string name="location_private">Lokasi Anda hanya disimpan di ponsel ini</string>
+    <string name="tuya_live_title">Pembaruan langsung Tuya di perangkat ini</string>
+    <string name="tuya_live_desc">Jika kunci Tuya yang sama dipakai di beberapa perangkat, pesan langsung hanya dikirim ke salah satunya. Jika nonaktif, perangkat ini memeriksa Tuya setiap 5 menit.</string>
+    <string name="tuya_standby_detail">Pesan langsung Tuya dikirim ke perangkat lain; diperiksa setiap 5 menit</string>
+    <string name="tuya_live_off_detail">Pembaruan langsung Tuya nonaktif di perangkat ini; diperiksa setiap 5 menit</string>
+    <string name="tuya_standby_notice">Pesan langsung Tuya dikirim ke perangkat lain yang memakai kunci Tuya yang sama. Perangkat ini akan memeriksa Tuya setiap 5 menit. Pilih perangkat penerima pembaruan langsung di Pengaturan → Pemantauan.</string>
+    <string name="transfer_tuya_note">Catatan: pesan langsung Tuya hanya dikirim ke satu perangkat. Pilih yang mana di Pengaturan → Pemantauan → Pembaruan langsung Tuya; yang lain memeriksa setiap 5 menit.</string>
 </resources>

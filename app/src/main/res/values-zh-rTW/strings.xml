@@ -1618,4 +1618,10 @@
     <string name="action_share">分享</string>
     <string name="location_outside">室外</string>
     <string name="location_private">您的位置只儲存在這支手機上</string>
+    <string name="tuya_live_title">在此裝置上接收 Tuya 即時更新</string>
+    <string name="tuya_live_desc">如果多台裝置使用同一組 Tuya 金鑰，即時訊息只會傳到其中一台。關閉後，此裝置每 5 分鐘查詢一次 Tuya。</string>
+    <string name="tuya_standby_detail">Tuya 即時訊息正傳往另一台裝置；每 5 分鐘查詢一次</string>
+    <string name="tuya_live_off_detail">此裝置已關閉 Tuya 即時更新；每 5 分鐘查詢一次</string>
+    <string name="tuya_standby_notice">Tuya 即時訊息正傳往另一台使用相同 Tuya 金鑰的裝置。此裝置將每 5 分鐘查詢一次 Tuya。可在 設定 → 監控 中選擇由哪台裝置接收即時更新。</string>
+    <string name="transfer_tuya_note">注意：Tuya 即時訊息只會傳到一台裝置。可在 設定 → 監控 → Tuya 即時更新 中選擇；另一台每 5 分鐘查詢一次。</string>
 </resources>

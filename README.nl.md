@@ -142,7 +142,7 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 
 ### Meerdere apparaten
 
-Telefoon, tablet, Android TV en pc: **elk apparaat heeft een eigen eWeLink-account nodig met goedgekeurde ontwikkelaarsfunctie, en de eigen API-sleutels van dat account (App ID / Secret)** — eWeLink staat één ingelogd apparaat per account toe. Deel je apparaten in de eWeLink-app met het extra account. Tuya-sleutels kun je op meerdere apparaten gebruiken. Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefoon, tablet, Android TV en pc: **elk apparaat heeft een eigen eWeLink-account nodig met goedgekeurde ontwikkelaarsfunctie, en de eigen API-sleutels van dat account (App ID / Secret)** — eWeLink staat één ingelogd apparaat per account toe. Deel je apparaten in de eWeLink-app met het extra account. Tuya-sleutels kun je op meerdere apparaten gebruiken, maar Tuya stuurt live berichten naar maar één ervan; kies welk via **Instellingen → Bewaking → Live Tuya-updates op dit apparaat** (de andere controleren elke 5 minuten). Details: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

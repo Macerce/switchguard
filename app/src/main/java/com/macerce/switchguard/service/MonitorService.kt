@@ -1,5 +1,6 @@
 package com.macerce.switchguard.service
 
+import com.macerce.switchguard.core.TuyaListenerCheck
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -154,6 +155,10 @@ class MonitorService : Service() {
     private var tuyaSyncRetryAttempt = 0
     /** Bilgiler hatalı ya da deneme süresi bitmiş: kota harcamamak için seyrek denenir. */
     private var tuyaBlocked = false
+    /** Bu cihaz Tuya mesajlarının sessiz yedeği mi (mesajlar aynı anahtarları kullanan başka cihaza gidiyor). */
+    private val tuyaFailover = TuyaListenerCheck()
+    /** Tuya mesaj servisi en son ne zaman hazır oldu (elapsedRealtime); kapalıyken 0. */
+    private var tuyaReadySince = 0L
     private var tuyaWarned = false
 
     /** Demo: gücü düşürülmüş kanallar (cihaz → kanallar) ve son dalgalanma zamanı. */
@@ -716,6 +721,7 @@ class MonitorService : Service() {
             if (!running) return@post
             tuyaReconnectAttempt = 0
             tuyaNextConnectAt = 0
+            tuyaReadySince = SystemClock.elapsedRealtime()
             tuyaIssue = ""
             // Bağlantı yokken olanları yakala; biriken eski mesajlar bu okumadan eski sayılıp atlanır.
             syncTuya()
@@ -726,6 +732,7 @@ class MonitorService : Service() {
         override fun onClosed(reason: String, rejected: Boolean) = handler.post {
             if (!running || !store.hasTuya) return@post
             Log.w(TAG, "Tuya message service closed: $reason (rejected=$rejected)")
+            tuyaReadySince = 0
             tuyaIssue = getString(if (rejected) R.string.tuya_ws_rejected else R.string.detail_reconnecting) + " ($reason)"
             scheduleTuyaReconnect(rejected)
             if (!tuyaBlocked) setTuyaState(ConnState.POLLING, tuyaIssue)
@@ -741,14 +748,21 @@ class MonitorService : Service() {
             }
             return
         }
-        if (!tuyaBlocked && !tuyaSocket.ready && now >= tuyaNextConnectAt) {
+        // Anlık güncellemeler bu cihazda kapalı: soket açılmaz, 5 dakikada bir yoklanır.
+        val live = store.tuyaLive
+        if (!live && (tuyaSocket.ready || tuyaReadySince != 0L)) {
+            tuyaSocket.close()
+            tuyaReadySince = 0
+        }
+        if (live && !tuyaBlocked && !tuyaSocket.ready && now >= tuyaNextConnectAt) {
             // Bağlanma sürerken tekrar denenmesin; sonuç onReady/onClosed ile gelir.
             tuyaNextConnectAt = now + TUYA_CONNECT_TIMEOUT_MS
             tuyaSocket.connect()
         }
         val every = when {
             tuyaBlocked -> TUYA_BLOCKED_MS
-            tuyaSocket.ready -> TUYA_RESYNC_MS
+            // Sessiz yedekte soket açık ama mesaj gelmiyor: yoklama gibi davranılır.
+            tuyaSocket.ready && !tuyaFailover.standby -> TUYA_RESYNC_MS
             else -> TUYA_POLL_MS
         }
         if (lastTuyaSyncAt == 0L || now - lastTuyaSyncAt >= every) syncTuya()
@@ -769,20 +783,37 @@ class MonitorService : Service() {
         tuyaWarned = false
         tuyaReconnectAttempt = 0
         tuyaNextConnectAt = 0
+        tuyaReadySince = 0
+        tuyaFailover.reset()
         lastTuyaSyncAt = 0
         tuyaTick(SystemClock.elapsedRealtime())
     }
 
     private fun syncTuya() {
+        val previousSync = lastTuyaSyncAt
         lastTuyaSyncAt = SystemClock.elapsedRealtime()
         if (!store.hasTuya) return
         try {
-            replaceCloud(Cloud.TUYA, tuya.getDevices())
+            val known = store.snapshots.filter { it.cloud == Cloud.TUYA }
+            val fetched = tuya.getDevices()
+            // Soket önceki senkrondan beri hep açıktıysa, senkronun bulduğu her aç/kapa ya da bağlantı değişikliği
+            // soketten gelmiş olmalıydı; gelmediyse mesajlar başka bir cihaza gidiyor olabilir (Failover).
+            if (tuyaSocket.ready && previousSync != 0L && tuyaReadySince in 1..previousSync) {
+                if (tuyaFailover.onSync(TuyaListenerCheck.missed(known, fetched))) {
+                    Log.w(TAG, "Tuya: changes found only by sync; another device seems to receive the messages")
+                    notifier.notifyEvent(getString(R.string.tuya_standby_notice))
+                }
+            }
+            replaceCloud(Cloud.TUYA, fetched)
             tuyaSyncRetryAttempt = 0
             tuyaBlocked = false
             tuyaWarned = false
-            if (tuyaSocket.ready) setTuyaState(ConnState.LIVE, synced = true)
-            else setTuyaState(ConnState.POLLING, tuyaIssue, synced = true)
+            when {
+                !store.tuyaLive -> setTuyaState(ConnState.POLLING, getString(R.string.tuya_live_off_detail), synced = true)
+                tuyaSocket.ready && tuyaFailover.standby -> setTuyaState(ConnState.POLLING, getString(R.string.tuya_standby_detail), synced = true)
+                tuyaSocket.ready -> setTuyaState(ConnState.LIVE, synced = true)
+                else -> setTuyaState(ConnState.POLLING, tuyaIssue, synced = true)
+            }
         } catch (e: TuyaExpiredException) {
             onTuyaBlocked(getString(R.string.tuya_expired))
         } catch (e: TuyaAuthException) {
@@ -816,6 +847,8 @@ class MonitorService : Service() {
     }
 
     private fun applyTuya(event: TuyaEvent) {
+        // Soketten olay geldi: mesajlar bu cihaza geliyor (yedek değil).
+        tuyaFailover.onEvent()
         // Bağlantı kopukken biriken ve son okumadan eski olaylar zaten okunan duruma dahildir.
         if (event.time != 0L && event.time < tuya.syncServerTime) return
         val list = store.snapshots

@@ -142,7 +142,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 
 ### Birden fazla cihaz
 
-Telefon, tablet, Android TV ve bilgisayar: **her cihazın geliştirici özelliği onaylanmış kendi eWeLink hesabı ve o hesabın kendi API anahtarları (App ID / Secret) olmalı** — eWeLink her hesapta tek oturum açık cihaza izin verir. Cihazlarınızı eWeLink uygulamasından ek hesaba paylaşın. Tuya anahtarları birden çok cihazda kullanılabilir. Ayrıntılar: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefon, tablet, Android TV ve bilgisayar: **her cihazın geliştirici özelliği onaylanmış kendi eWeLink hesabı ve o hesabın kendi API anahtarları (App ID / Secret) olmalı** — eWeLink her hesapta tek oturum açık cihaza izin verir. Cihazlarınızı eWeLink uygulamasından ek hesaba paylaşın. Tuya anahtarları birden çok cihazda kullanılabilir, ama Tuya anlık mesajları yalnızca birine gönderir; hangisinin alacağını **Ayarlar → İzleme → Bu cihazda Tuya anlık güncellemeleri** ile seçin (diğerleri 5 dakikada bir yoklar). Ayrıntılar: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 

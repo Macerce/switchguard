@@ -1661,4 +1661,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="action_share">Compartir</string>
     <string name="location_outside">Exterior</string>
     <string name="location_private">Tu ubicación solo se guarda en este teléfono</string>
+    <string name="tuya_live_title">Actualizaciones en vivo de Tuya en este dispositivo</string>
+    <string name="tuya_live_desc">Si las mismas claves de Tuya se usan en varios dispositivos, los mensajes en vivo llegan solo a uno. Desactivado, este dispositivo consulta Tuya cada 5 minutos.</string>
+    <string name="tuya_standby_detail">Los mensajes en vivo de Tuya van a otro dispositivo; se consulta cada 5 minutos</string>
+    <string name="tuya_live_off_detail">Las actualizaciones en vivo de Tuya están desactivadas en este dispositivo; se consulta cada 5 minutos</string>
+    <string name="tuya_standby_notice">Los mensajes en vivo de Tuya van a otro dispositivo que usa las mismas claves. Este dispositivo consultará Tuya cada 5 minutos. Elige qué dispositivo recibe las actualizaciones en Ajustes → Monitoreo.</string>
+    <string name="transfer_tuya_note">Nota: los mensajes en vivo de Tuya llegan a un solo dispositivo. Elige cuál en Ajustes → Monitoreo → Actualizaciones en vivo de Tuya; el otro consulta cada 5 minutos.</string>
 </resources>

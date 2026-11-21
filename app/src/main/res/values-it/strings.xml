@@ -1662,4 +1662,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="action_share">Condividi</string>
     <string name="location_outside">Esterno</string>
     <string name="location_private">La tua posizione è salvata solo su questo telefono</string>
+    <string name="tuya_live_title">Aggiornamenti Tuya in tempo reale su questo dispositivo</string>
+    <string name="tuya_live_desc">Se le stesse chiavi Tuya sono usate su più dispositivi, i messaggi in tempo reale arrivano solo a uno. Se disattivato, questo dispositivo controlla Tuya ogni 5 minuti.</string>
+    <string name="tuya_standby_detail">I messaggi Tuya in tempo reale vanno a un altro dispositivo; controllo ogni 5 minuti</string>
+    <string name="tuya_live_off_detail">Gli aggiornamenti Tuya in tempo reale sono disattivati su questo dispositivo; controllo ogni 5 minuti</string>
+    <string name="tuya_standby_notice">I messaggi Tuya in tempo reale vanno a un altro dispositivo con le stesse chiavi. Questo dispositivo controllerà Tuya ogni 5 minuti. Scegli quale dispositivo riceve gli aggiornamenti in Impostazioni → Monitoraggio.</string>
+    <string name="transfer_tuya_note">Nota: i messaggi Tuya in tempo reale arrivano a un solo dispositivo. Scegli quale in Impostazioni → Monitoraggio → Aggiornamenti Tuya in tempo reale; l\'altro controlla ogni 5 minuti.</string>
 </resources>

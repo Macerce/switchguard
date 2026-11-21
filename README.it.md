@@ -142,7 +142,7 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 
 ### Più dispositivi
 
-Telefono, tablet, Android TV e PC: **ogni dispositivo ha bisogno di un proprio account eWeLink con la funzione sviluppatore approvata e delle chiavi API di quell'account (App ID / Secret)** — eWeLink consente un solo dispositivo connesso per account. Condividi i tuoi dispositivi con l'account aggiuntivo dall'app eWeLink. Le chiavi Tuya si possono usare su più dispositivi. Dettagli: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
+Telefono, tablet, Android TV e PC: **ogni dispositivo ha bisogno di un proprio account eWeLink con la funzione sviluppatore approvata e delle chiavi API di quell'account (App ID / Secret)** — eWeLink consente un solo dispositivo connesso per account. Condividi i tuoi dispositivi con l'account aggiuntivo dall'app eWeLink. Le chiavi Tuya si possono usare su più dispositivi, ma Tuya invia i messaggi in tempo reale a uno solo; scegli quale in **Impostazioni → Monitoraggio → Aggiornamenti Tuya in tempo reale su questo dispositivo** (gli altri controllano ogni 5 minuti). Dettagli: [English](docs/guide/ewelink.en.md#using-several-devices-phone-tablet-android-tv) · [Türkçe](docs/guide/ewelink.tr.md#birden-fazla-cihazda-kullanım-telefon-tablet-android-tv)
 
 ### Demo
 
