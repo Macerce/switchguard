@@ -1589,4 +1589,10 @@
     <string name="ai_p_ideas_desc">根据你的设备给出警报、自动化和节能建议</string>
     <string name="ai_p_fix">解决问题</string>
     <string name="ai_p_fix_desc">警报不响、收不到通知、设备离线…</string>
+    <string name="onb_hero_tagline">为智能设备而生、不会停歇的警报</string>
+    <string name="onb_hero_tuya">使用 Tuya 登录</string>
+    <string name="onb_hero_demo">试用演示</string>
+    <string name="alarm_screen_title">警报</string>
+    <string name="alarm_swipe_dismiss">滑动以关闭</string>
+    <string name="alarm_rings_silent">静音模式下也会响</string>
 </resources>

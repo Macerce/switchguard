@@ -1690,4 +1690,10 @@
     <string name="ai_p_ideas_desc">Ідеї тривог, автоматизацій і економії для ваших пристроїв</string>
     <string name="ai_p_fix">Розв\'язати проблему</string>
     <string name="ai_p_fix_desc">Немає тривоги, немає сповіщень, пристрій не в мережі…</string>
+    <string name="onb_hero_tagline">Тривога, що не замовкає, — для ваших розумних пристроїв</string>
+    <string name="onb_hero_tuya">Увійти через Tuya</string>
+    <string name="onb_hero_demo">Спробувати демо</string>
+    <string name="alarm_screen_title">ТРИВОГА</string>
+    <string name="alarm_swipe_dismiss">Проведіть, щоб вимкнути</string>
+    <string name="alarm_rings_silent">Звучить навіть у беззвучному режимі</string>
 </resources>

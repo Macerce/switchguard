@@ -1576,4 +1576,10 @@
     <string name="ai_p_ideas_desc">आपके डिवाइस के अनुसार अलार्म, ऑटोमेशन और बचत के सुझाव</string>
     <string name="ai_p_fix">समस्या हल करें</string>
     <string name="ai_p_fix_desc">अलार्म नहीं बजता, सूचना नहीं आती, डिवाइस ऑफ़लाइन…</string>
+    <string name="onb_hero_tagline">आपके स्मार्ट डिवाइसों के लिए न रुकने वाला अलार्म</string>
+    <string name="onb_hero_tuya">Tuya से साइन इन करें</string>
+    <string name="onb_hero_demo">डेमो आज़माएँ</string>
+    <string name="alarm_screen_title">अलार्म</string>
+    <string name="alarm_swipe_dismiss">बंद करने के लिए स्वाइप करें</string>
+    <string name="alarm_rings_silent">साइलेंट मोड में भी बजता है</string>
 </resources>

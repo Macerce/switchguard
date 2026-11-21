@@ -1647,4 +1647,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="ai_p_ideas_desc">Ideeën voor alarmen, automatiseringen en besparing op basis van je apparaten</string>
     <string name="ai_p_fix">Probleem oplossen</string>
     <string name="ai_p_fix_desc">Geen alarm, geen melding, apparaat offline…</string>
+    <string name="onb_hero_tagline">Het alarm dat niet stopt, voor je slimme apparaten</string>
+    <string name="onb_hero_tuya">Inloggen met Tuya</string>
+    <string name="onb_hero_demo">Probeer de demo</string>
+    <string name="alarm_screen_title">ALARM</string>
+    <string name="alarm_swipe_dismiss">Veeg om te stoppen</string>
+    <string name="alarm_rings_silent">Gaat ook af in stille modus</string>
 </resources>

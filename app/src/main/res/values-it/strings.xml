@@ -1654,4 +1654,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="ai_p_ideas_desc">Idee di allarmi, automazioni e risparmio in base ai tuoi dispositivi</string>
     <string name="ai_p_fix">Risolvi un problema</string>
     <string name="ai_p_fix_desc">Allarme muto, notifiche assenti, dispositivo offline…</string>
+    <string name="onb_hero_tagline">L\'allarme che non si ferma, per i tuoi dispositivi smart</string>
+    <string name="onb_hero_tuya">Accedi con Tuya</string>
+    <string name="onb_hero_demo">Prova la demo</string>
+    <string name="alarm_screen_title">ALLARME</string>
+    <string name="alarm_swipe_dismiss">Scorri per spegnere</string>
+    <string name="alarm_rings_silent">Suona anche in modalità silenziosa</string>
 </resources>

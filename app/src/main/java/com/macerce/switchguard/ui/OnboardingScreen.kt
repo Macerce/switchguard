@@ -6,6 +6,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material.icons.automirrored.rounded.Login
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.ui.text.style.TextAlign
 import android.Manifest
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -82,7 +88,7 @@ import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
 import com.macerce.switchguard.data.Store
 
-private enum class Step { WELCOME, PLATFORM, RECEIVE, DEVELOPER, CREDENTIALS, LOGIN, TUYA_GUIDE, TUYA_CONNECT, PERMISSIONS, DONE }
+private enum class Step { WELCOME, RECEIVE, DEVELOPER, CREDENTIALS, LOGIN, TUYA_GUIDE, TUYA_CONNECT, PERMISSIONS, DONE }
 
 /**
  * İlk açılış sihirbazı: tanıtım → cihazların uygulaması (eWeLink / Tuya) → o bulutun kurulumu → izinler → başlat.
@@ -101,13 +107,13 @@ fun OnboardingScreen(onFinished: () -> Unit) {
         mutableStateOf(if (store.hasTuya && !store.isLoggedIn) Platform.TUYA else Platform.EWELINK)
     }
     val steps = when (platform) {
-        Platform.TUYA -> listOf(Step.WELCOME, Step.PLATFORM, Step.TUYA_GUIDE, Step.TUYA_CONNECT, Step.PERMISSIONS, Step.DONE)
-        Platform.EWELINK -> listOf(Step.WELCOME, Step.PLATFORM, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
+        Platform.TUYA -> listOf(Step.WELCOME, Step.TUYA_GUIDE, Step.TUYA_CONNECT, Step.PERMISSIONS, Step.DONE)
+        Platform.EWELINK -> listOf(Step.WELCOME, Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN, Step.PERMISSIONS, Step.DONE)
         // Demo: hesap adımları yok; cihazlar başlatınca eklenir.
-        Platform.DEMO -> listOf(Step.WELCOME, Step.PLATFORM, Step.PERMISSIONS, Step.DONE)
+        Platform.DEMO -> listOf(Step.WELCOME, Step.PERMISSIONS, Step.DONE)
         // Aktarma: Tuya, kurallar ve ayarlar telefondan gelir; eWeLink bu cihazın kendi hesabıyla kurulur.
         Platform.TRANSFER -> listOf(
-            Step.WELCOME, Step.PLATFORM, Step.RECEIVE,
+            Step.WELCOME, Step.RECEIVE,
             // eWeLink: bu cihazın kendi hesabı, geliştirici onayı ve o hesabın anahtarları (aktarılmaz).
             Step.DEVELOPER, Step.CREDENTIALS, Step.LOGIN,
             Step.PERMISSIONS, Step.DONE,
@@ -117,10 +123,13 @@ fun OnboardingScreen(onFinished: () -> Unit) {
     BackHandler(enabled = step > 0) { step-- }
 
     Column(Modifier.fillMaxSize().safeDrawingPadding().readableWidth(760.dp)) {
-        LinearProgressIndicator(
-            progress = { (step + 1f) / steps.size },
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
-        )
+        // Karşılamada ilerleme çubuğu yok (videodaki gibi yalnızca logo ve üç düğme).
+        if (step > 0) {
+            LinearProgressIndicator(
+                progress = { step.toFloat() / (steps.size - 1) },
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp),
+            )
+        }
         AnimatedContent(
             targetState = step,
             transitionSpec = {
@@ -130,10 +139,14 @@ fun OnboardingScreen(onFinished: () -> Unit) {
             modifier = Modifier.weight(1f),
             label = "step",
         ) { s ->
+            if (s == 0) {
+                // Karşılama: platform seçimi doğrudan buradaki düğmelerle yapılır.
+                WelcomeHero(showSkip = store.hasAnyAccount, onSkip = onFinished) { platform = it; step = 1 }
+                return@AnimatedContent
+            }
             Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 24.dp)) {
                 when (steps[s.coerceAtMost(steps.size - 1)]) {
-                    Step.WELCOME -> WelcomeStep()
-                    Step.PLATFORM -> PlatformStep(platform) { platform = it }
+                    Step.WELCOME -> Unit
                     Step.RECEIVE -> ReceiveStep()
                     Step.DEVELOPER -> DeveloperStep()
                     Step.CREDENTIALS -> CredentialsStep(store)
@@ -155,18 +168,16 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                 else -> true
             }
         }
-        Row(Modifier.fillMaxWidth().padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
-            if (step > 0) TextButton(onClick = { step-- }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_back)) }
+        if (step > 0) Row(Modifier.fillMaxWidth().padding(24.dp), verticalAlignment = Alignment.CenterVertically) {
+            TextButton(onClick = { step-- }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_back)) }
             Spacer(Modifier.weight(1f))
-            if (step == 0 && store.hasAnyAccount) {
-                // Kurulum rehberine sonradan dönenler için.
-                TextButton(onClick = onFinished, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_skip)) }
-            } else if (!canContinue && !store.hasAnyAccount) {
+            if (!canContinue && !store.hasAnyAccount) {
                 // Hesabı olmadan uygulamaya göz atmak isteyenler (ör. testçiler); hesap sonra Ayarlar'dan eklenir.
                 TextButton(onClick = onFinished, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_skip_for_now)) }
             }
-            Button(
-                modifier = Modifier.tvFocusRing(),
+            PillButton(
+                stringResource(if (step < steps.size - 1) R.string.action_next else R.string.action_start_monitoring),
+                modifier = Modifier.widthIn(min = 132.dp),
                 enabled = canContinue,
                 onClick = {
                     if (step < steps.size - 1) step++
@@ -176,24 +187,17 @@ fun OnboardingScreen(onFinished: () -> Unit) {
                         onFinished()
                     }
                 },
-            ) {
-                Text(stringResource(if (step < steps.size - 1) R.string.action_next else R.string.action_start_monitoring))
-            }
+            )
         }
     }
 }
 
 @Composable
 private fun StepHeader(icon: ImageVector, title: String, body: String) {
-    Spacer(Modifier.height(24.dp))
-    // Marka geçişli simge kutusu (Ayarlar'daki uygulama kartıyla aynı dil).
-    Box(
-        Modifier.size(72.dp).clip(RoundedCornerShape(22.dp)).background(Brand.guard(LocalDarkTheme.current)),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(icon, null, tint = Color.White, modifier = Modifier.size(40.dp))
-    }
-    Spacer(Modifier.height(24.dp))
+    Spacer(Modifier.height(16.dp))
+    // Halkalı marka dairesi (karşılama logosuyla aynı dil).
+    HaloIcon(icon, size = 88.dp)
+    Spacer(Modifier.height(20.dp))
     Text(title, style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
     Spacer(Modifier.height(12.dp))
     Text(body, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -209,15 +213,78 @@ private fun Feature(icon: ImageVector, text: String, hue: Hue = Hue.TEAL) {
     }
 }
 
+/**
+ * Karşılama (tanıtım videosundaki ekran): halkalı kalkan, ad, slogan ve üç büyük düğme.
+ * eWeLink / Tuya / Demo seçimi doğrudan buradan yapılır; aktarma altta bağlantı olarak durur.
+ */
 @Composable
-private fun WelcomeStep() {
-    StepHeader(Icons.Rounded.Shield, stringResource(R.string.onb_welcome_title), stringResource(R.string.onb_welcome_body))
-    Feature(Icons.Rounded.NotificationsActive, stringResource(R.string.onb_feature_alarm), Hue.RED)
-    Feature(Icons.Rounded.PowerSettingsNew, stringResource(R.string.onb_feature_control), Hue.GREEN)
-    Feature(Icons.Rounded.Tune, stringResource(R.string.onb_feature_rules), Hue.INDIGO)
-    Feature(Icons.Rounded.History, stringResource(R.string.onb_feature_history), Hue.BLUE)
-    Spacer(Modifier.height(16.dp))
-    Text(stringResource(R.string.disclaimer), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+private fun WelcomeHero(showSkip: Boolean, onSkip: () -> Unit, onPick: (Platform) -> Unit) {
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val minH = maxHeight
+        Column(
+            Modifier.fillMaxSize().verticalScroll(rememberScrollState()).heightIn(min = minH).padding(horizontal = 28.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Row(Modifier.fillMaxWidth().height(56.dp), horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.CenterVertically) {
+                // Kurulum rehberine sonradan dönenler için.
+                if (showSkip) TextButton(onClick = onSkip, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_skip)) }
+            }
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                HaloIcon(Icons.Rounded.Shield, size = 156.dp)
+                Spacer(Modifier.height(28.dp))
+                Text(
+                    stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    stringResource(R.string.onb_hero_tagline),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.widthIn(max = 300.dp),
+                )
+            }
+            Column(Modifier.widthIn(max = 420.dp).padding(vertical = 24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                PillButton(
+                    stringResource(R.string.action_login),
+                    onClick = { onPick(Platform.EWELINK) },
+                    icon = Icons.AutoMirrored.Rounded.Login,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(10.dp))
+                PillButton(
+                    stringResource(R.string.onb_hero_tuya),
+                    onClick = { onPick(Platform.TUYA) },
+                    style = PillStyle.OUTLINED,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(22.dp))
+                PillButton(
+                    stringResource(R.string.onb_hero_demo),
+                    onClick = { onPick(Platform.DEMO) },
+                    style = PillStyle.TONAL,
+                    icon = Icons.Rounded.PlayArrow,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Spacer(Modifier.height(6.dp))
+                TextButton(onClick = { onPick(Platform.TRANSFER) }, modifier = Modifier.tvFocusRing()) {
+                    Icon(Icons.Rounded.SyncAlt, null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.onb_platform_transfer))
+                }
+                Spacer(Modifier.height(10.dp))
+                Text(
+                    stringResource(R.string.disclaimer),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.outline,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -234,37 +301,6 @@ private fun NumberedStep(n: Int, text: String) {
 private enum class Platform { EWELINK, TUYA, DEMO, TRANSFER }
 
 @Composable
-private fun PlatformStep(selected: Platform, onPick: (Platform) -> Unit) {
-    StepHeader(Icons.Rounded.Hub, stringResource(R.string.onb_platform_title), stringResource(R.string.onb_platform_body))
-    PlatformOption(selected == Platform.EWELINK, stringResource(R.string.onb_platform_ewelink), stringResource(R.string.onb_platform_ewelink_desc)) { onPick(Platform.EWELINK) }
-    Spacer(Modifier.height(12.dp))
-    PlatformOption(selected == Platform.TUYA, stringResource(R.string.onb_platform_tuya), stringResource(R.string.onb_platform_tuya_desc)) { onPick(Platform.TUYA) }
-    Spacer(Modifier.height(12.dp))
-    PlatformOption(selected == Platform.DEMO, stringResource(R.string.onb_platform_demo), stringResource(R.string.onb_platform_demo_desc)) { onPick(Platform.DEMO) }
-    Spacer(Modifier.height(12.dp))
-    PlatformOption(selected == Platform.TRANSFER, stringResource(R.string.onb_platform_transfer), stringResource(R.string.onb_platform_transfer_desc)) { onPick(Platform.TRANSFER) }
-    Spacer(Modifier.height(12.dp))
-    Text(stringResource(R.string.onb_platform_both), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-}
-
-@Composable
-private fun PlatformOption(selected: Boolean, title: String, desc: String, onClick: () -> Unit) {
-    SectionCard(Modifier.tvFocusRing(RoundedCornerShape(20.dp)), horizontalPadding = 0) {
-        Row(
-            Modifier.fillMaxWidth().selectable(selected = selected, onClick = onClick).padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            RadioButton(selected = selected, onClick = null)
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text(title, style = MaterialTheme.typography.titleMedium)
-                Text(desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-    }
-}
-
-@Composable
 private fun TuyaGuideStep() {
     val context = LocalContext.current
     StepHeader(Icons.Rounded.DeveloperMode, stringResource(R.string.onb_tuya_title), stringResource(R.string.onb_tuya_body))
@@ -273,19 +309,19 @@ private fun TuyaGuideStep() {
     NumberedStep(3, stringResource(R.string.onb_tuya_step3))
     NumberedStep(4, stringResource(R.string.onb_tuya_step4))
     Spacer(Modifier.height(16.dp))
-    Button(onClick = { Actions.openUrl(context, Actions.TUYA_PLATFORM_URL) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
-        Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.onb_open_tuya))
-    }
-    OutlinedButton(
+    PillButton(
+        stringResource(R.string.onb_open_tuya),
+        onClick = { Actions.openUrl(context, Actions.TUYA_PLATFORM_URL) },
+        icon = Icons.AutoMirrored.Rounded.OpenInNew,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    PillButton(
+        stringResource(R.string.onb_open_guide),
         onClick = { Actions.openUrl(context, Actions.guideUrl(context, "tuya")) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
-    ) {
-        Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.onb_open_guide))
-    }
+        style = PillStyle.OUTLINED,
+        icon = Icons.AutoMirrored.Rounded.MenuBook,
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+    )
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_tuya_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
@@ -308,7 +344,7 @@ private fun TuyaConnectStep(store: Store, version: Int) {
         }
         TextButton(onClick = { dialog = true }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_change)) }
     } else {
-        Button(onClick = { dialog = true }, modifier = Modifier.fillMaxWidth().tvFocusRing()) { Text(stringResource(R.string.action_enter_keys)) }
+        PillButton(stringResource(R.string.action_enter_keys), onClick = { dialog = true }, icon = Icons.Rounded.Key, modifier = Modifier.fillMaxWidth())
     }
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_tuya_privacy), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -325,27 +361,26 @@ private fun DeveloperStep() {
     NumberedStep(3, stringResource(R.string.onb_dev_step3, Store.DEFAULT_REDIRECT))
     NumberedStep(4, stringResource(R.string.onb_dev_step4))
     Spacer(Modifier.height(16.dp))
-    Button(onClick = { Actions.openUrl(context, Actions.DEV_PORTAL_URL) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
-        Icon(Icons.AutoMirrored.Rounded.OpenInNew, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.onb_open_portal))
-    }
-    OutlinedButton(
+    PillButton(
+        stringResource(R.string.onb_open_portal),
+        onClick = { Actions.openUrl(context, Actions.DEV_PORTAL_URL) },
+        icon = Icons.AutoMirrored.Rounded.OpenInNew,
+        modifier = Modifier.fillMaxWidth(),
+    )
+    PillButton(
+        stringResource(R.string.onb_open_guide),
         onClick = { Actions.openUrl(context, Actions.guideUrl(context, "ewelink")) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
-    ) {
-        Icon(Icons.AutoMirrored.Rounded.MenuBook, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.onb_open_guide))
-    }
-    OutlinedButton(
+        style = PillStyle.OUTLINED,
+        icon = Icons.AutoMirrored.Rounded.MenuBook,
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+    )
+    PillButton(
+        stringResource(R.string.onb_copy_redirect),
         onClick = { clipboard.setPrimaryClip(ClipData.newPlainText("Redirect URL", Store.DEFAULT_REDIRECT)) },
-        modifier = Modifier.fillMaxWidth().padding(top = 8.dp).tvFocusRing(),
-    ) {
-        Icon(Icons.Rounded.ContentCopy, null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.onb_copy_redirect))
-    }
+        style = PillStyle.TONAL,
+        icon = Icons.Rounded.ContentCopy,
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+    )
     Spacer(Modifier.height(12.dp))
     Text(stringResource(R.string.onb_dev_brand_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
@@ -386,9 +421,12 @@ private fun LoginStep(loggedIn: Boolean) {
         }
         TextButton(onClick = { LoginActivity.start(context) }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_relogin)) }
     } else {
-        Button(onClick = { LoginActivity.start(context) }, modifier = Modifier.fillMaxWidth().tvFocusRing()) {
-            Text(stringResource(R.string.action_login))
-        }
+        PillButton(
+            stringResource(R.string.action_login),
+            onClick = { LoginActivity.start(context) },
+            icon = Icons.AutoMirrored.Rounded.Login,
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
 
@@ -473,13 +511,13 @@ private fun PermissionCard(
                 Icon(icon, null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(Modifier.width(12.dp))
                 Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                if (granted) Icon(Icons.Rounded.CheckCircle, null, tint = MaterialTheme.colorScheme.primary)
+                if (granted) CheckDot()
             }
             Spacer(Modifier.height(8.dp))
             Text(desc, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (!granted) {
                 Spacer(Modifier.height(8.dp))
-                Button(onClick = onGrant, modifier = Modifier.tvFocusRing()) { Text(actionLabel) }
+                PillButton(actionLabel, onClick = onGrant, modifier = Modifier.fillMaxWidth())
             }
         }
     }

@@ -1611,4 +1611,10 @@
     <string name="ai_p_ideas_desc">기기에 맞춘 알람, 자동화, 절약 아이디어</string>
     <string name="ai_p_fix">문제 해결</string>
     <string name="ai_p_fix_desc">알람이 안 울림, 알림이 안 옴, 기기 오프라인…</string>
+    <string name="onb_hero_tagline">스마트 기기를 위한 멈추지 않는 알람</string>
+    <string name="onb_hero_tuya">Tuya로 로그인</string>
+    <string name="onb_hero_demo">데모 체험하기</string>
+    <string name="alarm_screen_title">알람</string>
+    <string name="alarm_swipe_dismiss">밀어서 끄기</string>
+    <string name="alarm_rings_silent">무음 모드에서도 울립니다</string>
 </resources>

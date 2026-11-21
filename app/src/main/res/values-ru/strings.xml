@@ -1719,4 +1719,10 @@
     <string name="ai_p_ideas_desc">Идеи тревог, автоматизаций и экономии для ваших устройств</string>
     <string name="ai_p_fix">Решить проблему</string>
     <string name="ai_p_fix_desc">Нет тревоги, нет уведомлений, устройство не в сети…</string>
+    <string name="onb_hero_tagline">Тревога, которая не умолкает, — для ваших умных устройств</string>
+    <string name="onb_hero_tuya">Войти через Tuya</string>
+    <string name="onb_hero_demo">Попробовать демо</string>
+    <string name="alarm_screen_title">ТРЕВОГА</string>
+    <string name="alarm_swipe_dismiss">Проведите, чтобы выключить</string>
+    <string name="alarm_rings_silent">Звучит даже в беззвучном режиме</string>
 </resources>

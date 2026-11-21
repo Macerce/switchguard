@@ -504,7 +504,7 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
     val muted = if (branded) Brand.onActive.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
 
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(background).padding(20.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
@@ -671,8 +671,14 @@ private fun DeviceTile(
     val anyOn = device.switches.values.any { it }
     // Çok kanallıda kanal düğmeleri kendi durumunu gösterir; kutucuğun kendisi renklenmez.
     val active = anyOn && device.online && !device.isMultiChannel && editBar == null
-    val shape = RoundedCornerShape(24.dp)
-    val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
+    val shape = RoundedCornerShape(20.dp)
+    // Çevrimdışı cihaz (grup değilse) videodaki gibi kırmızımsı zemin + kırmızı çerçeveyle öne çıkar.
+    val warn = !device.online && groupCounts == null
+    val background: Brush = when {
+        active -> Brand.active(dark)
+        warn -> SolidColor(Brand.warnTile(dark))
+        else -> SolidColor(tileColor())
+    }
     val controls = editBar == null
 
     Column(
@@ -680,7 +686,8 @@ private fun DeviceTile(
             .fillMaxWidth()
             .then(if (tv && controls) Modifier.tvFocusRing(shape).focusGroup() else Modifier)
             .clip(shape)
-            .background(background),
+            .background(background)
+            .then(if (warn) Modifier.border(1.5.dp, Brand.alarm, shape) else Modifier),
     ) {
         Box {
             // Zemin: dokununca detay. İçerik onun üstündedir; düğmeler kendi dokunuşlarını alır.
@@ -708,12 +715,12 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
     val anyOn = device.switches.values.any { it }
     val raised = raisedOnTile()
     val (bg, tint) = when {
-        !device.online -> raised to scheme.outline
+        !device.online -> raised to Brand.alarm
         active -> Color.White.copy(alpha = 0.2f) to Color.White
         anyOn -> scheme.primaryContainer to scheme.onPrimaryContainer
         else -> raised to scheme.onSurfaceVariant
     }
-    IconBadge(if (device.online) kind.icon() else Icons.Rounded.CloudOff, tint, bg, size)
+    IconBadge(kind.icon(), tint, bg, size)
 }
 
 /**
@@ -734,10 +741,6 @@ fun sensorSummary(device: DeviceSnapshot): String {
 private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Row(verticalAlignment = Alignment.CenterVertically) {
-        if (!device.online) {
-            Box(Modifier.size(8.dp).background(StatusColors.offline, CircleShape))
-            Spacer(Modifier.width(6.dp))
-        }
         val onCount = device.switches.values.count { it }
         val sensorText = sensorSummary(device)
         val text = buildString {
@@ -758,7 +761,7 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
         Text(
             text,
             style = MaterialTheme.typography.bodyMedium,
-            color = if (!device.online) StatusColors.offline else muted,
+            color = if (!device.online) Brand.alarm else muted,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f, fill = false),

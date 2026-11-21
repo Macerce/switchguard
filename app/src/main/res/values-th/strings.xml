@@ -1582,4 +1582,10 @@
     <string name="ai_p_ideas_desc">ไอเดียสัญญาณเตือน ระบบอัตโนมัติ และการประหยัดตามอุปกรณ์ของคุณ</string>
     <string name="ai_p_fix">แก้ปัญหา</string>
     <string name="ai_p_fix_desc">ไม่มีเสียงเตือน ไม่มีการแจ้งเตือน อุปกรณ์ออฟไลน์…</string>
+    <string name="onb_hero_tagline">สัญญาณเตือนที่ไม่หยุด สำหรับอุปกรณ์อัจฉริยะของคุณ</string>
+    <string name="onb_hero_tuya">ลงชื่อเข้าใช้ด้วย Tuya</string>
+    <string name="onb_hero_demo">ลองใช้เดโม</string>
+    <string name="alarm_screen_title">สัญญาณเตือน</string>
+    <string name="alarm_swipe_dismiss">ปัดเพื่อปิด</string>
+    <string name="alarm_rings_silent">ดังแม้อยู่ในโหมดปิดเสียง</string>
 </resources>

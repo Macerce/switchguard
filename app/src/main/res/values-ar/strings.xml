@@ -1791,4 +1791,10 @@
     <string name="ai_p_ideas_desc">أفكار للإنذارات والأتمتة والتوفير حسب أجهزتك</string>
     <string name="ai_p_fix">حل مشكلة</string>
     <string name="ai_p_fix_desc">لا إنذار، لا إشعار، الجهاز غير متصل…</string>
+    <string name="onb_hero_tagline">إنذار لا يتوقف لأجهزتك الذكية</string>
+    <string name="onb_hero_tuya">تسجيل الدخول باستخدام Tuya</string>
+    <string name="onb_hero_demo">جرّب العرض التوضيحي</string>
+    <string name="alarm_screen_title">إنذار</string>
+    <string name="alarm_swipe_dismiss">اسحب للإيقاف</string>
+    <string name="alarm_rings_silent">يرن حتى في الوضع الصامت</string>
 </resources>

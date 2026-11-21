@@ -1683,4 +1683,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="ai_p_ideas_desc">Ideias de alarmes, automações e economia para seus dispositivos</string>
     <string name="ai_p_fix">Resolver um problema</string>
     <string name="ai_p_fix_desc">Alarme não toca, notificação não chega, dispositivo offline…</string>
+    <string name="onb_hero_tagline">O alarme que não para, para seus dispositivos inteligentes</string>
+    <string name="onb_hero_tuya">Entrar com a Tuya</string>
+    <string name="onb_hero_demo">Experimentar a demo</string>
+    <string name="alarm_screen_title">ALARME</string>
+    <string name="alarm_swipe_dismiss">Deslize para desligar</string>
+    <string name="alarm_rings_silent">Toca mesmo no modo silencioso</string>
 </resources>

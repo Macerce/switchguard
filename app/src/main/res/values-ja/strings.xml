@@ -1611,4 +1611,10 @@
     <string name="ai_p_ideas_desc">デバイスに合わせたアラーム・自動化・節約のアイデア</string>
     <string name="ai_p_fix">問題を解決</string>
     <string name="ai_p_fix_desc">アラームが鳴らない、通知が来ない、デバイスがオフライン…</string>
+    <string name="onb_hero_tagline">スマートデバイスのための、鳴り止まないアラーム</string>
+    <string name="onb_hero_tuya">Tuya でログイン</string>
+    <string name="onb_hero_demo">デモを試す</string>
+    <string name="alarm_screen_title">アラーム</string>
+    <string name="alarm_swipe_dismiss">スワイプして停止</string>
+    <string name="alarm_rings_silent">マナーモードでも鳴ります</string>
 </resources>

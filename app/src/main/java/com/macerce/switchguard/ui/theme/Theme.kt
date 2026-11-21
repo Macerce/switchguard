@@ -131,6 +131,24 @@ object Brand {
 
     /** Beyaz zemin üstündeki marka rengi (açık cihazın beyaz güç düğmesi). */
     val deep = Color(0xFF00796B)
+
+    /** Alarm kırmızısı: alarm seçimi, çevrimdışı kart kenarı, alarm satırı simgesi (tanıtım videosundaki ton). */
+    val alarm = Color(0xFFE5484D)
+
+    /** Alarm kırmızısının üstündeki yazı. */
+    val onAlarm = Color.White
+
+    /** Sorunlu (çevrimdışı) kartın zemini: koyuda kırmızımsı kahve, açıkta pembemsi. */
+    fun warnTile(dark: Boolean): Color = if (dark) Color(0xFF4E1E21) else Color(0xFFFDE8E8)
+
+    /** Tetikleyici ("Eğer") vurgusu: kehribar. */
+    val amber = Color(0xFFF0AA3C)
+
+    /** Mavi vurgu ("İse" rozeti, bilgi). */
+    val blue = Color(0xFF4096E6)
+
+    /** Tam ekran alarmın zemini: parlak kırmızıdan koyuya. */
+    val alarmScreen: Brush = Brush.verticalGradient(listOf(Color(0xFFE0383E), Color(0xFFB3202A), Color(0xFF7A1018)))
 }
 
 /** Kartların ve kutucukların zemini: açık temada beyaz, koyu temada zeminden bir ton açık. */

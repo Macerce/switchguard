@@ -1719,4 +1719,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="ai_p_ideas_desc">Pomysły na alarmy, automatyzacje i oszczędności dla Twoich urządzeń</string>
     <string name="ai_p_fix">Rozwiąż problem</string>
     <string name="ai_p_fix_desc">Brak alarmu, brak powiadomień, urządzenie offline…</string>
+    <string name="onb_hero_tagline">Alarm, który nie milknie – dla Twoich inteligentnych urządzeń</string>
+    <string name="onb_hero_tuya">Zaloguj się przez Tuya</string>
+    <string name="onb_hero_demo">Wypróbuj demo</string>
+    <string name="alarm_screen_title">ALARM</string>
+    <string name="alarm_swipe_dismiss">Przesuń, aby wyłączyć</string>
+    <string name="alarm_rings_silent">Dzwoni nawet w trybie cichym</string>
 </resources>

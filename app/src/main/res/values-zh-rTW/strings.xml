@@ -1610,4 +1610,10 @@
     <string name="ai_p_ideas_desc">依你的裝置提供警報、自動化和節能建議</string>
     <string name="ai_p_fix">解決問題</string>
     <string name="ai_p_fix_desc">警報不響、收不到通知、裝置離線…</string>
+    <string name="onb_hero_tagline">為智慧裝置而生、不會停歇的警報</string>
+    <string name="onb_hero_tuya">使用 Tuya 登入</string>
+    <string name="onb_hero_demo">試用示範</string>
+    <string name="alarm_screen_title">警報</string>
+    <string name="alarm_swipe_dismiss">滑動以關閉</string>
+    <string name="alarm_rings_silent">靜音模式下也會響</string>
 </resources>

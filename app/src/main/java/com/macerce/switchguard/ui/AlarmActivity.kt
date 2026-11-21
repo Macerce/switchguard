@@ -13,6 +13,33 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.automirrored.rounded.VolumeUp
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
+import com.macerce.switchguard.ui.theme.Brand
+import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -96,7 +123,7 @@ class AlarmActivity : ComponentActivity() {
                     val version by store.version.collectAsStateWithLifecycle()
                     val lines = remember(version) { store.pendingAlarm }
                     LaunchedEffect(lines.isEmpty()) { if (lines.isEmpty()) finish() }
-                    // Geri tuşu alarmı susturmasın; yalnızca düğmeyle kapanır.
+                    // Geri tuşu alarmı susturmasın; yalnızca kaydırarak (TV'de düğmeyle) kapanır.
                     BackHandler {}
                     AlarmScreen(
                         lines = lines,
@@ -179,7 +206,7 @@ class AlarmActivity : ComponentActivity() {
 private fun AlarmScreen(lines: List<String>, onDismiss: () -> Unit, onOpenApp: () -> Unit) {
     val tv = LocalIsTv.current
     val pulse by rememberInfiniteTransition(label = "pulse").animateFloat(
-        initialValue = 1f, targetValue = 1.12f,
+        initialValue = 1f, targetValue = 1.08f,
         animationSpec = infiniteRepeatable(tween(700), RepeatMode.Reverse), label = "pulse",
     )
     val focus = remember { FocusRequester() }
@@ -194,77 +221,161 @@ private fun AlarmScreen(lines: List<String>, onDismiss: () -> Unit, onOpenApp: (
         }
     }
 
-    Box(
-        Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color(0xFF7A1010), Color(0xFF2A0606)))),
-        contentAlignment = Alignment.Center,
-    ) {
+    Box(Modifier.fillMaxSize().background(Brand.alarmScreen).safeDrawingPadding(), contentAlignment = Alignment.Center) {
         Column(
-            Modifier.widthIn(max = 720.dp).padding(32.dp),
+            Modifier.fillMaxSize().widthIn(max = 720.dp).padding(horizontal = 28.dp, vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            // Simgenin çevresinde dışa yayılan halkalar (logodaki ses dalgaları gibi).
-            val waves = rememberInfiniteTransition(label = "waves")
-            val wave by waves.animateFloat(
-                initialValue = 0f, targetValue = 1f,
-                animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "wave",
-            )
-            Box(
-                Modifier.size(200.dp).drawBehind {
-                    val base = 60.dp.toPx()
-                    for (k in 0..2) {
-                        val t = (wave + k / 3f) % 1f
-                        drawCircle(
-                            Color.White.copy(alpha = 0.28f * (1f - t)),
-                            radius = base + (size.minDimension / 2 - base) * t,
-                            style = Stroke(width = 3.dp.toPx()),
-                        )
-                    }
-                },
-                contentAlignment = Alignment.Center,
-            ) {
+            Spacer(Modifier.height(8.dp))
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                // Tanıtım videosundaki çan: sabit iki halka + dışa yayılan dalgalar + nabız atan iç daire.
+                val waves = rememberInfiniteTransition(label = "waves")
+                val wave by waves.animateFloat(
+                    initialValue = 0f, targetValue = 1f,
+                    animationSpec = infiniteRepeatable(tween(1800, easing = LinearEasing)), label = "wave",
+                )
                 Box(
-                    Modifier.size(120.dp).graphicsLayer { scaleX = pulse; scaleY = pulse }
-                        .background(Color.White.copy(alpha = 0.14f), CircleShape),
+                    Modifier.size(if (tv) 220.dp else 240.dp).drawBehind {
+                        val r = size.minDimension / 2
+                        drawCircle(Color.White.copy(alpha = 0.10f), radius = r * 0.92f, style = Stroke(width = 2.dp.toPx()))
+                        drawCircle(Color.White.copy(alpha = 0.16f), radius = r * 0.72f, style = Stroke(width = 2.dp.toPx()))
+                        val base = r * 0.5f
+                        for (k in 0..1) {
+                            val t = (wave + k / 2f) % 1f
+                            drawCircle(
+                                Color.White.copy(alpha = 0.25f * (1f - t)),
+                                radius = base + (r - base) * t,
+                                style = Stroke(width = 3.dp.toPx()),
+                            )
+                        }
+                    },
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(Icons.Rounded.NotificationsActive, null, tint = Color.White, modifier = Modifier.size(64.dp))
+                    Box(
+                        Modifier.size(120.dp).graphicsLayer { scaleX = pulse; scaleY = pulse }
+                            .background(Color.White.copy(alpha = 0.2f), CircleShape),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(Icons.Rounded.NotificationsActive, null, tint = Color.White, modifier = Modifier.size(64.dp))
+                    }
+                }
+                Spacer(Modifier.height(20.dp))
+                Text(
+                    stringResource(R.string.alarm_screen_title),
+                    color = Color.White, fontSize = if (tv) 44.sp else 40.sp, lineHeight = 1.15.em,
+                    fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, letterSpacing = 0.04.em,
+                )
+                Spacer(Modifier.height(10.dp))
+                // En yeni olay en üstte; çok sayıda olayda ilk dördü.
+                lines.reversed().take(4).forEachIndexed { i, line ->
+                    Text(
+                        line,
+                        color = Color.White.copy(alpha = if (i == 0) 1f else 0.75f),
+                        fontSize = if (i == 0) 22.sp else 17.sp,
+                        fontWeight = if (i == 0) FontWeight.SemiBold else FontWeight.Normal,
+                        lineHeight = 1.25.em,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(vertical = 3.dp),
+                    )
+                }
+                if (lines.size > 4) {
+                    Text("+${lines.size - 4}", color = Color.White.copy(alpha = 0.7f), fontSize = 16.sp)
+                }
+                Spacer(Modifier.height(20.dp))
+                // "Sessiz modda bile çalar" hapı: alarm, alarm ses kanalından çalar.
+                Row(
+                    Modifier.background(Color.White.copy(alpha = 0.16f), CircleShape).padding(horizontal = 16.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.AutoMirrored.Rounded.VolumeUp, null, tint = Color.White, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.alarm_rings_silent), color = Color.White, fontSize = 14.sp)
                 }
             }
-            Spacer(Modifier.height(12.dp))
-            // Uzun başlık iki satıra bölünebilir: satır yüksekliği yazı boyutuna göre verilmezse satırlar üst üste biner.
-            Text(
-                stringResource(R.string.notif_alarm_title, lines.size),
-                color = Color.White, fontSize = if (tv) 34.sp else 30.sp, lineHeight = 1.2.em,
-                fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.height(16.dp))
-            // En yeni olay en üstte; çok sayıda olayda ilk dördü.
-            lines.reversed().take(4).forEachIndexed { i, line ->
-                Text(
-                    line,
-                    color = Color.White.copy(alpha = if (i == 0) 1f else 0.7f),
-                    fontSize = if (i == 0) 24.sp else 18.sp,
-                    lineHeight = 1.25.em,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(vertical = 3.dp),
-                )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                if (tv) {
+                    // Kumandada kaydırma yok: odaklı düğme.
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier.focusRequester(focus).tvFocusRing(color = Color.White).height(64.dp).widthIn(min = 280.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF8B1A1A)),
+                    ) {
+                        Text(stringResource(R.string.action_dismiss_alarm), fontSize = 22.sp, fontWeight = FontWeight.Bold)
+                    }
+                } else {
+                    SwipeToDismiss(onDismiss)
+                }
+                Spacer(Modifier.height(8.dp))
+                TextButton(onClick = onOpenApp, modifier = Modifier.tvFocusRing(color = Color.White)) {
+                    Text(stringResource(R.string.alarm_open_app), color = Color.White.copy(alpha = 0.85f))
+                }
             }
-            if (lines.size > 4) {
-                Text("+${lines.size - 4}", color = Color.White.copy(alpha = 0.6f), fontSize = 16.sp)
-            }
-            Spacer(Modifier.height(36.dp))
-            Button(
-                onClick = onDismiss,
-                modifier = Modifier.focusRequester(focus).tvFocusRing(color = Color.White).height(64.dp).widthIn(min = 280.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White, contentColor = Color(0xFF8B1A1A)),
-            ) {
-                Text(stringResource(R.string.action_dismiss_alarm), fontSize = 22.sp, fontWeight = FontWeight.Bold)
-            }
-            Spacer(Modifier.height(12.dp))
-            TextButton(onClick = onOpenApp, modifier = Modifier.tvFocusRing(color = Color.White)) {
-                Text(stringResource(R.string.alarm_open_app), color = Color.White.copy(alpha = 0.85f))
-            }
+        }
+    }
+}
+
+/**
+ * "Kapatmak için kaydırın": beyaz yuvarlak tutamak sona sürüklenince alarm kapanır, yarıda bırakılırsa geri
+ * döner (cepte yanlışlıkla kapanmasın). TalkBack'te iz tek dokunuşla kapatılabilen bir düğmedir.
+ */
+@Composable
+private fun SwipeToDismiss(onDismiss: () -> Unit) {
+    val scope = rememberCoroutineScope()
+    val offset = remember { Animatable(0f) }
+    val rtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val dismissLabel = stringResource(R.string.action_dismiss_alarm)
+    var done by remember { mutableStateOf(false) }
+    BoxWithConstraints(
+        Modifier
+            .fillMaxWidth()
+            .widthIn(max = 420.dp)
+            .height(68.dp)
+            .background(Color.White.copy(alpha = 0.18f), CircleShape)
+            .semantics(mergeDescendants = true) {
+                role = Role.Button
+                contentDescription = dismissLabel
+                onClick(label = dismissLabel) { if (!done) { done = true; onDismiss() }; true }
+            },
+    ) {
+        val thumb = 56.dp
+        val pad = 6.dp
+        val max = with(LocalDensity.current) { (maxWidth - thumb - pad * 2).toPx() }
+        val progress = if (max > 0) (offset.value / max).coerceIn(0f, 1f) else 0f
+        Text(
+            stringResource(R.string.alarm_swipe_dismiss) + "  ›",
+            color = Color.White.copy(alpha = 0.9f * (1f - progress)),
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.align(Alignment.Center).padding(start = thumb),
+        )
+        Box(
+            Modifier
+                .padding(pad)
+                .offset { IntOffset(((if (rtl) -1 else 1) * offset.value).roundToInt(), 0) }
+                .size(thumb)
+                .background(Color.White, CircleShape)
+                .pointerInput(max) {
+                    detectHorizontalDragGestures(
+                        onDragEnd = {
+                            scope.launch {
+                                if (offset.value > max * 0.85f) {
+                                    offset.animateTo(max, tween(120))
+                                    if (!done) { done = true; onDismiss() }
+                                } else {
+                                    offset.animateTo(0f, spring())
+                                }
+                            }
+                        },
+                        onDragCancel = { scope.launch { offset.animateTo(0f, spring()) } },
+                    ) { change, delta ->
+                        change.consume()
+                        scope.launch { offset.snapTo((offset.value + (if (rtl) -delta else delta)).coerceIn(0f, max)) }
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(Icons.Rounded.Close, null, tint = Color(0xFFC62830), modifier = Modifier.size(28.dp))
         }
     }
 }

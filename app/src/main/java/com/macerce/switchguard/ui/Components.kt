@@ -1,6 +1,7 @@
 package com.macerce.switchguard.ui
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +24,8 @@ import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.AcUnit
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.PriorityHigh
 import androidx.compose.material.icons.rounded.Air
 import androidx.compose.material.icons.rounded.DoorFront
 import androidx.compose.material.icons.rounded.ElectricalServices
@@ -31,6 +36,8 @@ import androidx.compose.material.icons.rounded.Power
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.material.icons.rounded.Workspaces
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -39,6 +46,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -112,7 +120,7 @@ fun SectionTitle(text: String, modifier: Modifier = Modifier) {
 fun SectionCard(modifier: Modifier = Modifier, horizontalPadding: Int = 16, content: @Composable () -> Unit) {
     Card(
         modifier = modifier.fillMaxWidth().padding(horizontal = horizontalPadding.dp),
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = tileColor()),
     ) {
         Column { content() }
@@ -367,3 +375,144 @@ fun RowDivider(inset: Dp = 56.dp) = HorizontalDivider(
     thickness = 1.dp,
     color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = if (LocalDarkTheme.current) 0.7f else 0.6f),
 )
+
+/** Büyük hap düğmenin türü: dolu (ana eylem), çerçeveli (ikinci seçenek), tonlu (üçüncü, sakin). */
+enum class PillStyle { FILLED, OUTLINED, TONAL }
+
+/**
+ * Tanıtım videosundaki büyük hap düğme: 54dp yükseklik, tam yuvarlak köşe, ortada simge + yazı.
+ * Karşılama, kurulum adımları ve düzenleyicilerin "Kaydet" düğmesi bunu kullanır.
+ */
+@Composable
+fun PillButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    style: PillStyle = PillStyle.FILLED,
+    icon: ImageVector? = null,
+    enabled: Boolean = true,
+) {
+    val scheme = MaterialTheme.colorScheme
+    val shape = CircleShape
+    val m = modifier.tvFocusRing(shape).heightIn(min = 54.dp)
+    val inner: @Composable RowScope.() -> Unit = {
+        if (icon != null) {
+            Icon(icon, null, modifier = Modifier.size(20.dp))
+            Spacer(Modifier.width(10.dp))
+        }
+        Text(text, style = MaterialTheme.typography.titleSmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+    }
+    when (style) {
+        PillStyle.FILLED -> Button(onClick, m, enabled = enabled, shape = shape, content = inner)
+        PillStyle.OUTLINED -> OutlinedButton(
+            onClick, m, enabled = enabled, shape = shape,
+            border = BorderStroke(1.5.dp, if (enabled) scheme.primary else scheme.outlineVariant),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = scheme.primary),
+            content = inner,
+        )
+        PillStyle.TONAL -> Button(
+            onClick, m, enabled = enabled, shape = shape,
+            colors = ButtonDefaults.buttonColors(containerColor = raisedTone(), contentColor = scheme.onSurface),
+            content = inner,
+        )
+    }
+}
+
+/** Kart üstündeki sakin düğme/zemin tonu (videodaki koyu gri). */
+@Composable
+private fun raisedTone(): Color = com.macerce.switchguard.ui.theme.raisedOnTile()
+
+/** Halkalı daire içinde simge: karşılama logosu, adım başlıkları, alarm çanı. */
+@Composable
+fun HaloIcon(
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    size: Dp = 116.dp,
+    color: Color = Color(0xFF0D7C6B),
+    tint: Color = Color.White,
+) {
+    Box(modifier.size(size).background(color.copy(alpha = 0.35f), CircleShape), contentAlignment = Alignment.Center) {
+        Box(Modifier.size(size * 0.74f).background(color, CircleShape), contentAlignment = Alignment.Center) {
+            Icon(icon, null, tint = tint, modifier = Modifier.size(size * 0.46f))
+        }
+    }
+}
+
+/**
+ * Hap biçimli seçim çipi (videodaki "Geri sayım", "Kritik", "Alarm" çipleri): seçiliyken koyu turkuaz
+ * zemin + marka çerçevesi, değilken kart tonu + ince gri çerçeve. [accent] seçili rengi değiştirir.
+ */
+@Composable
+fun ChoicePill(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    accent: Color = MaterialTheme.colorScheme.primary,
+    icon: ImageVector? = null,
+    enabled: Boolean = true,
+) {
+    val scheme = MaterialTheme.colorScheme
+    val dark = LocalDarkTheme.current
+    val fill by animateColorAsState(
+        if (selected) accent.copy(alpha = if (dark) 0.28f else 0.16f) else tileColor(),
+        label = "pillFill",
+    )
+    Row(
+        modifier
+            .tvFocusRing(CircleShape)
+            .heightIn(min = 36.dp)
+            .clip(CircleShape)
+            .background(fill)
+            .border(1.5.dp, if (selected) accent else scheme.outlineVariant, CircleShape)
+            .clickable(enabled = enabled, role = Role.RadioButton, onClick = onClick)
+            .semantics { stateDescription = if (selected) "✓" else "" }
+            .padding(horizontal = 14.dp, vertical = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        if (icon != null) {
+            Icon(icon, null, tint = if (selected) accent else scheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(6.dp))
+        }
+        Text(
+            text,
+            style = MaterialTheme.typography.labelLarge,
+            color = when {
+                !enabled -> scheme.outline
+                selected -> scheme.onSurface
+                else -> scheme.onSurfaceVariant
+            },
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+/** Renkli hap rozet (kural düzenleyicideki "EĞER" / "İSE", kategori etiketi). */
+@Composable
+fun PillBadge(text: String, color: Color, modifier: Modifier = Modifier, onColor: Color = Color.White) {
+    Text(
+        text.uppercase(),
+        style = MaterialTheme.typography.labelMedium,
+        fontWeight = FontWeight.Bold,
+        color = onColor,
+        modifier = modifier.background(color, CircleShape).padding(horizontal = 12.dp, vertical = 4.dp),
+    )
+}
+
+/** İzin ve hazırlık satırlarının sağındaki daire: tamamsa marka renginde tik, değilse turuncu ünlem. */
+@Composable
+fun CheckDot(ok: Boolean = true, size: Dp = 26.dp) {
+    Box(
+        Modifier.size(size).background(if (ok) MaterialTheme.colorScheme.primary else StatusColors.warning, CircleShape),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            if (ok) Icons.Rounded.Check else Icons.Rounded.PriorityHigh,
+            contentDescription = null,
+            tint = if (ok) MaterialTheme.colorScheme.onPrimary else Color.White,
+            modifier = Modifier.size(size * 0.62f),
+        )
+    }
+}

@@ -1645,4 +1645,10 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="ai_p_ideas_desc">Alarm-, Automations- und Sparideen für Ihre Geräte</string>
     <string name="ai_p_fix">Problem lösen</string>
     <string name="ai_p_fix_desc">Kein Alarm, keine Benachrichtigung, Gerät offline…</string>
+    <string name="onb_hero_tagline">Der Alarm, der nicht verstummt – für Ihre smarten Geräte</string>
+    <string name="onb_hero_tuya">Mit Tuya anmelden</string>
+    <string name="onb_hero_demo">Demo ausprobieren</string>
+    <string name="alarm_screen_title">ALARM</string>
+    <string name="alarm_swipe_dismiss">Zum Beenden wischen</string>
+    <string name="alarm_rings_silent">Klingelt auch im Lautlos-Modus</string>
 </resources>

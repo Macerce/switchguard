@@ -1540,4 +1540,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="ai_p_ideas_desc">Ide alarm, otomatisasi, dan penghematan sesuai perangkat Anda</string>
     <string name="ai_p_fix">Atasi masalah</string>
     <string name="ai_p_fix_desc">Alarm tidak berbunyi, notifikasi tidak datang, perangkat offline…</string>
+    <string name="onb_hero_tagline">Alarm yang tak berhenti untuk perangkat pintar Anda</string>
+    <string name="onb_hero_tuya">Masuk dengan Tuya</string>
+    <string name="onb_hero_demo">Coba demo</string>
+    <string name="alarm_screen_title">ALARM</string>
+    <string name="alarm_swipe_dismiss">Geser untuk mematikan</string>
+    <string name="alarm_rings_silent">Berbunyi bahkan dalam mode senyap</string>
 </resources>

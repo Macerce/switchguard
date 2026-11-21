@@ -1682,4 +1682,10 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="ai_p_ideas_desc">Idées d\'alarmes, d\'automatisations et d\'économies selon vos appareils</string>
     <string name="ai_p_fix">Résoudre un problème</string>
     <string name="ai_p_fix_desc">Pas d\'alarme, pas de notification, appareil hors ligne…</string>
+    <string name="onb_hero_tagline">L\'alarme qui ne s\'arrête pas, pour vos appareils connectés</string>
+    <string name="onb_hero_tuya">Se connecter avec Tuya</string>
+    <string name="onb_hero_demo">Essayer la démo</string>
+    <string name="alarm_screen_title">ALARME</string>
+    <string name="alarm_swipe_dismiss">Glissez pour arrêter</string>
+    <string name="alarm_rings_silent">Sonne même en mode silencieux</string>
 </resources>
