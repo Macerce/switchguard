@@ -1705,4 +1705,6 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="rule_tap_to_change">Toque para escolher</string>
     <string name="export_save_file">Salvar em arquivo</string>
     <string name="action_share">Compartilhar</string>
+    <string name="location_outside">Lá fora</string>
+    <string name="location_private">Sua localização fica salva só neste celular</string>
 </resources>

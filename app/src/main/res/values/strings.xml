@@ -1676,4 +1676,6 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="rule_tap_to_change">Tap to choose</string>
     <string name="export_save_file">Save to file</string>
     <string name="action_share">Share</string>
+    <string name="location_outside">Outside</string>
+    <string name="location_private">Your location is stored only on this phone</string>
 </resources>

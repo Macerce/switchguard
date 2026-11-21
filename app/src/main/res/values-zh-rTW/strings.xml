@@ -1632,4 +1632,6 @@
     <string name="rule_tap_to_change">輕觸以選擇</string>
     <string name="export_save_file">儲存到檔案</string>
     <string name="action_share">分享</string>
+    <string name="location_outside">室外</string>
+    <string name="location_private">您的位置只儲存在這支手機上</string>
 </resources>

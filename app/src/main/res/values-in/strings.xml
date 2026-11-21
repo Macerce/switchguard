@@ -1562,4 +1562,6 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="rule_tap_to_change">Ketuk untuk memilih</string>
     <string name="export_save_file">Simpan ke file</string>
     <string name="action_share">Bagikan</string>
+    <string name="location_outside">Di luar</string>
+    <string name="location_private">Lokasi Anda hanya disimpan di ponsel ini</string>
 </resources>

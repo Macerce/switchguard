@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material3.NavigationRailItemDefaults
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -206,6 +208,10 @@ fun App() {
                         Spacer(Modifier.weight(1f))
                         Tab.entries.forEach { t ->
                             NavigationRailItem(
+                                colors = NavigationRailItemDefaults.colors(
+                                    selectedIconColor = MaterialTheme.colorScheme.primary,
+                                    indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.22f),
+                                ),
                                 modifier = Modifier.tvFocusRing(RoundedCornerShape(16.dp), inside = true),
                                 selected = tab == t,
                                 onClick = { select(t) },
@@ -222,6 +228,14 @@ fun App() {
             } else {
                 Scaffold(
                     bottomBar = {
+                        val scheme = MaterialTheme.colorScheme
+                        val navColors = NavigationBarItemDefaults.colors(
+                            selectedIconColor = scheme.primary,
+                            selectedTextColor = scheme.onSurface,
+                            indicatorColor = scheme.primary.copy(alpha = 0.22f),
+                            unselectedIconColor = scheme.onSurfaceVariant,
+                            unselectedTextColor = scheme.onSurfaceVariant,
+                        )
                         NavigationBar(containerColor = tileColor()) {
                             Tab.entries.forEach { t ->
                                 NavigationBarItem(
@@ -229,6 +243,8 @@ fun App() {
                                     onClick = { select(t) },
                                     icon = { tabIcon(t) },
                                     label = { TabLabel(stringResource(t.label)) },
+                                    // Videodaki alt menü: seçili sekme turkuaz simge + koyu turkuaz hap.
+                                    colors = navColors,
                                 )
                             }
                         }

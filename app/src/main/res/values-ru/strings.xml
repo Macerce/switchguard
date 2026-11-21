@@ -1741,4 +1741,6 @@
     <string name="rule_tap_to_change">Нажмите, чтобы выбрать</string>
     <string name="export_save_file">Сохранить в файл</string>
     <string name="action_share">Поделиться</string>
+    <string name="location_outside">На улице</string>
+    <string name="location_private">Местоположение хранится только на этом телефоне</string>
 </resources>

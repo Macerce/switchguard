@@ -1611,4 +1611,6 @@
     <string name="rule_tap_to_change">点按选择</string>
     <string name="export_save_file">保存到文件</string>
     <string name="action_share">分享</string>
+    <string name="location_outside">室外</string>
+    <string name="location_private">您的位置仅保存在这部手机上</string>
 </resources>

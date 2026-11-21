@@ -1741,4 +1741,6 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="rule_tap_to_change">Dotknij, aby wybrać</string>
     <string name="export_save_file">Zapisz do pliku</string>
     <string name="action_share">Udostępnij</string>
+    <string name="location_outside">Na zewnątrz</string>
+    <string name="location_private">Twoja lokalizacja jest zapisana tylko w tym telefonie</string>
 </resources>

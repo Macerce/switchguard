@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.BeachAccess
 import androidx.compose.material.icons.rounded.Stairs
@@ -870,7 +872,9 @@ private fun SummaryPage() {
 private fun LocationPage() {
     val (store, version) = settingsState()
     SectionTitle(stringResource(R.string.location_title))
-    SectionCard {
+    // Videodaki gibi üstte harita, gün yayı ve dış sıcaklık.
+    LocationHeader(store, version, showMap = !LocalIsTv.current)
+    SectionCard(Modifier.padding(top = 10.dp)) {
         var locationVersion by remember { mutableStateOf(0) }
         key(locationVersion) {
             LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(16.dp))
@@ -1207,60 +1211,57 @@ private fun PermissionsPage() {
     val context = LocalContext.current
     val resumed = resumedState()
     PageIntro(stringResource(R.string.settings_permissions_intro))
-    SectionCard(Modifier.padding(top = 12.dp)) {
+    // Videodaki izin sihirbazı: her izin ayrı bir kart satırı, sağda tik dairesi.
+    val card = Modifier.clip(RoundedCornerShape(18.dp)).background(tileColor())
+    Column(Modifier.padding(start = 16.dp, end = 16.dp, top = 12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         val notif = remember(resumed) { Actions.notificationsEnabled(context) }
         val battery = remember(resumed) { Actions.batteryExempt(context) }
         InfoRow(
             if (notif) Icons.Rounded.NotificationsActive else Icons.Rounded.NotificationsOff,
             stringResource(R.string.perm_notifications),
             stringResource(if (notif) R.string.perm_granted else R.string.perm_missing),
-            Modifier.clickable { Actions.openNotificationSettings(context) },
+            card.clickable { Actions.openNotificationSettings(context) },
         ) { PermState(notif) }
-        Divider()
         InfoRow(
             if (battery) Icons.Rounded.BatteryChargingFull else Icons.Rounded.BatteryAlert,
             stringResource(R.string.perm_battery),
             stringResource(if (battery) R.string.perm_battery_ok else R.string.perm_battery_missing),
-            Modifier.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
+            card.clickable(enabled = !battery) { Actions.requestBatteryExemption(context) },
         ) { PermState(battery) }
         val fullScreen = remember(resumed) { Actions.fullScreenAllowed(context) }
         if (fullScreen != null) {
-            Divider()
             InfoRow(
                 Icons.Rounded.Fullscreen,
                 stringResource(R.string.perm_full_screen),
                 stringResource(if (fullScreen) R.string.perm_granted else R.string.perm_full_screen_missing),
-                Modifier.clickable(enabled = !fullScreen) { Actions.openFullScreenSettings(context) },
+                card.clickable(enabled = !fullScreen) { Actions.openFullScreenSettings(context) },
             ) { PermState(fullScreen) }
         }
         val lockPopup = remember(resumed) { XiaomiPermissions.lockScreenPopup(context) }
         if (lockPopup != null) {
-            Divider()
             InfoRow(
                 Icons.Rounded.ScreenLockPortrait,
                 stringResource(R.string.perm_lock_popup),
                 stringResource(if (lockPopup) R.string.perm_granted else R.string.perm_lock_popup_missing),
-                Modifier.clickable(enabled = !lockPopup) { XiaomiPermissions.openOtherPermissions(context) },
+                card.clickable(enabled = !lockPopup) { XiaomiPermissions.openOtherPermissions(context) },
             ) { PermState(lockPopup) }
         }
         if (AlarmActivity.needsOverlayPermission(context)) {
             val overlay = remember(resumed) { AlarmActivity.canShowOverApps(context) }
-            Divider()
             InfoRow(
                 Icons.Rounded.Layers,
                 stringResource(R.string.perm_overlay),
                 stringResource(if (overlay) R.string.perm_granted else R.string.perm_missing),
-                Modifier.clickable(enabled = !overlay) { AlarmActivity.openOverlaySettings(context) },
+                card.clickable(enabled = !overlay) { AlarmActivity.openOverlaySettings(context) },
             ) { PermState(overlay) }
         }
         OemBackground.current(context)?.let { oem ->
             val autostart = remember(resumed) { XiaomiPermissions.autostart(context) }
-            Divider()
             InfoRow(
                 Icons.Rounded.RestartAlt,
                 stringResource(R.string.perm_autostart, oem.label),
                 stringResource(if (autostart == true) R.string.perm_granted else oem.hint),
-                Modifier.clickable { oem.open(context) },
+                card.clickable { oem.open(context) },
             ) { if (autostart != null) PermState(autostart) }
         }
     }
@@ -1269,11 +1270,8 @@ private fun PermissionsPage() {
 /** İzin satırının sağındaki durum: yeşil onay ya da turuncu uyarı. */
 @Composable
 private fun PermState(ok: Boolean) {
-    Icon(
-        if (ok) Icons.Rounded.CheckCircle else Icons.Rounded.ErrorOutline,
-        contentDescription = stringResource(if (ok) R.string.perm_granted else R.string.perm_missing),
-        tint = if (ok) StatusColors.online else StatusColors.warning,
-    )
+    val desc = stringResource(if (ok) R.string.perm_granted else R.string.perm_missing)
+    Box(Modifier.semantics { contentDescription = desc }) { CheckDot(ok) }
 }
 
 // ---------------------------------------------------------------- Yedekleme ve aktarım

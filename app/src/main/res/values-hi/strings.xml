@@ -1598,4 +1598,6 @@
     <string name="rule_tap_to_change">चुनने के लिए टैप करें</string>
     <string name="export_save_file">फ़ाइल में सहेजें</string>
     <string name="action_share">शेयर करें</string>
+    <string name="location_outside">बाहर</string>
+    <string name="location_private">आपकी लोकेशन सिर्फ़ इसी फ़ोन में सेव रहती है</string>
 </resources>

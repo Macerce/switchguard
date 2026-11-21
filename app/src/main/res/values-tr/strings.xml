@@ -1672,4 +1672,6 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="rule_tap_to_change">Seçmek için dokunun</string>
     <string name="export_save_file">Dosyaya kaydet</string>
     <string name="action_share">Paylaş</string>
+    <string name="location_outside">Dışarısı</string>
+    <string name="location_private">Konumunuz yalnızca bu telefonda saklanır</string>
 </resources>

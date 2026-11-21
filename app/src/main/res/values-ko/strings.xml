@@ -1633,4 +1633,6 @@
     <string name="rule_tap_to_change">눌러서 선택</string>
     <string name="export_save_file">파일로 저장</string>
     <string name="action_share">공유</string>
+    <string name="location_outside">실외</string>
+    <string name="location_private">위치 정보는 이 휴대폰에만 저장됩니다</string>
 </resources>

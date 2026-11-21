@@ -1712,4 +1712,6 @@
     <string name="rule_tap_to_change">Торкніться, щоб вибрати</string>
     <string name="export_save_file">Зберегти у файл</string>
     <string name="action_share">Поділитися</string>
+    <string name="location_outside">Надворі</string>
+    <string name="location_private">Місцезнаходження зберігається лише на цьому телефоні</string>
 </resources>

@@ -1667,4 +1667,6 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="rule_tap_to_change">Zum Auswählen tippen</string>
     <string name="export_save_file">Als Datei speichern</string>
     <string name="action_share">Teilen</string>
+    <string name="location_outside">Draußen</string>
+    <string name="location_private">Ihr Standort wird nur auf diesem Telefon gespeichert</string>
 </resources>

@@ -1604,4 +1604,6 @@
     <string name="rule_tap_to_change">แตะเพื่อเลือก</string>
     <string name="export_save_file">บันทึกเป็นไฟล์</string>
     <string name="action_share">แชร์</string>
+    <string name="location_outside">ภายนอก</string>
+    <string name="location_private">ตำแหน่งของคุณจัดเก็บไว้บนโทรศัพท์เครื่องนี้เท่านั้น</string>
 </resources>

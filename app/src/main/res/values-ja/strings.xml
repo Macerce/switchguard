@@ -1633,4 +1633,6 @@
     <string name="rule_tap_to_change">タップして選択</string>
     <string name="export_save_file">ファイルに保存</string>
     <string name="action_share">共有</string>
+    <string name="location_outside">屋外</string>
+    <string name="location_private">位置情報はこのスマホにのみ保存されます</string>
 </resources>

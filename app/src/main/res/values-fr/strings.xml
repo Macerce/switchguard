@@ -1704,4 +1704,6 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="rule_tap_to_change">Touchez pour choisir</string>
     <string name="export_save_file">Enregistrer</string>
     <string name="action_share">Partager</string>
+    <string name="location_outside">Extérieur</string>
+    <string name="location_private">Votre position est enregistrée uniquement sur ce téléphone</string>
 </resources>

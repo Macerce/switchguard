@@ -1676,4 +1676,6 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="rule_tap_to_change">Tocca per scegliere</string>
     <string name="export_save_file">Salva su file</string>
     <string name="action_share">Condividi</string>
+    <string name="location_outside">Esterno</string>
+    <string name="location_private">La tua posizione è salvata solo su questo telefono</string>
 </resources>

@@ -1669,4 +1669,6 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="rule_tap_to_change">Tik om te kiezen</string>
     <string name="export_save_file">Opslaan als bestand</string>
     <string name="action_share">Delen</string>
+    <string name="location_outside">Buiten</string>
+    <string name="location_private">Je locatie wordt alleen op deze telefoon opgeslagen</string>
 </resources>

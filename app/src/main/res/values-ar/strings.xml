@@ -1813,4 +1813,6 @@
     <string name="rule_tap_to_change">انقر للاختيار</string>
     <string name="export_save_file">حفظ في ملف</string>
     <string name="action_share">مشاركة</string>
+    <string name="location_outside">في الخارج</string>
+    <string name="location_private">يُحفظ موقعك على هذا الهاتف فقط</string>
 </resources>

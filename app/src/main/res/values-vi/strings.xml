@@ -1604,4 +1604,6 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="rule_tap_to_change">Chạm để chọn</string>
     <string name="export_save_file">Lưu vào tệp</string>
     <string name="action_share">Chia sẻ</string>
+    <string name="location_outside">Ngoài trời</string>
+    <string name="location_private">Vị trí của bạn chỉ được lưu trên điện thoại này</string>
 </resources>
