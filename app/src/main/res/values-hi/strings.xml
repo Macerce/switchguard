@@ -1596,4 +1596,6 @@
     <string name="rule_triggers">ट्रिगर</string>
     <string name="rule_actions">क्रियाएँ</string>
     <string name="rule_tap_to_change">चुनने के लिए टैप करें</string>
+    <string name="export_save_file">फ़ाइल में सहेजें</string>
+    <string name="action_share">शेयर करें</string>
 </resources>

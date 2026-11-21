@@ -1665,4 +1665,6 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="rule_triggers">Auslöser</string>
     <string name="rule_actions">Aktionen</string>
     <string name="rule_tap_to_change">Zum Auswählen tippen</string>
+    <string name="export_save_file">Als Datei speichern</string>
+    <string name="action_share">Teilen</string>
 </resources>

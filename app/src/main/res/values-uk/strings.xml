@@ -1710,4 +1710,6 @@
     <string name="rule_triggers">Тригери</string>
     <string name="rule_actions">Дії</string>
     <string name="rule_tap_to_change">Торкніться, щоб вибрати</string>
+    <string name="export_save_file">Зберегти у файл</string>
+    <string name="action_share">Поділитися</string>
 </resources>

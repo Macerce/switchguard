@@ -1739,4 +1739,6 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="rule_triggers">Wyzwalacze</string>
     <string name="rule_actions">Akcje</string>
     <string name="rule_tap_to_change">Dotknij, aby wybrać</string>
+    <string name="export_save_file">Zapisz do pliku</string>
+    <string name="action_share">Udostępnij</string>
 </resources>

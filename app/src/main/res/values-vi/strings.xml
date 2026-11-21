@@ -1602,4 +1602,6 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="rule_triggers">Kích hoạt</string>
     <string name="rule_actions">Hành động</string>
     <string name="rule_tap_to_change">Chạm để chọn</string>
+    <string name="export_save_file">Lưu vào tệp</string>
+    <string name="action_share">Chia sẻ</string>
 </resources>

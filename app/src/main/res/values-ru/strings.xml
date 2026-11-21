@@ -1739,4 +1739,6 @@
     <string name="rule_triggers">Триггеры</string>
     <string name="rule_actions">Действия</string>
     <string name="rule_tap_to_change">Нажмите, чтобы выбрать</string>
+    <string name="export_save_file">Сохранить в файл</string>
+    <string name="action_share">Поделиться</string>
 </resources>

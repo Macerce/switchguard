@@ -1631,4 +1631,6 @@
     <string name="rule_triggers">트리거</string>
     <string name="rule_actions">동작</string>
     <string name="rule_tap_to_change">눌러서 선택</string>
+    <string name="export_save_file">파일로 저장</string>
+    <string name="action_share">공유</string>
 </resources>

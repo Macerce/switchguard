@@ -1674,4 +1674,6 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="rule_triggers">Attivatori</string>
     <string name="rule_actions">Azioni</string>
     <string name="rule_tap_to_change">Tocca per scegliere</string>
+    <string name="export_save_file">Salva su file</string>
+    <string name="action_share">Condividi</string>
 </resources>

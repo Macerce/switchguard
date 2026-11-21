@@ -1674,4 +1674,6 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="rule_triggers">Triggers</string>
     <string name="rule_actions">Actions</string>
     <string name="rule_tap_to_change">Tap to choose</string>
+    <string name="export_save_file">Save to file</string>
+    <string name="action_share">Share</string>
 </resources>

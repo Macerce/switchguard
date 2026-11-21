@@ -1670,4 +1670,6 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="rule_triggers">Tetikleyiciler</string>
     <string name="rule_actions">Eylemler</string>
     <string name="rule_tap_to_change">Seçmek için dokunun</string>
+    <string name="export_save_file">Dosyaya kaydet</string>
+    <string name="action_share">Paylaş</string>
 </resources>

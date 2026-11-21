@@ -1667,4 +1667,6 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="rule_triggers">Triggers</string>
     <string name="rule_actions">Acties</string>
     <string name="rule_tap_to_change">Tik om te kiezen</string>
+    <string name="export_save_file">Opslaan als bestand</string>
+    <string name="action_share">Delen</string>
 </resources>

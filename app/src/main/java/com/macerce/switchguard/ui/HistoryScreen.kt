@@ -1,5 +1,23 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.Description
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.core.content.FileProvider
+import android.content.Intent
+import com.macerce.switchguard.ui.theme.Brand
+import com.macerce.switchguard.ui.theme.tileColor
+import androidx.compose.foundation.layout.width
 import com.macerce.switchguard.ui.theme.raisedOnTile
 import androidx.compose.foundation.shape.CircleShape
 import android.text.format.DateUtils
@@ -92,6 +110,9 @@ fun HistoryScreen(modifier: Modifier) {
     val version by store.version.collectAsStateWithLifecycle()
 
     var filter by rememberSaveable { mutableStateOf<String?>(null) }
+    // Videodaki tür çipleri: Tümü / Alarm / Çevrimdışı / Otomasyon (cihaz filtresi ayrı açılır menüde).
+    var type by rememberSaveable { mutableStateOf(HistoryType.ALL) }
+    var deviceMenu by remember { mutableStateOf(false) }
     var confirmClear by remember { mutableStateOf(false) }
     var chooseRange by remember { mutableStateOf(false) }
     var exportRange by rememberSaveable { mutableStateOf(HistoryRange.ALL) }
@@ -110,7 +131,7 @@ fun HistoryScreen(modifier: Modifier) {
         }
     }
     val devices = remember(version) { store.snapshots }
-    val events = remember(logVersion, filter) { log.recent(filter) }
+    val events = remember(logVersion, filter, type) { log.recent(filter).filter(type::matches) }
 
     Column(modifier.fillMaxSize()) {
         AppTopBar(
@@ -128,12 +149,31 @@ fun HistoryScreen(modifier: Modifier) {
             },
         )
         Row(
-            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp),
+            Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 4.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            FilterChip(selected = filter == null, onClick = { filter = null }, label = { Text(stringResource(R.string.filter_all)) })
-            devices.forEach { d ->
-                FilterChip(selected = filter == d.id, onClick = { filter = d.id }, label = { Text(d.name) })
+            HistoryType.entries.forEach { t ->
+                ChoicePill(
+                    stringResource(t.label),
+                    selected = type == t,
+                    onClick = { type = t },
+                    accent = if (t == HistoryType.ALARM) Brand.alarm else MaterialTheme.colorScheme.primary,
+                )
+            }
+            // Cihaz filtresi: açılır menü
+            Box {
+                ChoicePill(
+                    devices.firstOrNull { it.id == filter }?.name ?: stringResource(R.string.automation_device),
+                    selected = filter != null,
+                    onClick = { deviceMenu = true },
+                    icon = Icons.Rounded.ArrowDropDown,
+                )
+                DropdownMenu(expanded = deviceMenu, onDismissRequest = { deviceMenu = false }) {
+                    DropdownMenuItem(text = { Text(stringResource(R.string.filter_all)) }, onClick = { filter = null; deviceMenu = false })
+                    devices.forEach { d ->
+                        DropdownMenuItem(text = { Text(d.name) }, onClick = { filter = d.id; deviceMenu = false })
+                    }
+                }
             }
         }
 
@@ -148,13 +188,19 @@ fun HistoryScreen(modifier: Modifier) {
             LazyColumn(contentPadding = PaddingValues(bottom = 24.dp)) {
                 grouped.forEach { (_, dayEvents) ->
                     item(key = "h" + dayEvents.first().id) {
-                        SectionTitle(dayLabel(dayEvents.first().time))
+                        // Videodaki turkuaz, küçük tarih başlığı.
+                        Text(
+                            dayLabel(dayEvents.first().time),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 18.dp, bottom = 8.dp),
+                        )
                     }
                     item(key = "c" + dayEvents.first().id) {
                         SectionCard {
                             dayEvents.forEachIndexed { i, e ->
                                 if (i > 0) RowDivider(70.dp)
-                                EventRow(e, showDevice = false)
+                                EventRow(e, showDevice = filter == null)
                             }
                         }
                     }
@@ -164,17 +210,69 @@ fun HistoryScreen(modifier: Modifier) {
     }
 
     if (chooseRange) {
-        ChoiceDialog(
-            stringResource(R.string.export_title),
-            stringResource(if (filter == null) R.string.export_desc_all else R.string.export_desc_device),
-            HistoryRange.entries, exportRange, { rangeLabel(it) },
-            onPick = { range ->
-                exportRange = range
-                runCatching { exporter.launch(HistoryExport.fileName(context)) }
-                    .onFailure { Toast.makeText(context, resources.getString(R.string.export_failed), Toast.LENGTH_LONG).show() }
-            },
-            onDismiss = { chooseRange = false },
-        )
+        val fileName = remember { HistoryExport.fileName(context) }
+        ModalBottomSheet(
+            onDismissRequest = { chooseRange = false },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        ) {
+            Column(Modifier.padding(horizontal = 20.dp).padding(bottom = 28.dp)) {
+                Text(stringResource(R.string.export_title), style = MaterialTheme.typography.titleLarge)
+                Text(
+                    stringResource(if (filter == null) R.string.export_desc_all else R.string.export_desc_device),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
+                )
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    HistoryRange.entries.forEach { r -> ChoicePill(rangeLabel(r), exportRange == r, { exportRange = r }) }
+                }
+                Row(
+                    Modifier.fillMaxWidth().padding(top = 14.dp).clip(RoundedCornerShape(16.dp)).background(tileColor())
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.Description, null, tint = MaterialTheme.colorScheme.primary)
+                    Spacer(Modifier.width(12.dp))
+                    Text(fileName, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                }
+                Row(Modifier.fillMaxWidth().padding(top = 16.dp), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    PillButton(
+                        stringResource(R.string.export_save_file),
+                        onClick = {
+                            chooseRange = false
+                            runCatching { exporter.launch(fileName) }
+                                .onFailure { Toast.makeText(context, resources.getString(R.string.export_failed), Toast.LENGTH_LONG).show() }
+                        },
+                        icon = Icons.Rounded.FileDownload,
+                        modifier = Modifier.weight(1f),
+                    )
+                    PillButton(
+                        stringResource(R.string.action_share),
+                        onClick = {
+                            chooseRange = false
+                            val device = filter
+                            scope.launch {
+                                // Önbelleğe yazıp paylaşım penceresini aç (FileProvider; dosya yalnızca seçilen uygulamaya açılır).
+                                runCatching {
+                                    val dir = java.io.File(context.cacheDir, "exports").apply { mkdirs() }
+                                    val file = java.io.File(dir, fileName)
+                                    HistoryExport.write(context, android.net.Uri.fromFile(file), device, exportRange)
+                                    val uri = FileProvider.getUriForFile(context, context.packageName + ".files", file)
+                                    val send = Intent(Intent.ACTION_SEND).setType("text/csv")
+                                        .putExtra(Intent.EXTRA_STREAM, uri)
+                                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    context.startActivity(Intent.createChooser(send, null).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                }.onFailure { Toast.makeText(context, resources.getString(R.string.export_failed), Toast.LENGTH_LONG).show() }
+                            }
+                        },
+                        style = PillStyle.TONAL,
+                        icon = Icons.Rounded.Share,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
     }
 
     if (confirmClear) {
@@ -241,35 +339,37 @@ internal fun eventStrings(): EventStrings {
     return remember(context, configuration) { EventLog.strings(context) }
 }
 
-/** Geçmiş satırı: simge, metin, saat ve yapılan işlem rozeti. */
+/** Geçmiş satırı (videodaki gibi): sonucun renginde simge dairesi, metin + kaynak, sağda saat. */
 @Composable
 fun EventRow(e: LoggedEvent, showDevice: Boolean) {
     val action = runCatching { AlertAction.valueOf(e.action) }.getOrNull()
     val scheme = MaterialTheme.colorScheme
     // Simge zemini olayın sonucunu söyler: alarm kırmızı, bildirim turkuaz, diğerleri sade.
     val (bg, fg) = when (action) {
-        AlertAction.ALARM -> scheme.errorContainer to scheme.onErrorContainer
-        AlertAction.NOTIFY -> scheme.primaryContainer to scheme.onPrimaryContainer
+        AlertAction.ALARM -> Brand.alarm.copy(alpha = 0.18f) to Brand.alarm
+        AlertAction.NOTIFY -> scheme.primary.copy(alpha = 0.18f) to scheme.primary
         else -> raisedOnTile() to scheme.onSurfaceVariant
     }
     Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
         IconBadge(e.icon(), fg, bg, size = 40)
         Column(Modifier.weight(1f).padding(horizontal = 14.dp)) {
             Text(e.text(eventStrings()), style = MaterialTheme.typography.bodyLarge)
-            val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(e.time))
             val sub = when (e.kind) {
                 EventKind.USER -> stringResource(R.string.event_by_user)
                 EventKind.SHORT_DROP -> stringResource(R.string.event_short_drop_sub)
                 EventKind.AUTOMATION -> stringResource(R.string.event_by_automation)
                 else -> null
             }
-            Text(
-                listOfNotNull(time, sub, if (showDevice) e.deviceName else null).joinToString(" · "),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            val line = listOfNotNull(if (showDevice) e.deviceName.ifEmpty { null } else null, sub).joinToString(" · ")
+            if (line.isNotEmpty()) {
+                Text(line, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
-        ActionBadge(e.action)
+        Text(
+            DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(e.time)),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -288,5 +388,20 @@ private fun ActionBadge(action: String) {
             color = fg,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
         )
+    }
+}
+
+/** Geçmiş tür filtresi (videodaki çipler). */
+private enum class HistoryType(val label: Int) {
+    ALL(R.string.filter_all),
+    ALARM(R.string.action_alarm),
+    OFFLINE(R.string.label_offline_title),
+    AUTOMATION(R.string.tab_automations);
+
+    fun matches(e: LoggedEvent): Boolean = when (this) {
+        ALL -> true
+        ALARM -> e.action == AlertAction.ALARM.name
+        OFFLINE -> e.kind == EventType.WENT_OFFLINE.name || e.kind == EventType.CAME_ONLINE.name || e.kind == EventKind.SHORT_DROP
+        AUTOMATION -> e.kind == EventKind.AUTOMATION
     }
 }

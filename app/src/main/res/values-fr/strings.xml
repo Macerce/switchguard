@@ -1702,4 +1702,6 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="rule_triggers">Déclencheurs</string>
     <string name="rule_actions">Actions</string>
     <string name="rule_tap_to_change">Touchez pour choisir</string>
+    <string name="export_save_file">Enregistrer</string>
+    <string name="action_share">Partager</string>
 </resources>

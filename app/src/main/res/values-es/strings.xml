@@ -1673,4 +1673,6 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="rule_triggers">Disparadores</string>
     <string name="rule_actions">Acciones</string>
     <string name="rule_tap_to_change">Toca para elegir</string>
+    <string name="export_save_file">Guardar en archivo</string>
+    <string name="action_share">Compartir</string>
 </resources>
