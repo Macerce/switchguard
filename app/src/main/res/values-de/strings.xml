@@ -883,7 +883,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="smart_tg_commands">Befehle und Schaltfläche „Verstanden“</string>
     <string name="smart_tg_commands_desc">Personen aus deiner Liste können /status senden und einen läutenden Alarm übernehmen. Die Alarmnachricht erhält eine Schaltfläche „Verstanden“: Ein Druck darauf schaltet das Handy stumm.</string>
     <string name="smart_tg_control">Ein- und Ausschalten von Geräten erlauben</string>
-    <string name="smart_tg_control_desc">Befehle /on und /off. Nur Personen aus deiner Liste können sie nutzen.</string>
+    <string name="smart_tg_control_desc">Befehle /on und /off. Im privaten Chat können die Personen aus deiner Liste sie nutzen, in einer Gruppe nur die Personen, die du auswählst.</string>
     <string name="smart_tg_forward">Intelligente Warnungen an Telegram senden</string>
     <string name="smart_tg_forward_desc">Stromausfälle, ungewöhnlicher Verbrauch, die Budgetwarnung und der Wochenbericht werden auch in Telegram geschrieben.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1652,11 +1652,17 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="export_save_file">Als Datei speichern</string>
     <string name="action_share">Teilen</string>
     <string name="location_outside">Draußen</string>
-    <string name="location_private">Ihr Standort wird nur auf diesem Telefon gespeichert</string>
+    <string name="location_private">Dein Standort wird nur auf diesem Telefon gespeichert</string>
     <string name="tuya_live_title">Tuya-Live-Updates auf diesem Gerät</string>
     <string name="tuya_live_desc">Werden dieselben Tuya-Schlüssel auf mehreren Geräten genutzt, gehen Live-Nachrichten nur an eines davon. Ausgeschaltet fragt dieses Gerät Tuya alle 5 Minuten ab.</string>
     <string name="tuya_standby_detail">Tuya-Live-Nachrichten gehen an ein anderes Gerät; Abfrage alle 5 Minuten</string>
     <string name="tuya_live_off_detail">Tuya-Live-Updates sind auf diesem Gerät aus; Abfrage alle 5 Minuten</string>
-    <string name="tuya_standby_notice">Tuya-Live-Nachrichten gehen an ein anderes Gerät mit denselben Tuya-Schlüsseln. Dieses Gerät fragt Tuya alle 5 Minuten ab. Welches Gerät Live-Updates erhält, wählen Sie unter Einstellungen → Überwachung.</string>
-    <string name="transfer_tuya_note">Hinweis: Tuya-Live-Nachrichten gehen nur an ein Gerät. Welches, wählen Sie unter Einstellungen → Überwachung → Tuya-Live-Updates; das andere fragt alle 5 Minuten ab.</string>
+    <string name="tuya_standby_notice">Tuya-Live-Nachrichten gehen an ein anderes Gerät mit denselben Tuya-Schlüsseln. Dieses Gerät fragt Tuya alle 5 Minuten ab. Welches Gerät Live-Updates erhält, wählst du unter Einstellungen → Überwachung.</string>
+    <string name="transfer_tuya_note">Hinweis: Tuya-Live-Nachrichten gehen nur an ein Gerät. Welches, wählst du unter Einstellungen → Überwachung → Tuya-Live-Updates; das andere fragt alle 5 Minuten ab.</string>
+    <string name="tg_group_control_title">Wer in Gruppen steuern darf</string>
+    <string name="tg_group_control_nobody">Niemand: Gruppen erhalten nur Meldungen und Status</string>
+    <string name="tg_group_control_count">Personen mit Steuerrecht: %d</string>
+    <string name="tg_group_control_on">Geräte aus dieser Gruppe ein- und ausschalten</string>
+    <string name="tg_group_control_hint">Nur die hier angehakten Personen können in dieser Gruppe Ein/Aus-Befehle geben. Wer fehlt, erscheint, sobald er in der Gruppe eine Nachricht schreibt.</string>
+    <string name="tg_control_not_allowed">Du darfst aus diesem Chat keine Geräte ein- oder ausschalten.</string>
 </resources>

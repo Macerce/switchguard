@@ -58,6 +58,7 @@ object Backup {
         "historySeen" to "geçmişte okunmamış sayacı",
         "transferReceived" to "Wi-Fi aktarımı işareti (bu cihaza özel)",
         "transferSource" to "aktarımın geldiği cihaz (bu cihaza özel)",
+        "tgSenders" to "Telegram gruplarında son yazanlar: yalnızca seçim listesi, yeni cihazda yeniden toplanır",
     )
 
     /** İçerik biçiminin etiketi; Windows sürümünün yedeği aynı zarfı kullanır ama içeriği farklıdır. */

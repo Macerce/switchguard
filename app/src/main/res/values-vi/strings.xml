@@ -836,7 +836,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="smart_tg_commands">Lệnh và nút “Đã nhận”</string>
     <string name="smart_tg_commands_desc">Những người trong danh sách của bạn có thể gửi /status và nhận xử lý báo động đang kêu. Tin nhắn báo động có nút “Đã nhận”: nhấn vào sẽ tắt tiếng điện thoại.</string>
     <string name="smart_tg_control">Cho phép bật và tắt thiết bị</string>
-    <string name="smart_tg_control_desc">Lệnh /on và /off. Chỉ những người trong danh sách của bạn mới dùng được.</string>
+    <string name="smart_tg_control_desc">Lệnh /on và /off. Trong trò chuyện riêng, những người trong danh sách có thể dùng; trong nhóm, chỉ những người bạn chọn.</string>
     <string name="smart_tg_forward">Gửi cảnh báo thông minh đến Telegram</string>
     <string name="smart_tg_forward_desc">Mất điện, tiêu thụ bất thường, cảnh báo ngân sách và báo cáo hằng tuần cũng được ghi vào Telegram.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1596,4 +1596,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="tuya_live_off_detail">Cập nhật Tuya tức thì đang tắt trên thiết bị này; kiểm tra mỗi 5 phút</string>
     <string name="tuya_standby_notice">Tin nhắn tức thì của Tuya đang đến một thiết bị khác dùng cùng khóa Tuya. Thiết bị này sẽ kiểm tra Tuya mỗi 5 phút. Chọn thiết bị nhận cập nhật tức thì trong Cài đặt → Giám sát.</string>
     <string name="transfer_tuya_note">Lưu ý: tin nhắn tức thì của Tuya chỉ đến một thiết bị. Chọn thiết bị trong Cài đặt → Giám sát → Cập nhật Tuya tức thì; thiết bị kia kiểm tra mỗi 5 phút.</string>
+    <string name="tg_group_control_title">Ai được điều khiển trong nhóm</string>
+    <string name="tg_group_control_nobody">Không ai: nhóm chỉ nhận cảnh báo và trạng thái</string>
+    <string name="tg_group_control_count">Số người được điều khiển: %d</string>
+    <string name="tg_group_control_on">Bật và tắt thiết bị từ nhóm này</string>
+    <string name="tg_group_control_hint">Chỉ những người được đánh dấu ở đây mới gửi được lệnh bật/tắt trong nhóm này. Người chưa có trong danh sách sẽ xuất hiện sau khi họ nhắn tin trong nhóm.</string>
+    <string name="tg_control_not_allowed">Bạn không có quyền bật hoặc tắt thiết bị từ cuộc trò chuyện này.</string>
 </resources>

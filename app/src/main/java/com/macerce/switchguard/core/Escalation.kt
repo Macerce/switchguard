@@ -10,7 +10,16 @@ enum class CallMode { NONE, PHONE }
  * Telegram'da haber verilecek kişi ya da grup. Gruplarda [id] eksi sayıdır.
  * [call]/[callTo]: kritik alarmda telefonla arama ve numara.
  */
-data class Recipient(val id: Long, val name: String, val call: CallMode = CallMode.NONE, val callTo: String = "") {
+data class Recipient(
+    val id: Long,
+    val name: String,
+    val call: CallMode = CallMode.NONE,
+    val callTo: String = "",
+    /** Bu sohbetten aç/kapa: null = varsayılan (özel sohbette açık, grupta kapalı). Bkz. [TelegramAuth]. */
+    val control: Boolean? = null,
+    /** Grupta aç/kapa yapabilecek kişilerin Telegram kullanıcı kimlikleri. */
+    val controllers: Set<Long> = emptySet(),
+) {
     /** Arama ayarlı ve hedefi geçerli. */
     val calls get() = call != CallMode.NONE && Escalation.isCallTarget(call, callTo)
 
@@ -18,6 +27,8 @@ data class Recipient(val id: Long, val name: String, val call: CallMode = CallMo
         fun listToJson(list: List<Recipient>): String = JSONArray(list.map {
             JSONObject().put("id", it.id).put("name", it.name).apply {
                 if (it.call != CallMode.NONE) put("call", it.call.name).put("callTo", it.callTo)
+                it.control?.let { c -> put("control", c) }
+                if (it.controllers.isNotEmpty()) put("controllers", JSONArray(it.controllers.sorted()))
             }
         }).toString()
 
@@ -28,7 +39,11 @@ data class Recipient(val id: Long, val name: String, val call: CallMode = CallMo
                 (0 until a.length()).map {
                     a.getJSONObject(it).let { o ->
                         val call = runCatching { CallMode.valueOf(o.optString("call")) }.getOrDefault(CallMode.NONE)
-                        Recipient(o.getLong("id"), o.optString("name"), call, if (call == CallMode.NONE) "" else o.optString("callTo"))
+                        Recipient(
+                            o.getLong("id"), o.optString("name"), call, if (call == CallMode.NONE) "" else o.optString("callTo"),
+                            control = if (o.has("control")) o.optBoolean("control") else null,
+                            controllers = o.optJSONArray("controllers")?.let { a -> (0 until a.length()).map { a.getLong(it) }.toSet() }.orEmpty(),
+                        )
                     }
                 }
             }.getOrDefault(emptyList())

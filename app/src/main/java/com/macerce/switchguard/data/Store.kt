@@ -282,6 +282,22 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var telegramToken: String
         get() = secret("tgToken")
         set(v) = putSecret("tgToken", v.trim())
+    /** Telegram gruplarında son yazan kişiler (sohbet → [kimlik, ad]); yalnızca "kim kontrol edebilir" seçimi için. */
+    var telegramSenders: Map<Long, List<Pair<Long, String>>>
+        get() = runCatching {
+            val o = org.json.JSONObject(prefs.getString("tgSenders", null) ?: "{}")
+            o.keys().asSequence().associate { chat ->
+                val a = o.getJSONArray(chat)
+                chat.toLong() to (0 until a.length()).map { i -> a.getJSONObject(i).let { it.getLong("id") to it.optString("name") } }
+            }
+        }.getOrDefault(emptyMap())
+        set(v) = put {
+            val o = org.json.JSONObject()
+            v.forEach { (chat, list) ->
+                o.put(chat.toString(), org.json.JSONArray(list.map { (id, name) -> org.json.JSONObject().put("id", id).put("name", name) }))
+            }
+            putString("tgSenders", o.toString())
+        }
     var telegramRecipients: List<com.macerce.switchguard.core.Recipient>
         get() = parsed.get("tgChats", prefs.getString("tgChats", null)) { com.macerce.switchguard.core.Recipient.listFromJson(it) }
         set(v) = put { putString("tgChats", com.macerce.switchguard.core.Recipient.listToJson(v)) }

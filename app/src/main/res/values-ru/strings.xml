@@ -937,7 +937,7 @@
     <string name="smart_tg_commands">Команды и кнопка «Понял»</string>
     <string name="smart_tg_commands_desc">Люди из вашего списка могут отправлять /status и брать на себя звучащую тревогу. В сообщении о тревоге появляется кнопка «Понял»: её нажатие заглушает телефон.</string>
     <string name="smart_tg_control">Разрешить включать и выключать устройства</string>
-    <string name="smart_tg_control_desc">Команды /on и /off. Ими могут пользоваться только люди из вашего списка.</string>
+    <string name="smart_tg_control_desc">Команды /on и /off. В личном чате ими могут пользоваться люди из вашего списка, в группе — только выбранные вами.</string>
     <string name="smart_tg_forward">Отправлять умные оповещения в Telegram</string>
     <string name="smart_tg_forward_desc">Отключения электричества, необычное потребление, оповещение о бюджете и недельный отчёт также отправляются в Telegram.</string>
     <string name="smart_wd">Сторож</string>
@@ -1733,4 +1733,10 @@
     <string name="tuya_live_off_detail">Мгновенные обновления Tuya выключены на этом устройстве; опрос каждые 5 минут</string>
     <string name="tuya_standby_notice">Мгновенные сообщения Tuya приходят на другое устройство с теми же ключами. Это устройство будет опрашивать Tuya каждые 5 минут. Выберите, какое устройство получает обновления, в Настройки → Мониторинг.</string>
     <string name="transfer_tuya_note">Примечание: мгновенные сообщения Tuya приходят только на одно устройство. Выберите какое в Настройки → Мониторинг → Мгновенные обновления Tuya; другое опрашивает каждые 5 минут.</string>
+    <string name="tg_group_control_title">Кто может управлять в группах</string>
+    <string name="tg_group_control_nobody">Никто: группы получают только оповещения и статус</string>
+    <string name="tg_group_control_count">Могут управлять: %d</string>
+    <string name="tg_group_control_on">Включать и выключать устройства из этой группы</string>
+    <string name="tg_group_control_hint">Только отмеченные здесь люди могут давать в этой группе команды вкл/выкл. Человек не из списка появится, когда напишет сообщение в группе.</string>
+    <string name="tg_control_not_allowed">У вас нет разрешения включать и выключать устройства из этого чата.</string>
 </resources>

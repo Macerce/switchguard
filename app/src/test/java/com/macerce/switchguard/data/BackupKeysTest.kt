@@ -19,8 +19,9 @@ class BackupKeysTest {
     private fun storeKeys(): Set<String> {
         val src = listOf("src/main/java/com/macerce/switchguard/data/Store.kt", "app/src/main/java/com/macerce/switchguard/data/Store.kt")
             .map(::File).first { it.exists() }.readText()
-        val accessor = "getString|getBoolean|getInt|getLong|getFloat|getStringSet|putString|putBoolean|putInt|putLong|putFloat|putStringSet|putSecret|remove|contains|str|secret"
-        return Regex("""\b(?:$accessor)\("([A-Za-z0-9_]+)"""").findAll(src).map { it.groupValues[1] }.toSet() - "switchguard"
+        // Okumalar yalnızca prefs üzerinden sayılır (JSONObject.getLong("id") gibi JSON okumaları anahtar değildir).
+        val accessor = """prefs\.(?:getString|getBoolean|getInt|getLong|getFloat|getStringSet|contains)|putString|putBoolean|putInt|putLong|putFloat|putStringSet|putSecret|remove|str|secret"""
+        return Regex("""(?<![\w.])(?:$accessor)\("([A-Za-z0-9_]+)"""").findAll(src).map { it.groupValues[1] }.toSet() - "switchguard"
     }
 
     @Test

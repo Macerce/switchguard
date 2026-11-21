@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.material.icons.rounded.Home
@@ -1008,6 +1009,14 @@ private fun SmartPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
                 Divider()
                 InfoRow(Icons.Rounded.PowerSettingsNew, stringResource(R.string.smart_tg_control), stringResource(R.string.smart_tg_control_desc)) {
                     Switch(checked = s.telegramControl, onCheckedChange = { store.telegramControl = it })
+                }
+                // Gruplarda aç/kapa: varsayılan kapalı, açılırsa yalnızca seçilen kişiler.
+                if (s.telegramControl && s.telegramRecipients.any { com.macerce.switchguard.core.TelegramAuth.isGroup(it.id) }) {
+                    Divider()
+                    InfoRow(
+                        Icons.Rounded.Groups, stringResource(R.string.tg_group_control_title), groupControlSummary(s),
+                        Modifier.clickable { showDialog { GroupControlDialog(store, close) } },
+                    )
                 }
             }
             Divider()

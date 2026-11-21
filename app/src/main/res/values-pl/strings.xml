@@ -937,7 +937,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="smart_tg_commands">Polecenia i przycisk „Rozumiem”</string>
     <string name="smart_tg_commands_desc">Osoby z Twojej listy mogą wysłać /status i przejąć dzwoniący alarm. Wiadomość o alarmie ma przycisk „Rozumiem”: jego naciśnięcie wycisza telefon.</string>
     <string name="smart_tg_control">Zezwól na włączanie i wyłączanie urządzeń</string>
-    <string name="smart_tg_control_desc">Polecenia /on i /off. Mogą ich używać tylko osoby z Twojej listy.</string>
+    <string name="smart_tg_control_desc">Polecenia /on i /off. W czacie prywatnym mogą ich używać osoby z listy, w grupie tylko wybrane osoby.</string>
     <string name="smart_tg_forward">Wysyłaj inteligentne alerty na Telegram</string>
     <string name="smart_tg_forward_desc">Awarie zasilania, nietypowe zużycie, alert budżetowy i raport tygodniowy są też zapisywane na Telegramie.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1733,4 +1733,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tuya_live_off_detail">Aktualizacje Tuya na żywo są wyłączone na tym urządzeniu; sprawdzanie co 5 minut</string>
     <string name="tuya_standby_notice">Wiadomości Tuya na żywo trafiają do innego urządzenia z tymi samymi kluczami. To urządzenie będzie sprawdzać Tuya co 5 minut. Wybierz, które urządzenie ma je otrzymywać, w Ustawienia → Monitorowanie.</string>
     <string name="transfer_tuya_note">Uwaga: wiadomości Tuya na żywo trafiają tylko do jednego urządzenia. Wybierz które w Ustawienia → Monitorowanie → Aktualizacje Tuya na żywo; drugie sprawdza co 5 minut.</string>
+    <string name="tg_group_control_title">Kto może sterować w grupach</string>
+    <string name="tg_group_control_nobody">Nikt: grupy dostają tylko alerty i stan</string>
+    <string name="tg_group_control_count">Osoby mogące sterować: %d</string>
+    <string name="tg_group_control_on">Włączanie i wyłączanie urządzeń z tej grupy</string>
+    <string name="tg_group_control_hint">Tylko zaznaczone tu osoby mogą wydawać w tej grupie polecenia włącz/wyłącz. Osoba spoza listy pojawi się po napisaniu wiadomości w grupie.</string>
+    <string name="tg_control_not_allowed">Nie masz uprawnień do włączania i wyłączania urządzeń z tego czatu.</string>
 </resources>

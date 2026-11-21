@@ -814,7 +814,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="smart_tg_commands">Perintah dan tombol “Siap”</string>
     <string name="smart_tg_commands_desc">Orang dalam daftar Anda dapat mengirim /status dan mengambil alih alarm yang berbunyi. Pesan alarm mendapat tombol “Siap”: menekannya membisukan ponsel.</string>
     <string name="smart_tg_control">Izinkan menyalakan dan mematikan perangkat</string>
-    <string name="smart_tg_control_desc">Perintah /on dan /off. Hanya orang dalam daftar Anda yang dapat memakainya.</string>
+    <string name="smart_tg_control_desc">Perintah /on dan /off. Di obrolan pribadi, orang di daftar Anda dapat memakainya; di grup, hanya orang yang Anda pilih.</string>
     <string name="smart_tg_forward">Kirim peringatan pintar ke Telegram</string>
     <string name="smart_tg_forward_desc">Pemadaman listrik, konsumsi tidak wajar, peringatan anggaran, dan laporan mingguan juga ditulis ke Telegram.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1554,4 +1554,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="tuya_live_off_detail">Pembaruan langsung Tuya nonaktif di perangkat ini; diperiksa setiap 5 menit</string>
     <string name="tuya_standby_notice">Pesan langsung Tuya dikirim ke perangkat lain yang memakai kunci Tuya yang sama. Perangkat ini akan memeriksa Tuya setiap 5 menit. Pilih perangkat penerima pembaruan langsung di Pengaturan → Pemantauan.</string>
     <string name="transfer_tuya_note">Catatan: pesan langsung Tuya hanya dikirim ke satu perangkat. Pilih yang mana di Pengaturan → Pemantauan → Pembaruan langsung Tuya; yang lain memeriksa setiap 5 menit.</string>
+    <string name="tg_group_control_title">Siapa yang bisa mengontrol di grup</string>
+    <string name="tg_group_control_nobody">Tidak ada: grup hanya menerima peringatan dan status</string>
+    <string name="tg_group_control_count">Orang yang bisa mengontrol: %d</string>
+    <string name="tg_group_control_on">Nyalakan dan matikan perangkat dari grup ini</string>
+    <string name="tg_group_control_hint">Hanya orang yang dicentang di sini yang dapat memberi perintah nyala/mati di grup ini. Orang yang tidak ada di daftar muncul setelah menulis pesan di grup.</string>
+    <string name="tg_control_not_allowed">Anda tidak diizinkan menyalakan atau mematikan perangkat dari obrolan ini.</string>
 </resources>

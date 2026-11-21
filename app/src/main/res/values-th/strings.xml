@@ -836,7 +836,7 @@
     <string name="smart_tg_commands">คำสั่งและปุ่ม “รับทราบ”</string>
     <string name="smart_tg_commands_desc">คนในรายชื่อของคุณส่ง /status และรับช่วงสัญญาณเตือนที่กำลังดังได้ ข้อความสัญญาณเตือนจะมีปุ่ม “รับทราบ” กดแล้วโทรศัพท์จะเงียบ</string>
     <string name="smart_tg_control">อนุญาตให้เปิดและปิดอุปกรณ์</string>
-    <string name="smart_tg_control_desc">คำสั่ง /on และ /off เฉพาะคนในรายชื่อของคุณเท่านั้นที่ใช้ได้</string>
+    <string name="smart_tg_control_desc">คำสั่ง /on และ /off ในแชทส่วนตัว คนในรายชื่อของคุณใช้ได้ ในกลุ่มใช้ได้เฉพาะคนที่คุณเลือก</string>
     <string name="smart_tg_forward">ส่งการแจ้งเตือนอัจฉริยะไปยัง Telegram</string>
     <string name="smart_tg_forward_desc">ไฟดับ การใช้ไฟผิดปกติ การแจ้งเตือนงบประมาณ และรายงานประจำสัปดาห์จะถูกเขียนลง Telegram ด้วย</string>
     <string name="smart_wd">Watchdog</string>
@@ -1596,4 +1596,10 @@
     <string name="tuya_live_off_detail">ปิดอัปเดต Tuya แบบทันทีบนอุปกรณ์นี้ กำลังตรวจสอบทุก 5 นาที</string>
     <string name="tuya_standby_notice">ข้อความ Tuya แบบทันทีไปที่อุปกรณ์อื่นที่ใช้คีย์ Tuya ชุดเดียวกัน อุปกรณ์นี้จะตรวจสอบ Tuya ทุก 5 นาที เลือกอุปกรณ์ที่รับอัปเดตแบบทันทีได้ที่ การตั้งค่า → การตรวจสอบ</string>
     <string name="transfer_tuya_note">หมายเหตุ: ข้อความ Tuya แบบทันทีไปถึงอุปกรณ์เพียงเครื่องเดียว เลือกเครื่องได้ที่ การตั้งค่า → การตรวจสอบ → อัปเดต Tuya แบบทันที อีกเครื่องจะตรวจสอบทุก 5 นาที</string>
+    <string name="tg_group_control_title">ใครควบคุมได้ในกลุ่ม</string>
+    <string name="tg_group_control_nobody">ไม่มีใคร: กลุ่มได้รับเฉพาะการแจ้งเตือนและสถานะ</string>
+    <string name="tg_group_control_count">จำนวนคนที่ควบคุมได้: %d</string>
+    <string name="tg_group_control_on">เปิดและปิดอุปกรณ์จากกลุ่มนี้</string>
+    <string name="tg_group_control_hint">เฉพาะคนที่ติ๊กไว้ที่นี่เท่านั้นที่สั่งเปิด/ปิดในกลุ่มนี้ได้ คนที่ไม่อยู่ในรายชื่อจะปรากฏหลังจากส่งข้อความในกลุ่ม</string>
+    <string name="tg_control_not_allowed">คุณไม่ได้รับอนุญาตให้เปิดหรือปิดอุปกรณ์จากแชทนี้</string>
 </resources>

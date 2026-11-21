@@ -887,7 +887,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="smart_tg_commands">Comandos y botón “Recibido”</string>
     <string name="smart_tg_commands_desc">Las personas de tu lista pueden enviar /status y hacerse cargo de una alarma que suena. El mensaje de alarma incluye un botón “Recibido”: al pulsarlo se silencia el teléfono.</string>
     <string name="smart_tg_control">Permitir encender y apagar dispositivos</string>
-    <string name="smart_tg_control_desc">Comandos /on y /off. Solo pueden usarlos las personas de tu lista.</string>
+    <string name="smart_tg_control_desc">Comandos /on y /off. En un chat privado los pueden usar las personas de tu lista; en un grupo, solo las que elijas.</string>
     <string name="smart_tg_forward">Enviar las alertas inteligentes a Telegram</string>
     <string name="smart_tg_forward_desc">Los cortes de luz, el consumo inusual, el aviso de presupuesto y el informe semanal también se escriben en Telegram.</string>
     <string name="smart_wd">Vigilante</string>
@@ -1667,4 +1667,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="tuya_live_off_detail">Las actualizaciones en vivo de Tuya están desactivadas en este dispositivo; se consulta cada 5 minutos</string>
     <string name="tuya_standby_notice">Los mensajes en vivo de Tuya van a otro dispositivo que usa las mismas claves. Este dispositivo consultará Tuya cada 5 minutos. Elige qué dispositivo recibe las actualizaciones en Ajustes → Monitoreo.</string>
     <string name="transfer_tuya_note">Nota: los mensajes en vivo de Tuya llegan a un solo dispositivo. Elige cuál en Ajustes → Monitoreo → Actualizaciones en vivo de Tuya; el otro consulta cada 5 minutos.</string>
+    <string name="tg_group_control_title">Quién puede controlar en grupos</string>
+    <string name="tg_group_control_nobody">Nadie: los grupos solo reciben avisos y estado</string>
+    <string name="tg_group_control_count">Personas que pueden controlar: %d</string>
+    <string name="tg_group_control_on">Encender y apagar dispositivos desde este grupo</string>
+    <string name="tg_group_control_hint">Solo las personas marcadas aquí pueden dar órdenes de encender/apagar en este grupo. Quien no aparezca se mostrará tras escribir un mensaje en el grupo.</string>
+    <string name="tg_control_not_allowed">No tienes permiso para encender o apagar dispositivos desde este chat.</string>
 </resources>

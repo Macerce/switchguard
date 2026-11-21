@@ -859,7 +859,7 @@
     <string name="smart_tg_commands">명령어 및 “확인했습니다” 버튼</string>
     <string name="smart_tg_commands_desc">목록에 있는 사람은 /status를 보내고 울리는 알람을 넘겨받을 수 있습니다. 알람 메시지에 “확인했습니다” 버튼이 추가되며, 누르면 휴대폰의 알람이 꺼집니다.</string>
     <string name="smart_tg_control">기기 켜기/끄기 허용</string>
-    <string name="smart_tg_control_desc">/on 및 /off 명령어입니다. 목록에 있는 사람만 사용할 수 있습니다.</string>
+    <string name="smart_tg_control_desc">/on, /off 명령. 개인 채팅에서는 목록의 사람이 쓸 수 있고, 그룹에서는 고른 사람만 쓸 수 있습니다.</string>
     <string name="smart_tg_forward">스마트 알림을 Telegram으로 보내기</string>
     <string name="smart_tg_forward_desc">정전, 평소와 다른 소비량, 예산 알림, 주간 보고서도 Telegram으로 전송됩니다.</string>
     <string name="smart_wd">워치독</string>
@@ -1625,4 +1625,10 @@
     <string name="tuya_live_off_detail">이 기기에서 Tuya 실시간 업데이트가 꺼져 있어 5분마다 확인 중</string>
     <string name="tuya_standby_notice">Tuya 실시간 메시지가 같은 Tuya 키를 쓰는 다른 기기로 가고 있습니다. 이 기기는 5분마다 Tuya를 확인합니다. 어느 기기가 실시간 업데이트를 받을지 설정 → 모니터링에서 고르세요.</string>
     <string name="transfer_tuya_note">참고: Tuya 실시간 메시지는 한 기기로만 갑니다. 설정 → 모니터링 → Tuya 실시간 업데이트에서 고르세요. 다른 기기는 5분마다 확인합니다.</string>
+    <string name="tg_group_control_title">그룹에서 제어할 수 있는 사람</string>
+    <string name="tg_group_control_nobody">없음: 그룹에는 알림과 상태만 전송</string>
+    <string name="tg_group_control_count">제어 가능한 사람: %d</string>
+    <string name="tg_group_control_on">이 그룹에서 기기 켜고 끄기</string>
+    <string name="tg_group_control_hint">이 그룹에서는 여기서 체크한 사람만 켜기/끄기 명령을 보낼 수 있습니다. 목록에 없는 사람은 그룹에 메시지를 쓰면 나타납니다.</string>
+    <string name="tg_control_not_allowed">이 채팅에서 기기를 켜거나 끌 권한이 없습니다.</string>
 </resources>

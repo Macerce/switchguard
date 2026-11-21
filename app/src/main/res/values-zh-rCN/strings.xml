@@ -836,7 +836,7 @@
     <string name="smart_tg_commands">命令和“收到”按钮</string>
     <string name="smart_tg_commands_desc">名单中的人可以发送 /status 并接手正在响铃的警报。警报消息带有“收到”按钮：按下后手机会静音。</string>
     <string name="smart_tg_control">允许开关设备</string>
-    <string name="smart_tg_control_desc">/on 和 /off 命令。仅名单中的人可以使用。</string>
+    <string name="smart_tg_control_desc">/on 和 /off 命令。私聊中列表里的人都能使用；群组中只有你选择的人能使用。</string>
     <string name="smart_tg_forward">将智能提醒发送到 Telegram</string>
     <string name="smart_tg_forward_desc">停电、异常用电、预算提醒和每周报告也会发送到 Telegram。</string>
     <string name="smart_wd">看门狗</string>
@@ -1603,4 +1603,10 @@
     <string name="tuya_live_off_detail">此设备已关闭 Tuya 实时更新；每 5 分钟查询一次</string>
     <string name="tuya_standby_notice">Tuya 实时消息正发往另一台使用相同 Tuya 密钥的设备。此设备将每 5 分钟查询一次 Tuya。可在 设置 → 监控 中选择由哪台设备接收实时更新。</string>
     <string name="transfer_tuya_note">注意：Tuya 实时消息只会发送到一台设备。可在 设置 → 监控 → Tuya 实时更新 中选择；另一台每 5 分钟查询一次。</string>
+    <string name="tg_group_control_title">群组中谁可以控制</string>
+    <string name="tg_group_control_nobody">无人：群组只接收提醒和状态</string>
+    <string name="tg_group_control_count">可控制的人数：%d</string>
+    <string name="tg_group_control_on">允许从此群组开关设备</string>
+    <string name="tg_group_control_hint">在此群组中，只有这里勾选的人可以发送开/关命令。未列出的人在群里发一条消息后就会出现在这里。</string>
+    <string name="tg_control_not_allowed">你无权从此聊天开关设备。</string>
 </resources>

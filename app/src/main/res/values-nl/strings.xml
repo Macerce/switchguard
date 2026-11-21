@@ -885,7 +885,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="smart_tg_commands">Commando\'s en knop “Begrepen”</string>
     <string name="smart_tg_commands_desc">Mensen in je lijst kunnen /status sturen en een afgaand alarm overnemen. Het alarmbericht krijgt een knop “Begrepen”: als je erop drukt, wordt de telefoon stil.</string>
     <string name="smart_tg_control">Aan- en uitzetten van apparaten toestaan</string>
-    <string name="smart_tg_control_desc">De commando\'s /on en /off. Alleen mensen in je lijst kunnen ze gebruiken.</string>
+    <string name="smart_tg_control_desc">Opdrachten /aan en /uit. In een privéchat kunnen de mensen uit je lijst ze gebruiken, in een groep alleen de mensen die je kiest.</string>
     <string name="smart_tg_forward">Slimme waarschuwingen naar Telegram sturen</string>
     <string name="smart_tg_forward_desc">Stroomstoringen, ongebruikelijk verbruik, de budgetwaarschuwing en het weekrapport worden ook naar Telegram geschreven.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1661,4 +1661,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tuya_live_off_detail">Live Tuya-updates staan uit op dit apparaat; controle elke 5 minuten</string>
     <string name="tuya_standby_notice">Live Tuya-berichten gaan naar een ander apparaat met dezelfde Tuya-sleutels. Dit apparaat controleert Tuya elke 5 minuten. Kies in Instellingen → Bewaking welk apparaat live updates krijgt.</string>
     <string name="transfer_tuya_note">Let op: live Tuya-berichten gaan naar maar één apparaat. Kies welk via Instellingen → Bewaking → Live Tuya-updates; het andere controleert elke 5 minuten.</string>
+    <string name="tg_group_control_title">Wie in groepen mag bedienen</string>
+    <string name="tg_group_control_nobody">Niemand: groepen krijgen alleen meldingen en status</string>
+    <string name="tg_group_control_count">Mensen die mogen bedienen: %d</string>
+    <string name="tg_group_control_on">Apparaten aan- en uitzetten vanuit deze groep</string>
+    <string name="tg_group_control_hint">Alleen de mensen die hier zijn aangevinkt kunnen in deze groep aan/uit-opdrachten geven. Wie ontbreekt, verschijnt nadat diegene een bericht in de groep heeft geschreven.</string>
+    <string name="tg_control_not_allowed">Je mag vanuit deze chat geen apparaten aan- of uitzetten.</string>
 </resources>

@@ -840,7 +840,7 @@
     <string name="smart_tg_commands">कमांड और “समझ गया” बटन</string>
     <string name="smart_tg_commands_desc">आपकी सूची के लोग /status भेज सकते हैं और बजता अलार्म संभाल सकते हैं। अलार्म संदेश में “समझ गया” बटन होता है: इसे दबाने से फ़ोन शांत हो जाता है।</string>
     <string name="smart_tg_control">डिवाइस चालू-बंद करने की अनुमति दें</string>
-    <string name="smart_tg_control_desc">/on और /off कमांड। इन्हें सिर्फ़ आपकी सूची के लोग इस्तेमाल कर सकते हैं।</string>
+    <string name="smart_tg_control_desc">/on और /off कमांड। निजी चैट में आपकी सूची के लोग इन्हें इस्तेमाल कर सकते हैं; ग्रुप में सिर्फ़ वे लोग जिन्हें आप चुनें।</string>
     <string name="smart_tg_forward">स्मार्ट अलर्ट Telegram पर भेजें</string>
     <string name="smart_tg_forward_desc">बिजली कटौती, असामान्य खपत, बजट अलर्ट और साप्ताहिक रिपोर्ट Telegram पर भी लिखी जाती हैं।</string>
     <string name="smart_wd">वॉचडॉग</string>
@@ -1590,4 +1590,10 @@
     <string name="tuya_live_off_detail">इस डिवाइस पर Tuya के लाइव अपडेट बंद हैं; हर 5 मिनट में जाँच हो रही है</string>
     <string name="tuya_standby_notice">Tuya के लाइव संदेश उन्हीं Tuya कुंजियों वाले दूसरे डिवाइस पर जा रहे हैं। यह डिवाइस हर 5 मिनट में Tuya जाँचेगा। लाइव अपडेट किसे मिलें, यह सेटिंग → निगरानी में चुनें।</string>
     <string name="transfer_tuya_note">ध्यान दें: Tuya के लाइव संदेश सिर्फ़ एक डिवाइस को मिलते हैं। कौन-सा, यह सेटिंग → निगरानी → Tuya लाइव अपडेट में चुनें; दूसरा हर 5 मिनट में जाँचता है।</string>
+    <string name="tg_group_control_title">ग्रुप में कौन कंट्रोल कर सकता है</string>
+    <string name="tg_group_control_nobody">कोई नहीं: ग्रुप को सिर्फ़ अलर्ट और स्थिति मिलती है</string>
+    <string name="tg_group_control_count">कंट्रोल कर सकने वाले लोग: %d</string>
+    <string name="tg_group_control_on">इस ग्रुप से डिवाइस चालू और बंद करें</string>
+    <string name="tg_group_control_hint">इस ग्रुप में सिर्फ़ यहाँ चुने गए लोग चालू/बंद कमांड दे सकते हैं। जो सूची में नहीं है, वह ग्रुप में संदेश लिखने के बाद यहाँ दिखेगा।</string>
+    <string name="tg_control_not_allowed">आपको इस चैट से डिवाइस चालू या बंद करने की अनुमति नहीं है।</string>
 </resources>

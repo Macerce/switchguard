@@ -914,7 +914,7 @@
     <string name="smart_tg_commands">Команди й кнопка «Зрозуміло»</string>
     <string name="smart_tg_commands_desc">Люди з вашого списку можуть надсилати /status і перебирати тривогу, що лунає. Повідомлення про тривогу отримує кнопку «Зрозуміло»: її натискання вимикає звук на телефоні.</string>
     <string name="smart_tg_control">Дозволити вмикати й вимикати пристрої</string>
-    <string name="smart_tg_control_desc">Команди /on і /off. Ними можуть користуватися лише люди з вашого списку.</string>
+    <string name="smart_tg_control_desc">Команди /on і /off. В особистому чаті ними можуть користуватися люди з вашого списку, у групі — лише вибрані вами.</string>
     <string name="smart_tg_forward">Надсилати розумні сповіщення в Telegram</string>
     <string name="smart_tg_forward_desc">Відключення електроенергії, незвичне споживання, сповіщення про бюджет і тижневий звіт також пишуться в Telegram.</string>
     <string name="smart_wd">Сторожовий таймер</string>
@@ -1704,4 +1704,10 @@
     <string name="tuya_live_off_detail">Миттєві оновлення Tuya вимкнено на цьому пристрої; опитування кожні 5 хвилин</string>
     <string name="tuya_standby_notice">Миттєві повідомлення Tuya надходять на інший пристрій із тими самими ключами. Цей пристрій опитуватиме Tuya кожні 5 хвилин. Виберіть, який пристрій отримує оновлення, у Налаштування → Моніторинг.</string>
     <string name="transfer_tuya_note">Примітка: миттєві повідомлення Tuya надходять лише на один пристрій. Виберіть який у Налаштування → Моніторинг → Миттєві оновлення Tuya; інший опитує кожні 5 хвилин.</string>
+    <string name="tg_group_control_title">Хто може керувати в групах</string>
+    <string name="tg_group_control_nobody">Ніхто: групи отримують лише сповіщення та стан</string>
+    <string name="tg_group_control_count">Можуть керувати: %d</string>
+    <string name="tg_group_control_on">Вмикати й вимикати пристрої з цієї групи</string>
+    <string name="tg_group_control_hint">Лише позначені тут люди можуть давати в цій групі команди увімк/вимк. Людина не зі списку з\'явиться, коли напише повідомлення в групі.</string>
+    <string name="tg_control_not_allowed">У вас немає дозволу вмикати й вимикати пристрої з цього чату.</string>
 </resources>

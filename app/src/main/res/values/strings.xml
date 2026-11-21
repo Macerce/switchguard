@@ -886,7 +886,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="smart_tg_commands">Commands and “Got it” button</string>
     <string name="smart_tg_commands_desc">People in your list can send /status and take over a ringing alarm. The alarm message gets a “Got it” button: pressing it silences the phone.</string>
     <string name="smart_tg_control">Allow turning devices on and off</string>
-    <string name="smart_tg_control_desc">/on and /off commands. Only people in your list can use them.</string>
+    <string name="smart_tg_control_desc">/on and /off commands. In a private chat the people in your list can use them; in a group only the people you choose.</string>
     <string name="smart_tg_forward">Send smart alerts to Telegram</string>
     <string name="smart_tg_forward_desc">Power outages, unusual consumption, the budget alert and the weekly report are also written to Telegram.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1668,4 +1668,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="tuya_live_off_detail">Tuya live updates are off on this device; checking every 5 minutes</string>
     <string name="tuya_standby_notice">Tuya live messages are going to another device that uses the same Tuya keys. This device will check Tuya every 5 minutes. Choose which device gets live updates in Settings → Monitoring.</string>
     <string name="transfer_tuya_note">Note: Tuya live messages go to only one device. Choose which one in Settings → Monitoring → Tuya live updates; the other checks every 5 minutes.</string>
+    <string name="tg_group_control_title">Who can control in groups</string>
+    <string name="tg_group_control_nobody">Nobody: groups get alerts and status only</string>
+    <string name="tg_group_control_count">People who can control: %d</string>
+    <string name="tg_group_control_on">Turn devices on and off from this group</string>
+    <string name="tg_group_control_hint">Only the people ticked here can give on/off commands in this group. Someone not listed appears after writing a message in the group.</string>
+    <string name="tg_control_not_allowed">You are not allowed to turn devices on or off from this chat.</string>
 </resources>

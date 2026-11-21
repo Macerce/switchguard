@@ -52,8 +52,8 @@ object ChatRunner {
     suspend fun answer(context: Context, text: String, by: String? = null, control: Boolean = true): String? =
         reply(context, text, by, control)?.text
 
-    suspend fun reply(context: Context, text: String, by: String? = null, control: Boolean = true): Reply? {
-        val key = by.orEmpty()
+    suspend fun reply(context: Context, text: String, by: String? = null, control: Boolean = true, pendingKey: String? = null): Reply? {
+        val key = pendingKey ?: by.orEmpty()
         var intent = ChatCommand.parse(text)
         if (intent == null) {
             // Sorunun yanıtı: "Hangi kanal?" → "iki"; "Hangisi?" → "salon ışık".
@@ -61,13 +61,17 @@ object ChatRunner {
             if (DeviceKinds.words(text).isEmpty()) return null
             intent = ChatCommand.Intent.Switch(p.on, listOf(if (p.needChannel) p.target + " " + text.trim() else text.trim()))
         }
-        val answer = run(context, intent, by, control)
+        val answer = run(context, intent, by, control, key)
         return Reply(answer, ask = pending.containsKey(key))
     }
 
-    suspend fun run(context: Context, intent: ChatCommand.Intent, by: String?, control: Boolean): String = withContext(Dispatchers.IO) {
+    /**
+     * [pendingKey]: onay ve soruların bekleme anahtarı; verilmezse [by]. Telegram sohbet + kişi verir
+     * ([com.macerce.switchguard.core.TelegramAuth.pendingKey]): aynı adlı farklı kişiler birbirinin onayını kullanamaz.
+     */
+    suspend fun run(context: Context, intent: ChatCommand.Intent, by: String?, control: Boolean, pendingKey: String? = null): String = withContext(Dispatchers.IO) {
         val store = Store.get(context)
-        val key = by.orEmpty()
+        val key = pendingKey ?: by.orEmpty()
         val waiting = pending.remove(key)?.takeIf { System.currentTimeMillis() - it.at < PENDING_MS }
         val refused = context.getString(R.string.tg_control_off)
         when (intent) {

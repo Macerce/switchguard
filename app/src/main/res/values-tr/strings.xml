@@ -882,7 +882,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="smart_tg_commands">Komutlar ve "Gördüm" düğmesi</string>
     <string name="smart_tg_commands_desc">Listenizdeki kişiler /durum yazabilir ve çalan alarmı üstlenebilir. Alarm mesajına "Gördüm" düğmesi eklenir: dokununca telefondaki alarm susar.</string>
     <string name="smart_tg_control">Aç/kapa izni</string>
-    <string name="smart_tg_control_desc">/ac ve /kapat komutları. Yalnızca listenizdeki kişiler kullanabilir.</string>
+    <string name="smart_tg_control_desc">/ac ve /kapat komutları. Özel sohbette listenizdeki kişiler kullanabilir; grupta yalnızca seçtiğiniz kişiler.</string>
     <string name="smart_tg_forward">Akıllı uyarıları Telegram\'a da gönder</string>
     <string name="smart_tg_forward_desc">Elektrik kesintisi, anormal tüketim, bütçe uyarısı ve haftalık rapor Telegram\'a da yazılır.</string>
     <string name="smart_wd">Bekçi</string>
@@ -1664,4 +1664,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="tuya_live_off_detail">Tuya anlık güncellemeleri bu cihazda kapalı; 5 dakikada bir yoklanıyor</string>
     <string name="tuya_standby_notice">Tuya anlık mesajları aynı Tuya anahtarlarını kullanan başka bir cihaza gidiyor. Bu cihaz Tuya\'yı 5 dakikada bir yoklayacak. Anlık güncellemeyi hangi cihazın alacağını Ayarlar → İzleme\'den seçin.</string>
     <string name="transfer_tuya_note">Not: Tuya anlık mesajları yalnızca bir cihaza gider. Hangisinin alacağını Ayarlar → İzleme → Tuya anlık güncellemeleri ile seçin; diğeri 5 dakikada bir yoklar.</string>
+    <string name="tg_group_control_title">Gruplarda kim kontrol edebilir</string>
+    <string name="tg_group_control_nobody">Hiç kimse: gruplara yalnızca uyarı ve durum gider</string>
+    <string name="tg_group_control_count">Kontrol edebilecek kişi: %d</string>
+    <string name="tg_group_control_on">Bu gruptan cihazları aç/kapat</string>
+    <string name="tg_group_control_hint">Bu grupta yalnızca burada işaretli kişiler aç/kapa komutu verebilir. Listede olmayan kişi grupta bir mesaj yazınca burada görünür.</string>
+    <string name="tg_control_not_allowed">Bu sohbetten cihazları açıp kapatma izniniz yok.</string>
 </resources>

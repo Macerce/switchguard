@@ -989,7 +989,7 @@
     <string name="smart_tg_commands">الأوامر وزر «فهمت»</string>
     <string name="smart_tg_commands_desc">يمكن للأشخاص في قائمتك إرسال /status وتولّي إنذار يرنّ. تحتوي رسالة الإنذار على زر «فهمت»: الضغط عليه يكتم صوت الهاتف.</string>
     <string name="smart_tg_control">السماح بتشغيل الأجهزة وإيقافها</string>
-    <string name="smart_tg_control_desc">الأمران /on و/off. لا يستطيع استخدامهما إلا الأشخاص في قائمتك.</string>
+    <string name="smart_tg_control_desc">أوامر /on و/off. في الدردشة الخاصة يستخدمها الأشخاص في قائمتك، وفي المجموعة الأشخاص الذين تختارهم فقط.</string>
     <string name="smart_tg_forward">إرسال التنبيهات الذكية إلى Telegram</string>
     <string name="smart_tg_forward_desc">تُكتب أيضًا إلى Telegram انقطاعات الكهرباء والاستهلاك غير المعتاد وتنبيه الميزانية والتقرير الأسبوعي.</string>
     <string name="smart_wd">الحارس</string>
@@ -1805,4 +1805,10 @@
     <string name="tuya_live_off_detail">تحديثات Tuya الفورية متوقفة على هذا الجهاز؛ يتم التحقق كل 5 دقائق</string>
     <string name="tuya_standby_notice">رسائل Tuya الفورية تذهب إلى جهاز آخر يستخدم مفاتيح Tuya نفسها. سيتحقق هذا الجهاز من Tuya كل 5 دقائق. اختر الجهاز الذي يتلقى التحديثات الفورية من الإعدادات ← المراقبة.</string>
     <string name="transfer_tuya_note">ملاحظة: رسائل Tuya الفورية تصل إلى جهاز واحد فقط. اختر أيّها من الإعدادات ← المراقبة ← تحديثات Tuya الفورية؛ والآخر يتحقق كل 5 دقائق.</string>
+    <string name="tg_group_control_title">من يمكنه التحكم في المجموعات</string>
+    <string name="tg_group_control_nobody">لا أحد: تتلقى المجموعات التنبيهات والحالة فقط</string>
+    <string name="tg_group_control_count">الأشخاص المسموح لهم بالتحكم: %d</string>
+    <string name="tg_group_control_on">تشغيل الأجهزة وإيقافها من هذه المجموعة</string>
+    <string name="tg_group_control_hint">لا يمكن إلا للأشخاص المحددين هنا إعطاء أوامر التشغيل والإيقاف في هذه المجموعة. يظهر الشخص غير المدرج بعد أن يكتب رسالة في المجموعة.</string>
+    <string name="tg_control_not_allowed">غير مسموح لك بتشغيل الأجهزة أو إيقافها من هذه الدردشة.</string>
 </resources>

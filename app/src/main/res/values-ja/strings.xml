@@ -859,7 +859,7 @@
     <string name="smart_tg_commands">コマンドと「了解」ボタン</string>
     <string name="smart_tg_commands_desc">リストの人は /status を送信したり、鳴動中のアラームを引き継いだりできます。アラームのメッセージには「了解」ボタンが付き、押すとスマートフォンが消音されます。</string>
     <string name="smart_tg_control">デバイスのオン・オフを許可</string>
-    <string name="smart_tg_control_desc">/on と /off コマンドです。リストの人だけが使えます。</string>
+    <string name="smart_tg_control_desc">/on と /off コマンド。個人チャットではリストの人が使えます。グループでは選んだ人だけです。</string>
     <string name="smart_tg_forward">スマートアラートをTelegramに送信</string>
     <string name="smart_tg_forward_desc">停電、いつもと違う消費量、予算アラート、週次レポートもTelegramに送信されます。</string>
     <string name="smart_wd">ウォッチドッグ</string>
@@ -1625,4 +1625,10 @@
     <string name="tuya_live_off_detail">この端末では Tuya のリアルタイム更新がオフです。5 分ごとに確認中</string>
     <string name="tuya_standby_notice">Tuya のリアルタイムメッセージは、同じ Tuya キーを使う別の端末に届いています。この端末は 5 分ごとに Tuya を確認します。どの端末で受け取るかは 設定 → 監視 で選べます。</string>
     <string name="transfer_tuya_note">注意: Tuya のリアルタイムメッセージは 1 台の端末にしか届きません。どれにするかは 設定 → 監視 → Tuya のリアルタイム更新 で選べます。もう一方は 5 分ごとに確認します。</string>
+    <string name="tg_group_control_title">グループで操作できる人</string>
+    <string name="tg_group_control_nobody">なし: グループには通知と状態のみ届きます</string>
+    <string name="tg_group_control_count">操作できる人: %d</string>
+    <string name="tg_group_control_on">このグループから機器をオン・オフ</string>
+    <string name="tg_group_control_hint">このグループでオン・オフの指示を出せるのは、ここでチェックした人だけです。リストにない人はグループにメッセージを書くと表示されます。</string>
+    <string name="tg_control_not_allowed">このチャットから機器をオン・オフする権限がありません。</string>
 </resources>

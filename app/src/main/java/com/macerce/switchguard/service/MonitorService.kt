@@ -1,5 +1,6 @@
 package com.macerce.switchguard.service
 
+import com.macerce.switchguard.core.TelegramAuth
 import com.macerce.switchguard.core.TuyaListenerCheck
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -1552,16 +1553,27 @@ class MonitorService : Service() {
         }
         val allowed = store.telegramRecipients.map { it.id }.toSet()
         var handled = runtime.tgHandled
+        var senders = store.telegramSenders
         for (u in updates.sortedBy { it.id }) {
             if (u.id <= handled) continue
             handled = u.id
             // Yalnızca haber verilecek kişiler (ve gruplar) komut verebilir.
             if (u.chatId !in allowed) continue
+            // Gruplarda yazanlar hatırlanır: Ayarlar'da "kim kontrol edebilir" listesinde seçilebilsinler.
+            senders = TelegramAuth.rememberSender(senders, u.chatId, u.fromId, u.from)
             if (u.callbackData != null) onTelegramButton(u)
             else if (store.telegramCommands) u.text?.let { onTelegramText(u, it, now) }
         }
         runtime.tgHandled = handled
+        if (senders != store.telegramSenders) store.telegramSenders = senders
     }
+
+    /** Bu güncellemeyi yazan kişi cihazları kontrol edebilir mi (grupta yalnızca seçilen kişiler). */
+    private fun telegramControl(u: TelegramBot.Update): Boolean =
+        TelegramAuth.canControl(store.telegramRecipients.firstOrNull { it.id == u.chatId }, u.fromId, store.telegramControl)
+
+    /** Kontrol izni yoksa yanıt: aç/kapa tümden kapalı mı, yoksa bu kişiye/bu gruba mı kapalı. */
+    private fun controlRefusal(): Int = if (store.telegramControl) R.string.tg_control_not_allowed else R.string.tg_control_off
 
     /** "Gördüm" düğmesi: alarm bu cihazınsa ve hâlâ sürüyorsa üstlenilir, alarm susar. */
     private fun onTelegramButton(u: TelegramBot.Update) {
@@ -1612,10 +1624,16 @@ class MonitorService : Service() {
             is ChatCommand.Intent.Batch -> return intent.steps.forEach { onTelegramSwitch(u, it, age) }
             else -> Unit
         }
+        // Durumu değiştiren komutlar (süreli, hepsini, onay, döngü) 2 dk, sorular 10 dk eski olabilir.
+        if (age > TelegramAuth.maxAge(intent)) {
+            if (TelegramAuth.changesState(intent)) reply(u.chatId, getString(R.string.tg_cmd_too_old))
+            return
+        }
+        val control = telegramControl(u)
+        val key = TelegramAuth.pendingKey(u.chatId, u.fromId)
         // Durum/güç/sıcaklık soruları: ölçüm geçmişi okunur, iş parçacığında.
-        if (age > TelegramBot.STATUS_MAX_AGE_MS) return
         telegram.execute {
-            val answer = runCatching { runBlocking { ChatRunner.run(this@MonitorService, intent, u.from, store.telegramControl) } }.getOrNull()
+            val answer = runCatching { runBlocking { ChatRunner.run(this@MonitorService, intent, u.from, control, key) } }.getOrNull()
             answer?.let { handler.post { reply(u.chatId, it) } }
         }
     }
@@ -1623,7 +1641,7 @@ class MonitorService : Service() {
     /** Birden çok hedefli aç/kapat ("/ac salon, mutfak", "bütün ışıkları kapat"); her cihaz kendi yanıtını verir. */
     private fun onTelegramSwitch(u: TelegramBot.Update, intent: ChatCommand.Intent.Switch, age: Long) {
         if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
-        if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+        if (!telegramControl(u)) return reply(u.chatId, getString(controlRefusal()))
         if (intent.targets.all { it.isBlank() }) return reply(u.chatId, getString(if (intent.on) R.string.tg_usage_on else R.string.tg_usage_off))
         val devices = store.snapshotsWithGroups
         fun one(d: DeviceSnapshot, ch: Int) =
@@ -1647,13 +1665,14 @@ class MonitorService : Service() {
             TelegramBot.Command.Status -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, statusText())
             TelegramBot.Command.Help -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, getString(R.string.tg_help))
             is TelegramBot.Command.SetPresence -> {
-                if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+                // Evde/dışarıda kuralları değiştirir: aç/kapa gibi kısa yaş sınırı.
+                if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
                 Actions.setAway(this, cmd.away, by = u.from.ifEmpty { getString(R.string.tg_someone) })
                 reply(u.chatId, getString(if (cmd.away) R.string.tg_presence_away else R.string.tg_presence_home))
             }
             is TelegramBot.Command.RunScene -> {
                 if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
-                if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+                if (!telegramControl(u)) return reply(u.chatId, getString(controlRefusal()))
                 val scenes = store.scenes
                 val scene = Scene.find(cmd.query, scenes)
                     ?: return reply(u.chatId, getString(R.string.tg_scene_not_found, cmd.query, scenes.joinToString(", ") { it.name }.ifEmpty { "—" }))
@@ -1670,7 +1689,7 @@ class MonitorService : Service() {
             }
             is TelegramBot.Command.Switch -> {
                 if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, getString(R.string.tg_cmd_too_old))
-                if (!store.telegramControl) return reply(u.chatId, getString(R.string.tg_control_off))
+                if (!telegramControl(u)) return reply(u.chatId, getString(controlRefusal()))
                 if (cmd.query.isBlank()) return reply(u.chatId, getString(if (cmd.on) R.string.tg_usage_on else R.string.tg_usage_off))
                 // Gruplar da adıyla bulunur ("/ac bahçe").
                 when (val m = TelegramBot.match(cmd.query, store.snapshotsWithGroups)) {

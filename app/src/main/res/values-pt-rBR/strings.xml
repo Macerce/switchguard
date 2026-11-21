@@ -911,7 +911,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="smart_tg_commands">Comandos e botão “Entendi”</string>
     <string name="smart_tg_commands_desc">As pessoas da sua lista podem enviar /status e assumir um alarme que está tocando. A mensagem do alarme ganha um botão “Entendi”: ao pressioná-lo, o celular é silenciado.</string>
     <string name="smart_tg_control">Permitir ligar e desligar dispositivos</string>
-    <string name="smart_tg_control_desc">Comandos /on e /off. Somente as pessoas da sua lista podem usá-los.</string>
+    <string name="smart_tg_control_desc">Comandos /on e /off. Em conversa privada, as pessoas da sua lista podem usá-los; em um grupo, só as pessoas que você escolher.</string>
     <string name="smart_tg_forward">Enviar alertas inteligentes ao Telegram</string>
     <string name="smart_tg_forward_desc">Quedas de energia, consumo incomum, o alerta de orçamento e o relatório semanal também são escritos no Telegram.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1697,4 +1697,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="tuya_live_off_detail">As atualizações ao vivo da Tuya estão desligadas neste dispositivo; consultando a cada 5 minutos</string>
     <string name="tuya_standby_notice">As mensagens ao vivo da Tuya estão indo para outro dispositivo com as mesmas chaves. Este dispositivo vai consultar a Tuya a cada 5 minutos. Escolha qual dispositivo recebe as atualizações em Ajustes → Monitoramento.</string>
     <string name="transfer_tuya_note">Observação: as mensagens ao vivo da Tuya vão para um só dispositivo. Escolha qual em Ajustes → Monitoramento → Atualizações ao vivo da Tuya; o outro consulta a cada 5 minutos.</string>
+    <string name="tg_group_control_title">Quem pode controlar nos grupos</string>
+    <string name="tg_group_control_nobody">Ninguém: os grupos só recebem alertas e status</string>
+    <string name="tg_group_control_count">Pessoas que podem controlar: %d</string>
+    <string name="tg_group_control_on">Ligar e desligar dispositivos por este grupo</string>
+    <string name="tg_group_control_hint">Só as pessoas marcadas aqui podem dar comandos de ligar/desligar neste grupo. Quem não estiver na lista aparece depois de escrever uma mensagem no grupo.</string>
+    <string name="tg_control_not_allowed">Você não tem permissão para ligar ou desligar dispositivos por esta conversa.</string>
 </resources>

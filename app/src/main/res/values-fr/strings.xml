@@ -910,7 +910,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="smart_tg_commands">Commandes et bouton « Bien reçu »</string>
     <string name="smart_tg_commands_desc">Les personnes de votre liste peuvent envoyer /status et prendre en charge une alarme qui sonne. Le message d\'alarme reçoit un bouton « Bien reçu » : l\'appuyer coupe le son du téléphone.</string>
     <string name="smart_tg_control">Autoriser l\'allumage et l\'extinction des appareils</string>
-    <string name="smart_tg_control_desc">Commandes /on et /off. Seules les personnes de votre liste peuvent les utiliser.</string>
+    <string name="smart_tg_control_desc">Commandes /on et /off. En discussion privée, les personnes de votre liste peuvent les utiliser ; dans un groupe, seulement celles que vous choisissez.</string>
     <string name="smart_tg_forward">Envoyer les alertes intelligentes sur Telegram</string>
     <string name="smart_tg_forward_desc">Les coupures de courant, la consommation inhabituelle, l\'alerte de budget et le rapport hebdomadaire sont aussi écrits sur Telegram.</string>
     <string name="smart_wd">Chien de garde</string>
@@ -1696,4 +1696,10 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="tuya_live_off_detail">Les mises à jour Tuya en direct sont désactivées sur cet appareil ; vérification toutes les 5 minutes</string>
     <string name="tuya_standby_notice">Les messages Tuya en direct vont vers un autre appareil qui utilise les mêmes clés. Cet appareil interrogera Tuya toutes les 5 minutes. Choisissez l\'appareil qui reçoit les mises à jour dans Réglages → Surveillance.</string>
     <string name="transfer_tuya_note">Remarque : les messages Tuya en direct n\'arrivent qu\'à un seul appareil. Choisissez lequel dans Réglages → Surveillance → Mises à jour Tuya en direct ; l\'autre vérifie toutes les 5 minutes.</string>
+    <string name="tg_group_control_title">Qui peut piloter dans les groupes</string>
+    <string name="tg_group_control_nobody">Personne : les groupes ne reçoivent qu\'alertes et état</string>
+    <string name="tg_group_control_count">Personnes autorisées : %d</string>
+    <string name="tg_group_control_on">Allumer et éteindre depuis ce groupe</string>
+    <string name="tg_group_control_hint">Seules les personnes cochées ici peuvent donner des ordres marche/arrêt dans ce groupe. Une personne absente apparaît après avoir écrit un message dans le groupe.</string>
+    <string name="tg_control_not_allowed">Vous n\'êtes pas autorisé à allumer ou éteindre des appareils depuis cette discussion.</string>
 </resources>
