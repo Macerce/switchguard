@@ -169,7 +169,7 @@ fun BackupSection() {
             body = summaryText(context, summary),
             confirm = stringResource(R.string.action_restore),
             onConfirm = {
-                Backup.apply(store, settings)
+                Backup.apply(store, settings, summary.keysVersion)
                 if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
                 toast(R.string.backup_restored)
             },

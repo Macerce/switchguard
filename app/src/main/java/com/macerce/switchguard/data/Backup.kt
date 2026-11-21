@@ -15,8 +15,50 @@ import java.time.Instant
  * olduğundan eWeLink geliştirici anahtarları da girer. Oturum token'ları, bekleyen alarm ve geçmiş hiçbir zaman girmez.
  */
 object Backup {
+    /**
+     * Anahtar listesinin sürümü. 2: sohbet şablonları, sesli okuma ve bekleme ekranı düzeni eklendi ([KEYS_V2]).
+     * Geri yüklemede "yedekte olmayanı temizle" kuralı, yedeğin alındığı sürümde var olmayan anahtarlara uygulanmaz.
+     */
+    const val KEYS_VERSION = 2
+
+    /** Sürüm 2'de eklenen anahtarlar: bunlardan önce alınmış bir yedek yüklenince mevcut değerleri silinmez. */
+    val KEYS_V2: Set<String> = setOf("chatTemplates", "chatDefaultsSeen", "chatTemplateUses", "chatSpeak", "standbyGrid", "standbyDim")
+
     /** Telegram ile haber verme de girer: aynı kişinin yeni telefonu aynı kişilere haber versin. */
-    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages")
+    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages") + KEYS_V2
+
+    /**
+     * Yedeğe bilerek girmeyen ayarlar ve nedenleri. Koruma testi, Store'daki her anahtarın ya [KEYS]'te ya burada
+     * olmasını ister: yeni bir ayar eklenip yedeğe koyması unutulursa test kırmızı olur.
+     */
+    val EXCLUDED: Map<String, String> = mapOf(
+        "at" to "eWeLink oturum token'ı (gizli; yeni cihazda yeniden giriş yapılır)",
+        "rt" to "eWeLink yenileme token'ı (gizli)",
+        "apikey" to "eWeLink oturumunun hesap kimliği",
+        "email" to "eWeLink oturumunun e-postası (oturumla birlikte)",
+        "sessionLost" to "oturum düştü uyarısı (bu cihazın durumu)",
+        "tuyaToken" to "Tuya erişim belirteci (anahtarlardan yeniden alınır)",
+        "tuyaTokenExp" to "Tuya erişim belirtecinin süresi",
+        "tuyaLive" to "Tuya anlık güncellemeleri cihaza özel (aynı anahtarlarla tek cihaz anlık mesaj alır)",
+        "monitoring" to "izleme açık/kapalı: bu cihazın çalışma durumu",
+        "pendingAlarm" to "çalmakta olan alarm",
+        "snapshots" to "cihazların canlı durumu (buluttan yeniden okunur)",
+        "onboardingDone" to "geri yüklemede ayrıca yazılır",
+        "wdMode" to "bekçi kipi bu cihaza özel",
+        "wdMin" to "bekçi aralığı bu cihaza özel",
+        "chargerOutage" to "şarj kesintisinden elektrik kesintisi çıkarımı bu cihazın donanımına bağlı",
+        "alarmSound" to "seçilen zil sesi bu cihazdaki bir dosyayı gösterir; yeni cihazda olmayabilir",
+        "autostartOk" to "bu telefonun otomatik başlatma onayı",
+        "twinOk" to "bu telefonun ikiz uygulama onayı",
+        "away" to "şu anki evde/dışarıda durumu (yeni cihazda yeniden belirlenir)",
+        "vacationUntil" to "geçici tatil kipi; yeni cihazda kendiliğinden başlamasın",
+        "cycleDone" to "döngülerin çalışma durumu",
+        "cycleRuns" to "döngülerin çalışma durumu",
+        "demo" to "deneme (demo) kipi",
+        "historySeen" to "geçmişte okunmamış sayacı",
+        "transferReceived" to "Wi-Fi aktarımı işareti (bu cihaza özel)",
+        "transferSource" to "aktarımın geldiği cihaz (bu cihaza özel)",
+    )
 
     /** İçerik biçiminin etiketi; Windows sürümünün yedeği aynı zarfı kullanır ama içeriği farklıdır. */
     const val APP = "android"
@@ -35,6 +77,8 @@ object Backup {
         val tuya: Boolean,
         val rules: Int,
         val automations: Int,
+        /** Yedeğin alındığı anahtar listesi sürümü; bu alan eklenmeden önceki yedeklerde 1. */
+        val keysVersion: Int = KEYS_VERSION,
     )
 
     fun create(store: Store, appVersion: String, password: CharArray): ByteArray {
@@ -43,6 +87,7 @@ object Backup {
             .put("app", APP)
             .put("appVersion", appVersion)
             .put("created", created.toString())
+            .put("keysVersion", KEYS_VERSION)
             .put("settings", TypedPrefs.encode(store.plainPrefs(), KEYS))
         return BackupCrypto.seal(content.toString().toByteArray(Charsets.UTF_8), password, created)
     }
@@ -63,6 +108,7 @@ object Backup {
             tuya = (settings["tuyaId"] as? String).orEmpty().isNotEmpty(),
             rules = (settings["rules"] as? String)?.let { runCatching { DeviceRules.mapFromJson(it).size }.getOrNull() } ?: 0,
             automations = (settings["automations"] as? String)?.let { runCatching { Automation.listFromJson(it).size }.getOrNull() } ?: 0,
+            keysVersion = content.optInt("keysVersion", 1),
         )
         return summary to settings
     }
@@ -75,11 +121,13 @@ object Backup {
      * bağlantısı (eWeLink ya da Tuya) olduğu gibi kalır. eWeLink oturumu yalnızca App ID ve bölge aynıysa
      * korunur: token o uygulamaya ve o bölgenin sunucusuna aittir.
      */
-    fun plan(backup: Map<String, Any>, loggedIn: Boolean, currentAppId: String, currentRegion: String): RestorePlan {
+    fun plan(backup: Map<String, Any>, loggedIn: Boolean, currentAppId: String, currentRegion: String, keysVersion: Int = KEYS_VERSION): RestorePlan {
         val hasEwelink = (backup["appId"] as? String).orEmpty().isNotEmpty()
         val hasTuya = (backup["tuyaId"] as? String).orEmpty().isNotEmpty()
         val keep = (if (hasEwelink) emptySet() else EWELINK_KEYS) + (if (hasTuya) emptySet() else TUYA_KEYS)
-        val remove = (KEYS - keep) + (if (hasTuya) setOf("tuyaToken", "tuyaTokenExp") else emptySet())
+        // Eski yedekte henüz var olmayan anahtarlar "yedekte yok" sayılıp silinmez (ör. sohbet şablonları).
+        val unknownThen = if (keysVersion < 2) KEYS_V2 else emptySet()
+        val remove = (KEYS - keep - unknownThen) + (if (hasTuya) setOf("tuyaToken", "tuyaTokenExp") else emptySet())
         val sameAccount = backup["appId"] == currentAppId && ((backup["region"] as? String) ?: currentRegion) == currentRegion
         return RestorePlan(
             remove = remove,
@@ -88,8 +136,8 @@ object Backup {
         )
     }
 
-    fun apply(store: Store, settings: Map<String, Any>) {
-        val plan = plan(settings, store.isLoggedIn, store.appId, store.region)
+    fun apply(store: Store, settings: Map<String, Any>, keysVersion: Int = KEYS_VERSION) {
+        val plan = plan(settings, store.isLoggedIn, store.appId, store.region, keysVersion)
         val editor = store.prefs.edit()
         plan.remove.forEach { editor.remove(it) }
         plan.put.forEach { (k, v) -> editor.putTyped(k, v) }

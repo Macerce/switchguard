@@ -31,7 +31,8 @@ class BackupReadTest {
         val sealed = BackupCrypto.seal(content.toString().toByteArray(), pw, Instant.parse("2026-10-12T08:00:00Z"), iterations = 1_000)
 
         val (summary, values) = Backup.read(sealed, pw)
-        assertEquals(Backup.Summary("2026-10-12T08:00:00Z", "2.10.0", ewelinkKeys = true, tuya = true, rules = 2, automations = 0), summary)
+        // Sürüm alanı olmayan (eski) yedek: anahtar listesi sürümü 1.
+        assertEquals(Backup.Summary("2026-10-12T08:00:00Z", "2.10.0", ewelinkKeys = true, tuya = true, rules = 2, automations = 0, keysVersion = 1), summary)
         assertEquals(30, values["pollIntervalSec"])
         assertFalse(values.containsKey("at"))
         assertTrue(Backup.KEYS.containsAll(listOf("appId", "appSecret", "rules", "automations", "reminderMin")))

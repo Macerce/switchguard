@@ -27,6 +27,7 @@ fun SharedPreferences.Editor.putTyped(key: String, value: Any): SharedPreference
     is Int -> putInt(key, value)
     is Long -> putLong(key, value)
     is Float -> putFloat(key, value)
+    is Set<*> -> putStringSet(key, value.filterIsInstance<String>().toSet())
     else -> this
 }
 

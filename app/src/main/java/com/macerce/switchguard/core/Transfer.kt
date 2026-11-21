@@ -38,6 +38,8 @@ object Transfer {
         "offlineGraceSec", "pollIntervalSec", "summaryEnabled", "summaryMinute",
         "blindAlertMin", "alarmBoost", "reminderMin",
         "outageDetect", "energyAnomaly", "budget", "weeklyReport", "devicePrices", "lat", "lon", "threeZone", "priceDay", "pricePeak", "priceNight", "scenes", "groups", "cycles", "zones", "softenAtHome", "quietBypass",
+        // Sohbet şablonları (saatli/tetikleyicili olanlar fiilen otomasyondur) ve varsayılan kWh fiyatı.
+        "chatTemplates", "chatDefaultsSeen", "chatTemplateUses", "energyPrice",
     )
 
     private const val PBKDF2_ITER = 100_000

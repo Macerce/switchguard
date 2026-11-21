@@ -1,5 +1,6 @@
 package com.macerce.switchguard.core
 
+import org.json.JSONArray
 import org.json.JSONObject
 
 /**
@@ -16,6 +17,8 @@ object TypedPrefs {
                 is Int -> JSONObject().put("t", "i").put("v", v)
                 is Long -> JSONObject().put("t", "l").put("v", v)
                 is Float -> JSONObject().put("t", "f").put("v", v.toDouble())
+                // StringSet (ör. chatDefaultsSeen): sıralı dizi olarak yazılır.
+                is Set<*> -> JSONObject().put("t", "ss").put("v", JSONArray(v.filterIsInstance<String>().sorted()))
                 else -> null
             }
             if (typed != null) put(k, typed)
@@ -34,6 +37,7 @@ object TypedPrefs {
                     "i" -> o.getInt("v")
                     "l" -> o.getLong("v")
                     "f" -> o.getDouble("v").toFloat()
+                    "ss" -> o.getJSONArray("v").let { a -> (0 until a.length()).map { a.getString(it) }.toSet() }
                     else -> null
                 }
             }.getOrNull()
