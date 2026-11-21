@@ -1,5 +1,9 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.ui.graphics.Color
+import com.macerce.switchguard.ui.theme.Brand
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.FilledIconButton
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.speech.RecognizerIntent
@@ -247,18 +251,26 @@ fun ChatScreen(onBack: () -> Unit) {
                 placeholder = { Text(stringResource(R.string.chat_hint)) },
                 modifier = Modifier.weight(1f),
                 singleLine = true,
-                shape = RoundedCornerShape(24.dp),
+                shape = RoundedCornerShape(28.dp),
+                // Videodaki dolu, çerçevesiz giriş kutusu.
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedContainerColor = tileColor(),
+                    focusedContainerColor = tileColor(),
+                    unfocusedBorderColor = Color.Transparent,
+                ),
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { send(input) }),
             )
             // Yazı yokken mikrofon, yazı varken gönder.
+            // Videodaki yuvarlak, dolu mikrofon / gönder düğmesi.
+            Spacer(Modifier.size(8.dp))
             if (input.isBlank()) {
-                IconButton(modifier = Modifier.tvFocusRing(), onClick = { listen() }, enabled = !busy) {
-                    Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice), tint = MaterialTheme.colorScheme.primary)
+                FilledIconButton(modifier = Modifier.size(52.dp).tvFocusRing(), onClick = { listen() }, enabled = !busy) {
+                    Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice))
                 }
             } else {
-                IconButton(modifier = Modifier.tvFocusRing(), onClick = { send(input) }, enabled = !busy) {
-                    Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send), tint = MaterialTheme.colorScheme.primary)
+                FilledIconButton(modifier = Modifier.size(52.dp).tvFocusRing(), onClick = { send(input) }, enabled = !busy) {
+                    Icon(Icons.AutoMirrored.Rounded.Send, stringResource(R.string.chat_send))
                 }
             }
         }
@@ -319,12 +331,12 @@ private fun Bubble(line: ChatLine, onAction: () -> Unit = {}) {
         )
         Column(
             Modifier.widthIn(max = 340.dp)
-                .background(if (line.mine) scheme.primary else tileColor(), shape)
+                .background(if (line.mine) Brand.deep else tileColor(), shape)
                 .padding(horizontal = 14.dp, vertical = 10.dp),
         ) {
             Text(
                 line.text,
-                color = if (line.mine) scheme.onPrimary else scheme.onSurface,
+                color = if (line.mine) Brand.onActive else scheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium,
             )
             if (line.action == ChatAction.SET_LOCATION) {
