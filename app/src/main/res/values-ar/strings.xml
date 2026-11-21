@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">اسمح لـ SwitchGuard في «مدير التشغيل التلقائي» ليعاد تشغيل المراقبة بعد إعادة التشغيل.</string>
     <string name="section_about">حول</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">أين توجد أجهزتك؟</string>
-    <string name="onb_platform_body">اختر التطبيق الذي تستخدمه حاليًا للتحكم في أجهزتك.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">أجهزة SONOFF والأجهزة الأخرى المتوافقة مع eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">الأجهزة التي تتحكم بها في تطبيق Smart Life أو Tuya Smart</string>
-    <string name="onb_platform_both">تستخدم كليهما؟ أعدّ أحدهما الآن وأضف الآخر لاحقًا في الإعدادات.</string>
     <string name="onb_tuya_title">أنشئ مشروع Tuya Cloud مجانيًا</string>
     <string name="onb_tuya_body">يقرأ SwitchGuard أجهزتك عبر واجهة Tuya السحابية الرسمية باستخدام مشروعك المجاني. يستغرق ذلك نحو خمس دقائق.</string>
     <string name="onb_tuya_step1">في platform.tuya.com أنشئ حسابًا مجانيًا، ثم Cloud ← Create Cloud Project: طريقة التطوير \"Smart Home\"، ومركز البيانات = منطقة حساب Smart Life لديك (أوروبا / تركيا: Central Europe).</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">فشل تسجيل الدخول: لم يُرجَع رمز تفويض</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">مرحبًا بك في SwitchGuard</string>
-    <string name="onb_welcome_body">احصل على إنذار لحظة تشغيل أجهزة eWeLink (Sonoff) أو Tuya / Smart Life أو إيقافها أو فقدانها الاتصال.</string>
-    <string name="onb_feature_alarm">إنذار يظل يرنّ حتى تقوم بإيقافه</string>
-    <string name="onb_feature_control">تشغيل الأجهزة وإيقافها من التطبيق</string>
-    <string name="onb_feature_rules">قواعد لكل جهاز وساعات هدوء</string>
-    <string name="onb_feature_history">سجل كامل للأحداث</string>
     <string name="onb_dev_title">أنشئ تطبيق مطوّر مجانيًا</string>
     <string name="onb_dev_body">يتواصل SwitchGuard مع أجهزتك عبر واجهة eWeLink الرسمية. تحتاج لذلك إلى App ID مجاني خاص بك — يستغرق نحو دقيقتين.</string>
     <string name="onb_dev_step1">افتح dev.ewelink.cc وسجّل الدخول بحساب eWeLink الذي توجد فيه أجهزتك.</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">تجريبي · إضاءة الحديقة</string>
     <string name="demo_auto_pump">توقفت المضخة</string>
     <string name="demo_auto_light">ضوء الحديقة بقي مضاءً</string>
-    <string name="onb_platform_demo">جرّب بدون حساب (تجريبي)</string>
-    <string name="onb_platform_demo_desc">ثلاثة أجهزة افتراضية بكل الميزات، دون إعداد. يمكنك إضافة حسابك الحقيقي لاحقًا في الإعدادات.</string>
     <string name="demo_devices">الأجهزة التجريبية</string>
     <string name="demo_devices_desc">أجهزة افتراضية لتجربة كل الميزات</string>
     <string name="section_demo">تجريبي: محاكاة حدث</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">نصيحة: اكتب أو الصق من هاتفك عبر تطبيق Google TV (جهاز التحكم ← لوحة المفاتيح).</string>
     <string name="tv_time_hint">لأعلى ولأسفل لتغيير القيمة. OK على الساعة ينتقل إلى الدقائق، وOK على الدقائق يحفظ، ورجوع يلغي.</string>
     <string name="onb_platform_transfer">النقل من جهاز آخر</string>
-    <string name="onb_platform_transfer_desc">أعددته على هاتفك مسبقًا؟ احصل على مفاتيح Tuya والقواعد والإعدادات عبر شبكة Wi-Fi المنزلية. بالنسبة إلى eWeLink يحتاج هذا الجهاز إلى حساب خاص به ومفاتيح API الخاصة بذلك الحساب.</string>
     <string name="onb_transfer_title">النقل من هاتفك</string>
     <string name="onb_transfer_body">يجب أن يكون الجهازان على شبكة Wi-Fi نفسها.</string>
     <string name="transfer_receive_steps">على هاتفك افتح SwitchGuard ← الإعدادات ← النسخ الاحتياطي والنقل ← الإرسال إلى جهاز آخر، ثم اختر هذا الجهاز وأدخل الرمز أدناه.</string>

@@ -149,13 +149,6 @@
     <string name="oem_hint_asus">Cho phép SwitchGuard trong Auto-start Manager để giám sát khởi động lại sau khi khởi động lại máy.</string>
     <string name="section_about">Giới thiệu</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Thiết bị của bạn ở đâu?</string>
-    <string name="onb_platform_body">Chọn ứng dụng bạn đang dùng để điều khiển thiết bị.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF và các thiết bị khác tương thích eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Thiết bị bạn điều khiển trong ứng dụng Smart Life hoặc Tuya Smart</string>
-    <string name="onb_platform_both">Dùng cả hai? Hãy thiết lập một cái bây giờ và thêm cái còn lại sau trong Cài đặt.</string>
     <string name="onb_tuya_title">Tạo dự án Tuya Cloud miễn phí</string>
     <string name="onb_tuya_body">SwitchGuard đọc thiết bị của bạn qua API đám mây chính thức của Tuya bằng dự án miễn phí của riêng bạn. Mất khoảng năm phút.</string>
     <string name="onb_tuya_step1">Trên platform.tuya.com, tạo tài khoản miễn phí, rồi chọn Cloud → Create Cloud Project: Development method \"Smart Home\", data center = khu vực tài khoản Smart Life của bạn (Châu Âu / Thổ Nhĩ Kỳ: Central Europe).</string>
@@ -329,12 +322,6 @@
     <string name="login_failed">Đăng nhập thất bại: %s</string>
     <string name="login_failed_no_code">Đăng nhập thất bại: không nhận được mã ủy quyền</string>
 
-    <string name="onb_welcome_title">Chào mừng đến với SwitchGuard</string>
-    <string name="onb_welcome_body">Nhận báo động ngay khi thiết bị eWeLink (Sonoff) hoặc Tuya / Smart Life của bạn bật, tắt hoặc mất kết nối.</string>
-    <string name="onb_feature_alarm">Báo động kêu liên tục cho đến khi bạn tắt</string>
-    <string name="onb_feature_control">Bật và tắt thiết bị ngay từ ứng dụng</string>
-    <string name="onb_feature_rules">Quy tắc riêng cho từng thiết bị và giờ yên tĩnh</string>
-    <string name="onb_feature_history">Lịch sử sự kiện đầy đủ</string>
     <string name="onb_dev_title">Tạo ứng dụng nhà phát triển miễn phí</string>
     <string name="onb_dev_body">SwitchGuard giao tiếp với thiết bị của bạn qua API chính thức của eWeLink. Bạn cần App ID miễn phí của riêng mình — mất khoảng hai phút.</string>
     <string name="onb_dev_step1">Mở dev.ewelink.cc và đăng nhập bằng tài khoản eWeLink chứa các thiết bị của bạn.</string>
@@ -513,8 +500,6 @@
     <string name="demo_light">Demo · Đèn sân vườn</string>
     <string name="demo_auto_pump">Máy bơm bị kẹt</string>
     <string name="demo_auto_light">Đèn sân vườn bị để bật</string>
-    <string name="onb_platform_demo">Dùng thử không cần tài khoản (demo)</string>
-    <string name="onb_platform_demo_desc">Ba thiết bị ảo với đầy đủ tính năng, không cần thiết lập. Bạn có thể thêm tài khoản thật sau trong Cài đặt.</string>
     <string name="demo_devices">Thiết bị demo</string>
     <string name="demo_devices_desc">Thiết bị ảo để thử mọi tính năng</string>
     <string name="section_demo">Demo: mô phỏng một sự kiện</string>
@@ -533,7 +518,6 @@
     <string name="tv_keyboard_hint">Mẹo: gõ hoặc dán từ điện thoại bằng ứng dụng Google TV (điều khiển từ xa → bàn phím).</string>
     <string name="tv_time_hint">Lên và xuống để đổi giá trị. OK ở phần giờ chuyển sang phút, OK ở phần phút để lưu, Quay lại để hủy.</string>
     <string name="onb_platform_transfer">Chuyển từ thiết bị khác</string>
-    <string name="onb_platform_transfer_desc">Đã thiết lập trên điện thoại? Nhận khóa Tuya, quy tắc và cài đặt qua Wi-Fi tại nhà. Với eWeLink, thiết bị này cần tài khoản riêng và khóa API riêng của tài khoản đó.</string>
     <string name="onb_transfer_title">Chuyển từ điện thoại của bạn</string>
     <string name="onb_transfer_body">Cả hai thiết bị phải dùng cùng một mạng Wi-Fi.</string>
     <string name="transfer_receive_steps">Trên điện thoại, mở SwitchGuard → Cài đặt → Sao lưu &amp; chuyển → Gửi sang thiết bị khác, chọn thiết bị này và nhập mã bên dưới.</string>

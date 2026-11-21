@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">Sta SwitchGuard toe in Auto-start Manager zodat de bewaking na een herstart weer start.</string>
     <string name="section_about">Over</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Waar staan je apparaten?</string>
-    <string name="onb_platform_body">Kies de app die je nu gebruikt om je apparaten te bedienen.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF en andere met eWeLink compatibele apparaten</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Apparaten die je bedient in de Smart Life- of Tuya Smart-app</string>
-    <string name="onb_platform_both">Heb je allebei? Stel er nu één in en voeg de andere later toe bij Instellingen.</string>
     <string name="onb_tuya_title">Maak een gratis Tuya Cloud-project</string>
     <string name="onb_tuya_body">SwitchGuard leest je apparaten via de officiële cloud-API van Tuya met je eigen gratis project. Dat duurt ongeveer vijf minuten.</string>
     <string name="onb_tuya_step1">Maak op platform.tuya.com een gratis account en kies Cloud → Create Cloud Project: Development method "Smart Home", data center = de regio van je Smart Life-account (Europa / Türkiye: Central Europe).</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">Inloggen mislukt: geen autorisatiecode ontvangen</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">Welkom bij SwitchGuard</string>
-    <string name="onb_welcome_body">Krijg een alarm op het moment dat je eWeLink- (Sonoff) of Tuya / Smart Life-apparaten aan- of uitgaan of hun verbinding verliezen.</string>
-    <string name="onb_feature_alarm">Een alarm dat blijft afgaan tot je het uitzet</string>
-    <string name="onb_feature_control">Apparaten aan- en uitzetten vanuit de app</string>
-    <string name="onb_feature_rules">Regels per apparaat en stille uren</string>
-    <string name="onb_feature_history">Volledige gebeurtenisgeschiedenis</string>
     <string name="onb_dev_title">Maak een gratis ontwikkelaarsapp</string>
     <string name="onb_dev_body">SwitchGuard praat met je apparaten via de officiële API van eWeLink. Hiervoor heb je een eigen gratis App ID nodig — dat duurt ongeveer twee minuten.</string>
     <string name="onb_dev_step1">Open dev.ewelink.cc en log in met het eWeLink-account waarin je apparaten staan.</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">Demo · Tuinverlichting</string>
     <string name="demo_auto_pump">Pomp vastgelopen</string>
     <string name="demo_auto_light">Tuinverlichting aan gelaten</string>
-    <string name="onb_platform_demo">Proberen zonder account (demo)</string>
-    <string name="onb_platform_demo_desc">Drie virtuele apparaten met alle functies, zonder instellen. Je kunt later je echte account toevoegen bij Instellingen.</string>
     <string name="demo_devices">Demo-apparaten</string>
     <string name="demo_devices_desc">Virtuele apparaten om alle functies uit te proberen</string>
     <string name="section_demo">Demo: een gebeurtenis simuleren</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">Tip: typ of plak vanaf je telefoon met de Google TV-app (afstandsbediening → toetsenbord).</string>
     <string name="tv_time_hint">Omhoog en omlaag wijzigen de waarde. OK op het uur gaat naar de minuten, OK op de minuten slaat op, Terug annuleert.</string>
     <string name="onb_platform_transfer">Overzetten van een ander apparaat</string>
-    <string name="onb_platform_transfer_desc">Al ingesteld op je telefoon? Haal Tuya-sleutels, regels en instellingen op via je thuis-wifi. Voor eWeLink heeft dit apparaat een eigen account en de eigen API-sleutels van dat account nodig.</string>
     <string name="onb_transfer_title">Overzetten van je telefoon</string>
     <string name="onb_transfer_body">Beide apparaten moeten op hetzelfde wifi-netwerk zitten.</string>
     <string name="transfer_receive_steps">Open op je telefoon SwitchGuard → Instellingen → Back-up &amp; overzetten → Naar een ander apparaat sturen, kies dit apparaat en voer de onderstaande code in.</string>

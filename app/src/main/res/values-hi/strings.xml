@@ -141,13 +141,6 @@
     <string name="oem_hint_asus">रीबूट के बाद निगरानी दोबारा शुरू होने के लिए Auto-start Manager में SwitchGuard को अनुमति दें।</string>
     <string name="section_about">ऐप के बारे में</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">आपके डिवाइस कहाँ हैं?</string>
-    <string name="onb_platform_body">वह ऐप चुनें जिससे आप आज अपने डिवाइस चलाते हैं।</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF और eWeLink के साथ चलने वाले दूसरे डिवाइस</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">वे डिवाइस जिन्हें आप Smart Life या Tuya Smart ऐप में चलाते हैं</string>
-    <string name="onb_platform_both">दोनों हैं? अभी एक सेट अप करें और दूसरा बाद में सेटिंग में जोड़ें।</string>
     <string name="onb_tuya_title">मुफ़्त Tuya Cloud प्रोजेक्ट बनाएँ</string>
     <string name="onb_tuya_body">SwitchGuard आपके अपने मुफ़्त प्रोजेक्ट के साथ Tuya के आधिकारिक क्लाउड API से आपके डिवाइस पढ़ता है। इसमें करीब पाँच मिनट लगते हैं।</string>
     <string name="onb_tuya_step1">platform.tuya.com पर मुफ़्त अकाउंट बनाएँ, फिर Cloud → Create Cloud Project: Development method \"Smart Home\", data center = आपके Smart Life अकाउंट का क्षेत्र (भारत: India)।</string>
@@ -319,12 +312,6 @@
     <string name="login_success">साइन इन हो गया</string>
     <string name="login_failed">साइन-इन नहीं हो सका: %s</string>
     <string name="login_failed_no_code">साइन-इन नहीं हो सका: कोई ऑथराइज़ेशन कोड नहीं मिला</string>
-    <string name="onb_welcome_title">SwitchGuard में आपका स्वागत है</string>
-    <string name="onb_welcome_body">आपके eWeLink (Sonoff) या Tuya / Smart Life डिवाइस के चालू-बंद होते ही या कनेक्शन खोते ही अलार्म पाएँ।</string>
-    <string name="onb_feature_alarm">ऐसा अलार्म जो आपके बंद करने तक बजता रहता है</string>
-    <string name="onb_feature_control">ऐप से डिवाइस चालू और बंद करें</string>
-    <string name="onb_feature_rules">हर डिवाइस के लिए नियम और शांत समय</string>
-    <string name="onb_feature_history">घटनाओं का पूरा इतिहास</string>
     <string name="onb_dev_title">मुफ़्त डेवलपर ऐप बनाएँ</string>
     <string name="onb_dev_body">SwitchGuard eWeLink के आधिकारिक API से आपके डिवाइस से बात करता है। इसके लिए आपको अपना मुफ़्त App ID चाहिए — इसमें करीब दो मिनट लगते हैं।</string>
     <string name="onb_dev_step1">dev.ewelink.cc खोलें और उस eWeLink अकाउंट से साइन इन करें जिसमें आपके डिवाइस हैं।</string>
@@ -497,8 +484,6 @@
     <string name="demo_light">डेमो · बगीचे की लाइट</string>
     <string name="demo_auto_pump">पंप रुक गया</string>
     <string name="demo_auto_light">बगीचे की लाइट चालू छूट गई</string>
-    <string name="onb_platform_demo">बिना अकाउंट के आज़माएँ (डेमो)</string>
-    <string name="onb_platform_demo_desc">हर सुविधा वाले तीन वर्चुअल डिवाइस, बिना किसी सेटअप के। अपना असली अकाउंट आप बाद में सेटिंग में जोड़ सकते हैं।</string>
     <string name="demo_devices">डेमो डिवाइस</string>
     <string name="demo_devices_desc">हर सुविधा आज़माने के लिए वर्चुअल डिवाइस</string>
     <string name="section_demo">डेमो: कोई घटना सिम्युलेट करें</string>
@@ -517,7 +502,6 @@
     <string name="tv_keyboard_hint">सुझाव: Google TV ऐप (रिमोट → कीबोर्ड) से अपने फ़ोन से टाइप या पेस्ट करें।</string>
     <string name="tv_time_hint">ऊपर और नीचे से मान बदलता है। घंटे पर OK दबाने से मिनट पर जाते हैं, मिनट पर OK दबाने से सेव होता है, वापस दबाने से रद्द होता है।</string>
     <string name="onb_platform_transfer">दूसरे डिवाइस से ट्रांसफ़र करें</string>
-    <string name="onb_platform_transfer_desc">फ़ोन पर पहले से सेट अप है? अपने घर के Wi-Fi से Tuya कुंजियाँ, नियम और सेटिंग ले आएँ। eWeLink के लिए इस डिवाइस को अपना अलग अकाउंट और उस अकाउंट की अपनी API कुंजियाँ चाहिए।</string>
     <string name="onb_transfer_title">अपने फ़ोन से ट्रांसफ़र करें</string>
     <string name="onb_transfer_body">दोनों डिवाइस एक ही Wi-Fi नेटवर्क पर होने चाहिए।</string>
     <string name="transfer_receive_steps">अपने फ़ोन पर SwitchGuard → सेटिंग → बैकअप और ट्रांसफ़र → दूसरे डिवाइस पर भेजें खोलें, यह डिवाइस चुनें और नीचे दिया कोड डालें।</string>

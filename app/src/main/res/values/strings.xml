@@ -160,13 +160,6 @@
     <string name="oem_hint_asus">Allow SwitchGuard in Auto-start Manager so monitoring restarts after a reboot.</string>
     <string name="section_about">About</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Where are your devices?</string>
-    <string name="onb_platform_body">Choose the app you use to control your devices today.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF and other eWeLink-compatible devices</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Devices you control in the Smart Life or Tuya Smart app</string>
-    <string name="onb_platform_both">Have both? Set up one now and add the other later in Settings.</string>
     <string name="onb_tuya_title">Create a free Tuya Cloud project</string>
     <string name="onb_tuya_body">SwitchGuard reads your devices through Tuya\'s official cloud API with your own free project. It takes about five minutes.</string>
     <string name="onb_tuya_step1">On platform.tuya.com create a free account, then Cloud → Create Cloud Project: Development method "Smart Home", data center = your Smart Life account region (Europe / Türkiye: Central Europe).</string>
@@ -342,12 +335,6 @@
     <string name="login_failed_no_code">Sign-in failed: no authorization code returned</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">Welcome to SwitchGuard</string>
-    <string name="onb_welcome_body">Get an alarm the moment your eWeLink (Sonoff) or Tuya / Smart Life devices switch on or off or lose their connection.</string>
-    <string name="onb_feature_alarm">An alarm that keeps ringing until you dismiss it</string>
-    <string name="onb_feature_control">Switch devices on and off from the app</string>
-    <string name="onb_feature_rules">Per-device rules and quiet hours</string>
-    <string name="onb_feature_history">Full event history</string>
     <string name="onb_dev_title">Create a free developer app</string>
     <string name="onb_dev_body">SwitchGuard talks to your devices through eWeLink\'s official API. You need your own free App ID for this — it takes about two minutes.</string>
     <string name="onb_dev_step1">Open dev.ewelink.cc and sign in with the eWeLink account your devices are in.</string>
@@ -533,8 +520,6 @@
     <string name="demo_light">Demo · Garden light</string>
     <string name="demo_auto_pump">Pump stalled</string>
     <string name="demo_auto_light">Garden light left on</string>
-    <string name="onb_platform_demo">Try without an account (demo)</string>
-    <string name="onb_platform_demo_desc">Three virtual devices with every feature, no setup. You can add your real account later in Settings.</string>
     <string name="demo_devices">Demo devices</string>
     <string name="demo_devices_desc">Virtual devices for trying every feature</string>
     <string name="section_demo">Demo: simulate an event</string>
@@ -553,7 +538,6 @@
     <string name="tv_keyboard_hint">Tip: type or paste from your phone with the Google TV app (remote → keyboard).</string>
     <string name="tv_time_hint">Up and down change the value. OK on the hour moves to minutes, OK on the minutes saves, Back cancels.</string>
     <string name="onb_platform_transfer">Transfer from another device</string>
-    <string name="onb_platform_transfer_desc">Already set up on your phone? Get Tuya keys, rules and settings over your home Wi-Fi. For eWeLink this device needs its own account and that account\'s own API keys.</string>
     <string name="onb_transfer_title">Transfer from your phone</string>
     <string name="onb_transfer_body">Both devices must be on the same Wi-Fi network.</string>
     <string name="transfer_receive_steps">On your phone open SwitchGuard → Settings → Backup &amp; transfer → Send to another device, pick this device and enter the code below.</string>

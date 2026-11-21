@@ -149,13 +149,6 @@
     <string name="oem_hint_asus">อนุญาต SwitchGuard ใน Auto-start Manager เพื่อให้การตรวจสอบเริ่มใหม่หลังรีบูต</string>
     <string name="section_about">เกี่ยวกับ</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">อุปกรณ์ของคุณอยู่ที่ไหน?</string>
-    <string name="onb_platform_body">เลือกแอปที่คุณใช้ควบคุมอุปกรณ์อยู่ในตอนนี้</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF และอุปกรณ์อื่นที่เข้ากันได้กับ eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">อุปกรณ์ที่คุณควบคุมในแอป Smart Life หรือ Tuya Smart</string>
-    <string name="onb_platform_both">มีทั้งสองอย่าง? ตั้งค่าอย่างหนึ่งตอนนี้ แล้วเพิ่มอีกอย่างภายหลังในการตั้งค่า</string>
     <string name="onb_tuya_title">สร้างโปรเจกต์ Tuya Cloud ฟรี</string>
     <string name="onb_tuya_body">SwitchGuard อ่านอุปกรณ์ของคุณผ่าน API คลาวด์ทางการของ Tuya ด้วยโปรเจกต์ฟรีของคุณเอง ใช้เวลาประมาณห้านาที</string>
     <string name="onb_tuya_step1">ที่ platform.tuya.com สร้างบัญชีฟรี แล้วไปที่ Cloud → Create Cloud Project: Development method เลือก \"Smart Home\" ศูนย์ข้อมูล = ภูมิภาคของบัญชี Smart Life ของคุณ (ยุโรป / ตุรกี: Central Europe)</string>
@@ -329,12 +322,6 @@
     <string name="login_failed">ลงชื่อเข้าใช้ไม่สำเร็จ: %s</string>
     <string name="login_failed_no_code">ลงชื่อเข้าใช้ไม่สำเร็จ: ไม่ได้รับรหัสการอนุญาต</string>
 
-    <string name="onb_welcome_title">ยินดีต้อนรับสู่ SwitchGuard</string>
-    <string name="onb_welcome_body">รับสัญญาณเตือนทันทีที่อุปกรณ์ eWeLink (Sonoff) หรือ Tuya / Smart Life ของคุณเปิดหรือปิด หรือขาดการเชื่อมต่อ</string>
-    <string name="onb_feature_alarm">สัญญาณเตือนที่ดังต่อเนื่องจนกว่าคุณจะปิด</string>
-    <string name="onb_feature_control">เปิดและปิดอุปกรณ์จากแอป</string>
-    <string name="onb_feature_rules">กฎรายอุปกรณ์และช่วงเวลาเงียบ</string>
-    <string name="onb_feature_history">ประวัติเหตุการณ์ครบถ้วน</string>
     <string name="onb_dev_title">สร้างแอปนักพัฒนาฟรี</string>
     <string name="onb_dev_body">SwitchGuard สื่อสารกับอุปกรณ์ของคุณผ่าน API ทางการของ eWeLink คุณต้องมี App ID ฟรีของตัวเองสำหรับสิ่งนี้ — ใช้เวลาประมาณสองนาที</string>
     <string name="onb_dev_step1">เปิด dev.ewelink.cc แล้วลงชื่อเข้าใช้ด้วยบัญชี eWeLink ที่มีอุปกรณ์ของคุณ</string>
@@ -513,8 +500,6 @@
     <string name="demo_light">สาธิต · ไฟสวน</string>
     <string name="demo_auto_pump">ปั๊มติดขัด</string>
     <string name="demo_auto_light">ลืมปิดไฟสวน</string>
-    <string name="onb_platform_demo">ลองโดยไม่ต้องมีบัญชี (สาธิต)</string>
-    <string name="onb_platform_demo_desc">อุปกรณ์เสมือนสามเครื่องพร้อมทุกฟีเจอร์ ไม่ต้องตั้งค่า คุณเพิ่มบัญชีจริงภายหลังได้ในการตั้งค่า</string>
     <string name="demo_devices">อุปกรณ์สาธิต</string>
     <string name="demo_devices_desc">อุปกรณ์เสมือนสำหรับลองทุกฟีเจอร์</string>
     <string name="section_demo">สาธิต: จำลองเหตุการณ์</string>
@@ -533,7 +518,6 @@
     <string name="tv_keyboard_hint">เคล็ดลับ: พิมพ์หรือวางจากโทรศัพท์ด้วยแอป Google TV (รีโมต → แป้นพิมพ์)</string>
     <string name="tv_time_hint">ขึ้นและลงเพื่อเปลี่ยนค่า OK ที่ชั่วโมงจะไปที่นาที OK ที่นาทีจะบันทึก ย้อนกลับเพื่อยกเลิก</string>
     <string name="onb_platform_transfer">โอนย้ายจากอุปกรณ์อื่น</string>
-    <string name="onb_platform_transfer_desc">ตั้งค่าบนโทรศัพท์ไว้แล้ว? รับคีย์ Tuya กฎ และการตั้งค่าผ่าน Wi-Fi ในบ้าน สำหรับ eWeLink อุปกรณ์นี้ต้องมีบัญชีของตัวเองและคีย์ API ของบัญชีนั้น</string>
     <string name="onb_transfer_title">โอนย้ายจากโทรศัพท์ของคุณ</string>
     <string name="onb_transfer_body">อุปกรณ์ทั้งสองต้องอยู่ในเครือข่าย Wi-Fi เดียวกัน</string>
     <string name="transfer_receive_steps">บนโทรศัพท์ของคุณ เปิด SwitchGuard → การตั้งค่า → สำรองข้อมูลและโอนย้าย → ส่งไปยังอุปกรณ์อื่น เลือกอุปกรณ์นี้แล้วใส่รหัสด้านล่าง</string>

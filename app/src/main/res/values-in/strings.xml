@@ -141,13 +141,6 @@
     <string name="oem_hint_asus">Izinkan SwitchGuard di Auto-start Manager agar pemantauan berjalan lagi setelah restart.</string>
     <string name="section_about">Tentang</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Di mana perangkat Anda?</string>
-    <string name="onb_platform_body">Pilih aplikasi yang saat ini Anda gunakan untuk mengontrol perangkat.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF dan perangkat lain yang kompatibel dengan eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Perangkat yang Anda kontrol di aplikasi Smart Life atau Tuya Smart</string>
-    <string name="onb_platform_both">Punya keduanya? Siapkan satu sekarang dan tambahkan yang lain nanti di Pengaturan.</string>
     <string name="onb_tuya_title">Buat proyek Tuya Cloud gratis</string>
     <string name="onb_tuya_body">SwitchGuard membaca perangkat Anda lewat API cloud resmi Tuya dengan proyek gratis milik Anda sendiri. Butuh sekitar lima menit.</string>
     <string name="onb_tuya_step1">Di platform.tuya.com buat akun gratis, lalu Cloud → Create Cloud Project: Development method "Smart Home", data center = wilayah akun Smart Life Anda (Eropa / Türkiye: Central Europe).</string>
@@ -319,12 +312,6 @@
     <string name="login_success">Berhasil masuk</string>
     <string name="login_failed">Gagal masuk: %s</string>
     <string name="login_failed_no_code">Gagal masuk: kode otorisasi tidak dikembalikan</string>
-    <string name="onb_welcome_title">Selamat datang di SwitchGuard</string>
-    <string name="onb_welcome_body">Dapatkan alarm saat perangkat eWeLink (Sonoff) atau Tuya / Smart Life Anda menyala, mati, atau kehilangan koneksi.</string>
-    <string name="onb_feature_alarm">Alarm yang terus berbunyi sampai Anda mematikannya</string>
-    <string name="onb_feature_control">Nyalakan dan matikan perangkat dari aplikasi</string>
-    <string name="onb_feature_rules">Aturan per perangkat dan jam tenang</string>
-    <string name="onb_feature_history">Riwayat kejadian lengkap</string>
     <string name="onb_dev_title">Buat aplikasi pengembang gratis</string>
     <string name="onb_dev_body">SwitchGuard berkomunikasi dengan perangkat Anda lewat API resmi eWeLink. Untuk itu Anda memerlukan App ID gratis milik sendiri — butuh sekitar dua menit.</string>
     <string name="onb_dev_step1">Buka dev.ewelink.cc dan masuk dengan akun eWeLink tempat perangkat Anda berada.</string>
@@ -497,8 +484,6 @@
     <string name="demo_light">Demo · Lampu taman</string>
     <string name="demo_auto_pump">Pompa macet</string>
     <string name="demo_auto_light">Lampu taman lupa dimatikan</string>
-    <string name="onb_platform_demo">Coba tanpa akun (demo)</string>
-    <string name="onb_platform_demo_desc">Tiga perangkat virtual dengan semua fitur, tanpa penyiapan. Anda dapat menambahkan akun asli nanti di Pengaturan.</string>
     <string name="demo_devices">Perangkat demo</string>
     <string name="demo_devices_desc">Perangkat virtual untuk mencoba semua fitur</string>
     <string name="section_demo">Demo: simulasikan kejadian</string>
@@ -517,7 +502,6 @@
     <string name="tv_keyboard_hint">Tips: ketik atau tempel dari ponsel Anda dengan aplikasi Google TV (remote → keyboard).</string>
     <string name="tv_time_hint">Atas dan bawah mengubah nilai. OK pada jam berpindah ke menit, OK pada menit menyimpan, Kembali membatalkan.</string>
     <string name="onb_platform_transfer">Transfer dari perangkat lain</string>
-    <string name="onb_platform_transfer_desc">Sudah disiapkan di ponsel Anda? Ambil kunci Tuya, aturan, dan pengaturan lewat Wi-Fi rumah. Untuk eWeLink, perangkat ini memerlukan akun sendiri dan kunci API milik akun itu.</string>
     <string name="onb_transfer_title">Transfer dari ponsel Anda</string>
     <string name="onb_transfer_body">Kedua perangkat harus berada di jaringan Wi-Fi yang sama.</string>
     <string name="transfer_receive_steps">Di ponsel Anda buka SwitchGuard → Pengaturan → Cadangan &amp; transfer → Kirim ke perangkat lain, pilih perangkat ini dan masukkan kode di bawah.</string>

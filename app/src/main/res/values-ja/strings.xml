@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">再起動後に監視を再開できるよう、自動起動マネージャーでSwitchGuardを許可してください。</string>
     <string name="section_about">アプリについて</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">デバイスはどこにありますか？</string>
-    <string name="onb_platform_body">現在デバイスの操作に使っているアプリを選んでください。</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFFおよびその他のeWeLink対応デバイス</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Smart LifeまたはTuya Smartアプリで操作しているデバイス</string>
-    <string name="onb_platform_both">両方お使いですか？まず一方を設定し、もう一方は後から設定で追加できます。</string>
     <string name="onb_tuya_title">無料のTuya Cloudプロジェクトを作成</string>
     <string name="onb_tuya_body">SwitchGuardは、ご自身の無料プロジェクトを使って、Tuya公式のクラウドAPI経由でデバイスを読み取ります。所要時間は約5分です。</string>
     <string name="onb_tuya_step1">platform.tuya.com で無料アカウントを作成し、Cloud → Create Cloud Project を開きます。Development method は「Smart Home」、データセンターはSmart Lifeアカウントのリージョンにします（ヨーロッパ / トルコ: Central Europe）。</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">ログインに失敗しました: 認証コードが返されませんでした</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">SwitchGuardへようこそ</string>
-    <string name="onb_welcome_body">eWeLink（Sonoff）またはTuya / Smart Lifeのデバイスがオン・オフになったり接続が切れたりした瞬間に、アラームでお知らせします。</string>
-    <string name="onb_feature_alarm">止めるまで鳴り続けるアラーム</string>
-    <string name="onb_feature_control">アプリからデバイスのオン・オフを操作</string>
-    <string name="onb_feature_rules">デバイスごとのルールとサイレント時間</string>
-    <string name="onb_feature_history">完全なイベント履歴</string>
     <string name="onb_dev_title">無料の開発者アプリを作成</string>
     <string name="onb_dev_body">SwitchGuardはeWeLink公式のAPI経由でデバイスと通信します。そのため、ご自身の無料のApp IDが必要です。所要時間は約2分です。</string>
     <string name="onb_dev_step1">dev.ewelink.cc を開き、デバイスが登録されているeWeLinkアカウントでログインします。</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">デモ · 庭の照明</string>
     <string name="demo_auto_pump">ポンプが停止</string>
     <string name="demo_auto_light">庭の照明がつけっぱなし</string>
-    <string name="onb_platform_demo">アカウントなしで試す（デモ）</string>
-    <string name="onb_platform_demo_desc">セットアップ不要で、全機能を試せる3台の仮想デバイスです。実際のアカウントは後から設定で追加できます。</string>
     <string name="demo_devices">デモデバイス</string>
     <string name="demo_devices_desc">全機能を試せる仮想デバイス</string>
     <string name="section_demo">デモ: イベントをシミュレート</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">ヒント: Google TVアプリ（リモコン → キーボード）を使うと、スマートフォンから入力や貼り付けができます。</string>
     <string name="tv_time_hint">上下で値を変更します。時でOKを押すと分に移動し、分でOKを押すと保存、戻るでキャンセルします。</string>
     <string name="onb_platform_transfer">別のデバイスから転送</string>
-    <string name="onb_platform_transfer_desc">すでにスマートフォンで設定済みですか？自宅のWi-FiでTuyaのキー、ルール、設定を取り込めます。eWeLinkの場合、このデバイスには専用のアカウントと、そのアカウント自身のAPIキーが必要です。</string>
     <string name="onb_transfer_title">スマートフォンから転送</string>
     <string name="onb_transfer_body">両方のデバイスが同じWi-Fiネットワークに接続されている必要があります。</string>
     <string name="transfer_receive_steps">スマートフォンでSwitchGuard → 設定 → バックアップと転送 → 別のデバイスに送信 を開き、このデバイスを選んで下のコードを入力します。</string>

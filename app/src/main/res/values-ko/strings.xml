@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">재부팅 후 모니터링이 다시 시작되도록 자동 시작 관리자에서 SwitchGuard를 허용하세요.</string>
     <string name="section_about">정보</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">기기는 어디에 있나요?</string>
-    <string name="onb_platform_body">현재 기기를 제어하는 데 사용하는 앱을 선택하세요.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF 및 기타 eWeLink 호환 기기</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Smart Life 또는 Tuya Smart 앱에서 제어하는 기기</string>
-    <string name="onb_platform_both">둘 다 사용하나요? 지금 하나를 설정하고 나머지는 나중에 설정에서 추가하세요.</string>
     <string name="onb_tuya_title">무료 Tuya Cloud 프로젝트 만들기</string>
     <string name="onb_tuya_body">SwitchGuard는 본인의 무료 프로젝트를 통해 Tuya 공식 클라우드 API로 기기를 읽어 옵니다. 약 5분이 걸립니다.</string>
     <string name="onb_tuya_step1">platform.tuya.com에서 무료 계정을 만든 다음 Cloud → Create Cloud Project에서 Development method는 \"Smart Home\", 데이터 센터는 Smart Life 계정의 지역으로 선택하세요 (유럽 / 튀르키예: Central Europe).</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">로그인 실패: 인증 코드가 반환되지 않았습니다</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">SwitchGuard에 오신 것을 환영합니다</string>
-    <string name="onb_welcome_body">eWeLink(Sonoff) 또는 Tuya / Smart Life 기기가 켜지거나 꺼지거나 연결이 끊어지는 즉시 알람을 받으세요.</string>
-    <string name="onb_feature_alarm">끌 때까지 계속 울리는 알람</string>
-    <string name="onb_feature_control">앱에서 기기를 켜고 끄기</string>
-    <string name="onb_feature_rules">기기별 규칙과 방해 금지 시간</string>
-    <string name="onb_feature_history">전체 이벤트 기록</string>
     <string name="onb_dev_title">무료 개발자 앱 만들기</string>
     <string name="onb_dev_body">SwitchGuard는 eWeLink 공식 API를 통해 기기와 통신합니다. 이를 위해 본인의 무료 App ID가 필요합니다. 약 2분이 걸립니다.</string>
     <string name="onb_dev_step1">dev.ewelink.cc를 열고 기기가 등록된 eWeLink 계정으로 로그인하세요.</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">데모 · 정원 조명</string>
     <string name="demo_auto_pump">펌프 정지</string>
     <string name="demo_auto_light">정원 조명이 켜진 채 방치됨</string>
-    <string name="onb_platform_demo">계정 없이 체험하기 (데모)</string>
-    <string name="onb_platform_demo_desc">별도 설정 없이 모든 기능을 갖춘 가상 기기 3대를 체험합니다. 실제 계정은 나중에 설정에서 추가할 수 있습니다.</string>
     <string name="demo_devices">데모 기기</string>
     <string name="demo_devices_desc">모든 기능을 체험해 볼 수 있는 가상 기기</string>
     <string name="section_demo">데모: 이벤트 시뮬레이션</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">팁: Google TV 앱(리모컨 → 키보드)을 사용하면 휴대폰에서 입력하거나 붙여 넣을 수 있습니다.</string>
     <string name="tv_time_hint">위/아래로 값을 바꿉니다. 시에서 확인을 누르면 분으로 이동하고, 분에서 확인을 누르면 저장되며, 뒤로를 누르면 취소됩니다.</string>
     <string name="onb_platform_transfer">다른 기기에서 가져오기</string>
-    <string name="onb_platform_transfer_desc">이미 휴대폰에 설정해 두셨나요? 집 Wi-Fi로 Tuya 키, 규칙, 설정을 가져옵니다. eWeLink는 이 기기에 별도의 계정과 그 계정의 API 키가 필요합니다.</string>
     <string name="onb_transfer_title">휴대폰에서 가져오기</string>
     <string name="onb_transfer_body">두 기기가 같은 Wi-Fi 네트워크에 연결되어 있어야 합니다.</string>
     <string name="transfer_receive_steps">휴대폰에서 SwitchGuard → 설정 → 백업 및 전송 → 다른 기기로 보내기를 열고, 이 기기를 선택한 다음 아래 코드를 입력하세요.</string>

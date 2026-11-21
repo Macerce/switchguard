@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">Permita o SwitchGuard no Gerenciador de Inicialização Automática para que o monitoramento reinicie após uma reinicialização.</string>
     <string name="section_about">Sobre</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Onde estão seus dispositivos?</string>
-    <string name="onb_platform_body">Escolha o app que você usa hoje para controlar seus dispositivos.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF e outros dispositivos compatíveis com eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Dispositivos que você controla no app Smart Life ou Tuya Smart</string>
-    <string name="onb_platform_both">Usa os dois? Configure um agora e adicione o outro depois em Ajustes.</string>
     <string name="onb_tuya_title">Crie um projeto Tuya Cloud gratuito</string>
     <string name="onb_tuya_body">O SwitchGuard lê seus dispositivos pela API oficial de nuvem da Tuya, com um projeto gratuito seu. Leva cerca de cinco minutos.</string>
     <string name="onb_tuya_step1">Em platform.tuya.com, crie uma conta gratuita e depois Cloud → Create Cloud Project: método de desenvolvimento \"Smart Home\", data center = região da sua conta Smart Life (Europa / Turquia: Central Europe).</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">Falha no login: nenhum código de autorização retornado</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">Bem-vindo ao SwitchGuard</string>
-    <string name="onb_welcome_body">Receba um alarme no instante em que seus dispositivos eWeLink (Sonoff) ou Tuya / Smart Life ligarem, desligarem ou perderem a conexão.</string>
-    <string name="onb_feature_alarm">Um alarme que toca até você desligá-lo</string>
-    <string name="onb_feature_control">Ligue e desligue dispositivos pelo app</string>
-    <string name="onb_feature_rules">Regras por dispositivo e horário de silêncio</string>
-    <string name="onb_feature_history">Histórico completo de eventos</string>
     <string name="onb_dev_title">Crie um app de desenvolvedor gratuito</string>
     <string name="onb_dev_body">O SwitchGuard se comunica com seus dispositivos pela API oficial do eWeLink. Para isso você precisa de um App ID gratuito — leva cerca de dois minutos.</string>
     <string name="onb_dev_step1">Abra dev.ewelink.cc e entre com a conta eWeLink em que seus dispositivos estão.</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">Demo · Luz do jardim</string>
     <string name="demo_auto_pump">Bomba travada</string>
     <string name="demo_auto_light">Luz do jardim esquecida acesa</string>
-    <string name="onb_platform_demo">Experimentar sem conta (demo)</string>
-    <string name="onb_platform_demo_desc">Três dispositivos virtuais com todos os recursos, sem configuração. Você pode adicionar sua conta real depois em Ajustes.</string>
     <string name="demo_devices">Dispositivos de demonstração</string>
     <string name="demo_devices_desc">Dispositivos virtuais para experimentar todos os recursos</string>
     <string name="section_demo">Demo: simular um evento</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">Dica: digite ou cole a partir do celular com o app Google TV (controle → teclado).</string>
     <string name="tv_time_hint">Cima e baixo alteram o valor. OK na hora passa para os minutos, OK nos minutos salva, Voltar cancela.</string>
     <string name="onb_platform_transfer">Transferir de outro dispositivo</string>
-    <string name="onb_platform_transfer_desc">Já configurou no celular? Receba as chaves do Tuya, regras e ajustes pelo Wi-Fi da sua casa. Para o eWeLink, este dispositivo precisa de uma conta própria e das chaves de API dessa conta.</string>
     <string name="onb_transfer_title">Transferir do seu celular</string>
     <string name="onb_transfer_body">Os dois dispositivos devem estar na mesma rede Wi-Fi.</string>
     <string name="transfer_receive_steps">No celular, abra SwitchGuard → Ajustes → Backup e transferência → Enviar para outro dispositivo, escolha este dispositivo e digite o código abaixo.</string>

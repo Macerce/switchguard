@@ -159,13 +159,6 @@
     <string name="oem_hint_asus">在「自動啟動管理員」中允許 SwitchGuard，讓監控在重新開機後能重新啟動。</string>
     <string name="section_about">關於</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">您的裝置在哪裡？</string>
-    <string name="onb_platform_body">請選擇您目前用來控制裝置的應用程式。</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF 及其他相容 eWeLink 的裝置</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">您在 Smart Life 或 Tuya Smart 應用程式中控制的裝置</string>
-    <string name="onb_platform_both">兩種都有嗎？先設定其中一種，之後再到「設定」新增另一種。</string>
     <string name="onb_tuya_title">建立免費的 Tuya Cloud 專案</string>
     <string name="onb_tuya_body">SwitchGuard 會透過您自己的免費專案，使用 Tuya 官方雲端 API 讀取您的裝置。大約需要五分鐘。</string>
     <string name="onb_tuya_step1">在 platform.tuya.com 建立免費帳號，然後選擇 Cloud → Create Cloud Project：Development method 選「Smart Home」，資料中心 = 您 Smart Life 帳號所在的地區（歐洲 / 土耳其：Central Europe）。</string>
@@ -341,12 +334,6 @@
     <string name="login_failed_no_code">登入失敗：未傳回授權碼</string>
 
     <!-- Onboarding -->
-    <string name="onb_welcome_title">歡迎使用 SwitchGuard</string>
-    <string name="onb_welcome_body">當您的 eWeLink（Sonoff）或 Tuya / Smart Life 裝置開啟、關閉或斷線的那一刻，立即收到警報。</string>
-    <string name="onb_feature_alarm">持續響鈴直到您解除的警報</string>
-    <string name="onb_feature_control">從應用程式開啟和關閉裝置</string>
-    <string name="onb_feature_rules">每個裝置獨立的規則和勿擾時段</string>
-    <string name="onb_feature_history">完整的事件記錄</string>
     <string name="onb_dev_title">建立免費的開發者應用程式</string>
     <string name="onb_dev_body">SwitchGuard 透過 eWeLink 的官方 API 與您的裝置通訊。您需要自己的免費 App ID — 大約需要兩分鐘。</string>
     <string name="onb_dev_step1">開啟 dev.ewelink.cc，並使用裝置所在的 eWeLink 帳號登入。</string>
@@ -532,8 +519,6 @@
     <string name="demo_light">示範 · 庭院燈</string>
     <string name="demo_auto_pump">水泵停轉</string>
     <string name="demo_auto_light">庭院燈忘了關</string>
-    <string name="onb_platform_demo">不用帳號先試用（示範）</string>
-    <string name="onb_platform_demo_desc">三個虛擬裝置，具備所有功能，無需設定。之後可在「設定」中加入您的真實帳號。</string>
     <string name="demo_devices">示範裝置</string>
     <string name="demo_devices_desc">可試用所有功能的虛擬裝置</string>
     <string name="section_demo">示範：模擬事件</string>
@@ -552,7 +537,6 @@
     <string name="tv_keyboard_hint">提示：可使用 Google TV 應用程式（遙控器 → 鍵盤）從手機輸入或貼上。</string>
     <string name="tv_time_hint">上下鍵可變更數值。在小時上按「確定」會移到分鐘，在分鐘上按「確定」會儲存，按「返回」則取消。</string>
     <string name="onb_platform_transfer">從另一個裝置轉移</string>
-    <string name="onb_platform_transfer_desc">已在手機上設定好了嗎？透過家中 Wi-Fi 取得 Tuya 金鑰、規則和設定。eWeLink 部分，此裝置需要自己的帳號以及該帳號專屬的 API 金鑰。</string>
     <string name="onb_transfer_title">從手機轉移</string>
     <string name="onb_transfer_body">兩個裝置必須連上同一個 Wi-Fi 網路。</string>
     <string name="transfer_receive_steps">在手機上開啟 SwitchGuard → 設定 → 備份與轉移 → 傳送到另一個裝置，選擇此裝置並輸入下方代碼。</string>

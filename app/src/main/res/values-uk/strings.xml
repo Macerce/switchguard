@@ -149,13 +149,6 @@
     <string name="oem_hint_asus">Дозвольте SwitchGuard у менеджері автозапуску, щоб моніторинг відновлювався після перезавантаження.</string>
     <string name="section_about">Про застосунок</string>
     <string name="tuya_account">Tuya / Smart Life</string>
-    <string name="onb_platform_title">Де ваші пристрої?</string>
-    <string name="onb_platform_body">Виберіть застосунок, яким ви зараз керуєте пристроями.</string>
-    <string name="onb_platform_ewelink">eWeLink</string>
-    <string name="onb_platform_ewelink_desc">SONOFF та інші пристрої, сумісні з eWeLink</string>
-    <string name="onb_platform_tuya">Tuya / Smart Life</string>
-    <string name="onb_platform_tuya_desc">Пристрої, якими ви керуєте в застосунку Smart Life або Tuya Smart</string>
-    <string name="onb_platform_both">Користуєтеся обома? Налаштуйте один зараз, а інший додайте пізніше в налаштуваннях.</string>
     <string name="onb_tuya_title">Створіть безкоштовний проєкт Tuya Cloud</string>
     <string name="onb_tuya_body">SwitchGuard зчитує ваші пристрої через офіційний хмарний API Tuya за допомогою вашого власного безкоштовного проєкту. Це займе близько п\'яти хвилин.</string>
     <string name="onb_tuya_step1">На platform.tuya.com створіть безкоштовний обліковий запис, потім Cloud → Create Cloud Project: Development method «Smart Home», дата-центр = регіон вашого облікового запису Smart Life (Європа / Туреччина: Central Europe).</string>
@@ -329,12 +322,6 @@
     <string name="login_failed">Не вдалося увійти: %s</string>
     <string name="login_failed_no_code">Не вдалося увійти: код авторизації не отримано</string>
 
-    <string name="onb_welcome_title">Ласкаво просимо до SwitchGuard</string>
-    <string name="onb_welcome_body">Отримуйте тривогу щойно ваші пристрої eWeLink (Sonoff) або Tuya / Smart Life вмикаються, вимикаються чи втрачають зв\'язок.</string>
-    <string name="onb_feature_alarm">Тривога, що лунає, доки ви її не вимкнете</string>
-    <string name="onb_feature_control">Вмикайте й вимикайте пристрої із застосунку</string>
-    <string name="onb_feature_rules">Правила для кожного пристрою та тихі години</string>
-    <string name="onb_feature_history">Повна історія подій</string>
     <string name="onb_dev_title">Створіть безкоштовний застосунок розробника</string>
     <string name="onb_dev_body">SwitchGuard взаємодіє з вашими пристроями через офіційний API eWeLink. Для цього потрібен ваш власний безкоштовний App ID — це займе близько двох хвилин.</string>
     <string name="onb_dev_step1">Відкрийте dev.ewelink.cc і увійдіть в обліковий запис eWeLink, у якому є ваші пристрої.</string>
@@ -513,8 +500,6 @@
     <string name="demo_light">Демо · Садове світло</string>
     <string name="demo_auto_pump">Насос зупинився</string>
     <string name="demo_auto_light">Садове світло залишили ввімкненим</string>
-    <string name="onb_platform_demo">Спробувати без облікового запису (демо)</string>
-    <string name="onb_platform_demo_desc">Три віртуальні пристрої з усіма функціями, без налаштування. Свій справжній обліковий запис можна додати пізніше в налаштуваннях.</string>
     <string name="demo_devices">Демопристрої</string>
     <string name="demo_devices_desc">Віртуальні пристрої для випробування всіх функцій</string>
     <string name="section_demo">Демо: імітація події</string>
@@ -533,7 +518,6 @@
     <string name="tv_keyboard_hint">Порада: вводьте текст або вставляйте його з телефона через застосунок Google TV (пульт → клавіатура).</string>
     <string name="tv_time_hint">Вгору й вниз змінюють значення. OK на годинах переходить до хвилин, OK на хвилинах зберігає, «Назад» скасовує.</string>
     <string name="onb_platform_transfer">Перенести з іншого пристрою</string>
-    <string name="onb_platform_transfer_desc">Уже налаштували на телефоні? Отримайте ключі Tuya, правила й налаштування через домашню мережу Wi-Fi. Для eWeLink цьому пристрою потрібен власний обліковий запис і власні ключі API цього облікового запису.</string>
     <string name="onb_transfer_title">Перенесення з телефона</string>
     <string name="onb_transfer_body">Обидва пристрої мають бути в одній мережі Wi-Fi.</string>
     <string name="transfer_receive_steps">На телефоні відкрийте SwitchGuard → Налаштування → Резервна копія й перенесення → Надіслати на інший пристрій, виберіть цей пристрій і введіть код нижче.</string>
