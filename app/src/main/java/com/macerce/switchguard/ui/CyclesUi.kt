@@ -1,5 +1,11 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Slider
+import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.ui.text.font.FontWeight
+import kotlin.math.roundToInt
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -242,6 +248,54 @@ private fun cycleScheduleText(c: Cycle, now: Long): String {
     return stringResource(R.string.cycle_next_at, text)
 }
 
+/** Süre kaydırıcısının adımları (saniye): kısa sürelerde sık, uzunlarda seyrek. */
+private val DURATION_STEPS: List<Int> = listOf(5, 10, 15, 20, 30, 45) +
+    listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30, 35, 40, 45, 50, 55).map { it * 60 } +
+    listOf(60, 90, 120, 150, 180, 240, 300, 360, 480, 600, 720, 1080, 1440).map { it * 60 } +
+    listOf(2, 3, 4, 5, 6, 7).map { it * 86_400 }
+
+/**
+ * Tanıtım videosundaki süre kartı: etiket, büyük değer, − / + ve kaydırıcı (anlamlı adımlarla). Değere dokununca
+ * tam sayı girilebilen alan açılır (ör. 7 dk 30 sn gibi adım dışı değerler için).
+ */
+@Composable
+private fun DurationPicker(label: String, seconds: Int, onChange: (Int) -> Unit) {
+    // Açılıştaki adım dışı değer listede kalsın; sonradan girilenler en yakın adıma oturur.
+    val steps = remember {
+        (DURATION_STEPS + seconds).filter { it in Cycle.MIN_STEP_SECONDS..Cycle.MAX_STEP_SECONDS }.distinct().sorted()
+    }
+    val idx = steps.indexOfLast { it <= seconds }.coerceAtLeast(0)
+    var exact by rememberSaveable { mutableStateOf(false) }
+    Column(
+        Modifier.fillMaxWidth().padding(top = 12.dp).clip(RoundedCornerShape(16.dp)).background(raisedOnTile())
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                cycleDuration(seconds.toLong()),
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f).clip(RoundedCornerShape(8.dp)).clickable(role = Role.Button) { exact = !exact },
+            )
+            FilledTonalIconButton(enabled = idx > 0 && seconds > steps.first(), onClick = { onChange(steps[if (steps[idx] < seconds) idx else idx - 1]) }, modifier = Modifier.tvFocusRing()) {
+                Icon(Icons.Rounded.Remove, stringResource(R.string.action_decrease))
+            }
+            Spacer(Modifier.width(8.dp))
+            FilledTonalIconButton(enabled = idx < steps.lastIndex, onClick = { onChange(steps[idx + 1]) }, modifier = Modifier.tvFocusRing()) {
+                Icon(Icons.Rounded.Add, stringResource(R.string.action_increase))
+            }
+        }
+        Slider(
+            value = idx.toFloat(),
+            onValueChange = { v -> onChange(steps[v.roundToInt().coerceIn(steps.indices)]) },
+            valueRange = 0f..steps.lastIndex.toFloat().coerceAtLeast(1f),
+            modifier = Modifier.tvFocusRing(RoundedCornerShape(12.dp)),
+        )
+        if (exact) DurationField(label, seconds, onChange)
+    }
+}
+
 /** Süre girişi: sayı + birim (sn / dk / sa). Değer saniyedir. */
 @Composable
 private fun DurationField(label: String, seconds: Int, onChange: (Int) -> Unit) {
@@ -427,17 +481,20 @@ fun CycleEditor(initial: Cycle?, devices: List<DeviceSnapshot>, onSave: (Cycle) 
                 stringResource(R.string.cycle_round_length, cycleDuration(draft.roundSeconds))) {
                 when (preset) {
                     CyclePreset.COUNTDOWN -> {
-                        DurationField(stringResource(R.string.cycle_duration), mainSec) { mainSec = it }
+                        DurationPicker(stringResource(R.string.cycle_duration), mainSec) { mainSec = it }
                         FieldLabel(stringResource(R.string.cycle_after))
-                        OptionGrid(listOf(false, true), countdownOn, { if (it) Icons.Rounded.PowerSettingsNew else Icons.Rounded.PowerOff },
-                            { stringResource(if (it) R.string.cycle_end_on else R.string.cycle_end_off) }) { countdownOn = it }
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            listOf(false, true).forEach { v ->
+                                ChoicePill(stringResource(if (v) R.string.cycle_end_on else R.string.cycle_end_off), countdownOn == v, { countdownOn = v })
+                            }
+                        }
                     }
-                    CyclePreset.ON_FOR -> DurationField(stringResource(R.string.cycle_on_time), mainSec) { mainSec = it }
+                    CyclePreset.ON_FOR -> DurationPicker(stringResource(R.string.cycle_on_time), mainSec) { mainSec = it }
                     CyclePreset.BLINK -> {
-                        DurationField(stringResource(R.string.cycle_on_time), mainSec) { mainSec = it }
-                        DurationField(stringResource(R.string.cycle_off_time), offSec) { offSec = it }
+                        DurationPicker(stringResource(R.string.cycle_on_time), mainSec) { mainSec = it }
+                        DurationPicker(stringResource(R.string.cycle_off_time), offSec) { offSec = it }
                     }
-                    CyclePreset.CHASE -> DurationField(stringResource(R.string.cycle_each_time), mainSec) { mainSec = it }
+                    CyclePreset.CHASE -> DurationPicker(stringResource(R.string.cycle_each_time), mainSec) { mainSec = it }
                     CyclePreset.CUSTOM -> CustomSteps(steps, targets, devices)
                 }
                 if (builtSteps.any { it.seconds < Cycle.MIN_STEP_SECONDS }) {
@@ -484,17 +541,18 @@ fun CycleEditor(initial: Cycle?, devices: List<DeviceSnapshot>, onSave: (Cycle) 
             if (preset != CyclePreset.COUNTDOWN) {
                 StepCard(Icons.Rounded.Check, Hue.GREEN, stringResource(R.string.cycle_end_title), "") {
                     Spacer(Modifier.height(12.dp))
-                    OptionGrid(CycleEnd.entries, end, {
-                        when (it) {
-                            CycleEnd.OFF -> Icons.Rounded.PowerOff; CycleEnd.ON -> Icons.Rounded.PowerSettingsNew
-                            CycleEnd.KEEP -> Icons.Rounded.AllInclusive; CycleEnd.RESTORE -> Icons.Rounded.History
+                    // Videodaki "Bitince" çipleri: Kapat / Aç / Bırak / Önceki durum.
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        CycleEnd.entries.forEach { e ->
+                            ChoicePill(
+                                stringResource(when (e) {
+                                    CycleEnd.OFF -> R.string.cycle_end_off; CycleEnd.ON -> R.string.cycle_end_on
+                                    CycleEnd.KEEP -> R.string.cycle_end_keep; CycleEnd.RESTORE -> R.string.cycle_end_restore
+                                }),
+                                end == e, { end = e },
+                            )
                         }
-                    }, {
-                        stringResource(when (it) {
-                            CycleEnd.OFF -> R.string.cycle_end_off; CycleEnd.ON -> R.string.cycle_end_on
-                            CycleEnd.KEEP -> R.string.cycle_end_keep; CycleEnd.RESTORE -> R.string.cycle_end_restore
-                        })
-                    }) { end = it }
+                    }
                 }
             }
 
@@ -519,16 +577,13 @@ fun CycleEditor(initial: Cycle?, devices: List<DeviceSnapshot>, onSave: (Cycle) 
                     color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 4.dp, start = 4.dp))
             }
 
-            Button(
-                enabled = draft.valid,
+            PillButton(
+                stringResource(R.string.action_save),
                 onClick = { onSave(draft) },
-                shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp).height(56.dp).tvFocusRing(RoundedCornerShape(18.dp)),
-            ) {
-                Icon(Icons.Rounded.Check, null)
-                Spacer(Modifier.size(8.dp))
-                Text(stringResource(R.string.action_save))
-            }
+                enabled = draft.valid,
+                icon = Icons.Rounded.Check,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            )
         }
     }
     if (confirmDelete) {

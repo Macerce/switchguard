@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material.icons.rounded.HourglassTop
@@ -1176,15 +1178,15 @@ internal fun <T> OptionChips(
     ) {
         options.forEach { o ->
             val on = o == selected
-            val shape = RoundedCornerShape(12.dp)
+            val shape = CircleShape
             Row(
                 Modifier.heightIn(min = 38.dp)
                     .tvFocusRing(shape)
                     .clip(shape)
-                    .background(if (on) scheme.primaryContainer else raisedOnTile())
-                    .then(if (on) Modifier.border(2.dp, scheme.primary, shape) else Modifier)
+                    .background(if (on) scheme.primary.copy(alpha = 0.22f) else raisedOnTile())
+                    .border(1.5.dp, if (on) scheme.primary else scheme.outlineVariant, shape)
                     .selectable(selected = on, onClick = { onPick(o) }, role = Role.RadioButton)
-                    .padding(horizontal = 10.dp, vertical = 6.dp),
+                    .padding(horizontal = 12.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(icon(o), null, tint = if (on) scheme.primary else scheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
@@ -1193,7 +1195,7 @@ internal fun <T> OptionChips(
                     label(o),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = if (on) FontWeight.SemiBold else FontWeight.Normal,
-                    color = if (on) scheme.onPrimaryContainer else scheme.onSurface,
+                    color = if (on) scheme.onSurface else scheme.onSurfaceVariant,
                     maxLines = 1,
                 )
             }
@@ -1351,12 +1353,13 @@ internal fun TimeChip(label: String, value: String, modifier: Modifier, onClick:
 internal fun DayChips(days: Int, onChange: (Int) -> Unit) {
     val names = stringArrayResource(R.array.day_short)
     val scheme = MaterialTheme.colorScheme
-    Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+    // Videodaki gibi yuvarlak gün daireleri; dar ekranda daireler küçülür.
+    Row(Modifier.fillMaxWidth().padding(top = 10.dp), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
         names.forEachIndexed { i, n ->
             val on = days and (1 shl i) != 0
-            val shape = RoundedCornerShape(12.dp)
+            val shape = CircleShape
             Box(
-                Modifier.weight(1f).heightIn(min = 40.dp).clip(shape)
+                Modifier.weight(1f).aspectRatio(1f).widthIn(max = 44.dp).clip(shape)
                     .background(if (on) scheme.primary else raisedOnTile())
                     .tvFocusRing(shape)
                     .selectable(selected = on, role = Role.Checkbox, onClick = {
