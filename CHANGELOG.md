@@ -6,6 +6,28 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.34.0 — 2026-11-21
+**New look**
+- Welcome screen with three buttons: sign in with eWeLink, sign in with Tuya, try the demo.
+- The full-screen alarm is bright red and dismissed by swiping (TV keeps the button).
+- Alert choices are colour-coded (Alarm red, Notify teal); offline devices stand out with a red card. The Alerts tab has a quiet-hours switch and the "ignore short disconnects" setting.
+- The device page shows a big live-power card, voltage/current/today/month tiles and a channel list you can tap to switch.
+- The rule editor has IF / THEN blocks, bottom sheets for triggers and actions, and a condition list. Cycles have a duration slider and round day chips.
+- History has Alarm / Offline / Automation filters; the exported CSV can now be shared.
+- The location page shows a map, the sun's path and the outdoor temperature.
+
+**Security**
+- Other apps can no longer switch your devices through the widgets.
+- The Wi-Fi transfer code is now 12 characters and the receiver stops after the first successful transfer. Both devices need this version.
+- Switching devices from Telegram groups is off by default; when on, only the people you choose can do it. State-changing commands older than 2 minutes are ignored.
+
+**Reliability**
+- Monitoring no longer slows down over time on always-on devices (TV box, wall tablet).
+- A slow or broken internet connection no longer delays alarm handling.
+- Piled-up notifications no longer stop a new alarm from showing; repeated events of the same device update one notification.
+- When the same Tuya keys are on two devices, the one that receives no live messages no longer shows "Live" and checks every 5 minutes. Choose which device gets live updates in Settings → Monitoring → Tuya live updates on this device.
+- Tuya connects on devices with a wrong clock (e.g. TV boxes).
+- The backup file now also includes chat templates, voice replies and the standby layout; restoring an older backup does not delete them.
 ## 2.33.1 — 2026-11-18
 **Changes**
 - The Wear OS watch app has been discontinued and removed. The phone no longer sends anything to a watch, and the app no longer includes the Wear OS connection library.

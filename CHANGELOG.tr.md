@@ -6,6 +6,28 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.34.0 — 2026-11-21
+**Yeni görünüm**
+- Karşılama ekranı üç düğmeyle: eWeLink ile giriş, Tuya ile giriş, Demo ile dene.
+- Tam ekran alarm parlak kırmızı ve kaydırarak kapanıyor (TV'de düğme kaldı).
+- Uyarı seçimleri renkli (Alarm kırmızı, Bildirim turkuaz); çevrimdışı cihaz kırmızı kartla öne çıkıyor. Uyarılar sekmesinde sessiz saatler anahtarı ve kısa kopmaları yok sayma.
+- Cihaz sayfasında büyük "Anlık güç" kartı, gerilim/akım/bugün/bu ay kutucukları ve dokununca açılıp kapanan kanal listesi.
+- Kural düzenleyicide EĞER / O ZAMAN blokları, alttan açılan tetikleyici ve eylem seçimi, koşul listesi. Döngülerde süre kaydırıcısı ve yuvarlak gün seçimi.
+- Geçmişte Alarm / Çevrimdışı / Otomasyon filtreleri; dışa aktarılan CSV artık paylaşılabiliyor.
+- Konum sayfasında harita, güneşin yolu ve dış sıcaklık.
+
+**Güvenlik**
+- Başka uygulamalar widget'lar üzerinden cihazlarınızı açıp kapatamaz.
+- Wi-Fi aktarım kodu 12 karaktere çıktı; alıcı ilk başarılı aktarımdan sonra kapanır. İki cihazın da bu sürümde olması gerekir.
+- Telegram gruplarında aç/kapa varsayılan olarak kapalı; açılırsa yalnızca seçtiğiniz kişiler kullanabilir. Durumu değiştiren komutlar 2 dakikadan eskiyse uygulanmaz.
+
+**Güvenilirlik**
+- Sürekli açık cihazlarda (TV kutusu, duvar tableti) izleme zamanla yavaşlamıyor.
+- Yavaş ya da kesik internet alarmların işlenmesini geciktirmiyor.
+- Biriken bildirimler yeni alarmın gösterilmesini engellemiyor; aynı cihazın aynı olayı tek bildirimde güncellenir.
+- Aynı Tuya anahtarları iki cihazdaysa mesaj almayan cihaz artık "Canlı" görünmüyor, 5 dakikada bir yokluyor. Ayarlar → İzleme → Bu cihazda Tuya anlık güncellemeleri ile hangi cihazın alacağını seçebilirsiniz.
+- Saati yanlış cihazlarda (ör. TV kutusu) Tuya bağlantısı kurulabiliyor.
+- Dosya yedeğine sohbet şablonları, sesli yanıt ve bekleme ekranı düzeni de giriyor; eski bir yedek bunları silmiyor.
 ## 2.33.1 — 2026-11-18
 **Değişiklikler**
 - Wear OS saat uygulaması sonlandırıldı ve kaldırıldı. Telefon artık saate hiçbir şey göndermiyor; uygulama Wear OS bağlantı kütüphanesini de içermiyor.
