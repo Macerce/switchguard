@@ -209,6 +209,9 @@ class EwelinkClient(private val store: Store) {
         val http: OkHttpClient = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
+            // Tek bir istek (yeniden denemeler, yönlendirmeler dahil) en çok 30 sn sürsün; kötü ağda takılmasın.
+            // WebSocket istemcileri bunu callTimeout(0) ile kapatır (uzun ömürlü bağlantı kesilmesin).
+            .callTimeout(30, TimeUnit.SECONDS)
             .build()
 
         fun host(region: String) =

@@ -38,7 +38,7 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
         val secret = store.tuyaSecret
         val url = TuyaClient.pulsarHost(store.tuyaRegion) +
             "ws/v2/consumer/persistent/$id/out/event/$id-sub?ackTimeoutMillis=3000&subscriptionType=Failover"
-        val client = EwelinkClient.http.newBuilder().pingInterval(30, TimeUnit.SECONDS).build()
+        val client = EwelinkClient.http.newBuilder().callTimeout(0, TimeUnit.SECONDS).pingInterval(30, TimeUnit.SECONDS).build()
         val request = Request.Builder().url(url)
             .header("Connection-Id", "switchguard")
             .header("username", id)

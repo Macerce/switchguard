@@ -194,6 +194,19 @@ class MonitorService : Service() {
         }
     }
 
+    /**
+     * Ağ işleri izleme thread'ini bekletmesin (kötü ağda tek istek 30 sn sürebilir; bu sırada gelen olaylar ve alarmlar
+     * kuyrukta beklerdi). Senkronlar ve bağlantı kurma [syncIo]'da, cihaz komutları [commands]'ta çalışır; sonuçlar
+     * handler'a gönderilir, durum yalnızca izleme thread'inde değişir. [commands] tek thread'li: aynı cihaza aynı anda
+     * iki komut gitmez ve komutlar uzun bir senkronu beklemez.
+     */
+    private val syncIo = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "monitor-sync").apply { isDaemon = true } }
+    private val commands = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "monitor-cmd").apply { isDaemon = true } }
+    /** Sürmekte olan senkron ya da bağlanma: üst üste binmesin. */
+    private var ewSyncBusy = false
+    private var tuyaSyncBusy = false
+    private var reconnectBusy = false
+
     private val loop = object : Runnable {
         override fun run() {
             tick()
@@ -393,6 +406,8 @@ class MonitorService : Service() {
             notifier.stopAlarm()
         }
         worker.quitSafely()
+        syncIo.shutdownNow()
+        commands.shutdown()
         wakeLock?.release()
         wakeLock = null
         if (LiveState.connection.value.state != ConnState.STOPPED) LiveState.setConnection(ConnState.STOPPED)
@@ -536,32 +551,44 @@ class MonitorService : Service() {
     }
 
     private fun reconnectNow() {
-        if (!running || authFailed || wsUnsupported || !store.isLoggedIn) return
+        if (!running || authFailed || wsUnsupported || !store.isLoggedIn || reconnectBusy) return
         nextReconnectAt = 0
-        try {
-            if (store.userApiKey.isEmpty()) {
-                // Profil yolu bazı App ID'lere kapalı (407); o zaman apikey cihaz listesinden, o da yoksa (yalnız
-                // paylaşılan cihazlar) ev listesinden alınır.
-                try { client.loadProfile() } catch (e: ApiException) { Log.w(TAG, "profile unavailable: ${e.message}") }
-                if (store.userApiKey.isEmpty()) client.getDevices()
+        reconnectBusy = true
+        // Profil, cihaz listesi ve dispatch istekleri ağ thread'inde; sonuç izleme thread'ine döner.
+        syncIo.execute {
+            val outcome: Exception? = try {
                 if (store.userApiKey.isEmpty()) {
-                    try { client.loadFamilyApiKey() } catch (e: ApiException) { Log.w(TAG, "family unavailable: ${e.message}") }
+                    // Profil yolu bazı App ID'lere kapalı (407); o zaman apikey cihaz listesinden, o da yoksa (yalnız
+                    // paylaşılan cihazlar) ev listesinden alınır.
+                    try { client.loadProfile() } catch (e: ApiException) { Log.w(TAG, "profile unavailable: ${e.message}") }
+                    if (store.userApiKey.isEmpty()) client.getDevices()
+                    if (store.userApiKey.isEmpty()) {
+                        try { client.loadFamilyApiKey() } catch (e: ApiException) { Log.w(TAG, "family unavailable: ${e.message}") }
+                    }
+                }
+                if (store.userApiKey.isNotEmpty()) socket.connect()
+                null
+            } catch (e: Exception) {
+                e
+            }
+            handler.post {
+                reconnectBusy = false
+                if (!running) return@post
+                when {
+                    outcome is AuthException -> onAuthFailed()
+                    outcome != null -> {
+                        Log.w(TAG, "WebSocket connect failed", outcome)
+                        wsIssue = "${getString(R.string.detail_reconnecting)} (${outcome.javaClass.simpleName}: ${outcome.message})"
+                        scheduleReconnect()
+                    }
+                    store.userApiKey.isEmpty() -> {
+                        wsUnsupported = true
+                        wsIssue = "${getString(R.string.detail_ws_unsupported)} (no apikey)"
+                        Log.w(TAG, "WebSocket unavailable: no apikey")
+                        setState(ConnState.POLLING, wsIssue)
+                    }
                 }
             }
-            if (store.userApiKey.isEmpty()) {
-                wsUnsupported = true
-                wsIssue = "${getString(R.string.detail_ws_unsupported)} (no apikey)"
-                Log.w(TAG, "WebSocket unavailable: no apikey")
-                setState(ConnState.POLLING, wsIssue)
-                return
-            }
-            socket.connect()
-        } catch (e: AuthException) {
-            onAuthFailed()
-        } catch (e: Exception) {
-            Log.w(TAG, "WebSocket connect failed", e)
-            wsIssue = "${getString(R.string.detail_reconnecting)} (${e.javaClass.simpleName}: ${e.message})"
-            scheduleReconnect()
         }
     }
 
@@ -585,27 +612,36 @@ class MonitorService : Service() {
             } else onAuthFailed()
             return
         }
-        try {
-            replaceCloud(Cloud.EWELINK, client.getDevices())
-            syncRetryAttempt = 0
-            if (authFailed) {
-                authFailed = false
-                notifier.clearWarning()
+        if (ewSyncBusy) return
+        ewSyncBusy = true
+        // Liste ağ thread'inde çekilir; farklar izleme thread'inde işlenir.
+        syncIo.execute {
+            val result = runCatching { client.getDevices() }
+            handler.post {
+                ewSyncBusy = false
+                if (!running) return@post
+                result.onSuccess { devices ->
+                    replaceCloud(Cloud.EWELINK, devices)
+                    syncRetryAttempt = 0
+                    if (authFailed) {
+                        authFailed = false
+                        notifier.clearWarning()
+                    }
+                    if (socket.ready) setState(ConnState.LIVE, synced = true)
+                    else setState(ConnState.POLLING, wsIssue, synced = true)
+                }.onFailure { e ->
+                    when (e) {
+                        is AuthException -> onAuthFailed()
+                        // Anlık bağlantı canlıyken tek bir HTTP hatası izlemeyi durdurmaz (bkz. retrySyncSoon).
+                        // Telefonun interneti yok: cihaz "offline" sayılmaz, sadece durum güncellenir.
+                        is IOException -> if (socket.ready) retrySyncSoon(e) else setState(ConnState.NO_INTERNET)
+                        is ApiException ->
+                            if (socket.ready && TokenRefresh.isTransient(e.code)) retrySyncSoon(e)
+                            else setState(ConnState.ERROR, getString(R.string.detail_api_error, e.code))
+                        else -> setState(ConnState.ERROR, e.message.orEmpty())
+                    }
+                }
             }
-            if (socket.ready) setState(ConnState.LIVE, synced = true)
-            else setState(ConnState.POLLING, wsIssue, synced = true)
-        } catch (e: AuthException) {
-            onAuthFailed()
-        } catch (e: IOException) {
-            // Anlık bağlantı canlıyken tek bir HTTP hatası izlemeyi durdurmaz (bkz. retrySyncSoon).
-            if (socket.ready) retrySyncSoon(e)
-            // Telefonun interneti yok: cihaz "offline" sayılmaz, sadece durum güncellenir.
-            else setState(ConnState.NO_INTERNET)
-        } catch (e: ApiException) {
-            if (socket.ready && TokenRefresh.isTransient(e.code)) retrySyncSoon(e)
-            else setState(ConnState.ERROR, getString(R.string.detail_api_error, e.code))
-        } catch (e: Exception) {
-            setState(ConnState.ERROR, e.message.orEmpty())
         }
     }
 
@@ -793,10 +829,22 @@ class MonitorService : Service() {
     private fun syncTuya() {
         val previousSync = lastTuyaSyncAt
         lastTuyaSyncAt = SystemClock.elapsedRealtime()
-        if (!store.hasTuya) return
+        if (!store.hasTuya || tuyaSyncBusy) return
+        tuyaSyncBusy = true
+        syncIo.execute {
+            val result = runCatching { tuya.getDevices() }
+            handler.post {
+                tuyaSyncBusy = false
+                if (running && store.hasTuya) applyTuyaSync(result, previousSync)
+            }
+        }
+    }
+
+    /** Tuya senkronunun sonucu (izleme thread'inde). */
+    private fun applyTuyaSync(result: Result<List<DeviceSnapshot>>, previousSync: Long) {
         try {
             val known = store.snapshots.filter { it.cloud == Cloud.TUYA }
-            val fetched = tuya.getDevices()
+            val fetched = result.getOrThrow()
             // Soket önceki senkrondan beri hep açıktıysa, senkronun bulduğu her aç/kapa ya da bağlantı değişikliği
             // soketten gelmiş olmalıydı; gelmediyse mesajlar başka bir cihaza gidiyor olabilir (Failover).
             if (tuyaSocket.ready && previousSync != 0L && tuyaReadySince in 1..previousSync) {
@@ -998,10 +1046,12 @@ class MonitorService : Service() {
             if (requested == null || wall - requested >= LIVE_ENERGY_REFRESH_MS) {
                 if (requested == null) channelPowerSeenAt[d.id] = wall
                 liveEnergyRequestedAt[d.id] = wall
-                try {
-                    client.requestLiveEnergy(d, LIVE_ENERGY_SECONDS)
-                } catch (e: Exception) {
-                    Log.w(TAG, "uiActive failed for ${d.id}", e)
+                syncIo.execute {
+                    try {
+                        client.requestLiveEnergy(d, LIVE_ENERGY_SECONDS)
+                    } catch (e: Exception) {
+                        Log.w(TAG, "uiActive failed for ${d.id}", e)
+                    }
                 }
             }
             val seen = channelPowerSeenAt[d.id] ?: wall
@@ -1083,13 +1133,18 @@ class MonitorService : Service() {
             log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
             return
         }
+        val targets = group.targets(store.snapshots.associateBy { it.id }, on)
+        // Sonuçlar izleme thread'inde tek tek gelir; hepsi gelince hepsi gittiyse grup adıyla tek satır yazılır.
+        var left = targets.size
         var allSent = true
-        for ((device, channel) in group.targets(store.snapshots.associateBy { it.id }, on)) {
-            if (!sendAutomationSwitch(a.name, device, channel, on, attempt = 1, logSuccess = false)) allSent = false
-        }
-        if (allSent) {
-            val args = EventArgs.AutoSwitch(a.name, 0, false, on)
-            log.add(group.deviceId, group.name, EventKind.AUTOMATION, args.render(group.name, strings), "", args)
+        for ((device, channel) in targets) {
+            sendAutomationSwitch(a.name, device, channel, on, attempt = 1, logSuccess = false) { sent ->
+                if (!sent) allSent = false
+                if (--left == 0 && allSent) {
+                    val args = EventArgs.AutoSwitch(a.name, 0, false, on)
+                    log.add(group.deviceId, group.name, EventKind.AUTOMATION, args.render(group.name, strings), "", args)
+                }
+            }
         }
     }
 
@@ -1097,18 +1152,34 @@ class MonitorService : Service() {
      * Otomasyonun tek cihaz/kanal komutu. Gidemezse cihazın kendi adıyla kayda düşer ve [AutoRetry]
      * ile yeniden denenir; denemeler bitince "açılmadı/kapanmadı" bildirimi verilir.
      */
+    /**
+     * Komut [commands] thread'inde gönderilir; sonuç izleme thread'inde kaydedilir ve [done] ile bildirilir
+     * (gönderildi mi). Gidemezse yeniden deneme kurulur.
+     */
     private fun sendAutomationSwitch(
         automation: String, device: DeviceSnapshot, channel: Int, on: Boolean, attempt: Int, logSuccess: Boolean,
-    ): Boolean {
+        done: ((Boolean) -> Unit)? = null,
+    ) {
         retries.cancel(device.id, channel)
         val args = EventArgs.AutoSwitch(automation, channel, device.isMultiChannel, on, attempt = attempt)
-        return try {
-            // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
-            LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-            controlSwitch(device, channel, on)
+        // Otomasyonun yaptığı değişiklik alarm çaldırmasın.
+        LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+        commands.execute {
+            val failure = runCatching { controlSwitch(device, channel, on) }.exceptionOrNull()
+            handler.post { done?.invoke(onAutomationSwitched(automation, device, channel, on, attempt, logSuccess, args, failure)) }
+        }
+    }
+
+    /** [sendAutomationSwitch]'in sonucu (izleme thread'inde). Döner: gönderildi mi. */
+    private fun onAutomationSwitched(
+        automation: String, device: DeviceSnapshot, channel: Int, on: Boolean, attempt: Int, logSuccess: Boolean,
+        args: EventArgs.AutoSwitch, failure: Throwable?,
+    ): Boolean {
+        return if (failure == null) {
             if (logSuccess || attempt > 1) log.add(device.id, device.name, EventKind.AUTOMATION, args.render(device.name, strings), "", args)
             true
-        } catch (e: Exception) {
+        } else {
+            val e = failure
             val error = e.message.orEmpty()
             Log.w(TAG, "automation \"$automation\": ${device.name} (${device.id}) ch$channel -> ${if (on) "ON" else "OFF"} " +
                 "attempt $attempt failed, online=${device.online}: $error", e)
@@ -1303,7 +1374,8 @@ class MonitorService : Service() {
         // "Gördüm" düğmesi: kişi alarmı üstlenir, telefondaki alarm susar.
         val button = TelegramBot.button(getString(R.string.tg_ack_button), TelegramBot.ackData(runtime.installTag, at))
         escalationInFlight = true
-        telegram.execute {
+        // Ayrı thread: yavaş bir sahne ya da Telegram yoklaması haber vermeyi geciktirmesin.
+        escalation.execute {
             val sent = mutableListOf<Long>()
             val gaveUp = mutableListOf<Long>()
             var error: Exception? = null
@@ -1707,19 +1779,24 @@ class MonitorService : Service() {
     private fun telegramSwitch(u: TelegramBot.Update, device: DeviceSnapshot, channel: Int, on: Boolean) {
         val who = u.from.ifEmpty { getString(R.string.tg_someone) }
         val args = EventArgs.TelegramSwitch(who, channel, device.isMultiChannel, on)
-        try {
-            if (!device.online) throw IOException(labels.offline)
-            // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
-            LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-            controlSwitch(device, channel, on)
-            log.add(device.id, device.name, EventKind.TELEGRAM, args.render(device.name, strings), "", args)
-            val label = if (device.isMultiChannel) labels.channel(device.name, channel + 1) else device.name
-            reply(u.chatId, "✅ $label: ${if (on) labels.on else labels.off}")
-        } catch (e: Exception) {
-            val failed = args.copy(error = e.message.orEmpty())
-            log.add(device.id, device.name, EventKind.TELEGRAM, failed.render(device.name, strings), AlertAction.NOTIFY.name, failed)
-            reply(u.chatId, "⚠️ " + failed.render(device.name, strings))
+        if (!device.online) return telegramSwitchFailed(u, device.id, device.name, args, labels.offline)
+        // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
+        LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
+        commands.execute {
+            val failure = runCatching { controlSwitch(device, channel, on) }.exceptionOrNull()
+            handler.post {
+                if (failure != null) return@post telegramSwitchFailed(u, device.id, device.name, args, failure.message.orEmpty())
+                log.add(device.id, device.name, EventKind.TELEGRAM, args.render(device.name, strings), "", args)
+                val label = if (device.isMultiChannel) labels.channel(device.name, channel + 1) else device.name
+                reply(u.chatId, "✅ $label: ${if (on) labels.on else labels.off}")
+            }
         }
+    }
+
+    private fun telegramSwitchFailed(u: TelegramBot.Update, id: String, name: String, args: EventArgs.TelegramSwitch, error: String) {
+        val failed = args.copy(error = error)
+        log.add(id, name, EventKind.TELEGRAM, failed.render(name, strings), AlertAction.NOTIFY.name, failed)
+        reply(u.chatId, "⚠️ " + failed.render(name, strings))
     }
 
     /** Telegram'dan grup aç/kapa: değişmesi gereken her üyeye komut gider; geçmişe grup adıyla tek satır yazılır. */
@@ -1727,20 +1804,17 @@ class MonitorService : Service() {
         val who = u.from.ifEmpty { getString(R.string.tg_someone) }
         val args = EventArgs.TelegramSwitch(who, 0, false, on)
         val group = store.groups.firstOrNull { it.deviceId == groupDevice.id } ?: return reply(u.chatId, getString(R.string.group_missing))
-        try {
-            if (!groupDevice.online) throw IOException(labels.offline)
-            val targets = group.targets(store.snapshots.associateBy { it.id }, on)
-            for ((device, channel) in targets) {
-                // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
-                LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
-                controlSwitch(device, channel, on)
+        if (!groupDevice.online) return telegramSwitchFailed(u, group.deviceId, group.name, args, labels.offline)
+        val targets = group.targets(store.snapshots.associateBy { it.id }, on)
+        // Uzaktan yapılan değişiklik alarm çaldırmasın (uygulamadan aç/kapa gibi).
+        targets.forEach { (device, channel) -> LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis()) }
+        commands.execute {
+            val failure = runCatching { targets.forEach { (device, channel) -> controlSwitch(device, channel, on) } }.exceptionOrNull()
+            handler.post {
+                if (failure != null) return@post telegramSwitchFailed(u, group.deviceId, group.name, args, failure.message.orEmpty())
+                log.add(group.deviceId, group.name, EventKind.TELEGRAM, args.render(group.name, strings), "", args)
+                reply(u.chatId, getString(R.string.tg_group_done, group.name, if (on) labels.on else labels.off, targets.size))
             }
-            log.add(group.deviceId, group.name, EventKind.TELEGRAM, args.render(group.name, strings), "", args)
-            reply(u.chatId, getString(R.string.tg_group_done, group.name, if (on) labels.on else labels.off, targets.size))
-        } catch (e: Exception) {
-            val failed = args.copy(error = e.message.orEmpty())
-            log.add(group.deviceId, group.name, EventKind.TELEGRAM, failed.render(group.name, strings), AlertAction.NOTIFY.name, failed)
-            reply(u.chatId, "⚠️ " + failed.render(group.name, strings))
         }
     }
 
@@ -2316,6 +2390,8 @@ class MonitorService : Service() {
          * kuyruğa giren "alarm kapatıldı" mesajı da gidebilsin.
          */
         private val telegram = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "telegram").apply { isDaemon = true } }
+        /** Alarmı başkasına haber verme: yalnız bu iş; sahneler ve yoklama [telegram]'da. */
+        private val escalation = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "escalation").apply { isDaemon = true } }
 
         private fun tickPendingIntent(context: Context) = PendingIntent.getBroadcast(
             context, 0, Intent(context, TickReceiver::class.java),

@@ -39,7 +39,7 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
     fun connect() {
         close()
         val url = EwelinkClient(store).dispatchWebSocketUrl()
-        val client = EwelinkClient.http.newBuilder().pingInterval(0, TimeUnit.SECONDS).build()
+        val client = EwelinkClient.http.newBuilder().callTimeout(0, TimeUnit.SECONDS).pingInterval(0, TimeUnit.SECONDS).build()
         socket = client.newWebSocket(Request.Builder().url(url).build(), object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 val now = System.currentTimeMillis()
