@@ -18,6 +18,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.IBinder
 import android.os.PowerManager
+import android.os.Looper
 import android.os.SystemClock
 import android.util.Log
 import com.macerce.switchguard.R
@@ -26,6 +27,7 @@ import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkSocket
 import com.macerce.switchguard.api.WeatherClient
+import com.macerce.switchguard.core.WakeScheduler
 import com.macerce.switchguard.core.Environment
 import com.macerce.switchguard.api.TelegramClient
 import com.macerce.switchguard.api.TelegramException
@@ -161,6 +163,30 @@ class MonitorService : Service() {
     /** Kaynakların ayrı ayrı durumu; ekrana ikisinin kötüsü yansır (bkz. [publishState]). */
     private var ewState: Pair<ConnState, String>? = null
     private var tuyaState: Pair<ConnState, String>? = null
+
+    /**
+     * Tek uyanma: birçok yerden istenen "şu vakitte tick()" birikmez; yalnızca en erken vakit için tek bir gönderi
+     * durur ([WakeScheduler]). 15 sn'lik [loop], [retryRunnable] ve [cycleRunnable] zaten tekil.
+     */
+    private val wake = WakeScheduler()
+    private val tickRunnable = Runnable {
+        wake.fired()
+        tick()
+    }
+
+    /** [delayMs] sonra tick(); daha erken bir uyanma kuruluysa yeni gönderi eklenmez. */
+    private fun wakeIn(delayMs: Long) {
+        val at = SystemClock.uptimeMillis() + delayMs.coerceAtLeast(0)
+        // Kaldır-kur ikilisi yalnızca izleme thread'inde yapılsın (başka thread'den gelirse oraya aktarılır).
+        if (Looper.myLooper() != handler.looper) {
+            handler.post { wakeIn(at - SystemClock.uptimeMillis()) }
+            return
+        }
+        if (wake.request(at)) {
+            handler.removeCallbacks(tickRunnable)
+            handler.postAtTime(tickRunnable, at)
+        }
+    }
 
     private val loop = object : Runnable {
         override fun run() {
@@ -316,6 +342,7 @@ class MonitorService : Service() {
         running = false
         LiveState.setConnection(ConnState.STOPPED)
         handler.removeCallbacksAndMessages(null)
+        wake.reset()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -352,6 +379,8 @@ class MonitorService : Service() {
         // Kuyruğu boşaltma: stopMonitoring'in temizlik işleri henüz çalışmamış olabilir.
         // quitSafely zamanı gelmiş işleri çalıştırır, ileri tarihli (tick vb.) olanları atar.
         handler.removeCallbacks(loop)
+        handler.removeCallbacks(tickRunnable)
+        wake.reset()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -424,7 +453,7 @@ class MonitorService : Service() {
         val syncEvery = if (socket.ready) RESYNC_MS else store.pollIntervalSec * 1000L
         if (now - lastSyncAt >= syncEvery) sync()
 
-        grace.nextDueAt()?.let { due -> handler.postDelayed({ tick() }, (due - wall).coerceAtLeast(0) + 50) }
+        grace.nextDueAt()?.let { due -> wakeIn((due - wall).coerceAtLeast(0) + 50) }
     }
 
     /** İzleme fiilen çalışıyor mu (örnek var ama durdurulmuş olabilir). */
@@ -534,7 +563,7 @@ class MonitorService : Service() {
         val delays = longArrayOf(5_000, 15_000, 30_000, 60_000, 120_000)
         nextReconnectAt = SystemClock.elapsedRealtime() + delays[reconnectAttempt.coerceAtMost(delays.size - 1)]
         reconnectAttempt++
-        handler.postDelayed({ tick() }, nextReconnectAt - SystemClock.elapsedRealtime() + 50)
+        wakeIn(nextReconnectAt - SystemClock.elapsedRealtime() + 50)
     }
 
     // ---------------------------------------------------------------- durum işleme
@@ -730,7 +759,7 @@ class MonitorService : Service() {
         val delay = if (rejected) TUYA_BLOCKED_MS else delays[tuyaReconnectAttempt.coerceAtMost(delays.size - 1)]
         tuyaReconnectAttempt++
         tuyaNextConnectAt = SystemClock.elapsedRealtime() + delay
-        handler.postDelayed({ tick() }, delay + 50)
+        wakeIn(delay + 50)
     }
 
     /** Bilgiler değişti ya da kullanıcı yeniden denedi: baştan bağlan. */
@@ -958,7 +987,7 @@ class MonitorService : Service() {
             automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()),
             ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, System.currentTimeMillis()),
         ).minOrNull() ?: return
-        handler.postDelayed({ tick() }, (due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
+        wakeIn((due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
     private fun execute(a: Automation) {
@@ -1092,7 +1121,7 @@ class MonitorService : Service() {
         if (change is Change.Connection) {
             if (!change.to && store.offlineGraceSec > 0 && action != AlertAction.IGNORE) {
                 grace.hold(change, wall, store.offlineGraceSec * 1000L)
-                handler.postDelayed({ tick() }, store.offlineGraceSec * 1000L + 50)
+                wakeIn(store.offlineGraceSec * 1000L + 50)
                 return
             }
             if (change.to && grace.cameBack(change.deviceId, wall)) {
@@ -1123,7 +1152,7 @@ class MonitorService : Service() {
             val wall = System.currentTimeMillis()
             when (val o = outage.offer(change, action, wall, store.monitoredIds().size, store.outageDetect)) {
                 is OutageWatch.Offer.Hold -> {
-                    handler.postDelayed({ tick() }, (o.dueAt - wall).coerceAtLeast(0) + 50)
+                    wakeIn((o.dueAt - wall).coerceAtLeast(0) + 50)
                     return
                 }
                 OutageWatch.Offer.Absorbed -> {
@@ -1195,12 +1224,12 @@ class MonitorService : Service() {
         if (!test && runtime.realAlarmAt == 0L) {
             runtime.realAlarmAt = now
             val first = Escalation.firstDelay(store.telegramRecipients, store.telegramStages, store.escalateMin)
-            if (store.escalationReady && first != null) handler.postDelayed({ tick() }, first * 60_000L + 50)
+            if (store.escalationReady && first != null) wakeIn(first * 60_000L + 50)
         }
         if (!test && critical && runtime.criticalAlarmFor != runtime.realAlarmAt) {
             runtime.criticalAlarmFor = runtime.realAlarmAt
             // Vakti çoktan gelmiş kişiler (mesajı almış olanlar) beklemeden aransın.
-            if (store.escalationReady) handler.postDelayed({ tick() }, 50)
+            if (store.escalationReady) wakeIn(50)
         }
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
