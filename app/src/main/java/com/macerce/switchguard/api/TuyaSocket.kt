@@ -26,7 +26,14 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
         fun onClosed(reason: String, rejected: Boolean)
     }
 
-    private var socket: WebSocket? = null
+    @Volatile private var socket: WebSocket? = null
+    /**
+     * Bağlantı kuşağı: her connect/close artırır. Geri çağrılar kendi kuşaklarını [generation] ile karşılaştırır:
+     * eski soketin olayları ve kurulurken kapatılan bağlantı yok sayılır. (Soket alanıyla karşılaştırmak yarışlıydı:
+     * [socket] newWebSocket döndükten sonra yazıldığından çok erken bir onOpen kendi soketini tanımayabiliyordu.)
+     * Soket izleme thread'inde kapatılır, ağ thread'inde kurulur, OkHttp thread'inde okunur: alanlar @Volatile.
+     */
+    private val generation = java.util.concurrent.atomic.AtomicInteger()
     @Volatile var ready = false
         private set
     @Volatile var lastMessageAt = 0L
@@ -34,6 +41,7 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
 
     fun connect() {
         close()
+        val gen = generation.get()
         val id = store.tuyaAccessId
         val secret = store.tuyaSecret
         val url = TuyaClient.pulsarHost(store.tuyaRegion) +
@@ -44,16 +52,18 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
             .header("username", id)
             .header("password", TuyaSign.pulsarPassword(id, secret))
             .build()
-        socket = client.newWebSocket(request, object : WebSocketListener() {
+        val ws = client.newWebSocket(request, object : WebSocketListener() {
+            private fun stale() = gen != generation.get()
+
             override fun onOpen(webSocket: WebSocket, response: Response) {
-                if (webSocket != socket) return
+                if (stale()) return
                 ready = true
                 lastMessageAt = System.currentTimeMillis()
                 listener.onReady()
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
-                if (webSocket != socket) return
+                if (stale()) return
                 lastMessageAt = System.currentTimeMillis()
                 val frame = try {
                     TuyaMessages.decode(text, secret)
@@ -67,18 +77,24 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                if (webSocket != socket) return
+                if (stale()) return
                 ready = false
                 val code = response?.code ?: 0
                 listener.onClosed(if (code != 0) "HTTP $code" else t.message ?: "failure", rejected = code in 400..499)
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                if (webSocket != socket) return
+                if (stale()) return
                 ready = false
                 listener.onClosed("closed $code", rejected = false)
             }
         })
+        socket = ws
+        // Kurulurken kapatıldıysa bu soket de kapansın.
+        if (gen != generation.get()) {
+            ws.cancel()
+            if (socket === ws) socket = null
+        }
     }
 
     private fun ack(webSocket: WebSocket, messageId: String) {
@@ -86,6 +102,7 @@ class TuyaSocket(private val store: Store, private val listener: Listener) {
     }
 
     fun close() {
+        generation.incrementAndGet()
         ready = false
         socket?.cancel()
         socket = null
