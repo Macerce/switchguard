@@ -1589,4 +1589,17 @@
     <string name="alarm_swipe_dismiss">ปัดเพื่อปิด</string>
     <string name="alarm_rings_silent">ดังแม้อยู่ในโหมดปิดเสียง</string>
     <string name="energy_live_power">กำลังไฟขณะนี้</string>
+    <string name="rule_conditions_optional">เงื่อนไข (ไม่บังคับ)</string>
+    <string name="rule_cond_delay">รอ</string>
+    <string name="rule_cond_time">ช่วงเวลา</string>
+    <string name="rule_cond_days">วัน</string>
+    <string name="rule_cond_extra">เงื่อนไขเพิ่มเติม</string>
+    <string name="rule_cond_presence">อยู่บ้าน / ออกนอกบ้าน</string>
+    <string name="rule_any_time">ทุกเวลา</string>
+    <string name="rule_presence_any">ไม่สำคัญ</string>
+    <string name="rule_cond_none">ไม่มี</string>
+    <string name="rule_conds_count">เงื่อนไข: %d</string>
+    <string name="rule_triggers">ตัวกระตุ้น</string>
+    <string name="rule_actions">การทำงาน</string>
+    <string name="rule_tap_to_change">แตะเพื่อเลือก</string>
 </resources>

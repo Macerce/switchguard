@@ -1596,4 +1596,17 @@
     <string name="alarm_swipe_dismiss">滑动以关闭</string>
     <string name="alarm_rings_silent">静音模式下也会响</string>
     <string name="energy_live_power">实时功率</string>
+    <string name="rule_conditions_optional">条件（可选）</string>
+    <string name="rule_cond_delay">等待</string>
+    <string name="rule_cond_time">时间段</string>
+    <string name="rule_cond_days">日期</string>
+    <string name="rule_cond_extra">附加条件</string>
+    <string name="rule_cond_presence">在家 / 外出</string>
+    <string name="rule_any_time">任何时间</string>
+    <string name="rule_presence_any">不限</string>
+    <string name="rule_cond_none">无</string>
+    <string name="rule_conds_count">条件：%d</string>
+    <string name="rule_triggers">触发条件</string>
+    <string name="rule_actions">动作</string>
+    <string name="rule_tap_to_change">点按选择</string>
 </resources>

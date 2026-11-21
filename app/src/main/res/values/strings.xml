@@ -1661,4 +1661,17 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="alarm_swipe_dismiss">Swipe to dismiss</string>
     <string name="alarm_rings_silent">Rings even in silent mode</string>
     <string name="energy_live_power">Live power</string>
+    <string name="rule_conditions_optional">Conditions (optional)</string>
+    <string name="rule_cond_delay">Wait</string>
+    <string name="rule_cond_time">Time range</string>
+    <string name="rule_cond_days">Days</string>
+    <string name="rule_cond_extra">Extra conditions</string>
+    <string name="rule_cond_presence">Home / away</string>
+    <string name="rule_any_time">Any time</string>
+    <string name="rule_presence_any">Doesn\'t matter</string>
+    <string name="rule_cond_none">None</string>
+    <string name="rule_conds_count">Conditions: %d</string>
+    <string name="rule_triggers">Triggers</string>
+    <string name="rule_actions">Actions</string>
+    <string name="rule_tap_to_change">Tap to choose</string>
 </resources>

@@ -1726,4 +1726,17 @@
     <string name="alarm_swipe_dismiss">Проведите, чтобы выключить</string>
     <string name="alarm_rings_silent">Звучит даже в беззвучном режиме</string>
     <string name="energy_live_power">Текущая мощность</string>
+    <string name="rule_conditions_optional">Условия (необязательно)</string>
+    <string name="rule_cond_delay">Ожидание</string>
+    <string name="rule_cond_time">Время</string>
+    <string name="rule_cond_days">Дни</string>
+    <string name="rule_cond_extra">Доп. условия</string>
+    <string name="rule_cond_presence">Дома / не дома</string>
+    <string name="rule_any_time">Всегда</string>
+    <string name="rule_presence_any">Неважно</string>
+    <string name="rule_cond_none">Нет</string>
+    <string name="rule_conds_count">Условий: %d</string>
+    <string name="rule_triggers">Триггеры</string>
+    <string name="rule_actions">Действия</string>
+    <string name="rule_tap_to_change">Нажмите, чтобы выбрать</string>
 </resources>

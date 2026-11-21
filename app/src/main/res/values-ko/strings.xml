@@ -1618,4 +1618,17 @@
     <string name="alarm_swipe_dismiss">밀어서 끄기</string>
     <string name="alarm_rings_silent">무음 모드에서도 울립니다</string>
     <string name="energy_live_power">현재 전력</string>
+    <string name="rule_conditions_optional">조건 (선택)</string>
+    <string name="rule_cond_delay">대기</string>
+    <string name="rule_cond_time">시간대</string>
+    <string name="rule_cond_days">요일</string>
+    <string name="rule_cond_extra">추가 조건</string>
+    <string name="rule_cond_presence">집 / 외출</string>
+    <string name="rule_any_time">항상</string>
+    <string name="rule_presence_any">상관없음</string>
+    <string name="rule_cond_none">없음</string>
+    <string name="rule_conds_count">조건: %d</string>
+    <string name="rule_triggers">트리거</string>
+    <string name="rule_actions">동작</string>
+    <string name="rule_tap_to_change">눌러서 선택</string>
 </resources>

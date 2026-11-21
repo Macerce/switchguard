@@ -1589,4 +1589,17 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="alarm_swipe_dismiss">Vuốt để tắt</string>
     <string name="alarm_rings_silent">Đổ chuông cả khi ở chế độ im lặng</string>
     <string name="energy_live_power">Công suất hiện tại</string>
+    <string name="rule_conditions_optional">Điều kiện (tùy chọn)</string>
+    <string name="rule_cond_delay">Chờ</string>
+    <string name="rule_cond_time">Khung giờ</string>
+    <string name="rule_cond_days">Ngày</string>
+    <string name="rule_cond_extra">Điều kiện thêm</string>
+    <string name="rule_cond_presence">Ở nhà / ra ngoài</string>
+    <string name="rule_any_time">Mọi lúc</string>
+    <string name="rule_presence_any">Không quan trọng</string>
+    <string name="rule_cond_none">Không có</string>
+    <string name="rule_conds_count">Điều kiện: %d</string>
+    <string name="rule_triggers">Kích hoạt</string>
+    <string name="rule_actions">Hành động</string>
+    <string name="rule_tap_to_change">Chạm để chọn</string>
 </resources>

@@ -556,7 +556,7 @@ fun TimersSection(device: DeviceSnapshot) {
 
 /** 0=Pazar düzenindeki günleri yerel kısa adlarla, Pazartesi'den başlayarak yazar. */
 @Composable
-private fun daysLabel(days: Set<Int>): String {
+internal fun daysLabel(days: Set<Int>): String {
     if (days.size == 7) return stringResource(R.string.days_every)
     if (days == setOf(1, 2, 3, 4, 5)) return stringResource(R.string.days_weekdays)
     if (days == setOf(0, 6)) return stringResource(R.string.days_weekend)

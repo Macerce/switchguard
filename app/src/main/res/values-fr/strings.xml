@@ -1689,4 +1689,17 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="alarm_swipe_dismiss">Glissez pour arrêter</string>
     <string name="alarm_rings_silent">Sonne même en mode silencieux</string>
     <string name="energy_live_power">Puissance instantanée</string>
+    <string name="rule_conditions_optional">Conditions (facultatif)</string>
+    <string name="rule_cond_delay">Attente</string>
+    <string name="rule_cond_time">Plage horaire</string>
+    <string name="rule_cond_days">Jours</string>
+    <string name="rule_cond_extra">Conditions supplémentaires</string>
+    <string name="rule_cond_presence">Maison / absent</string>
+    <string name="rule_any_time">Toujours</string>
+    <string name="rule_presence_any">Peu importe</string>
+    <string name="rule_cond_none">Aucune</string>
+    <string name="rule_conds_count">Conditions : %d</string>
+    <string name="rule_triggers">Déclencheurs</string>
+    <string name="rule_actions">Actions</string>
+    <string name="rule_tap_to_change">Touchez pour choisir</string>
 </resources>

@@ -1,5 +1,16 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material.icons.rounded.HourglassTop
+import androidx.compose.material.icons.rounded.Schedule
+import androidx.compose.material.icons.rounded.CalendarMonth
+import androidx.compose.material.icons.rounded.Rule
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
+import com.macerce.switchguard.ui.theme.Brand
+import com.macerce.switchguard.ui.theme.LocalDarkTheme
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Thermostat
 import androidx.compose.material.icons.rounded.SensorsOff
@@ -537,6 +548,7 @@ fun ActionKind.title(): Int = when (this) {
  * Otomasyon ve koşullu uyarı düzenleyicisi. [tab] işlem seçeneklerini belirler: Uyarılar'da yalnızca alarm çal /
  * bildirim gönder (hedef cihaz yok), Otomasyon'da yalnızca cihazı aç / kapat. Var olan kayıt kendi sekmesinden açılır.
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AutomationEditor(
     tab: AutomationTab,
@@ -733,7 +745,10 @@ fun AutomationEditor(
             )
 
             // ------------------------------------------------ Eğer
-            StepCard(Icons.Rounded.Sensors, Hue.BLUE, stringResource(R.string.auto_if), stringResource(R.string.automation_when)) {
+            // Videodaki düzen: EĞER ve İSE kartlarında seçili tetikleyici / eylem renkli çerçeveli satırdır; dokununca
+            // alttan açılan sayfada değiştirilir (kumandada alanlar yerinde kalır). Koşullar ayrı, isteğe bağlı bir liste.
+            val summary = if (src != null || !triggerKind.usesDevice) describe(draft, devices) else null
+            val triggerContent: @Composable ColumnScope.() -> Unit = {
                 FieldLabel(stringResource(R.string.automation_event))
                 OptionChips(kinds, triggerKind, { it.icon() }, { stringResource(it.shortTitle()) }) { triggerKind = it }
                 if (triggerKind.usesDevice) {
@@ -828,29 +843,97 @@ fun AutomationEditor(
                         modifier = Modifier.padding(top = 8.dp),
                     )
                 }
+                        }
+            val actionContent: @Composable ColumnScope.() -> Unit = {
+                FieldLabel(stringResource(R.string.automation_action))
+                OptionGrid(tab.actions, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
+                if (actionKind.usesCycle) CyclePick(cycleList, actionCycle) { actionCycle = it }
+                if (actionKind == ActionKind.RUN_SCENE) {
+                    FieldLabel(stringResource(R.string.scenes_title))
+                    if (sceneList.isEmpty()) {
+                        Text(stringResource(R.string.scene_none_yet), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    } else {
+                        OptionGrid(sceneList.map { it.id }, sceneId, { Icons.Rounded.PlayArrow }, { id -> sceneList.first { it.id == id }.name }) { sceneId = it }
+                    }
+                }
+                if (actionKind.usesDevice) {
+                    FieldLabel(stringResource(R.string.automation_device))
+                    DeviceChooser(actionTargets, actionDevice) { actionDevice = it.id; actionChannel = 0 }
+                    if (dst?.isMultiChannel == true) {
+                        FieldLabel(stringResource(R.string.automation_channel))
+                        ChannelChooser(dst, actionChannel) { actionChannel = it }
+                    }
+                }
+                        }
+            var sheet by rememberSaveable { mutableStateOf<String?>(null) }
+            StepCard(Icons.Rounded.Sensors, Hue.TEAL, stringResource(R.string.auto_if), stringResource(R.string.automation_when)) {
+                if (tv) triggerContent()
+                else ChoiceSummary(summary?.first ?: stringResource(R.string.rule_tap_to_change), triggerKind.icon(), Brand.amber) { sheet = "trigger" }
             }
 
-            // ------------------------------------------------ Yalnızca / Ve
-            StepCard(Icons.Rounded.Tune, Hue.PURPLE, stringResource(R.string.auto_only), stringResource(R.string.auto_only_desc)) {
-                ToggleLine(stringResource(R.string.window_toggle), windowOn) { windowOn = it }
-                if (windowOn) {
-                    val context = LocalContext.current
-                    val startTitle = stringResource(R.string.window_start)
-                    val endTitle = stringResource(R.string.window_end)
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
-                        TimeChip(startTitle, formatMinute(context, windowStart), Modifier.weight(1f)) { timePicker.pick(startTitle, windowStart) { windowStart = it } }
-                        TimeChip(endTitle, formatMinute(context, windowEnd), Modifier.weight(1f)) { timePicker.pick(endTitle, windowEnd) { windowEnd = it } }
+            // ------------------------------------------------ İse
+            StepCard(Icons.Rounded.Bolt, Hue.BLUE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
+                if (tv) actionContent()
+                else ChoiceSummary(
+                    summary?.second ?: stringResource(R.string.rule_tap_to_change),
+                    actionKind.icon(),
+                    if (actionKind == ActionKind.ALARM) Brand.alarm else MaterialTheme.colorScheme.primary,
+                ) { sheet = "action" }
+            }
+
+            // ------------------------------------------------ Koşullar (isteğe bağlı)
+            StepCard(Icons.Rounded.Tune, Hue.PURPLE, stringResource(R.string.auto_only), stringResource(R.string.rule_conditions_optional)) {
+                var openCond by rememberSaveable { mutableStateOf<String?>(null) }
+                fun toggle(k: String) { openCond = if (openCond == k) null else k }
+                val context = LocalContext.current
+                // Bekleme (işlemden önce)
+                CondRow(Icons.Rounded.HourglassTop, stringResource(R.string.rule_cond_delay),
+                    if (delay == 0) stringResource(R.string.automation_now) else holdLabel(delay), openCond == "delay") { toggle("delay") }
+                if (openCond == "delay") {
+                    Stepper(stringResource(R.string.automation_delay_short), delay, DELAY_STEPS, zeroLabel = stringResource(R.string.automation_now)) { delay = it }
+                }
+                // Saat aralığı: başlangıç = bitiş "tüm gün" demektir (yalnız günler seçiliyse böyle saklanır).
+                val timed = windowOn && windowStart != windowEnd
+                CondRow(Icons.Rounded.Schedule, stringResource(R.string.rule_cond_time),
+                    if (!timed) stringResource(R.string.rule_any_time)
+                    else stringResource(R.string.time_range, formatMinute(context, windowStart), formatMinute(context, windowEnd)),
+                    openCond == "time") { toggle("time") }
+                if (openCond == "time") {
+                    ToggleLine(stringResource(R.string.window_toggle), timed) { on ->
+                        if (on) {
+                            windowOn = true
+                            if (windowStart == windowEnd) { windowStart = 22 * 60; windowEnd = 6 * 60 }
+                        } else if (windowDays == ActiveWindow.ALL_DAYS) {
+                            windowOn = false
+                        } else {
+                            windowStart = 0; windowEnd = 0
+                        }
                     }
-                    DayChips(windowDays) { windowDays = it }
-                    if (windowStart == windowEnd) {
-                        Text(stringResource(R.string.window_all_day_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp))
+                    if (timed) {
+                        val startTitle = stringResource(R.string.window_start)
+                        val endTitle = stringResource(R.string.window_end)
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
+                            TimeChip(startTitle, formatMinute(context, windowStart), Modifier.weight(1f)) { timePicker.pick(startTitle, windowStart) { windowStart = it } }
+                            TimeChip(endTitle, formatMinute(context, windowEnd), Modifier.weight(1f)) { timePicker.pick(endTitle, windowEnd) { windowEnd = it } }
+                        }
                     }
                 }
-                ToggleLine(stringResource(R.string.presence_toggle), presenceRule != null) { presenceRule = if (it) PresenceRule.AWAY else null }
-                presenceRule?.let { rule ->
-                    OptionGrid(PresenceRule.entries, rule, { if (it == PresenceRule.AWAY) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home },
-                        { stringResource(if (it == PresenceRule.AWAY) R.string.presence_away else R.string.presence_home) }) { presenceRule = it }
+                // Günler
+                val days = if (windowOn) windowDays else ActiveWindow.ALL_DAYS
+                CondRow(Icons.Rounded.CalendarMonth, stringResource(R.string.rule_cond_days),
+                    if (days == ActiveWindow.ALL_DAYS) stringResource(R.string.days_every) else daysLabel((0..6).filter { days and (1 shl it) != 0 }.map { (it + 1) % 7 }.toSet()), openCond == "days") { toggle("days") }
+                if (openCond == "days") {
+                    DayChips(days) { d ->
+                        if (!windowOn) { windowOn = true; windowStart = 0; windowEnd = 0 }
+                        windowDays = d
+                        if (d == ActiveWindow.ALL_DAYS && windowStart == windowEnd) windowOn = false
+                    }
                 }
+                // Ek koşullar
+                CondRow(Icons.Rounded.Rule, stringResource(R.string.rule_cond_extra),
+                    if (conds.isEmpty()) stringResource(R.string.rule_cond_none) else stringResource(R.string.rule_conds_count, conds.size),
+                    openCond == "extra") { toggle("extra") }
+                if (openCond == "extra") {
                 fun newCond() = CondDraft(ConditionKind.IS_ON, targets.firstOrNull { !it.sensorOnly }?.id ?: targets.first().id)
                 ToggleLine(stringResource(R.string.cond_toggle), conds.isNotEmpty()) { conds = if (it) listOf(newCond()) else emptyList() }
                 if (conds.isNotEmpty()) {
@@ -879,34 +962,45 @@ fun AutomationEditor(
                         }
                     }
                 }
+                            }
+                // Evde / dışarıda
+                CondRow(Icons.Rounded.Home, stringResource(R.string.rule_cond_presence),
+                    stringResource(
+                        when (presenceRule) {
+                            null -> R.string.rule_presence_any
+                            PresenceRule.AWAY -> R.string.presence_away
+                            else -> R.string.presence_home
+                        }
+                    ),
+                    openCond == "presence") { toggle("presence") }
+                if (openCond == "presence") {
+                ToggleLine(stringResource(R.string.presence_toggle), presenceRule != null) { presenceRule = if (it) PresenceRule.AWAY else null }
+                presenceRule?.let { rule ->
+                    OptionGrid(PresenceRule.entries, rule, { if (it == PresenceRule.AWAY) Icons.AutoMirrored.Rounded.DirectionsWalk else Icons.Rounded.Home },
+                        { stringResource(if (it == PresenceRule.AWAY) R.string.presence_away else R.string.presence_home) }) { presenceRule = it }
+                }
+                }
             }
 
-            // ------------------------------------------------ O zaman
-            StepCard(Icons.Rounded.Bolt, Hue.ORANGE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
-                FieldLabel(stringResource(R.string.automation_action))
-                OptionGrid(tab.actions, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
-                if (actionKind.usesCycle) CyclePick(cycleList, actionCycle) { actionCycle = it }
-                if (actionKind == ActionKind.RUN_SCENE) {
-                    FieldLabel(stringResource(R.string.scenes_title))
-                    if (sceneList.isEmpty()) {
-                        Text(stringResource(R.string.scene_none_yet), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                    } else {
-                        OptionGrid(sceneList.map { it.id }, sceneId, { Icons.Rounded.PlayArrow }, { id -> sceneList.first { it.id == id }.name }) { sceneId = it }
+            if (sheet != null && !tv) {
+                ModalBottomSheet(
+                    onDismissRequest = { sheet = null },
+                    sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+                    containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+                ) {
+                    Column(Modifier.verticalScroll(rememberScrollState()).padding(horizontal = 20.dp).padding(bottom = 24.dp)) {
+                        Text(
+                            stringResource(if (sheet == "trigger") R.string.rule_triggers else R.string.rule_actions),
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                        if (sheet == "trigger") triggerContent() else actionContent()
+                        PillButton(stringResource(R.string.action_done), onClick = { sheet = null }, modifier = Modifier.fillMaxWidth().padding(top = 20.dp))
                     }
                 }
-                if (actionKind.usesDevice) {
-                    FieldLabel(stringResource(R.string.automation_device))
-                    DeviceChooser(actionTargets, actionDevice) { actionDevice = it.id; actionChannel = 0 }
-                    if (dst?.isMultiChannel == true) {
-                        FieldLabel(stringResource(R.string.automation_channel))
-                        ChannelChooser(dst, actionChannel) { actionChannel = it }
-                    }
-                }
-                Stepper(stringResource(R.string.automation_delay_short), delay, DELAY_STEPS, zeroLabel = stringResource(R.string.automation_now)) { delay = it }
             }
 
             // ------------------------------------------------ Özet
-            if (src != null || !triggerKind.usesDevice) {
+            if (tv && (src != null || !triggerKind.usesDevice)) {
                 val (whenText, thenText) = describe(draft, devices)
                 Column(
                     Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
@@ -931,16 +1025,13 @@ fun AutomationEditor(
                 )
             }
 
-            Button(
-                enabled = valid,
+            PillButton(
+                stringResource(R.string.action_save),
                 onClick = { onSave(draft.copy(id = initial?.id ?: UUID.randomUUID().toString())) },
-                shape = RoundedCornerShape(18.dp),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp).height(56.dp).tvFocusRing(RoundedCornerShape(18.dp)),
-            ) {
-                Icon(Icons.Rounded.Check, null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.action_save), style = MaterialTheme.typography.titleSmall)
-            }
+                enabled = valid,
+                icon = Icons.Rounded.Check,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+            )
         }
     }
 
@@ -975,15 +1066,13 @@ private val GRACE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
 internal fun StepCard(icon: ImageVector, hue: Hue, title: String, subtitle: String, content: @Composable ColumnScope.() -> Unit) {
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(24.dp)).background(tileColor()).padding(16.dp),
+            .clip(RoundedCornerShape(20.dp)).background(tileColor()).padding(16.dp),
     ) {
+        // Videodaki "EĞER" / "İSE" rozetleri: renkli hap + yanında kısa açıklama.
         Row(verticalAlignment = Alignment.CenterVertically) {
-            HueIcon(icon, hue, size = 40.dp)
-            Spacer(Modifier.width(12.dp))
-            Column {
-                Text(title, style = MaterialTheme.typography.titleLarge)
-                Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
+            PillBadge(title, if (LocalDarkTheme.current) hue.dark else hue.light)
+            Spacer(Modifier.width(10.dp))
+            Text(subtitle, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2)
         }
         content()
     }
@@ -1543,5 +1632,59 @@ fun <T> Picker(label: String, options: List<T>, selected: T?, text: @Composable 
                 DropdownMenuItem(text = { Text(text(o)) }, onClick = { onPick(o); expanded = false })
             }
         }
+    }
+}
+
+/** Seçili tetikleyici / eylem: renkli çerçeveli satır (videodaki "Banyo su sensörü · Etkin"); dokununca değiştirilir. */
+@Composable
+private fun ChoiceSummary(text: String, icon: ImageVector, color: Color, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(16.dp)
+    Row(
+        Modifier.fillMaxWidth().padding(top = 12.dp)
+            .tvFocusRing(shape)
+            .clip(shape)
+            .background(color.copy(alpha = 0.12f))
+            .border(1.5.dp, color, shape)
+            .clickable(role = Role.Button, onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, null, tint = color, modifier = Modifier.size(22.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(text, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium, modifier = Modifier.weight(1f))
+        Spacer(Modifier.width(8.dp))
+        Icon(Icons.Rounded.Edit, stringResource(R.string.action_change), tint = color, modifier = Modifier.size(20.dp))
+    }
+}
+
+/** Koşul satırı: simge, ad, sağda şu anki değer ve ok; dokununca altında ayarı açılır. */
+@Composable
+private fun CondRow(icon: ImageVector, title: String, value: String, open: Boolean, onClick: () -> Unit) {
+    val shape = RoundedCornerShape(14.dp)
+    Row(
+        Modifier.fillMaxWidth().padding(top = 8.dp)
+            .tvFocusRing(shape)
+            .clip(shape)
+            .background(raisedOnTile())
+            .clickable(role = Role.Button, onClick = onClick)
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(20.dp))
+        Spacer(Modifier.width(12.dp))
+        Text(title, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Text(
+            value,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 160.dp),
+        )
+        Icon(
+            if (open) Icons.Rounded.KeyboardArrowUp else Icons.AutoMirrored.Rounded.KeyboardArrowRight,
+            null,
+            tint = MaterialTheme.colorScheme.primary,
+        )
     }
 }

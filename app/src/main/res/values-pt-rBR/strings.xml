@@ -1690,4 +1690,17 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="alarm_swipe_dismiss">Deslize para desligar</string>
     <string name="alarm_rings_silent">Toca mesmo no modo silencioso</string>
     <string name="energy_live_power">Potência atual</string>
+    <string name="rule_conditions_optional">Condições (opcional)</string>
+    <string name="rule_cond_delay">Espera</string>
+    <string name="rule_cond_time">Intervalo de horário</string>
+    <string name="rule_cond_days">Dias</string>
+    <string name="rule_cond_extra">Condições extras</string>
+    <string name="rule_cond_presence">Em casa / fora</string>
+    <string name="rule_any_time">Sempre</string>
+    <string name="rule_presence_any">Tanto faz</string>
+    <string name="rule_cond_none">Nenhuma</string>
+    <string name="rule_conds_count">Condições: %d</string>
+    <string name="rule_triggers">Gatilhos</string>
+    <string name="rule_actions">Ações</string>
+    <string name="rule_tap_to_change">Toque para escolher</string>
 </resources>

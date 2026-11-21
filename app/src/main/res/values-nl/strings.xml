@@ -1654,4 +1654,17 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="alarm_swipe_dismiss">Veeg om te stoppen</string>
     <string name="alarm_rings_silent">Gaat ook af in stille modus</string>
     <string name="energy_live_power">Actueel vermogen</string>
+    <string name="rule_conditions_optional">Voorwaarden (optioneel)</string>
+    <string name="rule_cond_delay">Wachten</string>
+    <string name="rule_cond_time">Tijdsbereik</string>
+    <string name="rule_cond_days">Dagen</string>
+    <string name="rule_cond_extra">Extra voorwaarden</string>
+    <string name="rule_cond_presence">Thuis / weg</string>
+    <string name="rule_any_time">Altijd</string>
+    <string name="rule_presence_any">Maakt niet uit</string>
+    <string name="rule_cond_none">Geen</string>
+    <string name="rule_conds_count">Voorwaarden: %d</string>
+    <string name="rule_triggers">Triggers</string>
+    <string name="rule_actions">Acties</string>
+    <string name="rule_tap_to_change">Tik om te kiezen</string>
 </resources>

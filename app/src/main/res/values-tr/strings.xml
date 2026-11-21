@@ -1657,4 +1657,17 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="alarm_swipe_dismiss">Kapatmak için kaydırın</string>
     <string name="alarm_rings_silent">Sessiz modda bile çalar</string>
     <string name="energy_live_power">Anlık güç</string>
+    <string name="rule_conditions_optional">Koşullar (isteğe bağlı)</string>
+    <string name="rule_cond_delay">Bekleme</string>
+    <string name="rule_cond_time">Saat aralığı</string>
+    <string name="rule_cond_days">Günler</string>
+    <string name="rule_cond_extra">Ek koşullar</string>
+    <string name="rule_cond_presence">Evde / dışarıda</string>
+    <string name="rule_any_time">Her zaman</string>
+    <string name="rule_presence_any">Fark etmez</string>
+    <string name="rule_cond_none">Yok</string>
+    <string name="rule_conds_count">Koşul: %d</string>
+    <string name="rule_triggers">Tetikleyiciler</string>
+    <string name="rule_actions">Eylemler</string>
+    <string name="rule_tap_to_change">Seçmek için dokunun</string>
 </resources>

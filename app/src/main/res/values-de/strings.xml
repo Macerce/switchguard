@@ -1652,4 +1652,17 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="alarm_swipe_dismiss">Zum Beenden wischen</string>
     <string name="alarm_rings_silent">Klingelt auch im Lautlos-Modus</string>
     <string name="energy_live_power">Aktuelle Leistung</string>
+    <string name="rule_conditions_optional">Bedingungen (optional)</string>
+    <string name="rule_cond_delay">Warten</string>
+    <string name="rule_cond_time">Zeitraum</string>
+    <string name="rule_cond_days">Tage</string>
+    <string name="rule_cond_extra">Weitere Bedingungen</string>
+    <string name="rule_cond_presence">Zu Hause / unterwegs</string>
+    <string name="rule_any_time">Jederzeit</string>
+    <string name="rule_presence_any">Egal</string>
+    <string name="rule_cond_none">Keine</string>
+    <string name="rule_conds_count">Bedingungen: %d</string>
+    <string name="rule_triggers">Auslöser</string>
+    <string name="rule_actions">Aktionen</string>
+    <string name="rule_tap_to_change">Zum Auswählen tippen</string>
 </resources>

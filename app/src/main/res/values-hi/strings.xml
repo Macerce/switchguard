@@ -1583,4 +1583,17 @@
     <string name="alarm_swipe_dismiss">बंद करने के लिए स्वाइप करें</string>
     <string name="alarm_rings_silent">साइलेंट मोड में भी बजता है</string>
     <string name="energy_live_power">वर्तमान पावर</string>
+    <string name="rule_conditions_optional">शर्तें (वैकल्पिक)</string>
+    <string name="rule_cond_delay">प्रतीक्षा</string>
+    <string name="rule_cond_time">समय सीमा</string>
+    <string name="rule_cond_days">दिन</string>
+    <string name="rule_cond_extra">अतिरिक्त शर्तें</string>
+    <string name="rule_cond_presence">घर पर / बाहर</string>
+    <string name="rule_any_time">हमेशा</string>
+    <string name="rule_presence_any">कोई फ़र्क नहीं</string>
+    <string name="rule_cond_none">कोई नहीं</string>
+    <string name="rule_conds_count">शर्तें: %d</string>
+    <string name="rule_triggers">ट्रिगर</string>
+    <string name="rule_actions">क्रियाएँ</string>
+    <string name="rule_tap_to_change">चुनने के लिए टैप करें</string>
 </resources>

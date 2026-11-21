@@ -1618,4 +1618,17 @@
     <string name="alarm_swipe_dismiss">スワイプして停止</string>
     <string name="alarm_rings_silent">マナーモードでも鳴ります</string>
     <string name="energy_live_power">現在の電力</string>
+    <string name="rule_conditions_optional">条件（任意）</string>
+    <string name="rule_cond_delay">待機</string>
+    <string name="rule_cond_time">時間帯</string>
+    <string name="rule_cond_days">曜日</string>
+    <string name="rule_cond_extra">追加の条件</string>
+    <string name="rule_cond_presence">在宅 / 外出</string>
+    <string name="rule_any_time">いつでも</string>
+    <string name="rule_presence_any">問わない</string>
+    <string name="rule_cond_none">なし</string>
+    <string name="rule_conds_count">条件: %d</string>
+    <string name="rule_triggers">トリガー</string>
+    <string name="rule_actions">アクション</string>
+    <string name="rule_tap_to_change">タップして選択</string>
 </resources>

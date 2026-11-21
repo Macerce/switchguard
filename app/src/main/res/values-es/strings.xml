@@ -1660,4 +1660,17 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="alarm_swipe_dismiss">Desliza para apagar</string>
     <string name="alarm_rings_silent">Suena incluso en modo silencio</string>
     <string name="energy_live_power">Potencia actual</string>
+    <string name="rule_conditions_optional">Condiciones (opcional)</string>
+    <string name="rule_cond_delay">Espera</string>
+    <string name="rule_cond_time">Franja horaria</string>
+    <string name="rule_cond_days">Días</string>
+    <string name="rule_cond_extra">Condiciones extra</string>
+    <string name="rule_cond_presence">En casa / fuera</string>
+    <string name="rule_any_time">Siempre</string>
+    <string name="rule_presence_any">Da igual</string>
+    <string name="rule_cond_none">Ninguna</string>
+    <string name="rule_conds_count">Condiciones: %d</string>
+    <string name="rule_triggers">Disparadores</string>
+    <string name="rule_actions">Acciones</string>
+    <string name="rule_tap_to_change">Toca para elegir</string>
 </resources>

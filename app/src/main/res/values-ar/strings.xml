@@ -1798,4 +1798,17 @@
     <string name="alarm_swipe_dismiss">اسحب للإيقاف</string>
     <string name="alarm_rings_silent">يرن حتى في الوضع الصامت</string>
     <string name="energy_live_power">القدرة الحالية</string>
+    <string name="rule_conditions_optional">الشروط (اختياري)</string>
+    <string name="rule_cond_delay">الانتظار</string>
+    <string name="rule_cond_time">النطاق الزمني</string>
+    <string name="rule_cond_days">الأيام</string>
+    <string name="rule_cond_extra">شروط إضافية</string>
+    <string name="rule_cond_presence">في المنزل / خارجه</string>
+    <string name="rule_any_time">في أي وقت</string>
+    <string name="rule_presence_any">لا يهم</string>
+    <string name="rule_cond_none">لا يوجد</string>
+    <string name="rule_conds_count">الشروط: %d</string>
+    <string name="rule_triggers">المشغّلات</string>
+    <string name="rule_actions">الإجراءات</string>
+    <string name="rule_tap_to_change">انقر للاختيار</string>
 </resources>

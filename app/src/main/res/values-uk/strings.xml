@@ -1697,4 +1697,17 @@
     <string name="alarm_swipe_dismiss">Проведіть, щоб вимкнути</string>
     <string name="alarm_rings_silent">Звучить навіть у беззвучному режимі</string>
     <string name="energy_live_power">Поточна потужність</string>
+    <string name="rule_conditions_optional">Умови (необов\'язково)</string>
+    <string name="rule_cond_delay">Очікування</string>
+    <string name="rule_cond_time">Час</string>
+    <string name="rule_cond_days">Дні</string>
+    <string name="rule_cond_extra">Додаткові умови</string>
+    <string name="rule_cond_presence">Вдома / не вдома</string>
+    <string name="rule_any_time">Завжди</string>
+    <string name="rule_presence_any">Неважливо</string>
+    <string name="rule_cond_none">Немає</string>
+    <string name="rule_conds_count">Умов: %d</string>
+    <string name="rule_triggers">Тригери</string>
+    <string name="rule_actions">Дії</string>
+    <string name="rule_tap_to_change">Торкніться, щоб вибрати</string>
 </resources>

@@ -1661,4 +1661,17 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="alarm_swipe_dismiss">Scorri per spegnere</string>
     <string name="alarm_rings_silent">Suona anche in modalità silenziosa</string>
     <string name="energy_live_power">Potenza attuale</string>
+    <string name="rule_conditions_optional">Condizioni (facoltative)</string>
+    <string name="rule_cond_delay">Attesa</string>
+    <string name="rule_cond_time">Fascia oraria</string>
+    <string name="rule_cond_days">Giorni</string>
+    <string name="rule_cond_extra">Condizioni aggiuntive</string>
+    <string name="rule_cond_presence">A casa / fuori</string>
+    <string name="rule_any_time">Sempre</string>
+    <string name="rule_presence_any">Indifferente</string>
+    <string name="rule_cond_none">Nessuna</string>
+    <string name="rule_conds_count">Condizioni: %d</string>
+    <string name="rule_triggers">Attivatori</string>
+    <string name="rule_actions">Azioni</string>
+    <string name="rule_tap_to_change">Tocca per scegliere</string>
 </resources>

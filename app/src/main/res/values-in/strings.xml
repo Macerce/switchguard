@@ -1547,4 +1547,17 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="alarm_swipe_dismiss">Geser untuk mematikan</string>
     <string name="alarm_rings_silent">Berbunyi bahkan dalam mode senyap</string>
     <string name="energy_live_power">Daya saat ini</string>
+    <string name="rule_conditions_optional">Ketentuan (opsional)</string>
+    <string name="rule_cond_delay">Tunggu</string>
+    <string name="rule_cond_time">Rentang waktu</string>
+    <string name="rule_cond_days">Hari</string>
+    <string name="rule_cond_extra">Ketentuan tambahan</string>
+    <string name="rule_cond_presence">Di rumah / di luar</string>
+    <string name="rule_any_time">Kapan saja</string>
+    <string name="rule_presence_any">Tidak masalah</string>
+    <string name="rule_cond_none">Tidak ada</string>
+    <string name="rule_conds_count">Ketentuan: %d</string>
+    <string name="rule_triggers">Pemicu</string>
+    <string name="rule_actions">Tindakan</string>
+    <string name="rule_tap_to_change">Ketuk untuk memilih</string>
 </resources>

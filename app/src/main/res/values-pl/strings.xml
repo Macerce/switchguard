@@ -1726,4 +1726,17 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="alarm_swipe_dismiss">Przesuń, aby wyłączyć</string>
     <string name="alarm_rings_silent">Dzwoni nawet w trybie cichym</string>
     <string name="energy_live_power">Moc chwilowa</string>
+    <string name="rule_conditions_optional">Warunki (opcjonalnie)</string>
+    <string name="rule_cond_delay">Oczekiwanie</string>
+    <string name="rule_cond_time">Przedział czasu</string>
+    <string name="rule_cond_days">Dni</string>
+    <string name="rule_cond_extra">Dodatkowe warunki</string>
+    <string name="rule_cond_presence">W domu / poza domem</string>
+    <string name="rule_any_time">Zawsze</string>
+    <string name="rule_presence_any">Bez znaczenia</string>
+    <string name="rule_cond_none">Brak</string>
+    <string name="rule_conds_count">Warunki: %d</string>
+    <string name="rule_triggers">Wyzwalacze</string>
+    <string name="rule_actions">Akcje</string>
+    <string name="rule_tap_to_change">Dotknij, aby wybrać</string>
 </resources>
