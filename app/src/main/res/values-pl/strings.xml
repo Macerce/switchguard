@@ -1739,4 +1739,5 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tg_group_control_on">Włączanie i wyłączanie urządzeń z tej grupy</string>
     <string name="tg_group_control_hint">Tylko zaznaczone tu osoby mogą wydawać w tej grupie polecenia włącz/wyłącz. Osoba spoza listy pojawi się po napisaniu wiadomości w grupie.</string>
     <string name="tg_control_not_allowed">Nie masz uprawnień do włączania i wyłączania urządzeń z tego czatu.</string>
+    <string name="transfer_old_version">Drugie urządzenie pokazuje stary kod: zaktualizuj SwitchGuard na obu urządzeniach i spróbuj ponownie.</string>
 </resources>

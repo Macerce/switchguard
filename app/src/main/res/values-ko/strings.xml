@@ -1631,4 +1631,5 @@
     <string name="tg_group_control_on">이 그룹에서 기기 켜고 끄기</string>
     <string name="tg_group_control_hint">이 그룹에서는 여기서 체크한 사람만 켜기/끄기 명령을 보낼 수 있습니다. 목록에 없는 사람은 그룹에 메시지를 쓰면 나타납니다.</string>
     <string name="tg_control_not_allowed">이 채팅에서 기기를 켜거나 끌 권한이 없습니다.</string>
+    <string name="transfer_old_version">다른 기기에 이전 형식의 코드가 표시됩니다. 두 기기 모두 SwitchGuard를 업데이트한 뒤 다시 시도하세요.</string>
 </resources>

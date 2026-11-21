@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -100,9 +101,10 @@ fun ReceiveTransferPanel(onReceived: () -> Unit) {
     Spacer(Modifier.height(20.dp))
     Text(stringResource(R.string.transfer_code_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Text(
-        code.chunked(3).joinToString(" "),
-        fontSize = 56.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace,
-        color = MaterialTheme.colorScheme.primary, letterSpacing = 4.sp,
+        Transfer.formatCode(code),
+        // 14 karakter tek satıra sığsın (dar telefonda iletişim kutusunun içi ≈260 dp).
+        fontSize = 26.sp, fontWeight = FontWeight.Bold, fontFamily = FontFamily.Monospace,
+        color = MaterialTheme.colorScheme.primary, letterSpacing = 1.sp, maxLines = 1, softWrap = false,
     )
     Spacer(Modifier.height(12.dp))
     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -163,6 +165,7 @@ fun SendTransferDialog(onDismiss: () -> Unit) {
     val scope = rememberCoroutineScope()
     var peers by remember { mutableStateOf(emptyList<TransferPeer>()) }
     var target by remember { mutableStateOf<TransferPeer?>(null) }
+    var oldCode by remember { mutableStateOf(false) }
     var code by remember { mutableStateOf("") }
     var sending by remember { mutableStateOf(false) }
     var result by remember { mutableStateOf<TransferSender.Result?>(null) }
@@ -207,14 +210,20 @@ fun SendTransferDialog(onDismiss: () -> Unit) {
                 } else {
                     Text(stringResource(R.string.transfer_enter_code, t.name), style = MaterialTheme.typography.bodyMedium)
                     OutlinedTextField(
-                        code, { v -> code = v.filter(Char::isDigit).take(6) },
+                        code, { v -> oldCode = Transfer.looksLikeOldCode(v); code = Transfer.normalizeCode(v) },
                         label = { Text(stringResource(R.string.transfer_code_label)) },
+                        placeholder = { Text("ABCD-EFGH-JKMN") },
                         singleLine = true,
-                        keyboardOptions = tvKeyboardOptions(KeyboardOptions(keyboardType = KeyboardType.NumberPassword)),
+                        keyboardOptions = tvKeyboardOptions(
+                            KeyboardOptions(keyboardType = KeyboardType.Ascii, capitalization = KeyboardCapitalization.Characters, autoCorrectEnabled = false),
+                        ),
                         modifier = Modifier.fillMaxWidth().tvTextField(),
                     )
+                    // Diğer cihaz 6 haneli kod gösteriyorsa eski sürümdedir.
+                    if (oldCode) Text(stringResource(R.string.transfer_old_version), color = MaterialTheme.colorScheme.error)
                     when (val r = result) {
                         TransferSender.Result.WrongCode -> Text(stringResource(R.string.transfer_wrong_code), color = MaterialTheme.colorScheme.error)
+                        TransferSender.Result.OldVersion -> Text(stringResource(R.string.transfer_old_version), color = MaterialTheme.colorScheme.error)
                         is TransferSender.Result.Failed -> Text(stringResource(R.string.transfer_failed), color = MaterialTheme.colorScheme.error)
                         else -> Unit
                     }
@@ -227,7 +236,7 @@ fun SendTransferDialog(onDismiss: () -> Unit) {
                 TextButton(onClick = onDismiss, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_done)) }
             } else if (t != null) {
                 TextButton(
-                    enabled = code.length == 6 && !sending,
+                    enabled = Transfer.isValidCode(code) && !sending,
                     modifier = Modifier.tvFocusRing(),
                     onClick = {
                         sending = true

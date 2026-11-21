@@ -35,6 +35,8 @@ class TransferReceiver(
     private var registration: NsdManager.RegistrationListener? = null
     @Volatile private var code = Transfer.newCode()
     @Volatile private var attempts = 0
+    /** İlk başarılı alımdan sonra alıcı kapanır: aynı paket ikinci kez gönderilip uygulanamaz. */
+    @Volatile private var finished = false
 
     fun start() {
         main.post { onNewCode(code) }
@@ -42,11 +44,13 @@ class TransferReceiver(
             val srv = runCatching { ServerSocket(0) }.getOrElse { Log.w(TAG, "server", it); return@execute }
             server = srv
             register(srv.localPort)
-            while (!srv.isClosed) {
+            while (!srv.isClosed && !finished) {
                 val s = runCatching { srv.accept() }.getOrNull() ?: break
                 runCatching { handle(s) }.onFailure { Log.w(TAG, "handle", it) }
                 runCatching { s.close() }
             }
+            // Alım tamam: artık dinleme ve ağda görünme.
+            if (finished) main.post { stop() }
         }
     }
 
@@ -54,9 +58,14 @@ class TransferReceiver(
         s.soTimeout = 15_000
         val line = BoundedLine.read(BufferedInputStream(s.getInputStream()), MAX_BYTES) ?: return
         val out = OutputStreamWriter(s.getOutputStream(), Charsets.UTF_8)
-        val reply = try {
-            val plain = Transfer.decrypt(code, JSONObject(line))
+        val msg = runCatching { JSONObject(line) }.getOrNull()
+        val reply = if (msg != null && Transfer.envelopeVersion(msg) != Transfer.VERSION) {
+            // Farklı sürüm: kod denemesi sayılmaz, gönderene anlaşılır hata döner.
+            JSONObject().put("ok", false).put("err", "version")
+        } else try {
+            val plain = Transfer.decrypt(code, msg ?: error("bad message"))
             val data = JSONObject(String(plain, Charsets.UTF_8))
+            finished = true
             main.post { onReceived(data) }
             JSONObject().put("ok", true).put("device", Build.MODEL)
         } catch (e: Exception) {
@@ -158,6 +167,8 @@ object TransferSender {
     sealed interface Result {
         data class Ok(val device: String) : Result
         data object WrongCode : Result
+        /** Diğer cihazdaki uygulama farklı aktarım sürümünde: iki cihazda da güncellenmeli. */
+        data object OldVersion : Result
         data class Failed(val error: Throwable) : Result
     }
 
@@ -172,7 +183,11 @@ object TransferSender {
             out.flush()
             // Ağda alıcı gibi görünen başka bir cihaz da cevap verebilir: cevap kısa olmalı.
             val reply = JSONObject(BoundedLine.read(BufferedInputStream(s.getInputStream()), MAX_REPLY_BYTES) ?: error("no reply"))
-            if (reply.optBoolean("ok")) Result.Ok(reply.optString("device")) else Result.WrongCode
+            when {
+                reply.optBoolean("ok") -> Result.Ok(reply.optString("device"))
+                reply.optString("err") == "version" -> Result.OldVersion
+                else -> Result.WrongCode
+            }
         }
     } catch (e: Exception) {
         Result.Failed(e)

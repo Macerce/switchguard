@@ -1560,4 +1560,5 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="tg_group_control_on">Nyalakan dan matikan perangkat dari grup ini</string>
     <string name="tg_group_control_hint">Hanya orang yang dicentang di sini yang dapat memberi perintah nyala/mati di grup ini. Orang yang tidak ada di daftar muncul setelah menulis pesan di grup.</string>
     <string name="tg_control_not_allowed">Anda tidak diizinkan menyalakan atau mematikan perangkat dari obrolan ini.</string>
+    <string name="transfer_old_version">Perangkat lain menampilkan kode format lama: perbarui SwitchGuard di kedua perangkat lalu coba lagi.</string>
 </resources>

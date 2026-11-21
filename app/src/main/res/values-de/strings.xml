@@ -1665,4 +1665,5 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="tg_group_control_on">Geräte aus dieser Gruppe ein- und ausschalten</string>
     <string name="tg_group_control_hint">Nur die hier angehakten Personen können in dieser Gruppe Ein/Aus-Befehle geben. Wer fehlt, erscheint, sobald er in der Gruppe eine Nachricht schreibt.</string>
     <string name="tg_control_not_allowed">Du darfst aus diesem Chat keine Geräte ein- oder ausschalten.</string>
+    <string name="transfer_old_version">Das andere Gerät zeigt einen Code im alten Format: Aktualisiere SwitchGuard auf beiden Geräten und versuche es erneut.</string>
 </resources>

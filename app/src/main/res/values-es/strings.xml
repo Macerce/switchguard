@@ -1673,4 +1673,5 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="tg_group_control_on">Encender y apagar dispositivos desde este grupo</string>
     <string name="tg_group_control_hint">Solo las personas marcadas aquí pueden dar órdenes de encender/apagar en este grupo. Quien no aparezca se mostrará tras escribir un mensaje en el grupo.</string>
     <string name="tg_control_not_allowed">No tienes permiso para encender o apagar dispositivos desde este chat.</string>
+    <string name="transfer_old_version">El otro dispositivo muestra un código antiguo: actualiza SwitchGuard en ambos dispositivos e inténtalo de nuevo.</string>
 </resources>

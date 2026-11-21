@@ -1670,4 +1670,5 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="tg_group_control_on">Bu gruptan cihazları aç/kapat</string>
     <string name="tg_group_control_hint">Bu grupta yalnızca burada işaretli kişiler aç/kapa komutu verebilir. Listede olmayan kişi grupta bir mesaj yazınca burada görünür.</string>
     <string name="tg_control_not_allowed">Bu sohbetten cihazları açıp kapatma izniniz yok.</string>
+    <string name="transfer_old_version">Diğer cihaz eski biçimde bir kod gösteriyor: iki cihazda da SwitchGuard\'ı güncelleyip yeniden deneyin.</string>
 </resources>

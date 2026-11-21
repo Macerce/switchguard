@@ -1674,4 +1674,5 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="tg_group_control_on">Turn devices on and off from this group</string>
     <string name="tg_group_control_hint">Only the people ticked here can give on/off commands in this group. Someone not listed appears after writing a message in the group.</string>
     <string name="tg_control_not_allowed">You are not allowed to turn devices on or off from this chat.</string>
+    <string name="transfer_old_version">The other device shows an older code: update SwitchGuard on both devices and try again.</string>
 </resources>

@@ -1609,4 +1609,5 @@
     <string name="tg_group_control_on">允许从此群组开关设备</string>
     <string name="tg_group_control_hint">在此群组中，只有这里勾选的人可以发送开/关命令。未列出的人在群里发一条消息后就会出现在这里。</string>
     <string name="tg_control_not_allowed">你无权从此聊天开关设备。</string>
+    <string name="transfer_old_version">另一台设备显示的是旧格式代码：请在两台设备上都更新 SwitchGuard 后重试。</string>
 </resources>

@@ -1631,4 +1631,5 @@
     <string name="tg_group_control_on">このグループから機器をオン・オフ</string>
     <string name="tg_group_control_hint">このグループでオン・オフの指示を出せるのは、ここでチェックした人だけです。リストにない人はグループにメッセージを書くと表示されます。</string>
     <string name="tg_control_not_allowed">このチャットから機器をオン・オフする権限がありません。</string>
+    <string name="transfer_old_version">もう一方の端末に古い形式のコードが表示されています。両方の端末で SwitchGuard を更新してからやり直してください。</string>
 </resources>

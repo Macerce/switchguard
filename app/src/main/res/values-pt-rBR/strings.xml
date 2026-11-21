@@ -1703,4 +1703,5 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="tg_group_control_on">Ligar e desligar dispositivos por este grupo</string>
     <string name="tg_group_control_hint">Só as pessoas marcadas aqui podem dar comandos de ligar/desligar neste grupo. Quem não estiver na lista aparece depois de escrever uma mensagem no grupo.</string>
     <string name="tg_control_not_allowed">Você não tem permissão para ligar ou desligar dispositivos por esta conversa.</string>
+    <string name="transfer_old_version">O outro dispositivo mostra um código antigo: atualize o SwitchGuard nos dois dispositivos e tente de novo.</string>
 </resources>

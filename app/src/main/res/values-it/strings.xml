@@ -1674,4 +1674,5 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="tg_group_control_on">Accendere e spegnere i dispositivi da questo gruppo</string>
     <string name="tg_group_control_hint">Solo le persone spuntate qui possono dare comandi di accensione/spegnimento in questo gruppo. Chi non è in elenco compare dopo aver scritto un messaggio nel gruppo.</string>
     <string name="tg_control_not_allowed">Non hai il permesso di accendere o spegnere dispositivi da questa chat.</string>
+    <string name="transfer_old_version">L\'altro dispositivo mostra un codice vecchio: aggiorna SwitchGuard su entrambi i dispositivi e riprova.</string>
 </resources>

@@ -1602,4 +1602,5 @@
     <string name="tg_group_control_on">เปิดและปิดอุปกรณ์จากกลุ่มนี้</string>
     <string name="tg_group_control_hint">เฉพาะคนที่ติ๊กไว้ที่นี่เท่านั้นที่สั่งเปิด/ปิดในกลุ่มนี้ได้ คนที่ไม่อยู่ในรายชื่อจะปรากฏหลังจากส่งข้อความในกลุ่ม</string>
     <string name="tg_control_not_allowed">คุณไม่ได้รับอนุญาตให้เปิดหรือปิดอุปกรณ์จากแชทนี้</string>
+    <string name="transfer_old_version">อุปกรณ์อีกเครื่องแสดงรหัสแบบเก่า อัปเดต SwitchGuard ทั้งสองเครื่องแล้วลองอีกครั้ง</string>
 </resources>

@@ -1811,4 +1811,5 @@
     <string name="tg_group_control_on">تشغيل الأجهزة وإيقافها من هذه المجموعة</string>
     <string name="tg_group_control_hint">لا يمكن إلا للأشخاص المحددين هنا إعطاء أوامر التشغيل والإيقاف في هذه المجموعة. يظهر الشخص غير المدرج بعد أن يكتب رسالة في المجموعة.</string>
     <string name="tg_control_not_allowed">غير مسموح لك بتشغيل الأجهزة أو إيقافها من هذه الدردشة.</string>
+    <string name="transfer_old_version">يعرض الجهاز الآخر رمزًا بالصيغة القديمة: حدّث SwitchGuard على الجهازين وحاول مرة أخرى.</string>
 </resources>

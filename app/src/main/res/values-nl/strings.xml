@@ -1667,4 +1667,5 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tg_group_control_on">Apparaten aan- en uitzetten vanuit deze groep</string>
     <string name="tg_group_control_hint">Alleen de mensen die hier zijn aangevinkt kunnen in deze groep aan/uit-opdrachten geven. Wie ontbreekt, verschijnt nadat diegene een bericht in de groep heeft geschreven.</string>
     <string name="tg_control_not_allowed">Je mag vanuit deze chat geen apparaten aan- of uitzetten.</string>
+    <string name="transfer_old_version">Het andere apparaat toont een oude code: werk SwitchGuard op beide apparaten bij en probeer het opnieuw.</string>
 </resources>

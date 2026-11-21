@@ -1596,4 +1596,5 @@
     <string name="tg_group_control_on">इस ग्रुप से डिवाइस चालू और बंद करें</string>
     <string name="tg_group_control_hint">इस ग्रुप में सिर्फ़ यहाँ चुने गए लोग चालू/बंद कमांड दे सकते हैं। जो सूची में नहीं है, वह ग्रुप में संदेश लिखने के बाद यहाँ दिखेगा।</string>
     <string name="tg_control_not_allowed">आपको इस चैट से डिवाइस चालू या बंद करने की अनुमति नहीं है।</string>
+    <string name="transfer_old_version">दूसरा डिवाइस पुराना कोड दिखा रहा है: दोनों डिवाइसों पर SwitchGuard अपडेट करें और फिर से कोशिश करें।</string>
 </resources>
