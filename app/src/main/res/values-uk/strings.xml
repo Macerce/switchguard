@@ -1696,4 +1696,5 @@
     <string name="alarm_screen_title">ТРИВОГА</string>
     <string name="alarm_swipe_dismiss">Проведіть, щоб вимкнути</string>
     <string name="alarm_rings_silent">Звучить навіть у беззвучному режимі</string>
+    <string name="energy_live_power">Поточна потужність</string>
 </resources>

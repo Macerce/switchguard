@@ -1,5 +1,10 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.ui.draw.clip
+import androidx.compose.material.icons.rounded.Bolt
+import com.macerce.switchguard.ui.theme.Brand
+import com.macerce.switchguard.ui.theme.LocalDarkTheme
+import com.macerce.switchguard.ui.theme.tileColor
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.text.format.DateFormat as AndroidDateFormat
@@ -123,28 +128,21 @@ fun EnergySection(device: DeviceSnapshot) {
     val hasData = remember(metricsVersion) { metrics.hasPowerData(device.id) }
 
     SectionTitle(stringResource(R.string.section_energy))
+    // Tanıtım videosundaki düzen: üstte büyük "Anlık güç" kartı, altında 2x2 değer kutucukları.
+    // Çevrimdışıyken son ölçüm anlık değer gibi gösterilmez.
+    val live = device.online
+    PowerHero(device.power?.takeIf { live }?.let(::formatWatts) ?: "–")
+    Column(Modifier.padding(horizontal = 16.dp, vertical = 10.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            StatTile(stringResource(R.string.energy_voltage), device.voltage?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.0f V", it) } ?: "–", Modifier.weight(1f))
+            StatTile(stringResource(R.string.energy_current), device.current?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–", Modifier.weight(1f))
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            StatTile(stringResource(R.string.energy_today), DailySummary.formatKwh(todayKwh), Modifier.weight(1f))
+            StatTile(stringResource(R.string.energy_month), DailySummary.formatKwh(month), Modifier.weight(1f))
+        }
+    }
     SectionCard {
-        Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            // Çevrimdışıyken son ölçüm anlık değer gibi gösterilmez.
-            val live = device.online
-            Metric(stringResource(R.string.energy_power), device.power?.takeIf { live }?.let(::formatWatts) ?: "–", big = true)
-            Metric(stringResource(R.string.energy_voltage), device.voltage?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.0f V", it) } ?: "–")
-            Metric(stringResource(R.string.energy_current), device.current?.takeIf { live }?.let { String.format(Locale.getDefault(), "%.2f A", it) } ?: "–")
-        }
-        if (device.online && device.channelPower.isNotEmpty()) {
-            RowDivider(inset = 0.dp)
-            Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-                device.channelPower.toSortedMap().forEach { (ch, w) ->
-                    Metric(stringResource(R.string.channel_n, ch + 1), formatWatts(w))
-                }
-            }
-        }
-        RowDivider(inset = 0.dp)
-        Row(Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Metric(stringResource(R.string.energy_today), DailySummary.formatKwh(todayKwh))
-            Metric(stringResource(R.string.energy_month), DailySummary.formatKwh(month))
-        }
-        RowDivider(inset = 0.dp)
         if (!hasData) {
             Text(
                 stringResource(R.string.energy_no_data),
@@ -174,6 +172,34 @@ private fun Metric(label: String, value: String, big: Boolean = false) {
             fontWeight = FontWeight.SemiBold,
             color = if (big) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
         )
+    }
+}
+
+/** Büyük anlık güç kartı: marka geçişli zemin, solda etiket ve kocaman değer, sağda şimşek. */
+@Composable
+private fun PowerHero(value: String) {
+    Row(
+        Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(22.dp)).background(Brand.active(LocalDarkTheme.current))
+            .padding(horizontal = 20.dp, vertical = 18.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(stringResource(R.string.energy_live_power), style = MaterialTheme.typography.labelLarge, color = Brand.onActive.copy(alpha = 0.85f))
+            Text(value, style = MaterialTheme.typography.displaySmall, fontWeight = FontWeight.Bold, color = Brand.onActive, maxLines = 1)
+        }
+        Icon(Icons.Rounded.Bolt, null, tint = Brand.onActive, modifier = Modifier.size(40.dp))
+    }
+}
+
+/** Küçük değer kutucuğu (Gerilim, Akım, Bugün, Bu ay). */
+@Composable
+private fun StatTile(label: String, value: String, modifier: Modifier = Modifier) {
+    Column(
+        modifier.clip(RoundedCornerShape(18.dp)).background(tileColor()).padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+        Text(value, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, maxLines = 1)
     }
 }
 

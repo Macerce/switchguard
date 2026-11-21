@@ -1546,4 +1546,5 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Geser untuk mematikan</string>
     <string name="alarm_rings_silent">Berbunyi bahkan dalam mode senyap</string>
+    <string name="energy_live_power">Daya saat ini</string>
 </resources>

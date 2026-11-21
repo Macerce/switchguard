@@ -1653,4 +1653,5 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Veeg om te stoppen</string>
     <string name="alarm_rings_silent">Gaat ook af in stille modus</string>
+    <string name="energy_live_power">Actueel vermogen</string>
 </resources>

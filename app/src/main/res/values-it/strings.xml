@@ -1660,4 +1660,5 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="alarm_screen_title">ALLARME</string>
     <string name="alarm_swipe_dismiss">Scorri per spegnere</string>
     <string name="alarm_rings_silent">Suona anche in modalità silenziosa</string>
+    <string name="energy_live_power">Potenza attuale</string>
 </resources>

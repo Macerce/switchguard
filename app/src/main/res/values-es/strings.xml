@@ -1659,4 +1659,5 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="alarm_screen_title">ALARMA</string>
     <string name="alarm_swipe_dismiss">Desliza para apagar</string>
     <string name="alarm_rings_silent">Suena incluso en modo silencio</string>
+    <string name="energy_live_power">Potencia actual</string>
 </resources>

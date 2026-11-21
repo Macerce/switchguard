@@ -1,5 +1,13 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.macerce.switchguard.ui.theme.raisedOnTile
 import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -98,13 +106,13 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
         }
         Column(Modifier.verticalScroll(rememberScrollState()).navigationBarsPadding().padding(bottom = 24.dp)) {
             ControlHero(device, monitored)
+            // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez. Videodaki gibi kontrolün hemen altında durur.
+            // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
+            if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
             ConnectionCard(device)
 
             if (device.cloud == Cloud.DEMO) DemoSection(device)
 
-            // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez.
-            // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
-            if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
             if (device.hasEnergy && device.cloud != Cloud.DEMO) StandbyCard(device)
             SensorHistorySection(device)
 
@@ -282,7 +290,6 @@ private fun SensorAlertRules(device: DeviceSnapshot) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SensorRuleRow(
     icon: ImageVector,
@@ -290,28 +297,7 @@ private fun SensorRuleRow(
     current: AlertAction,
     header: (@Composable () -> Unit)? = null,
     onChange: (AlertAction) -> Unit,
-) {
-    Column(Modifier.padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(icon, null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.width(12.dp))
-            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
-        }
-        header?.invoke()
-        Spacer(Modifier.height(10.dp))
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            AlertAction.entries.forEachIndexed { i, action ->
-                SegmentedButton(
-                    selected = current == action,
-                    onClick = { onChange(action) },
-                    shape = SegmentedButtonDefaults.itemShape(i, AlertAction.entries.size),
-                ) {
-                    Text(stringResource(action.title()), fontWeight = if (current == action) FontWeight.SemiBold else null)
-                }
-            }
-        }
-    }
-}
+) = AlertChoiceRow(icon, title, current, onChange, below = header)
 
 private fun EventType.icon(): ImageVector = when (this) {
     EventType.TURNED_OFF -> Icons.Rounded.PowerOff
@@ -333,29 +319,9 @@ fun AlertAction.title(): Int = when (this) {
     AlertAction.IGNORE -> R.string.action_ignore
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertAction) -> Unit) {
-    Column(Modifier.padding(16.dp)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(type.icon(), null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
-            Spacer(Modifier.width(12.dp))
-            Text(stringResource(type.title()), style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
-        }
-        Spacer(Modifier.height(10.dp))
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            AlertAction.entries.forEachIndexed { i, action ->
-                SegmentedButton(
-                    selected = current == action,
-                    onClick = { onChange(action) },
-                    shape = SegmentedButtonDefaults.itemShape(i, AlertAction.entries.size),
-                ) {
-                    Text(stringResource(action.title()), fontWeight = if (current == action) FontWeight.SemiBold else null)
-                }
-            }
-        }
-    }
-}
+private fun RuleRow(type: EventType, current: AlertAction, onChange: (AlertAction) -> Unit) =
+    AlertChoiceRow(type.icon(), stringResource(type.title()), current, onChange)
 
 /**
  * Detayın üstü: tek kanallı cihazda ortada büyük güç düğmesi (açıkken kart marka renginde), çok kanallıda
@@ -372,7 +338,7 @@ private fun ControlHero(device: DeviceSnapshot, monitored: Boolean) {
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp)
-            .clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+            .clip(RoundedCornerShape(22.dp)).background(background).padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -411,7 +377,59 @@ private fun ControlHero(device: DeviceSnapshot, monitored: Boolean) {
             Text(stringResource(R.string.tap_to_toggle), style = MaterialTheme.typography.bodySmall, color = muted)
             Spacer(Modifier.height(4.dp))
         } else {
-            ChannelButtons(device, Modifier.fillMaxWidth(), height = 84)
+            ChannelList(device)
+        }
+    }
+}
+
+/**
+ * Çok kanallı cihazın kanalları (tanıtım videosundaki "Kanallar" listesi): numaralı daire (açıkken marka renginde),
+ * Açık/Kapalı ve ölçülüyorsa kanal gücü. Satıra dokunmak kanalı açıp kapatır.
+ */
+@Composable
+private fun ChannelList(device: DeviceSnapshot) {
+    val scheme = MaterialTheme.colorScheme
+    Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        device.switches.toSortedMap().forEach { (channel, on) ->
+            val control = rememberSwitchControl(device, channel, on)
+            val shown = control.shown
+            val enabled = device.online
+            val shape = RoundedCornerShape(16.dp)
+            val label = stringResource(R.string.channel_n, channel + 1)
+            val state = stringResource(if (shown) R.string.state_on_title else R.string.state_off_title)
+            Row(
+                Modifier.fillMaxWidth().heightIn(min = 54.dp)
+                    .tvFocusRing(shape)
+                    .clip(shape)
+                    .background(raisedOnTile())
+                    .clickable(enabled = enabled, role = Role.Switch) { if (!control.busy) control.toggle(!shown) }
+                    .semantics(mergeDescendants = true) { contentDescription = "$label, $state" }
+                    .padding(horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Box(
+                    Modifier.size(30.dp).background(if (shown && enabled) scheme.primary else tileColor(), CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (control.busy) CircularProgressIndicator(Modifier.size(22.dp), strokeWidth = 2.dp)
+                    else Text(
+                        "${channel + 1}",
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = if (shown && enabled) scheme.onPrimary else scheme.onSurfaceVariant,
+                    )
+                }
+                Spacer(Modifier.width(14.dp))
+                Text(
+                    state,
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (enabled) scheme.onSurface else scheme.outline,
+                    modifier = Modifier.weight(1f),
+                )
+                device.channelPower[channel]?.takeIf { enabled }?.let { w ->
+                    Text(formatWatts(if (shown) w else 0.0), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+                }
+            }
         }
     }
 }

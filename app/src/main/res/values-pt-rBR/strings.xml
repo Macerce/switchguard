@@ -1689,4 +1689,5 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="alarm_screen_title">ALARME</string>
     <string name="alarm_swipe_dismiss">Deslize para desligar</string>
     <string name="alarm_rings_silent">Toca mesmo no modo silencioso</string>
+    <string name="energy_live_power">Potência atual</string>
 </resources>

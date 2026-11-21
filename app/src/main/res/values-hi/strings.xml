@@ -1582,4 +1582,5 @@
     <string name="alarm_screen_title">अलार्म</string>
     <string name="alarm_swipe_dismiss">बंद करने के लिए स्वाइप करें</string>
     <string name="alarm_rings_silent">साइलेंट मोड में भी बजता है</string>
+    <string name="energy_live_power">वर्तमान पावर</string>
 </resources>

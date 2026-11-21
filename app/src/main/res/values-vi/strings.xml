@@ -1588,4 +1588,5 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="alarm_screen_title">BÁO ĐỘNG</string>
     <string name="alarm_swipe_dismiss">Vuốt để tắt</string>
     <string name="alarm_rings_silent">Đổ chuông cả khi ở chế độ im lặng</string>
+    <string name="energy_live_power">Công suất hiện tại</string>
 </resources>

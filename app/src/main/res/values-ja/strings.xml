@@ -1617,4 +1617,5 @@
     <string name="alarm_screen_title">アラーム</string>
     <string name="alarm_swipe_dismiss">スワイプして停止</string>
     <string name="alarm_rings_silent">マナーモードでも鳴ります</string>
+    <string name="energy_live_power">現在の電力</string>
 </resources>

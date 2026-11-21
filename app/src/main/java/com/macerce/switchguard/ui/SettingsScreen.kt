@@ -1445,7 +1445,7 @@ private fun monitoringSummary(graceSec: Int, poll: String): String =
     else stringResource(R.string.monitoring_summary_grace, graceLabel(graceSec), poll)
 
 @Composable
-private fun graceLabel(sec: Int): String = when {
+internal fun graceLabel(sec: Int): String = when {
     sec == 0 -> stringResource(R.string.grace_off)
     sec < 60 -> pluralStringResource(R.plurals.seconds_n, sec, sec)
     else -> pluralStringResource(R.plurals.minutes_n, sec / 60, sec / 60)

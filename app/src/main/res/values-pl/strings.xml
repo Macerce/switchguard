@@ -1725,4 +1725,5 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Przesuń, aby wyłączyć</string>
     <string name="alarm_rings_silent">Dzwoni nawet w trybie cichym</string>
+    <string name="energy_live_power">Moc chwilowa</string>
 </resources>

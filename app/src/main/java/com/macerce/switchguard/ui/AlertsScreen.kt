@@ -41,6 +41,8 @@ import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.RemoveModerator
 import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Timer
+import androidx.compose.material.icons.rounded.WifiOff
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -298,6 +300,31 @@ private fun AlertsHome(
                     Icons.Rounded.Bedtime, Hue.INDIGO, stringResource(R.string.section_quiet_hours),
                     onClick = { onOpen(AlertsRoute(AlertsRoute.Kind.QUIET), "quiet") }, modifier = focus("quiet"),
                     summary = quietSummary(s.quietHours),
+                    // Videodaki gibi sessiz saatler buradan tek dokunuşla açılıp kapanır.
+                    trailing = {
+                        Switch(
+                            checked = s.quietHours.enabled,
+                            onCheckedChange = { store.quietHours = s.quietHours.copy(enabled = it) },
+                            modifier = Modifier.tvFocusRing(),
+                        )
+                    },
+                )
+                RowDivider(68.dp)
+                // Kısa kopmaları yok say (Ayarlar › İzleme'deki ayarın kısayolu).
+                val graceOptions = listOf(0, 30, 60, 120, 300)
+                val graceTitle = stringResource(R.string.offline_grace)
+                val graceDesc = stringResource(R.string.offline_grace_desc)
+                MenuRow(
+                    Icons.Rounded.WifiOff, Hue.SLATE, graceTitle,
+                    onClick = {
+                        showDialog {
+                            ChoiceDialog(
+                                graceTitle, graceDesc, graceOptions, s.offlineGraceSec, { graceLabel(it) },
+                                onPick = { store.offlineGraceSec = it }, onDismiss = { showDialog(null) },
+                            )
+                        }
+                    },
+                    summary = graceLabel(s.offlineGraceSec),
                 )
                 RowDivider(68.dp)
                 MenuRow(
@@ -379,7 +406,7 @@ private fun AlertStatusCard(monitoring: Boolean, hasAccount: Boolean, issues: In
 
     Column(
         Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)
-            .clip(RoundedCornerShape(28.dp)).background(background).padding(20.dp),
+            .clip(RoundedCornerShape(24.dp)).background(background).padding(20.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(

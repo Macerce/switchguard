@@ -1688,4 +1688,5 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="alarm_screen_title">ALARME</string>
     <string name="alarm_swipe_dismiss">Glissez pour arrêter</string>
     <string name="alarm_rings_silent">Sonne même en mode silencieux</string>
+    <string name="energy_live_power">Puissance instantanée</string>
 </resources>

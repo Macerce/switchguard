@@ -1656,4 +1656,5 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Kapatmak için kaydırın</string>
     <string name="alarm_rings_silent">Sessiz modda bile çalar</string>
+    <string name="energy_live_power">Anlık güç</string>
 </resources>

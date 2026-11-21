@@ -1616,4 +1616,5 @@
     <string name="alarm_screen_title">警報</string>
     <string name="alarm_swipe_dismiss">滑動以關閉</string>
     <string name="alarm_rings_silent">靜音模式下也會響</string>
+    <string name="energy_live_power">即時功率</string>
 </resources>

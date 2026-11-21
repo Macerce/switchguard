@@ -7,6 +7,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.R
+import com.macerce.switchguard.ui.theme.Brand
 import com.macerce.switchguard.core.DeviceCategory
 import com.macerce.switchguard.core.DeviceRules
 import com.macerce.switchguard.core.DeviceSnapshot
@@ -109,7 +111,6 @@ fun CategoryFilter(counts: Map<DeviceCategory, Int>, selected: DeviceCategory?, 
  * Cihaz kurallarındaki uyarı kategorisi: Otomatik (kurallardan; şu anki sonucu yazar) ya da elle Kritik / Önemli /
  * Normal. Kategori sessiz saatleri ve kategori tetikleyicili otomasyonları belirler.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryRow(rules: DeviceRules, onChange: (DeviceCategory?) -> Unit) {
     val auto = DeviceCategory.auto(rules)
@@ -128,22 +129,20 @@ fun CategoryRow(rules: DeviceRules, onChange: (DeviceCategory?) -> Unit) {
             }
         }
         Spacer(Modifier.height(10.dp))
+        // Videodaki gibi hap çipler; her kategori kendi renginde (Kritik kırmızı, Önemli kehribar).
         val options = listOf<DeviceCategory?>(null) + DeviceCategory.entries
-        SingleChoiceSegmentedButtonRow(Modifier.fillMaxWidth()) {
-            options.forEachIndexed { i, c ->
-                val selected = rules.category == c
-                SegmentedButton(
-                    selected = selected,
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            options.forEach { c ->
+                ChoicePill(
+                    stringResource(c?.title() ?: R.string.category_auto),
+                    selected = rules.category == c,
                     onClick = { onChange(c) },
-                    shape = SegmentedButtonDefaults.itemShape(i, options.size),
-                    icon = {},
-                ) {
-                    Text(
-                        stringResource(c?.title() ?: R.string.category_auto),
-                        fontWeight = if (selected) FontWeight.SemiBold else null,
-                        maxLines = 1,
-                    )
-                }
+                    accent = when (c) {
+                        DeviceCategory.CRITICAL -> Brand.alarm
+                        DeviceCategory.IMPORTANT -> Brand.amber
+                        else -> MaterialTheme.colorScheme.primary
+                    },
+                )
             }
         }
     }

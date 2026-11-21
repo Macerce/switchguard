@@ -1660,4 +1660,5 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Swipe to dismiss</string>
     <string name="alarm_rings_silent">Rings even in silent mode</string>
+    <string name="energy_live_power">Live power</string>
 </resources>

@@ -1651,4 +1651,5 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="alarm_screen_title">ALARM</string>
     <string name="alarm_swipe_dismiss">Zum Beenden wischen</string>
     <string name="alarm_rings_silent">Klingelt auch im Lautlos-Modus</string>
+    <string name="energy_live_power">Aktuelle Leistung</string>
 </resources>
