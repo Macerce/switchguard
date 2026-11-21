@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.WidgetGuard
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.Actions
 import com.macerce.switchguard.ui.formatWatts
@@ -31,6 +32,9 @@ class GroupWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_MEMBER && intent.action != ACTION_ALL) return super.onReceive(context, intent)
         val widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        // Yalnızca gerçekten eklenmiş bir grup widget'ından gelen dokunuş (ikinci savunma katmanı).
+        val own = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, GroupWidget::class.java))
+        if (!WidgetGuard.isOwnWidget(widgetId, own)) return
         val result = goAsync()
         Thread {
             try {
@@ -43,6 +47,8 @@ class GroupWidget : AppWidgetProvider() {
                 } else {
                     val deviceId = intent.getStringExtra(EXTRA_DEVICE) ?: return@Thread
                     val channel = intent.getIntExtra(EXTRA_CHANNEL, 0)
+                    // Grubun üyesi olmayan cihaz/kanal değiştirilmez.
+                    if (!WidgetGuard.isGroupMember(group(context, widgetId), deviceId, channel)) return@Thread
                     val device = store.snapshots.firstOrNull { it.id == deviceId }
                     if (device != null && device.online) runBlocking { Actions.setSwitch(context, device, channel, device.switches[channel] != true) }
                 }

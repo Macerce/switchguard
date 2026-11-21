@@ -10,6 +10,7 @@ import android.widget.RemoteViews
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.WidgetGuard
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.ui.Actions
 import com.macerce.switchguard.ui.formatWatts
@@ -29,6 +30,9 @@ class DeviceWidget : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != ACTION_TOGGLE) return super.onReceive(context, intent)
         val id = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        // Yalnızca gerçekten eklenmiş bir cihaz widget'ından gelen dokunuş (ikinci savunma katmanı).
+        val own = AppWidgetManager.getInstance(context).getAppWidgetIds(ComponentName(context, DeviceWidget::class.java))
+        if (!WidgetGuard.isOwnWidget(id, own)) return
         val raw = rawBinding(context, id) ?: return
         val result = goAsync()
         Thread {

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.R
 import com.macerce.switchguard.core.AppLanguage
 import com.macerce.switchguard.data.Store
+import com.macerce.switchguard.core.WidgetGuard
 import com.macerce.switchguard.service.GroupWidget
 import com.macerce.switchguard.ui.theme.SwitchGuardTheme
 
@@ -41,6 +42,9 @@ class GroupWidgetConfigActivity : ComponentActivity() {
         // Vazgeçilirse widget eklenmesin.
         setResult(Activity.RESULT_CANCELED, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId))
         if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return finish()
+        // Başlatıcı açtığı için ekran dışa açık; yalnızca kendi widget'ımızın kimliğiyle çalışır.
+        val provider = AppWidgetManager.getInstance(this).getAppWidgetInfo(widgetId)?.provider
+        if (!WidgetGuard.isOwnProvider(provider?.className, provider?.packageName, packageName, GroupWidget::class.java.name)) return finish()
         enableEdgeToEdge()
         setContent {
             SwitchGuardTheme {
