@@ -19,8 +19,8 @@ android {
         applicationId = "com.macerce.switchguard"
         minSdk = 26
         targetSdk = 37
-        versionCode = 73
-        versionName = "2.34.0"
+        versionCode = 74
+        versionName = "2.37.0"
         // Cihaz üstü testler (Keystore, bildirimler, ses): ./gradlew connectedDebugAndroidTest
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

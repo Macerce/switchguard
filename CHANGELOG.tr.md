@@ -6,6 +6,20 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.37.0 — 2026-11-21
+**Yeni**
+- Canlılık adresi (Ayarlar → İzleme): izleme sağlıklıyken cihaz birkaç dakikada bir (varsayılan 5 dk) healthchecks.io ya da Uptime Kuma adresinizi çağırır. Telefon kapanır ya da izleme durursa o servis size haber verir. Her cihaz için ayrı adres kullanın; bu ayar yedeğe girmez.
+- ntfy ve webhook (Uyarılar → ntfy ve webhook): Telegram dışında ikinci haber kanalı. Gerçek alarm başlayınca hemen ntfy konunuza ve/veya webhook adresinize gider, kapatılınca kısa bir mesaj gelir. "Dene" düğmesiyle denenebilir; yerel ağdaki http:// adresleri de çalışır.
+
+## 2.36.0 — 2026-11-21
+**Yeni**
+- Tuya / Smart Life sensörleri: Tuya'nın standart kodlarını kullanan sıcaklık-nem, kapı, su kaçağı, hareket sensörleri ve pil durumu artık okunuyor; cihaz kartlarında, kurallarda, sensör geçmişinde, sensör uyarılarında ve bekleme ekranında görünür.
+
+## 2.35.0 — 2026-11-21
+**Yeni**
+- Kurallarda "Saatte" tetikleyicisi: seçilen günlerde belirli saatte (ör. her hafta içi 07:00). Telefon kapalıyken 2 saatten fazla kaçırılan vakit atlanır; yeni kurulan kural o gün geçmiş vakit için çalışmaz.
+- Otomasyonlara birden çok eylem: "Eylem ekle" ile cihaz aç/kapa, sahne ya da döngü eylemleri art arda eklenir; her biri öncekinden sonra isteğe bağlı bekleyebilir. Bekleyen adımlar telefon yeniden başlasa da kaybolmaz.
+
 ## 2.34.0 — 2026-11-21
 **Yeni görünüm**
 - Karşılama ekranı üç düğmeyle: eWeLink ile giriş, Tuya ile giriş, Demo ile dene.

@@ -6,6 +6,20 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.37.0 — 2026-11-21
+**New**
+- Heartbeat URL (Settings → Monitoring): while monitoring is healthy the device calls your healthchecks.io or Uptime Kuma address every few minutes (default 5). If the phone goes off or monitoring stops, that service tells you. Use a separate address per device; this setting is not backed up.
+- ntfy and webhook (Alerts → ntfy and webhook): a second way to be told besides Telegram. A real alarm is sent at once to your ntfy topic and/or webhook, and a short message follows when it is dismissed. Use "Try" to test; http:// addresses on your home network work too.
+
+## 2.36.0 — 2026-11-21
+**New**
+- Tuya / Smart Life sensors: temperature-humidity, door, water leak and motion sensors and battery level that use Tuya's standard codes are now read; they show on device tiles, in rules, sensor history, sensor alerts and on the standby screen.
+
+## 2.35.0 — 2026-11-21
+**New**
+- Clock trigger in rules: at a set time on chosen days (e.g. 07:00 on weekdays). A time missed by more than 2 hours while the phone was off is skipped; a new rule does not run for a time already past that day.
+- Several actions per automation: "Add action" adds device on/off, scene or cycle actions in a row, each with an optional wait after the previous one. Waiting steps survive a phone restart.
+
 ## 2.34.0 — 2026-11-21
 **New look**
 - Welcome screen with three buttons: sign in with eWeLink, sign in with Tuya, try the demo.
