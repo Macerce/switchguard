@@ -1718,4 +1718,19 @@
     <string name="rule_action_wait">Чекати після попередньої дії</string>
     <string name="rule_step_after">через %1$s: %2$s</string>
     <string name="rule_extra_n">Дія %d</string>
+    <string name="hb_title">Адреса heartbeat</string>
+    <string name="hb_desc">Поки моніторинг працює, пристрій регулярно звертається за адресою. Якщо звернення припиняться (телефон вимкнено, моніторинг зупинено чи «сліпий»), зовнішній сервіс (healthchecks.io, Uptime Kuma) повідомить вас.</string>
+    <string name="hb_hint">У зовнішньому сервісі встановіть час очікування приблизно вдвічі більший за інтервал. Для кожного пристрою — окрема адреса.</string>
+    <string name="hb_url_label">Адреса (https://…)</string>
+    <string name="action_try">Перевірити</string>
+    <string name="hook_sent">Надіслано (HTTP %d)</string>
+    <string name="hook_failed">Не вдалося надіслати: %s</string>
+    <string name="hook_invalid_url">Адреса має починатися з https:// або http://</string>
+    <string name="hooks_title">ntfy і вебхук</string>
+    <string name="hooks_desc">Ще один спосіб, крім Telegram: справжня тривога надсилається одразу, після вимкнення — коротке повідомлення.</string>
+    <string name="hooks_ntfy_label">Адреса теми ntfy</string>
+    <string name="hooks_webhook_label">Адреса вебхука (JSON POST)</string>
+    <string name="hooks_hint">Оберіть тему ntfy, яку важко вгадати: на ntfy.sh будь-хто, хто знає тему, може читати повідомлення. Повідомлення йдуть лише на вказані адреси.</string>
+    <string name="hooks_test_text">Тестове повідомлення SwitchGuard</string>
+    <string name="hooks_dismissed">Тривогу вимкнено.</string>
 </resources>

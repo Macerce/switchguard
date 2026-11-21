@@ -1604,4 +1604,19 @@
     <string name="rule_action_wait">पिछली क्रिया के बाद रुकें</string>
     <string name="rule_step_after">%1$s बाद: %2$s</string>
     <string name="rule_extra_n">क्रिया %d</string>
+    <string name="hb_title">हार्टबीट पता</string>
+    <string name="hb_desc">निगरानी ठीक चलते समय यह डिवाइस इस पते पर नियमित अनुरोध भेजता है। अनुरोध रुकने पर (फ़ोन बंद, निगरानी रुकी) बाहरी सेवा (healthchecks.io, Uptime Kuma) आपको बताती है।</string>
+    <string name="hb_hint">बाहरी सेवा में ग्रेस समय अंतराल का लगभग दोगुना रखें। हर डिवाइस के लिए अलग पता इस्तेमाल करें।</string>
+    <string name="hb_url_label">पता (https://…)</string>
+    <string name="action_try">आज़माएँ</string>
+    <string name="hook_sent">भेजा गया (HTTP %d)</string>
+    <string name="hook_failed">भेजा नहीं जा सका: %s</string>
+    <string name="hook_invalid_url">पता https:// या http:// से शुरू होना चाहिए</string>
+    <string name="hooks_title">ntfy और वेबहुक</string>
+    <string name="hooks_desc">Telegram के अलावा दूसरा तरीका: असली अलार्म तुरंत भेजा जाता है, बंद करने पर छोटा संदेश जाता है।</string>
+    <string name="hooks_ntfy_label">ntfy विषय का पता</string>
+    <string name="hooks_webhook_label">वेबहुक पता (JSON POST)</string>
+    <string name="hooks_hint">ऐसा ntfy विषय चुनें जिसका अंदाज़ा लगाना मुश्किल हो: ntfy.sh पर विषय जानने वाला कोई भी संदेश पढ़ सकता है। संदेश सिर्फ़ आपके दिए पतों पर जाते हैं।</string>
+    <string name="hooks_test_text">SwitchGuard परीक्षण संदेश</string>
+    <string name="hooks_dismissed">अलार्म बंद कर दिया गया।</string>
 </resources>

@@ -1610,4 +1610,19 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="rule_action_wait">Chờ sau hành động trước</string>
     <string name="rule_step_after">sau %1$s: %2$s</string>
     <string name="rule_extra_n">Hành động %d</string>
+    <string name="hb_title">Địa chỉ heartbeat</string>
+    <string name="hb_desc">Khi giám sát hoạt động tốt, thiết bị này gọi địa chỉ đều đặn. Nếu các lần gọi dừng (điện thoại tắt, giám sát dừng), dịch vụ bên ngoài (healthchecks.io, Uptime Kuma) sẽ báo cho bạn.</string>
+    <string name="hb_hint">Đặt thời gian chờ ở dịch vụ bên ngoài khoảng gấp đôi khoảng thời gian. Dùng địa chỉ riêng cho mỗi thiết bị.</string>
+    <string name="hb_url_label">Địa chỉ (https://…)</string>
+    <string name="action_try">Thử</string>
+    <string name="hook_sent">Đã gửi (HTTP %d)</string>
+    <string name="hook_failed">Không gửi được: %s</string>
+    <string name="hook_invalid_url">Địa chỉ phải bắt đầu bằng https:// hoặc http://</string>
+    <string name="hooks_title">ntfy và webhook</string>
+    <string name="hooks_desc">Cách khác ngoài Telegram: báo động thật được gửi ngay, khi tắt sẽ có tin nhắn ngắn.</string>
+    <string name="hooks_ntfy_label">Địa chỉ chủ đề ntfy</string>
+    <string name="hooks_webhook_label">Địa chỉ webhook (JSON POST)</string>
+    <string name="hooks_hint">Chọn chủ đề ntfy khó đoán: trên ntfy.sh ai biết chủ đề đều đọc được tin nhắn. Tin nhắn chỉ gửi đến địa chỉ bạn nhập.</string>
+    <string name="hooks_test_text">Tin nhắn thử của SwitchGuard</string>
+    <string name="hooks_dismissed">Đã tắt báo động.</string>
 </resources>

@@ -1673,4 +1673,19 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="rule_action_wait">Nach der vorigen Aktion warten</string>
     <string name="rule_step_after">nach %1$s: %2$s</string>
     <string name="rule_extra_n">Aktion %d</string>
+    <string name="hb_title">Heartbeat-Adresse</string>
+    <string name="hb_desc">Solange die Überwachung läuft, ruft dieses Gerät die Adresse regelmäßig auf. Bleiben die Aufrufe aus (Telefon aus, Überwachung gestoppt oder blind), meldet sich der externe Dienst (healthchecks.io, Uptime Kuma).</string>
+    <string name="hb_hint">Stelle die Kulanzzeit im externen Dienst auf etwa das Doppelte des Intervalls. Nutze für jedes Gerät eine eigene Adresse.</string>
+    <string name="hb_url_label">Adresse (https://…)</string>
+    <string name="action_try">Testen</string>
+    <string name="hook_sent">Gesendet (HTTP %d)</string>
+    <string name="hook_failed">Senden fehlgeschlagen: %s</string>
+    <string name="hook_invalid_url">Die Adresse muss mit https:// oder http:// beginnen</string>
+    <string name="hooks_title">ntfy und Webhook</string>
+    <string name="hooks_desc">Ein zweiter Weg neben Telegram: Ein echter Alarm wird sofort gesendet, beim Beenden folgt eine kurze Nachricht.</string>
+    <string name="hooks_ntfy_label">ntfy-Themenadresse</string>
+    <string name="hooks_webhook_label">Webhook-Adresse (JSON POST)</string>
+    <string name="hooks_hint">Wähle ein schwer zu erratendes ntfy-Thema: Auf ntfy.sh kann jeder, der das Thema kennt, die Nachrichten lesen. Nachrichten gehen nur an die eingegebenen Adressen.</string>
+    <string name="hooks_test_text">SwitchGuard-Testnachricht</string>
+    <string name="hooks_dismissed">Der Alarm wurde beendet.</string>
 </resources>

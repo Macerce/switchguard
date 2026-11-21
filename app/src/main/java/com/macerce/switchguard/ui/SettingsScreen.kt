@@ -600,6 +600,11 @@ private fun MonitoringPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
                 if (store.monitoringEnabled) Actions.startMonitoring(context)
             })
         }
+        Divider()
+        InfoRow(
+            Icons.Rounded.MonitorHeart, stringResource(R.string.hb_title), heartbeatSummary(s),
+            Modifier.clickable { showDialog { HeartbeatDialog(store, close) } },
+        )
         if (s.hasTuya) {
             Divider()
             InfoRow(Icons.Rounded.Bolt, stringResource(R.string.tuya_live_title), stringResource(R.string.tuya_live_desc)) {

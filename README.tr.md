@@ -82,6 +82,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 
 - Cihaz uyarıları ve koşullu uyarılar tek yerde; uyarı kategorisine göre filtre (Kritik / Önemli / Normal).
 - Uyarı ayarları: alarm sesi ve ses düzeyi, sessiz saatler, uyarı kategorileri, Telegram ("İkinci kişiye haber ver") ve akıllı uyarılar — aşağıdaki *Tüm ayarlar* bölümüne bakın.
+- **ntfy ve webhook** (Uyarılar → ntfy ve webhook): Telegram dışında ikinci haber kanalı — gerçek alarm ntfy konunuza ya da webhook adresinize hemen gider, kapatılınca kısa bir mesaj gelir. **Canlılık adresi** (Ayarlar → İzleme): izleme sağlıklıyken cihaz birkaç dakikada bir healthchecks.io / Uptime Kuma adresinizi çağırır; telefon ya da izleme durursa haberiniz olur.
 - Akıllı uyarılar: elektrik kesintisi için tek uyarı, olağandışı tüketim, aylık bütçe, haftalık rapor, tatil modu.
 
 ### Otomasyon

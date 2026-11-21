@@ -82,6 +82,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 
 - Device alerts and conditional alerts in one place, with filters by alert category (Critical / Important / Normal).
 - Alert settings: alarm sound and volume, quiet hours, alert categories, Telegram ("Tell someone else") and smart alerts — see *All settings* below.
+- **ntfy and webhook** (Alerts → ntfy and webhook): a second way to be told besides Telegram — a real alarm is sent at once to your ntfy topic or webhook, with a short message when dismissed. **Heartbeat URL** (Settings → Monitoring): while monitoring is healthy the device calls your healthchecks.io / Uptime Kuma address every few minutes, so you hear about it if the phone or monitoring stops.
 - Smart alerts: one alert for a power outage, unusual consumption, monthly budget, weekly report, vacation mode.
 
 ### Automations

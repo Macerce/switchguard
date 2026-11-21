@@ -1568,4 +1568,19 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="rule_action_wait">Tunggu setelah tindakan sebelumnya</string>
     <string name="rule_step_after">setelah %1$s: %2$s</string>
     <string name="rule_extra_n">Tindakan %d</string>
+    <string name="hb_title">Alamat heartbeat</string>
+    <string name="hb_desc">Selama pemantauan berjalan baik, perangkat ini memanggil alamat secara rutin. Jika panggilan berhenti (ponsel mati, pemantauan berhenti), layanan luar (healthchecks.io, Uptime Kuma) memberi tahu Anda.</string>
+    <string name="hb_hint">Atur masa tenggang di layanan luar sekitar dua kali interval. Gunakan alamat berbeda untuk tiap perangkat.</string>
+    <string name="hb_url_label">Alamat (https://…)</string>
+    <string name="action_try">Coba</string>
+    <string name="hook_sent">Terkirim (HTTP %d)</string>
+    <string name="hook_failed">Gagal mengirim: %s</string>
+    <string name="hook_invalid_url">Alamat harus diawali https:// atau http://</string>
+    <string name="hooks_title">ntfy dan webhook</string>
+    <string name="hooks_desc">Cara lain selain Telegram: alarm sungguhan langsung dikirim, dan pesan singkat menyusul saat dimatikan.</string>
+    <string name="hooks_ntfy_label">Alamat topik ntfy</string>
+    <string name="hooks_webhook_label">Alamat webhook (JSON POST)</string>
+    <string name="hooks_hint">Pilih topik ntfy yang sulit ditebak: di ntfy.sh siapa pun yang tahu topiknya bisa membaca pesan. Pesan hanya dikirim ke alamat yang Anda masukkan.</string>
+    <string name="hooks_test_text">Pesan uji SwitchGuard</string>
+    <string name="hooks_dismissed">Alarm telah dimatikan.</string>
 </resources>

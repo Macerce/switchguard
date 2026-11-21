@@ -1,5 +1,8 @@
 package com.macerce.switchguard.service
 
+import com.macerce.switchguard.api.HookClient
+import com.macerce.switchguard.core.Heartbeat
+import com.macerce.switchguard.core.AlertHooks
 import com.macerce.switchguard.core.ActionSteps
 import com.macerce.switchguard.core.TelegramAuth
 import com.macerce.switchguard.core.TuyaListenerCheck
@@ -449,6 +452,7 @@ class MonitorService : Service() {
         retryTick(wall)
         // Kuralların beklemeli ek eylemleri.
         stepTick(wall)
+        heartbeatTick(wall)
         weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
@@ -1067,6 +1071,32 @@ class MonitorService : Service() {
         }
     }
 
+    /** Canlılık adresine son istek (bellekte; servis yeniden başlayınca hemen bir istek gider). */
+    private var heartbeatAt = 0L
+
+    /** İzleme sağlıklıyken (canlı ya da yoklamada) dış canlılık adresine düzenli GET; durursa dış servis haber verir. */
+    private fun heartbeatTick(wall: Long) {
+        val url = store.heartbeatUrl
+        val healthy = running && LiveState.connection.value.state in setOf(ConnState.LIVE, ConnState.POLLING)
+        if (!Heartbeat.due(heartbeatAt, wall, store.heartbeatMin, healthy, url)) return
+        heartbeatAt = wall
+        syncIo.execute { runCatching { HookClient.ping(url) }.onFailure { Log.w(TAG, "heartbeat failed: ${it.message}") } }
+    }
+
+    /** Alarmı ntfy / webhook ile de bildir (gerçek alarm başlayınca ve kapatılınca); haber verme thread'inde. */
+    private fun sendHooks(event: AlertHooks.Event, text: String) {
+        val ntfy = store.ntfyUrl
+        val hook = store.webhookUrl
+        if (!Heartbeat.isValidUrl(ntfy) && !Heartbeat.isValidUrl(hook)) return
+        val device = deviceName()
+        val now = System.currentTimeMillis()
+        escalation.execute {
+            if (Heartbeat.isValidUrl(ntfy)) runCatching { HookClient.ntfy(ntfy, text, event, device) }.onFailure { Log.w(TAG, "ntfy failed: ${it.message}") }
+            if (Heartbeat.isValidUrl(hook)) runCatching { HookClient.webhook(hook, AlertHooks.webhookJson(event, device, text, now)) }
+                .onFailure { Log.w(TAG, "webhook failed: ${it.message}") }
+        }
+    }
+
     /** Kural çalıştı: ek eylemlerinden beklemesizler hemen, beklemeliler kalıcı listeye (kural yeniden çalışırsa yenilenir). */
     private fun startSteps(a: Automation) {
         if (a.extraActions.isEmpty()) return
@@ -1365,6 +1395,8 @@ class MonitorService : Service() {
             // Vakti çoktan gelmiş kişiler (mesajı almış olanlar) beklemeden aransın.
             if (store.escalationReady) wakeIn(50)
         }
+        // ntfy / webhook: test alarmı göndermez.
+        if (!test) sendHooks(AlertHooks.Event.ALARM, text)
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date())
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         notifier.showAlarm(store.pendingAlarm, sound, silent = runtime.silentAlarm)
@@ -1539,6 +1571,8 @@ class MonitorService : Service() {
      */
     private fun dismissAlarm(byTelegram: String? = null) {
         val lines = store.pendingAlarm
+        // Gerçek bir alarm kapatıldı: ntfy / webhook'a kısa haber.
+        if (lines.isNotEmpty() && runtime.realAlarmAt != 0L) sendHooks(AlertHooks.Event.DISMISSED, getString(R.string.hooks_dismissed))
         if (lines.isNotEmpty()) {
             if (byTelegram == null) logDismissal(lines.size) else runtime.alarmStartedAt = 0
             reminders.onDismiss(System.currentTimeMillis())

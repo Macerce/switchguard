@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.Webhook
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -331,6 +332,12 @@ private fun AlertsHome(
                     Icons.AutoMirrored.Rounded.Send, Hue.BLUE, stringResource(R.string.tg_title),
                     onClick = { showDialog { TelegramDialog(store) { showDialog(null) } } },
                     summary = escalationSummary(s),
+                )
+                RowDivider(68.dp)
+                MenuRow(
+                    Icons.Rounded.Webhook, Hue.TEAL, stringResource(R.string.hooks_title),
+                    onClick = { showDialog { HooksDialog(store) { showDialog(null) } } },
+                    summary = hooksSummary(s),
                 )
                 RowDivider(68.dp)
                 MenuRow(

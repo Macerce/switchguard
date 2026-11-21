@@ -1819,4 +1819,19 @@
     <string name="rule_action_wait">الانتظار بعد الإجراء السابق</string>
     <string name="rule_step_after">بعد %1$s: %2$s</string>
     <string name="rule_extra_n">الإجراء %d</string>
+    <string name="hb_title">عنوان نبض المراقبة</string>
+    <string name="hb_desc">ما دامت المراقبة سليمة يرسل هذا الجهاز طلبًا منتظمًا إلى العنوان. إذا توقفت الطلبات (أُطفئ الهاتف أو توقفت المراقبة) تنبّهك الخدمة الخارجية (healthchecks.io أو Uptime Kuma).</string>
+    <string name="hb_hint">اضبط مهلة الانتظار في الخدمة الخارجية على نحو ضعف الفاصل. استخدم عنوانًا مختلفًا لكل جهاز.</string>
+    <string name="hb_url_label">العنوان (https://…)</string>
+    <string name="action_try">تجربة</string>
+    <string name="hook_sent">أُرسل (HTTP %d)</string>
+    <string name="hook_failed">تعذّر الإرسال: %s</string>
+    <string name="hook_invalid_url">يجب أن يبدأ العنوان بـ https:// أو http://</string>
+    <string name="hooks_title">ntfy وwebhook</string>
+    <string name="hooks_desc">طريقة أخرى غير Telegram: يُرسل الإنذار الحقيقي فورًا، وتصل رسالة قصيرة عند إيقافه.</string>
+    <string name="hooks_ntfy_label">عنوان موضوع ntfy</string>
+    <string name="hooks_webhook_label">عنوان webhook (JSON POST)</string>
+    <string name="hooks_hint">اختر موضوع ntfy يصعب تخمينه: على ntfy.sh يستطيع كل من يعرف الموضوع قراءة الرسائل. تُرسل الرسائل إلى العناوين التي تدخلها فقط.</string>
+    <string name="hooks_test_text">رسالة تجريبية من SwitchGuard</string>
+    <string name="hooks_dismissed">تم إيقاف الإنذار.</string>
 </resources>

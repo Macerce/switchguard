@@ -1610,4 +1610,19 @@
     <string name="rule_action_wait">รอหลังการทำงานก่อนหน้า</string>
     <string name="rule_step_after">หลัง %1$s: %2$s</string>
     <string name="rule_extra_n">การทำงานที่ %d</string>
+    <string name="hb_title">ที่อยู่ heartbeat</string>
+    <string name="hb_desc">ขณะที่การตรวจสอบทำงานปกติ อุปกรณ์นี้จะเรียกที่อยู่นี้เป็นระยะ หากการเรียกหยุด (ปิดโทรศัพท์ หรือการตรวจสอบหยุด) บริการภายนอก (healthchecks.io, Uptime Kuma) จะแจ้งคุณ</string>
+    <string name="hb_hint">ตั้งเวลาผ่อนผันในบริการภายนอกประมาณสองเท่าของช่วงเวลา ใช้ที่อยู่แยกสำหรับแต่ละอุปกรณ์</string>
+    <string name="hb_url_label">ที่อยู่ (https://…)</string>
+    <string name="action_try">ทดลอง</string>
+    <string name="hook_sent">ส่งแล้ว (HTTP %d)</string>
+    <string name="hook_failed">ส่งไม่สำเร็จ: %s</string>
+    <string name="hook_invalid_url">ที่อยู่ต้องขึ้นต้นด้วย https:// หรือ http://</string>
+    <string name="hooks_title">ntfy และ webhook</string>
+    <string name="hooks_desc">อีกช่องทางนอกจาก Telegram: สัญญาณเตือนจริงจะส่งทันที และมีข้อความสั้นเมื่อปิด</string>
+    <string name="hooks_ntfy_label">ที่อยู่หัวข้อ ntfy</string>
+    <string name="hooks_webhook_label">ที่อยู่ webhook (JSON POST)</string>
+    <string name="hooks_hint">เลือกหัวข้อ ntfy ที่เดายาก: บน ntfy.sh ใครรู้หัวข้อก็อ่านข้อความได้ ข้อความส่งไปเฉพาะที่อยู่ที่คุณกรอกเท่านั้น</string>
+    <string name="hooks_test_text">ข้อความทดสอบจาก SwitchGuard</string>
+    <string name="hooks_dismissed">ปิดสัญญาณเตือนแล้ว</string>
 </resources>

@@ -1710,4 +1710,19 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="rule_action_wait">Attendre après l\'action précédente</string>
     <string name="rule_step_after">après %1$s : %2$s</string>
     <string name="rule_extra_n">Action %d</string>
+    <string name="hb_title">Adresse de battement</string>
+    <string name="hb_desc">Tant que la surveillance fonctionne, cet appareil appelle l\'adresse régulièrement. Si les appels s\'arrêtent (téléphone éteint, surveillance arrêtée ou aveugle), le service externe (healthchecks.io, Uptime Kuma) vous prévient.</string>
+    <string name="hb_hint">Réglez le délai de grâce du service externe à environ deux fois l\'intervalle. Utilisez une adresse différente par appareil.</string>
+    <string name="hb_url_label">Adresse (https://…)</string>
+    <string name="action_try">Essayer</string>
+    <string name="hook_sent">Envoyé (HTTP %d)</string>
+    <string name="hook_failed">Échec de l\'envoi : %s</string>
+    <string name="hook_invalid_url">L\'adresse doit commencer par https:// ou http://</string>
+    <string name="hooks_title">ntfy et webhook</string>
+    <string name="hooks_desc">Un autre moyen que Telegram : une vraie alarme est envoyée aussitôt, et un court message suit quand elle est arrêtée.</string>
+    <string name="hooks_ntfy_label">Adresse du sujet ntfy</string>
+    <string name="hooks_webhook_label">Adresse du webhook (JSON POST)</string>
+    <string name="hooks_hint">Choisissez un sujet ntfy difficile à deviner : sur ntfy.sh, quiconque connaît le sujet peut lire les messages. Les messages ne vont qu\'aux adresses saisies.</string>
+    <string name="hooks_test_text">Message de test SwitchGuard</string>
+    <string name="hooks_dismissed">L\'alarme a été arrêtée.</string>
 </resources>

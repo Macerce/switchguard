@@ -1678,4 +1678,19 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="rule_action_wait">Önceki eylemden sonra bekle</string>
     <string name="rule_step_after">%1$s sonra: %2$s</string>
     <string name="rule_extra_n">%d. eylem</string>
+    <string name="hb_title">Canlılık adresi</string>
+    <string name="hb_desc">İzleme sağlıklıyken bu cihaz adrese düzenli istek gönderir. İstekler kesilirse (telefon kapandı, izleme durdu ya da kör kaldı) dış servis (healthchecks.io, Uptime Kuma) size haber verir.</string>
+    <string name="hb_hint">Dış servisteki bekleme süresini aralığın yaklaşık iki katı yapın. Her cihaz için ayrı adres kullanın.</string>
+    <string name="hb_url_label">Adres (https://…)</string>
+    <string name="action_try">Dene</string>
+    <string name="hook_sent">Gönderildi (HTTP %d)</string>
+    <string name="hook_failed">Gönderilemedi: %s</string>
+    <string name="hook_invalid_url">Adres https:// ya da http:// ile başlamalı</string>
+    <string name="hooks_title">ntfy ve webhook</string>
+    <string name="hooks_desc">Telegram dışında alarm haberi almanın ikinci yolu: gerçek alarm başlayınca hemen gönderilir, kapatılınca kısa bir mesaj gider.</string>
+    <string name="hooks_ntfy_label">ntfy konu adresi</string>
+    <string name="hooks_webhook_label">Webhook adresi (JSON POST)</string>
+    <string name="hooks_hint">Tahmin edilmesi zor bir ntfy konu adı seçin: ntfy.sh\'de konuyu bilen herkes mesajları okuyabilir. Mesajlar yalnızca girdiğiniz adreslere gider.</string>
+    <string name="hooks_test_text">SwitchGuard deneme mesajı</string>
+    <string name="hooks_dismissed">Alarm kapatıldı.</string>
 </resources>

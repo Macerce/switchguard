@@ -1681,4 +1681,19 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="rule_action_wait">Esperar tras la acción anterior</string>
     <string name="rule_step_after">tras %1$s: %2$s</string>
     <string name="rule_extra_n">Acción %d</string>
+    <string name="hb_title">URL de latido</string>
+    <string name="hb_desc">Mientras la supervisión funciona, este dispositivo llama a la dirección con regularidad. Si las llamadas se detienen (teléfono apagado, supervisión parada o ciega), el servicio externo (healthchecks.io, Uptime Kuma) te avisa.</string>
+    <string name="hb_hint">Pon en el servicio externo un margen de unas dos veces el intervalo. Usa una dirección distinta para cada dispositivo.</string>
+    <string name="hb_url_label">Dirección (https://…)</string>
+    <string name="action_try">Probar</string>
+    <string name="hook_sent">Enviado (HTTP %d)</string>
+    <string name="hook_failed">No se pudo enviar: %s</string>
+    <string name="hook_invalid_url">La dirección debe empezar por https:// o http://</string>
+    <string name="hooks_title">ntfy y webhook</string>
+    <string name="hooks_desc">Otra forma de enterarte de las alarmas además de Telegram: una alarma real se envía al momento y al apagarla llega un mensaje breve.</string>
+    <string name="hooks_ntfy_label">Dirección del tema de ntfy</string>
+    <string name="hooks_webhook_label">Dirección del webhook (JSON POST)</string>
+    <string name="hooks_hint">Elige un tema de ntfy difícil de adivinar: en ntfy.sh cualquiera que conozca el tema puede leer los mensajes. Los mensajes solo van a las direcciones que escribas.</string>
+    <string name="hooks_test_text">Mensaje de prueba de SwitchGuard</string>
+    <string name="hooks_dismissed">La alarma se ha apagado.</string>
 </resources>

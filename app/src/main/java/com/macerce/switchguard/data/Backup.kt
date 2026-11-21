@@ -19,13 +19,16 @@ object Backup {
      * Anahtar listesinin sürümü. 2: sohbet şablonları, sesli okuma ve bekleme ekranı düzeni eklendi ([KEYS_V2]).
      * Geri yüklemede "yedekte olmayanı temizle" kuralı, yedeğin alındığı sürümde var olmayan anahtarlara uygulanmaz.
      */
-    const val KEYS_VERSION = 2
+    const val KEYS_VERSION = 3
 
     /** Sürüm 2'de eklenen anahtarlar: bunlardan önce alınmış bir yedek yüklenince mevcut değerleri silinmez. */
     val KEYS_V2: Set<String> = setOf("chatTemplates", "chatDefaultsSeen", "chatTemplateUses", "chatSpeak", "standbyGrid", "standbyDim")
 
+    /** Sürüm 3'te eklenenler: ntfy ve webhook haber kanalları. */
+    val KEYS_V3: Set<String> = setOf("ntfyUrl", "webhookUrl")
+
     /** Telegram ile haber verme de girer: aynı kişinin yeni telefonu aynı kişilere haber versin. */
-    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages") + KEYS_V2
+    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages") + KEYS_V2 + KEYS_V3
 
     /**
      * Yedeğe bilerek girmeyen ayarlar ve nedenleri. Koruma testi, Store'daki her anahtarın ya [KEYS]'te ya burada
@@ -58,6 +61,8 @@ object Backup {
         "historySeen" to "geçmişte okunmamış sayacı",
         "transferReceived" to "Wi-Fi aktarımı işareti (bu cihaza özel)",
         "transferSource" to "aktarımın geldiği cihaz (bu cihaza özel)",
+        "hbUrl" to "canlılık adresi cihaza özel: aynı adresi iki cihaz kullanırsa biri durunca fark edilmez",
+        "hbMin" to "canlılık adresinin aralığı (adresle birlikte cihaza özel)",
         "tgSenders" to "Telegram gruplarında son yazanlar: yalnızca seçim listesi, yeni cihazda yeniden toplanır",
     )
 
@@ -127,7 +132,7 @@ object Backup {
         val hasTuya = (backup["tuyaId"] as? String).orEmpty().isNotEmpty()
         val keep = (if (hasEwelink) emptySet() else EWELINK_KEYS) + (if (hasTuya) emptySet() else TUYA_KEYS)
         // Eski yedekte henüz var olmayan anahtarlar "yedekte yok" sayılıp silinmez (ör. sohbet şablonları).
-        val unknownThen = if (keysVersion < 2) KEYS_V2 else emptySet()
+        val unknownThen = (if (keysVersion < 2) KEYS_V2 else emptySet()) + (if (keysVersion < 3) KEYS_V3 else emptySet())
         val remove = (KEYS - keep - unknownThen) + (if (hasTuya) setOf("tuyaToken", "tuyaTokenExp") else emptySet())
         val sameAccount = backup["appId"] == currentAppId && ((backup["region"] as? String) ?: currentRegion) == currentRegion
         return RestorePlan(

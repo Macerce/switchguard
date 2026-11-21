@@ -1675,4 +1675,19 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="rule_action_wait">Wachten na de vorige actie</string>
     <string name="rule_step_after">na %1$s: %2$s</string>
     <string name="rule_extra_n">Actie %d</string>
+    <string name="hb_title">Heartbeat-adres</string>
+    <string name="hb_desc">Zolang de bewaking werkt, roept dit apparaat het adres regelmatig aan. Stoppen de aanroepen (telefoon uit, bewaking gestopt of blind), dan waarschuwt de externe dienst (healthchecks.io, Uptime Kuma) je.</string>
+    <string name="hb_hint">Zet de wachttijd in de externe dienst op ongeveer twee keer het interval. Gebruik voor elk apparaat een eigen adres.</string>
+    <string name="hb_url_label">Adres (https://…)</string>
+    <string name="action_try">Testen</string>
+    <string name="hook_sent">Verzonden (HTTP %d)</string>
+    <string name="hook_failed">Verzenden mislukt: %s</string>
+    <string name="hook_invalid_url">Het adres moet beginnen met https:// of http://</string>
+    <string name="hooks_title">ntfy en webhook</string>
+    <string name="hooks_desc">Een tweede manier naast Telegram: een echt alarm wordt meteen verstuurd en bij het uitzetten volgt een kort bericht.</string>
+    <string name="hooks_ntfy_label">ntfy-onderwerpadres</string>
+    <string name="hooks_webhook_label">Webhook-adres (JSON POST)</string>
+    <string name="hooks_hint">Kies een moeilijk te raden ntfy-onderwerp: op ntfy.sh kan iedereen die het onderwerp kent de berichten lezen. Berichten gaan alleen naar de adressen die je invult.</string>
+    <string name="hooks_test_text">SwitchGuard-testbericht</string>
+    <string name="hooks_dismissed">Het alarm is uitgezet.</string>
 </resources>

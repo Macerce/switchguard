@@ -1617,4 +1617,19 @@
     <string name="rule_action_wait">上一动作后等待</string>
     <string name="rule_step_after">%1$s后：%2$s</string>
     <string name="rule_extra_n">动作 %d</string>
+    <string name="hb_title">心跳地址</string>
+    <string name="hb_desc">监控正常时，此设备会定期请求该地址。请求中断（手机关机、监控停止或失明）时，外部服务（healthchecks.io、Uptime Kuma）会提醒你。</string>
+    <string name="hb_hint">在外部服务中把宽限时间设为间隔的约两倍。每台设备使用不同的地址。</string>
+    <string name="hb_url_label">地址 (https://…)</string>
+    <string name="action_try">测试</string>
+    <string name="hook_sent">已发送 (HTTP %d)</string>
+    <string name="hook_failed">发送失败：%s</string>
+    <string name="hook_invalid_url">地址必须以 https:// 或 http:// 开头</string>
+    <string name="hooks_title">ntfy 和 Webhook</string>
+    <string name="hooks_desc">Telegram 之外的另一种通知方式：真实警报开始时立即发送，关闭时再发一条简短消息。</string>
+    <string name="hooks_ntfy_label">ntfy 主题地址</string>
+    <string name="hooks_webhook_label">Webhook 地址 (JSON POST)</string>
+    <string name="hooks_hint">请选择难以猜到的 ntfy 主题：在 ntfy.sh 上，知道主题的人都能读取消息。消息只会发送到你填写的地址。</string>
+    <string name="hooks_test_text">SwitchGuard 测试消息</string>
+    <string name="hooks_dismissed">警报已关闭。</string>
 </resources>

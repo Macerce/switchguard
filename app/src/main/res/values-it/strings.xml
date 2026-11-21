@@ -1682,4 +1682,19 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="rule_action_wait">Attendi dopo l\'azione precedente</string>
     <string name="rule_step_after">dopo %1$s: %2$s</string>
     <string name="rule_extra_n">Azione %d</string>
+    <string name="hb_title">URL heartbeat</string>
+    <string name="hb_desc">Finché il monitoraggio funziona, questo dispositivo chiama l\'indirizzo regolarmente. Se le chiamate si fermano (telefono spento, monitoraggio fermo o cieco), il servizio esterno (healthchecks.io, Uptime Kuma) ti avvisa.</string>
+    <string name="hb_hint">Nel servizio esterno imposta un margine di circa il doppio dell\'intervallo. Usa un indirizzo diverso per ogni dispositivo.</string>
+    <string name="hb_url_label">Indirizzo (https://…)</string>
+    <string name="action_try">Prova</string>
+    <string name="hook_sent">Inviato (HTTP %d)</string>
+    <string name="hook_failed">Invio non riuscito: %s</string>
+    <string name="hook_invalid_url">L\'indirizzo deve iniziare con https:// o http://</string>
+    <string name="hooks_title">ntfy e webhook</string>
+    <string name="hooks_desc">Un altro modo oltre a Telegram: un vero allarme viene inviato subito e, quando lo spegni, segue un breve messaggio.</string>
+    <string name="hooks_ntfy_label">Indirizzo argomento ntfy</string>
+    <string name="hooks_webhook_label">Indirizzo webhook (JSON POST)</string>
+    <string name="hooks_hint">Scegli un argomento ntfy difficile da indovinare: su ntfy.sh chiunque lo conosca può leggere i messaggi. I messaggi vanno solo agli indirizzi inseriti.</string>
+    <string name="hooks_test_text">Messaggio di prova di SwitchGuard</string>
+    <string name="hooks_dismissed">L\'allarme è stato spento.</string>
 </resources>

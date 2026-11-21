@@ -1639,4 +1639,19 @@
     <string name="rule_action_wait">前のアクションの後に待つ</string>
     <string name="rule_step_after">%1$s後: %2$s</string>
     <string name="rule_extra_n">アクション %d</string>
+    <string name="hb_title">ハートビート URL</string>
+    <string name="hb_desc">監視が正常な間、この端末は定期的にアドレスへアクセスします。止まると（電源オフ、監視停止など）外部サービス（healthchecks.io、Uptime Kuma）が知らせてくれます。</string>
+    <string name="hb_hint">外部サービスの猶予時間は間隔の約 2 倍にしてください。端末ごとに別のアドレスを使ってください。</string>
+    <string name="hb_url_label">アドレス (https://…)</string>
+    <string name="action_try">テスト</string>
+    <string name="hook_sent">送信しました (HTTP %d)</string>
+    <string name="hook_failed">送信できませんでした: %s</string>
+    <string name="hook_invalid_url">アドレスは https:// または http:// で始めてください</string>
+    <string name="hooks_title">ntfy と Webhook</string>
+    <string name="hooks_desc">Telegram 以外の通知方法: 実際のアラームが鳴るとすぐ送信し、止めると短いメッセージを送ります。</string>
+    <string name="hooks_ntfy_label">ntfy トピックのアドレス</string>
+    <string name="hooks_webhook_label">Webhook アドレス (JSON POST)</string>
+    <string name="hooks_hint">推測しにくい ntfy トピックを選んでください。ntfy.sh ではトピックを知っている人なら誰でも読めます。メッセージは入力したアドレスにのみ送られます。</string>
+    <string name="hooks_test_text">SwitchGuard のテストメッセージ</string>
+    <string name="hooks_dismissed">アラームが止められました。</string>
 </resources>

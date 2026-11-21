@@ -207,6 +207,22 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var alwaysAwake: Boolean
         get() = prefs.getBoolean("alwaysAwake", false)
         set(v) = put { putBoolean("alwaysAwake", v) }
+    /** Dış canlılık adresi (healthchecks.io, Uptime Kuma); boş = kapalı. Cihaza özel: her cihazın kendi adresi olmalı. */
+    var heartbeatUrl: String
+        get() = str("hbUrl")
+        set(v) = put { putString("hbUrl", v.trim()) }
+    /** Canlılık isteklerinin aralığı (dakika). */
+    var heartbeatMin: Int
+        get() = prefs.getInt("hbMin", com.macerce.switchguard.core.Heartbeat.DEFAULT_MIN)
+        set(v) = put { putInt("hbMin", v) }
+    /** Alarmda ntfy konu adresi (https://ntfy.sh/konu); boş = kapalı. */
+    var ntfyUrl: String
+        get() = str("ntfyUrl")
+        set(v) = put { putString("ntfyUrl", v.trim()) }
+    /** Alarmda JSON gönderilecek webhook adresi; boş = kapalı. */
+    var webhookUrl: String
+        get() = str("webhookUrl")
+        set(v) = put { putString("webhookUrl", v.trim()) }
     /**
      * Bu cihaz Tuya mesaj servisine bağlanıp anlık güncelleme alsın mı. Aynı Tuya projesi birden çok cihazdaysa mesajlar
      * yalnızca birine gider; kapalıyken bu cihaz 5 dakikada bir yoklar. Cihaza özel: yedeğe ve aktarıma girmez.
