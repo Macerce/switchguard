@@ -1,5 +1,6 @@
 package com.macerce.switchguard.api
 
+import com.macerce.switchguard.core.ServerClock
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.TuyaParser
 import com.macerce.switchguard.core.TuyaSign
@@ -134,8 +135,10 @@ class TuyaClient(private val store: Store) {
         }
     }
 
-    private fun send(method: String, path: String, body: String?, token: String): JSONObject {
-        val t = System.currentTimeMillis().toString()
+    private fun send(method: String, path: String, body: String?, token: String, retryClock: Boolean = true): JSONObject {
+        // İmza sunucu saatine göre düzeltilmiş zamanla atılır (saati yanlış TV kutusu).
+        val sentAt = System.currentTimeMillis()
+        val t = clock.now(sentAt).toString()
         val nonce = UUID.randomUUID().toString().replace("-", "")
         val sign = TuyaSign.sign(store.tuyaAccessId, store.tuyaSecret, token, t, nonce, method, body.orEmpty(), path)
         val request = Request.Builder()
@@ -150,7 +153,12 @@ class TuyaClient(private val store: Store) {
             .build()
         val text = EwelinkClient.http.newCall(request).execute().use { it.body?.string() ?: throw IOException("HTTP ${it.code}") }
         val json = runCatching { JSONObject(text) }.getOrElse { throw IOException("invalid response") }
-        json.optLong("t").takeIf { it > 0 }?.let { lastServerTime = it }
+        json.optLong("t").takeIf { it > 0 }?.let {
+            lastServerTime = it
+            clock.observe(it, sentAt, System.currentTimeMillis())
+        }
+        // 1013: istek zamanı geçersiz. Fark bu yanıttan güncellendi; bir kez yeniden dene.
+        if (retryClock && json.optInt("code") == TIME_INVALID) return send(method, path, body, token, retryClock = false)
         return json
     }
 
@@ -162,6 +170,12 @@ class TuyaClient(private val store: Store) {
         private val TOKEN_ERRORS = setOf(1010, 1011)
         /** 1004: imza yanlış (Secret hatalı), 1005: client_id yanlış, 2009: proje/istemci yok. */
         private val AUTH_ERRORS = setOf(1004, 1005, 2009)
+        /** 1013: istek zamanı (t) sunucu saatinden çok farklı. */
+        private const val TIME_INVALID = 1013
+
+        /** Sunucu ile cihaz saati arasındaki fark; tüm TuyaClient örnekleri paylaşır (her işlem yeni örnek açar). */
+        val clock = ServerClock()
+
         /** Deneme planı bitti / yetki yok. */
         private val EXPIRED_ERRORS = setOf(28841002, 28841004, 28841101)
 
