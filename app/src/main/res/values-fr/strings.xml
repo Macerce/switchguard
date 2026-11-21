@@ -1703,4 +1703,11 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="tg_group_control_hint">Seules les personnes cochées ici peuvent donner des ordres marche/arrêt dans ce groupe. Une personne absente apparaît après avoir écrit un message dans le groupe.</string>
     <string name="tg_control_not_allowed">Vous n\'êtes pas autorisé à allumer ou éteindre des appareils depuis cette discussion.</string>
     <string name="transfer_old_version">L\'autre appareil affiche un ancien code : mettez à jour SwitchGuard sur les deux appareils et réessayez.</string>
+    <string name="trigger_time">À une heure</string>
+    <string name="evt_time">À une heure</string>
+    <string name="rule_clock_time">Heure</string>
+    <string name="rule_add_action">Ajouter une action</string>
+    <string name="rule_action_wait">Attendre après l\'action précédente</string>
+    <string name="rule_step_after">après %1$s : %2$s</string>
+    <string name="rule_extra_n">Action %d</string>
 </resources>

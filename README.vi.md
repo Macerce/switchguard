@@ -87,8 +87,8 @@ SwitchGuard theo dõi ổ cắm và công tắc thông minh trong chính tài kh
 ### Tự động hóa
 
 - **Quy tắc** — hành động tự động: *Nếu* có chuyện xảy ra, *thì* làm gì đó, có độ trễ tùy chọn.
-- Điều kiện kích hoạt: bật, tắt, vẫn bật trong, vẫn tắt trong, chuyển sang ngoại tuyến, trực tuyến trở lại, công suất vượt quá, công suất giảm xuống dưới, lúc mặt trời mọc, lúc mặt trời lặn, khi nhiệt độ ngoài trời tăng lên trên, khi nhiệt độ ngoài trời giảm xuống dưới, khi đến, khi rời đi. Trình kích hoạt cảm biến: giá trị trên / dưới, cửa mở / đóng, chuyển động, rò rỉ nước.
-- Hành động: Bật, Tắt, Phát báo động, Gửi thông báo, Chạy kịch bản, Bắt đầu chu kỳ, Dừng chu kỳ.
+- Điều kiện kích hoạt: bật, tắt, vẫn bật trong, vẫn tắt trong, chuyển sang ngoại tuyến, trực tuyến trở lại, công suất vượt quá, công suất giảm xuống dưới, lúc mặt trời mọc, lúc mặt trời lặn, khi nhiệt độ ngoài trời tăng lên trên, khi nhiệt độ ngoài trời giảm xuống dưới, khi đến, khi rời đi. Trình kích hoạt cảm biến: giá trị trên / dưới, cửa mở / đóng, chuyển động, rò rỉ nước. Giờ: vào giờ cố định trong các ngày đã chọn.
+- Hành động: Bật, Tắt, Phát báo động, Gửi thông báo, Chạy kịch bản, Bắt đầu chu kỳ, Dừng chu kỳ. Một quy tắc có thể chạy nhiều hành động nối tiếp, có thể chờ giữa các hành động.
 - **Chỉ khi**: Chỉ trong những giờ này, Và chỉ khi một thiết bị khác…, Chỉ khi ở nhà / vắng nhà. Điều kiện cũng có thể kiểm tra giá trị cảm biến, trạng thái cảm biến (cửa mở, chuyển động, rò rỉ), công suất thiết bị hoặc nhiệt độ ngoài trời; thêm nhiều điều kiện và chọn “Tất cả điều kiện” (và) hoặc “Chỉ cần một” (hoặc).
 - **Kịch bản** — Chọn điều gì xảy ra với từng thiết bị khi kịch bản chạy. Các thiết bị để ở “Bỏ qua” sẽ không bị tác động.
 - **Nhóm** — Chọn các thiết bị trong nhóm. Nhóm hiện trên màn hình Thiết bị như một thiết bị: nút của nó bật hoặc tắt tất cả cùng lúc, và bạn có thể dùng nó trong tự động hóa.

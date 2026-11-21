@@ -1740,4 +1740,11 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="tg_group_control_hint">Tylko zaznaczone tu osoby mogą wydawać w tej grupie polecenia włącz/wyłącz. Osoba spoza listy pojawi się po napisaniu wiadomości w grupie.</string>
     <string name="tg_control_not_allowed">Nie masz uprawnień do włączania i wyłączania urządzeń z tego czatu.</string>
     <string name="transfer_old_version">Drugie urządzenie pokazuje stary kod: zaktualizuj SwitchGuard na obu urządzeniach i spróbuj ponownie.</string>
+    <string name="trigger_time">O godzinie</string>
+    <string name="evt_time">O godzinie</string>
+    <string name="rule_clock_time">Godzina</string>
+    <string name="rule_add_action">Dodaj akcję</string>
+    <string name="rule_action_wait">Czekaj po poprzedniej akcji</string>
+    <string name="rule_step_after">po %1$s: %2$s</string>
+    <string name="rule_extra_n">Akcja %d</string>
 </resources>

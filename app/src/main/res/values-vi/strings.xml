@@ -1603,4 +1603,11 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="tg_group_control_hint">Chỉ những người được đánh dấu ở đây mới gửi được lệnh bật/tắt trong nhóm này. Người chưa có trong danh sách sẽ xuất hiện sau khi họ nhắn tin trong nhóm.</string>
     <string name="tg_control_not_allowed">Bạn không có quyền bật hoặc tắt thiết bị từ cuộc trò chuyện này.</string>
     <string name="transfer_old_version">Thiết bị kia hiển thị mã kiểu cũ: hãy cập nhật SwitchGuard trên cả hai thiết bị rồi thử lại.</string>
+    <string name="trigger_time">Vào giờ</string>
+    <string name="evt_time">Theo giờ</string>
+    <string name="rule_clock_time">Giờ</string>
+    <string name="rule_add_action">Thêm hành động</string>
+    <string name="rule_action_wait">Chờ sau hành động trước</string>
+    <string name="rule_step_after">sau %1$s: %2$s</string>
+    <string name="rule_extra_n">Hành động %d</string>
 </resources>

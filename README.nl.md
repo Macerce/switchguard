@@ -87,8 +87,8 @@ SwitchGuard bewaakt de slimme stekkers en schakelaars in je eigen **eWeLink / SO
 ### Automatiseringen
 
 - **Regels** — automatische acties: *Als* er iets gebeurt, *dan* iets doen, met optionele vertraging.
-- Triggers: aangaat, uitgaat, aan blijft gedurende, uit blijft gedurende, offline gaat, weer online komt, vermogen boven, vermogen daalt onder, bij zonsopgang, bij zonsondergang, wanneer de buitentemperatuur stijgt boven, wanneer de buitentemperatuur daalt onder, bij aankomst, bij vertrek. Sensortriggers: waarde boven / onder, deur geopend / gesloten, beweging, waterlek.
-- Acties: Aanzetten, Uitzetten, Alarm laten afgaan, Melding sturen, Scène uitvoeren, Cyclus starten, Cyclus stoppen.
+- Triggers: aangaat, uitgaat, aan blijft gedurende, uit blijft gedurende, offline gaat, weer online komt, vermogen boven, vermogen daalt onder, bij zonsopgang, bij zonsondergang, wanneer de buitentemperatuur stijgt boven, wanneer de buitentemperatuur daalt onder, bij aankomst, bij vertrek. Sensortriggers: waarde boven / onder, deur geopend / gesloten, beweging, waterlek. Tijd: op een vast tijdstip op gekozen dagen.
+- Acties: Aanzetten, Uitzetten, Alarm laten afgaan, Melding sturen, Scène uitvoeren, Cyclus starten, Cyclus stoppen. Een regel kan meerdere acties na elkaar uitvoeren, eventueel met een wachttijd ertussen.
 - **Alleen wanneer**: Alleen tijdens deze uren, En alleen als een ander apparaat…, Alleen als ik thuis / weg ben. Voorwaarden kunnen ook een sensorwaarde, een sensorstatus (deur open, beweging, lek), het vermogen van een apparaat of de buitentemperatuur controleren; voeg er meerdere toe en kies „Alle voorwaarden” (en) of „Eén is genoeg” (of).
 - **Scènes** — Kies wat er met elk apparaat gebeurt als de scène wordt uitgevoerd. Apparaten die op “Overslaan” blijven staan, worden niet aangeraakt.
 - **Groepen** — Kies de apparaten in de groep. De groep verschijnt op het scherm Apparaten als een apparaat: met de knop zet je ze allemaal tegelijk aan of uit, en je kunt hem in automatiseringen gebruiken.

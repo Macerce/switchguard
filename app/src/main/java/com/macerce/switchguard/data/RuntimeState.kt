@@ -113,6 +113,10 @@ class RuntimeState private constructor(context: Context) {
     var chargerLostAt: Long
         get() = prefs.getLong("chargerLost", 0)
         set(v) = put { putLong("chargerLost", v) }
+    /** Kuralların beklemeli ek eylemleri (vakti gelince çalıştırılır; servis yeniden başlasa da kaybolmaz). */
+    var actionSteps: List<com.macerce.switchguard.core.ActionSteps.Due>
+        get() = com.macerce.switchguard.core.ActionSteps.fromJson(prefs.getString("actionSteps", null))
+        set(v) = put { putString("actionSteps", com.macerce.switchguard.core.ActionSteps.toJson(v)) }
     /** Saatli sohbet şablonlarının son çalıştığı an (şablon kimliği → zaman). */
     var templateRuns: Map<String, Long>
         get() = runCatching { org.json.JSONObject(prefs.getString("templateRuns", "{}")!!).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())

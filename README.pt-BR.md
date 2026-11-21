@@ -87,8 +87,8 @@ O SwitchGuard monitora as tomadas e interruptores inteligentes das suas própria
 ### Automações
 
 - **Regras** — ações automáticas: *Se* algo acontecer, *então* faça algo, com atraso opcional.
-- Gatilhos: ligar, desligar, ficar ligado por, ficar desligado por, ficar offline, voltar a ficar online, a potência passar de, a potência cair abaixo de, ao nascer do sol, ao pôr do sol, quando a temperatura externa subir acima de, quando a temperatura externa cair abaixo de, ao chegar, ao sair. Gatilhos de sensor: valor acima / abaixo, porta aberta / fechada, movimento, vazamento de água.
-- Ações: Ligar, Desligar, Tocar alarme, Enviar notificação, Executar cena, Iniciar ciclo, Parar ciclo.
+- Gatilhos: ligar, desligar, ficar ligado por, ficar desligado por, ficar offline, voltar a ficar online, a potência passar de, a potência cair abaixo de, ao nascer do sol, ao pôr do sol, quando a temperatura externa subir acima de, quando a temperatura externa cair abaixo de, ao chegar, ao sair. Gatilhos de sensor: valor acima / abaixo, porta aberta / fechada, movimento, vazamento de água. Horário: em um horário fixo nos dias escolhidos.
+- Ações: Ligar, Desligar, Tocar alarme, Enviar notificação, Executar cena, Iniciar ciclo, Parar ciclo. Uma regra pode executar várias ações em sequência, com uma espera opcional entre elas.
 - **Somente quando**: Somente nestes horários, E somente se outro dispositivo…, Somente quando em casa / ausente. As condições também podem verificar um valor de sensor, um estado de sensor (porta aberta, movimento, vazamento), a potência do dispositivo ou a temperatura externa; adicione várias e escolha “Todas as condições” (e) ou “Basta uma” (ou).
 - **Cenas** — Escolha o que acontece com cada dispositivo quando a cena é executada. Dispositivos deixados em “Pular” não são alterados.
 - **Grupos** — Escolha os dispositivos do grupo. O grupo aparece na tela Dispositivos como um dispositivo: o botão dele liga ou desliga todos juntos, e você pode usá-lo em automações.

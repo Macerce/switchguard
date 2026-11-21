@@ -1711,4 +1711,11 @@
     <string name="tg_group_control_hint">Лише позначені тут люди можуть давати в цій групі команди увімк/вимк. Людина не зі списку з\'явиться, коли напише повідомлення в групі.</string>
     <string name="tg_control_not_allowed">У вас немає дозволу вмикати й вимикати пристрої з цього чату.</string>
     <string name="transfer_old_version">Інший пристрій показує код старого формату: оновіть SwitchGuard на обох пристроях і спробуйте ще раз.</string>
+    <string name="trigger_time">У визначений час</string>
+    <string name="evt_time">За часом</string>
+    <string name="rule_clock_time">Час</string>
+    <string name="rule_add_action">Додати дію</string>
+    <string name="rule_action_wait">Чекати після попередньої дії</string>
+    <string name="rule_step_after">через %1$s: %2$s</string>
+    <string name="rule_extra_n">Дія %d</string>
 </resources>

@@ -1740,4 +1740,11 @@
     <string name="tg_group_control_hint">Только отмеченные здесь люди могут давать в этой группе команды вкл/выкл. Человек не из списка появится, когда напишет сообщение в группе.</string>
     <string name="tg_control_not_allowed">У вас нет разрешения включать и выключать устройства из этого чата.</string>
     <string name="transfer_old_version">Другое устройство показывает код старого формата: обновите SwitchGuard на обоих устройствах и попробуйте снова.</string>
+    <string name="trigger_time">В заданное время</string>
+    <string name="evt_time">По времени</string>
+    <string name="rule_clock_time">Время</string>
+    <string name="rule_add_action">Добавить действие</string>
+    <string name="rule_action_wait">Ждать после предыдущего действия</string>
+    <string name="rule_step_after">через %1$s: %2$s</string>
+    <string name="rule_extra_n">Действие %d</string>
 </resources>

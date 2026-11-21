@@ -87,8 +87,8 @@ SwitchGuard controlla le prese e gli interruttori smart dei tuoi account **eWeLi
 ### Automazioni
 
 - **Regole** — azioni automatiche: *Se* succede qualcosa, *allora* fai qualcosa, con ritardo facoltativo.
-- Attivatori: si accende, si spegne, resta acceso per, resta spento per, va offline, torna online, la potenza supera, la potenza scende sotto, all'alba, al tramonto, quando la temperatura esterna sale sopra, quando la temperatura esterna scende sotto, all'arrivo, alla partenza. Attivatori dei sensori: valore sopra / sotto, porta aperta / chiusa, movimento, perdita d’acqua.
-- Azioni: Accendi, Spegni, Fai suonare l'allarme, Invia notifica, Esegui scena, Avvia ciclo, Ferma ciclo.
+- Attivatori: si accende, si spegne, resta acceso per, resta spento per, va offline, torna online, la potenza supera, la potenza scende sotto, all'alba, al tramonto, quando la temperatura esterna sale sopra, quando la temperatura esterna scende sotto, all'arrivo, alla partenza. Attivatori dei sensori: valore sopra / sotto, porta aperta / chiusa, movimento, perdita d’acqua. Orario: a un'ora fissa nei giorni scelti.
+- Azioni: Accendi, Spegni, Fai suonare l'allarme, Invia notifica, Esegui scena, Avvia ciclo, Ferma ciclo. Una regola può eseguire più azioni in sequenza, con un'attesa facoltativa tra l'una e l'altra.
 - **Solo quando**: Solo in queste ore, E solo se un altro dispositivo…, Solo quando in casa / fuori casa. Le condizioni possono anche controllare un valore del sensore, uno stato del sensore (porta aperta, movimento, perdita), la potenza del dispositivo o la temperatura esterna; aggiungine più di una e scegli «Tutte le condizioni» (e) o «Ne basta una» (o).
 - **Scene** — Scegli cosa succede a ogni dispositivo quando la scena viene eseguita. I dispositivi lasciati su “Salta” non vengono toccati.
 - **Gruppi** — Scegli i dispositivi del gruppo. Il gruppo compare nella schermata Dispositivi come un dispositivo: il suo pulsante li accende o li spegne tutti insieme, e puoi usarlo nelle automazioni.

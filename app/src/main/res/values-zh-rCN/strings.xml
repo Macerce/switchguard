@@ -1610,4 +1610,11 @@
     <string name="tg_group_control_hint">在此群组中，只有这里勾选的人可以发送开/关命令。未列出的人在群里发一条消息后就会出现在这里。</string>
     <string name="tg_control_not_allowed">你无权从此聊天开关设备。</string>
     <string name="transfer_old_version">另一台设备显示的是旧格式代码：请在两台设备上都更新 SwitchGuard 后重试。</string>
+    <string name="trigger_time">定时</string>
+    <string name="evt_time">定时</string>
+    <string name="rule_clock_time">时间</string>
+    <string name="rule_add_action">添加动作</string>
+    <string name="rule_action_wait">上一动作后等待</string>
+    <string name="rule_step_after">%1$s后：%2$s</string>
+    <string name="rule_extra_n">动作 %d</string>
 </resources>

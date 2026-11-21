@@ -1668,4 +1668,11 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="tg_group_control_hint">Alleen de mensen die hier zijn aangevinkt kunnen in deze groep aan/uit-opdrachten geven. Wie ontbreekt, verschijnt nadat diegene een bericht in de groep heeft geschreven.</string>
     <string name="tg_control_not_allowed">Je mag vanuit deze chat geen apparaten aan- of uitzetten.</string>
     <string name="transfer_old_version">Het andere apparaat toont een oude code: werk SwitchGuard op beide apparaten bij en probeer het opnieuw.</string>
+    <string name="trigger_time">Op een tijdstip</string>
+    <string name="evt_time">Tijdstip</string>
+    <string name="rule_clock_time">Tijd</string>
+    <string name="rule_add_action">Actie toevoegen</string>
+    <string name="rule_action_wait">Wachten na de vorige actie</string>
+    <string name="rule_step_after">na %1$s: %2$s</string>
+    <string name="rule_extra_n">Actie %d</string>
 </resources>

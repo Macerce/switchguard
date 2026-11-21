@@ -1674,4 +1674,11 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="tg_group_control_hint">Solo las personas marcadas aquí pueden dar órdenes de encender/apagar en este grupo. Quien no aparezca se mostrará tras escribir un mensaje en el grupo.</string>
     <string name="tg_control_not_allowed">No tienes permiso para encender o apagar dispositivos desde este chat.</string>
     <string name="transfer_old_version">El otro dispositivo muestra un código antiguo: actualiza SwitchGuard en ambos dispositivos e inténtalo de nuevo.</string>
+    <string name="trigger_time">A una hora</string>
+    <string name="evt_time">A una hora</string>
+    <string name="rule_clock_time">Hora</string>
+    <string name="rule_add_action">Añadir acción</string>
+    <string name="rule_action_wait">Esperar tras la acción anterior</string>
+    <string name="rule_step_after">tras %1$s: %2$s</string>
+    <string name="rule_extra_n">Acción %d</string>
 </resources>

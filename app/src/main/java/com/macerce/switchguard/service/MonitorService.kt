@@ -1,5 +1,6 @@
 package com.macerce.switchguard.service
 
+import com.macerce.switchguard.core.ActionSteps
 import com.macerce.switchguard.core.TelegramAuth
 import com.macerce.switchguard.core.TuyaListenerCheck
 import android.annotation.SuppressLint
@@ -446,6 +447,8 @@ class MonitorService : Service() {
         cycleTick(wall)
         runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
         retryTick(wall)
+        // Kuralların beklemeli ek eylemleri.
+        stepTick(wall)
         weatherTick(wall)
         tuyaTick(now)
         demoTick(wall)
@@ -1064,12 +1067,38 @@ class MonitorService : Service() {
         }
     }
 
+    /** Kural çalıştı: ek eylemlerinden beklemesizler hemen, beklemeliler kalıcı listeye (kural yeniden çalışırsa yenilenir). */
+    private fun startSteps(a: Automation) {
+        if (a.extraActions.isEmpty()) return
+        val (immediate, later) = ActionSteps.plan(a, System.currentTimeMillis())
+        immediate.forEach { i -> execute(a.copy(action = a.extraActions[i])) }
+        runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id } + later
+    }
+
+    /** Vakti gelen ek eylemler; bu arada kapatılan ya da silinen kuralınki yapılmaz, düzenlendiyse güncel hali kullanılır. */
+    private fun stepTick(wall: Long) {
+        val list = runtime.actionSteps
+        if (list.isEmpty()) return
+        val due = list.filter { it.at <= wall }
+        if (due.isEmpty()) return
+        runtime.actionSteps = list - due.toSet()
+        val byId = store.engineAutomations().associateBy { it.id }
+        for (d in due.sortedBy { it.at }) {
+            val a = byId[d.automationId]?.takeIf { it.enabled } ?: continue
+            a.extraActions.getOrNull(d.step)?.let { execute(a.copy(action = it)) }
+        }
+    }
+
     private fun runAutomations(fired: List<Automation>) {
-        fired.forEach(::execute)
+        fired.forEach { a ->
+            execute(a)
+            startSteps(a)
+        }
         // Süre dolumu, gecikmeli eylem ya da saatli şablon varsa tam vaktinde uyan.
         val due = listOfNotNull(
             automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()),
             ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, System.currentTimeMillis()),
+            runtime.actionSteps.minOfOrNull { it.at },
         ).minOrNull() ?: return
         wakeIn((due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }

@@ -1597,4 +1597,11 @@
     <string name="tg_group_control_hint">इस ग्रुप में सिर्फ़ यहाँ चुने गए लोग चालू/बंद कमांड दे सकते हैं। जो सूची में नहीं है, वह ग्रुप में संदेश लिखने के बाद यहाँ दिखेगा।</string>
     <string name="tg_control_not_allowed">आपको इस चैट से डिवाइस चालू या बंद करने की अनुमति नहीं है।</string>
     <string name="transfer_old_version">दूसरा डिवाइस पुराना कोड दिखा रहा है: दोनों डिवाइसों पर SwitchGuard अपडेट करें और फिर से कोशिश करें।</string>
+    <string name="trigger_time">तय समय पर</string>
+    <string name="evt_time">समय पर</string>
+    <string name="rule_clock_time">समय</string>
+    <string name="rule_add_action">क्रिया जोड़ें</string>
+    <string name="rule_action_wait">पिछली क्रिया के बाद रुकें</string>
+    <string name="rule_step_after">%1$s बाद: %2$s</string>
+    <string name="rule_extra_n">क्रिया %d</string>
 </resources>

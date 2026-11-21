@@ -87,8 +87,8 @@ SwitchGuard pilnuje inteligentnych gniazdek i przełączników na Twoich własny
 ### Automatyzacje
 
 - **Reguły** — automatyczne działania: *Jeśli* coś się stanie, *to* zrób coś, z opcjonalnym opóźnieniem.
-- Wyzwalacze: włączy się, wyłączy się, pozostaje włączone przez, pozostaje wyłączone przez, przejdzie w tryb offline, wróci online, moc przekroczy, moc spadnie poniżej, o wschodzie słońca, o zachodzie słońca, gdy temperatura na zewnątrz wzrośnie powyżej, gdy temperatura na zewnątrz spadnie poniżej, po przybyciu, po wyjściu. Wyzwalacze czujników: wartość powyżej / poniżej, drzwi otwarte / zamknięte, ruch, wyciek wody.
-- Działania: Włącz, Wyłącz, Uruchom alarm, Wyślij powiadomienie, Uruchom scenę, Uruchom cykl, Zatrzymaj cykl.
+- Wyzwalacze: włączy się, wyłączy się, pozostaje włączone przez, pozostaje wyłączone przez, przejdzie w tryb offline, wróci online, moc przekroczy, moc spadnie poniżej, o wschodzie słońca, o zachodzie słońca, gdy temperatura na zewnątrz wzrośnie powyżej, gdy temperatura na zewnątrz spadnie poniżej, po przybyciu, po wyjściu. Wyzwalacze czujników: wartość powyżej / poniżej, drzwi otwarte / zamknięte, ruch, wyciek wody. Godzina: o stałej godzinie w wybrane dni.
+- Działania: Włącz, Wyłącz, Uruchom alarm, Wyślij powiadomienie, Uruchom scenę, Uruchom cykl, Zatrzymaj cykl. Reguła może wykonać kilka działań po kolei, z opcjonalnym odczekaniem między nimi.
 - **Tylko gdy**: Tylko w tych godzinach, I tylko jeśli inne urządzenie…, Tylko w domu / poza domem. Warunki mogą też sprawdzać wartość czujnika, stan czujnika (drzwi otwarte, ruch, wyciek), moc urządzenia lub temperaturę na zewnątrz; dodaj kilka i wybierz „Wszystkie warunki” (i) albo „Wystarczy jeden” (lub).
 - **Sceny** — Wybierz, co ma się stać z każdym urządzeniem po uruchomieniu sceny. Urządzenia ustawione na „Pomiń” nie są ruszane.
 - **Grupy** — Wybierz urządzenia w grupie. Grupa pojawia się na ekranie Urządzenia jak urządzenie: jej przycisk włącza lub wyłącza wszystkie naraz, a możesz jej używać w automatyzacjach.

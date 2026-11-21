@@ -87,8 +87,8 @@ SwitchGuard vigila los enchufes e interruptores inteligentes de tus propias cuen
 ### Automatizaciones
 
 - **Reglas** — acciones automáticas: *Si* pasa algo, *entonces* haz algo, con retraso opcional.
-- Disparadores: se enciende, se apaga, permanece encendido durante, permanece apagado durante, se desconecta, vuelve a conectarse, la potencia supera, la potencia cae por debajo de, al amanecer, al atardecer, cuando la temperatura exterior sube por encima de, cuando la temperatura exterior baja por debajo de, al llegar, al salir. Disparadores de sensor: valor por encima / por debajo, puerta abierta / cerrada, movimiento, fuga de agua.
-- Acciones: Encender, Apagar, Hacer sonar la alarma, Enviar notificación, Ejecutar escena, Iniciar ciclo, Detener ciclo.
+- Disparadores: se enciende, se apaga, permanece encendido durante, permanece apagado durante, se desconecta, vuelve a conectarse, la potencia supera, la potencia cae por debajo de, al amanecer, al atardecer, cuando la temperatura exterior sube por encima de, cuando la temperatura exterior baja por debajo de, al llegar, al salir. Disparadores de sensor: valor por encima / por debajo, puerta abierta / cerrada, movimiento, fuga de agua. Hora: a una hora fija en los días elegidos.
+- Acciones: Encender, Apagar, Hacer sonar la alarma, Enviar notificación, Ejecutar escena, Iniciar ciclo, Detener ciclo. Una regla puede ejecutar varias acciones seguidas, con una espera opcional entre ellas.
 - **Solo cuando**: Solo durante estas horas, Y solo si otro dispositivo…, Solo cuando estoy en casa / fuera. Las condiciones también pueden comprobar un valor de sensor, un estado de sensor (puerta abierta, movimiento, fuga), la potencia del dispositivo o la temperatura exterior; añade varias y elige «Todas las condiciones» (y) o «Basta con una» (o).
 - **Escenas** — Elige qué ocurre con cada dispositivo cuando se ejecuta la escena. Los dispositivos en “Omitir” no se tocan.
 - **Grupos** — Elige los dispositivos del grupo. El grupo aparece en la pantalla Dispositivos como un dispositivo más: su botón los enciende o apaga todos a la vez, y puedes usarlo en automatizaciones.

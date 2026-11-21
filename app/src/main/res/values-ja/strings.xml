@@ -1632,4 +1632,11 @@
     <string name="tg_group_control_hint">このグループでオン・オフの指示を出せるのは、ここでチェックした人だけです。リストにない人はグループにメッセージを書くと表示されます。</string>
     <string name="tg_control_not_allowed">このチャットから機器をオン・オフする権限がありません。</string>
     <string name="transfer_old_version">もう一方の端末に古い形式のコードが表示されています。両方の端末で SwitchGuard を更新してからやり直してください。</string>
+    <string name="trigger_time">時刻に</string>
+    <string name="evt_time">時刻</string>
+    <string name="rule_clock_time">時刻</string>
+    <string name="rule_add_action">アクションを追加</string>
+    <string name="rule_action_wait">前のアクションの後に待つ</string>
+    <string name="rule_step_after">%1$s後: %2$s</string>
+    <string name="rule_extra_n">アクション %d</string>
 </resources>

@@ -87,8 +87,8 @@ SwitchGuard memantau colokan dan sakelar pintar di akun **eWeLink / SONOFF** dan
 ### Otomatisasi
 
 - **Aturan** — tindakan otomatis: *Jika* sesuatu terjadi, *maka* lakukan sesuatu, dengan jeda opsional.
-- Pemicu: menyala, mati, tetap menyala selama, tetap mati selama, menjadi offline, kembali online, daya melebihi, daya turun di bawah, saat matahari terbit, saat matahari terbenam, saat suhu luar naik di atas, saat suhu luar turun di bawah, saat tiba, saat pergi. Pemicu sensor: nilai di atas / di bawah, pintu terbuka / tertutup, gerakan, kebocoran air.
-- Tindakan: Nyalakan, Matikan, Bunyikan alarm, Kirim notifikasi, Jalankan skenario, Mulai siklus, Hentikan siklus.
+- Pemicu: menyala, mati, tetap menyala selama, tetap mati selama, menjadi offline, kembali online, daya melebihi, daya turun di bawah, saat matahari terbit, saat matahari terbenam, saat suhu luar naik di atas, saat suhu luar turun di bawah, saat tiba, saat pergi. Pemicu sensor: nilai di atas / di bawah, pintu terbuka / tertutup, gerakan, kebocoran air. Jam: pada jam tertentu di hari yang dipilih.
+- Tindakan: Nyalakan, Matikan, Bunyikan alarm, Kirim notifikasi, Jalankan skenario, Mulai siklus, Hentikan siklus. Satu aturan dapat menjalankan beberapa tindakan berurutan, dengan jeda opsional di antaranya.
 - **Hanya jika**: Hanya pada jam ini, Dan hanya jika perangkat lain…, Hanya saat di rumah / bepergian. Kondisi juga dapat memeriksa nilai sensor, status sensor (pintu terbuka, gerakan, bocor), daya perangkat, atau suhu luar; tambahkan beberapa dan pilih “Semua kondisi” (dan) atau “Satu saja cukup” (atau).
 - **Skenario** — Pilih apa yang terjadi pada setiap perangkat saat skenario dijalankan. Perangkat yang dibiarkan di “Lewati” tidak disentuh.
 - **Grup** — Pilih perangkat dalam grup. Grup muncul di layar Perangkat seperti perangkat: tombolnya menyalakan atau mematikan semuanya sekaligus, dan Anda dapat memakainya di otomatisasi.

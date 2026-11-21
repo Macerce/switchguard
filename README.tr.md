@@ -87,8 +87,8 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 ### Otomasyon
 
 - **Kurallar** — otomatik işlemler: *Eğer* bir şey olursa *o zaman* bir şey yap; isteğe bağlı gecikmeyle.
-- Tetikleyiciler: açılınca, kapanınca, şu süre açık kalınca:, şu süre kapalı kalınca:, çevrimdışı olunca, tekrar çevrimiçi olunca, güç şunu aşınca:, güç şunun altına inince:, gün doğunca, gün batınca, dış sıcaklık şunu aşınca:, dış sıcaklık şunun altına inince:, bölgesine girince, bölgesinden çıkınca. Sensör tetikleyicileri: değer üstünde / altında, kapı açıldı / kapandı, hareket, su kaçağı.
-- İşlemler: Aç, Kapat, Alarm çal, Bildirim gönder, Sahneyi çalıştır, Döngüyü başlat, Döngüyü durdur.
+- Tetikleyiciler: açılınca, kapanınca, şu süre açık kalınca:, şu süre kapalı kalınca:, çevrimdışı olunca, tekrar çevrimiçi olunca, güç şunu aşınca:, güç şunun altına inince:, gün doğunca, gün batınca, dış sıcaklık şunu aşınca:, dış sıcaklık şunun altına inince:, bölgesine girince, bölgesinden çıkınca. Sensör tetikleyicileri: değer üstünde / altında, kapı açıldı / kapandı, hareket, su kaçağı. Saat: seçilen günlerde belirli bir saatte.
+- İşlemler: Aç, Kapat, Alarm çal, Bildirim gönder, Sahneyi çalıştır, Döngüyü başlat, Döngüyü durdur. Bir kural birden çok işlemi sırayla, aralarında isteğe bağlı beklemeyle yapabilir.
 - **Yalnızca**: Yalnızca şu saatlerde, Ve başka bir cihaz şu durumdaysa…, Yalnızca evdeyken / dışarıdayken. Koşullar sensör değerine, sensör durumuna (kapı açık, hareket, su kaçağı), cihaz gücüne veya dış sıcaklığa da bakabilir; birden çok koşul ekleyip “Hepsi sağlansın” (ve) ya da “Biri yeterli” (veya) seçin.
 - **Sahneler** — Sahne çalışınca her cihaza ne olacağını seçin. "Dokunma"da bırakılan cihazlar değişmez.
 - **Gruplar** — Gruptaki cihazları seçin. Grup, Cihazlar ekranında bir cihaz gibi görünür: düğmesi hepsini birlikte açar ya da kapatır; otomasyonlarda da seçilebilir.

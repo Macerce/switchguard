@@ -87,8 +87,8 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 ### Automations
 
 - **Rules** — automatic actions: *If* something happens, *then* do something, with an optional delay.
-- Triggers: turns on, turns off, stays on for, stays off for, goes offline, comes back online, power goes above, power drops below, at sunrise, at sunset, when outside temperature rises above, when outside temperature drops below, on arrival, on leaving. Sensor triggers: value above / below, door opened / closed, motion, water leak.
-- Actions: Turn on, Turn off, Ring alarm, Send notification, Run scene, Start cycle, Stop cycle.
+- Triggers: turns on, turns off, stays on for, stays off for, goes offline, comes back online, power goes above, power drops below, at sunrise, at sunset, when outside temperature rises above, when outside temperature drops below, on arrival, on leaving. Sensor triggers: value above / below, door opened / closed, motion, water leak. Clock: at a set time on chosen days.
+- Actions: Turn on, Turn off, Ring alarm, Send notification, Run scene, Start cycle, Stop cycle. A rule can run several actions in a row, with an optional wait between them.
 - **Only when**: Only during these hours, And only if another device…, Only when at home / away. Conditions can also check a sensor value, a sensor state (door open, motion, leak), device power or the outdoor temperature; add several and choose “All conditions” (and) or “Any one is enough” (or).
 - **Scenes** — Choose what happens to each device when the scene runs. Devices left on “Skip” are not touched.
 - **Groups** — Pick the devices in the group. The group shows up on the Devices screen like a device: its button turns them all on or off together, and you can use it in automations.

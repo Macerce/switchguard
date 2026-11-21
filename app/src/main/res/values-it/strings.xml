@@ -1675,4 +1675,11 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="tg_group_control_hint">Solo le persone spuntate qui possono dare comandi di accensione/spegnimento in questo gruppo. Chi non è in elenco compare dopo aver scritto un messaggio nel gruppo.</string>
     <string name="tg_control_not_allowed">Non hai il permesso di accendere o spegnere dispositivi da questa chat.</string>
     <string name="transfer_old_version">L\'altro dispositivo mostra un codice vecchio: aggiorna SwitchGuard su entrambi i dispositivi e riprova.</string>
+    <string name="trigger_time">A un orario</string>
+    <string name="evt_time">A un orario</string>
+    <string name="rule_clock_time">Orario</string>
+    <string name="rule_add_action">Aggiungi azione</string>
+    <string name="rule_action_wait">Attendi dopo l\'azione precedente</string>
+    <string name="rule_step_after">dopo %1$s: %2$s</string>
+    <string name="rule_extra_n">Azione %d</string>
 </resources>

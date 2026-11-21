@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.ModalBottomSheet
@@ -378,6 +380,10 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String
         else -> src?.let { channelLabel(it, t.channel, t.kind.usesChannel) } ?: stringResource(R.string.device_missing)
     }
     val trigger = when (t.kind) {
+        // "Saatte 07:00 · Pzt, Sal, Çar".
+        TriggerKind.TIME -> stringResource(t.kind.title()) + " " + formatMinute(zoneContext, t.minutes) + " · " +
+            (if (t.days == com.macerce.switchguard.core.ActiveWindow.ALL_DAYS) stringResource(R.string.days_every)
+            else daysLabel((0..6).filter { t.days and (1 shl it) != 0 }.map { (it + 1) % 7 }.toSet()))
         TriggerKind.SUNRISE, TriggerKind.SUNSET -> stringResource(t.kind.title()) + offsetSuffix(t.minutes)
         TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> stringResource(t.kind.title()) + " " + formatTemp(t.watts)
         // "Salon sensörü · Sıcaklık > 26 °C", "Ön kapı · Kapı açık".
@@ -394,24 +400,11 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String
             else stringResource(R.string.automation_low_for_nograce, t.minutes))
         else -> stringResource(t.kind.title())
     }
-    val act = a.action
-    val action = when {
-        act.kind.usesDevice -> {
-            val dst = devices.firstOrNull { it.id == act.deviceId }
-            val dstName = dst?.let { channelLabel(it, act.channel, true) } ?: stringResource(R.string.device_missing)
-            "$dstName: " + stringResource(act.kind.title())
-        }
-        act.kind.usesCycle -> {
-            val cycle = remember(act.deviceId) { Store.get(zoneContext).cycles.firstOrNull { it.id == act.deviceId } }
-            stringResource(act.kind.title()) + ": " + (cycle?.name ?: stringResource(R.string.device_missing))
-        }
-        act.kind == ActionKind.RUN_SCENE -> {
-            val context = LocalContext.current
-            val scene = remember(act.deviceId) { Store.get(context).scenes.firstOrNull { it.id == act.deviceId } }
-            stringResource(R.string.auto_action_scene, scene?.name ?: stringResource(R.string.device_missing))
-        }
-        else -> stringResource(act.kind.title())
-    }
+    // İlk eylem ve ek eylemler: "Pompa: Kapat → 5 dk sonra: Vana: Kapat".
+    val action = a.allActions.mapIndexed { i, act ->
+        val text = actionText(act, devices)
+        if (i > 0 && act.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(act.waitMinutes), text) else text
+    }.joinToString(" → ")
     val delay = if (a.delayMinutes > 0) " · " + stringResource(R.string.automation_after, a.delayMinutes) else ""
     val extras = buildList {
         a.window?.let { add(windowText(it)) }
@@ -419,6 +412,28 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String
         a.presence?.let { add(stringResource(if (it == PresenceRule.AWAY) R.string.presence_only_away else R.string.presence_only_home)) }
     }.joinToString("") { " · $it" }
     return (if (srcName != null) "$srcName · $trigger" else trigger) + extras to "$action$delay"
+}
+
+/** Tek eylemin metni: "Pompa: Kapat", "Sahne: Gece", "Döngüyü başlat: Sulama". */
+@Composable
+internal fun actionText(act: com.macerce.switchguard.core.AutoAction, devices: List<DeviceSnapshot>): String {
+    val context = LocalContext.current
+    return when {
+        act.kind.usesDevice -> {
+            val dst = devices.firstOrNull { it.id == act.deviceId }
+            val dstName = dst?.let { channelLabel(it, act.channel, true) } ?: stringResource(R.string.device_missing)
+            "$dstName: " + stringResource(act.kind.title())
+        }
+        act.kind.usesCycle -> {
+            val cycle = Store.get(context).cycles.firstOrNull { it.id == act.deviceId }
+            stringResource(act.kind.title()) + ": " + (cycle?.name ?: stringResource(R.string.device_missing))
+        }
+        act.kind == ActionKind.RUN_SCENE -> {
+            val scene = Store.get(context).scenes.firstOrNull { it.id == act.deviceId }
+            stringResource(R.string.auto_action_scene, scene?.name ?: stringResource(R.string.device_missing))
+        }
+        else -> stringResource(act.kind.title())
+    }
 }
 
 /** " · 15 dk önce", "" (tam vaktinde). */
@@ -511,6 +526,7 @@ private fun channelLabel(d: DeviceSnapshot, channel: Int, withChannel: Boolean):
     if (withChannel && d.isMultiChannel) "${d.name} · " + stringResource(R.string.channel_n, channel + 1) else d.name
 
 fun TriggerKind.title(): Int = when (this) {
+    TriggerKind.TIME -> R.string.trigger_time
     TriggerKind.TURNED_ON -> R.string.trigger_turned_on
     TriggerKind.TURNED_OFF -> R.string.trigger_turned_off
     TriggerKind.STAYED_ON -> R.string.trigger_stayed_on
@@ -602,6 +618,11 @@ fun AutomationEditor(
     var actionDevice by rememberSaveable { mutableStateOf(initial?.action?.deviceId?.ifEmpty { null } ?: first?.id.orEmpty()) }
     var actionChannel by rememberSaveable { mutableStateOf(initial?.action?.channel ?: 0) }
     var delay by rememberSaveable { mutableStateOf(initial?.delayMinutes ?: 0) }
+    // Saat tetikleyicisi: SS:DD ve günler.
+    var clockMinute by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.isClock }?.minutes ?: 7 * 60) }
+    var clockDays by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.isClock }?.days ?: ActiveWindow.ALL_DAYS) }
+    // Ek eylemler (yalnız Otomasyon sekmesinde): ilk eylemden sonra sırayla, her biri kendi beklemesiyle.
+    val extras = rememberSaveable(saver = extraActionsSaver) { mutableStateListOf<AutoAction>().apply { initial?.extraActions?.let(::addAll) } }
     var confirmDelete by remember { mutableStateOf(false) }
     // Kumanda: açan öğe (Ekle, kart) ekrandan kalkınca odak yan menüye düşüyordu; düzenleyicide geri okuna ver.
     // Ad alanına verilmez: programla odaklanınca TV klavyesi kendiliğinden açılıyor.
@@ -661,7 +682,9 @@ fun AutomationEditor(
         (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
         (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
-        (!actionKind.usesCycle || cycleList.any { it.id == actionCycle })
+        (!actionKind.usesCycle || cycleList.any { it.id == actionCycle }) &&
+        (!triggerKind.isClock || clockDays != 0) &&
+        (alert || extras.all { x -> extraValid(x, actionTargets, sceneList, cycleList) })
 
     // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
     val draft = Automation(
@@ -678,6 +701,7 @@ fun AutomationEditor(
             },
             channel = if (triggerKind.usesChannel) triggerChannel else 0,
             minutes = when {
+                triggerKind.isClock -> clockMinute
                 triggerKind.usesMinutes -> minutes
                 triggerKind.usesChannelPower -> lowMinutes
                 triggerKind.allowsHold -> holdMinutes
@@ -692,6 +716,7 @@ fun AutomationEditor(
             },
             graceMinutes = if (triggerKind.usesChannelPower) grace else 0,
             sensor = if (triggerKind.usesSensor) sensorKind else null,
+            days = if (triggerKind.isClock) clockDays else ActiveWindow.ALL_DAYS,
         ),
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
@@ -704,6 +729,7 @@ fun AutomationEditor(
         presence = presenceRule,
         conditions = conds.map { it.toCondition() },
         conditionMatch = condMatch,
+        extraActions = if (alert) emptyList() else extras.toList(),
     )
 
     Column(modifier.fillMaxSize()) {
@@ -780,6 +806,14 @@ fun AutomationEditor(
                             modifier = Modifier.padding(top = 8.dp),
                         )
                     }
+                }
+                if (triggerKind.isClock) {
+                    val context = LocalContext.current
+                    val title = stringResource(R.string.rule_clock_time)
+                    TimeChip(title, formatMinute(context, clockMinute), Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        timePicker.pick(title, clockMinute) { clockMinute = it }
+                    }
+                    DayChips(clockDays) { clockDays = it }
                 }
                 if (triggerKind.isSun) {
                     // "Gün doğumundan 15 dk önce", "gün batımından 1 sa sonra".
@@ -877,10 +911,33 @@ fun AutomationEditor(
             StepCard(Icons.Rounded.Bolt, Hue.BLUE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
                 if (tv) actionContent()
                 else ChoiceSummary(
-                    summary?.second ?: stringResource(R.string.rule_tap_to_change),
+                    actionText(draft.action, devices),
                     actionKind.icon(),
                     if (actionKind == ActionKind.ALARM) Brand.alarm else MaterialTheme.colorScheme.primary,
                 ) { sheet = "action" }
+                if (!alert) {
+                    extras.forEachIndexed { i, x ->
+                        if (tv) {
+                            ExtraActionEditor(x, i, tab, actionTargets, sceneList, cycleList, onChange = { extras[i] = it }, onDelete = { extras.removeAt(i) })
+                        } else {
+                            val text = actionText(x, devices)
+                            ChoiceSummary(
+                                if (x.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(x.waitMinutes), text) else text,
+                                x.kind.icon(),
+                                MaterialTheme.colorScheme.primary,
+                            ) { sheet = "extra:$i" }
+                        }
+                    }
+                    // Ek eylem: varsayılanı ilk hedefi kapatmak; alttan açılan sayfada değiştirilir.
+                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = {
+                        extras.add(AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty()))
+                        if (!tv) sheet = "extra:" + (extras.size - 1)
+                    }) {
+                        Icon(Icons.Rounded.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.rule_add_action))
+                    }
+                }
             }
 
             // ------------------------------------------------ Koşullar (isteğe bağlı)
@@ -995,7 +1052,20 @@ fun AutomationEditor(
                             stringResource(if (sheet == "trigger") R.string.rule_triggers else R.string.rule_actions),
                             style = MaterialTheme.typography.titleLarge,
                         )
-                        if (sheet == "trigger") triggerContent() else actionContent()
+                        val s = sheet.orEmpty()
+                        when {
+                            s == "trigger" -> triggerContent()
+                            s.startsWith("extra:") -> {
+                                val i = s.removePrefix("extra:").toIntOrNull()
+                                val x = i?.let { extras.getOrNull(it) }
+                                if (i != null && x != null) {
+                                    ExtraActionEditor(x, i, tab, actionTargets, sceneList, cycleList,
+                                        onChange = { extras[i] = it },
+                                        onDelete = { sheet = null; extras.removeAt(i) })
+                                }
+                            }
+                            else -> actionContent()
+                        }
                         PillButton(stringResource(R.string.action_done), onClick = { sheet = null }, modifier = Modifier.fillMaxWidth().padding(top = 20.dp))
                     }
                 }
@@ -1538,6 +1608,7 @@ internal fun conditionsText(list: List<Condition>, match: ConditionMatch, device
 }
 
 private fun TriggerKind.icon(): ImageVector = when (this) {
+    TriggerKind.TIME -> Icons.Rounded.Schedule
     TriggerKind.TURNED_ON -> Icons.Rounded.PowerSettingsNew
     TriggerKind.TURNED_OFF -> Icons.Rounded.PowerOff
     TriggerKind.STAYED_ON -> Icons.Rounded.Timer
@@ -1563,6 +1634,7 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
 fun TriggerKind.shortTitle(): Int = when (this) {
+    TriggerKind.TIME -> R.string.evt_time
     TriggerKind.TURNED_ON -> R.string.evt_turned_on
     TriggerKind.TURNED_OFF -> R.string.evt_turned_off
     TriggerKind.STAYED_ON -> R.string.evt_stayed_on
@@ -1689,5 +1761,72 @@ private fun CondRow(icon: ImageVector, title: String, value: String, open: Boole
             null,
             tint = MaterialTheme.colorScheme.primary,
         )
+    }
+}
+
+/** Ek eylemlerin kaydedilebilir listesi (döndürmede kaybolmasın). */
+private val extraActionsSaver = listSaver<androidx.compose.runtime.snapshots.SnapshotStateList<AutoAction>, String>(
+    save = { list -> list.map { listOf(it.kind.name, it.deviceId, it.channel, it.waitMinutes).joinToString("|") } },
+    restore = { saved ->
+        mutableStateListOf<AutoAction>().apply {
+            saved.forEach { line ->
+                val p = line.split("|")
+                runCatching { add(AutoAction(ActionKind.valueOf(p[0]), p[1], p[2].toInt(), p[3].toInt())) }
+            }
+        }
+    },
+)
+
+/** Ek eylem kaydedilebilir mi: cihaz eyleminde hedef, sahnede/döngüde var olan kayıt. */
+internal fun extraValid(x: AutoAction, targets: List<DeviceSnapshot>, scenes: List<com.macerce.switchguard.core.Scene>, cycles: List<com.macerce.switchguard.core.Cycle>): Boolean = when {
+    x.kind.usesDevice -> targets.any { it.id == x.deviceId }
+    x.kind == ActionKind.RUN_SCENE -> scenes.any { it.id == x.deviceId }
+    x.kind.usesCycle -> cycles.any { it.id == x.deviceId }
+    else -> true
+}
+
+/** Bir ek eylemin düzenleyicisi: tür, hedef, önceki eylemden sonra bekleme ve silme. */
+@Composable
+private fun ExtraActionEditor(
+    x: AutoAction,
+    index: Int,
+    tab: AutomationTab,
+    targets: List<DeviceSnapshot>,
+    scenes: List<com.macerce.switchguard.core.Scene>,
+    cycles: List<com.macerce.switchguard.core.Cycle>,
+    onChange: (AutoAction) -> Unit,
+    onDelete: () -> Unit,
+) {
+    Column(Modifier.fillMaxWidth().padding(top = 12.dp)) {
+        FieldLabel(stringResource(R.string.rule_extra_n, index + 2))
+        OptionGrid(tab.actions, x.kind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { k ->
+            val target = when {
+                k.usesDevice -> x.deviceId.takeIf { id -> targets.any { it.id == id } } ?: targets.firstOrNull()?.id.orEmpty()
+                k == ActionKind.RUN_SCENE -> scenes.firstOrNull()?.id.orEmpty()
+                k.usesCycle -> cycles.firstOrNull()?.id.orEmpty()
+                else -> ""
+            }
+            onChange(x.copy(kind = k, deviceId = target, channel = if (k.usesDevice) x.channel else 0))
+        }
+        if (x.kind.usesDevice) {
+            FieldLabel(stringResource(R.string.automation_device))
+            DeviceChooser(targets, x.deviceId) { onChange(x.copy(deviceId = it.id, channel = 0)) }
+            targets.firstOrNull { it.id == x.deviceId }?.takeIf { it.isMultiChannel }?.let { d ->
+                FieldLabel(stringResource(R.string.automation_channel))
+                ChannelChooser(d, x.channel) { onChange(x.copy(channel = it)) }
+            }
+        }
+        if (x.kind == ActionKind.RUN_SCENE) {
+            FieldLabel(stringResource(R.string.scenes_title))
+            if (scenes.isEmpty()) Text(stringResource(R.string.scene_none_yet), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            else OptionGrid(scenes.map { it.id }, x.deviceId, { Icons.Rounded.PlayArrow }, { id -> scenes.first { it.id == id }.name }) { onChange(x.copy(deviceId = it)) }
+        }
+        if (x.kind.usesCycle) CyclePick(cycles, x.deviceId) { onChange(x.copy(deviceId = it)) }
+        Stepper(stringResource(R.string.rule_action_wait), x.waitMinutes, DELAY_STEPS, zeroLabel = stringResource(R.string.automation_now)) { onChange(x.copy(waitMinutes = it)) }
+        TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = onDelete) {
+            Icon(Icons.Rounded.Delete, null, tint = MaterialTheme.colorScheme.error)
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
+        }
     }
 }

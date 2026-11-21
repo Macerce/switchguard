@@ -87,8 +87,8 @@ SwitchGuard überwacht die smarten Steckdosen und Schalter in deinen eigenen **e
 ### Automationen
 
 - **Regeln** — automatische Aktionen: *Wenn* etwas passiert, *dann* tue etwas, optional mit Verzögerung.
-- Auslöser: einschaltet, ausschaltet, an bleibt für, aus bleibt für, offline geht, wieder online kommt, die Leistung steigt über, die Leistung fällt unter, bei Sonnenaufgang, bei Sonnenuntergang, wenn die Außentemperatur steigt über, wenn die Außentemperatur fällt unter, bei Ankunft, beim Verlassen. Sensor-Auslöser: Wert über / unter, Tür geöffnet / geschlossen, Bewegung, Wasserleck.
-- Aktionen: Einschalten, Ausschalten, Alarm läuten, Benachrichtigung senden, Szene starten, Zyklus starten, Zyklus stoppen.
+- Auslöser: einschaltet, ausschaltet, an bleibt für, aus bleibt für, offline geht, wieder online kommt, die Leistung steigt über, die Leistung fällt unter, bei Sonnenaufgang, bei Sonnenuntergang, wenn die Außentemperatur steigt über, wenn die Außentemperatur fällt unter, bei Ankunft, beim Verlassen. Sensor-Auslöser: Wert über / unter, Tür geöffnet / geschlossen, Bewegung, Wasserleck. Uhrzeit: zu einer festen Zeit an gewählten Tagen.
+- Aktionen: Einschalten, Ausschalten, Alarm läuten, Benachrichtigung senden, Szene starten, Zyklus starten, Zyklus stoppen. Eine Regel kann mehrere Aktionen nacheinander ausführen, auf Wunsch mit Wartezeit dazwischen.
 - **Nur wenn**: Nur in diesen Stunden, Und nur wenn ein anderes Gerät …, Nur bei Zuhause / Abwesend. Bedingungen können auch einen Sensorwert, einen Sensorzustand (Tür offen, Bewegung, Leck), die Geräteleistung oder die Außentemperatur prüfen; mehrere hinzufügen und „Alle Bedingungen“ (und) oder „Eine genügt“ (oder) wählen.
 - **Szenen** — Lege fest, was mit jedem Gerät passiert, wenn die Szene läuft. Geräte auf „Überspringen“ bleiben unberührt.
 - **Gruppen** — Wähle die Geräte der Gruppe. Die Gruppe erscheint auf dem Bildschirm „Geräte“ wie ein Gerät: Ihre Taste schaltet alle gemeinsam ein oder aus, und du kannst sie in Automationen verwenden.

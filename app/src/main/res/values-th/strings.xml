@@ -1603,4 +1603,11 @@
     <string name="tg_group_control_hint">เฉพาะคนที่ติ๊กไว้ที่นี่เท่านั้นที่สั่งเปิด/ปิดในกลุ่มนี้ได้ คนที่ไม่อยู่ในรายชื่อจะปรากฏหลังจากส่งข้อความในกลุ่ม</string>
     <string name="tg_control_not_allowed">คุณไม่ได้รับอนุญาตให้เปิดหรือปิดอุปกรณ์จากแชทนี้</string>
     <string name="transfer_old_version">อุปกรณ์อีกเครื่องแสดงรหัสแบบเก่า อัปเดต SwitchGuard ทั้งสองเครื่องแล้วลองอีกครั้ง</string>
+    <string name="trigger_time">ตามเวลา</string>
+    <string name="evt_time">ตามเวลา</string>
+    <string name="rule_clock_time">เวลา</string>
+    <string name="rule_add_action">เพิ่มการทำงาน</string>
+    <string name="rule_action_wait">รอหลังการทำงานก่อนหน้า</string>
+    <string name="rule_step_after">หลัง %1$s: %2$s</string>
+    <string name="rule_extra_n">การทำงานที่ %d</string>
 </resources>

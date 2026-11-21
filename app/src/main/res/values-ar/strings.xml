@@ -1812,4 +1812,11 @@
     <string name="tg_group_control_hint">لا يمكن إلا للأشخاص المحددين هنا إعطاء أوامر التشغيل والإيقاف في هذه المجموعة. يظهر الشخص غير المدرج بعد أن يكتب رسالة في المجموعة.</string>
     <string name="tg_control_not_allowed">غير مسموح لك بتشغيل الأجهزة أو إيقافها من هذه الدردشة.</string>
     <string name="transfer_old_version">يعرض الجهاز الآخر رمزًا بالصيغة القديمة: حدّث SwitchGuard على الجهازين وحاول مرة أخرى.</string>
+    <string name="trigger_time">في وقت محدد</string>
+    <string name="evt_time">في وقت</string>
+    <string name="rule_clock_time">الوقت</string>
+    <string name="rule_add_action">إضافة إجراء</string>
+    <string name="rule_action_wait">الانتظار بعد الإجراء السابق</string>
+    <string name="rule_step_after">بعد %1$s: %2$s</string>
+    <string name="rule_extra_n">الإجراء %d</string>
 </resources>

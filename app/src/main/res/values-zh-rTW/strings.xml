@@ -1631,4 +1631,11 @@
     <string name="tg_group_control_hint">在此群組中，只有這裡勾選的人可以傳送開/關指令。未列出的人在群組裡傳一則訊息後就會出現在這裡。</string>
     <string name="tg_control_not_allowed">你無權從此聊天開關裝置。</string>
     <string name="transfer_old_version">另一台裝置顯示的是舊格式代碼：請在兩台裝置上都更新 SwitchGuard 後再試一次。</string>
+    <string name="trigger_time">定時</string>
+    <string name="evt_time">定時</string>
+    <string name="rule_clock_time">時間</string>
+    <string name="rule_add_action">新增動作</string>
+    <string name="rule_action_wait">上一個動作後等待</string>
+    <string name="rule_step_after">%1$s後：%2$s</string>
+    <string name="rule_extra_n">動作 %d</string>
 </resources>
