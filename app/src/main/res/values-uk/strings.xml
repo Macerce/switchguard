@@ -1767,8 +1767,8 @@
     <string name="area_exclude_title">Беруть участь у «Увімкнути все / Вимкнути все»</string>
     <string name="area_exclude_desc">Невідмічені пристрої лишаються в зоні, але їх не перемикають «Увімкнути все / Вимкнути все», автоматизації зони, чат і Telegram.</string>
     <string name="area_excluded_count">Виключено з «увімкнути/вимкнути все»: %1$d</string>
-    <string name="lan_add">Додати Sonoff (LAN)</string>
-    <string name="lan_add_title">Пристрої Sonoff у цій мережі</string>
+    <string name="lan_add">Додати пристрій (LAN)</string>
+    <string name="lan_add_title">Додати пристрій із локальної мережі</string>
     <string name="lan_add_network">Мережа: %1$s</string>
     <string name="lan_network_unknown">Мережа Wi-Fi (для назви потрібен дозвіл на геолокацію)</string>
     <string name="lan_network_unnamed">Wi-Fi без назви</string>
@@ -1782,4 +1782,32 @@
     <string name="lan_device_other_network">Зараз ви в іншій мережі (%1$s); пристрій доступний лише в %2$s.</string>
     <string name="lan_device_needs_monitoring">Стан і керування працюють, коли увімкнено спостереження.</string>
     <string name="lan_device_remove">Видалити пристрій</string>
+    <string name="lan_added_toast">%1$s додано</string>
+    <string name="lan_help_body">• Телефон і пристрій мають бути в одній мережі. Гостьові мережі та «ізоляція клієнтів/AP» приховують їх один від одного.
+• Wi-Fi-підсилювач або другий модем може створювати окрему мережу; підключіть телефон до мережі пристрою.
+• IP пристрою можна знайти у списку «Підключені пристрої» роутера (назва shelly… або ESP_…) або в застосунку виробника в даних про пристрій; потім скористайтеся «Додати за IP-адресою».
+• Закріпіть за пристроєм постійну IP у роутері (резервування DHCP), щоб адреса не змінювалася.
+• Назва мережі видна лише з дозволом на геолокацію; додавання працює і без нього.
+• Стан і керування працюють, поки ввімкнено моніторинг.</string>
+    <string name="lan_help_title">Не знаходиться?</string>
+    <string name="lan_shelly_unsupported">Ця модель поки не підтримується (немає реле).</string>
+    <string name="lan_shelly_auth">Захищено паролем: вимкніть захист входу (Authentication) у налаштуваннях Shelly і поверніться.</string>
+    <string name="lan_ip_not_found">За адресою %1$s Shelly не відповів. Перевірте адресу та що телефон у тій самій Wi-Fi.</string>
+    <string name="lan_ip_checking">Перевірка…</string>
+    <string name="lan_ip_find">Знайти</string>
+    <string name="lan_ip_hint">напр. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Додати за IP-адресою</string>
+    <string name="lan_found_title">Знайдено в цій мережі</string>
+    <string name="lan_sonoff_step3">Знову підключіть телефон до тієї самої Wi-Fi. Пристрій з\'явиться нижче за кілька секунд; торкніться «Додати».</string>
+    <string name="lan_sonoff_step2">Пристрій не з облікового запису переведіть у режим DIY (LAN): утримуйте кнопку близько 5 с, доки світлодіод не почне часто блимати, підключіть телефон до Wi-Fi ITEAD-xxxx (пароль 12345678), відкрийте 10.10.7.1 у браузері та введіть назву й пароль Wi-Fi.</string>
+    <string name="lan_sonoff_step1">Пристрої з облікового запису eWeLink самі з\'являються в розділі «Пристрої»; додавати їх тут не потрібно.</string>
+    <string name="lan_shelly_step3">Пристрій з\'явиться нижче за кілька секунд; торкніться «Додати». Якщо не з\'явився, введіть його IP-адресу.</string>
+    <string name="lan_shelly_step2">Телефон має залишатися в тій самій Wi-Fi, що й Shelly (не гостьовій).</string>
+    <string name="lan_shelly_step1">Підключіть Shelly до Wi-Fi: у застосунку Shelly Smart Control або підключіть телефон до власної мережі пристрою (shelly…), відкрийте 192.168.33.1 у браузері та введіть назву й пароль Wi-Fi у Налаштування → Wi-Fi.</string>
+    <string name="lan_steps_title">Перед початком</string>
+    <string name="lan_brand_title">Додати %1$s</string>
+    <string name="lan_brand_soon">Незабаром: Tasmota, ESPHome, Philips Hue, TP-Link і Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Пристрої eWeLink у режимі DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Реле та розетки Gen1, Plus, Pro, Gen3 і Gen4</string>
+    <string name="lan_brand_hint">Виберіть марку. Обліковий запис і хмара не потрібні: телефон і пристрій мають бути в одній Wi-Fi.</string>
 </resources>

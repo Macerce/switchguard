@@ -1688,8 +1688,8 @@
     <string name="area_exclude_title">すべてオン / すべてオフの対象</string>
     <string name="area_exclude_desc">チェックを外したデバイスはエリアに残りますが、すべてオン / すべてオフ、エリアの自動化、チャットや Telegram のコマンドでは切り替わりません。</string>
     <string name="area_excluded_count">%1$d 台をすべてオン/オフから除外</string>
-    <string name="lan_add">Sonoff を追加（LAN）</string>
-    <string name="lan_add_title">このネットワークの Sonoff デバイス</string>
+    <string name="lan_add">デバイスを追加（LAN）</string>
+    <string name="lan_add_title">ローカルネットワークのデバイスを追加</string>
     <string name="lan_add_network">ネットワーク: %1$s</string>
     <string name="lan_network_unknown">Wi-Fi ネットワーク（名前の表示には位置情報の許可が必要）</string>
     <string name="lan_network_unnamed">名前のない Wi-Fi</string>
@@ -1703,4 +1703,32 @@
     <string name="lan_device_other_network">現在は別のネットワーク（%1$s）です。このデバイスには %2$s でのみ接続できます。</string>
     <string name="lan_device_needs_monitoring">状態と操作は監視がオンのときに動作します。</string>
     <string name="lan_device_remove">デバイスを削除</string>
+    <string name="lan_added_toast">%1$sを追加しました</string>
+    <string name="lan_help_body">• スマホとデバイスは同じネットワークにある必要があります。ゲストネットワークや「AP／クライアント分離」は互いを見えなくします。
+• 中継器や2台目のモデムは別ネットワークを作ることがあります。スマホをデバイスと同じネットワークにつないでください。
+• デバイスのIPはルーターの「接続中の機器」一覧（名前 shelly… や ESP_…）やメーカーアプリのデバイス情報で確認し、「IPアドレスで追加」を使います。
+• ルーターでデバイスに固定IP（DHCP予約）を割り当てると、アドレスが変わりません。
+• ネットワーク名は位置情報の権限がある場合のみ表示されます。追加は権限なしでも可能です。
+• 状態表示と操作は監視がオンのときに動作します。</string>
+    <string name="lan_help_title">見つからない場合</string>
+    <string name="lan_shelly_unsupported">このモデルはまだ対応していません（リレーがありません）。</string>
+    <string name="lan_shelly_auth">パスワード保護中：Shellyの設定でログイン保護（Authentication）をオフにしてから戻ってください。</string>
+    <string name="lan_ip_not_found">%1$sでShellyが応答しませんでした。アドレスと、スマホが同じWi-Fiにあるか確認してください。</string>
+    <string name="lan_ip_checking">確認中…</string>
+    <string name="lan_ip_find">検索</string>
+    <string name="lan_ip_hint">例：192.168.1.50</string>
+    <string name="lan_add_by_ip">IPアドレスで追加</string>
+    <string name="lan_found_title">このネットワークで見つかったデバイス</string>
+    <string name="lan_sonoff_step3">スマホを同じWi-Fiにつなぎ直します。数秒で下にデバイスが表示されます。「追加」をタップ。</string>
+    <string name="lan_sonoff_step2">アカウントにないデバイスはDIY（LAN）モードにします：LEDが速く点滅するまでボタンを約5秒押し、スマホをWi-Fi「ITEAD-xxxx」（パスワード12345678）につなぎ、ブラウザで10.10.7.1を開いてWi-Fi名とパスワードを入力します。</string>
+    <string name="lan_sonoff_step1">eWeLinkアカウントのデバイスは自動でデバイス画面に表示されるため、ここで追加する必要はありません。</string>
+    <string name="lan_shelly_step3">数秒で下にデバイスが表示されます。「追加」をタップ。表示されない場合はIPアドレスを入力します。</string>
+    <string name="lan_shelly_step2">スマホはShellyと同じWi-Fiにつないだままにします（ゲストネットワーク不可）。</string>
+    <string name="lan_shelly_step1">ShellyをWi-Fiにつなぎます：Shelly Smart Controlアプリを使うか、スマホをデバイス自身のWi-Fi（shelly…）につないでブラウザで192.168.33.1を開き、設定 → Wi-FiでWi-Fi名とパスワードを入力します。</string>
+    <string name="lan_steps_title">始める前に</string>
+    <string name="lan_brand_title">%1$sを追加</string>
+    <string name="lan_brand_soon">近日対応：Tasmota、ESPHome、Philips Hue、TP-Link、Home Assistant。</string>
+    <string name="lan_brand_sonoff_desc">DIY（LAN）モードの eWeLink デバイス</string>
+    <string name="lan_brand_shelly_desc">Gen1・Plus・Pro・Gen3・Gen4 のリレーとプラグ</string>
+    <string name="lan_brand_hint">ブランドを選んでください。アカウントやクラウドは不要で、スマホとデバイスが同じWi-Fiにあれば使えます。</string>
 </resources>

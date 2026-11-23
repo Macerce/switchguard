@@ -1659,8 +1659,8 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="area_exclude_title">Có trong Bật tất cả / Tắt tất cả</string>
     <string name="area_exclude_desc">Thiết bị bỏ chọn vẫn ở trong khu vực nhưng không bị Bật tất cả / Tắt tất cả, tự động hóa khu vực hay lệnh trò chuyện, Telegram điều khiển.</string>
     <string name="area_excluded_count">%1$d thiết bị bị loại khỏi bật/tắt tất cả</string>
-    <string name="lan_add">Thêm Sonoff (LAN)</string>
-    <string name="lan_add_title">Thiết bị Sonoff trong mạng này</string>
+    <string name="lan_add">Thêm thiết bị (LAN)</string>
+    <string name="lan_add_title">Thêm thiết bị mạng nội bộ</string>
     <string name="lan_add_network">Mạng: %1$s</string>
     <string name="lan_network_unknown">Mạng Wi-Fi (cần quyền vị trí để đọc tên)</string>
     <string name="lan_network_unnamed">Wi-Fi không tên</string>
@@ -1674,4 +1674,32 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_device_other_network">Bạn đang ở mạng khác (%1$s); thiết bị này chỉ truy cập được trên %2$s.</string>
     <string name="lan_device_needs_monitoring">Trạng thái và điều khiển hoạt động khi đang giám sát.</string>
     <string name="lan_device_remove">Xóa thiết bị</string>
+    <string name="lan_added_toast">Đã thêm %1$s</string>
+    <string name="lan_help_body">• Điện thoại và thiết bị phải cùng mạng. Mạng khách và \"cách ly AP/máy khách\" khiến chúng không thấy nhau.
+• Bộ kích sóng hoặc modem thứ hai có thể tạo mạng riêng; nối điện thoại vào mạng của thiết bị.
+• Tìm IP của thiết bị trong danh sách \"Thiết bị đã kết nối\" của router (tên shelly… hoặc ESP_…) hoặc trong ứng dụng của hãng phần thông tin thiết bị, rồi dùng Thêm bằng địa chỉ IP.
+• Đặt IP cố định cho thiết bị trong router (giữ chỗ DHCP) để địa chỉ không đổi.
+• Tên mạng chỉ hiện khi có quyền vị trí; việc thêm vẫn hoạt động khi không có.
+• Trạng thái và điều khiển hoạt động khi đang bật giám sát.</string>
+    <string name="lan_help_title">Không tìm thấy?</string>
+    <string name="lan_shelly_unsupported">Mẫu này chưa được hỗ trợ (không có rơ-le).</string>
+    <string name="lan_shelly_auth">Có mật khẩu bảo vệ: tắt bảo vệ đăng nhập (Authentication) trong cài đặt Shelly rồi quay lại.</string>
+    <string name="lan_ip_not_found">Không có Shelly nào trả lời tại %1$s. Kiểm tra địa chỉ và điện thoại có cùng Wi-Fi không.</string>
+    <string name="lan_ip_checking">Đang kiểm tra…</string>
+    <string name="lan_ip_find">Tìm</string>
+    <string name="lan_ip_hint">vd. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Thêm bằng địa chỉ IP</string>
+    <string name="lan_found_title">Tìm thấy trong mạng này</string>
+    <string name="lan_sonoff_step3">Nối lại điện thoại vào cùng Wi-Fi đó. Thiết bị hiện bên dưới sau vài giây; chạm Thêm.</string>
+    <string name="lan_sonoff_step2">Với thiết bị ngoài tài khoản, chuyển sang chế độ DIY (LAN): giữ nút khoảng 5 giây đến khi đèn nháy nhanh, nối điện thoại vào Wi-Fi ITEAD-xxxx (mật khẩu 12345678), mở 10.10.7.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi.</string>
+    <string name="lan_sonoff_step1">Thiết bị trong tài khoản eWeLink tự hiện ở mục Thiết bị; không cần thêm ở đây.</string>
+    <string name="lan_shelly_step3">Thiết bị hiện bên dưới sau vài giây; chạm Thêm. Nếu không hiện, nhập địa chỉ IP của nó.</string>
+    <string name="lan_shelly_step2">Giữ điện thoại cùng Wi-Fi với Shelly (không phải mạng khách).</string>
+    <string name="lan_shelly_step1">Kết nối Shelly với Wi-Fi: dùng ứng dụng Shelly Smart Control, hoặc nối điện thoại vào Wi-Fi riêng của thiết bị (shelly…), mở 192.168.33.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi trong Settings → Wi-Fi.</string>
+    <string name="lan_steps_title">Trước khi bắt đầu</string>
+    <string name="lan_brand_title">Thêm %1$s</string>
+    <string name="lan_brand_soon">Sắp có: Tasmota, ESPHome, Philips Hue, TP-Link và Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
+    <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
 </resources>

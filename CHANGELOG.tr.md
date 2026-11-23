@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.41.0 — 2026-11-23
+**Yeni**
+- Hesap ya da bulut gerektirmeyen Shelly desteği: Cihazlar → Cihaz ekle (yerel ağ) → Shelly. Aynı Wi-Fi'deki Gen1, Plus, Pro, Gen3 ve Gen4 röle ve prizler kendiliğinden bulunur ya da IP adresiyle eklenir. Aç/kapa, alarmlar, otomasyonlar ve güç ölçümü (PM modeller) yerel ağdan çalışır.
+- Rehberli ekleme: markayı seç, numaralı adımları izle; misafir ağı, Wi-Fi genişletici, modemde IP bulma ve sabit IP için "Bulamıyor musun?" bölümünü aç.
+
 ## 2.38.2 — 2026-11-23
 **Düzeltme**
 - Yerel ağ kontrolü sorun gidermek için kısa tanılama satırları yazar (bulunan cihaz, komut sonucu ve süresi).

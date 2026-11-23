@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.41.0 — 2026-11-23
+**New**
+- Shelly support without any account or cloud: Devices → Add device (LAN) → Shelly. Gen1, Plus, Pro, Gen3 and Gen4 relays and plugs on the same Wi-Fi are found automatically, or added by IP address. On/off, alarms, automations and power readings (PM models) work over the local network.
+- Guided adding: pick the brand, follow the numbered steps, and open "Can't find it?" for help with guest networks, extenders, finding the IP in the router and fixed IPs.
+
 ## 2.38.2 — 2026-11-23
 **Fixed**
 - Local network control writes short diagnostic lines (device found, command result and time) for troubleshooting.

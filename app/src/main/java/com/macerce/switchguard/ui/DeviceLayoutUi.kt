@@ -259,13 +259,15 @@ fun CategoriesDialog(layout: DeviceLayout, onChange: (DeviceLayout) -> Unit, onD
 }
 
 @Composable
-internal fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
+internal fun NameDialog(
+    title: String, initial: String, onDismiss: () -> Unit, label: Int = R.string.category_name, onSave: (String) -> Unit,
+) {
     var name by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(title) },
         text = {
-            OutlinedTextField(name, { name = it }, label = { Text(stringResource(R.string.category_name)) }, singleLine = true)
+            OutlinedTextField(name, { name = it }, label = { Text(stringResource(label)) }, singleLine = true)
         },
         confirmButton = {
             TextButton(modifier = Modifier.tvFocusRing(), enabled = name.isNotBlank(), onClick = { onSave(name.trim()); onDismiss() }) { Text(stringResource(R.string.action_save)) }

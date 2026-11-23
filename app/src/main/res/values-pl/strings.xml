@@ -1796,8 +1796,8 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="area_exclude_title">Objęte przez Włącz wszystko / Wyłącz wszystko</string>
     <string name="area_exclude_desc">Odznaczone urządzenia zostają w obszarze, ale nie przełączają ich Włącz wszystko / Wyłącz wszystko, automatyzacje obszaru ani polecenia czatu i Telegrama.</string>
     <string name="area_excluded_count">Wykluczone z włącz/wyłącz wszystko: %1$d</string>
-    <string name="lan_add">Dodaj Sonoff (LAN)</string>
-    <string name="lan_add_title">Urządzenia Sonoff w tej sieci</string>
+    <string name="lan_add">Dodaj urządzenie (LAN)</string>
+    <string name="lan_add_title">Dodaj urządzenie z sieci lokalnej</string>
     <string name="lan_add_network">Sieć: %1$s</string>
     <string name="lan_network_unknown">Sieć Wi-Fi (nazwa wymaga uprawnienia lokalizacji)</string>
     <string name="lan_network_unnamed">Wi-Fi bez nazwy</string>
@@ -1811,4 +1811,32 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_device_other_network">Jesteś teraz w innej sieci (%1$s); to urządzenie jest dostępne tylko w %2$s.</string>
     <string name="lan_device_needs_monitoring">Stan i sterowanie działają przy włączonym monitorowaniu.</string>
     <string name="lan_device_remove">Usuń urządzenie</string>
+    <string name="lan_added_toast">Dodano %1$s</string>
+    <string name="lan_help_body">• Telefon i urządzenie muszą być w tej samej sieci. Sieci gościnne i „izolacja AP/klientów” ukrywają je przed sobą.
+• Wzmacniacz Wi-Fi lub drugi modem może tworzyć osobną sieć; połącz telefon z siecią urządzenia.
+• Adres IP urządzenia znajdziesz na liście „Podłączone urządzenia” routera (nazwa shelly… lub ESP_…) albo w aplikacji producenta w informacjach o urządzeniu; potem użyj Dodaj przez adres IP.
+• Nadaj urządzeniu stały IP w routerze (rezerwacja DHCP), by adres się nie zmieniał.
+• Nazwa sieci jest widoczna tylko z uprawnieniem lokalizacji; dodawanie działa bez niego.
+• Stan i sterowanie działają, gdy monitorowanie jest włączone.</string>
+    <string name="lan_help_title">Nie możesz znaleźć?</string>
+    <string name="lan_shelly_unsupported">Ten model nie jest jeszcze obsługiwany (brak przekaźnika).</string>
+    <string name="lan_shelly_auth">Chronione hasłem: wyłącz ochronę logowania (Authentication) w ustawieniach Shelly i wróć.</string>
+    <string name="lan_ip_not_found">Żadne Shelly nie odpowiedziało pod %1$s. Sprawdź adres i czy telefon jest w tej samej sieci Wi-Fi.</string>
+    <string name="lan_ip_checking">Sprawdzanie…</string>
+    <string name="lan_ip_find">Szukaj</string>
+    <string name="lan_ip_hint">np. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Dodaj przez adres IP</string>
+    <string name="lan_found_title">Znalezione w tej sieci</string>
+    <string name="lan_sonoff_step3">Połącz telefon ponownie z tą samą siecią. Urządzenie pojawi się poniżej w kilka sekund; dotknij Dodaj.</string>
+    <string name="lan_sonoff_step2">Urządzenie spoza konta przełącz w tryb DIY (LAN): przytrzymaj przycisk ok. 5 s, aż dioda zacznie szybko migać, połącz telefon z Wi-Fi ITEAD-xxxx (hasło 12345678), otwórz 10.10.7.1 w przeglądarce i wpisz nazwę i hasło Wi-Fi.</string>
+    <string name="lan_sonoff_step1">Urządzenia z konta eWeLink pojawiają się same w Urządzeniach; nie trzeba ich tu dodawać.</string>
+    <string name="lan_shelly_step3">Urządzenie pojawi się poniżej w kilka sekund; dotknij Dodaj. Jeśli się nie pojawi, wpisz jego adres IP.</string>
+    <string name="lan_shelly_step2">Telefon musi zostać w tej samej sieci Wi-Fi co Shelly (nie sieci gościnnej).</string>
+    <string name="lan_shelly_step1">Połącz Shelly z Wi-Fi: w aplikacji Shelly Smart Control albo połącz telefon z własną siecią urządzenia (shelly…), otwórz 192.168.33.1 w przeglądarce i w Ustawienia → Wi-Fi wpisz nazwę i hasło sieci.</string>
+    <string name="lan_steps_title">Zanim zaczniesz</string>
+    <string name="lan_brand_title">Dodaj %1$s</string>
+    <string name="lan_brand_soon">Wkrótce: Tasmota, ESPHome, Philips Hue, TP-Link i Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Urządzenia eWeLink w trybie DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Przekaźniki i gniazdka Gen1, Plus, Pro, Gen3 i Gen4</string>
+    <string name="lan_brand_hint">Wybierz markę. Bez konta i chmury: telefon i urządzenie muszą tylko być w tej samej sieci Wi-Fi.</string>
 </resources>

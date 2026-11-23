@@ -156,6 +156,7 @@ fun DevicesScreen(
 ) {
     val tv = LocalIsTv.current
     val context = LocalContext.current
+    val resources = androidx.compose.ui.platform.LocalResources.current
     val store = remember { Store.get(context) }
     val scope = rememberCoroutineScope()
     val version by store.version.collectAsStateWithLifecycle()
@@ -375,7 +376,7 @@ fun DevicesScreen(
                             onAll = { on ->
                                 scope.launch {
                                     Actions.setGroup(context, DeviceGroup.areaDeviceId(openArea.id), on).onFailure {
-                                        Toast.makeText(context, context.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
+                                        Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
                                     }
                                 }
                             },

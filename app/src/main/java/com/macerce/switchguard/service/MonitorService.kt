@@ -371,6 +371,7 @@ class MonitorService : Service() {
         handler.removeCallbacksAndMessages(null)
         wake.reset()
         EwelinkLan.stop()
+        com.macerce.switchguard.api.ShellyLan.stop()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -410,6 +411,7 @@ class MonitorService : Service() {
         handler.removeCallbacks(tickRunnable)
         wake.reset()
         EwelinkLan.stop()
+        com.macerce.switchguard.api.ShellyLan.stop()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -699,7 +701,9 @@ class MonitorService : Service() {
             Cloud.TUYA -> tuya.setSwitch(device, channel, on)
             Cloud.EWELINK -> client.setSwitch(device, channel, on)
             Cloud.DEMO -> handler.post { demoUpdate(device.id) { it.copy(switches = it.switches + (channel to on)) } }
-            Cloud.LAN -> if (!EwelinkLan.trySwitch(device, channel, on)) throw IOException(getString(R.string.lan_unreachable))
+            Cloud.LAN -> if (!com.macerce.switchguard.api.LocalLan.trySwitch(device, store.localDevices.firstOrNull { it.id == device.id }, channel, on)) {
+                throw IOException(getString(R.string.lan_unreachable))
+            }
         }
     }
 
@@ -752,7 +756,13 @@ class MonitorService : Service() {
     /** Bir bulutun cihazlarını yenileriyle değiştirip farkları işler; diğer bulutun cihazlarına dokunmaz. */
     /** Yerel ağ keşfi: ayar açık ve eWeLink'e girilmişse çalışır (bkz. [EwelinkLan]). */
     private fun restartLan() {
-        val locals = store.localDevices.isNotEmpty()
+        val shelly = store.localDevices.filter { it.isShelly }
+        if (running && shelly.isNotEmpty()) {
+            com.macerce.switchguard.api.ShellyLan.start(this, shelly) { handler.post { refreshLocal() } }
+        } else {
+            com.macerce.switchguard.api.ShellyLan.stop()
+        }
+        val locals = store.localDevices.any { !it.isShelly }
         if (!running || !(store.lanControl && store.isLoggedIn) && !locals) {
             EwelinkLan.onPresence = null
             EwelinkLan.stop()
@@ -768,7 +778,7 @@ class MonitorService : Service() {
     private fun refreshLocal() {
         if (!running) return
         val list = store.snapshots
-        val next = com.macerce.switchguard.core.LocalDevice.merge(list, store.localDevices) { EwelinkLan.entry(it)?.switches }
+        val next = com.macerce.switchguard.core.LocalDevice.merge(list, store.localDevices) { com.macerce.switchguard.api.LocalLan.reading(it) }
         if (next != list) process(next)
     }
 

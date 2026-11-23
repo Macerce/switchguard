@@ -1659,8 +1659,8 @@
     <string name="area_exclude_title">รวมใน เปิดทั้งหมด / ปิดทั้งหมด</string>
     <string name="area_exclude_desc">อุปกรณ์ที่ไม่ได้เลือกยังอยู่ในพื้นที่ แต่จะไม่ถูกสั่งโดย เปิดทั้งหมด / ปิดทั้งหมด ระบบอัตโนมัติของพื้นที่ หรือคำสั่งแชตและ Telegram</string>
     <string name="area_excluded_count">ยกเว้นจากเปิด/ปิดทั้งหมด %1$d เครื่อง</string>
-    <string name="lan_add">เพิ่ม Sonoff (LAN)</string>
-    <string name="lan_add_title">อุปกรณ์ Sonoff ในเครือข่ายนี้</string>
+    <string name="lan_add">เพิ่มอุปกรณ์ (LAN)</string>
+    <string name="lan_add_title">เพิ่มอุปกรณ์ในเครือข่ายท้องถิ่น</string>
     <string name="lan_add_network">เครือข่าย: %1$s</string>
     <string name="lan_network_unknown">เครือข่าย Wi-Fi (ชื่อต้องใช้สิทธิ์ตำแหน่ง)</string>
     <string name="lan_network_unnamed">Wi-Fi ไม่มีชื่อ</string>
@@ -1674,4 +1674,32 @@
     <string name="lan_device_other_network">ขณะนี้คุณอยู่ในเครือข่ายอื่น (%1$s) อุปกรณ์นี้เข้าถึงได้เฉพาะใน %2$s</string>
     <string name="lan_device_needs_monitoring">สถานะและการควบคุมทำงานเมื่อเปิดการเฝ้าระวัง</string>
     <string name="lan_device_remove">ลบอุปกรณ์</string>
+    <string name="lan_added_toast">เพิ่ม %1$s แล้ว</string>
+    <string name="lan_help_body">• โทรศัพท์และอุปกรณ์ต้องอยู่ในเครือข่ายเดียวกัน เครือข่ายแขกและ \"การแยก AP/ไคลเอนต์\" ทำให้มองไม่เห็นกัน
+• ตัวขยาย Wi-Fi หรือโมเด็มตัวที่สองอาจสร้างเครือข่ายแยก ให้เชื่อมโทรศัพท์กับเครือข่ายของอุปกรณ์
+• หา IP ของอุปกรณ์ในรายการ \"อุปกรณ์ที่เชื่อมต่อ\" ของเราเตอร์ (ชื่อ shelly… หรือ ESP_…) หรือในแอปของแบรนด์ส่วนข้อมูลอุปกรณ์ แล้วใช้เพิ่มด้วยที่อยู่ IP
+• กำหนด IP คงที่ให้อุปกรณ์ในเราเตอร์ (จอง DHCP) เพื่อไม่ให้ที่อยู่เปลี่ยน
+• ชื่อเครือข่ายแสดงเมื่อมีสิทธิ์ตำแหน่งเท่านั้น การเพิ่มทำได้แม้ไม่มีสิทธิ์
+• สถานะและการควบคุมทำงานขณะเปิดการเฝ้าระวัง</string>
+    <string name="lan_help_title">หาไม่เจอ?</string>
+    <string name="lan_shelly_unsupported">ยังไม่รองรับรุ่นนี้ (ไม่มีรีเลย์)</string>
+    <string name="lan_shelly_auth">มีรหัสผ่านป้องกัน: ปิดการป้องกันการเข้าสู่ระบบ (Authentication) ในการตั้งค่า Shelly แล้วกลับมา</string>
+    <string name="lan_ip_not_found">ไม่มี Shelly ตอบที่ %1$s ตรวจสอบที่อยู่และว่าโทรศัพท์อยู่ใน Wi-Fi เดียวกัน</string>
+    <string name="lan_ip_checking">กำลังตรวจสอบ…</string>
+    <string name="lan_ip_find">ค้นหา</string>
+    <string name="lan_ip_hint">เช่น 192.168.1.50</string>
+    <string name="lan_add_by_ip">เพิ่มด้วยที่อยู่ IP</string>
+    <string name="lan_found_title">พบในเครือข่ายนี้</string>
+    <string name="lan_sonoff_step3">เชื่อมโทรศัพท์กลับไปที่ Wi-Fi เดิม อุปกรณ์จะแสดงด้านล่างภายในไม่กี่วินาที แตะเพิ่ม</string>
+    <string name="lan_sonoff_step2">อุปกรณ์ที่ไม่อยู่ในบัญชี ให้เปลี่ยนเป็นโหมด DIY (LAN): กดปุ่มค้างราว 5 วินาทีจนไฟกะพริบเร็ว เชื่อมโทรศัพท์กับ Wi-Fi ITEAD-xxxx (รหัส 12345678) เปิด 10.10.7.1 ในเบราว์เซอร์ แล้วกรอกชื่อและรหัส Wi-Fi</string>
+    <string name="lan_sonoff_step1">อุปกรณ์ในบัญชี eWeLink จะแสดงในหน้าอุปกรณ์เอง ไม่ต้องเพิ่มที่นี่</string>
+    <string name="lan_shelly_step3">อุปกรณ์จะแสดงด้านล่างภายในไม่กี่วินาที แตะเพิ่ม หากไม่แสดง ให้ป้อนที่อยู่ IP</string>
+    <string name="lan_shelly_step2">ให้โทรศัพท์อยู่ใน Wi-Fi เดียวกับ Shelly (ไม่ใช่เครือข่ายแขก)</string>
+    <string name="lan_shelly_step1">เชื่อม Shelly กับ Wi-Fi: ใช้แอป Shelly Smart Control หรือเชื่อมโทรศัพท์กับ Wi-Fi ของอุปกรณ์เอง (shelly…) เปิด 192.168.33.1 ในเบราว์เซอร์ แล้วกรอกชื่อและรหัส Wi-Fi ที่ Settings → Wi-Fi</string>
+    <string name="lan_steps_title">ก่อนเริ่ม</string>
+    <string name="lan_brand_title">เพิ่ม %1$s</string>
+    <string name="lan_brand_soon">เร็ว ๆ นี้: Tasmota, ESPHome, Philips Hue, TP-Link และ Home Assistant</string>
+    <string name="lan_brand_sonoff_desc">อุปกรณ์ eWeLink ในโหมด DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">รีเลย์และปลั๊ก Gen1, Plus, Pro, Gen3 และ Gen4</string>
+    <string name="lan_brand_hint">เลือกแบรนด์ ไม่ต้องใช้บัญชีหรือคลาวด์ แค่โทรศัพท์และอุปกรณ์อยู่ใน Wi-Fi เดียวกัน</string>
 </resources>

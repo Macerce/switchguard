@@ -113,7 +113,7 @@ class AreasAndRoutesTest {
         assertFalse(s.online)
         assertEquals(mapOf(0 to false, 1 to false), s.switches)
         // Görüldü: anahtarlar yerel ağdan; fazladan kanal alınmaz.
-        val seen = LocalDevice.merge(offline, listOf(l)) { mapOf(1 to true, 5 to true) }.last()
+        val seen = LocalDevice.merge(offline, listOf(l)) { LocalReading(mapOf(1 to true, 5 to true)) }.last()
         assertTrue(seen.online)
         assertEquals(mapOf(0 to false, 1 to true), seen.switches)
         // Kayboldu: son bilinen durum kalır.

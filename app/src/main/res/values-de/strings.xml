@@ -1722,8 +1722,8 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="area_exclude_title">In Alle an / Alle aus enthalten</string>
     <string name="area_exclude_desc">Abgewählte Geräte bleiben im Bereich, werden aber von Alle an / Alle aus, Bereichsautomationen, Chat- und Telegram-Befehlen nicht geschaltet.</string>
     <string name="area_excluded_count">%1$d von Alle an/aus ausgeschlossen</string>
-    <string name="lan_add">Sonoff hinzufügen (LAN)</string>
-    <string name="lan_add_title">Sonoff-Geräte in diesem Netz</string>
+    <string name="lan_add">Gerät hinzufügen (LAN)</string>
+    <string name="lan_add_title">Gerät im lokalen Netz hinzufügen</string>
     <string name="lan_add_network">Netz: %1$s</string>
     <string name="lan_network_unknown">WLAN (Name erfordert Standortberechtigung)</string>
     <string name="lan_network_unnamed">unbenanntes WLAN</string>
@@ -1737,4 +1737,32 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_device_other_network">Sie sind gerade in einem anderen Netz (%1$s); dieses Gerät ist nur in %2$s erreichbar.</string>
     <string name="lan_device_needs_monitoring">Status und Steuerung funktionieren bei aktiver Überwachung.</string>
     <string name="lan_device_remove">Gerät entfernen</string>
+    <string name="lan_added_toast">%1$s hinzugefügt</string>
+    <string name="lan_help_body">• Telefon und Gerät müssen im selben Netz sein. Gastnetze und „AP-/Client-Isolation“ verbergen Geräte voreinander.
+• Ein WLAN-Repeater oder zweites Modem kann ein eigenes Netz bilden; verbinde das Telefon mit dem Netz des Geräts.
+• Die IP des Geräts findest du im Router unter „Verbundene Geräte“ (Name shelly… oder ESP_…) oder in der App der Marke unter Geräteinfo; dann Per IP-Adresse hinzufügen.
+• Gib dem Gerät im Router eine feste IP (DHCP-Reservierung), damit sich die Adresse nie ändert.
+• Der Netzname wird nur mit Standortberechtigung angezeigt; Hinzufügen geht auch ohne.
+• Status und Steuerung funktionieren, solange die Überwachung läuft.</string>
+    <string name="lan_help_title">Nicht gefunden?</string>
+    <string name="lan_shelly_unsupported">Dieses Modell wird noch nicht unterstützt (kein Relais).</string>
+    <string name="lan_shelly_auth">Passwortgeschützt: Schalte den Anmeldeschutz (Authentication) in den Shelly-Einstellungen aus und komm zurück.</string>
+    <string name="lan_ip_not_found">Unter %1$s hat kein Shelly geantwortet. Prüfe die Adresse und ob das Telefon im selben WLAN ist.</string>
+    <string name="lan_ip_checking">Wird geprüft…</string>
+    <string name="lan_ip_find">Suchen</string>
+    <string name="lan_ip_hint">z. B. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Per IP-Adresse hinzufügen</string>
+    <string name="lan_found_title">In diesem Netz gefunden</string>
+    <string name="lan_sonoff_step3">Verbinde das Telefon wieder mit demselben WLAN. Das Gerät erscheint in wenigen Sekunden unten; tippe auf Hinzufügen.</string>
+    <string name="lan_sonoff_step2">Ein Gerät ohne Konto in den DIY-(LAN-)Modus versetzen: Taste ca. 5 s halten, bis die LED schnell blinkt, Telefon mit dem WLAN ITEAD-xxxx verbinden (Passwort 12345678), 10.10.7.1 im Browser öffnen und WLAN-Name und Passwort eingeben.</string>
+    <string name="lan_sonoff_step1">Geräte aus deinem eWeLink-Konto erscheinen automatisch unter Geräte; du musst sie hier nicht hinzufügen.</string>
+    <string name="lan_shelly_step3">Das Gerät erscheint in wenigen Sekunden unten; tippe auf Hinzufügen. Erscheint es nicht, gib seine IP-Adresse ein.</string>
+    <string name="lan_shelly_step2">Lass das Telefon im selben WLAN wie das Shelly (kein Gastnetz).</string>
+    <string name="lan_shelly_step1">Verbinde das Shelly mit deinem WLAN: mit der App Shelly Smart Control oder verbinde das Telefon mit dem eigenen WLAN des Geräts (shelly…), öffne 192.168.33.1 im Browser und gib unter Einstellungen → WLAN Netzname und Passwort ein.</string>
+    <string name="lan_steps_title">Bevor du beginnst</string>
+    <string name="lan_brand_title">%1$s hinzufügen</string>
+    <string name="lan_brand_soon">Demnächst: Tasmota, ESPHome, Philips Hue, TP-Link und Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">eWeLink-Geräte im DIY-(LAN-)Modus</string>
+    <string name="lan_brand_shelly_desc">Relais und Steckdosen der Gen1, Plus, Pro, Gen3 und Gen4</string>
+    <string name="lan_brand_hint">Wähle die Marke. Kein Konto und keine Cloud nötig: Telefon und Gerät müssen nur im selben WLAN sein.</string>
 </resources>

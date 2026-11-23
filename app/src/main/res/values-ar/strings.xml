@@ -1868,8 +1868,8 @@
     <string name="area_exclude_title">مشمولة في تشغيل الكل / إيقاف الكل</string>
     <string name="area_exclude_desc">تبقى الأجهزة غير المحددة في المنطقة لكنها لا تتأثر بتشغيل الكل / إيقاف الكل ولا بأتمتة المنطقة ولا بأوامر الدردشة أو تيليجرام.</string>
     <string name="area_excluded_count">%1$d مستبعدة من تشغيل/إيقاف الكل</string>
-    <string name="lan_add">إضافة Sonoff (شبكة محلية)</string>
-    <string name="lan_add_title">أجهزة Sonoff على هذه الشبكة</string>
+    <string name="lan_add">إضافة جهاز (الشبكة المحلية)</string>
+    <string name="lan_add_title">إضافة جهاز من الشبكة المحلية</string>
     <string name="lan_add_network">الشبكة: %1$s</string>
     <string name="lan_network_unknown">شبكة Wi-Fi (يتطلب الاسم إذن الموقع)</string>
     <string name="lan_network_unnamed">Wi-Fi بلا اسم</string>
@@ -1883,4 +1883,32 @@
     <string name="lan_device_other_network">أنت الآن على شبكة أخرى (%1$s)؛ لا يمكن الوصول إلى هذا الجهاز إلا على %2$s.</string>
     <string name="lan_device_needs_monitoring">تعمل الحالة والتحكم أثناء تشغيل المراقبة.</string>
     <string name="lan_device_remove">إزالة الجهاز</string>
+    <string name="lan_added_toast">تمت إضافة %1$s</string>
+    <string name="lan_help_body">• يجب أن يكون الهاتف والجهاز على الشبكة نفسها. شبكات الضيوف و\"عزل العملاء/نقطة الوصول\" تخفيهما عن بعضهما.
+• قد ينشئ مقوّي Wi-Fi أو مودم ثانٍ شبكة منفصلة؛ وصّل الهاتف بالشبكة التي يستخدمها الجهاز.
+• اعثر على عنوان IP للجهاز في قائمة \"الأجهزة المتصلة\" في الراوتر (الاسم shelly… أو ESP_…) أو في تطبيق الشركة ضمن معلومات الجهاز، ثم استخدم إضافة بعنوان IP.
+• امنح الجهاز عنوان IP ثابتًا في الراوتر (حجز DHCP) حتى لا يتغير.
+• يظهر اسم الشبكة فقط مع إذن الموقع؛ الإضافة تعمل بدونه.
+• تعمل الحالة والتحكم أثناء تشغيل المراقبة.</string>
+    <string name="lan_help_title">لا تجده؟</string>
+    <string name="lan_shelly_unsupported">هذا الطراز غير مدعوم بعد (لا يحتوي على مرحّل).</string>
+    <string name="lan_shelly_auth">محمي بكلمة مرور: أوقف حماية الدخول (Authentication) في إعدادات Shelly ثم عد.</string>
+    <string name="lan_ip_not_found">لم يستجب أي Shelly على %1$s. تحقق من العنوان ومن أن الهاتف على شبكة Wi-Fi نفسها.</string>
+    <string name="lan_ip_checking">جارٍ التحقق…</string>
+    <string name="lan_ip_find">بحث</string>
+    <string name="lan_ip_hint">مثال 192.168.1.50</string>
+    <string name="lan_add_by_ip">إضافة بعنوان IP</string>
+    <string name="lan_found_title">وُجد على هذه الشبكة</string>
+    <string name="lan_sonoff_step3">أعد توصيل الهاتف بشبكة Wi-Fi نفسها. يظهر الجهاز أدناه خلال ثوانٍ؛ اضغط إضافة.</string>
+    <string name="lan_sonoff_step2">للجهاز غير الموجود في حسابك، فعّل وضع DIY (الشبكة المحلية): اضغط الزر نحو 5 ثوانٍ حتى يومض المصباح بسرعة، ووصّل الهاتف بشبكة ITEAD-xxxx (كلمة المرور 12345678)، وافتح 10.10.7.1 في المتصفح وأدخل اسم شبكتك وكلمة المرور.</string>
+    <string name="lan_sonoff_step1">تظهر أجهزة حساب eWeLink تلقائيًا في الأجهزة؛ لا حاجة لإضافتها هنا.</string>
+    <string name="lan_shelly_step3">يظهر الجهاز أدناه خلال ثوانٍ؛ اضغط إضافة. إن لم يظهر، أدخل عنوان IP الخاص به.</string>
+    <string name="lan_shelly_step2">أبقِ الهاتف على شبكة Wi-Fi نفسها التي يتصل بها Shelly (ليست شبكة ضيوف).</string>
+    <string name="lan_shelly_step1">وصّل Shelly بشبكة Wi-Fi: عبر تطبيق Shelly Smart Control، أو وصّل الهاتف بشبكة الجهاز الخاصة (shelly…) وافتح 192.168.33.1 في المتصفح وأدخل اسم الشبكة وكلمة المرور في الإعدادات ← Wi-Fi.</string>
+    <string name="lan_steps_title">قبل أن تبدأ</string>
+    <string name="lan_brand_title">إضافة %1$s</string>
+    <string name="lan_brand_soon">قريبًا: Tasmota وESPHome وPhilips Hue وTP-Link وHome Assistant.</string>
+    <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
+    <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
+    <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
 </resources>

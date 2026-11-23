@@ -1731,8 +1731,8 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="area_exclude_title">Inclusi in Accendi tutto / Spegni tutto</string>
     <string name="area_exclude_desc">I dispositivi non spuntati restano nell\'area ma non vengono comandati da Accendi tutto / Spegni tutto, dalle automazioni dell\'area né dai comandi chat o Telegram.</string>
     <string name="area_excluded_count">%1$d esclusi da accendi/spegni tutto</string>
-    <string name="lan_add">Aggiungi Sonoff (LAN)</string>
-    <string name="lan_add_title">Dispositivi Sonoff in questa rete</string>
+    <string name="lan_add">Aggiungi dispositivo (LAN)</string>
+    <string name="lan_add_title">Aggiungi un dispositivo della rete locale</string>
     <string name="lan_add_network">Rete: %1$s</string>
     <string name="lan_network_unknown">Rete Wi-Fi (il nome richiede il permesso di posizione)</string>
     <string name="lan_network_unnamed">Wi-Fi senza nome</string>
@@ -1746,4 +1746,32 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_device_other_network">Ora sei su un\'altra rete (%1$s); questo dispositivo è raggiungibile solo su %2$s.</string>
     <string name="lan_device_needs_monitoring">Stato e controllo funzionano con il monitoraggio attivo.</string>
     <string name="lan_device_remove">Rimuovi dispositivo</string>
+    <string name="lan_added_toast">%1$s aggiunto</string>
+    <string name="lan_help_body">• Telefono e dispositivo devono essere sulla stessa rete. Le reti ospiti e l\'\"isolamento AP/client\" li nascondono a vicenda.
+• Un ripetitore o un secondo modem può creare una rete separata; collega il telefono a quella del dispositivo.
+• Trova l\'IP del dispositivo nell\'elenco \"Dispositivi connessi\" del router (nome shelly… o ESP_…) o nell\'app della marca, tra le info del dispositivo, poi usa Aggiungi tramite indirizzo IP.
+• Assegna al dispositivo un IP fisso nel router (prenotazione DHCP) così non cambia mai.
+• Il nome della rete appare solo con il permesso di posizione; l\'aggiunta funziona anche senza.
+• Stato e controllo funzionano mentre il monitoraggio è attivo.</string>
+    <string name="lan_help_title">Non lo trovi?</string>
+    <string name="lan_shelly_unsupported">Questo modello non è ancora supportato (non ha relè).</string>
+    <string name="lan_shelly_auth">Protetto da password: disattiva la protezione di accesso (Authentication) nelle impostazioni dello Shelly, poi torna qui.</string>
+    <string name="lan_ip_not_found">Nessuno Shelly ha risposto a %1$s. Controlla l\'indirizzo e che il telefono sia sulla stessa Wi-Fi.</string>
+    <string name="lan_ip_checking">Verifica…</string>
+    <string name="lan_ip_find">Cerca</string>
+    <string name="lan_ip_hint">es. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Aggiungi tramite indirizzo IP</string>
+    <string name="lan_found_title">Trovati in questa rete</string>
+    <string name="lan_sonoff_step3">Ricollega il telefono alla stessa Wi-Fi. Il dispositivo compare qui sotto in pochi secondi; tocca Aggiungi.</string>
+    <string name="lan_sonoff_step2">Per un dispositivo non presente nell\'account, mettilo in modalità DIY (LAN): tieni premuto il pulsante circa 5 s finché il LED lampeggia veloce, collega il telefono alla Wi-Fi ITEAD-xxxx (password 12345678), apri 10.10.7.1 nel browser e inserisci nome e password della Wi-Fi.</string>
+    <string name="lan_sonoff_step1">I dispositivi del tuo account eWeLink compaiono da soli in Dispositivi; non serve aggiungerli qui.</string>
+    <string name="lan_shelly_step3">Il dispositivo compare qui sotto in pochi secondi; tocca Aggiungi. Se non compare, inserisci il suo indirizzo IP.</string>
+    <string name="lan_shelly_step2">Tieni il telefono sulla stessa Wi-Fi dello Shelly (non una rete ospiti).</string>
+    <string name="lan_shelly_step1">Collega lo Shelly alla tua Wi-Fi: con l\'app Shelly Smart Control, oppure collega il telefono alla Wi-Fi del dispositivo (shelly…), apri 192.168.33.1 nel browser e inserisci nome e password della Wi-Fi in Impostazioni → Wi-Fi.</string>
+    <string name="lan_steps_title">Prima di iniziare</string>
+    <string name="lan_brand_title">Aggiungi %1$s</string>
+    <string name="lan_brand_soon">Prossimamente: Tasmota, ESPHome, Philips Hue, TP-Link e Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Dispositivi eWeLink in modalità DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Relè e prese Gen1, Plus, Pro, Gen3 e Gen4</string>
+    <string name="lan_brand_hint">Scegli la marca. Nessun account né cloud: telefono e dispositivo devono solo essere sulla stessa Wi-Fi.</string>
 </resources>

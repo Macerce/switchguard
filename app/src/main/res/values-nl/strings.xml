@@ -1724,8 +1724,8 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="area_exclude_title">Inbegrepen in Alles aan / Alles uit</string>
     <string name="area_exclude_desc">Niet-aangevinkte apparaten blijven in de ruimte, maar worden niet geschakeld door Alles aan / Alles uit, ruimte-automatiseringen of chat- en Telegram-opdrachten.</string>
     <string name="area_excluded_count">%1$d uitgesloten van alles aan/uit</string>
-    <string name="lan_add">Sonoff toevoegen (LAN)</string>
-    <string name="lan_add_title">Sonoff-apparaten op dit netwerk</string>
+    <string name="lan_add">Apparaat toevoegen (LAN)</string>
+    <string name="lan_add_title">Apparaat uit lokaal netwerk toevoegen</string>
     <string name="lan_add_network">Netwerk: %1$s</string>
     <string name="lan_network_unknown">Wifi-netwerk (naam vereist locatietoestemming)</string>
     <string name="lan_network_unnamed">naamloze wifi</string>
@@ -1739,4 +1739,32 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_device_other_network">Je zit nu op een ander netwerk (%1$s); dit apparaat is alleen bereikbaar op %2$s.</string>
     <string name="lan_device_needs_monitoring">Status en bediening werken als bewaking aan staat.</string>
     <string name="lan_device_remove">Apparaat verwijderen</string>
+    <string name="lan_added_toast">%1$s toegevoegd</string>
+    <string name="lan_help_body">• Telefoon en apparaat moeten op hetzelfde netwerk zitten. Gastnetwerken en \"AP-/clientisolatie\" verbergen ze voor elkaar.
+• Een wifi-versterker of tweede modem kan een apart netwerk maken; verbind de telefoon met dat van het apparaat.
+• Zoek het IP van het apparaat in de lijst \"Verbonden apparaten\" van je router (naam shelly… of ESP_…) of in de app van het merk bij apparaatinfo en gebruik Toevoegen via IP-adres.
+• Geef het apparaat in de router een vast IP (DHCP-reservering) zodat het adres nooit verandert.
+• De netwerknaam verschijnt alleen met locatietoestemming; toevoegen werkt ook zonder.
+• Status en bediening werken zolang de bewaking aan staat.</string>
+    <string name="lan_help_title">Kun je het niet vinden?</string>
+    <string name="lan_shelly_unsupported">Dit model wordt nog niet ondersteund (geen relais).</string>
+    <string name="lan_shelly_auth">Met wachtwoord beveiligd: zet de inlogbeveiliging (Authentication) uit in de Shelly-instellingen en kom terug.</string>
+    <string name="lan_ip_not_found">Geen Shelly reageerde op %1$s. Controleer het adres en of de telefoon op hetzelfde wifi zit.</string>
+    <string name="lan_ip_checking">Controleren…</string>
+    <string name="lan_ip_find">Zoeken</string>
+    <string name="lan_ip_hint">bijv. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Toevoegen via IP-adres</string>
+    <string name="lan_found_title">Gevonden in dit netwerk</string>
+    <string name="lan_sonoff_step3">Verbind de telefoon weer met hetzelfde wifi. Het apparaat verschijnt binnen enkele seconden hieronder; tik op Toevoegen.</string>
+    <string name="lan_sonoff_step2">Zet een apparaat dat niet in je account staat in DIY-(LAN-)modus: houd de knop ca. 5 s ingedrukt tot de led snel knippert, verbind de telefoon met wifi ITEAD-xxxx (wachtwoord 12345678), open 10.10.7.1 in de browser en vul je wifinaam en wachtwoord in.</string>
+    <string name="lan_sonoff_step1">Apparaten in je eWeLink-account verschijnen vanzelf bij Apparaten; je hoeft ze hier niet toe te voegen.</string>
+    <string name="lan_shelly_step3">Het apparaat verschijnt binnen enkele seconden hieronder; tik op Toevoegen. Verschijnt het niet, vul dan het IP-adres in.</string>
+    <string name="lan_shelly_step2">Houd de telefoon op hetzelfde wifi als de Shelly (geen gastnetwerk).</string>
+    <string name="lan_shelly_step1">Verbind de Shelly met je wifi: met de app Shelly Smart Control, of verbind de telefoon met het eigen wifi van het apparaat (shelly…), open 192.168.33.1 in de browser en vul onder Instellingen → Wi-Fi je netwerknaam en wachtwoord in.</string>
+    <string name="lan_steps_title">Voordat je begint</string>
+    <string name="lan_brand_title">%1$s toevoegen</string>
+    <string name="lan_brand_soon">Binnenkort: Tasmota, ESPHome, Philips Hue, TP-Link en Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
+    <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
+    <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
 </resources>

@@ -244,7 +244,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = com.macerce.switchguard.core.LocalDevice.listFromJson(prefs.getString("localDevices", null))
         set(v) {
             put { putString("localDevices", com.macerce.switchguard.core.LocalDevice.listToJson(v)) }
-            snapshots = com.macerce.switchguard.core.LocalDevice.merge(snapshots, v) { com.macerce.switchguard.api.EwelinkLan.entry(it)?.switches }
+            snapshots = com.macerce.switchguard.core.LocalDevice.merge(snapshots, v) { com.macerce.switchguard.api.LocalLan.reading(it) }
         }
     /** eWeLink cihazı başına kontrol yolu (yoksa [com.macerce.switchguard.core.ControlRoute.AUTO]). */
     var lanRoutes: Map<String, com.macerce.switchguard.core.ControlRoute>

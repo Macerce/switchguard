@@ -1760,8 +1760,8 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="area_exclude_title">Incluídos em Ligar tudo / Desligar tudo</string>
     <string name="area_exclude_desc">Dispositivos desmarcados continuam na área, mas não são acionados por Ligar tudo / Desligar tudo, automações da área nem comandos de chat ou Telegram.</string>
     <string name="area_excluded_count">%1$d fora de ligar/desligar tudo</string>
-    <string name="lan_add">Adicionar Sonoff (LAN)</string>
-    <string name="lan_add_title">Dispositivos Sonoff nesta rede</string>
+    <string name="lan_add">Adicionar dispositivo (LAN)</string>
+    <string name="lan_add_title">Adicionar dispositivo da rede local</string>
     <string name="lan_add_network">Rede: %1$s</string>
     <string name="lan_network_unknown">Rede Wi-Fi (o nome exige permissão de localização)</string>
     <string name="lan_network_unnamed">Wi-Fi sem nome</string>
@@ -1775,4 +1775,32 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_device_other_network">Você está em outra rede agora (%1$s); este dispositivo só é acessível em %2$s.</string>
     <string name="lan_device_needs_monitoring">Estado e controle funcionam com o monitoramento ativo.</string>
     <string name="lan_device_remove">Remover dispositivo</string>
+    <string name="lan_added_toast">%1$s adicionado</string>
+    <string name="lan_help_body">• O celular e o dispositivo precisam estar na mesma rede. Redes de convidados e \"isolamento de AP/clientes\" escondem um do outro.
+• Um repetidor ou um segundo modem pode criar outra rede; conecte o celular à rede do dispositivo.
+• Encontre o IP do dispositivo na lista \"Dispositivos conectados\" do roteador (nome shelly… ou ESP_…) ou no app da marca, nas informações do dispositivo, e use Adicionar pelo endereço IP.
+• Dê ao dispositivo um IP fixo no roteador (reserva DHCP) para que nunca mude.
+• O nome da rede só aparece com permissão de localização; adicionar funciona sem ela.
+• Status e controle funcionam enquanto o monitoramento está ligado.</string>
+    <string name="lan_help_title">Não encontrou?</string>
+    <string name="lan_shelly_unsupported">Este modelo ainda não é compatível (não tem relé).</string>
+    <string name="lan_shelly_auth">Protegido por senha: desative a proteção de login (Authentication) nas configurações do Shelly e volte.</string>
+    <string name="lan_ip_not_found">Nenhum Shelly respondeu em %1$s. Confira o endereço e se o celular está no mesmo Wi-Fi.</string>
+    <string name="lan_ip_checking">Verificando…</string>
+    <string name="lan_ip_find">Buscar</string>
+    <string name="lan_ip_hint">ex. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Adicionar pelo endereço IP</string>
+    <string name="lan_found_title">Encontrados nesta rede</string>
+    <string name="lan_sonoff_step3">Reconecte o celular ao mesmo Wi-Fi. O dispositivo aparece abaixo em alguns segundos; toque em Adicionar.</string>
+    <string name="lan_sonoff_step2">Para um dispositivo fora da sua conta, coloque-o no modo DIY (LAN): segure o botão cerca de 5 s até o LED piscar rápido, conecte o celular ao Wi-Fi ITEAD-xxxx (senha 12345678), abra 10.10.7.1 no navegador e informe o nome e a senha do Wi-Fi.</string>
+    <string name="lan_sonoff_step1">Dispositivos da sua conta eWeLink aparecem sozinhos em Dispositivos; não é preciso adicioná-los aqui.</string>
+    <string name="lan_shelly_step3">O dispositivo aparece abaixo em alguns segundos; toque em Adicionar. Se não aparecer, digite o endereço IP.</string>
+    <string name="lan_shelly_step2">Mantenha o celular no mesmo Wi-Fi do Shelly (não em rede de convidados).</string>
+    <string name="lan_shelly_step1">Conecte o Shelly ao seu Wi-Fi: pelo app Shelly Smart Control, ou conecte o celular ao Wi-Fi próprio do dispositivo (shelly…), abra 192.168.33.1 no navegador e informe o nome e a senha do Wi-Fi em Configurações → Wi-Fi.</string>
+    <string name="lan_steps_title">Antes de começar</string>
+    <string name="lan_brand_title">Adicionar %1$s</string>
+    <string name="lan_brand_soon">Em breve: Tasmota, ESPHome, Philips Hue, TP-Link e Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Dispositivos eWeLink no modo DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Relés e tomadas Gen1, Plus, Pro, Gen3 e Gen4</string>
+    <string name="lan_brand_hint">Escolha a marca. Sem conta nem nuvem: o celular e o dispositivo só precisam estar no mesmo Wi-Fi.</string>
 </resources>

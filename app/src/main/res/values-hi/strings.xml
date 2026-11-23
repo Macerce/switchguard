@@ -1653,8 +1653,8 @@
     <string name="area_exclude_title">सब चालू / सब बंद में शामिल</string>
     <string name="area_exclude_desc">बिना टिक वाले डिवाइस क्षेत्र में रहते हैं, पर सब चालू / सब बंद, क्षेत्र ऑटोमेशन, चैट या Telegram कमांड से नहीं बदलते।</string>
     <string name="area_excluded_count">%1$d सब चालू/बंद से बाहर</string>
-    <string name="lan_add">Sonoff जोड़ें (LAN)</string>
-    <string name="lan_add_title">इस नेटवर्क पर Sonoff डिवाइस</string>
+    <string name="lan_add">डिवाइस जोड़ें (LAN)</string>
+    <string name="lan_add_title">लोकल नेटवर्क डिवाइस जोड़ें</string>
     <string name="lan_add_network">नेटवर्क: %1$s</string>
     <string name="lan_network_unknown">Wi-Fi नेटवर्क (नाम के लिए लोकेशन अनुमति चाहिए)</string>
     <string name="lan_network_unnamed">बिना नाम का Wi-Fi</string>
@@ -1668,4 +1668,32 @@
     <string name="lan_device_other_network">आप अभी दूसरे नेटवर्क पर हैं (%1$s); यह डिवाइस केवल %2$s पर पहुँच योग्य है।</string>
     <string name="lan_device_needs_monitoring">स्थिति और नियंत्रण निगरानी चालू होने पर काम करते हैं।</string>
     <string name="lan_device_remove">डिवाइस हटाएँ</string>
+    <string name="lan_added_toast">%1$s जोड़ा गया</string>
+    <string name="lan_help_body">• फ़ोन और डिवाइस एक ही नेटवर्क पर हों। गेस्ट नेटवर्क और \"AP/क्लाइंट आइसोलेशन\" इन्हें एक-दूसरे से छिपाते हैं।
+• Wi-Fi एक्सटेंडर या दूसरा मॉडेम अलग नेटवर्क बना सकता है; फ़ोन को डिवाइस वाले नेटवर्क से जोड़ें।
+• डिवाइस का IP राउटर की \"Connected devices\" सूची (नाम shelly… या ESP_…) या ब्रांड ऐप की डिवाइस जानकारी में देखें, फिर IP पते से जोड़ें।
+• राउटर में डिवाइस को स्थिर IP दें (DHCP रिज़र्वेशन) ताकि पता कभी न बदले।
+• नेटवर्क का नाम केवल लोकेशन अनुमति से दिखता है; जोड़ना इसके बिना भी काम करता है।
+• स्थिति और नियंत्रण मॉनिटरिंग चालू रहने पर काम करते हैं।</string>
+    <string name="lan_help_title">नहीं मिल रहा?</string>
+    <string name="lan_shelly_unsupported">यह मॉडल अभी समर्थित नहीं है (इसमें रिले नहीं है)।</string>
+    <string name="lan_shelly_auth">पासवर्ड सुरक्षित: Shelly सेटिंग्स में लॉगिन सुरक्षा (Authentication) बंद करें, फिर लौटें।</string>
+    <string name="lan_ip_not_found">%1$s पर कोई Shelly नहीं मिला। पता और फ़ोन का उसी Wi-Fi पर होना जाँचें।</string>
+    <string name="lan_ip_checking">जाँच हो रही है…</string>
+    <string name="lan_ip_find">खोजें</string>
+    <string name="lan_ip_hint">जैसे 192.168.1.50</string>
+    <string name="lan_add_by_ip">IP पते से जोड़ें</string>
+    <string name="lan_found_title">इस नेटवर्क पर मिले</string>
+    <string name="lan_sonoff_step3">फ़ोन को फिर उसी Wi-Fi से जोड़ें। डिवाइस कुछ सेकंड में नीचे दिखेगा; जोड़ें पर टैप करें।</string>
+    <string name="lan_sonoff_step2">खाते से बाहर के डिवाइस को DIY (LAN) मोड में डालें: LED तेज़ी से झपकने तक बटन लगभग 5 सेकंड दबाए रखें, फ़ोन को ITEAD-xxxx Wi-Fi (पासवर्ड 12345678) से जोड़ें, ब्राउज़र में 10.10.7.1 खोलें और Wi-Fi नाम व पासवर्ड डालें।</string>
+    <string name="lan_sonoff_step1">आपके eWeLink खाते के डिवाइस अपने-आप डिवाइस में आ जाते हैं; उन्हें यहाँ जोड़ने की ज़रूरत नहीं।</string>
+    <string name="lan_shelly_step3">डिवाइस कुछ सेकंड में नीचे दिखेगा; जोड़ें पर टैप करें। न दिखे तो उसका IP पता डालें।</string>
+    <string name="lan_shelly_step2">फ़ोन को Shelly वाले उसी Wi-Fi पर रखें (गेस्ट नेटवर्क नहीं)।</string>
+    <string name="lan_shelly_step1">Shelly को अपने Wi-Fi से जोड़ें: Shelly Smart Control ऐप से, या फ़ोन को डिवाइस के अपने Wi-Fi (shelly…) से जोड़कर ब्राउज़र में 192.168.33.1 खोलें और Settings → Wi-Fi में नेटवर्क नाम व पासवर्ड डालें।</string>
+    <string name="lan_steps_title">शुरू करने से पहले</string>
+    <string name="lan_brand_title">%1$s जोड़ें</string>
+    <string name="lan_brand_soon">जल्द आ रहा है: Tasmota, ESPHome, Philips Hue, TP-Link और Home Assistant।</string>
+    <string name="lan_brand_sonoff_desc">DIY (LAN) मोड वाले eWeLink डिवाइस</string>
+    <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 और Gen4 रिले और प्लग</string>
+    <string name="lan_brand_hint">ब्रांड चुनें। खाता या क्लाउड ज़रूरी नहीं: फ़ोन और डिवाइस बस एक ही Wi-Fi पर हों।</string>
 </resources>

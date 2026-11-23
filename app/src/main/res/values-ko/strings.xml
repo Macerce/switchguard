@@ -1688,8 +1688,8 @@
     <string name="area_exclude_title">모두 켜기 / 모두 끄기 대상</string>
     <string name="area_exclude_desc">선택 해제한 기기는 영역에 남지만 모두 켜기 / 모두 끄기, 영역 자동화, 채팅·Telegram 명령으로 전환되지 않습니다.</string>
     <string name="area_excluded_count">%1$d개 모두 켜기/끄기에서 제외</string>
-    <string name="lan_add">Sonoff 추가(LAN)</string>
-    <string name="lan_add_title">이 네트워크의 Sonoff 기기</string>
+    <string name="lan_add">기기 추가 (LAN)</string>
+    <string name="lan_add_title">로컬 네트워크 기기 추가</string>
     <string name="lan_add_network">네트워크: %1$s</string>
     <string name="lan_network_unknown">Wi-Fi 네트워크(이름 표시에 위치 권한 필요)</string>
     <string name="lan_network_unnamed">이름 없는 Wi-Fi</string>
@@ -1703,4 +1703,32 @@
     <string name="lan_device_other_network">지금은 다른 네트워크(%1$s)에 있습니다. 이 기기는 %2$s에서만 연결됩니다.</string>
     <string name="lan_device_needs_monitoring">상태와 제어는 모니터링이 켜져 있을 때 작동합니다.</string>
     <string name="lan_device_remove">기기 삭제</string>
+    <string name="lan_added_toast">%1$s 추가됨</string>
+    <string name="lan_help_body">• 휴대폰과 기기가 같은 네트워크에 있어야 합니다. 게스트 네트워크와 \"AP/클라이언트 격리\"는 서로를 숨깁니다.
+• Wi-Fi 확장기나 두 번째 모뎀은 별도 네트워크를 만들 수 있습니다. 휴대폰을 기기가 쓰는 네트워크에 연결하세요.
+• 공유기의 \"연결된 기기\" 목록(이름 shelly… 또는 ESP_…)이나 브랜드 앱의 기기 정보에서 IP를 찾아 IP 주소로 추가를 사용하세요.
+• 공유기에서 기기에 고정 IP(DHCP 예약)를 주면 주소가 바뀌지 않습니다.
+• 네트워크 이름은 위치 권한이 있을 때만 보입니다. 추가는 권한 없이도 됩니다.
+• 상태와 제어는 모니터링이 켜져 있을 때 작동합니다.</string>
+    <string name="lan_help_title">찾을 수 없나요?</string>
+    <string name="lan_shelly_unsupported">이 모델은 아직 지원되지 않습니다(릴레이 없음).</string>
+    <string name="lan_shelly_auth">비밀번호 보호됨: Shelly 설정에서 로그인 보호(Authentication)를 끄고 다시 오세요.</string>
+    <string name="lan_ip_not_found">%1$s에서 응답한 Shelly가 없습니다. 주소와 휴대폰이 같은 Wi-Fi에 있는지 확인하세요.</string>
+    <string name="lan_ip_checking">확인 중…</string>
+    <string name="lan_ip_find">찾기</string>
+    <string name="lan_ip_hint">예: 192.168.1.50</string>
+    <string name="lan_add_by_ip">IP 주소로 추가</string>
+    <string name="lan_found_title">이 네트워크에서 찾은 기기</string>
+    <string name="lan_sonoff_step3">휴대폰을 같은 Wi-Fi에 다시 연결하세요. 몇 초 안에 아래에 기기가 나타납니다. 추가를 누르세요.</string>
+    <string name="lan_sonoff_step2">계정에 없는 기기는 DIY(LAN) 모드로 바꾸세요: LED가 빠르게 깜박일 때까지 버튼을 약 5초 누르고, 휴대폰을 ITEAD-xxxx Wi-Fi(비밀번호 12345678)에 연결한 뒤 브라우저에서 10.10.7.1을 열어 Wi-Fi 이름과 비밀번호를 입력하세요.</string>
+    <string name="lan_sonoff_step1">eWeLink 계정의 기기는 기기 화면에 자동으로 나타나므로 여기서 추가할 필요가 없습니다.</string>
+    <string name="lan_shelly_step3">몇 초 안에 아래에 기기가 나타납니다. 추가를 누르세요. 나타나지 않으면 IP 주소를 입력하세요.</string>
+    <string name="lan_shelly_step2">휴대폰을 Shelly와 같은 Wi-Fi에 두세요(게스트 네트워크 제외).</string>
+    <string name="lan_shelly_step1">Shelly를 Wi-Fi에 연결하세요: Shelly Smart Control 앱을 쓰거나, 휴대폰을 기기 자체 Wi-Fi(shelly…)에 연결한 뒤 브라우저에서 192.168.33.1을 열고 설정 → Wi-Fi에 네트워크 이름과 비밀번호를 입력하세요.</string>
+    <string name="lan_steps_title">시작하기 전에</string>
+    <string name="lan_brand_title">%1$s 추가</string>
+    <string name="lan_brand_soon">곧 지원: Tasmota, ESPHome, Philips Hue, TP-Link, Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">DIY(LAN) 모드의 eWeLink 기기</string>
+    <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3, Gen4 릴레이와 플러그</string>
+    <string name="lan_brand_hint">브랜드를 고르세요. 계정이나 클라우드가 필요 없고 휴대폰과 기기가 같은 Wi-Fi에 있으면 됩니다.</string>
 </resources>

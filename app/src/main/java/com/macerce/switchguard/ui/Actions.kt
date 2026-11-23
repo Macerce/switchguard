@@ -85,7 +85,7 @@ object Actions {
                         throw java.io.IOException(context.getString(R.string.lan_unreachable), e)
                     }
                     Cloud.DEMO -> Unit
-                    Cloud.LAN -> if (!com.macerce.switchguard.api.EwelinkLan.trySwitch(device, channel, on)) {
+                    Cloud.LAN -> if (!com.macerce.switchguard.api.LocalLan.trySwitch(device, store.localDevices.firstOrNull { it.id == device.id }, channel, on)) {
                         throw java.io.IOException(context.getString(R.string.lan_unreachable))
                     }
                 }

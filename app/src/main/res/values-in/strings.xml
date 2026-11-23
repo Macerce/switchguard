@@ -1617,8 +1617,8 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="area_exclude_title">Termasuk dalam Nyalakan semua / Matikan semua</string>
     <string name="area_exclude_desc">Perangkat yang tidak dicentang tetap di area, tetapi tidak diubah oleh Nyalakan semua / Matikan semua, otomasi area, maupun perintah chat atau Telegram.</string>
     <string name="area_excluded_count">%1$d dikecualikan dari nyalakan/matikan semua</string>
-    <string name="lan_add">Tambah Sonoff (LAN)</string>
-    <string name="lan_add_title">Perangkat Sonoff di jaringan ini</string>
+    <string name="lan_add">Tambah perangkat (LAN)</string>
+    <string name="lan_add_title">Tambah perangkat jaringan lokal</string>
     <string name="lan_add_network">Jaringan: %1$s</string>
     <string name="lan_network_unknown">Jaringan Wi-Fi (nama memerlukan izin lokasi)</string>
     <string name="lan_network_unnamed">Wi-Fi tanpa nama</string>
@@ -1632,4 +1632,32 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_device_other_network">Anda sekarang di jaringan lain (%1$s); perangkat ini hanya bisa dijangkau di %2$s.</string>
     <string name="lan_device_needs_monitoring">Status dan kontrol berfungsi saat pemantauan aktif.</string>
     <string name="lan_device_remove">Hapus perangkat</string>
+    <string name="lan_added_toast">%1$s ditambahkan</string>
+    <string name="lan_help_body">• Ponsel dan perangkat harus di jaringan yang sama. Jaringan tamu dan \"isolasi AP/klien\" menyembunyikan keduanya.
+• Penguat Wi-Fi atau modem kedua bisa membuat jaringan terpisah; hubungkan ponsel ke jaringan perangkat.
+• Cari IP perangkat di daftar \"Perangkat terhubung\" router (nama shelly… atau ESP_…) atau di aplikasi merek pada info perangkat, lalu gunakan Tambah lewat alamat IP.
+• Beri perangkat IP tetap di router (reservasi DHCP) agar alamat tidak pernah berubah.
+• Nama jaringan hanya tampil dengan izin lokasi; penambahan tetap berfungsi tanpanya.
+• Status dan kontrol berjalan selama pemantauan aktif.</string>
+    <string name="lan_help_title">Tidak ketemu?</string>
+    <string name="lan_shelly_unsupported">Model ini belum didukung (tidak punya relai).</string>
+    <string name="lan_shelly_auth">Dilindungi sandi: matikan perlindungan login (Authentication) di pengaturan Shelly, lalu kembali.</string>
+    <string name="lan_ip_not_found">Tidak ada Shelly yang menjawab di %1$s. Periksa alamat dan pastikan ponsel di Wi-Fi yang sama.</string>
+    <string name="lan_ip_checking">Memeriksa…</string>
+    <string name="lan_ip_find">Cari</string>
+    <string name="lan_ip_hint">mis. 192.168.1.50</string>
+    <string name="lan_add_by_ip">Tambah lewat alamat IP</string>
+    <string name="lan_found_title">Ditemukan di jaringan ini</string>
+    <string name="lan_sonoff_step3">Hubungkan lagi ponsel ke Wi-Fi yang sama. Perangkat muncul di bawah dalam beberapa detik; ketuk Tambah.</string>
+    <string name="lan_sonoff_step2">Untuk perangkat di luar akun, ubah ke mode DIY (LAN): tahan tombol sekitar 5 detik hingga LED berkedip cepat, hubungkan ponsel ke Wi-Fi ITEAD-xxxx (sandi 12345678), buka 10.10.7.1 di browser lalu isi nama dan sandi Wi-Fi.</string>
+    <string name="lan_sonoff_step1">Perangkat di akun eWeLink Anda otomatis muncul di Perangkat; tidak perlu ditambahkan di sini.</string>
+    <string name="lan_shelly_step3">Perangkat muncul di bawah dalam beberapa detik; ketuk Tambah. Jika tidak muncul, masukkan alamat IP-nya.</string>
+    <string name="lan_shelly_step2">Biarkan ponsel di Wi-Fi yang sama dengan Shelly (bukan jaringan tamu).</string>
+    <string name="lan_shelly_step1">Hubungkan Shelly ke Wi-Fi: dengan aplikasi Shelly Smart Control, atau hubungkan ponsel ke Wi-Fi milik perangkat (shelly…), buka 192.168.33.1 di browser lalu isi nama dan sandi Wi-Fi di Settings → Wi-Fi.</string>
+    <string name="lan_steps_title">Sebelum mulai</string>
+    <string name="lan_brand_title">Tambah %1$s</string>
+    <string name="lan_brand_soon">Segera hadir: Tasmota, ESPHome, Philips Hue, TP-Link dan Home Assistant.</string>
+    <string name="lan_brand_sonoff_desc">Perangkat eWeLink dalam mode DIY (LAN)</string>
+    <string name="lan_brand_shelly_desc">Relai dan colokan Gen1, Plus, Pro, Gen3 dan Gen4</string>
+    <string name="lan_brand_hint">Pilih merek. Tanpa akun atau cloud: ponsel dan perangkat cukup berada di Wi-Fi yang sama.</string>
 </resources>
