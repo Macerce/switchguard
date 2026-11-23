@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">Estrella = mantener arriba · flechas = mover · ⇕ = tarjeta pequeña / grande · etiqueta = categoría. Selecciona el icono de disposición arriba a la derecha para volver aquí.</string>
+    <string name="layout_hint">Estrella = mantener arriba · flechas = mover · ⇕ = tarjeta pequeña / grande · etiqueta = área. Selecciona el icono de disposición arriba a la derecha para volver aquí.</string>
     <string name="tuya_not_connected">Sin conectar · selecciona para conectar</string>
     <string name="perm_missing">No permitido — selecciona para solucionarlo</string>
     <string name="perm_battery_missing">Restringida — las alarmas pueden retrasarse. Selecciona para solucionarlo.</string>

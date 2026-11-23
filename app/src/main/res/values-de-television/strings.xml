@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">Stern = oben halten · Pfeile = verschieben · ⇕ = kleine / große Karte · Tag = Kategorie. Wähle oben rechts das Layout-Symbol, um hierher zurückzukehren.</string>
+    <string name="layout_hint">Stern = oben halten · Pfeile = verschieben · ⇕ = kleine / große Karte · Tag = Bereich. Wähle oben rechts das Layout-Symbol, um hierher zurückzukehren.</string>
     <string name="tuya_not_connected">Nicht verbunden · zum Verbinden auswählen</string>
     <string name="perm_missing">Nicht erlaubt — zum Beheben auswählen</string>
     <string name="perm_battery_missing">Eingeschränkt — Alarme können sich verzögern. Zum Beheben auswählen.</string>

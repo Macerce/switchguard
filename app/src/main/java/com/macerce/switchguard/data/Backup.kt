@@ -44,6 +44,7 @@ object Backup {
         "tuyaTokenExp" to "Tuya erişim belirtecinin süresi",
         "lanControl" to "yerel ağ kontrolü cihaza özel (bu cihazın bağlı olduğu ağ)",
         "lanKeys" to "cihaz yerel ağ anahtarları (gizli; buluttan yeniden okunur)",
+        "areasInviteDismissed" to "alan davet kartının gizlenmesi bu cihazdaki ekrana özel",
         "tuyaLive" to "Tuya anlık güncellemeleri cihaza özel (aynı anahtarlarla tek cihaz anlık mesaj alır)",
         "monitoring" to "izleme açık/kapalı: bu cihazın çalışma durumu",
         "pendingAlarm" to "çalmakta olan alarm",

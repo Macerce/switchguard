@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">Stella = tieni in alto · frecce = sposta · ⇕ = scheda piccola / grande · etichetta = categoria. Seleziona l\'icona della disposizione in alto a destra per tornare qui.</string>
+    <string name="layout_hint">Stella = tieni in alto · frecce = sposta · ⇕ = scheda piccola / grande · etichetta = area. Seleziona l\'icona della disposizione in alto a destra per tornare qui.</string>
     <string name="tuya_not_connected">Non connesso · seleziona per connettere</string>
     <string name="perm_missing">Non consentito — seleziona per risolvere</string>
     <string name="perm_battery_missing">Limitata — gli allarmi potrebbero essere in ritardo. Seleziona per risolvere.</string>

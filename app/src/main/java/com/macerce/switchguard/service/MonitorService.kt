@@ -34,6 +34,7 @@ import com.macerce.switchguard.api.EwelinkClient
 import com.macerce.switchguard.api.EwelinkLan
 import com.macerce.switchguard.api.EwelinkSocket
 import com.macerce.switchguard.api.WeatherClient
+import com.macerce.switchguard.core.RouteMerge
 import com.macerce.switchguard.core.WakeScheduler
 import com.macerce.switchguard.core.Environment
 import com.macerce.switchguard.api.TelegramClient
@@ -680,7 +681,7 @@ class MonitorService : Service() {
             handler.post { demoUpdate(deviceId) { it.copy(switches = it.switches + (channel to on)) } }
             return
         }
-        handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on))) }
+        handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on)), fromCloud = false) }
         val isTuya = store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }
         handler.postDelayed({
             if (!running) return@postDelayed
@@ -756,12 +757,12 @@ class MonitorService : Service() {
     }
 
     /**
-     * Yerel ağdan gelen anahtar durumu. Bulut anlık bağlantısı canlıyken yok sayılır (o daha güvenilir ve yerel
-     * duyuru gecikebilir: eski durum geri yazılmasın); bağlantı koptuğunda (internet yok, sunucu çöktü)
-     * değişiklikler buradan algılanır, alarm ve otomasyonlar çalışmaya devam eder.
+     * Yerel ağdan gelen anahtar durumu; yalnızca yerel ağ bu cihaz için yetkiliyse işlenir (bkz. [RouteMerge]):
+     * "Yalnız yerel ağ" cihazlarda her zaman, "Otomatik"te bulut anlık bağlantısı kopukken (internet yok,
+     * sunucu çöktü). Böylece iki kaynak aynı anda durum yazıp sahte "kapandı/açıldı" alarmı üretmez.
      */
     private fun applyLan(deviceId: String, switches: Map<Int, Boolean>) {
-        if (!running || socket.ready) return
+        if (!running || !RouteMerge.acceptLan(store.routeOf(deviceId), socket.ready)) return
         val list = store.snapshots
         val before = list.firstOrNull { it.id == deviceId && it.cloud == Cloud.EWELINK } ?: return
         val after = WsMessages.apply(before, WsEvent.Update(deviceId, online = null, switches = switches))
@@ -770,10 +771,15 @@ class MonitorService : Service() {
     }
 
     private fun replaceCloud(cloud: Cloud, devices: List<DeviceSnapshot>) {
-        process(store.snapshots.filter { it.cloud != cloud } + devices)
+        // Yoklamayla gelen eWeLink listesi: yerel ağın yetkili olduğu cihazlarda anahtarlar yerel ağdan kalır.
+        val merged = if (cloud != Cloud.EWELINK || !store.lanControl) devices else devices.map { d ->
+            RouteMerge.apply(d, EwelinkLan.entry(d.id)?.switches, store.routeOf(d.id), socket.ready)
+        }
+        process(store.snapshots.filter { it.cloud != cloud } + merged)
     }
 
-    private fun applyUpdate(update: WsEvent.Update) {
+    /** [fromCloud] false: uygulamanın kendi komutunun yerel yansıması (yerel ağ yetkili olsa da uygulanır). */
+    private fun applyUpdate(update: WsEvent.Update, fromCloud: Boolean = true) {
         // Kanal gücü (SPM/DualR3: actPow_N) ya da tek kanallı güç ölçerde toplam güç geldi.
         if (update.params?.keys()?.asSequence()?.any { it.startsWith("actPow_") || it == "power" } == true) {
             channelPowerSeenAt[update.deviceId] = System.currentTimeMillis()
@@ -781,7 +787,12 @@ class MonitorService : Service() {
         }
         val list = store.snapshots
         val before = list.firstOrNull { it.id == update.deviceId } ?: return
-        val after = WsMessages.apply(before, update)
+        // Yerel ağın yetkili olduğu cihazda bulutun anahtar değerleri yok sayılır (güç/sensör işlenir).
+        // Cihaz yerel ağda yanıt verirken bulutun "çevrimdışı" demesi de yok sayılır.
+        val lanAuth = fromCloud && before.cloud == Cloud.EWELINK && store.lanControl &&
+            !RouteMerge.acceptCloudSwitches(store.routeOf(update.deviceId), EwelinkLan.entry(update.deviceId) != null, socket.ready)
+        val routed = if (lanAuth) update.copy(switches = emptyMap(), online = update.online?.takeIf { it }) else update
+        val after = WsMessages.apply(before, routed)
         if (after == before) return
         process(list.map { if (it.id == after.id) after else it })
         setState(ConnState.LIVE, synced = true)

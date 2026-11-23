@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">Estrela = manter no topo · setas = mover · ⇕ = cartão pequeno / grande · etiqueta = categoria. Selecione o ícone de layout no canto superior direito para voltar aqui.</string>
+    <string name="layout_hint">Estrela = manter no topo · setas = mover · ⇕ = cartão pequeno / grande · etiqueta = área. Selecione o ícone de layout no canto superior direito para voltar aqui.</string>
     <string name="tuya_not_connected">Não conectado · selecione para conectar</string>
     <string name="perm_missing">Não permitido — selecione para corrigir</string>
     <string name="perm_battery_missing">Restrito — os alarmes podem atrasar. Selecione para corrigir.</string>

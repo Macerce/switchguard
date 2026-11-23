@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">तारा = ऊपर रखें · तीर = खिसकाएँ · ⇕ = छोटा / बड़ा कार्ड · टैग = श्रेणी। यहाँ वापस आने के लिए ऊपर दाईं ओर लेआउट आइकन चुनें।</string>
+    <string name="layout_hint">तारा = ऊपर रखें · तीर = खिसकाएँ · ⇕ = छोटा / बड़ा कार्ड · टैग = क्षेत्र। यहाँ वापस आने के लिए ऊपर दाईं ओर लेआउट आइकन चुनें।</string>
     <string name="tuya_not_connected">कनेक्ट नहीं है · कनेक्ट करने के लिए चुनें</string>
     <string name="perm_missing">अनुमति नहीं है — ठीक करने के लिए चुनें</string>
     <string name="perm_battery_missing">प्रतिबंधित — अलार्म में देरी हो सकती है। ठीक करने के लिए चुनें।</string>

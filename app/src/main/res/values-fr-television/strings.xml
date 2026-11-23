@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">Étoile = garder en haut · flèches = déplacer · ⇕ = petite / grande carte · étiquette = catégorie. Sélectionnez l\'icône de disposition en haut à droite pour revenir ici.</string>
+    <string name="layout_hint">Étoile = garder en haut · flèches = déplacer · ⇕ = petite / grande carte · étiquette = pièce. Sélectionnez l\'icône de disposition en haut à droite pour revenir ici.</string>
     <string name="tuya_not_connected">Non connecté · sélectionnez pour vous connecter</string>
     <string name="perm_missing">Non autorisé — sélectionnez pour corriger</string>
     <string name="perm_battery_missing">Restreinte — les alarmes peuvent être retardées. Sélectionnez pour corriger.</string>

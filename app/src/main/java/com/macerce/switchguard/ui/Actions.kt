@@ -73,10 +73,17 @@ object Actions {
         else withContext(Dispatchers.IO) {
             runCatching {
                 val store = Store.get(context)
+                if (device.cloud == Cloud.EWELINK && store.routeOf(device.id) == com.macerce.switchguard.core.ControlRoute.LAN &&
+                    com.macerce.switchguard.api.EwelinkLan.entry(device.id) == null
+                ) throw java.io.IOException(context.getString(R.string.lan_unreachable))
                 LiveState.expected.expect(device.id, channel, on, System.currentTimeMillis())
                 when (device.cloud) {
                     Cloud.TUYA -> TuyaClient(store).setSwitch(device, channel, on)
-                    Cloud.EWELINK -> EwelinkClient(store).setSwitch(device, channel, on)
+                    Cloud.EWELINK -> try {
+                        EwelinkClient(store).setSwitch(device, channel, on)
+                    } catch (e: com.macerce.switchguard.api.LanUnreachableException) {
+                        throw java.io.IOException(context.getString(R.string.lan_unreachable), e)
+                    }
                     Cloud.DEMO -> Unit
                 }
                 val service = MonitorService.instance

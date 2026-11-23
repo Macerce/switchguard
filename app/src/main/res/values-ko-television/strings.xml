@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">별 = 맨 위에 고정 · 화살표 = 이동 · ⇕ = 작은 카드 / 큰 카드 · 태그 = 카테고리. 이 화면으로 돌아오려면 오른쪽 위의 레이아웃 아이콘을 선택하세요.</string>
+    <string name="layout_hint">별 = 맨 위에 고정 · 화살표 = 이동 · ⇕ = 작은 카드 / 큰 카드 · 태그 = 영역. 이 화면으로 돌아오려면 오른쪽 위의 레이아웃 아이콘을 선택하세요.</string>
     <string name="tuya_not_connected">연결되지 않음 · 선택하여 연결</string>
     <string name="perm_missing">허용 안 됨 — 선택하여 해결</string>
     <string name="perm_battery_missing">제한됨 — 알람이 늦어질 수 있습니다. 선택하여 해결하세요.</string>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">星标 = 置顶 · 箭头 = 移动 · ⇕ = 小 / 大卡片 · 标签 = 分类。选择右上角的布局图标可返回此处。</string>
+    <string name="layout_hint">星标 = 置顶 · 箭头 = 移动 · ⇕ = 小 / 大卡片 · 标签 = 区域。选择右上角的布局图标可返回此处。</string>
     <string name="tuya_not_connected">未连接 · 选择以连接</string>
     <string name="perm_missing">未允许 — 选择以修复</string>
     <string name="perm_battery_missing">受限制 — 警报可能延迟。选择以修复。</string>

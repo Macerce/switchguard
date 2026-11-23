@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">Bintang = tetap di atas · panah = pindahkan · ⇕ = kartu kecil / besar · tag = kategori. Pilih ikon tata letak di kanan atas untuk kembali ke sini.</string>
+    <string name="layout_hint">Bintang = tetap di atas · panah = pindahkan · ⇕ = kartu kecil / besar · tag = area. Pilih ikon tata letak di kanan atas untuk kembali ke sini.</string>
     <string name="tuya_not_connected">Tidak terhubung · pilih untuk menghubungkan</string>
     <string name="perm_missing">Tidak diizinkan — pilih untuk memperbaiki</string>
     <string name="perm_battery_missing">Dibatasi — alarm mungkin terlambat. Pilih untuk memperbaiki.</string>

@@ -32,6 +32,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.relocation.BringIntoViewRequester
@@ -117,12 +118,15 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
 import com.macerce.switchguard.R
+import java.util.UUID
 import com.macerce.switchguard.core.Demo
 import com.macerce.switchguard.core.SensorKind
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceKinds
 import com.macerce.switchguard.core.DeviceLayout
 import com.macerce.switchguard.core.DeviceSection
+import com.macerce.switchguard.core.AreaSummary
+import com.macerce.switchguard.core.Category
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Readiness
 import com.macerce.switchguard.data.ConnState
@@ -170,7 +174,8 @@ fun DevicesScreen(
     val layout = remember(version) { store.deviceLayout }
     // Gruplar ızgarada cihaz gibi durur (sıralanır, kategoriye girer); düğmeleri bütün üyeleri açıp kapatır.
     val groups = remember(version) { store.groups }
-    val shown = remember(version) { store.snapshotsWithGroups }
+    // Alanların sanal grupları kart olarak gösterilmez: alan kartları ve alan sayfası onların yerini tutar.
+    val shown = remember(version) { store.snapshotsWithGroups.filterNot { DeviceGroup.isArea(it.id) } }
     val groupCounts = remember(version) {
         val byId = devices.associateBy { it.id }
         groups.associate { it.deviceId to it.counts(byId) }
@@ -181,7 +186,15 @@ fun DevicesScreen(
     val order = remember { DragOrder() }
     LaunchedEffect(sortedIds) { order.show(sortedIds) }
     val shownLayout = if (order.dragging) layout.copy(order = order.ids) else layout
-    val sections = remember(shownLayout, shown) { shownLayout.sections(shown) }
+    // Alan sayfası (Home Assistant'taki gibi): alan kartına dokununca yalnız o alanın cihazları gösterilir.
+    val inviteDismissed = remember(version) { store.areasInviteDismissed }
+    var openAreaId by rememberSaveable { mutableStateOf<String?>(null) }
+    val openArea = layout.categories.firstOrNull { it.id == openAreaId }
+    val areaSummaries = remember(version) { layout.categories.associate { it.id to AreaSummary.of(it.id, layout, devices) } }
+    val sections = remember(shownLayout, shown, openArea) {
+        if (openArea == null) shownLayout.sections(shown)
+        else listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(shown).filter { shownLayout.categoryOf[it.id] == openArea.id }))
+    }
     val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
     val currentSectionOf by rememberUpdatedState(sectionOf)
     val haptic = LocalHapticFeedback.current
@@ -207,7 +220,20 @@ fun DevicesScreen(
     var showCategories by remember { mutableStateOf(false) }
     val saveLayout: (DeviceLayout) -> Unit = { store.deviceLayout = it }
     if (showCategories) CategoriesDialog(layout, saveLayout) { showCategories = false }
+    var newArea by remember { mutableStateOf(false) }
+    if (newArea) NameDialog(stringResource(R.string.area_new), "", onDismiss = { newArea = false }) { name ->
+        val c = Category(UUID.randomUUID().toString(), name)
+        saveLayout(store.deviceLayout.addCategory(c))
+        openAreaId = c.id
+    }
+    var areaMembers by remember { mutableStateOf(false) }
+    var areaRename by remember { mutableStateOf(false) }
+    if (openArea != null && areaMembers) AreaMembersDialog(openArea, layout, devices, saveLayout) { areaMembers = false }
+    if (openArea != null && areaRename) NameDialog(stringResource(R.string.action_rename), openArea.name, onDismiss = { areaRename = false }) {
+        saveLayout(store.deviceLayout.renameCategory(openArea.id, it))
+    }
     BackHandler(enabled = editMode) { editMode = false }
+    BackHandler(enabled = !editMode && openArea != null) { openAreaId = null }
     var refreshing by remember { mutableStateOf(false) }
 
     val doRefresh: () -> Unit = {
@@ -221,7 +247,9 @@ fun DevicesScreen(
 
     Column(modifier.fillMaxSize()) {
         AppTopBar(
-            title = stringResource(if (editMode) R.string.action_edit_layout else R.string.app_name),
+            title = if (editMode) stringResource(R.string.action_edit_layout) else openArea?.name ?: stringResource(R.string.app_name),
+            navigationIcon = { if (openArea != null && !editMode) BackButton { openAreaId = null } },
+            small = openArea != null && !editMode,
             actions = {
                 if (editMode) {
                     val doneFocus = remember { FocusRequester() }
@@ -293,7 +321,7 @@ fun DevicesScreen(
                         AlarmBanner(alarm) { Actions.dismissAlarm(context) }
                     }
                 }
-                if (!editMode) {
+                if (!editMode && openArea == null) {
                     item(span = full) {
                         if (loggedIn) {
                             GuardCard(connection.state, connection.detail, connection.lastSync, monitoring, devices)
@@ -313,6 +341,45 @@ fun DevicesScreen(
                 if (editMode) {
                     item(key = "edit-hint", span = full) {
                         LayoutEditHint(onCategories = { showCategories = true }, onAddGroup = { editingGroup = NEW_AUTOMATION })
+                    }
+                }
+                if (!editMode && openArea != null) {
+                    item(key = "area-hero", span = full) {
+                        AreaHero(
+                            openArea, areaSummaries[openArea.id] ?: AreaSummary.of(emptyList()),
+                            onAll = { on ->
+                                scope.launch {
+                                    Actions.setGroup(context, DeviceGroup.areaDeviceId(openArea.id), on).onFailure {
+                                        Toast.makeText(context, context.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                            },
+                            onMembers = { areaMembers = true },
+                            onRename = { areaRename = true },
+                        )
+                    }
+                    if (sections.first().devices.isEmpty()) {
+                        item(key = "area-empty", span = full) {
+                            Text(stringResource(R.string.category_no_devices), style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp))
+                        }
+                    }
+                }
+                // Ana sayfada alan kartları (Home Assistant'ın alanları gibi); dokununca alanın sayfası açılır.
+                if (!editMode && openArea == null && devices.isNotEmpty()) {
+                    if (layout.categories.isEmpty()) {
+                        if (!inviteDismissed) item(key = "area-invite", span = full) {
+                            AreaInviteCard(onCreate = { newArea = true }, onDismiss = { store.areasInviteDismissed = true })
+                        }
+                    } else {
+                        item(key = "areas-title", span = full) {
+                            Text(stringResource(R.string.areas_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.padding(start = 4.dp, top = 6.dp))
+                        }
+                        items(layout.categories, key = { "area-" + it.id }) { area ->
+                            AreaTile(area, areaSummaries[area.id] ?: AreaSummary.of(emptyList()), onOpen = { openAreaId = area.id })
+                        }
+                        item(key = "area-add") { AreaAddTile(onClick = { newArea = true }) }
                     }
                 }
                 for (section in sections) {

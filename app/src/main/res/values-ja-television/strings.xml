@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">星 = 先頭に固定 · 矢印 = 移動 · ⇕ = 小 / 大カード · タグ = カテゴリ。右上のレイアウトアイコンを選択するとここに戻ります。</string>
+    <string name="layout_hint">星 = 先頭に固定 · 矢印 = 移動 · ⇕ = 小 / 大カード · タグ = エリア。右上のレイアウトアイコンを選択するとここに戻ります。</string>
     <string name="tuya_not_connected">未接続 · 選択して接続</string>
     <string name="perm_missing">許可されていません — 選択して修正</string>
     <string name="perm_battery_missing">制限されています — アラームが遅れる可能性があります。選択して修正。</string>

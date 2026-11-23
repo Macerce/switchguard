@@ -1,6 +1,7 @@
 package com.macerce.switchguard.api
 
 import android.net.Uri
+import com.macerce.switchguard.core.ControlRoute
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Signer
@@ -18,6 +19,9 @@ import java.util.concurrent.TimeUnit
 
 /** eWeLink API bir hata kodu döndürdü (internet sorunu değil). */
 open class ApiException(val code: Int, message: String) : Exception("eWeLink $code: $message")
+
+/** Cihaz "yalnız yerel ağ" yolunda ama yerel ağda bulunamadı ya da yanıt vermedi (buluta düşülmez). */
+class LanUnreachableException(deviceId: String) : IOException("LAN unreachable: $deviceId")
 
 /** Token geçersiz ve yenilenemedi; kullanıcı yeniden giriş yapmalı. */
 class AuthException(code: Int, message: String) : ApiException(code, message)
@@ -82,8 +86,13 @@ class EwelinkClient(private val store: Store) {
 
     /** Cihazı açar/kapatır. Çok kanallı cihazlarda [channel] 0'dan başlar. */
     fun setSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
-        // Yerel ağda görülen cihaz önce doğrudan denenir (hızlı, internetsiz çalışır); olmazsa bulut.
-        if (store.lanControl && EwelinkLan.trySwitch(device, channel, on)) return
+        // Kontrol yolu cihaz başına (bkz. ControlRoute): Otomatik = önce yerel ağ, olmazsa bulut; Yalnız yerel ağ =
+        // buluta hiç gitmez; Yalnız bulut = yerel ağ denenmez.
+        when (store.routeOf(device.id)) {
+            ControlRoute.CLOUD -> Unit
+            ControlRoute.AUTO -> if (EwelinkLan.trySwitch(device, channel, on)) return
+            ControlRoute.LAN -> if (EwelinkLan.trySwitch(device, channel, on)) return else throw LanUnreachableException(device.id)
+        }
         val value = if (on) "on" else "off"
         val array = JSONObject().put("switches", JSONArray().put(JSONObject().put("switch", value).put("outlet", channel)))
         if (device.usesSwitchArray) return setParams(device.id, array)

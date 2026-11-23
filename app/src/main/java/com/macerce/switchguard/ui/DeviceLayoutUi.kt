@@ -17,6 +17,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Label
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.MeetingRoom
 import androidx.compose.material.icons.rounded.CropLandscape
 import androidx.compose.material.icons.rounded.CropSquare
 import androidx.compose.material.icons.rounded.ArrowDownward
@@ -102,7 +103,7 @@ fun LayoutEditHint(onCategories: () -> Unit, onAddGroup: (() -> Unit)? = null) {
         Column(Modifier.padding(16.dp)) {
             Text(stringResource(R.string.layout_hint), style = MaterialTheme.typography.bodyMedium)
             TextButton(onClick = onCategories, modifier = Modifier.padding(top = 4.dp).tvFocusRing()) {
-                Icon(Icons.AutoMirrored.Rounded.Label, null)
+                Icon(Icons.Rounded.MeetingRoom, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.categories_manage))
             }
@@ -184,7 +185,7 @@ fun LayoutEditBar(
             AssistChip(
                 onClick = { menu = true },
                 label = { Text(current?.name ?: stringResource(R.string.category_none), maxLines = 1, overflow = TextOverflow.Ellipsis) },
-                leadingIcon = { Icon(Icons.AutoMirrored.Rounded.Label, null, Modifier.size(18.dp)) },
+                leadingIcon = { Icon(Icons.Rounded.MeetingRoom, null, Modifier.size(18.dp)) },
                 modifier = Modifier.padding(end = 8.dp).widthIn(max = 160.dp).tvFocusRing(RoundedCornerShape(8.dp)),
             )
             DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
@@ -258,7 +259,7 @@ fun CategoriesDialog(layout: DeviceLayout, onChange: (DeviceLayout) -> Unit, onD
 }
 
 @Composable
-private fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
+internal fun NameDialog(title: String, initial: String, onDismiss: () -> Unit, onSave: (String) -> Unit) {
     var name by remember { mutableStateOf(initial) }
     AlertDialog(
         onDismissRequest = onDismiss,

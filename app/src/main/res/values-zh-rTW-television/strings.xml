@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">星號 = 置頂 · 方向鍵 = 移動 · ⇕ = 小卡片 / 大卡片 · 標籤 = 分類。選取右上角的版面圖示即可回到此處。</string>
+    <string name="layout_hint">星號 = 置頂 · 方向鍵 = 移動 · ⇕ = 小卡片 / 大卡片 · 標籤 = 區域。選取右上角的版面圖示即可回到此處。</string>
     <string name="tuya_not_connected">未連線 · 選取以連線</string>
     <string name="perm_missing">未允許 — 選取以修正</string>
     <string name="perm_battery_missing">受到限制 — 警報可能延遲。選取以修正。</string>

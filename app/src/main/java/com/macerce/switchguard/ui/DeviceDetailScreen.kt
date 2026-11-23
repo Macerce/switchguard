@@ -109,7 +109,9 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             // Enerji ölçmeyen cihazlarda bu bölüm hiç görünmez. Videodaki gibi kontrolün hemen altında durur.
             // SPM/DualR3 veriyi ancak istenince gönderdiğinden, veri gelmeden de gösterilir (açılınca istenir).
             if (device.hasEnergy || device.hasChannelPower) EnergySection(device)
+            DeviceAreaRow(device.id)
             ConnectionCard(device)
+            RouteCard(device)
 
             if (device.cloud == Cloud.DEMO) DemoSection(device)
 

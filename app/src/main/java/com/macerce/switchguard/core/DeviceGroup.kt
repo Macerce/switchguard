@@ -58,6 +58,30 @@ data class DeviceGroup(val id: String, val name: String, val members: List<Group
 
         fun isGroup(deviceId: String): Boolean = deviceId.startsWith(PREFIX)
 
+        /** Alanların (Cihazlar düzenindeki odalar) kendiliğinden oluşan grup kimliği öneki. */
+        const val AREA_ID_PREFIX = "area-"
+
+        /** Alanın sanal cihazı mı ("group:area-…"): Cihazlar ızgarasında kart olarak gösterilmez. */
+        fun isArea(deviceId: String): Boolean = deviceId.startsWith(PREFIX + AREA_ID_PREFIX)
+
+        /** Alan kimliği → sanal cihaz kimliği. */
+        fun areaDeviceId(areaId: String): String = PREFIX + AREA_ID_PREFIX + areaId
+
+        /**
+         * Her alan için kendiliğinden bir grup: alandaki gerçek cihazların bütün anahtar kanalları. Böylece alan
+         * otomasyonlarda, sohbette ("salonu kapat"), Telegram'da ve widget'larda grup gibi kullanılır.
+         * Saklanmaz; düzenden her seferinde türetilir.
+         */
+        fun areaGroups(layout: DeviceLayout, devices: List<DeviceSnapshot>): List<DeviceGroup> {
+            if (layout.categories.isEmpty()) return emptyList()
+            val real = devices.filterNot { isGroup(it.id) }
+            return layout.categories.map { area ->
+                val members = real.filter { layout.categoryOf[it.id] == area.id }
+                    .flatMap { d -> d.switches.keys.sorted().map { GroupMember(d.id, it) } }
+                DeviceGroup(AREA_ID_PREFIX + area.id, area.name, members)
+            }
+        }
+
         /** Gerçek cihazlar + grupların sanal cihazları (otomasyon ve Cihazlar ekranı için). */
         fun withGroups(devices: List<DeviceSnapshot>, groups: List<DeviceGroup>): List<DeviceSnapshot> {
             if (groups.isEmpty()) return devices

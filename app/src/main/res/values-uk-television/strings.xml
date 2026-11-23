@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">Зірка = закріпити вгорі · стрілки = перемістити · ⇕ = малий / великий розмір картки · мітка = категорія. Виберіть значок розташування вгорі праворуч, щоб повернутися сюди.</string>
+    <string name="layout_hint">Зірка = закріпити вгорі · стрілки = перемістити · ⇕ = малий / великий розмір картки · мітка = зона. Виберіть значок розташування вгорі праворуч, щоб повернутися сюди.</string>
     <string name="tuya_not_connected">Не підключено · виберіть, щоб підключити</string>
     <string name="perm_missing">Не дозволено — виберіть, щоб виправити</string>
     <string name="perm_battery_missing">Обмежено — тривоги можуть запізнюватися. Виберіть, щоб виправити.</string>

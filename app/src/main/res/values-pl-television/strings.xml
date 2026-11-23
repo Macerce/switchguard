@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">Gwiazdka = zawsze na górze · strzałki = przesuń · ⇕ = mała / duża karta · etykieta = kategoria. Wybierz ikonę układu w prawym górnym rogu, aby tu wrócić.</string>
+    <string name="layout_hint">Gwiazdka = zawsze na górze · strzałki = przesuń · ⇕ = mała / duża karta · etykieta = strefa. Wybierz ikonę układu w prawym górnym rogu, aby tu wrócić.</string>
     <string name="tuya_not_connected">Niepołączono · wybierz, aby połączyć</string>
     <string name="perm_missing">Niedozwolone — wybierz, aby naprawić</string>
     <string name="perm_battery_missing">Ograniczona — alarmy mogą być opóźnione. Wybierz, aby naprawić.</string>

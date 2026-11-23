@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">Ster = bovenaan houden · pijlen = verplaatsen · ⇕ = kleine / grote kaart · label = categorie. Selecteer rechtsboven het indelingspictogram om hier terug te komen.</string>
+    <string name="layout_hint">Ster = bovenaan houden · pijlen = verplaatsen · ⇕ = kleine / grote kaart · label = ruimte. Selecteer rechtsboven het indelingspictogram om hier terug te komen.</string>
     <string name="tuya_not_connected">Niet verbonden · selecteer om te verbinden</string>
     <string name="perm_missing">Niet toegestaan — selecteer om op te lossen</string>
     <string name="perm_battery_missing">Beperkt — alarmen kunnen vertraagd zijn. Selecteer om op te lossen.</string>

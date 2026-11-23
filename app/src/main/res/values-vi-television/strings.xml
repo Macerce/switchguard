@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">Ngôi sao = giữ ở trên cùng · mũi tên = di chuyển · ⇕ = thẻ nhỏ / lớn · nhãn = danh mục. Chọn biểu tượng bố cục ở góc trên bên phải để quay lại đây.</string>
+    <string name="layout_hint">Ngôi sao = giữ ở trên cùng · mũi tên = di chuyển · ⇕ = thẻ nhỏ / lớn · nhãn = khu vực. Chọn biểu tượng bố cục ở góc trên bên phải để quay lại đây.</string>
     <string name="tuya_not_connected">Chưa kết nối · chọn để kết nối</string>
     <string name="perm_missing">Chưa cho phép — chọn để khắc phục</string>
     <string name="perm_battery_missing">Bị hạn chế — báo động có thể bị trễ. Chọn để khắc phục.</string>

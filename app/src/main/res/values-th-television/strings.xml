@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="layout_hint">ดาว = ปักไว้ด้านบน · ลูกศร = ย้าย · ⇕ = การ์ดเล็ก / ใหญ่ · แท็ก = หมวดหมู่ เลือกไอคอนเลย์เอาต์ที่มุมขวาบนเพื่อกลับมาที่นี่</string>
+    <string name="layout_hint">ดาว = ปักไว้ด้านบน · ลูกศร = ย้าย · ⇕ = การ์ดเล็ก / ใหญ่ · แท็ก = พื้นที่ เลือกไอคอนเลย์เอาต์ที่มุมขวาบนเพื่อกลับมาที่นี่</string>
     <string name="tuya_not_connected">ยังไม่ได้เชื่อมต่อ · เลือกเพื่อเชื่อมต่อ</string>
     <string name="perm_missing">ยังไม่อนุญาต — เลือกเพื่อแก้ไข</string>
     <string name="perm_battery_missing">ถูกจำกัด — การแจ้งเตือนอาจล่าช้า เลือกเพื่อแก้ไข</string>

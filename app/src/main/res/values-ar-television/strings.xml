@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Android TV: dokunmatik yok, kumandayla seçilir. Yalnızca "dokun/uzun bas" geçen metinler. -->
 <resources>
-    <string name="layout_hint">النجمة = البقاء في الأعلى · الأسهم = تحريك · ⇕ = بطاقة صغيرة / كبيرة · الوسم = الفئة. اختر أيقونة التخطيط في أعلى اليمين للعودة إلى هنا.</string>
+    <string name="layout_hint">النجمة = البقاء في الأعلى · الأسهم = تحريك · ⇕ = بطاقة صغيرة / كبيرة · الوسم = المنطقة. اختر أيقونة التخطيط في أعلى اليمين للعودة إلى هنا.</string>
     <string name="tuya_not_connected">غير متصل · اختر للاتصال</string>
     <string name="perm_missing">غير مسموح — اختر للإصلاح</string>
     <string name="perm_battery_missing">مقيّد — قد تتأخر الإنذارات. اختر للإصلاح.</string>

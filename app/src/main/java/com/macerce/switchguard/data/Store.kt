@@ -235,6 +235,22 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = prefs.getBoolean("lanControl", true)
         set(v) = put { putBoolean("lanControl", v) }
     /** Cihaz kimliği → devicekey (yerel ağ şifrelemesi; cihaz listesinden gelir, gizli saklanır). */
+    /** Cihazlar ekranındaki "alan oluştur" davet kartı gizlendi. */
+    var areasInviteDismissed: Boolean
+        get() = prefs.getBoolean("areasInviteDismissed", false)
+        set(v) = put { putBoolean("areasInviteDismissed", v) }
+    /** eWeLink cihazı başına kontrol yolu (yoksa [com.macerce.switchguard.core.ControlRoute.AUTO]). */
+    var lanRoutes: Map<String, com.macerce.switchguard.core.ControlRoute>
+        get() = runCatching {
+            org.json.JSONObject(prefs.getString("lanRoutes", "{}")!!).let { o ->
+                o.keys().asSequence().mapNotNull { k -> com.macerce.switchguard.core.ControlRoute.from(o.getString(k))?.let { k to it } }.toMap()
+            }
+        }.getOrDefault(emptyMap())
+        set(v) = put { putString("lanRoutes", org.json.JSONObject(v.filterValues { it != com.macerce.switchguard.core.ControlRoute.AUTO }.mapValues { it.value.name }).toString()) }
+    /** Cihazın kontrol yolu; yerel ağ kontrolü kapalıysa her cihaz yalnız buluttur. */
+    fun routeOf(deviceId: String): com.macerce.switchguard.core.ControlRoute =
+        if (!lanControl) com.macerce.switchguard.core.ControlRoute.CLOUD
+        else lanRoutes[deviceId] ?: com.macerce.switchguard.core.ControlRoute.AUTO
     var lanKeys: Map<String, String>
         get() = secret("lanKeys").takeIf { it.isNotEmpty() }?.let { text ->
             runCatching { org.json.JSONObject(text).let { o -> o.keys().asSequence().associateWith { o.getString(it) } } }.getOrNull()
@@ -434,14 +450,17 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         set(v) = put { putBoolean("chatSpeak", v) }
 
     /** Gruplar: tek düğmeyle açılıp kapanan cihaz kümeleri (bkz. [com.macerce.switchguard.core.DeviceGroup]). */
-    var groups: List<com.macerce.switchguard.core.DeviceGroup>
+    var userGroups: List<com.macerce.switchguard.core.DeviceGroup>
         get() = parsed.get("groups", prefs.getString("groups", null)) { com.macerce.switchguard.core.DeviceGroup.listFromJson(it) }
         set(v) = put { putString("groups", com.macerce.switchguard.core.DeviceGroup.listToJson(v)) }
+    /** Kullanıcının grupları + alanların kendiliğinden oluşan grupları (bkz. [com.macerce.switchguard.core.DeviceGroup.areaGroups]). */
+    val groups: List<com.macerce.switchguard.core.DeviceGroup>
+        get() = userGroups + com.macerce.switchguard.core.DeviceGroup.areaGroups(deviceLayout, snapshots)
     fun saveGroup(g: com.macerce.switchguard.core.DeviceGroup) {
-        val list = groups
-        groups = if (list.any { it.id == g.id }) list.map { if (it.id == g.id) g else it } else list + g
+        val list = userGroups
+        userGroups = if (list.any { it.id == g.id }) list.map { if (it.id == g.id) g else it } else list + g
     }
-    fun deleteGroup(id: String) { groups = groups.filterNot { it.id == id } }
+    fun deleteGroup(id: String) { userGroups = userGroups.filterNot { it.id == id } }
 
     /** Döngüler ve zamanlayıcılar (bkz. [com.macerce.switchguard.core.Cycle]). */
     var cycles: List<com.macerce.switchguard.core.Cycle>
