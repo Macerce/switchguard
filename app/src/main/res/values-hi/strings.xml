@@ -1772,7 +1772,7 @@
     <string name="ha_test_remote">बाहरी पता: %1$s</string>
     <string name="ha_entities_found">%1$d चालू/बंद होने वाली इकाइयाँ सूचीबद्ध; जो चाहें जोड़ें।</string>
     <string name="ha_connect_test">कनेक्शन जाँचें</string>
-    <string name="ha_connect_open">पते से सर्वर से जुड़ें</string>
+    <string name="ha_connect_open">सर्वर से जुड़ें</string>
     <string name="ha_connect_edit">सर्वर पता या टोकन बदलें</string>
     <string name="lan_filter">खोजें</string>
 </resources>

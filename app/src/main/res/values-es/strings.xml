@@ -1849,7 +1849,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="ha_test_remote">Dirección externa: %1$s</string>
     <string name="ha_entities_found">%1$d entidades conmutables listadas; añade las que quieras.</string>
     <string name="ha_connect_test">Probar conexión</string>
-    <string name="ha_connect_open">Conectar a un servidor por dirección</string>
+    <string name="ha_connect_open">Conectar a un servidor</string>
     <string name="ha_connect_edit">Cambiar dirección o token del servidor</string>
     <string name="lan_filter">Buscar</string>
 </resources>

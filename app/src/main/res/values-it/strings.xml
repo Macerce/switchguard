@@ -1850,7 +1850,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="ha_test_remote">Indirizzo esterno: %1$s</string>
     <string name="ha_entities_found">%1$d entità commutabili elencate; aggiungi quelle che vuoi.</string>
     <string name="ha_connect_test">Prova connessione</string>
-    <string name="ha_connect_open">Connetti a un server tramite indirizzo</string>
+    <string name="ha_connect_open">Connetti a un server</string>
     <string name="ha_connect_edit">Cambia indirizzo del server o token</string>
     <string name="lan_filter">Cerca</string>
 </resources>

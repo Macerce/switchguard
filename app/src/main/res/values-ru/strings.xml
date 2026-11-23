@@ -1915,7 +1915,7 @@
     <string name="ha_test_remote">Внешний адрес: %1$s</string>
     <string name="ha_entities_found">Показано переключаемых объектов: %1$d; добавьте нужные.</string>
     <string name="ha_connect_test">Проверить подключение</string>
-    <string name="ha_connect_open">Подключиться к серверу по адресу</string>
+    <string name="ha_connect_open">Подключиться к серверу</string>
     <string name="ha_connect_edit">Изменить адрес сервера или токен</string>
     <string name="lan_filter">Поиск</string>
 </resources>

@@ -1987,7 +1987,7 @@
     <string name="ha_test_remote">العنوان الخارجي: %1$s</string>
     <string name="ha_entities_found">تم سرد %1$d كيانًا قابلًا للتبديل؛ أضف ما تريد.</string>
     <string name="ha_connect_test">اختبار الاتصال</string>
-    <string name="ha_connect_open">الاتصال بخادم عبر العنوان</string>
+    <string name="ha_connect_open">اتصال بخادم</string>
     <string name="ha_connect_edit">تغيير عنوان الخادم أو الرمز</string>
     <string name="lan_filter">بحث</string>
 </resources>

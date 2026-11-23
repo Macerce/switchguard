@@ -1846,7 +1846,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="ha_test_remote">Dış adres: %1$s</string>
     <string name="ha_entities_found">%1$d aç/kapa yapılabilen varlık listelendi; istediklerini ekle.</string>
     <string name="ha_connect_test">Bağlantıyı dene</string>
-    <string name="ha_connect_open">Sunucuya adresle bağlan</string>
+    <string name="ha_connect_open">Sunucuya bağlan</string>
     <string name="ha_connect_edit">Sunucu adresini ya da anahtarı değiştir</string>
     <string name="lan_filter">Ara</string>
 </resources>

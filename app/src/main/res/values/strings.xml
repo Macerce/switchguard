@@ -1850,7 +1850,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="ha_test_remote">Outside address: %1$s</string>
     <string name="ha_entities_found">%1$d switchable entities listed; add the ones you want.</string>
     <string name="ha_connect_test">Test connection</string>
-    <string name="ha_connect_open">Connect to a server by address</string>
+    <string name="ha_connect_open">Connect to a server</string>
     <string name="ha_connect_edit">Change server address or token</string>
     <string name="lan_filter">Search</string>
 </resources>

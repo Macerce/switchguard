@@ -1806,7 +1806,7 @@
     <string name="ha_test_remote">外部位址：%1$s</string>
     <string name="ha_entities_found">已列出 %1$d 個可開關的實體，新增你要的。</string>
     <string name="ha_connect_test">測試連線</string>
-    <string name="ha_connect_open">透過位址連線到伺服器</string>
+    <string name="ha_connect_open">連線到伺服器</string>
     <string name="ha_connect_edit">變更伺服器位址或權杖</string>
     <string name="lan_filter">搜尋</string>
 </resources>

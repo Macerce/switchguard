@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.47.1 — 2026-11-24
+**Fixed**
+- Home Assistant addresses like homeassistant.local:8123 were opened over HTTPS instead of HTTP.
+- Add list: no repeated brand name in titles; Home Assistant rows show the entity ID instead of the server address.
+
 ## 2.47.0 — 2026-11-24
 **New**
 - Home Assistant connection: Add device (LAN) → Home Assistant. Enter the home address, an optional outside address (Home Assistant Cloud, Tailscale, Cloudflare Tunnel or your own HTTPS address) and a long-lived access token; "Test connection" checks both. Switches, lights, fans and helpers can then be added and work with alarms and automations. On your Wi-Fi the home address is used, elsewhere the outside one. The token is stored encrypted on this phone only.

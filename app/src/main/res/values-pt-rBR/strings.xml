@@ -1879,7 +1879,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="ha_test_remote">Endereço externo: %1$s</string>
     <string name="ha_entities_found">%1$d entidades comutáveis listadas; adicione as que quiser.</string>
     <string name="ha_connect_test">Testar conexão</string>
-    <string name="ha_connect_open">Conectar a um servidor pelo endereço</string>
+    <string name="ha_connect_open">Conectar a um servidor</string>
     <string name="ha_connect_edit">Alterar endereço do servidor ou token</string>
     <string name="lan_filter">Pesquisar</string>
 </resources>

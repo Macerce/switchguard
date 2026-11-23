@@ -1807,7 +1807,7 @@
     <string name="ha_test_remote">외부 주소: %1$s</string>
     <string name="ha_entities_found">켜고 끌 수 있는 엔터티 %1$d개를 표시했습니다. 원하는 것을 추가하세요.</string>
     <string name="ha_connect_test">연결 테스트</string>
-    <string name="ha_connect_open">주소로 서버에 연결</string>
+    <string name="ha_connect_open">서버에 연결</string>
     <string name="ha_connect_edit">서버 주소 또는 토큰 변경</string>
     <string name="lan_filter">검색</string>
 </resources>

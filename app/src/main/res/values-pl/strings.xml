@@ -1915,7 +1915,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="ha_test_remote">Adres zewnętrzny: %1$s</string>
     <string name="ha_entities_found">Wyświetlono %1$d przełączalnych encji; dodaj wybrane.</string>
     <string name="ha_connect_test">Testuj połączenie</string>
-    <string name="ha_connect_open">Połącz z serwerem przez adres</string>
+    <string name="ha_connect_open">Połącz z serwerem</string>
     <string name="ha_connect_edit">Zmień adres serwera lub token</string>
     <string name="lan_filter">Szukaj</string>
 </resources>

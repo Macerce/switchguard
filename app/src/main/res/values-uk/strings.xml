@@ -1886,7 +1886,7 @@
     <string name="ha_test_remote">Зовнішня адреса: %1$s</string>
     <string name="ha_entities_found">Показано перемикних об’єктів: %1$d; додайте потрібні.</string>
     <string name="ha_connect_test">Перевірити підключення</string>
-    <string name="ha_connect_open">Підключитися до сервера за адресою</string>
+    <string name="ha_connect_open">Підключитися до сервера</string>
     <string name="ha_connect_edit">Змінити адресу сервера або токен</string>
     <string name="lan_filter">Пошук</string>
 </resources>

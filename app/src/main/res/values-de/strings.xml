@@ -1841,7 +1841,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="ha_test_remote">Externe Adresse: %1$s</string>
     <string name="ha_entities_found">%1$d schaltbare Entitäten aufgelistet; füge die gewünschten hinzu.</string>
     <string name="ha_connect_test">Verbindung testen</string>
-    <string name="ha_connect_open">Per Adresse mit Server verbinden</string>
+    <string name="ha_connect_open">Mit Server verbinden</string>
     <string name="ha_connect_edit">Serveradresse oder Token ändern</string>
     <string name="lan_filter">Suchen</string>
 </resources>

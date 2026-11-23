@@ -1807,7 +1807,7 @@
     <string name="ha_test_remote">外部アドレス：%1$s</string>
     <string name="ha_entities_found">オン/オフできるエンティティを %1$d 件表示しました。必要なものを追加してください。</string>
     <string name="ha_connect_test">接続テスト</string>
-    <string name="ha_connect_open">アドレスでサーバーに接続</string>
+    <string name="ha_connect_open">サーバーに接続</string>
     <string name="ha_connect_edit">サーバーアドレスまたはトークンを変更</string>
     <string name="lan_filter">検索</string>
 </resources>

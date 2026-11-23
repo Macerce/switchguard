@@ -1878,7 +1878,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="ha_test_remote">Adresse externe : %1$s</string>
     <string name="ha_entities_found">%1$d entités commutables listées ; ajoute celles que tu veux.</string>
     <string name="ha_connect_test">Tester la connexion</string>
-    <string name="ha_connect_open">Se connecter à un serveur par adresse</string>
+    <string name="ha_connect_open">Se connecter à un serveur</string>
     <string name="ha_connect_edit">Modifier l’adresse du serveur ou le jeton</string>
     <string name="lan_filter">Rechercher</string>
 </resources>

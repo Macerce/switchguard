@@ -31,10 +31,13 @@ object HaProtocol {
         if (a.isEmpty()) return ""
         if (a.contains("://")) return a
         val hostPart = a.substringBefore('/')
-        val isIp = hostPart.substringBefore(':').all { it.isDigit() || it == '.' }
+        val name = hostPart.substringBefore(':')
+        val hasPort = hostPart.contains(':')
+        // Ev ağı adresleri (IP, .local) şifresiz ve varsayılan 8123; diğer adlar dış adres sayılır (HTTPS).
+        val home = name.all { it.isDigit() || it == '.' } || name.endsWith(".local") || !name.contains('.')
         return when {
-            isIp && !hostPart.contains(':') -> "http://$a:$DEFAULT_PORT"
-            isIp || hostPart.endsWith(".local") -> "http://$a"
+            home && !hasPort -> "http://$a:$DEFAULT_PORT"
+            home -> "http://$a"
             else -> "https://$a"
         }
     }

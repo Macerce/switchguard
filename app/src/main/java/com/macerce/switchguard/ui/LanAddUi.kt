@@ -210,9 +210,11 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
         // Eşleşmiş Hue köprüsünün kendi satırı gösterilmez (lambaları listelenir).
         if (driver != null) driver.all().values.filter { !(it.extra == HueLan.BRIDGE && !it.locked) }.sortedBy { it.host + it.id }.map { f ->
             val existing = known[f.id]
-            val model = f.name ?: "${brandName(brand)} ${f.model}".trim()
+            val model = f.name ?: if (f.model.startsWith(brandName(brand), ignoreCase = true)) f.model else "${brandName(brand)} ${f.model}".trim()
+            // Home Assistant varlıklarında adres yerine varlık kimliği (switch.pompa) daha anlamlı.
+            val where = if (brand == LocalDevice.BRAND_HA && f.extra.contains('.')) f.extra else f.host
             FoundRow(
-                f.id, existing?.name ?: model, listOfNotNull(f.host, ch(f.channels)).joinToString(" · "),
+                f.id, existing?.name ?: model, listOfNotNull(where, ch(f.channels)).joinToString(" · "),
                 addable = existing == null && (f.supported || f.locked),
                 warning = when {
                     existing != null -> null
@@ -390,7 +392,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     d.remember(r)
                     askGeneric = null
                     if (r.supported) {
-                        val model = r.name ?: "${brandName(brand)} ${r.model}".trim()
+                        val model = r.name ?: if (r.model.startsWith(brandName(brand), ignoreCase = true)) r.model else "${brandName(brand)} ${r.model}".trim()
                         naming = FoundRow(r.id, model, r.host, true, null, model, credentials = r.credentials, found = r) { name, net -> r.toDevice(name, net) }
                     }
                     null

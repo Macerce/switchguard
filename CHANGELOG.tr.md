@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.47.1 — 2026-11-24
+**Düzeltme**
+- homeassistant.local:8123 gibi Home Assistant adresleri HTTP yerine HTTPS ile açılıyordu.
+- Ekleme listesi: başlıklarda marka adı iki kez yazılmıyor; Home Assistant satırları sunucu adresi yerine varlık kimliğini gösterir.
+
 ## 2.47.0 — 2026-11-24
 **Yeni**
 - Home Assistant bağlantısı: Cihaz ekle (yerel ağ) → Home Assistant. Yerel adresi, isteğe bağlı dış adresi (Home Assistant Cloud, Tailscale, Cloudflare Tunnel ya da kendi HTTPS adresin) ve uzun ömürlü erişim anahtarını gir; "Bağlantıyı dene" ikisini de sınar. Ardından anahtarlar, ışıklar, fanlar ve yardımcılar eklenebilir; alarmlar ve otomasyonlarla çalışır. Ev Wi-Fi'ında yerel adres, dışarıda dış adres kullanılır. Anahtar yalnızca bu telefonda şifreli tutulur.

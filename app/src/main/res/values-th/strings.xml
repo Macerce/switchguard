@@ -1778,7 +1778,7 @@
     <string name="ha_test_remote">ที่อยู่ภายนอก: %1$s</string>
     <string name="ha_entities_found">แสดงเอนทิตีที่เปิด/ปิดได้ %1$d รายการ เพิ่มอันที่ต้องการ</string>
     <string name="ha_connect_test">ทดสอบการเชื่อมต่อ</string>
-    <string name="ha_connect_open">เชื่อมต่อเซิร์ฟเวอร์ด้วยที่อยู่</string>
+    <string name="ha_connect_open">เชื่อมต่อเซิร์ฟเวอร์</string>
     <string name="ha_connect_edit">เปลี่ยนที่อยู่เซิร์ฟเวอร์หรือโทเค็น</string>
     <string name="lan_filter">ค้นหา</string>
 </resources>

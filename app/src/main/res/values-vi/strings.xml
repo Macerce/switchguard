@@ -1778,7 +1778,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="ha_test_remote">Địa chỉ bên ngoài: %1$s</string>
     <string name="ha_entities_found">Đã liệt kê %1$d thực thể bật/tắt được; thêm cái bạn muốn.</string>
     <string name="ha_connect_test">Kiểm tra kết nối</string>
-    <string name="ha_connect_open">Kết nối máy chủ bằng địa chỉ</string>
+    <string name="ha_connect_open">Kết nối máy chủ</string>
     <string name="ha_connect_edit">Đổi địa chỉ máy chủ hoặc mã</string>
     <string name="lan_filter">Tìm kiếm</string>
 </resources>

@@ -1785,7 +1785,7 @@
     <string name="ha_test_remote">外部地址：%1$s</string>
     <string name="ha_entities_found">已列出 %1$d 个可开关的实体，添加你需要的。</string>
     <string name="ha_connect_test">测试连接</string>
-    <string name="ha_connect_open">通过地址连接服务器</string>
+    <string name="ha_connect_open">连接服务器</string>
     <string name="ha_connect_edit">更改服务器地址或令牌</string>
     <string name="lan_filter">搜索</string>
 </resources>

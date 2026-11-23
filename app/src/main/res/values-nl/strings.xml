@@ -1843,7 +1843,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="ha_test_remote">Extern adres: %1$s</string>
     <string name="ha_entities_found">%1$d schakelbare entiteiten getoond; voeg toe wat je wilt.</string>
     <string name="ha_connect_test">Verbinding testen</string>
-    <string name="ha_connect_open">Met server verbinden via adres</string>
+    <string name="ha_connect_open">Verbinden met server</string>
     <string name="ha_connect_edit">Serveradres of token wijzigen</string>
     <string name="lan_filter">Zoeken</string>
 </resources>
