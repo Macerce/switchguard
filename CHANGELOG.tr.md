@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.38.1 — 2026-11-23
+**Düzeltme**
+- Yerel ağ kontrolü bulunan her cihaz için kısa bir tanılama satırı yazar (sorun gidermek için).
+
 ## 2.38.0 — 2026-11-23
 **Yeni**
 - Yerel ağ kontrolü (Ayarlar → İzleme, varsayılan açık): aynı Wi-Fi'daki eWeLink cihazları kendiliğinden bulunur ve aç/kapa komutu önce doğrudan ağ üzerinden gider; daha hızlıdır, internet olmadan da çalışır. Cihaz yanıt vermezse komut eskisi gibi buluttan gider. İnternet ya da eWeLink sunucusu kesilince açık/kapalı değişiklikleri yerel ağdan okunmaya devam eder; alarmlar ve otomasyonlar çalışır. Cihazda yerel ağ (LAN) kipi olmalı (çoğu SONOFF modelinde var). Bunun için gereken cihaz anahtarları eWeLink cihaz listesinden alınır ve yalnızca bu telefonda şifreli saklanır.

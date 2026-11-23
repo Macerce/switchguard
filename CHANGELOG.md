@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.38.1 — 2026-11-23
+**Fixed**
+- Local network control writes a short diagnostic line per device found (for troubleshooting).
+
 ## 2.38.0 — 2026-11-23
 **New**
 - Local network control (Settings → Monitoring, on by default): eWeLink devices on the same Wi-Fi are found automatically and switched directly over the network first, which is faster and works without internet. If a device does not answer, the command goes through the cloud as before. When the internet or the eWeLink server is down, on/off changes are still picked up from the local network, so alarms and automations keep working. Devices need LAN mode (most SONOFF models have it). The device keys this needs come from your eWeLink device list and are stored encrypted on this phone only.

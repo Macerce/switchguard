@@ -170,6 +170,7 @@ object EwelinkLan {
         serviceIds[info.serviceName] = id
         val previous = entries[id]
         val switches = com.macerce.switchguard.core.DeviceParser.parseSwitches(announce.params)
+        if (previous == null) Log.i(TAG, "seen $id at $host key=${keys.containsKey(id)} decoded=${announce.params != null} channels=${switches.size}")
         entries[id] = Entry(host, info.port.takeIf { it > 0 } ?: LanProtocol.DEFAULT_PORT, announce.seq,
             switches.ifEmpty { previous?.switches.orEmpty() }, System.currentTimeMillis())
         if (switches.isNotEmpty() && (previous == null || previous.seq != announce.seq || previous.switches != switches)) {
