@@ -30,13 +30,16 @@ object EwelinkLan {
     private const val RERESOLVE_MS = 30_000L
 
     /** Yerel ağda görülen cihaz. */
-    data class Entry(val host: String, val port: Int, val seq: Long, val switches: Map<Int, Boolean>, val seenAt: Long)
+    /** [decoded]: duyurunun içeriği okunabildi (şifresiz DIY kipi ya da anahtarı bilinen hesap cihazı). */
+    data class Entry(val host: String, val port: Int, val seq: Long, val switches: Map<Int, Boolean>, val seenAt: Long, val decoded: Boolean = true)
 
     private val entries = ConcurrentHashMap<String, Entry>()
     /** mDNS servis adı → cihaz kimliği (servis kaybolunca kaydı silmek için). */
     private val serviceIds = ConcurrentHashMap<String, String>()
     @Volatile private var keys: Map<String, String> = emptyMap()
     @Volatile private var onAnnounce: ((String, Map<Int, Boolean>) -> Unit)? = null
+    /** Bir cihaz yerel ağda ilk kez görülünce ya da kaybolunca (yerel ağdan eklenen cihazların çevrimiçi durumu). */
+    @Volatile var onPresence: ((String) -> Unit)? = null
 
     private var nsd: NsdManager? = null
     private var discovery: NsdManager.DiscoveryListener? = null
@@ -55,6 +58,9 @@ object EwelinkLan {
     val count: Int get() = entries.size
 
     fun entry(deviceId: String): Entry? = entries[deviceId]
+
+    /** Yerel ağda şu an görülen bütün cihazlar (ekleme penceresi için). */
+    fun all(): Map<String, Entry> = HashMap(entries)
 
     val running: Boolean get() = discovery != null
 
@@ -140,7 +146,7 @@ object EwelinkLan {
         if (Build.VERSION.SDK_INT >= 34) (infoCallbacks.remove(serviceName) as? NsdManager.ServiceInfoCallback)?.let { cb ->
             runCatching { nsd?.unregisterServiceInfoCallback(cb) }
         }
-        serviceIds.remove(serviceName)?.let { entries.remove(it) }
+        serviceIds.remove(serviceName)?.let { id -> entries.remove(id); onPresence?.invoke(id) }
     }
 
     @Suppress("DEPRECATION")
@@ -172,7 +178,8 @@ object EwelinkLan {
         val switches = com.macerce.switchguard.core.DeviceParser.parseSwitches(announce.params)
         if (previous == null) Log.i(TAG, "seen $id at $host key=${keys.containsKey(id)} decoded=${announce.params != null} channels=${switches.size}")
         entries[id] = Entry(host, info.port.takeIf { it > 0 } ?: LanProtocol.DEFAULT_PORT, announce.seq,
-            switches.ifEmpty { previous?.switches.orEmpty() }, System.currentTimeMillis())
+            switches.ifEmpty { previous?.switches.orEmpty() }, System.currentTimeMillis(), announce.params != null)
+        if (previous == null) onPresence?.invoke(id)
         if (switches.isNotEmpty() && (previous == null || previous.seq != announce.seq || previous.switches != switches)) {
             onAnnounce?.invoke(id, switches)
         }

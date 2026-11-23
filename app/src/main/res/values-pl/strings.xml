@@ -1792,4 +1792,23 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="route_cloud_desc">Sieć lokalna nie jest używana dla tego urządzenia.</string>
     <string name="route_lan_warn">Urządzenie nie jest teraz widoczne w tej sieci i nie da się nim sterować, dopóki się nie pojawi.</string>
     <string name="lan_unreachable">Nie znaleziono urządzenia w sieci lokalnej (droga: tylko sieć lokalna)</string>
+    <string name="area_exclude">Wyklucz</string>
+    <string name="area_exclude_title">Objęte przez Włącz wszystko / Wyłącz wszystko</string>
+    <string name="area_exclude_desc">Odznaczone urządzenia zostają w obszarze, ale nie przełączają ich Włącz wszystko / Wyłącz wszystko, automatyzacje obszaru ani polecenia czatu i Telegrama.</string>
+    <string name="area_excluded_count">Wykluczone z włącz/wyłącz wszystko: %1$d</string>
+    <string name="lan_add">Dodaj Sonoff (LAN)</string>
+    <string name="lan_add_title">Urządzenia Sonoff w tej sieci</string>
+    <string name="lan_add_network">Sieć: %1$s</string>
+    <string name="lan_network_unknown">Sieć Wi-Fi (nazwa wymaga uprawnienia lokalizacji)</string>
+    <string name="lan_network_unnamed">Wi-Fi bez nazwy</string>
+    <string name="lan_add_searching">Wyszukiwanie… Urządzenie i telefon muszą być w tej samej sieci Wi-Fi.</string>
+    <string name="lan_add_added">Dodane</string>
+    <string name="lan_add_encrypted">Zaszyfrowane: jeśli jest na Twoim koncie eWeLink, już jest na liście; w przeciwnym razie przełącz urządzenie w tryb DIY.</string>
+    <string name="lan_channels">Kanały: %1$d</string>
+    <string name="lan_device_title">Urządzenie w sieci lokalnej</string>
+    <string name="lan_device_network">Dodano w sieci: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Jesteś teraz w innej sieci (%1$s); to urządzenie jest dostępne tylko w %2$s.</string>
+    <string name="lan_device_needs_monitoring">Stan i sterowanie działają przy włączonym monitorowaniu.</string>
+    <string name="lan_device_remove">Usuń urządzenie</string>
 </resources>

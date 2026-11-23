@@ -112,6 +112,7 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             DeviceAreaRow(device.id)
             ConnectionCard(device)
             RouteCard(device)
+            LocalDeviceCard(device, onRemoved = onBack)
 
             if (device.cloud == Cloud.DEMO) DemoSection(device)
 

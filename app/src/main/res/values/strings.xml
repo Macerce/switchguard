@@ -1727,4 +1727,23 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="route_cloud_desc">The local network is not used for this device.</string>
     <string name="route_lan_warn">This device is not seen on this network right now: it cannot be switched until it is.</string>
     <string name="lan_unreachable">The device was not found on the local network (route: local network only)</string>
+    <string name="area_exclude">Exclude</string>
+    <string name="area_exclude_title">Included in All on / All off</string>
+    <string name="area_exclude_desc">Unticked devices stay in the area but are not switched by All on / All off, nor by area automations, chat or Telegram commands.</string>
+    <string name="area_excluded_count">%1$d excluded from All on/off</string>
+    <string name="lan_add">Add Sonoff (LAN)</string>
+    <string name="lan_add_title">Sonoff devices on this network</string>
+    <string name="lan_add_network">Network: %1$s</string>
+    <string name="lan_network_unknown">Wi-Fi network (name needs location permission)</string>
+    <string name="lan_network_unnamed">unnamed Wi-Fi</string>
+    <string name="lan_add_searching">Searching… The device and the phone must be on the same Wi-Fi.</string>
+    <string name="lan_add_added">Added</string>
+    <string name="lan_add_encrypted">Encrypted: if it is in your eWeLink account it is already listed; otherwise put the device in DIY mode.</string>
+    <string name="lan_channels">%1$d channels</string>
+    <string name="lan_device_title">Local network device</string>
+    <string name="lan_device_network">Added on network: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">You are on another network now (%1$s); this device is reachable only on %2$s.</string>
+    <string name="lan_device_needs_monitoring">Status and control work while monitoring is on.</string>
+    <string name="lan_device_remove">Remove device</string>
 </resources>

@@ -1723,4 +1723,23 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="route_cloud_desc">Bu cihaz için yerel ağ kullanılmaz.</string>
     <string name="route_lan_warn">Cihaz şu an bu ağda görülmüyor: görülene kadar açılıp kapatılamaz.</string>
     <string name="lan_unreachable">Cihaz yerel ağda bulunamadı (bağlantı yolu: yalnız yerel ağ)</string>
+    <string name="area_exclude">Hariç tut</string>
+    <string name="area_exclude_title">Hepsini aç / kapat\'a dahil olanlar</string>
+    <string name="area_exclude_desc">İşareti kaldırılan cihazlar alanda kalır ama Hepsini aç / Hepsini kapat, alan otomasyonları, sohbet ve Telegram komutlarından etkilenmez.</string>
+    <string name="area_excluded_count">%1$d cihaz hepsini aç/kapat dışında</string>
+    <string name="lan_add">Sonoff ekle (yerel ağ)</string>
+    <string name="lan_add_title">Bu ağdaki Sonoff cihazları</string>
+    <string name="lan_add_network">Ağ: %1$s</string>
+    <string name="lan_network_unknown">Wi-Fi ağı (adını okumak için konum izni gerekir)</string>
+    <string name="lan_network_unnamed">adsız Wi-Fi</string>
+    <string name="lan_add_searching">Aranıyor… Cihaz ve telefon aynı Wi-Fi ağında olmalı.</string>
+    <string name="lan_add_added">Ekli</string>
+    <string name="lan_add_encrypted">Şifreli: eWeLink hesabınızdaysa zaten listede; değilse cihazı DIY kipine alın.</string>
+    <string name="lan_channels">%1$d kanal</string>
+    <string name="lan_device_title">Yerel ağ cihazı</string>
+    <string name="lan_device_network">Eklendiği ağ: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Şu an başka ağdasınız (%1$s); bu cihaza yalnız %2$s ağında ulaşılır.</string>
+    <string name="lan_device_needs_monitoring">Durum ve kontrol izleme açıkken çalışır.</string>
+    <string name="lan_device_remove">Cihazı kaldır</string>
 </resources>

@@ -1684,4 +1684,23 @@
     <string name="route_cloud_desc">このデバイスではローカルネットワークを使いません。</string>
     <string name="route_lan_warn">デバイスは現在このネットワークで見えません。見えるまで操作できません。</string>
     <string name="lan_unreachable">ローカルネットワークでデバイスが見つかりません（経路: ローカルネットワークのみ）</string>
+    <string name="area_exclude">除外</string>
+    <string name="area_exclude_title">すべてオン / すべてオフの対象</string>
+    <string name="area_exclude_desc">チェックを外したデバイスはエリアに残りますが、すべてオン / すべてオフ、エリアの自動化、チャットや Telegram のコマンドでは切り替わりません。</string>
+    <string name="area_excluded_count">%1$d 台をすべてオン/オフから除外</string>
+    <string name="lan_add">Sonoff を追加（LAN）</string>
+    <string name="lan_add_title">このネットワークの Sonoff デバイス</string>
+    <string name="lan_add_network">ネットワーク: %1$s</string>
+    <string name="lan_network_unknown">Wi-Fi ネットワーク（名前の表示には位置情報の許可が必要）</string>
+    <string name="lan_network_unnamed">名前のない Wi-Fi</string>
+    <string name="lan_add_searching">検索中… デバイスとスマートフォンを同じ Wi-Fi に接続してください。</string>
+    <string name="lan_add_added">追加済み</string>
+    <string name="lan_add_encrypted">暗号化: eWeLink アカウントにあれば既に一覧にあります。ない場合はデバイスを DIY モードにしてください。</string>
+    <string name="lan_channels">%1$d チャンネル</string>
+    <string name="lan_device_title">ローカルネットワークのデバイス</string>
+    <string name="lan_device_network">追加したネットワーク: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">現在は別のネットワーク（%1$s）です。このデバイスには %2$s でのみ接続できます。</string>
+    <string name="lan_device_needs_monitoring">状態と操作は監視がオンのときに動作します。</string>
+    <string name="lan_device_remove">デバイスを削除</string>
 </resources>

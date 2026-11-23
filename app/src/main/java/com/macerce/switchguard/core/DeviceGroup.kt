@@ -76,7 +76,8 @@ data class DeviceGroup(val id: String, val name: String, val members: List<Group
             if (layout.categories.isEmpty()) return emptyList()
             val real = devices.filterNot { isGroup(it.id) }
             return layout.categories.map { area ->
-                val members = real.filter { layout.categoryOf[it.id] == area.id }
+                // Hariç tutulanlar alanın sayfasında görünür ama "hepsini aç/kapat"tan etkilenmez.
+                val members = real.filter { layout.categoryOf[it.id] == area.id && it.id !in layout.allExcluded }
                     .flatMap { d -> d.switches.keys.sorted().map { GroupMember(d.id, it) } }
                 DeviceGroup(AREA_ID_PREFIX + area.id, area.name, members)
             }

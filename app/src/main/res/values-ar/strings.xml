@@ -1864,4 +1864,23 @@
     <string name="route_cloud_desc">لا تُستخدم الشبكة المحلية لهذا الجهاز.</string>
     <string name="route_lan_warn">الجهاز غير مرئي في هذه الشبكة الآن: لا يمكن تشغيله أو إيقافه حتى يظهر.</string>
     <string name="lan_unreachable">لم يُعثر على الجهاز في الشبكة المحلية (المسار: الشبكة المحلية فقط)</string>
+    <string name="area_exclude">استبعاد</string>
+    <string name="area_exclude_title">مشمولة في تشغيل الكل / إيقاف الكل</string>
+    <string name="area_exclude_desc">تبقى الأجهزة غير المحددة في المنطقة لكنها لا تتأثر بتشغيل الكل / إيقاف الكل ولا بأتمتة المنطقة ولا بأوامر الدردشة أو تيليجرام.</string>
+    <string name="area_excluded_count">%1$d مستبعدة من تشغيل/إيقاف الكل</string>
+    <string name="lan_add">إضافة Sonoff (شبكة محلية)</string>
+    <string name="lan_add_title">أجهزة Sonoff على هذه الشبكة</string>
+    <string name="lan_add_network">الشبكة: %1$s</string>
+    <string name="lan_network_unknown">شبكة Wi-Fi (يتطلب الاسم إذن الموقع)</string>
+    <string name="lan_network_unnamed">Wi-Fi بلا اسم</string>
+    <string name="lan_add_searching">جارٍ البحث… يجب أن يكون الجهاز والهاتف على شبكة Wi-Fi نفسها.</string>
+    <string name="lan_add_added">مضاف</string>
+    <string name="lan_add_encrypted">مشفّر: إن كان في حساب eWeLink فهو مدرج بالفعل؛ وإلا فضع الجهاز في وضع DIY.</string>
+    <string name="lan_channels">%1$d قنوات</string>
+    <string name="lan_device_title">جهاز شبكة محلية</string>
+    <string name="lan_device_network">أضيف على الشبكة: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">أنت الآن على شبكة أخرى (%1$s)؛ لا يمكن الوصول إلى هذا الجهاز إلا على %2$s.</string>
+    <string name="lan_device_needs_monitoring">تعمل الحالة والتحكم أثناء تشغيل المراقبة.</string>
+    <string name="lan_device_remove">إزالة الجهاز</string>
 </resources>

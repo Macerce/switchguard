@@ -682,7 +682,10 @@ class MonitorService : Service() {
             return
         }
         handler.post { applyUpdate(WsEvent.Update(deviceId, online = null, switches = mapOf(channel to on)), fromCloud = false) }
-        val isTuya = store.snapshots.any { it.id == deviceId && it.cloud == Cloud.TUYA }
+        val cloud = store.snapshots.firstOrNull { it.id == deviceId }?.cloud
+        // Yerel ağdan eklenen cihazın bulutta karşılığı yok: doğrulama yerel ağ duyurusundan gelir.
+        if (cloud == Cloud.LAN) return
+        val isTuya = cloud == Cloud.TUYA
         handler.postDelayed({
             if (!running) return@postDelayed
             // Tuya'da sonuç mesaj servisinden gelir; kota harcamamak için yalnızca o yoksa sorgulanır.
@@ -696,6 +699,7 @@ class MonitorService : Service() {
             Cloud.TUYA -> tuya.setSwitch(device, channel, on)
             Cloud.EWELINK -> client.setSwitch(device, channel, on)
             Cloud.DEMO -> handler.post { demoUpdate(device.id) { it.copy(switches = it.switches + (channel to on)) } }
+            Cloud.LAN -> if (!EwelinkLan.trySwitch(device, channel, on)) throw IOException(getString(R.string.lan_unreachable))
         }
     }
 
@@ -748,12 +752,24 @@ class MonitorService : Service() {
     /** Bir bulutun cihazlarını yenileriyle değiştirip farkları işler; diğer bulutun cihazlarına dokunmaz. */
     /** Yerel ağ keşfi: ayar açık ve eWeLink'e girilmişse çalışır (bkz. [EwelinkLan]). */
     private fun restartLan() {
-        if (!running || !store.lanControl || !store.isLoggedIn) {
+        val locals = store.localDevices.isNotEmpty()
+        if (!running || !(store.lanControl && store.isLoggedIn) && !locals) {
+            EwelinkLan.onPresence = null
             EwelinkLan.stop()
             return
         }
         EwelinkLan.setKeys(store.lanKeys)
+        EwelinkLan.onPresence = { handler.post { refreshLocal() } }
         EwelinkLan.start(this) { id, switches -> handler.post { applyLan(id, switches) } }
+        handler.post { refreshLocal() }
+    }
+
+    /** Yerel ağdan eklenen cihazların kartları: görülen çevrimiçi, kaybolan çevrimdışı (bkz. [LocalDevice.merge]). */
+    private fun refreshLocal() {
+        if (!running) return
+        val list = store.snapshots
+        val next = com.macerce.switchguard.core.LocalDevice.merge(list, store.localDevices) { EwelinkLan.entry(it)?.switches }
+        if (next != list) process(next)
     }
 
     /**
@@ -762,9 +778,10 @@ class MonitorService : Service() {
      * sunucu çöktü). Böylece iki kaynak aynı anda durum yazıp sahte "kapandı/açıldı" alarmı üretmez.
      */
     private fun applyLan(deviceId: String, switches: Map<Int, Boolean>) {
-        if (!running || !RouteMerge.acceptLan(store.routeOf(deviceId), socket.ready)) return
+        if (!running) return
         val list = store.snapshots
-        val before = list.firstOrNull { it.id == deviceId && it.cloud == Cloud.EWELINK } ?: return
+        val before = list.firstOrNull { it.id == deviceId && (it.cloud == Cloud.EWELINK || it.cloud == Cloud.LAN) } ?: return
+        if (before.cloud == Cloud.EWELINK && !RouteMerge.acceptLan(store.routeOf(deviceId), socket.ready)) return
         val after = WsMessages.apply(before, WsEvent.Update(deviceId, online = null, switches = switches))
         if (after == before) return
         process(list.map { if (it.id == after.id) after else it })

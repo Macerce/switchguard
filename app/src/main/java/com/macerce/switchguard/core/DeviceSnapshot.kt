@@ -1,7 +1,11 @@
 package com.macerce.switchguard.core
 
 /** Cihazın bağlı olduğu bulut. */
-enum class Cloud { EWELINK, TUYA, DEMO }
+enum class Cloud {
+    EWELINK, TUYA, DEMO,
+    /** Hesaba bağlı olmayan, yerel ağdan (mDNS) eklenmiş Sonoff (DIY/şifresiz LAN kipi); bkz. [LocalDevice]. */
+    LAN,
+}
 
 /**
  * Bir cihazın belirli bir andaki durumu.

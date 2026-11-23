@@ -239,6 +239,13 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var areasInviteDismissed: Boolean
         get() = prefs.getBoolean("areasInviteDismissed", false)
         set(v) = put { putBoolean("areasInviteDismissed", v) }
+    /** Yerel ağdan eklenen Sonoff'lar; kaydedilince kartları da Cihazlar listesine işlenir. */
+    var localDevices: List<com.macerce.switchguard.core.LocalDevice>
+        get() = com.macerce.switchguard.core.LocalDevice.listFromJson(prefs.getString("localDevices", null))
+        set(v) {
+            put { putString("localDevices", com.macerce.switchguard.core.LocalDevice.listToJson(v)) }
+            snapshots = com.macerce.switchguard.core.LocalDevice.merge(snapshots, v) { com.macerce.switchguard.api.EwelinkLan.entry(it)?.switches }
+        }
     /** eWeLink cihazı başına kontrol yolu (yoksa [com.macerce.switchguard.core.ControlRoute.AUTO]). */
     var lanRoutes: Map<String, com.macerce.switchguard.core.ControlRoute>
         get() = runCatching {

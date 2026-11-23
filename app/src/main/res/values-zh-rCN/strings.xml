@@ -1662,4 +1662,23 @@
     <string name="route_cloud_desc">此设备不使用局域网。</string>
     <string name="route_lan_warn">设备当前不在此网络中：出现之前无法开关。</string>
     <string name="lan_unreachable">局域网中未找到设备（路径：仅局域网）</string>
+    <string name="area_exclude">排除</string>
+    <string name="area_exclude_title">参与“全部打开 / 全部关闭”</string>
+    <string name="area_exclude_desc">取消勾选的设备仍在区域内，但不会被“全部打开 / 全部关闭”、区域自动化、聊天或 Telegram 命令切换。</string>
+    <string name="area_excluded_count">%1$d 台不参与全部开/关</string>
+    <string name="lan_add">添加 Sonoff（局域网）</string>
+    <string name="lan_add_title">此网络中的 Sonoff 设备</string>
+    <string name="lan_add_network">网络：%1$s</string>
+    <string name="lan_network_unknown">Wi-Fi 网络（显示名称需要位置权限）</string>
+    <string name="lan_network_unnamed">未命名 Wi-Fi</string>
+    <string name="lan_add_searching">正在搜索… 设备和手机须连接同一 Wi-Fi。</string>
+    <string name="lan_add_added">已添加</string>
+    <string name="lan_add_encrypted">已加密：如在您的 eWeLink 账户中，则已在列表里；否则请将设备切换到 DIY 模式。</string>
+    <string name="lan_channels">%1$d 路</string>
+    <string name="lan_device_title">局域网设备</string>
+    <string name="lan_device_network">添加时的网络：%1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">您当前在其他网络（%1$s）；此设备只能在 %2$s 中访问。</string>
+    <string name="lan_device_needs_monitoring">状态和控制在监控开启时有效。</string>
+    <string name="lan_device_remove">移除设备</string>
 </resources>

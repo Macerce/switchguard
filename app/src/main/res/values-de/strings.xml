@@ -1718,4 +1718,23 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="route_cloud_desc">Das lokale Netz wird für dieses Gerät nicht genutzt.</string>
     <string name="route_lan_warn">Das Gerät ist gerade nicht in diesem Netz zu sehen und kann erst dann geschaltet werden.</string>
     <string name="lan_unreachable">Gerät im lokalen Netz nicht gefunden (Steuerweg: nur lokales Netz)</string>
+    <string name="area_exclude">Ausschließen</string>
+    <string name="area_exclude_title">In Alle an / Alle aus enthalten</string>
+    <string name="area_exclude_desc">Abgewählte Geräte bleiben im Bereich, werden aber von Alle an / Alle aus, Bereichsautomationen, Chat- und Telegram-Befehlen nicht geschaltet.</string>
+    <string name="area_excluded_count">%1$d von Alle an/aus ausgeschlossen</string>
+    <string name="lan_add">Sonoff hinzufügen (LAN)</string>
+    <string name="lan_add_title">Sonoff-Geräte in diesem Netz</string>
+    <string name="lan_add_network">Netz: %1$s</string>
+    <string name="lan_network_unknown">WLAN (Name erfordert Standortberechtigung)</string>
+    <string name="lan_network_unnamed">unbenanntes WLAN</string>
+    <string name="lan_add_searching">Suche… Gerät und Telefon müssen im selben WLAN sein.</string>
+    <string name="lan_add_added">Hinzugefügt</string>
+    <string name="lan_add_encrypted">Verschlüsselt: Ist es in Ihrem eWeLink-Konto, steht es schon in der Liste; sonst Gerät in den DIY-Modus versetzen.</string>
+    <string name="lan_channels">%1$d Kanäle</string>
+    <string name="lan_device_title">Gerät im lokalen Netz</string>
+    <string name="lan_device_network">Hinzugefügt im Netz: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Sie sind gerade in einem anderen Netz (%1$s); dieses Gerät ist nur in %2$s erreichbar.</string>
+    <string name="lan_device_needs_monitoring">Status und Steuerung funktionieren bei aktiver Überwachung.</string>
+    <string name="lan_device_remove">Gerät entfernen</string>
 </resources>

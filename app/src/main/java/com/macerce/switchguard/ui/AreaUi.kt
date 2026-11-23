@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Bathtub
 import androidx.compose.material.icons.rounded.Bed
+import androidx.compose.material.icons.rounded.Block
 import androidx.compose.material.icons.rounded.ChildCare
 import androidx.compose.material.icons.rounded.DoorFront
 import androidx.compose.material.icons.rounded.Edit
@@ -133,22 +134,6 @@ fun AreaTile(area: Category, summary: AreaSummary, onOpen: () -> Unit, modifier:
     }
 }
 
-/** "Yeni alan" kartı: alan kartlarının sonunda. */
-@Composable
-fun AreaAddTile(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val shape = RoundedCornerShape(20.dp)
-    Row(
-        modifier.fillMaxWidth().tvFocusRing(shape).heightIn(min = 56.dp)
-            .border(1.5.dp, MaterialTheme.colorScheme.outlineVariant, shape)
-            .clickable(onClick = onClick).padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(Icons.Rounded.Add, null, tint = MaterialTheme.colorScheme.primary)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.area_new), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-    }
-}
-
 /** Hiç alan yokken Cihazlar ekranında bir kez görünen davet kartı. */
 @Composable
 fun AreaInviteCard(onCreate: () -> Unit, onDismiss: () -> Unit) {
@@ -172,6 +157,8 @@ fun AreaHero(
     onAll: (Boolean) -> Unit,
     onMembers: () -> Unit,
     onRename: () -> Unit,
+    excluded: Int = 0,
+    onExclude: () -> Unit = {},
 ) {
     SectionCard(horizontalPadding = 0) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -194,12 +181,21 @@ fun AreaHero(
                         Text(stringResource(R.string.area_all_off), maxLines = 1)
                     }
                 }
+                if (excluded > 0) {
+                    Text(stringResource(R.string.area_excluded_count, excluded), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
             }
             FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 TextButton(onClick = onMembers, modifier = Modifier.tvFocusRing()) {
                     Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
                     Spacer(Modifier.width(6.dp))
                     Text(stringResource(R.string.area_choose_devices))
+                }
+                if (summary.switchesTotal > 0) TextButton(onClick = onExclude, modifier = Modifier.tvFocusRing()) {
+                    Icon(Icons.Rounded.Block, null, Modifier.size(18.dp))
+                    Spacer(Modifier.width(6.dp))
+                    Text(stringResource(R.string.area_exclude))
                 }
                 TextButton(onClick = onRename, modifier = Modifier.tvFocusRing()) {
                     Icon(Icons.Rounded.Edit, null, Modifier.size(18.dp))
@@ -240,6 +236,39 @@ fun AreaMembersDialog(area: Category, layout: DeviceLayout, devices: List<Device
                                 Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_done)) } },
+    )
+}
+
+/**
+ * "Hariç tut": alandaki anahtarlı cihazlardan hangileri Hepsini aç / Hepsini kapat'a (ve alan grubunun otomasyon,
+ * sohbet, Telegram komutlarına) dahil. İşareti kaldırılan cihaz alanda kalır, yalnızca toplu komuttan etkilenmez.
+ */
+@Composable
+fun AreaExcludeDialog(area: Category, layout: DeviceLayout, devices: List<DeviceSnapshot>, onChange: (DeviceLayout) -> Unit, onDismiss: () -> Unit) {
+    val members = remember(devices, layout) {
+        layout.sorted(devices.filter { !DeviceGroup.isGroup(it.id) && layout.categoryOf[it.id] == area.id && it.switches.isNotEmpty() })
+    }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.area_exclude_title)) },
+        text = {
+            Column(Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState())) {
+                Text(stringResource(R.string.area_exclude_desc), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 8.dp))
+                members.forEach { d ->
+                    val included = d.id !in layout.allExcluded
+                    val toggle = { onChange(layout.toggleAllExcluded(d.id)) }
+                    Row(
+                        Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(8.dp)).clickable(onClick = toggle).padding(vertical = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Checkbox(checked = included, onCheckedChange = { toggle() })
+                        Text(d.name, Modifier.weight(1f), maxLines = 1, overflow = TextOverflow.Ellipsis)
                     }
                 }
             }

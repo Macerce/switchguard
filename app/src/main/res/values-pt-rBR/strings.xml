@@ -1756,4 +1756,23 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="route_cloud_desc">A rede local não é usada para este dispositivo.</string>
     <string name="route_lan_warn">O dispositivo não está visível nesta rede agora: não dá para ligar/desligar até aparecer.</string>
     <string name="lan_unreachable">Dispositivo não encontrado na rede local (rota: só rede local)</string>
+    <string name="area_exclude">Excluir</string>
+    <string name="area_exclude_title">Incluídos em Ligar tudo / Desligar tudo</string>
+    <string name="area_exclude_desc">Dispositivos desmarcados continuam na área, mas não são acionados por Ligar tudo / Desligar tudo, automações da área nem comandos de chat ou Telegram.</string>
+    <string name="area_excluded_count">%1$d fora de ligar/desligar tudo</string>
+    <string name="lan_add">Adicionar Sonoff (LAN)</string>
+    <string name="lan_add_title">Dispositivos Sonoff nesta rede</string>
+    <string name="lan_add_network">Rede: %1$s</string>
+    <string name="lan_network_unknown">Rede Wi-Fi (o nome exige permissão de localização)</string>
+    <string name="lan_network_unnamed">Wi-Fi sem nome</string>
+    <string name="lan_add_searching">Procurando… O dispositivo e o telefone devem estar no mesmo Wi-Fi.</string>
+    <string name="lan_add_added">Adicionado</string>
+    <string name="lan_add_encrypted">Criptografado: se está na sua conta eWeLink, já aparece na lista; senão, coloque o dispositivo no modo DIY.</string>
+    <string name="lan_channels">%1$d canais</string>
+    <string name="lan_device_title">Dispositivo da rede local</string>
+    <string name="lan_device_network">Adicionado na rede: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Você está em outra rede agora (%1$s); este dispositivo só é acessível em %2$s.</string>
+    <string name="lan_device_needs_monitoring">Estado e controle funcionam com o monitoramento ativo.</string>
+    <string name="lan_device_remove">Remover dispositivo</string>
 </resources>

@@ -85,4 +85,42 @@ class AreasAndRoutesTest {
         assertEquals(ControlRoute.LAN, ControlRoute.from("LAN"))
         assertNull(ControlRoute.from("x"))
     }
+
+    @Test fun excludedDevicesLeaveAreaGroupButStayInArea() {
+        val devices = listOf(dev("a", true), dev("b", false, true))
+        val ex = layout.toggleAllExcluded("b")
+        val k = DeviceGroup.areaGroups(ex, devices).first { it.name == "Mutfak" }
+        assertEquals(listOf(GroupMember("a", 0)), k.members)
+        assertEquals("k", ex.categoryOf["b"])
+        val back = DeviceLayout.fromJson(ex.toJson())
+        assertEquals(setOf("b"), back.allExcluded)
+        assertTrue(back.toggleAllExcluded("b").allExcluded.isEmpty())
+    }
+
+    @Test fun localDevicesJsonAndMerge() {
+        val l = LocalDevice("s1", "Pompa", channels = 2, ssid = "Shark_iot", ip = "192.168.1.5", addedAt = 5)
+        assertEquals(listOf(l), LocalDevice.listFromJson(LocalDevice.listToJson(listOf(l))))
+        val noSsid = l.copy(ssid = null, ip = null)
+        assertEquals(listOf(noSsid), LocalDevice.listFromJson(LocalDevice.listToJson(listOf(noSsid))))
+        assertTrue(LocalDevice.listFromJson("bozuk").isEmpty())
+
+        val cloud = listOf(dev("a", true))
+        // Görülmüyor: çevrimdışı, kanallar kapalı.
+        val offline = LocalDevice.merge(cloud, listOf(l)) { null }
+        assertEquals(2, offline.size)
+        val s = offline.last()
+        assertEquals(Cloud.LAN, s.cloud)
+        assertFalse(s.online)
+        assertEquals(mapOf(0 to false, 1 to false), s.switches)
+        // Görüldü: anahtarlar yerel ağdan; fazladan kanal alınmaz.
+        val seen = LocalDevice.merge(offline, listOf(l)) { mapOf(1 to true, 5 to true) }.last()
+        assertTrue(seen.online)
+        assertEquals(mapOf(0 to false, 1 to true), seen.switches)
+        // Kayboldu: son bilinen durum kalır.
+        assertEquals(mapOf(0 to false, 1 to true), LocalDevice.merge(listOf(seen), listOf(l)) { null }.single().switches)
+        // Kaldırıldı: kartı gider, diğerleri kalır.
+        assertEquals(cloud, LocalDevice.merge(offline, emptyList()) { null })
+        // Hesapta aynı kimlik varsa yerel kopya eklenmez.
+        assertEquals(1, LocalDevice.merge(listOf(dev("s1", true)), listOf(l)) { null }.size)
+    }
 }

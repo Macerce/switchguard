@@ -1720,4 +1720,23 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="route_cloud_desc">Het lokale netwerk wordt voor dit apparaat niet gebruikt.</string>
     <string name="route_lan_warn">Het apparaat is nu niet zichtbaar in dit netwerk en kan pas geschakeld worden als het weer verschijnt.</string>
     <string name="lan_unreachable">Apparaat niet gevonden in het lokale netwerk (route: alleen lokaal netwerk)</string>
+    <string name="area_exclude">Uitsluiten</string>
+    <string name="area_exclude_title">Inbegrepen in Alles aan / Alles uit</string>
+    <string name="area_exclude_desc">Niet-aangevinkte apparaten blijven in de ruimte, maar worden niet geschakeld door Alles aan / Alles uit, ruimte-automatiseringen of chat- en Telegram-opdrachten.</string>
+    <string name="area_excluded_count">%1$d uitgesloten van alles aan/uit</string>
+    <string name="lan_add">Sonoff toevoegen (LAN)</string>
+    <string name="lan_add_title">Sonoff-apparaten op dit netwerk</string>
+    <string name="lan_add_network">Netwerk: %1$s</string>
+    <string name="lan_network_unknown">Wifi-netwerk (naam vereist locatietoestemming)</string>
+    <string name="lan_network_unnamed">naamloze wifi</string>
+    <string name="lan_add_searching">Zoeken… Apparaat en telefoon moeten op dezelfde wifi zitten.</string>
+    <string name="lan_add_added">Toegevoegd</string>
+    <string name="lan_add_encrypted">Versleuteld: staat het in je eWeLink-account, dan staat het al in de lijst; zet het apparaat anders in DIY-modus.</string>
+    <string name="lan_channels">%1$d kanalen</string>
+    <string name="lan_device_title">Apparaat op lokaal netwerk</string>
+    <string name="lan_device_network">Toegevoegd op netwerk: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Je zit nu op een ander netwerk (%1$s); dit apparaat is alleen bereikbaar op %2$s.</string>
+    <string name="lan_device_needs_monitoring">Status en bediening werken als bewaking aan staat.</string>
+    <string name="lan_device_remove">Apparaat verwijderen</string>
 </resources>

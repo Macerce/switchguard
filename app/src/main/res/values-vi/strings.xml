@@ -1655,4 +1655,23 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="route_cloud_desc">Thiết bị này không dùng mạng cục bộ.</string>
     <string name="route_lan_warn">Hiện không thấy thiết bị trên mạng này: chưa thể bật/tắt cho đến khi thấy lại.</string>
     <string name="lan_unreachable">Không tìm thấy thiết bị trên mạng cục bộ (đường: chỉ mạng cục bộ)</string>
+    <string name="area_exclude">Loại trừ</string>
+    <string name="area_exclude_title">Có trong Bật tất cả / Tắt tất cả</string>
+    <string name="area_exclude_desc">Thiết bị bỏ chọn vẫn ở trong khu vực nhưng không bị Bật tất cả / Tắt tất cả, tự động hóa khu vực hay lệnh trò chuyện, Telegram điều khiển.</string>
+    <string name="area_excluded_count">%1$d thiết bị bị loại khỏi bật/tắt tất cả</string>
+    <string name="lan_add">Thêm Sonoff (LAN)</string>
+    <string name="lan_add_title">Thiết bị Sonoff trong mạng này</string>
+    <string name="lan_add_network">Mạng: %1$s</string>
+    <string name="lan_network_unknown">Mạng Wi-Fi (cần quyền vị trí để đọc tên)</string>
+    <string name="lan_network_unnamed">Wi-Fi không tên</string>
+    <string name="lan_add_searching">Đang tìm… Thiết bị và điện thoại phải cùng một mạng Wi-Fi.</string>
+    <string name="lan_add_added">Đã thêm</string>
+    <string name="lan_add_encrypted">Đã mã hóa: nếu có trong tài khoản eWeLink thì đã có trong danh sách; nếu không, hãy chuyển thiết bị sang chế độ DIY.</string>
+    <string name="lan_channels">%1$d kênh</string>
+    <string name="lan_device_title">Thiết bị mạng cục bộ</string>
+    <string name="lan_device_network">Thêm trên mạng: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Bạn đang ở mạng khác (%1$s); thiết bị này chỉ truy cập được trên %2$s.</string>
+    <string name="lan_device_needs_monitoring">Trạng thái và điều khiển hoạt động khi đang giám sát.</string>
+    <string name="lan_device_remove">Xóa thiết bị</string>
 </resources>

@@ -62,7 +62,7 @@ object Actions {
                 val old = store.snapshots
                 // Hata veren bulutun eski listesi korunur.
                 store.snapshots = (ewelink ?: old.filter { it.cloud == Cloud.EWELINK }) + (tuya ?: old.filter { it.cloud == Cloud.TUYA }) +
-                    old.filter { it.cloud == Cloud.DEMO }
+                    old.filter { it.cloud == Cloud.DEMO || it.cloud == Cloud.LAN }
             }.start()
         }
     }
@@ -85,6 +85,9 @@ object Actions {
                         throw java.io.IOException(context.getString(R.string.lan_unreachable), e)
                     }
                     Cloud.DEMO -> Unit
+                    Cloud.LAN -> if (!com.macerce.switchguard.api.EwelinkLan.trySwitch(device, channel, on)) {
+                        throw java.io.IOException(context.getString(R.string.lan_unreachable))
+                    }
                 }
                 val service = MonitorService.instance
                 if (store.monitoringEnabled && service != null) {
@@ -204,7 +207,7 @@ object Actions {
             val device = store.snapshots.firstOrNull { it.id == deviceId }
             when (device?.cloud) {
                 Cloud.TUYA -> TuyaClient(store).rawProperties(deviceId).toString(2)
-                Cloud.DEMO -> org.json.JSONArray(DeviceParser.snapshotsToJson(listOf(device))).toString(2)
+                Cloud.DEMO, Cloud.LAN -> org.json.JSONArray(DeviceParser.snapshotsToJson(listOf(device))).toString(2)
                 else -> EwelinkClient(store).getDeviceParams(deviceId).toString(2)
             }
         }

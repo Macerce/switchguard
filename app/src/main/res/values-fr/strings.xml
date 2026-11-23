@@ -1755,4 +1755,23 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="route_cloud_desc">Le réseau local n\'est pas utilisé pour cet appareil.</string>
     <string name="route_lan_warn">L\'appareil n\'est pas visible sur ce réseau pour l\'instant : impossible de le commander tant qu\'il ne l\'est pas.</string>
     <string name="lan_unreachable">Appareil introuvable sur le réseau local (voie : réseau local seulement)</string>
+    <string name="area_exclude">Exclure</string>
+    <string name="area_exclude_title">Inclus dans Tout allumer / Tout éteindre</string>
+    <string name="area_exclude_desc">Les appareils décochés restent dans la zone mais ne sont pas commutés par Tout allumer / Tout éteindre, les automatisations de zone ni les commandes chat ou Telegram.</string>
+    <string name="area_excluded_count">%1$d exclus de tout allumer/éteindre</string>
+    <string name="lan_add">Ajouter un Sonoff (LAN)</string>
+    <string name="lan_add_title">Appareils Sonoff sur ce réseau</string>
+    <string name="lan_add_network">Réseau : %1$s</string>
+    <string name="lan_network_unknown">Réseau Wi-Fi (le nom exige l’autorisation de localisation)</string>
+    <string name="lan_network_unnamed">Wi-Fi sans nom</string>
+    <string name="lan_add_searching">Recherche… L’appareil et le téléphone doivent être sur le même Wi-Fi.</string>
+    <string name="lan_add_added">Ajouté</string>
+    <string name="lan_add_encrypted">Chiffré : s’il est dans votre compte eWeLink, il est déjà listé ; sinon, passez l’appareil en mode DIY.</string>
+    <string name="lan_channels">%1$d canaux</string>
+    <string name="lan_device_title">Appareil du réseau local</string>
+    <string name="lan_device_network">Ajouté sur le réseau : %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Vous êtes sur un autre réseau (%1$s) ; cet appareil n’est joignable que sur %2$s.</string>
+    <string name="lan_device_needs_monitoring">L’état et la commande fonctionnent quand la surveillance est active.</string>
+    <string name="lan_device_remove">Retirer l’appareil</string>
 </resources>

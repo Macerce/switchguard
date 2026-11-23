@@ -1655,4 +1655,23 @@
     <string name="route_cloud_desc">อุปกรณ์นี้ไม่ใช้เครือข่ายท้องถิ่น</string>
     <string name="route_lan_warn">ตอนนี้ไม่พบอุปกรณ์ในเครือข่ายนี้ จะสั่งเปิดปิดได้เมื่อพบอีกครั้ง</string>
     <string name="lan_unreachable">ไม่พบอุปกรณ์ในเครือข่ายท้องถิ่น (เส้นทาง: เครือข่ายท้องถิ่นเท่านั้น)</string>
+    <string name="area_exclude">ยกเว้น</string>
+    <string name="area_exclude_title">รวมใน เปิดทั้งหมด / ปิดทั้งหมด</string>
+    <string name="area_exclude_desc">อุปกรณ์ที่ไม่ได้เลือกยังอยู่ในพื้นที่ แต่จะไม่ถูกสั่งโดย เปิดทั้งหมด / ปิดทั้งหมด ระบบอัตโนมัติของพื้นที่ หรือคำสั่งแชตและ Telegram</string>
+    <string name="area_excluded_count">ยกเว้นจากเปิด/ปิดทั้งหมด %1$d เครื่อง</string>
+    <string name="lan_add">เพิ่ม Sonoff (LAN)</string>
+    <string name="lan_add_title">อุปกรณ์ Sonoff ในเครือข่ายนี้</string>
+    <string name="lan_add_network">เครือข่าย: %1$s</string>
+    <string name="lan_network_unknown">เครือข่าย Wi-Fi (ชื่อต้องใช้สิทธิ์ตำแหน่ง)</string>
+    <string name="lan_network_unnamed">Wi-Fi ไม่มีชื่อ</string>
+    <string name="lan_add_searching">กำลังค้นหา… อุปกรณ์และโทรศัพท์ต้องอยู่ใน Wi-Fi เดียวกัน</string>
+    <string name="lan_add_added">เพิ่มแล้ว</string>
+    <string name="lan_add_encrypted">เข้ารหัส: หากอยู่ในบัญชี eWeLink จะมีในรายการแล้ว หากไม่ใช่ ให้ตั้งอุปกรณ์เป็นโหมด DIY</string>
+    <string name="lan_channels">%1$d ช่อง</string>
+    <string name="lan_device_title">อุปกรณ์เครือข่ายท้องถิ่น</string>
+    <string name="lan_device_network">เพิ่มในเครือข่าย: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">ขณะนี้คุณอยู่ในเครือข่ายอื่น (%1$s) อุปกรณ์นี้เข้าถึงได้เฉพาะใน %2$s</string>
+    <string name="lan_device_needs_monitoring">สถานะและการควบคุมทำงานเมื่อเปิดการเฝ้าระวัง</string>
+    <string name="lan_device_remove">ลบอุปกรณ์</string>
 </resources>

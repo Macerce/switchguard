@@ -1613,4 +1613,23 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="route_cloud_desc">Jaringan lokal tidak dipakai untuk perangkat ini.</string>
     <string name="route_lan_warn">Perangkat sedang tidak terlihat di jaringan ini: tidak bisa dinyalakan/dimatikan sampai terlihat.</string>
     <string name="lan_unreachable">Perangkat tidak ditemukan di jaringan lokal (jalur: hanya jaringan lokal)</string>
+    <string name="area_exclude">Kecualikan</string>
+    <string name="area_exclude_title">Termasuk dalam Nyalakan semua / Matikan semua</string>
+    <string name="area_exclude_desc">Perangkat yang tidak dicentang tetap di area, tetapi tidak diubah oleh Nyalakan semua / Matikan semua, otomasi area, maupun perintah chat atau Telegram.</string>
+    <string name="area_excluded_count">%1$d dikecualikan dari nyalakan/matikan semua</string>
+    <string name="lan_add">Tambah Sonoff (LAN)</string>
+    <string name="lan_add_title">Perangkat Sonoff di jaringan ini</string>
+    <string name="lan_add_network">Jaringan: %1$s</string>
+    <string name="lan_network_unknown">Jaringan Wi-Fi (nama memerlukan izin lokasi)</string>
+    <string name="lan_network_unnamed">Wi-Fi tanpa nama</string>
+    <string name="lan_add_searching">Mencari… Perangkat dan ponsel harus di Wi-Fi yang sama.</string>
+    <string name="lan_add_added">Ditambahkan</string>
+    <string name="lan_add_encrypted">Terenkripsi: jika ada di akun eWeLink Anda, sudah ada di daftar; jika tidak, ubah perangkat ke mode DIY.</string>
+    <string name="lan_channels">%1$d saluran</string>
+    <string name="lan_device_title">Perangkat jaringan lokal</string>
+    <string name="lan_device_network">Ditambahkan di jaringan: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Anda sekarang di jaringan lain (%1$s); perangkat ini hanya bisa dijangkau di %2$s.</string>
+    <string name="lan_device_needs_monitoring">Status dan kontrol berfungsi saat pemantauan aktif.</string>
+    <string name="lan_device_remove">Hapus perangkat</string>
 </resources>

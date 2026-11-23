@@ -1792,4 +1792,23 @@
     <string name="route_cloud_desc">Локальная сеть для этого устройства не используется.</string>
     <string name="route_lan_warn">Устройство сейчас не видно в этой сети: управлять им можно будет, когда оно появится.</string>
     <string name="lan_unreachable">Устройство не найдено в локальной сети (путь: только локальная сеть)</string>
+    <string name="area_exclude">Исключить</string>
+    <string name="area_exclude_title">Участвуют во «Включить все / Выключить все»</string>
+    <string name="area_exclude_desc">Неотмеченные устройства остаются в зоне, но не переключаются командами «Включить все / Выключить все», автоматизациями зоны, чатом и Telegram.</string>
+    <string name="area_excluded_count">Исключено из «включить/выключить все»: %1$d</string>
+    <string name="lan_add">Добавить Sonoff (LAN)</string>
+    <string name="lan_add_title">Устройства Sonoff в этой сети</string>
+    <string name="lan_add_network">Сеть: %1$s</string>
+    <string name="lan_network_unknown">Сеть Wi-Fi (для названия нужно разрешение на геолокацию)</string>
+    <string name="lan_network_unnamed">Wi-Fi без названия</string>
+    <string name="lan_add_searching">Поиск… Устройство и телефон должны быть в одной сети Wi-Fi.</string>
+    <string name="lan_add_added">Добавлено</string>
+    <string name="lan_add_encrypted">Зашифровано: если оно в вашем аккаунте eWeLink, оно уже в списке; иначе переведите устройство в режим DIY.</string>
+    <string name="lan_channels">Каналов: %1$d</string>
+    <string name="lan_device_title">Устройство локальной сети</string>
+    <string name="lan_device_network">Добавлено в сети: %1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">Сейчас вы в другой сети (%1$s); устройство доступно только в %2$s.</string>
+    <string name="lan_device_needs_monitoring">Состояние и управление работают при включённом наблюдении.</string>
+    <string name="lan_device_remove">Удалить устройство</string>
 </resources>

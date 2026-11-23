@@ -1683,4 +1683,23 @@
     <string name="route_cloud_desc">此裝置不使用區域網路。</string>
     <string name="route_lan_warn">裝置目前不在此網路中：出現前無法開關。</string>
     <string name="lan_unreachable">區域網路中找不到裝置（路徑：僅區域網路）</string>
+    <string name="area_exclude">排除</string>
+    <string name="area_exclude_title">參與「全部開啟 / 全部關閉」</string>
+    <string name="area_exclude_desc">取消勾選的裝置仍在區域內，但不會被「全部開啟 / 全部關閉」、區域自動化、聊天或 Telegram 指令切換。</string>
+    <string name="area_excluded_count">%1$d 台不參與全部開/關</string>
+    <string name="lan_add">新增 Sonoff（區域網路）</string>
+    <string name="lan_add_title">此網路中的 Sonoff 裝置</string>
+    <string name="lan_add_network">網路：%1$s</string>
+    <string name="lan_network_unknown">Wi-Fi 網路（顯示名稱需要位置權限）</string>
+    <string name="lan_network_unnamed">未命名 Wi-Fi</string>
+    <string name="lan_add_searching">搜尋中… 裝置和手機須連線同一 Wi-Fi。</string>
+    <string name="lan_add_added">已新增</string>
+    <string name="lan_add_encrypted">已加密：如在您的 eWeLink 帳戶中，則已在清單裡；否則請將裝置切換到 DIY 模式。</string>
+    <string name="lan_channels">%1$d 路</string>
+    <string name="lan_device_title">區域網路裝置</string>
+    <string name="lan_device_network">新增時的網路：%1$s</string>
+    <string name="lan_device_ip">IP %1$s</string>
+    <string name="lan_device_other_network">您目前在其他網路（%1$s）；此裝置只能在 %2$s 中存取。</string>
+    <string name="lan_device_needs_monitoring">狀態和控制在監控開啟時有效。</string>
+    <string name="lan_device_remove">移除裝置</string>
 </resources>

@@ -40,7 +40,9 @@ import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Alarm
+import androidx.compose.material.icons.rounded.Router
 import androidx.compose.material.icons.rounded.AlarmOff
 import androidx.compose.material.icons.rounded.CloudOff
 import androidx.compose.material.icons.rounded.GppMaybe
@@ -228,6 +230,10 @@ fun DevicesScreen(
     }
     var areaMembers by remember { mutableStateOf(false) }
     var areaRename by remember { mutableStateOf(false) }
+    var areaExclude by remember { mutableStateOf(false) }
+    var lanAdd by remember { mutableStateOf(false) }
+    if (lanAdd) LanAddDialog { lanAdd = false }
+    if (openArea != null && areaExclude) AreaExcludeDialog(openArea, layout, devices, saveLayout) { areaExclude = false }
     if (openArea != null && areaMembers) AreaMembersDialog(openArea, layout, devices, saveLayout) { areaMembers = false }
     if (openArea != null && areaRename) NameDialog(stringResource(R.string.action_rename), openArea.name, onDismiss = { areaRename = false }) {
         saveLayout(store.deviceLayout.renameCategory(openArea.id, it))
@@ -330,6 +336,25 @@ fun DevicesScreen(
                         }
                     }
                 }
+                // En üstte: yeni alan ve yerel ağdan Sonoff ekleme.
+                if (!editMode && openArea == null && loggedIn) {
+                    item(key = "add-row", span = full) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            OutlinedButton(onClick = { newArea = true }, modifier = Modifier.weight(1f).tvFocusRing(),
+                                contentPadding = PaddingValues(horizontal = 12.dp)) {
+                                Icon(Icons.Rounded.Add, null, Modifier.size(18.dp))
+                                Spacer(Modifier.width(6.dp))
+                                Text(stringResource(R.string.area_new), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                            OutlinedButton(onClick = { lanAdd = true }, modifier = Modifier.weight(1f).tvFocusRing(),
+                                contentPadding = PaddingValues(horizontal = 12.dp)) {
+                                Icon(Icons.Rounded.Router, null, Modifier.size(18.dp))
+                                Spacer(Modifier.width(6.dp))
+                                Text(stringResource(R.string.lan_add), maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            }
+                        }
+                    }
+                }
                 // Girişten önce yalnızca ikiz uyarısı: aynı eWeLink hesabıyla ikinci kopyada giriş, diğerinin oturumunu kapatır.
                 val shownReadiness = if (loggedIn) readiness else readiness.filter { it in Readiness.SHOWN_WHEN_STOPPED }
                 if (shownReadiness.isNotEmpty() && !editMode) {
@@ -356,6 +381,10 @@ fun DevicesScreen(
                             },
                             onMembers = { areaMembers = true },
                             onRename = { areaRename = true },
+                            excluded = remember(layout, devices) {
+                                devices.count { layout.categoryOf[it.id] == openArea.id && it.id in layout.allExcluded && it.switches.isNotEmpty() }
+                            },
+                            onExclude = { areaExclude = true },
                         )
                     }
                     if (sections.first().devices.isEmpty()) {
@@ -379,7 +408,6 @@ fun DevicesScreen(
                         items(layout.categories, key = { "area-" + it.id }) { area ->
                             AreaTile(area, areaSummaries[area.id] ?: AreaSummary.of(emptyList()), onOpen = { openAreaId = area.id })
                         }
-                        item(key = "area-add") { AreaAddTile(onClick = { newArea = true }) }
                     }
                 }
                 for (section in sections) {
@@ -571,11 +599,11 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
     val muted = if (branded) Brand.onActive.copy(alpha = 0.8f) else MaterialTheme.colorScheme.onSurfaceVariant
 
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(background).padding(20.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(background).padding(horizontal = 14.dp, vertical = 12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(
-                Modifier.size(52.dp).background(if (branded) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape),
+                Modifier.size(38.dp).background(if (branded) Color.White.copy(alpha = 0.18f) else MaterialTheme.colorScheme.surfaceContainerHigh, CircleShape),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -586,12 +614,12 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
                     },
                     contentDescription = null,
                     tint = if (branded) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(30.dp),
+                    modifier = Modifier.size(22.dp),
                 )
             }
-            Spacer(Modifier.width(16.dp))
+            Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(stringResource(connTitle(shown)), style = MaterialTheme.typography.titleLarge, color = content)
+                Text(stringResource(connTitle(shown)), style = MaterialTheme.typography.titleMedium, color = content, maxLines = 1)
                 val sub = when {
                     !monitoring -> stringResource(R.string.monitoring_off_hint)
                     detail.isNotEmpty() -> detail
@@ -603,11 +631,17 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
                     devices.isEmpty() -> pluralStringResource(R.plurals.device_count, devices.size, devices.size)
                     else -> stringResource(R.string.guard_ready)
                 }
-                Text(sub, style = MaterialTheme.typography.bodyMedium, color = muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(sub, style = MaterialTheme.typography.bodySmall, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+            // İzleme açıkken "Durdur" başlık satırının sağında küçük düğme (ayrı satır kaplamasın).
+            if (monitoring) {
+                IconButton(onClick = { Actions.stopMonitoring(context) }, modifier = Modifier.size(36.dp).tvFocusRing()) {
+                    Icon(Icons.Rounded.Stop, stringResource(R.string.action_stop_monitoring), tint = content)
+                }
             }
         }
         if (devices.isNotEmpty()) {
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(10.dp))
             val on = devices.count { d -> d.online && d.switches.values.any { it } }
             val offline = devices.count { !it.online }
             val power = devices.filter { it.online && it.hasEnergy }.sumOf { it.power ?: 0.0 }
@@ -621,20 +655,9 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
                 if (devices.any { it.hasEnergy }) Stat(formatWatts(power), stringResource(R.string.stat_power), content, muted, Modifier.weight(1.3f))
             }
         }
-        Spacer(Modifier.height(16.dp))
-        if (monitoring) {
-            OutlinedButton(
-                onClick = { Actions.stopMonitoring(context) },
-                modifier = Modifier.tvFocusRing(),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = content),
-                border = BorderStroke(1.dp, if (branded) Color.White.copy(alpha = 0.6f) else MaterialTheme.colorScheme.outline),
-            ) {
-                Icon(Icons.Rounded.Stop, null, Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(R.string.action_stop_monitoring))
-            }
-        } else {
-            Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth().height(52.dp).tvFocusRing()) {
+        if (!monitoring) {
+            Spacer(Modifier.height(12.dp))
+            Button(onClick = { Actions.startMonitoring(context) }, modifier = Modifier.fillMaxWidth().height(46.dp).tvFocusRing()) {
                 Icon(Icons.Rounded.PlayArrow, null)
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.action_start_monitoring), style = MaterialTheme.typography.titleSmall)
@@ -646,8 +669,8 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
 @Composable
 private fun Stat(value: String, label: String, color: Color, muted: Color, modifier: Modifier = Modifier) {
     Column(modifier) {
-        Text(value, style = MaterialTheme.typography.titleLarge, color = color, maxLines = 1)
-        Text(label, style = MaterialTheme.typography.labelMedium, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(value, style = MaterialTheme.typography.titleMedium, color = color, maxLines = 1)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 

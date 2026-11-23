@@ -29,7 +29,11 @@ data class DeviceLayout(
     val collapsed: Set<String> = emptySet(),
     /** Kullanıcının büyüttüğü kartlar (tam satır). */
     val large: Set<String> = emptySet(),
+    /** Alanın "Hepsini aç / Hepsini kapat"ından (ve alan grubundan) hariç tutulan cihazlar. */
+    val allExcluded: Set<String> = emptySet(),
 ) {
+    fun toggleAllExcluded(id: String) = copy(allExcluded = if (id in allExcluded) allExcluded - id else allExcluded + id)
+
     /**
      * Kart tam satır mı: kullanıcı seçtiyse o; seçmediyse çok kanallılar büyük (kanal düğmeleri sığsın),
      * tek kanallılar yarım satır (ızgarada yan yana iki kutucuk).
@@ -135,6 +139,7 @@ data class DeviceLayout(
         .put("categoryOf", JSONObject(categoryOf))
         .put("collapsed", JSONArray(collapsed.toList()))
         .put("large", JSONArray(large.toList()))
+        .put("allExcluded", JSONArray(allExcluded.toList()))
         .toString()
 
     companion object {
@@ -149,7 +154,7 @@ data class DeviceLayout(
                 val of = o.optJSONObject("categoryOf")?.let { m -> m.keys().asSequence().associateWith { m.getString(it) } }.orEmpty()
                 DeviceLayout(
                     strings("order"), strings("priority").toSet(), strings("compact").toSet(), cats, of,
-                    strings("collapsed").toSet(), strings("large").toSet(),
+                    strings("collapsed").toSet(), strings("large").toSet(), strings("allExcluded").toSet(),
                 )
             }.getOrDefault(DeviceLayout())
         }
