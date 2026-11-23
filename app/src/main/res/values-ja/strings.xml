@@ -1727,7 +1727,7 @@
     <string name="lan_shelly_step1">ShellyをWi-Fiにつなぎます：Shelly Smart Controlアプリを使うか、スマホをデバイス自身のWi-Fi（shelly…）につないでブラウザで192.168.33.1を開き、設定 → Wi-FiでWi-Fi名とパスワードを入力します。</string>
     <string name="lan_steps_title">始める前に</string>
     <string name="lan_brand_title">%1$sを追加</string>
-    <string name="lan_brand_soon">近日対応：Philips Hue、TP-Link、Home Assistant。</string>
+    <string name="lan_brand_soon">近日対応：TP-Link Kasa / Tapo、Home Assistant。</string>
     <string name="lan_brand_sonoff_desc">DIY（LAN）モードの eWeLink デバイス</string>
     <string name="lan_brand_shelly_desc">Gen1・Plus・Pro・Gen3・Gen4 のリレーとプラグ</string>
     <string name="lan_brand_hint">ブランドを選んでください。アカウントやクラウドは不要で、スマホとデバイスが同じWi-Fiにあれば使えます。</string>
@@ -1767,4 +1767,14 @@
     <string name="lan_unsupported_generic">この機器にはスイッチやリレーが見つかりませんでした。</string>
     <string name="lan_pw_title_generic">機器のパスワード</string>
     <string name="lan_pw_body_generic">機器の Web ページのユーザー名とパスワードを入力してください。この端末にのみ暗号化して保存され、バックアップには含まれません。</string>
+    <string name="lan_brand_hue_desc">Hue ブリッジにつながったライトとプラグ</string>
+    <string name="lan_hue_step1">Hue ブリッジはスマホと同じネットワークにある必要があります（ルーターに有線接続）。</string>
+    <string name="lan_hue_step2">下のブリッジをタップし、ブリッジ上部の丸いボタンを押してから「ペアリング」をタップします。</string>
+    <string name="lan_hue_step3">するとブリッジのライトとプラグが一覧に表示されます。必要なものを追加してください。</string>
+    <string name="lan_hue_locked">未ペアリング：「追加」をタップしてからブリッジのボタンを押してください。</string>
+    <string name="lan_hue_pair_title">Hue ブリッジとペアリング</string>
+    <string name="lan_hue_pair_body">ブリッジ上部の丸いボタンを押し、30 秒以内に「ペアリング」をタップしてください。ブリッジのキーはこの端末にのみ暗号化して保存されます。</string>
+    <string name="lan_hue_pair_start">ペアリング</string>
+    <string name="lan_hue_pair_waiting">ボタンを待っています…</string>
+    <string name="lan_hue_pair_timeout">時間内にボタンが押されませんでした。押してからもう一度「ペアリング」をタップしてください。</string>
 </resources>

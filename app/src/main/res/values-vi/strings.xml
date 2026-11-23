@@ -1698,7 +1698,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_step1">Kết nối Shelly với Wi-Fi: dùng ứng dụng Shelly Smart Control, hoặc nối điện thoại vào Wi-Fi riêng của thiết bị (shelly…), mở 192.168.33.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi trong Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Trước khi bắt đầu</string>
     <string name="lan_brand_title">Thêm %1$s</string>
-    <string name="lan_brand_soon">Sắp có: Philips Hue, TP-Link và Home Assistant.</string>
+    <string name="lan_brand_soon">Sắp có: TP-Link Kasa / Tapo và Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
     <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
@@ -1738,4 +1738,14 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_unsupported_generic">Không tìm thấy công tắc hoặc rơ-le trên thiết bị này.</string>
     <string name="lan_pw_title_generic">Mật khẩu thiết bị</string>
     <string name="lan_pw_body_generic">Nhập tên người dùng và mật khẩu trang web của thiết bị. Chúng được mã hóa chỉ trên điện thoại này và không có trong bản sao lưu.</string>
+    <string name="lan_brand_hue_desc">Đèn và ổ cắm trên Hue Bridge</string>
+    <string name="lan_hue_step1">Hue Bridge phải cùng mạng với điện thoại (cắm dây vào router).</string>
+    <string name="lan_hue_step2">Chạm vào bridge bên dưới, nhấn nút tròn trên đỉnh bridge, rồi chạm Ghép đôi.</string>
+    <string name="lan_hue_step3">Sau đó đèn và ổ cắm của bridge xuất hiện trong danh sách; thêm cái bạn muốn.</string>
+    <string name="lan_hue_locked">Chưa ghép đôi: chạm Thêm rồi nhấn nút trên bridge.</string>
+    <string name="lan_hue_pair_title">Ghép đôi Hue Bridge</string>
+    <string name="lan_hue_pair_body">Nhấn nút tròn trên bridge rồi chạm Ghép đôi trong 30 giây. Khóa của bridge chỉ được lưu mã hóa trên điện thoại này.</string>
+    <string name="lan_hue_pair_start">Ghép đôi</string>
+    <string name="lan_hue_pair_waiting">Đang chờ nút…</string>
+    <string name="lan_hue_pair_timeout">Nút không được nhấn kịp. Nhấn nút rồi chạm Ghép đôi lần nữa.</string>
 </resources>

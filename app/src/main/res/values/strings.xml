@@ -1770,7 +1770,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_shelly_step1">Connect the Shelly to your Wi-Fi: use the Shelly Smart Control app, or connect the phone to the device\'s own Wi-Fi (shelly…), open 192.168.33.1 in the browser and enter your Wi-Fi name and password under Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Before you start</string>
     <string name="lan_brand_title">Add %1$s</string>
-    <string name="lan_brand_soon">Coming soon: Philips Hue, TP-Link and Home Assistant.</string>
+    <string name="lan_brand_soon">Coming soon: TP-Link Kasa / Tapo and Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">eWeLink devices in DIY (LAN) mode</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 and Gen4 relays and plugs</string>
     <string name="lan_brand_hint">Pick the brand. No account or cloud needed: the phone and the device just have to be on the same Wi-Fi.</string>
@@ -1810,4 +1810,14 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_unsupported_generic">No switch or relay was found on this device.</string>
     <string name="lan_pw_title_generic">Device password</string>
     <string name="lan_pw_body_generic">Enter the user name and password of the device\'s web page. They are kept encrypted on this phone only and are not included in backups.</string>
+    <string name="lan_brand_hue_desc">Lights and plugs on a Hue Bridge</string>
+    <string name="lan_hue_step1">The Hue Bridge must be on the same network as the phone (cable to the router).</string>
+    <string name="lan_hue_step2">Tap the bridge below, press the round button on top of the bridge, then tap Pair.</string>
+    <string name="lan_hue_step3">The bridge\'s lights and plugs then appear in the list; add the ones you want.</string>
+    <string name="lan_hue_locked">Not paired yet: tap Add, then press the button on the bridge.</string>
+    <string name="lan_hue_pair_title">Pair Hue Bridge</string>
+    <string name="lan_hue_pair_body">Press the round button on top of the bridge, then tap Pair within 30 seconds. The key the bridge gives is stored encrypted on this phone only.</string>
+    <string name="lan_hue_pair_start">Pair</string>
+    <string name="lan_hue_pair_waiting">Waiting for the button…</string>
+    <string name="lan_hue_pair_timeout">The button was not pressed in time. Press it and tap Pair again.</string>
 </resources>

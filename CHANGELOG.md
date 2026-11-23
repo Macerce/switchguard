@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.45.0 — 2026-11-24
+**New**
+- Philips Hue without the Hue cloud: Add device (LAN) → Philips Hue. The Hue Bridge is found automatically; press its button and tap Pair, then add the lights and plugs you want. On/off, alarms and automations work; a light whose power is cut shows as offline.
+
 ## 2.44.0 — 2026-11-24
 **New**
 - Tasmota and ESPHome devices on the local network, without any cloud: Add device (LAN) → Tasmota or ESPHome. ESPHome devices (with web_server) are found automatically; Tasmota devices are found with "Scan network" or by IP address. On/off, alarms, automations and power readings work; a web password is asked for when the device has one.

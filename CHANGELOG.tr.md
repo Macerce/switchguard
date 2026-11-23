@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.45.0 — 2026-11-24
+**Yeni**
+- Hue bulutu olmadan Philips Hue: Cihaz ekle (yerel ağ) → Philips Hue. Hue Köprüsü kendiliğinden bulunur; düğmesine basıp Eşleştir'e dokun, sonra istediğin ışıkları ve prizleri ekle. Aç/kapa, alarmlar ve otomasyonlar çalışır; elektriği kesilen lamba çevrimdışı görünür.
+
 ## 2.44.0 — 2026-11-24
 **Yeni**
 - Bulutsuz, yerel ağdan Tasmota ve ESPHome cihazlar: Cihaz ekle (yerel ağ) → Tasmota ya da ESPHome. ESPHome cihazlar (web_server açık) kendiliğinden bulunur; Tasmota cihazlar "Ağı tara" ya da IP adresiyle bulunur. Aç/kapa, alarmlar, otomasyonlar ve güç ölçümü çalışır; cihazda web şifresi varsa sorulur.

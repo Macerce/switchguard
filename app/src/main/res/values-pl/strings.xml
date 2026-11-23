@@ -1835,7 +1835,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_step1">Połącz Shelly z Wi-Fi: w aplikacji Shelly Smart Control albo połącz telefon z własną siecią urządzenia (shelly…), otwórz 192.168.33.1 w przeglądarce i w Ustawienia → Wi-Fi wpisz nazwę i hasło sieci.</string>
     <string name="lan_steps_title">Zanim zaczniesz</string>
     <string name="lan_brand_title">Dodaj %1$s</string>
-    <string name="lan_brand_soon">Wkrótce: Philips Hue, TP-Link i Home Assistant.</string>
+    <string name="lan_brand_soon">Wkrótce: TP-Link Kasa / Tapo i Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Urządzenia eWeLink w trybie DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Przekaźniki i gniazdka Gen1, Plus, Pro, Gen3 i Gen4</string>
     <string name="lan_brand_hint">Wybierz markę. Bez konta i chmury: telefon i urządzenie muszą tylko być w tej samej sieci Wi-Fi.</string>
@@ -1875,4 +1875,14 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_unsupported_generic">Nie znaleziono przełącznika ani przekaźnika w tym urządzeniu.</string>
     <string name="lan_pw_title_generic">Hasło urządzenia</string>
     <string name="lan_pw_body_generic">Wpisz nazwę użytkownika i hasło strony urządzenia. Są przechowywane zaszyfrowane tylko na tym telefonie i nie trafiają do kopii.</string>
+    <string name="lan_brand_hue_desc">Światła i gniazdka na mostku Hue</string>
+    <string name="lan_hue_step1">Mostek Hue musi być w tej samej sieci co telefon (kablem do routera).</string>
+    <string name="lan_hue_step2">Dotknij mostka poniżej, naciśnij okrągły przycisk na górze mostka, a potem Sparuj.</string>
+    <string name="lan_hue_step3">Potem światła i gniazdka mostka pojawią się na liście; dodaj wybrane.</string>
+    <string name="lan_hue_locked">Jeszcze nie sparowano: dotknij Dodaj, potem naciśnij przycisk mostka.</string>
+    <string name="lan_hue_pair_title">Sparuj mostek Hue</string>
+    <string name="lan_hue_pair_body">Naciśnij okrągły przycisk na mostku, a potem w ciągu 30 sekund dotknij Sparuj. Klucz z mostka jest zapisywany zaszyfrowany tylko na tym telefonie.</string>
+    <string name="lan_hue_pair_start">Sparuj</string>
+    <string name="lan_hue_pair_waiting">Czekam na przycisk…</string>
+    <string name="lan_hue_pair_timeout">Przycisk nie został naciśnięty na czas. Naciśnij go i ponownie dotknij Sparuj.</string>
 </resources>

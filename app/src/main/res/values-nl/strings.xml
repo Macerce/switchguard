@@ -1763,7 +1763,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_step1">Verbind de Shelly met je wifi: met de app Shelly Smart Control, of verbind de telefoon met het eigen wifi van het apparaat (shelly…), open 192.168.33.1 in de browser en vul onder Instellingen → Wi-Fi je netwerknaam en wachtwoord in.</string>
     <string name="lan_steps_title">Voordat je begint</string>
     <string name="lan_brand_title">%1$s toevoegen</string>
-    <string name="lan_brand_soon">Binnenkort: Philips Hue, TP-Link en Home Assistant.</string>
+    <string name="lan_brand_soon">Binnenkort: TP-Link Kasa / Tapo en Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
     <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
     <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
@@ -1803,4 +1803,14 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_unsupported_generic">Geen schakelaar of relais gevonden op dit apparaat.</string>
     <string name="lan_pw_title_generic">Apparaatwachtwoord</string>
     <string name="lan_pw_body_generic">Voer gebruikersnaam en wachtwoord van de webpagina van het apparaat in. Ze blijven versleuteld alleen op deze telefoon en zitten niet in back-ups.</string>
+    <string name="lan_brand_hue_desc">Lampen en stekkers op een Hue Bridge</string>
+    <string name="lan_hue_step1">De Hue Bridge moet op hetzelfde netwerk als de telefoon zitten (kabel naar de router).</string>
+    <string name="lan_hue_step2">Tik hieronder op de bridge, druk op de ronde knop bovenop de bridge en tik dan op Koppelen.</string>
+    <string name="lan_hue_step3">Daarna verschijnen de lampen en stekkers van de bridge in de lijst; voeg toe wat je wilt.</string>
+    <string name="lan_hue_locked">Nog niet gekoppeld: tik op Toevoegen en druk dan op de knop van de bridge.</string>
+    <string name="lan_hue_pair_title">Hue Bridge koppelen</string>
+    <string name="lan_hue_pair_body">Druk op de ronde knop bovenop de bridge en tik binnen 30 seconden op Koppelen. De sleutel van de bridge blijft versleuteld alleen op deze telefoon.</string>
+    <string name="lan_hue_pair_start">Koppelen</string>
+    <string name="lan_hue_pair_waiting">Wachten op de knop…</string>
+    <string name="lan_hue_pair_timeout">De knop is niet op tijd ingedrukt. Druk erop en tik opnieuw op Koppelen.</string>
 </resources>

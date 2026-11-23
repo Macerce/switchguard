@@ -1726,7 +1726,7 @@
     <string name="lan_shelly_step1">將 Shelly 連上 Wi-Fi：使用 Shelly Smart Control App，或讓手機連上裝置自己的 Wi-Fi（shelly…），在瀏覽器開啟 192.168.33.1，於 設定 → Wi-Fi 輸入網路名稱和密碼。</string>
     <string name="lan_steps_title">開始之前</string>
     <string name="lan_brand_title">新增 %1$s</string>
-    <string name="lan_brand_soon">即將支援：Philips Hue、TP-Link 和 Home Assistant。</string>
+    <string name="lan_brand_soon">即將支援：TP-Link Kasa / Tapo 和 Home Assistant。</string>
     <string name="lan_brand_sonoff_desc">DIY（區域網路）模式的 eWeLink 裝置</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 繼電器與插座</string>
     <string name="lan_brand_hint">選擇品牌。不需要帳號或雲端：手機和裝置在同一個 Wi-Fi 即可。</string>
@@ -1766,4 +1766,14 @@
     <string name="lan_unsupported_generic">此裝置上找不到開關或繼電器。</string>
     <string name="lan_pw_title_generic">裝置密碼</string>
     <string name="lan_pw_body_generic">輸入裝置網頁的使用者名稱和密碼。它們只加密保存在這支手機上，不會包含在備份中。</string>
+    <string name="lan_brand_hue_desc">Hue 橋接器上的燈和插座</string>
+    <string name="lan_hue_step1">Hue 橋接器必須與手機在同一個網路（用網路線接路由器）。</string>
+    <string name="lan_hue_step2">點按下方的橋接器，按下橋接器頂部的圓形按鈕，然後點按「配對」。</string>
+    <string name="lan_hue_step3">接著橋接器的燈和插座會出現在清單中，新增你要的即可。</string>
+    <string name="lan_hue_locked">尚未配對：點按「新增」，然後按下橋接器按鈕。</string>
+    <string name="lan_hue_pair_title">配對 Hue 橋接器</string>
+    <string name="lan_hue_pair_body">按下橋接器頂部的圓形按鈕，然後在 30 秒內點按「配對」。橋接器提供的金鑰只加密保存在這支手機上。</string>
+    <string name="lan_hue_pair_start">配對</string>
+    <string name="lan_hue_pair_waiting">正在等待按鈕…</string>
+    <string name="lan_hue_pair_timeout">未及時按下按鈕。按下後再次點按「配對」。</string>
 </resources>

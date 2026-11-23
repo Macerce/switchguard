@@ -1761,7 +1761,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_shelly_step1">Verbinde das Shelly mit deinem WLAN: mit der App Shelly Smart Control oder verbinde das Telefon mit dem eigenen WLAN des Geräts (shelly…), öffne 192.168.33.1 im Browser und gib unter Einstellungen → WLAN Netzname und Passwort ein.</string>
     <string name="lan_steps_title">Bevor du beginnst</string>
     <string name="lan_brand_title">%1$s hinzufügen</string>
-    <string name="lan_brand_soon">Demnächst: Philips Hue, TP-Link und Home Assistant.</string>
+    <string name="lan_brand_soon">Demnächst: TP-Link Kasa / Tapo und Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-Geräte im DIY-(LAN-)Modus</string>
     <string name="lan_brand_shelly_desc">Relais und Steckdosen der Gen1, Plus, Pro, Gen3 und Gen4</string>
     <string name="lan_brand_hint">Wähle die Marke. Kein Konto und keine Cloud nötig: Telefon und Gerät müssen nur im selben WLAN sein.</string>
@@ -1801,4 +1801,14 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_unsupported_generic">Auf diesem Gerät wurde kein Schalter oder Relais gefunden.</string>
     <string name="lan_pw_title_generic">Gerätepasswort</string>
     <string name="lan_pw_body_generic">Gib Benutzername und Passwort der Webseite des Geräts ein. Sie bleiben verschlüsselt nur auf diesem Telefon und sind nicht in Sicherungen.</string>
+    <string name="lan_brand_hue_desc">Lampen und Steckdosen an einer Hue Bridge</string>
+    <string name="lan_hue_step1">Die Hue Bridge muss im selben Netz wie das Telefon sein (per Kabel am Router).</string>
+    <string name="lan_hue_step2">Tippe unten auf die Bridge, drücke den runden Knopf oben auf der Bridge und tippe dann auf Koppeln.</string>
+    <string name="lan_hue_step3">Danach erscheinen die Lampen und Steckdosen der Bridge in der Liste; füge die gewünschten hinzu.</string>
+    <string name="lan_hue_locked">Noch nicht gekoppelt: Tippe auf Hinzufügen und drücke dann den Knopf an der Bridge.</string>
+    <string name="lan_hue_pair_title">Hue Bridge koppeln</string>
+    <string name="lan_hue_pair_body">Drücke den runden Knopf oben auf der Bridge und tippe innerhalb von 30 Sekunden auf Koppeln. Der Schlüssel der Bridge wird nur auf diesem Telefon verschlüsselt gespeichert.</string>
+    <string name="lan_hue_pair_start">Koppeln</string>
+    <string name="lan_hue_pair_waiting">Warte auf den Knopf…</string>
+    <string name="lan_hue_pair_timeout">Der Knopf wurde nicht rechtzeitig gedrückt. Drücke ihn und tippe erneut auf Koppeln.</string>
 </resources>

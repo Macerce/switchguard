@@ -1907,7 +1907,7 @@
     <string name="lan_shelly_step1">وصّل Shelly بشبكة Wi-Fi: عبر تطبيق Shelly Smart Control، أو وصّل الهاتف بشبكة الجهاز الخاصة (shelly…) وافتح 192.168.33.1 في المتصفح وأدخل اسم الشبكة وكلمة المرور في الإعدادات ← Wi-Fi.</string>
     <string name="lan_steps_title">قبل أن تبدأ</string>
     <string name="lan_brand_title">إضافة %1$s</string>
-    <string name="lan_brand_soon">قريبًا: Philips Hue وTP-Link وHome Assistant.</string>
+    <string name="lan_brand_soon">قريبًا: TP-Link Kasa / Tapo وHome Assistant.</string>
     <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
     <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
     <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
@@ -1947,4 +1947,14 @@
     <string name="lan_unsupported_generic">لم يُعثر على مفتاح أو مرحل في هذا الجهاز.</string>
     <string name="lan_pw_title_generic">كلمة مرور الجهاز</string>
     <string name="lan_pw_body_generic">أدخل اسم المستخدم وكلمة المرور لصفحة الجهاز. تُحفظ مشفّرة على هذا الهاتف فقط ولا تدخل في النسخ الاحتياطية.</string>
+    <string name="lan_brand_hue_desc">أضواء ومقابس على جسر Hue</string>
+    <string name="lan_hue_step1">يجب أن يكون جسر Hue على نفس شبكة الهاتف (موصولًا بالراوتر بكابل).</string>
+    <string name="lan_hue_step2">اضغط على الجسر أدناه، ثم اضغط الزر الدائري أعلى الجسر، ثم اضغط إقران.</string>
+    <string name="lan_hue_step3">بعدها تظهر أضواء ومقابس الجسر في القائمة؛ أضف ما تريد.</string>
+    <string name="lan_hue_locked">لم يُقرن بعد: اضغط إضافة ثم اضغط زر الجسر.</string>
+    <string name="lan_hue_pair_title">إقران جسر Hue</string>
+    <string name="lan_hue_pair_body">اضغط الزر الدائري أعلى الجسر، ثم اضغط إقران خلال 30 ثانية. يُحفظ مفتاح الجسر مشفّرًا على هذا الهاتف فقط.</string>
+    <string name="lan_hue_pair_start">إقران</string>
+    <string name="lan_hue_pair_waiting">في انتظار الزر…</string>
+    <string name="lan_hue_pair_timeout">لم يُضغط الزر في الوقت المناسب. اضغطه ثم اضغط إقران مرة أخرى.</string>
 </resources>

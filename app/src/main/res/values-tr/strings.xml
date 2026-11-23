@@ -1766,7 +1766,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_shelly_step1">Shelly\'yi Wi-Fi ağına bağla: Shelly Smart Control uygulamasıyla ya da telefonu cihazın kendi Wi-Fi\'ına (shelly…) bağlayıp tarayıcıda 192.168.33.1 adresini aç, Ayarlar → Wi-Fi bölümüne ağ adını ve şifreni yaz.</string>
     <string name="lan_steps_title">Başlamadan önce</string>
     <string name="lan_brand_title">%1$s ekle</string>
-    <string name="lan_brand_soon">Yakında: Philips Hue, TP-Link ve Home Assistant.</string>
+    <string name="lan_brand_soon">Yakında: TP-Link Kasa / Tapo ve Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">DIY (yerel ağ) kipindeki eWeLink cihazları</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 ve Gen4 röleler ve prizler</string>
     <string name="lan_brand_hint">Markayı seç. Hesap ya da bulut gerekmez: telefon ve cihazın aynı Wi-Fi\'de olması yeterli.</string>
@@ -1806,4 +1806,14 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_unsupported_generic">Bu cihazda anahtar ya da röle bulunamadı.</string>
     <string name="lan_pw_title_generic">Cihaz şifresi</string>
     <string name="lan_pw_body_generic">Cihazın web sayfasının kullanıcı adı ve şifresini gir. Yalnızca bu telefonda şifreli tutulur, yedeğe girmez.</string>
+    <string name="lan_brand_hue_desc">Hue Köprüsü\'ne bağlı ışıklar ve prizler</string>
+    <string name="lan_hue_step1">Hue Köprüsü telefonla aynı ağda olmalı (routera kabloyla bağlı).</string>
+    <string name="lan_hue_step2">Aşağıdaki köprüye dokun, köprünün üstündeki yuvarlak düğmeye bas, sonra Eşleştir\'e dokun.</string>
+    <string name="lan_hue_step3">Ardından köprünün ışıkları ve prizleri listede görünür; istediklerini ekle.</string>
+    <string name="lan_hue_locked">Henüz eşleşmedi: Ekle\'ye dokun, sonra köprünün düğmesine bas.</string>
+    <string name="lan_hue_pair_title">Hue Köprüsü\'nü eşleştir</string>
+    <string name="lan_hue_pair_body">Köprünün üstündeki yuvarlak düğmeye bas, sonra 30 saniye içinde Eşleştir\'e dokun. Köprünün verdiği anahtar yalnızca bu telefonda şifreli tutulur.</string>
+    <string name="lan_hue_pair_start">Eşleştir</string>
+    <string name="lan_hue_pair_waiting">Düğme bekleniyor…</string>
+    <string name="lan_hue_pair_timeout">Düğmeye zamanında basılmadı. Bas ve yeniden Eşleştir\'e dokun.</string>
 </resources>

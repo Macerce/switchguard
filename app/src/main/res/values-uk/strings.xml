@@ -1806,7 +1806,7 @@
     <string name="lan_shelly_step1">Підключіть Shelly до Wi-Fi: у застосунку Shelly Smart Control або підключіть телефон до власної мережі пристрою (shelly…), відкрийте 192.168.33.1 у браузері та введіть назву й пароль Wi-Fi у Налаштування → Wi-Fi.</string>
     <string name="lan_steps_title">Перед початком</string>
     <string name="lan_brand_title">Додати %1$s</string>
-    <string name="lan_brand_soon">Незабаром: Philips Hue, TP-Link і Home Assistant.</string>
+    <string name="lan_brand_soon">Незабаром: TP-Link Kasa / Tapo і Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Пристрої eWeLink у режимі DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Реле та розетки Gen1, Plus, Pro, Gen3 і Gen4</string>
     <string name="lan_brand_hint">Виберіть марку. Обліковий запис і хмара не потрібні: телефон і пристрій мають бути в одній Wi-Fi.</string>
@@ -1846,4 +1846,14 @@
     <string name="lan_unsupported_generic">На цьому пристрої не знайдено вимикача чи реле.</string>
     <string name="lan_pw_title_generic">Пароль пристрою</string>
     <string name="lan_pw_body_generic">Введіть ім’я користувача й пароль вебсторінки пристрою. Вони зберігаються зашифровано лише на цьому телефоні й не потрапляють до резервних копій.</string>
+    <string name="lan_brand_hue_desc">Лампи й розетки на мосту Hue</string>
+    <string name="lan_hue_step1">Міст Hue має бути в тій самій мережі, що й телефон (кабелем до роутера).</string>
+    <string name="lan_hue_step2">Торкніться мосту нижче, натисніть круглу кнопку зверху мосту, потім «Зв’язати».</string>
+    <string name="lan_hue_step3">Потім лампи й розетки мосту з’являться в списку; додайте потрібні.</string>
+    <string name="lan_hue_locked">Ще не зв’язано: торкніться «Додати», потім натисніть кнопку на мосту.</string>
+    <string name="lan_hue_pair_title">Зв’язати міст Hue</string>
+    <string name="lan_hue_pair_body">Натисніть круглу кнопку зверху мосту, потім протягом 30 секунд — «Зв’язати». Ключ мосту зберігається зашифровано лише на цьому телефоні.</string>
+    <string name="lan_hue_pair_start">Зв’язати</string>
+    <string name="lan_hue_pair_waiting">Чекаємо натискання кнопки…</string>
+    <string name="lan_hue_pair_timeout">Кнопку не натиснуто вчасно. Натисніть її й знову «Зв’язати».</string>
 </resources>

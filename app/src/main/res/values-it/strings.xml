@@ -1770,7 +1770,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_step1">Collega lo Shelly alla tua Wi-Fi: con l\'app Shelly Smart Control, oppure collega il telefono alla Wi-Fi del dispositivo (shelly…), apri 192.168.33.1 nel browser e inserisci nome e password della Wi-Fi in Impostazioni → Wi-Fi.</string>
     <string name="lan_steps_title">Prima di iniziare</string>
     <string name="lan_brand_title">Aggiungi %1$s</string>
-    <string name="lan_brand_soon">In arrivo: Philips Hue, TP-Link e Home Assistant.</string>
+    <string name="lan_brand_soon">In arrivo: TP-Link Kasa / Tapo e Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Dispositivi eWeLink in modalità DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relè e prese Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Scegli la marca. Nessun account né cloud: telefono e dispositivo devono solo essere sulla stessa Wi-Fi.</string>
@@ -1810,4 +1810,14 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_unsupported_generic">Nessun interruttore o relè trovato su questo dispositivo.</string>
     <string name="lan_pw_title_generic">Password del dispositivo</string>
     <string name="lan_pw_body_generic">Inserisci nome utente e password della pagina web del dispositivo. Restano cifrati solo su questo telefono e non vanno nei backup.</string>
+    <string name="lan_brand_hue_desc">Luci e prese su un Hue Bridge</string>
+    <string name="lan_hue_step1">L’Hue Bridge deve essere sulla stessa rete del telefono (via cavo al router).</string>
+    <string name="lan_hue_step2">Tocca il bridge qui sotto, premi il pulsante rotondo sopra il bridge, poi tocca Associa.</string>
+    <string name="lan_hue_step3">Le luci e le prese del bridge compaiono poi nell’elenco; aggiungi quelle che vuoi.</string>
+    <string name="lan_hue_locked">Non ancora associato: tocca Aggiungi, poi premi il pulsante del bridge.</string>
+    <string name="lan_hue_pair_title">Associa Hue Bridge</string>
+    <string name="lan_hue_pair_body">Premi il pulsante rotondo sopra il bridge, poi tocca Associa entro 30 secondi. La chiave del bridge resta cifrata solo su questo telefono.</string>
+    <string name="lan_hue_pair_start">Associa</string>
+    <string name="lan_hue_pair_waiting">In attesa del pulsante…</string>
+    <string name="lan_hue_pair_timeout">Il pulsante non è stato premuto in tempo. Premilo e tocca di nuovo Associa.</string>
 </resources>

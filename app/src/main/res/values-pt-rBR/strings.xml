@@ -1799,7 +1799,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_shelly_step1">Conecte o Shelly ao seu Wi-Fi: pelo app Shelly Smart Control, ou conecte o celular ao Wi-Fi próprio do dispositivo (shelly…), abra 192.168.33.1 no navegador e informe o nome e a senha do Wi-Fi em Configurações → Wi-Fi.</string>
     <string name="lan_steps_title">Antes de começar</string>
     <string name="lan_brand_title">Adicionar %1$s</string>
-    <string name="lan_brand_soon">Em breve: Philips Hue, TP-Link e Home Assistant.</string>
+    <string name="lan_brand_soon">Em breve: TP-Link Kasa / Tapo e Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Dispositivos eWeLink no modo DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relés e tomadas Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Escolha a marca. Sem conta nem nuvem: o celular e o dispositivo só precisam estar no mesmo Wi-Fi.</string>
@@ -1839,4 +1839,14 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_unsupported_generic">Nenhum interruptor ou relé encontrado neste dispositivo.</string>
     <string name="lan_pw_title_generic">Senha do dispositivo</string>
     <string name="lan_pw_body_generic">Digite o usuário e a senha da página web do dispositivo. Ficam criptografados só neste telefone e não entram nos backups.</string>
+    <string name="lan_brand_hue_desc">Luzes e tomadas em uma Hue Bridge</string>
+    <string name="lan_hue_step1">A Hue Bridge deve estar na mesma rede do telefone (cabo no roteador).</string>
+    <string name="lan_hue_step2">Toque na ponte abaixo, aperte o botão redondo em cima da ponte e toque em Parear.</string>
+    <string name="lan_hue_step3">Depois as luzes e tomadas da ponte aparecem na lista; adicione as que quiser.</string>
+    <string name="lan_hue_locked">Ainda não pareado: toque em Adicionar e aperte o botão da ponte.</string>
+    <string name="lan_hue_pair_title">Parear Hue Bridge</string>
+    <string name="lan_hue_pair_body">Aperte o botão redondo em cima da ponte e toque em Parear em até 30 segundos. A chave da ponte fica criptografada só neste telefone.</string>
+    <string name="lan_hue_pair_start">Parear</string>
+    <string name="lan_hue_pair_waiting">Aguardando o botão…</string>
+    <string name="lan_hue_pair_timeout">O botão não foi apertado a tempo. Aperte e toque em Parear de novo.</string>
 </resources>

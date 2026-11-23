@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkLan
+import com.macerce.switchguard.api.HueLan
 import com.macerce.switchguard.api.LanScan
 import com.macerce.switchguard.api.LocalLan
 import com.macerce.switchguard.api.ShellyLan
@@ -101,6 +102,7 @@ private val BRANDS = listOf(
     Triple(LocalDevice.BRAND_SONOFF, R.string.lan_brand_sonoff_desc, Hue.TEAL),
     Triple(LocalDevice.BRAND_TASMOTA, R.string.lan_brand_tasmota_desc, Hue.GREEN),
     Triple(LocalDevice.BRAND_ESPHOME, R.string.lan_brand_esphome_desc, Hue.SLATE),
+    Triple(LocalDevice.BRAND_HUE, R.string.lan_brand_hue_desc, Hue.AMBER),
 )
 
 fun brandName(brand: String) = when (brand) {
@@ -118,6 +120,7 @@ private fun brandSteps(brand: String): List<Int> = when (brand) {
     LocalDevice.BRAND_SHELLY -> listOf(R.string.lan_shelly_step1, R.string.lan_shelly_step2, R.string.lan_shelly_step3)
     LocalDevice.BRAND_TASMOTA -> listOf(R.string.lan_tasmota_step1, R.string.lan_tasmota_step2, R.string.lan_tasmota_step3)
     LocalDevice.BRAND_ESPHOME -> listOf(R.string.lan_esphome_step1, R.string.lan_esphome_step2, R.string.lan_esphome_step3)
+    LocalDevice.BRAND_HUE -> listOf(R.string.lan_hue_step1, R.string.lan_hue_step2, R.string.lan_hue_step3)
     else -> listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
 }
 
@@ -196,7 +199,8 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     val rows = remember(tick, version, manual) {
         val res = resources
         fun ch(n: Int) = if (n > 1) res.getString(R.string.lan_channels, n) else null
-        if (driver != null) driver.all().values.sortedBy { it.host }.map { f ->
+        // Eşleşmiş Hue köprüsünün kendi satırı gösterilmez (lambaları listelenir).
+        if (driver != null) driver.all().values.filter { !(it.extra == HueLan.BRIDGE && !it.locked) }.sortedBy { it.host + it.id }.map { f ->
             val existing = known[f.id]
             val model = f.name ?: "${brandName(brand)} ${f.model}".trim()
             FoundRow(
@@ -204,6 +208,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                 addable = existing == null && (f.supported || f.locked),
                 warning = when {
                     existing != null -> null
+                    f.locked && f.extra == HueLan.BRIDGE -> res.getString(R.string.lan_hue_locked)
                     f.locked -> res.getString(R.string.lan_locked_generic)
                     !f.supported -> res.getString(R.string.lan_unsupported_generic)
                     else -> null
@@ -239,6 +244,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     var naming by remember { mutableStateOf<FoundRow?>(null) }
     var askPassword by remember { mutableStateOf<ShellyLan.Found?>(null) }
     var askGeneric by remember { mutableStateOf<LanFound?>(null) }
+    var pairHue by remember { mutableStateOf<LanFound?>(null) }
     var setup by remember { mutableStateOf(false) }
     var help by remember { mutableStateOf(false) }
 
@@ -281,6 +287,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     FoundLine(r, added = known.containsKey(r.id)) {
                         when {
                             r.shelly?.locked == true -> askPassword = r.shelly
+                            r.found?.locked == true && r.found.extra == HueLan.BRIDGE -> pairHue = r.found
                             r.found?.locked == true -> askGeneric = r.found
                             else -> naming = r
                         }
@@ -326,6 +333,13 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
         }
     }
     if (setup) ShellySetupDialog(ssid) { setup = false }
+    pairHue?.let { f ->
+        HuePairDialog(f, onDismiss = { pairHue = null }) { key ->
+            store.shellyAuth = store.shellyAuth + (f.id to ShellyAuth.Credentials(key, ""))
+            HueLan.setCredentials(store.shellyAuth)
+            pairHue = null
+        }
+    }
     askGeneric?.let { f ->
         val d = driver
         if (d != null) LanPasswordDialog("${brandName(brand)} · ${f.host}", onDismiss = { askGeneric = null }) { cred ->
@@ -515,6 +529,60 @@ private fun ScanLine(driver: com.macerce.switchguard.api.PolledLan) {
         }
     }
     result?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+}
+
+/**
+ * Hue köprüsüyle eşleşme: kullanıcı köprünün üstündeki yuvarlak düğmeye basar, uygulama 30 sn boyunca iki saniyede
+ * bir eşleşmeyi dener. Anahtar alınınca [onPaired] çağrılır ve köprünün lambaları listeye girer.
+ */
+@Composable
+private fun HuePairDialog(bridge: LanFound, onDismiss: () -> Unit, onPaired: (String) -> Unit) {
+    val scope = rememberCoroutineScope()
+    var waiting by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    val resources = LocalResources.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Router, null) },
+        title = { Text(stringResource(R.string.lan_hue_pair_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("${bridge.name ?: "Hue Bridge"} · ${bridge.host}", style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(R.string.lan_hue_pair_body), style = MaterialTheme.typography.bodySmall)
+                if (waiting) LinearProgressIndicator(Modifier.fillMaxWidth())
+                error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = StatusColors.warning) }
+            }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        confirmButton = {
+            TextButton(
+                enabled = !waiting, modifier = Modifier.tvFocusRing(),
+                onClick = {
+                    waiting = true
+                    error = null
+                    scope.launch {
+                        var key: String? = null
+                        var reached = false
+                        val until = System.currentTimeMillis() + 30_000
+                        while (key == null && System.currentTimeMillis() < until) {
+                            val (k, linkButton) = withContext(Dispatchers.IO) { HueLan.pair(bridge.host) }
+                            key = k
+                            reached = reached || k != null || linkButton
+                            if (key == null) delay(2000)
+                        }
+                        waiting = false
+                        val k = key
+                        if (k == null) {
+                            error = resources.getString(if (reached) R.string.lan_hue_pair_timeout else R.string.lan_ip_not_found, bridge.host)
+                        } else {
+                            onPaired(k)
+                            withContext(Dispatchers.IO) { HueLan.probe(bridge.host, ShellyAuth.Credentials(k, ""), quickly = false)?.let(HueLan::remember) }
+                        }
+                    }
+                },
+            ) { Text(stringResource(if (waiting) R.string.lan_hue_pair_waiting else R.string.lan_hue_pair_start)) }
+        },
+    )
 }
 
 /**
