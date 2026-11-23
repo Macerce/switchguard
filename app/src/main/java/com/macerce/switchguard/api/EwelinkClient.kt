@@ -72,11 +72,18 @@ class EwelinkClient(private val store: Store) {
     fun getDevices(): List<DeviceSnapshot> {
         val body = withTokenRetry { authed("GET", "/v2/device/thing?num=0", null) }
         if (store.userApiKey.isEmpty()) DeviceParser.ownApiKey(body)?.let { store.userApiKey = it }
+        runCatching {
+            val keys = DeviceParser.deviceKeys(body)
+            if (keys.isNotEmpty() && keys != store.lanKeys) store.lanKeys = keys
+            EwelinkLan.setKeys(keys.ifEmpty { store.lanKeys })
+        }
         return DeviceParser.parseThingList(body)
     }
 
     /** Cihazı açar/kapatır. Çok kanallı cihazlarda [channel] 0'dan başlar. */
     fun setSwitch(device: DeviceSnapshot, channel: Int, on: Boolean) {
+        // Yerel ağda görülen cihaz önce doğrudan denenir (hızlı, internetsiz çalışır); olmazsa bulut.
+        if (store.lanControl && EwelinkLan.trySwitch(device, channel, on)) return
         val value = if (on) "on" else "off"
         val array = JSONObject().put("switches", JSONArray().put(JSONObject().put("switch", value).put("outlet", channel)))
         if (device.usesSwitchArray) return setParams(device.id, array)

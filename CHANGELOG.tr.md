@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.38.0 — 2026-11-23
+**Yeni**
+- Yerel ağ kontrolü (Ayarlar → İzleme, varsayılan açık): aynı Wi-Fi'daki eWeLink cihazları kendiliğinden bulunur ve aç/kapa komutu önce doğrudan ağ üzerinden gider; daha hızlıdır, internet olmadan da çalışır. Cihaz yanıt vermezse komut eskisi gibi buluttan gider. İnternet ya da eWeLink sunucusu kesilince açık/kapalı değişiklikleri yerel ağdan okunmaya devam eder; alarmlar ve otomasyonlar çalışır. Cihazda yerel ağ (LAN) kipi olmalı (çoğu SONOFF modelinde var). Bunun için gereken cihaz anahtarları eWeLink cihaz listesinden alınır ve yalnızca bu telefonda şifreli saklanır.
+
 ## 2.37.0 — 2026-11-21
 **Yeni**
 - Canlılık adresi (Ayarlar → İzleme): izleme sağlıklıyken cihaz birkaç dakikada bir (varsayılan 5 dk) healthchecks.io ya da Uptime Kuma adresinizi çağırır. Telefon kapanır ya da izleme durursa o servis size haber verir. Her cihaz için ayrı adres kullanın; bu ayar yedeğe girmez.

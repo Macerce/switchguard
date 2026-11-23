@@ -1625,4 +1625,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="hooks_hint">Chọn chủ đề ntfy khó đoán: trên ntfy.sh ai biết chủ đề đều đọc được tin nhắn. Tin nhắn chỉ gửi đến địa chỉ bạn nhập.</string>
     <string name="hooks_test_text">Tin nhắn thử của SwitchGuard</string>
     <string name="hooks_dismissed">Đã tắt báo động.</string>
+    <string name="lan_title">Điều khiển qua mạng nội bộ</string>
+    <string name="lan_desc">Bật/tắt thiết bị eWeLink trực tiếp qua Wi‑Fi trước (nhanh hơn) và tiếp tục theo dõi trạng thái bật/tắt khi mất internet hoặc máy chủ eWeLink ngừng hoạt động. Thiết bị cần chế độ LAN, có trên hầu hết các mẫu SONOFF.</string>
+    <string name="lan_found">Trong mạng này: %1$d</string>
 </resources>

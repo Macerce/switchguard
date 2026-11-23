@@ -1725,4 +1725,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="hooks_hint">Choisissez un sujet ntfy difficile à deviner : sur ntfy.sh, quiconque connaît le sujet peut lire les messages. Les messages ne vont qu\'aux adresses saisies.</string>
     <string name="hooks_test_text">Message de test SwitchGuard</string>
     <string name="hooks_dismissed">L\'alarme a été arrêtée.</string>
+    <string name="lan_title">Contrôle en réseau local</string>
+    <string name="lan_desc">Commande d’abord les appareils eWeLink directement en Wi‑Fi (plus rapide) et continue de surveiller leur état marche/arrêt quand internet ou le serveur eWeLink est coupé. Les appareils doivent avoir le mode LAN, présent sur la plupart des modèles SONOFF.</string>
+    <string name="lan_found">Sur ce réseau : %1$d</string>
 </resources>

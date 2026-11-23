@@ -1625,4 +1625,7 @@
     <string name="hooks_hint">เลือกหัวข้อ ntfy ที่เดายาก: บน ntfy.sh ใครรู้หัวข้อก็อ่านข้อความได้ ข้อความส่งไปเฉพาะที่อยู่ที่คุณกรอกเท่านั้น</string>
     <string name="hooks_test_text">ข้อความทดสอบจาก SwitchGuard</string>
     <string name="hooks_dismissed">ปิดสัญญาณเตือนแล้ว</string>
+    <string name="lan_title">ควบคุมผ่านเครือข่ายท้องถิ่น</string>
+    <string name="lan_desc">สั่งเปิด/ปิดอุปกรณ์ eWeLink ผ่าน Wi‑Fi โดยตรงก่อน (เร็วกว่า) และเฝ้าดูสถานะเปิด/ปิดต่อไปเมื่ออินเทอร์เน็ตหรือเซิร์ฟเวอร์ eWeLink ล่ม อุปกรณ์ต้องมีโหมด LAN ซึ่ง SONOFF ส่วนใหญ่มี</string>
+    <string name="lan_found">ในเครือข่ายนี้: %1$d</string>
 </resources>

@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.38.0 — 2026-11-23
+**New**
+- Local network control (Settings → Monitoring, on by default): eWeLink devices on the same Wi-Fi are found automatically and switched directly over the network first, which is faster and works without internet. If a device does not answer, the command goes through the cloud as before. When the internet or the eWeLink server is down, on/off changes are still picked up from the local network, so alarms and automations keep working. Devices need LAN mode (most SONOFF models have it). The device keys this needs come from your eWeLink device list and are stored encrypted on this phone only.
+
 ## 2.37.0 — 2026-11-21
 **New**
 - Heartbeat URL (Settings → Monitoring): while monitoring is healthy the device calls your healthchecks.io or Uptime Kuma address every few minutes (default 5). If the phone goes off or monitoring stops, that service tells you. Use a separate address per device; this setting is not backed up.

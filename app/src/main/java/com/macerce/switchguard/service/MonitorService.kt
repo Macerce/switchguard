@@ -31,6 +31,7 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.api.ApiException
 import com.macerce.switchguard.api.AuthException
 import com.macerce.switchguard.api.EwelinkClient
+import com.macerce.switchguard.api.EwelinkLan
 import com.macerce.switchguard.api.EwelinkSocket
 import com.macerce.switchguard.api.WeatherClient
 import com.macerce.switchguard.core.WakeScheduler
@@ -305,6 +306,7 @@ class MonitorService : Service() {
                 return START_STICKY
             }
             ACTION_RESTART -> handler.post {
+                restartLan()
                 authFailed = false
                 wsUnsupported = false
                 notifier.clearWarning()
@@ -352,6 +354,7 @@ class MonitorService : Service() {
             ZoneWatcher.sync(this)
             sync()
             reconnectNow()
+            restartLan()
             tuyaTick(SystemClock.elapsedRealtime())
             handler.post(loop)
         }
@@ -366,6 +369,7 @@ class MonitorService : Service() {
         LiveState.setConnection(ConnState.STOPPED)
         handler.removeCallbacksAndMessages(null)
         wake.reset()
+        EwelinkLan.stop()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -404,6 +408,7 @@ class MonitorService : Service() {
         handler.removeCallbacks(loop)
         handler.removeCallbacks(tickRunnable)
         wake.reset()
+        EwelinkLan.stop()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -740,6 +745,30 @@ class MonitorService : Service() {
     }
 
     /** Bir bulutun cihazlarını yenileriyle değiştirip farkları işler; diğer bulutun cihazlarına dokunmaz. */
+    /** Yerel ağ keşfi: ayar açık ve eWeLink'e girilmişse çalışır (bkz. [EwelinkLan]). */
+    private fun restartLan() {
+        if (!running || !store.lanControl || !store.isLoggedIn) {
+            EwelinkLan.stop()
+            return
+        }
+        EwelinkLan.setKeys(store.lanKeys)
+        EwelinkLan.start(this) { id, switches -> handler.post { applyLan(id, switches) } }
+    }
+
+    /**
+     * Yerel ağdan gelen anahtar durumu. Bulut anlık bağlantısı canlıyken yok sayılır (o daha güvenilir ve yerel
+     * duyuru gecikebilir: eski durum geri yazılmasın); bağlantı koptuğunda (internet yok, sunucu çöktü)
+     * değişiklikler buradan algılanır, alarm ve otomasyonlar çalışmaya devam eder.
+     */
+    private fun applyLan(deviceId: String, switches: Map<Int, Boolean>) {
+        if (!running || socket.ready) return
+        val list = store.snapshots
+        val before = list.firstOrNull { it.id == deviceId && it.cloud == Cloud.EWELINK } ?: return
+        val after = WsMessages.apply(before, WsEvent.Update(deviceId, online = null, switches = switches))
+        if (after == before) return
+        process(list.map { if (it.id == after.id) after else it })
+    }
+
     private fun replaceCloud(cloud: Cloud, devices: List<DeviceSnapshot>) {
         process(store.snapshots.filter { it.cloud != cloud } + devices)
     }

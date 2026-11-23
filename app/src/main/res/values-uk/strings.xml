@@ -1733,4 +1733,7 @@
     <string name="hooks_hint">Оберіть тему ntfy, яку важко вгадати: на ntfy.sh будь-хто, хто знає тему, може читати повідомлення. Повідомлення йдуть лише на вказані адреси.</string>
     <string name="hooks_test_text">Тестове повідомлення SwitchGuard</string>
     <string name="hooks_dismissed">Тривогу вимкнено.</string>
+    <string name="lan_title">Керування локальною мережею</string>
+    <string name="lan_desc">Спершу керувати пристроями eWeLink напряму через Wi‑Fi (швидше) і далі стежити за станом увімк/вимк, коли немає інтернету або сервер eWeLink недоступний. Потрібен режим LAN, він є в більшості моделей SONOFF.</string>
+    <string name="lan_found">У цій мережі: %1$d</string>
 </resources>

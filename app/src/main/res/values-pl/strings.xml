@@ -1762,4 +1762,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="hooks_hint">Wybierz trudny do odgadnięcia temat ntfy: na ntfy.sh każdy, kto zna temat, może czytać wiadomości. Wiadomości trafiają tylko na podane adresy.</string>
     <string name="hooks_test_text">Wiadomość testowa SwitchGuard</string>
     <string name="hooks_dismissed">Alarm został wyłączony.</string>
+    <string name="lan_title">Sterowanie w sieci lokalnej</string>
+    <string name="lan_desc">Najpierw steruj urządzeniami eWeLink bezpośrednio przez Wi‑Fi (szybciej) i dalej śledź ich stan wł./wył., gdy internet lub serwer eWeLink nie działa. Urządzenia muszą mieć tryb LAN, który ma większość modeli SONOFF.</string>
+    <string name="lan_found">W tej sieci: %1$d</string>
 </resources>

@@ -1693,4 +1693,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="hooks_hint">Tahmin edilmesi zor bir ntfy konu adı seçin: ntfy.sh\'de konuyu bilen herkes mesajları okuyabilir. Mesajlar yalnızca girdiğiniz adreslere gider.</string>
     <string name="hooks_test_text">SwitchGuard deneme mesajı</string>
     <string name="hooks_dismissed">Alarm kapatıldı.</string>
+    <string name="lan_title">Yerel ağ kontrolü</string>
+    <string name="lan_desc">eWeLink cihazlarını önce doğrudan Wi-Fi üzerinden aç/kapat (daha hızlı); internet ya da eWeLink sunucusu kesilince de açık/kapalı durumlarını izlemeye devam et. Cihazda yerel ağ (LAN) kipi olmalı; çoğu SONOFF modelinde vardır.</string>
+    <string name="lan_found">Bu ağda: %1$d</string>
 </resources>

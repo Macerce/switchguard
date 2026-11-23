@@ -60,6 +60,19 @@ object DeviceParser {
         return own?.optString("apikey")?.takeIf { it.isNotEmpty() }
     }
 
+    /** Cihaz kimliği → devicekey (yerel ağ şifrelemesi için, bkz. [LanProtocol]). */
+    fun deviceKeys(body: String): Map<String, String> {
+        val list = JSONObject(body).optJSONObject("data")?.optJSONArray("thingList") ?: return emptyMap()
+        val map = HashMap<String, String>()
+        for (i in 0 until list.length()) {
+            val item = list.optJSONObject(i)?.optJSONObject("itemData") ?: continue
+            val id = item.optString("deviceid")
+            val key = item.optString("devicekey")
+            if (id.isNotEmpty() && key.isNotEmpty()) map[id] = key
+        }
+        return map
+    }
+
     /** Tek cihaz sorgusunun (`POST /v2/device/thing`) ham params nesnesi. */
     fun parseSingleParams(body: String): JSONObject? =
         JSONObject(body).optJSONObject("data")?.optJSONArray("thingList")

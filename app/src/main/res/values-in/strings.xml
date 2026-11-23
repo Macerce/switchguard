@@ -1583,4 +1583,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="hooks_hint">Pilih topik ntfy yang sulit ditebak: di ntfy.sh siapa pun yang tahu topiknya bisa membaca pesan. Pesan hanya dikirim ke alamat yang Anda masukkan.</string>
     <string name="hooks_test_text">Pesan uji SwitchGuard</string>
     <string name="hooks_dismissed">Alarm telah dimatikan.</string>
+    <string name="lan_title">Kontrol jaringan lokal</string>
+    <string name="lan_desc">Kendalikan perangkat eWeLink langsung lewat Wi‑Fi terlebih dahulu (lebih cepat) dan tetap pantau status nyala/matinya saat internet atau server eWeLink mati. Perangkat perlu mode LAN, yang dimiliki sebagian besar model SONOFF.</string>
+    <string name="lan_found">Di jaringan ini: %1$d</string>
 </resources>

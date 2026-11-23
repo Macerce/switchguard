@@ -1697,4 +1697,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="hooks_hint">Pick a hard-to-guess ntfy topic: on ntfy.sh anyone who knows the topic can read its messages. Messages go only to the addresses you enter.</string>
     <string name="hooks_test_text">SwitchGuard test message</string>
     <string name="hooks_dismissed">The alarm was dismissed.</string>
+    <string name="lan_title">Local network control</string>
+    <string name="lan_desc">Control eWeLink devices directly over Wi-Fi first (faster) and keep watching their on/off state when the internet or the eWeLink server is down. Devices need LAN mode, which most SONOFF models have.</string>
+    <string name="lan_found">On this network: %1$d</string>
 </resources>

@@ -21,6 +21,8 @@ SwitchGuard ("the app") monitors smart devices in **your own** eWeLink and/or Tu
 
 **Transfer to your other devices:** if you use "Send to another device", the app sends your Tuya keys, rules, automations and settings directly to your own TV or tablet on the same home Wi-Fi network, encrypted with the one-time 12-character code shown on that device. Nothing passes through any server; eWeLink API keys and the eWeLink session (sign-in) are never transferred.
 
+**Local network control:** the app finds your eWeLink devices on your Wi-Fi (mDNS) and sends on/off commands to them directly, encrypted with each device's own key from your eWeLink device list. This traffic stays inside your network; the keys are stored encrypted on the device and are not backed up.
+
 **Heartbeat URL, ntfy and webhook:** off unless you enter an address. With a heartbeat URL (e.g. healthchecks.io, Uptime Kuma) the app calls that address every few minutes while monitoring is healthy; the call carries no data. With an ntfy topic or a webhook, when a real alarm starts the app sends the alarm text, the time and this device's model name to the address you entered, and a short message when the alarm is dismissed. Nothing goes anywhere else, and anyone who knows a public ntfy topic can read its messages.
 
 **Telling someone else (Telegram):** this is off unless you turn it on. If an alarm isn't dismissed within the time you choose, the app sends the alarm's text (time, device name and what happened) and your phone's name to the people or groups you picked, through a Telegram bot that you create and own; it sends one more message when the alarm is dismissed. If you turn them on, the same bot also carries power-outage messages, the daily summary and weekly report (device names, events and energy figures), and a pinned "watchdog" message that shows the app is running. The bot only accepts commands (status, take over an alarm, switch a device, run a scene, home/away) from the chats you picked; other chats are ignored. The bot token and the chosen chats are stored only on your device. Telegram's own privacy policy applies to these messages.
@@ -65,6 +67,8 @@ SwitchGuard ("uygulama"), **size ait** eWeLink ve/veya Tuya (Smart Life) hesabı
 **Şifreniz** eWeLink'in kendi giriş sayfasına girilir; uygulama şifrenizi hiçbir zaman görmez ve saklamaz.
 
 **Diğer cihazlarınıza aktarma:** "Başka cihaza aktar" özelliğini kullanırsanız uygulama Tuya bilgilerinizi, kurallarınızı, otomasyonlarınızı ve ayarlarınızı aynı ev Wi-Fi ağındaki kendi TV'nize ya da tabletinize, o cihazda görünen tek seferlik 12 karakterlik kodla şifreleyerek doğrudan gönderir. Hiçbir sunucudan geçmez; eWeLink API anahtarları ve eWeLink oturumu (girişi) hiçbir zaman aktarılmaz.
+
+**Yerel ağ kontrolü:** uygulama Wi-Fi ağınızdaki eWeLink cihazlarını (mDNS ile) bulur ve aç/kapa komutlarını, eWeLink cihaz listenizdeki cihaza özel anahtarla şifreleyerek doğrudan cihaza gönderir. Bu trafik ağınızın dışına çıkmaz; anahtarlar cihazda şifreli saklanır ve yedeğe girmez.
 
 **Canlılık adresi, ntfy ve webhook:** siz bir adres girmedikçe kapalıdır. Canlılık adresi (ör. healthchecks.io, Uptime Kuma) girerseniz uygulama, izleme sağlıklıyken birkaç dakikada bir bu adrese veri içermeyen bir istek gönderir. ntfy konusu ya da webhook girerseniz gerçek bir alarm başlayınca alarm metni, saati ve bu cihazın model adı girdiğiniz adrese, alarm kapatılınca da kısa bir mesaj gönderilir. Başka hiçbir yere gitmez; herkese açık bir ntfy konusunu bilen herkes mesajlarını okuyabilir.
 

@@ -1726,4 +1726,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="hooks_hint">Escolha um tópico ntfy difícil de adivinhar: no ntfy.sh qualquer pessoa que saiba o tópico pode ler as mensagens. As mensagens vão só para os endereços que você informar.</string>
     <string name="hooks_test_text">Mensagem de teste do SwitchGuard</string>
     <string name="hooks_dismissed">O alarme foi desligado.</string>
+    <string name="lan_title">Controle pela rede local</string>
+    <string name="lan_desc">Controle os dispositivos eWeLink primeiro direto pelo Wi‑Fi (mais rápido) e continue monitorando o estado ligado/desligado quando a internet ou o servidor eWeLink caírem. Os dispositivos precisam do modo LAN, presente na maioria dos modelos SONOFF.</string>
+    <string name="lan_found">Nesta rede: %1$d</string>
 </resources>

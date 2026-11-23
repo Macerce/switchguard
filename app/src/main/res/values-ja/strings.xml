@@ -1654,4 +1654,7 @@
     <string name="hooks_hint">推測しにくい ntfy トピックを選んでください。ntfy.sh ではトピックを知っている人なら誰でも読めます。メッセージは入力したアドレスにのみ送られます。</string>
     <string name="hooks_test_text">SwitchGuard のテストメッセージ</string>
     <string name="hooks_dismissed">アラームが止められました。</string>
+    <string name="lan_title">ローカルネットワーク制御</string>
+    <string name="lan_desc">eWeLink デバイスをまず Wi‑Fi 経由で直接オン/オフし（高速）、インターネットや eWeLink サーバーが止まってもオン/オフ状態の監視を続けます。デバイスに LAN モードが必要です（多くの SONOFF モデルが対応）。</string>
+    <string name="lan_found">このネットワーク: %1$d</string>
 </resources>

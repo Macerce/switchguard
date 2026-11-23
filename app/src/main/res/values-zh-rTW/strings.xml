@@ -1653,4 +1653,7 @@
     <string name="hooks_hint">請選擇難以猜到的 ntfy 主題：在 ntfy.sh 上，知道主題的人都能讀取訊息。訊息只會傳到你填寫的位址。</string>
     <string name="hooks_test_text">SwitchGuard 測試訊息</string>
     <string name="hooks_dismissed">警報已關閉。</string>
+    <string name="lan_title">區域網路控制</string>
+    <string name="lan_desc">優先透過 Wi‑Fi 直接控制 eWeLink 裝置（更快），在網際網路或 eWeLink 伺服器中斷時繼續監看其開/關狀態。裝置需支援區域網路（LAN）模式，多數 SONOFF 型號都支援。</string>
+    <string name="lan_found">此網路中：%1$d</string>
 </resources>

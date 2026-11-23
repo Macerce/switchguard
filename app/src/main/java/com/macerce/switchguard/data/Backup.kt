@@ -42,6 +42,8 @@ object Backup {
         "sessionLost" to "oturum düştü uyarısı (bu cihazın durumu)",
         "tuyaToken" to "Tuya erişim belirteci (anahtarlardan yeniden alınır)",
         "tuyaTokenExp" to "Tuya erişim belirtecinin süresi",
+        "lanControl" to "yerel ağ kontrolü cihaza özel (bu cihazın bağlı olduğu ağ)",
+        "lanKeys" to "cihaz yerel ağ anahtarları (gizli; buluttan yeniden okunur)",
         "tuyaLive" to "Tuya anlık güncellemeleri cihaza özel (aynı anahtarlarla tek cihaz anlık mesaj alır)",
         "monitoring" to "izleme açık/kapalı: bu cihazın çalışma durumu",
         "pendingAlarm" to "çalmakta olan alarm",

@@ -1688,4 +1688,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="hooks_hint">Wähle ein schwer zu erratendes ntfy-Thema: Auf ntfy.sh kann jeder, der das Thema kennt, die Nachrichten lesen. Nachrichten gehen nur an die eingegebenen Adressen.</string>
     <string name="hooks_test_text">SwitchGuard-Testnachricht</string>
     <string name="hooks_dismissed">Der Alarm wurde beendet.</string>
+    <string name="lan_title">Lokale Netzwerksteuerung</string>
+    <string name="lan_desc">eWeLink-Geräte zuerst direkt über WLAN schalten (schneller) und ihren Ein/Aus-Zustand weiter überwachen, wenn Internet oder eWeLink-Server ausfallen. Die Geräte brauchen den LAN-Modus, den die meisten SONOFF-Modelle haben.</string>
+    <string name="lan_found">In diesem Netzwerk: %1$d</string>
 </resources>

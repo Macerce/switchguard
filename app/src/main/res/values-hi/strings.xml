@@ -1619,4 +1619,7 @@
     <string name="hooks_hint">ऐसा ntfy विषय चुनें जिसका अंदाज़ा लगाना मुश्किल हो: ntfy.sh पर विषय जानने वाला कोई भी संदेश पढ़ सकता है। संदेश सिर्फ़ आपके दिए पतों पर जाते हैं।</string>
     <string name="hooks_test_text">SwitchGuard परीक्षण संदेश</string>
     <string name="hooks_dismissed">अलार्म बंद कर दिया गया।</string>
+    <string name="lan_title">लोकल नेटवर्क नियंत्रण</string>
+    <string name="lan_desc">eWeLink डिवाइस को पहले सीधे Wi‑Fi से चालू/बंद करें (तेज़), और इंटरनेट या eWeLink सर्वर बंद होने पर भी उनकी चालू/बंद स्थिति पर नज़र रखें। डिवाइस में LAN मोड होना चाहिए, जो अधिकांश SONOFF मॉडल में है।</string>
+    <string name="lan_found">इस नेटवर्क पर: %1$d</string>
 </resources>

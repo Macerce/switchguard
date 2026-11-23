@@ -1690,4 +1690,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="hooks_hint">Kies een moeilijk te raden ntfy-onderwerp: op ntfy.sh kan iedereen die het onderwerp kent de berichten lezen. Berichten gaan alleen naar de adressen die je invult.</string>
     <string name="hooks_test_text">SwitchGuard-testbericht</string>
     <string name="hooks_dismissed">Het alarm is uitgezet.</string>
+    <string name="lan_title">Bediening via lokaal netwerk</string>
+    <string name="lan_desc">Schakel eWeLink-apparaten eerst rechtstreeks via wifi (sneller) en blijf hun aan/uit-status bewaken als internet of de eWeLink-server uitvalt. Apparaten hebben de LAN-modus nodig, die de meeste SONOFF-modellen hebben.</string>
+    <string name="lan_found">Op dit netwerk: %1$d</string>
 </resources>

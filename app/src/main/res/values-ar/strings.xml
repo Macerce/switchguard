@@ -1834,4 +1834,7 @@
     <string name="hooks_hint">اختر موضوع ntfy يصعب تخمينه: على ntfy.sh يستطيع كل من يعرف الموضوع قراءة الرسائل. تُرسل الرسائل إلى العناوين التي تدخلها فقط.</string>
     <string name="hooks_test_text">رسالة تجريبية من SwitchGuard</string>
     <string name="hooks_dismissed">تم إيقاف الإنذار.</string>
+    <string name="lan_title">التحكم عبر الشبكة المحلية</string>
+    <string name="lan_desc">تحكّم في أجهزة eWeLink مباشرة عبر Wi‑Fi أولًا (أسرع)، وواصل مراقبة حالة التشغيل/الإيقاف عند انقطاع الإنترنت أو خادم eWeLink. يجب أن يدعم الجهاز وضع LAN، وهو متوفر في معظم طرازات SONOFF.</string>
+    <string name="lan_found">على هذه الشبكة: %1$d</string>
 </resources>

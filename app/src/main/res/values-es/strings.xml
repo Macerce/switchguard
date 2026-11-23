@@ -1696,4 +1696,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="hooks_hint">Elige un tema de ntfy difícil de adivinar: en ntfy.sh cualquiera que conozca el tema puede leer los mensajes. Los mensajes solo van a las direcciones que escribas.</string>
     <string name="hooks_test_text">Mensaje de prueba de SwitchGuard</string>
     <string name="hooks_dismissed">La alarma se ha apagado.</string>
+    <string name="lan_title">Control por red local</string>
+    <string name="lan_desc">Controla primero los dispositivos eWeLink directamente por Wi‑Fi (más rápido) y sigue vigilando su estado encendido/apagado cuando caen internet o el servidor de eWeLink. Requiere el modo LAN, presente en la mayoría de modelos SONOFF.</string>
+    <string name="lan_found">En esta red: %1$d</string>
 </resources>

@@ -93,6 +93,7 @@ import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.School
+import androidx.compose.material.icons.rounded.Router
 import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.ScreenLockPortrait
 import androidx.compose.material.icons.rounded.Shield
@@ -610,6 +611,18 @@ private fun MonitoringPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
             InfoRow(Icons.Rounded.Bolt, stringResource(R.string.tuya_live_title), stringResource(R.string.tuya_live_desc)) {
                 Switch(checked = s.tuyaLive, onCheckedChange = {
                     store.tuyaLive = it
+                    if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
+                })
+            }
+        }
+        if (s.isLoggedIn) {
+            Divider()
+            val found = com.macerce.switchguard.api.EwelinkLan.count
+            val desc = stringResource(R.string.lan_desc) +
+                if (s.lanControl && s.monitoringEnabled) "\n" + stringResource(R.string.lan_found, found) else ""
+            InfoRow(Icons.Rounded.Router, stringResource(R.string.lan_title), desc) {
+                Switch(checked = s.lanControl, onCheckedChange = {
+                    store.lanControl = it
                     if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
                 })
             }

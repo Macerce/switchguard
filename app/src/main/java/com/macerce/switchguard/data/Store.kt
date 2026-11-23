@@ -120,7 +120,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     /** Şifre çözmeden bakılır (sık çağrılır); çözülemeyen token ilk istekte oturum hatasına döner. */
     val isLoggedIn get() = str("at").isNotEmpty()
 
-    fun logout() = put { remove("at"); remove("rt"); remove("apikey"); remove("email") }
+    fun logout() = put { remove("at"); remove("rt"); remove("apikey"); remove("email"); remove("lanKeys") }
 
     // --- Tuya (Smart Life) ---
     var tuyaAccessId: String
@@ -230,6 +230,16 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var tuyaLive: Boolean
         get() = prefs.getBoolean("tuyaLive", true)
         set(v) = put { putBoolean("tuyaLive", v) }
+    /** eWeLink cihazlarını yerel ağdan da izle ve önce yerel ağdan aç/kapa (bulut kapalıyken de çalışır). */
+    var lanControl: Boolean
+        get() = prefs.getBoolean("lanControl", true)
+        set(v) = put { putBoolean("lanControl", v) }
+    /** Cihaz kimliği → devicekey (yerel ağ şifrelemesi; cihaz listesinden gelir, gizli saklanır). */
+    var lanKeys: Map<String, String>
+        get() = secret("lanKeys").takeIf { it.isNotEmpty() }?.let { text ->
+            runCatching { org.json.JSONObject(text).let { o -> o.keys().asSequence().associateWith { o.getString(it) } } }.getOrNull()
+        }.orEmpty()
+        set(v) = putSecret("lanKeys", if (v.isEmpty()) "" else org.json.JSONObject(v).toString())
     /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
     var energyPrice: Double
         get() = str("energyPrice").toDoubleOrNull() ?: 0.0
@@ -592,7 +602,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     companion object {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         /** Keystore ile şifreli saklanan anahtarlar. */
-        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken")
+        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys")
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
         const val WATCHDOG_OFF = 0
