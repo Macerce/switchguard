@@ -6,9 +6,9 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
-## 2.38.1 — 2026-11-23
+## 2.38.2 — 2026-11-23
 **Fixed**
-- Local network control writes a short diagnostic line per device found (for troubleshooting).
+- Local network control writes short diagnostic lines (device found, command result and time) for troubleshooting.
 
 ## 2.38.0 — 2026-11-23
 **New**

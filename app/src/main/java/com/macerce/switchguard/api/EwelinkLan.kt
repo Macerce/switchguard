@@ -187,7 +187,15 @@ object EwelinkLan {
         val cmd = LanProtocol.switchCommand(device.id, keys[device.id], channel, on, multi = device.usesSwitchArray || channel > 0)
         val req = Request.Builder().url("http://${e.host}:${e.port}${cmd.path}")
             .post(cmd.body.toRequestBody("application/json".toMediaType())).build()
-        return runCatching { http.newCall(req).execute().use { it.isSuccessful && LanProtocol.isOk(it.body?.string().orEmpty()) } }
+        val started = System.currentTimeMillis()
+        return runCatching {
+            http.newCall(req).execute().use { r ->
+                val text = r.body?.string().orEmpty()
+                (r.isSuccessful && LanProtocol.isOk(text)).also { ok ->
+                    Log.i(TAG, "LAN switch ${device.id} ok=$ok http=${r.code} ${System.currentTimeMillis() - started} ms" + if (ok) "" else " body=${text.take(80)}")
+                }
+            }
+        }
             .onFailure { Log.w(TAG, "LAN switch failed for ${device.id}: ${it.javaClass.simpleName}") }
             .getOrDefault(false)
             .also { ok -> if (ok) entries[device.id] = e.copy(switches = e.switches + (channel to on)) }

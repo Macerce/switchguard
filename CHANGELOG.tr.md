@@ -6,9 +6,9 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
-## 2.38.1 — 2026-11-23
+## 2.38.2 — 2026-11-23
 **Düzeltme**
-- Yerel ağ kontrolü bulunan her cihaz için kısa bir tanılama satırı yazar (sorun gidermek için).
+- Yerel ağ kontrolü sorun gidermek için kısa tanılama satırları yazar (bulunan cihaz, komut sonucu ve süresi).
 
 ## 2.38.0 — 2026-11-23
 **Yeni**
