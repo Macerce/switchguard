@@ -1776,4 +1776,17 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_shelly_pw">Şifre</string>
     <string name="lan_shelly_pw_wrong">Şifre yanlış. Kontrol edip yeniden dene.</string>
     <string name="lan_shelly_pw_ok">Devam</string>
+    <string name="lan_shelly_setup_open">Yeni ya da sıfırlanmış Shelly mi? Buradan Wi-Fi\'a bağla</string>
+    <string name="lan_shelly_setup_title">Shelly\'yi Wi-Fi\'a bağla</string>
+    <string name="lan_shelly_setup_body">Yeni (ya da sıfırlanmış) Shelly\'ye elektrik ver, telefonu yakın tut. Aşağıya ev Wi-Fi\'ni yaz. Telefon kısa süre Shelly\'nin kendi ağına bağlanır (Android seçmeni ister), bu bilgileri gönderir ve Shelly ev ağına katılır. 2,4 GHz ağ kullan.</string>
+    <string name="lan_shelly_setup_ssid">Wi-Fi adı</string>
+    <string name="lan_shelly_setup_pass">Wi-Fi şifresi</string>
+    <string name="lan_shelly_setup_start">Bağla</string>
+    <string name="lan_shelly_setup_stage1">Android\'in açtığı pencerede Shelly\'yi (shelly…) seç…</string>
+    <string name="lan_shelly_setup_stage2">Wi-Fi bilgileri Shelly\'ye gönderiliyor…</string>
+    <string name="lan_shelly_setup_ok">Tamam. Shelly yeniden başlıyor ve %1$s ağına katılıyor; yaklaşık 30 saniyede listede belirir.</string>
+    <string name="lan_shelly_setup_no_network">Shelly\'nin ağı bulunamadı ya da seçilmedi. Cihazın yeni ya da sıfırlanmış olduğundan (kendi shelly… ağı görünüyor) emin olup yeniden dene.</string>
+    <string name="lan_shelly_setup_not_shelly">Bağlanıldı ama 192.168.33.1\'de Shelly yanıt vermedi.</string>
+    <string name="lan_shelly_setup_rejected">Shelly Wi-Fi bilgilerini kabul etmedi. Ağ adını ve şifreyi kontrol et.</string>
+    <string name="lan_shelly_setup_old_android">Bu Android sürümünde telefonu Shelly\'nin Wi-Fi\'ına (shelly…) kendin bağla, tarayıcıda 192.168.33.1\'i aç ve Settings → Wi-Fi altında ev Wi-Fi\'ni yaz.</string>
 </resources>

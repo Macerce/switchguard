@@ -1780,4 +1780,17 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_pw">Password</string>
     <string name="lan_shelly_pw_wrong">Password errata. Controllala e riprova.</string>
     <string name="lan_shelly_pw_ok">Continua</string>
+    <string name="lan_shelly_setup_open">Shelly nuovo o ripristinato? Collegalo al Wi-Fi da qui</string>
+    <string name="lan_shelly_setup_title">Collega Shelly al Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Alimenta lo Shelly nuovo (o ripristinato) e tieni il telefono vicino. Inserisci sotto il tuo Wi-Fi. Il telefono si collega per poco alla rete dello Shelly (Android ti chiede di sceglierla), invia i dati e lo Shelly entra nel tuo Wi-Fi. Usa una rete a 2,4 GHz.</string>
+    <string name="lan_shelly_setup_ssid">Nome Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Password Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Collega</string>
+    <string name="lan_shelly_setup_stage1">Scegli lo Shelly (shelly…) nella finestra di Android…</string>
+    <string name="lan_shelly_setup_stage2">Invio dei dati Wi-Fi allo Shelly…</string>
+    <string name="lan_shelly_setup_ok">Fatto. Lo Shelly si riavvia ed entra in %1$s; compare nell’elenco tra circa 30 secondi.</string>
+    <string name="lan_shelly_setup_no_network">Rete dello Shelly non trovata o non scelta. Verifica che il dispositivo sia nuovo o ripristinato (si vede il suo Wi-Fi shelly…) e riprova.</string>
+    <string name="lan_shelly_setup_not_shelly">Connesso, ma nessuno Shelly ha risposto su 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">Lo Shelly non ha accettato i dati Wi-Fi. Controlla nome e password.</string>
+    <string name="lan_shelly_setup_old_android">Su questa versione di Android collega tu il telefono al Wi-Fi dello Shelly (shelly…), apri 192.168.33.1 nel browser e inserisci il tuo Wi-Fi in Settings → Wi-Fi.</string>
 </resources>

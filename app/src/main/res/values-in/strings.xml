@@ -1666,4 +1666,17 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_shelly_pw">Kata sandi</string>
     <string name="lan_shelly_pw_wrong">Kata sandi salah. Periksa lalu coba lagi.</string>
     <string name="lan_shelly_pw_ok">Lanjut</string>
+    <string name="lan_shelly_setup_open">Shelly baru atau direset? Hubungkan ke Wi-Fi dari sini</string>
+    <string name="lan_shelly_setup_title">Hubungkan Shelly ke Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Nyalakan Shelly baru (atau yang direset) dan dekatkan ponsel. Masukkan Wi-Fi rumah di bawah. Ponsel sebentar terhubung ke jaringan milik Shelly (Android meminta Anda memilihnya), mengirim data ini, lalu Shelly bergabung ke Wi-Fi Anda. Gunakan jaringan 2,4 GHz.</string>
+    <string name="lan_shelly_setup_ssid">Nama Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Kata sandi Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Hubungkan</string>
+    <string name="lan_shelly_setup_stage1">Pilih Shelly (shelly…) di jendela Android…</string>
+    <string name="lan_shelly_setup_stage2">Mengirim data Wi-Fi ke Shelly…</string>
+    <string name="lan_shelly_setup_ok">Selesai. Shelly memulai ulang dan bergabung ke %1$s; akan muncul di daftar dalam sekitar 30 detik.</string>
+    <string name="lan_shelly_setup_no_network">Jaringan Shelly tidak ditemukan atau tidak dipilih. Pastikan perangkat baru atau sudah direset (Wi-Fi shelly… terlihat), lalu coba lagi.</string>
+    <string name="lan_shelly_setup_not_shelly">Terhubung, tetapi tidak ada Shelly yang menjawab di 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">Shelly tidak menerima data Wi-Fi. Periksa nama dan kata sandi.</string>
+    <string name="lan_shelly_setup_old_android">Di versi Android ini, hubungkan sendiri ponsel ke Wi-Fi Shelly (shelly…), buka 192.168.33.1 di browser, lalu masukkan Wi-Fi Anda di Settings → Wi-Fi.</string>
 </resources>

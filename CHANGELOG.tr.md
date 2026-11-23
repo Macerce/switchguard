@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.43.0 — 2026-11-24
+**Yeni**
+- Yeni ya da sıfırlanmış Shelly'yi uygulamadan Wi-Fi'a bağlama: Cihaz ekle (yerel ağ) → Shelly → "Yeni ya da sıfırlanmış Shelly mi?". Wi-Fi'ını yaz; telefon kısa süre Shelly'nin kendi ağına bağlanıp bilgileri gönderir ve Shelly listede belirir. Android 10 ve üstü.
+
 ## 2.42.0 — 2026-11-23
 **Yeni**
 - Şifre korumalı Shelly cihazlar eklenebilir: Ekle'ye dokunup cihazın giriş şifresini gir (Gen1'de kullanıcı adı da sorulur). Şifre cihazda doğrulanır, yalnızca bu telefonda şifreli tutulur; yedeğe ve aktarıma girmez.

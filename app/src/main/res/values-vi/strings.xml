@@ -1708,4 +1708,17 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_pw">Mật khẩu</string>
     <string name="lan_shelly_pw_wrong">Sai mật khẩu. Kiểm tra rồi thử lại.</string>
     <string name="lan_shelly_pw_ok">Tiếp tục</string>
+    <string name="lan_shelly_setup_open">Shelly mới hoặc đã đặt lại? Kết nối Wi-Fi tại đây</string>
+    <string name="lan_shelly_setup_title">Kết nối Shelly với Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Cấp điện cho Shelly mới (hoặc đã đặt lại) và để điện thoại gần đó. Nhập Wi-Fi nhà bạn bên dưới. Điện thoại sẽ tạm kết nối vào mạng riêng của Shelly (Android sẽ hỏi bạn chọn), gửi thông tin này và Shelly tham gia Wi-Fi của bạn. Dùng mạng 2,4 GHz.</string>
+    <string name="lan_shelly_setup_ssid">Tên Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Mật khẩu Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Kết nối</string>
+    <string name="lan_shelly_setup_stage1">Chọn Shelly (shelly…) trong cửa sổ Android…</string>
+    <string name="lan_shelly_setup_stage2">Đang gửi thông tin Wi-Fi tới Shelly…</string>
+    <string name="lan_shelly_setup_ok">Xong. Shelly đang khởi động lại và tham gia %1$s; sẽ xuất hiện trong danh sách sau khoảng 30 giây.</string>
+    <string name="lan_shelly_setup_no_network">Không tìm thấy hoặc chưa chọn mạng của Shelly. Hãy chắc thiết bị mới hoặc đã đặt lại (thấy Wi-Fi shelly…), rồi thử lại.</string>
+    <string name="lan_shelly_setup_not_shelly">Đã kết nối nhưng không có Shelly trả lời tại 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">Shelly không chấp nhận thông tin Wi-Fi. Kiểm tra tên và mật khẩu.</string>
+    <string name="lan_shelly_setup_old_android">Trên phiên bản Android này, hãy tự kết nối điện thoại vào Wi-Fi của Shelly (shelly…), mở 192.168.33.1 trong trình duyệt và nhập Wi-Fi của bạn ở Settings → Wi-Fi.</string>
 </resources>

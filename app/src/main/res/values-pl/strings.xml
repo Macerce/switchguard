@@ -1845,4 +1845,17 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_pw">Hasło</string>
     <string name="lan_shelly_pw_wrong">Nieprawidłowe hasło. Sprawdź je i spróbuj ponownie.</string>
     <string name="lan_shelly_pw_ok">Dalej</string>
+    <string name="lan_shelly_setup_open">Nowe lub zresetowane Shelly? Połącz je tutaj z Wi-Fi</string>
+    <string name="lan_shelly_setup_title">Połącz Shelly z Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Podłącz zasilanie nowego (lub zresetowanego) Shelly i trzymaj telefon blisko. Wpisz poniżej swoje Wi-Fi. Telefon na chwilę łączy się z własną siecią Shelly (Android poprosi o jej wybór), wysyła dane, a Shelly dołącza do Twojej sieci. Użyj sieci 2,4 GHz.</string>
+    <string name="lan_shelly_setup_ssid">Nazwa Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Hasło Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Połącz</string>
+    <string name="lan_shelly_setup_stage1">Wybierz Shelly (shelly…) w oknie Androida…</string>
+    <string name="lan_shelly_setup_stage2">Wysyłanie danych Wi-Fi do Shelly…</string>
+    <string name="lan_shelly_setup_ok">Gotowe. Shelly uruchamia się ponownie i łączy z %1$s; pojawi się na liście po około 30 sekundach.</string>
+    <string name="lan_shelly_setup_no_network">Nie znaleziono lub nie wybrano sieci Shelly. Upewnij się, że urządzenie jest nowe lub zresetowane (widać jego Wi-Fi shelly…), i spróbuj ponownie.</string>
+    <string name="lan_shelly_setup_not_shelly">Połączono, ale żadne Shelly nie odpowiedziało pod 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">Shelly nie przyjęło danych Wi-Fi. Sprawdź nazwę i hasło.</string>
+    <string name="lan_shelly_setup_old_android">W tej wersji Androida połącz telefon z Wi-Fi Shelly (shelly…) samodzielnie, otwórz 192.168.33.1 w przeglądarce i wpisz swoje Wi-Fi w Settings → Wi-Fi.</string>
 </resources>

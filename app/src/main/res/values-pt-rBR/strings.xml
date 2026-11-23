@@ -1809,4 +1809,17 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_shelly_pw">Senha</string>
     <string name="lan_shelly_pw_wrong">Senha incorreta. Verifique e tente de novo.</string>
     <string name="lan_shelly_pw_ok">Continuar</string>
+    <string name="lan_shelly_setup_open">Shelly novo ou redefinido? Conecte ao Wi-Fi por aqui</string>
+    <string name="lan_shelly_setup_title">Conectar Shelly ao Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Ligue o Shelly novo (ou redefinido) e mantenha o telefone perto. Digite seu Wi-Fi abaixo. O telefone entra rapidamente na rede do próprio Shelly (o Android pede para escolher), envia os dados e o Shelly entra no seu Wi-Fi. Use uma rede de 2,4 GHz.</string>
+    <string name="lan_shelly_setup_ssid">Nome do Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Senha do Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Conectar</string>
+    <string name="lan_shelly_setup_stage1">Escolha o Shelly (shelly…) na janela do Android…</string>
+    <string name="lan_shelly_setup_stage2">Enviando os dados do Wi-Fi ao Shelly…</string>
+    <string name="lan_shelly_setup_ok">Pronto. O Shelly está reiniciando e entrando em %1$s; aparece na lista em cerca de 30 segundos.</string>
+    <string name="lan_shelly_setup_no_network">A rede do Shelly não foi encontrada ou escolhida. Confirme que o dispositivo é novo ou redefinido (o Wi-Fi shelly… aparece) e tente de novo.</string>
+    <string name="lan_shelly_setup_not_shelly">Conectado, mas nenhum Shelly respondeu em 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">O Shelly não aceitou os dados do Wi-Fi. Verifique o nome e a senha.</string>
+    <string name="lan_shelly_setup_old_android">Nesta versão do Android, conecte você mesmo o telefone ao Wi-Fi do Shelly (shelly…), abra 192.168.33.1 no navegador e digite seu Wi-Fi em Settings → Wi-Fi.</string>
 </resources>

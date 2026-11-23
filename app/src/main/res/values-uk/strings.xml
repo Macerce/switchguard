@@ -1816,4 +1816,17 @@
     <string name="lan_shelly_pw">Пароль</string>
     <string name="lan_shelly_pw_wrong">Неправильний пароль. Перевірте й спробуйте ще раз.</string>
     <string name="lan_shelly_pw_ok">Продовжити</string>
+    <string name="lan_shelly_setup_open">Новий або скинутий Shelly? Підключіть його до Wi-Fi тут</string>
+    <string name="lan_shelly_setup_title">Підключити Shelly до Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Увімкніть новий (або скинутий) Shelly й тримайте телефон поруч. Введіть нижче домашню мережу Wi-Fi. Телефон ненадовго підключиться до власної мережі Shelly (Android попросить її вибрати), передасть дані, і Shelly приєднається до вашої мережі. Використовуйте мережу 2,4 ГГц.</string>
+    <string name="lan_shelly_setup_ssid">Назва мережі Wi-Fi</string>
+    <string name="lan_shelly_setup_pass">Пароль Wi-Fi</string>
+    <string name="lan_shelly_setup_start">Підключити</string>
+    <string name="lan_shelly_setup_stage1">Виберіть Shelly (shelly…) у вікні Android…</string>
+    <string name="lan_shelly_setup_stage2">Надсилання даних Wi-Fi на Shelly…</string>
+    <string name="lan_shelly_setup_ok">Готово. Shelly перезавантажується й підключається до %1$s; він з’явиться в списку приблизно за 30 секунд.</string>
+    <string name="lan_shelly_setup_no_network">Мережу Shelly не знайдено або не вибрано. Переконайтеся, що пристрій новий або скинутий (видно його мережу shelly…), і повторіть.</string>
+    <string name="lan_shelly_setup_not_shelly">Підключено, але за адресою 192.168.33.1 Shelly не відповів.</string>
+    <string name="lan_shelly_setup_rejected">Shelly не прийняв дані Wi-Fi. Перевірте назву й пароль.</string>
+    <string name="lan_shelly_setup_old_android">У цій версії Android підключіть телефон до мережі Shelly (shelly…) вручну, відкрийте 192.168.33.1 у браузері й укажіть свою мережу в Settings → Wi-Fi.</string>
 </resources>

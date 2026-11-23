@@ -194,6 +194,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     }
     var naming by remember { mutableStateOf<FoundRow?>(null) }
     var askPassword by remember { mutableStateOf<ShellyLan.Found?>(null) }
+    var setup by remember { mutableStateOf(false) }
     var help by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -213,6 +214,17 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                 val steps = if (shelly) listOf(R.string.lan_shelly_step1, R.string.lan_shelly_step2, R.string.lan_shelly_step3)
                 else listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
                 steps.forEachIndexed { i, res -> StepLine(i + 1, stringResource(res)) }
+                if (shelly) Row(
+                    Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(8.dp)).clickable { setup = true }.padding(vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(Icons.Rounded.Wifi, null, tint = MaterialTheme.colorScheme.primary)
+                    Text(
+                        stringResource(R.string.lan_shelly_setup_open), style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.primary, modifier = Modifier.weight(1f).padding(start = 8.dp),
+                    )
+                    Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = MaterialTheme.colorScheme.primary)
+                }
 
                 Text(
                     stringResource(R.string.lan_found_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold,
@@ -259,6 +271,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
             onDismiss()
         }
     }
+    if (setup) ShellySetupDialog(ssid) { setup = false }
     askPassword?.let { f ->
         ShellyPasswordDialog(f, onDismiss = { askPassword = null }) { ok ->
             askPassword = null

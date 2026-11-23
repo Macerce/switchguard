@@ -1715,4 +1715,17 @@
     <string name="lan_shelly_pw">密码</string>
     <string name="lan_shelly_pw_wrong">密码错误。请检查后重试。</string>
     <string name="lan_shelly_pw_ok">继续</string>
+    <string name="lan_shelly_setup_open">新的或已重置的 Shelly？在这里连接 Wi-Fi</string>
+    <string name="lan_shelly_setup_title">将 Shelly 连接到 Wi-Fi</string>
+    <string name="lan_shelly_setup_body">给新的（或已重置的）Shelly 通电，并让手机靠近它。在下方输入家里的 Wi-Fi。手机会短暂连接 Shelly 自己的网络（Android 会让你选择），发送这些信息，然后 Shelly 加入你的 Wi-Fi。请使用 2.4 GHz 网络。</string>
+    <string name="lan_shelly_setup_ssid">Wi-Fi 名称</string>
+    <string name="lan_shelly_setup_pass">Wi-Fi 密码</string>
+    <string name="lan_shelly_setup_start">连接</string>
+    <string name="lan_shelly_setup_stage1">在 Android 弹出的窗口中选择 Shelly（shelly…）…</string>
+    <string name="lan_shelly_setup_stage2">正在向 Shelly 发送 Wi-Fi 信息…</string>
+    <string name="lan_shelly_setup_ok">完成。Shelly 正在重启并加入 %1$s，大约 30 秒后出现在列表中。</string>
+    <string name="lan_shelly_setup_no_network">未找到或未选择 Shelly 的网络。请确认设备是新的或已重置（能看到它的 shelly… Wi-Fi），然后重试。</string>
+    <string name="lan_shelly_setup_not_shelly">已连接，但 192.168.33.1 上没有 Shelly 响应。</string>
+    <string name="lan_shelly_setup_rejected">Shelly 未接受 Wi-Fi 信息。请检查名称和密码。</string>
+    <string name="lan_shelly_setup_old_android">在此 Android 版本上，请手动将手机连接到 Shelly 的 Wi-Fi（shelly…），在浏览器中打开 192.168.33.1，并在 Settings → Wi-Fi 中输入你的 Wi-Fi。</string>
 </resources>

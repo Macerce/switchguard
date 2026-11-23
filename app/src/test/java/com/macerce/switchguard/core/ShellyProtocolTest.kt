@@ -104,4 +104,18 @@ class ShellyProtocolTest {
         assertTrue(ShellyProtocol.isShellyServiceName("ShellyPlus1PM-a8032ab12345"))
         assertFalse(ShellyProtocol.isShellyServiceName("eWeLink_1000aa"))
     }
+
+    @Test
+    fun staConfig() {
+        assertEquals("/settings/sta?enabled=1&ssid=Ev%20Wi-Fi&key=a%26b", ShellyProtocol.staConfigPath(1, "Ev Wi-Fi", "a&b"))
+        val p2 = ShellyProtocol.staConfigPath(2, "Ev", "x\"y")
+        assertTrue(p2.startsWith("/rpc/WiFi.SetConfig?config="))
+        val cfg = org.json.JSONObject(java.net.URLDecoder.decode(p2.substringAfter("config="), "UTF-8")).getJSONObject("sta")
+        assertEquals("x\"y", cfg.getString("pass"))
+        assertTrue(ShellyProtocol.isStaConfigOk(1, """{"enabled":true,"ssid":"Ev"}""", "Ev"))
+        assertTrue(ShellyProtocol.isStaConfigOk(2, """{"restart_required":true}""", "Ev"))
+        assertFalse(ShellyProtocol.isStaConfigOk(2, """{"code":-103,"message":"x"}""", "Ev"))
+        assertTrue(ShellyProtocol.isSetupSsid("ShellyPlus1PM-A8032AB12345"))
+        assertFalse(ShellyProtocol.isSetupSsid("Ev"))
+    }
 }

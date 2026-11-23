@@ -90,6 +90,35 @@ object ShellyProtocol {
         )
     }.getOrNull()
 
+    /** Fabrika ayarlı Shelly'nin kendi Wi-Fi erişim noktasındaki adresi. */
+    const val SETUP_HOST = "192.168.33.1"
+
+    /**
+     * Fabrika ayarlı Shelly'yi ev Wi-Fi'sine tanıtan adres (cihazın kendi ağına bağlıyken çağrılır).
+     * Gen1: `/settings/sta?enabled=1&ssid=..&key=..` (kendiliğinden yeniden başlar).
+     * Gen2+: `/rpc/WiFi.SetConfig?config={"sta":{"ssid":..,"pass":..,"enable":true}}` (ardından [rebootPath]).
+     */
+    fun staConfigPath(gen: Int, ssid: String, password: String): String {
+        fun enc(v: String) = java.net.URLEncoder.encode(v, "UTF-8").replace("+", "%20")
+        return if (gen <= 1) "/settings/sta?enabled=1&ssid=${enc(ssid)}&key=${enc(password)}"
+        else {
+            val sta = JSONObject().put("ssid", ssid).put("pass", password).put("enable", true)
+            "/rpc/WiFi.SetConfig?config=" + enc(JSONObject().put("sta", sta).toString())
+        }
+    }
+
+    fun rebootPath(gen: Int): String = if (gen <= 1) "/reboot" else "/rpc/Shelly.Reboot"
+
+    /** Wi-Fi ayarı kabul edildi mi: Gen1 yanıtında `wifi_sta.ssid` (ya da `ssid`), Gen2'de hata kodu yok. */
+    fun isStaConfigOk(gen: Int, json: String, ssid: String): Boolean = runCatching {
+        val o = JSONObject(json)
+        if (gen <= 1) (o.optJSONObject("wifi_sta")?.optString("ssid") ?: o.optString("ssid")) == ssid
+        else !o.has("code") && !o.has("error")
+    }.getOrDefault(false)
+
+    /** Shelly'nin kendi erişim noktası ("shelly1-A1B2C3", "ShellyPlus1PM-A8032AB12345"). */
+    fun isSetupSsid(ssid: String?): Boolean = ssid != null && ssid.startsWith("shelly", ignoreCase = true)
+
     /** mDNS servis adı Shelly'ye mi ait ("shelly1pm-A1B2C3", "ShellyPlus1PM-a8032ab12345"). */
     fun isShellyServiceName(name: String): Boolean = name.startsWith("shelly", ignoreCase = true)
 }

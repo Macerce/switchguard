@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.43.0 — 2026-11-24
+**New**
+- Connect a new or reset Shelly to Wi-Fi from the app: Add device (LAN) → Shelly → "New or reset Shelly?". Enter your Wi-Fi; the phone briefly joins the Shelly's own network, sends the details and the Shelly appears in the list. Android 10 or newer.
+
 ## 2.42.0 — 2026-11-23
 **New**
 - Password-protected Shelly devices can be added: tap Add and enter the device's login password (Gen1 also asks for the user name). The password is checked on the device, kept encrypted on this phone only and is not included in backups or transfers.

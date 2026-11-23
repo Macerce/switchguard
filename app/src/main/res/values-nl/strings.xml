@@ -1773,4 +1773,17 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_pw">Wachtwoord</string>
     <string name="lan_shelly_pw_wrong">Onjuist wachtwoord. Controleer het en probeer opnieuw.</string>
     <string name="lan_shelly_pw_ok">Doorgaan</string>
+    <string name="lan_shelly_setup_open">Nieuwe of gereset Shelly? Verbind hem hier met wifi</string>
+    <string name="lan_shelly_setup_title">Shelly met wifi verbinden</string>
+    <string name="lan_shelly_setup_body">Zet stroom op de nieuwe (of gereset) Shelly en houd de telefoon dichtbij. Vul hieronder je wifi in. De telefoon maakt kort verbinding met het eigen netwerk van de Shelly (Android vraagt je het te kiezen), stuurt de gegevens en de Shelly gaat op je wifi. Gebruik een 2,4 GHz-netwerk.</string>
+    <string name="lan_shelly_setup_ssid">Wifi-naam</string>
+    <string name="lan_shelly_setup_pass">Wifi-wachtwoord</string>
+    <string name="lan_shelly_setup_start">Verbinden</string>
+    <string name="lan_shelly_setup_stage1">Kies de Shelly (shelly…) in het Android-venster…</string>
+    <string name="lan_shelly_setup_stage2">Wifi-gegevens worden naar de Shelly gestuurd…</string>
+    <string name="lan_shelly_setup_ok">Klaar. De Shelly start opnieuw en gaat op %1$s; hij verschijnt binnen ongeveer 30 seconden in de lijst.</string>
+    <string name="lan_shelly_setup_no_network">Het netwerk van de Shelly is niet gevonden of niet gekozen. Controleer of het apparaat nieuw of gereset is (zijn wifi shelly… is zichtbaar) en probeer opnieuw.</string>
+    <string name="lan_shelly_setup_not_shelly">Verbonden, maar er antwoordde geen Shelly op 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">De Shelly accepteerde de wifi-gegevens niet. Controleer naam en wachtwoord.</string>
+    <string name="lan_shelly_setup_old_android">Op deze Android-versie verbind je de telefoon zelf met de wifi van de Shelly (shelly…), open je 192.168.33.1 in de browser en vul je je wifi in onder Settings → Wi-Fi.</string>
 </resources>

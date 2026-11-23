@@ -1780,4 +1780,17 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_shelly_pw">Password</string>
     <string name="lan_shelly_pw_wrong">Wrong password. Check it and try again.</string>
     <string name="lan_shelly_pw_ok">Continue</string>
+    <string name="lan_shelly_setup_open">New or reset Shelly? Connect it to Wi-Fi from here</string>
+    <string name="lan_shelly_setup_title">Connect Shelly to Wi-Fi</string>
+    <string name="lan_shelly_setup_body">Power the new (or reset) Shelly and keep the phone close to it. Enter your home Wi-Fi below. The phone briefly joins the Shelly\'s own network (Android asks you to pick it), sends these details, and the Shelly joins your Wi-Fi. Use a 2.4 GHz network.</string>
+    <string name="lan_shelly_setup_ssid">Wi-Fi name</string>
+    <string name="lan_shelly_setup_pass">Wi-Fi password</string>
+    <string name="lan_shelly_setup_start">Connect</string>
+    <string name="lan_shelly_setup_stage1">Pick the Shelly (shelly…) in the window Android shows…</string>
+    <string name="lan_shelly_setup_stage2">Sending Wi-Fi details to the Shelly…</string>
+    <string name="lan_shelly_setup_ok">Done. The Shelly is restarting and joining %1$s; it appears in the list in about 30 seconds.</string>
+    <string name="lan_shelly_setup_no_network">The Shelly\'s network was not found or not selected. Make sure the device is new or reset (its own Wi-Fi shelly… is visible), then try again.</string>
+    <string name="lan_shelly_setup_not_shelly">Connected, but no Shelly answered at 192.168.33.1.</string>
+    <string name="lan_shelly_setup_rejected">The Shelly did not accept the Wi-Fi details. Check the name and password.</string>
+    <string name="lan_shelly_setup_old_android">On this Android version, connect the phone to the Shelly\'s Wi-Fi (shelly…) yourself, open 192.168.33.1 in the browser and enter your Wi-Fi under Settings → Wi-Fi.</string>
 </resources>

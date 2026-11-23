@@ -1771,4 +1771,17 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_shelly_pw">Passwort</string>
     <string name="lan_shelly_pw_wrong">Falsches Passwort. Prüfe es und versuche es erneut.</string>
     <string name="lan_shelly_pw_ok">Weiter</string>
+    <string name="lan_shelly_setup_open">Neues oder zurückgesetztes Shelly? Hier mit dem WLAN verbinden</string>
+    <string name="lan_shelly_setup_title">Shelly mit WLAN verbinden</string>
+    <string name="lan_shelly_setup_body">Versorge das neue (oder zurückgesetzte) Shelly mit Strom und halte das Telefon in der Nähe. Gib unten dein WLAN ein. Das Telefon verbindet sich kurz mit dem eigenen Netz des Shelly (Android fragt nach der Auswahl), sendet die Daten, und das Shelly tritt deinem WLAN bei. Nutze ein 2,4-GHz-Netz.</string>
+    <string name="lan_shelly_setup_ssid">WLAN-Name</string>
+    <string name="lan_shelly_setup_pass">WLAN-Passwort</string>
+    <string name="lan_shelly_setup_start">Verbinden</string>
+    <string name="lan_shelly_setup_stage1">Wähle das Shelly (shelly…) im Android-Fenster…</string>
+    <string name="lan_shelly_setup_stage2">WLAN-Daten werden an das Shelly gesendet…</string>
+    <string name="lan_shelly_setup_ok">Fertig. Das Shelly startet neu und verbindet sich mit %1$s; es erscheint in etwa 30 Sekunden in der Liste.</string>
+    <string name="lan_shelly_setup_no_network">Das Netz des Shelly wurde nicht gefunden oder nicht ausgewählt. Prüfe, ob das Gerät neu oder zurückgesetzt ist (sein WLAN shelly… ist sichtbar), und versuche es erneut.</string>
+    <string name="lan_shelly_setup_not_shelly">Verbunden, aber unter 192.168.33.1 hat kein Shelly geantwortet.</string>
+    <string name="lan_shelly_setup_rejected">Das Shelly hat die WLAN-Daten nicht angenommen. Prüfe Name und Passwort.</string>
+    <string name="lan_shelly_setup_old_android">Auf dieser Android-Version verbinde das Telefon selbst mit dem WLAN des Shelly (shelly…), öffne 192.168.33.1 im Browser und gib dein WLAN unter Settings → Wi-Fi ein.</string>
 </resources>
