@@ -1727,7 +1727,7 @@
     <string name="lan_shelly_step1">Shelly를 Wi-Fi에 연결하세요: Shelly Smart Control 앱을 쓰거나, 휴대폰을 기기 자체 Wi-Fi(shelly…)에 연결한 뒤 브라우저에서 192.168.33.1을 열고 설정 → Wi-Fi에 네트워크 이름과 비밀번호를 입력하세요.</string>
     <string name="lan_steps_title">시작하기 전에</string>
     <string name="lan_brand_title">%1$s 추가</string>
-    <string name="lan_brand_soon">곧 지원: Tasmota, ESPHome, Philips Hue, TP-Link, Home Assistant.</string>
+    <string name="lan_brand_soon">곧 지원: Philips Hue, TP-Link, Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">DIY(LAN) 모드의 eWeLink 기기</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3, Gen4 릴레이와 플러그</string>
     <string name="lan_brand_hint">브랜드를 고르세요. 계정이나 클라우드가 필요 없고 휴대폰과 기기가 같은 Wi-Fi에 있으면 됩니다.</string>
@@ -1752,4 +1752,19 @@
     <string name="lan_shelly_setup_old_android">이 Android 버전에서는 휴대폰을 직접 Shelly Wi-Fi(shelly…)에 연결하고 브라우저에서 192.168.33.1을 열어 Settings → Wi-Fi에 집 Wi-Fi를 입력하세요.</string>
     <string name="lan_shelly_setup_stage3">Shelly 자체의 열린 네트워크를 끄기 위해 집 Wi-Fi에 나타나기를 기다리는 중…</string>
     <string name="lan_shelly_setup_ap_on">주의: Shelly 자체 Wi-Fi(shelly…)가 아직 켜져 있어 근처 누구나 연결할 수 있습니다. Shelly 웹 페이지(목록의 IP)를 열어 Settings → Wi-Fi → Access Point를 끄거나 로그인 비밀번호를 설정하세요.</string>
+    <string name="lan_brand_tasmota_desc">Tasmota를 설치한 기기(플러그, 릴레이, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">웹 서버를 켠 ESPHome 기기</string>
+    <string name="lan_tasmota_step1">기기에 Tasmota가 설치되어 있고 Wi-Fi에 연결되어 있어야 합니다(IP 주소로 웹 페이지가 열림).</string>
+    <string name="lan_tasmota_step2">Tasmota는 네트워크에 자신을 알리지 않습니다. 네트워크 검색을 누르거나 IP를 입력하세요.</string>
+    <string name="lan_tasmota_step3">Tasmota에 웹 비밀번호를 설정했다면 입력하라는 메시지가 나옵니다.</string>
+    <string name="lan_esphome_step1">기기의 ESPHome 구성에 web_server:를 추가하고 설치하세요.</string>
+    <string name="lan_esphome_step2">휴대폰을 같은 Wi-Fi에 두면 기기가 아래에 자동으로 나타납니다. 또는 IP를 입력하세요.</string>
+    <string name="lan_esphome_step3">스위치와 조명은 채널이 됩니다(최대 4개). W 단위 전력 센서는 전력으로 표시됩니다.</string>
+    <string name="lan_scan">네트워크 검색</string>
+    <string name="lan_scan_done">검색 완료: %1$d개 찾음.</string>
+    <string name="lan_scan_no_wifi">먼저 휴대폰을 Wi-Fi에 연결하세요.</string>
+    <string name="lan_locked_generic">비밀번호로 보호됨: 추가를 누르고 기기의 웹 비밀번호를 입력하세요.</string>
+    <string name="lan_unsupported_generic">이 기기에서 스위치나 릴레이를 찾지 못했습니다.</string>
+    <string name="lan_pw_title_generic">기기 비밀번호</string>
+    <string name="lan_pw_body_generic">기기 웹 페이지의 사용자 이름과 비밀번호를 입력하세요. 이 휴대폰에만 암호화되어 저장되며 백업에 포함되지 않습니다.</string>
 </resources>

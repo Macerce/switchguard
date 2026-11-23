@@ -1806,7 +1806,7 @@
     <string name="lan_shelly_step1">Підключіть Shelly до Wi-Fi: у застосунку Shelly Smart Control або підключіть телефон до власної мережі пристрою (shelly…), відкрийте 192.168.33.1 у браузері та введіть назву й пароль Wi-Fi у Налаштування → Wi-Fi.</string>
     <string name="lan_steps_title">Перед початком</string>
     <string name="lan_brand_title">Додати %1$s</string>
-    <string name="lan_brand_soon">Незабаром: Tasmota, ESPHome, Philips Hue, TP-Link і Home Assistant.</string>
+    <string name="lan_brand_soon">Незабаром: Philips Hue, TP-Link і Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Пристрої eWeLink у режимі DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Реле та розетки Gen1, Plus, Pro, Gen3 і Gen4</string>
     <string name="lan_brand_hint">Виберіть марку. Обліковий запис і хмара не потрібні: телефон і пристрій мають бути в одній Wi-Fi.</string>
@@ -1831,4 +1831,19 @@
     <string name="lan_shelly_setup_old_android">У цій версії Android підключіть телефон до мережі Shelly (shelly…) вручну, відкрийте 192.168.33.1 у браузері й укажіть свою мережу в Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">Чекаємо Shelly у вашій мережі, щоб вимкнути його власну відкриту мережу…</string>
     <string name="lan_shelly_setup_ap_on">Увага: власна мережа Shelly (shelly…) може бути ще ввімкнена, і будь-хто поруч зможе підключитися. Відкрийте вебсторінку Shelly (його IP у списку) й вимкніть Settings → Wi-Fi → Access Point або задайте пароль.</string>
+    <string name="lan_brand_tasmota_desc">Пристрої з Tasmota (розетки, реле, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Пристрої ESPHome з увімкненим вебсервером</string>
+    <string name="lan_tasmota_step1">На пристрої має бути Tasmota, і він має бути у вашій мережі (вебсторінка відкривається за його IP).</string>
+    <string name="lan_tasmota_step2">Tasmota не оголошує себе в мережі: торкніться «Сканувати мережу» або введіть IP.</string>
+    <string name="lan_tasmota_step3">Якщо в Tasmota задано вебпароль, його запитають.</string>
+    <string name="lan_esphome_step1">Додайте web_server: до конфігурації ESPHome пристрою й установіть її.</string>
+    <string name="lan_esphome_step2">Телефон у тій самій мережі; пристрій з’явиться нижче сам, або введіть його IP.</string>
+    <string name="lan_esphome_step3">Вимикачі й світильники стають каналами (до 4); датчик потужності у Вт показується як потужність.</string>
+    <string name="lan_scan">Сканувати мережу</string>
+    <string name="lan_scan_done">Сканування завершено: знайдено %1$d.</string>
+    <string name="lan_scan_no_wifi">Спершу підключіть телефон до Wi-Fi.</string>
+    <string name="lan_locked_generic">Захищено паролем: торкніться «Додати» й введіть вебпароль пристрою.</string>
+    <string name="lan_unsupported_generic">На цьому пристрої не знайдено вимикача чи реле.</string>
+    <string name="lan_pw_title_generic">Пароль пристрою</string>
+    <string name="lan_pw_body_generic">Введіть ім’я користувача й пароль вебсторінки пристрою. Вони зберігаються зашифровано лише на цьому телефоні й не потрапляють до резервних копій.</string>
 </resources>

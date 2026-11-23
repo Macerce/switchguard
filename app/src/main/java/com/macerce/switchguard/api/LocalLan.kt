@@ -1,19 +1,53 @@
 package com.macerce.switchguard.api
 
+import android.content.Context
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.LocalDevice
 import com.macerce.switchguard.core.LocalReading
+import com.macerce.switchguard.core.ShellyAuth
 
-/** Yerel ağdan eklenen cihazlar için markaya göre doğru istemciyi seçer (Sonoff → [EwelinkLan], Shelly → [ShellyLan]). */
+/**
+ * Yerel ağdan eklenen cihazlar için markaya göre doğru istemciyi seçer: Sonoff → [EwelinkLan], Shelly → [ShellyLan],
+ * diğerleri [drivers] ([PolledLan]).
+ */
 object LocalLan {
-    fun reading(d: LocalDevice): LocalReading? =
-        if (d.isShelly) ShellyLan.reading(d.id) else EwelinkLan.entry(d.id)?.switches?.let { LocalReading(it) }
+    /** Yoklamalı markalar; yeni marka buraya eklenir. */
+    val drivers: Map<String, PolledLan> by lazy {
+        listOf<PolledLan>(TasmotaLan, EsphomeLan).associateBy { it.brand }
+    }
+
+    fun driver(brand: String): PolledLan? = drivers[brand]
+
+    fun reading(d: LocalDevice): LocalReading? = when {
+        d.isShelly -> ShellyLan.reading(d.id)
+        d.isSonoff -> EwelinkLan.entry(d.id)?.switches?.let { LocalReading(it) }
+        else -> drivers[d.brand]?.reading(d.id)
+    }
 
     /** Cihazın şu an görüldüğü adres; görülmüyorsa null. */
-    fun seenHost(d: LocalDevice): String? =
-        if (d.isShelly) ShellyLan.reading(d.id)?.let { ShellyLan.host(d) } else EwelinkLan.entry(d.id)?.host
+    fun seenHost(d: LocalDevice): String? = when {
+        d.isShelly -> ShellyLan.reading(d.id)?.let { ShellyLan.host(d) }
+        d.isSonoff -> EwelinkLan.entry(d.id)?.host
+        else -> drivers[d.brand]?.let { dr -> dr.reading(d.id)?.let { dr.host(d) } }
+    }
 
     /** Bloklayıcı; ana thread'den çağırmayın. [local] yoksa Sonoff sayılır (eski kayıtlar). */
-    fun trySwitch(device: DeviceSnapshot, local: LocalDevice?, channel: Int, on: Boolean): Boolean =
-        if (local?.isShelly == true) ShellyLan.trySwitch(local, channel, on) else EwelinkLan.trySwitch(device, channel, on)
+    fun trySwitch(device: DeviceSnapshot, local: LocalDevice?, channel: Int, on: Boolean): Boolean = when {
+        local == null || local.isSonoff -> EwelinkLan.trySwitch(device, channel, on)
+        local.isShelly -> ShellyLan.trySwitch(local, channel, on)
+        else -> drivers[local.brand]?.trySwitch(local, channel, on) == true
+    }
+
+    /** İzleme: her yoklamalı markayı kendi cihazlarıyla başlatır, cihazı olmayanı durdurur. */
+    fun startDrivers(context: Context, devices: List<LocalDevice>, auth: Map<String, ShellyAuth.Credentials>, listener: () -> Unit) {
+        drivers.values.forEach { dr ->
+            val mine = devices.filter { it.brand == dr.brand }
+            if (mine.isEmpty()) dr.stop() else {
+                dr.setCredentials(auth)
+                dr.start(context, mine, listener)
+            }
+        }
+    }
+
+    fun stopDrivers() = drivers.values.forEach { it.stop() }
 }

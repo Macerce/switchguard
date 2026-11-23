@@ -1766,7 +1766,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_shelly_step1">Shelly\'yi Wi-Fi ağına bağla: Shelly Smart Control uygulamasıyla ya da telefonu cihazın kendi Wi-Fi\'ına (shelly…) bağlayıp tarayıcıda 192.168.33.1 adresini aç, Ayarlar → Wi-Fi bölümüne ağ adını ve şifreni yaz.</string>
     <string name="lan_steps_title">Başlamadan önce</string>
     <string name="lan_brand_title">%1$s ekle</string>
-    <string name="lan_brand_soon">Yakında: Tasmota, ESPHome, Philips Hue, TP-Link ve Home Assistant.</string>
+    <string name="lan_brand_soon">Yakında: Philips Hue, TP-Link ve Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">DIY (yerel ağ) kipindeki eWeLink cihazları</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 ve Gen4 röleler ve prizler</string>
     <string name="lan_brand_hint">Markayı seç. Hesap ya da bulut gerekmez: telefon ve cihazın aynı Wi-Fi\'de olması yeterli.</string>
@@ -1791,4 +1791,19 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_shelly_setup_old_android">Bu Android sürümünde telefonu Shelly\'nin Wi-Fi\'ına (shelly…) kendin bağla, tarayıcıda 192.168.33.1\'i aç ve Settings → Wi-Fi altında ev Wi-Fi\'ni yaz.</string>
     <string name="lan_shelly_setup_stage3">Shelly\'nin kendi açık ağını kapatmak için ev ağında görünmesi bekleniyor…</string>
     <string name="lan_shelly_setup_ap_on">Uyarı: Shelly\'nin kendi Wi-Fi ağı (shelly…) hâlâ açık olabilir ve yakındaki herkes bağlanabilir. Shelly\'nin web sayfasını aç (listedeki IP) ve Settings → Wi-Fi → Access Point\'i kapat ya da bir giriş şifresi koy.</string>
+    <string name="lan_brand_tasmota_desc">Tasmota yüklü cihazlar (priz, röle, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Web sunucusu açık ESPHome cihazlar</string>
+    <string name="lan_tasmota_step1">Cihazda Tasmota yüklü ve Wi-Fi\'ına bağlı olsun (IP adresinde web sayfası açılıyor olmalı).</string>
+    <string name="lan_tasmota_step2">Tasmota ağda kendini duyurmaz: Ağı tara\'ya dokun ya da IP adresini yaz.</string>
+    <string name="lan_tasmota_step3">Tasmota\'da web şifresi koyduysan sorulur.</string>
+    <string name="lan_esphome_step1">Cihazın ESPHome yapılandırmasına web_server: ekleyip yükle.</string>
+    <string name="lan_esphome_step2">Telefon aynı Wi-Fi\'de kalsın; cihaz aşağıda kendiliğinden belirir ya da IP adresini yaz.</string>
+    <string name="lan_esphome_step3">Anahtarlar ve ışıklar kanal olur (en çok 4); W birimli güç sensörü güç olarak görünür.</string>
+    <string name="lan_scan">Ağı tara</string>
+    <string name="lan_scan_done">Tarama bitti: %1$d bulundu.</string>
+    <string name="lan_scan_no_wifi">Önce telefonu Wi-Fi\'a bağla.</string>
+    <string name="lan_locked_generic">Şifre korumalı: Ekle\'ye dokunup cihazın web şifresini gir.</string>
+    <string name="lan_unsupported_generic">Bu cihazda anahtar ya da röle bulunamadı.</string>
+    <string name="lan_pw_title_generic">Cihaz şifresi</string>
+    <string name="lan_pw_body_generic">Cihazın web sayfasının kullanıcı adı ve şifresini gir. Yalnızca bu telefonda şifreli tutulur, yedeğe girmez.</string>
 </resources>

@@ -372,6 +372,7 @@ class MonitorService : Service() {
         wake.reset()
         EwelinkLan.stop()
         com.macerce.switchguard.api.ShellyLan.stop()
+        com.macerce.switchguard.api.LocalLan.stopDrivers()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -412,6 +413,7 @@ class MonitorService : Service() {
         wake.reset()
         EwelinkLan.stop()
         com.macerce.switchguard.api.ShellyLan.stop()
+        com.macerce.switchguard.api.LocalLan.stopDrivers()
         handler.post {
             socket.close()
             tuyaSocket.close()
@@ -762,8 +764,11 @@ class MonitorService : Service() {
             com.macerce.switchguard.api.ShellyLan.start(this, shelly) { handler.post { refreshLocal() } }
         } else {
             com.macerce.switchguard.api.ShellyLan.stop()
+            com.macerce.switchguard.api.LocalLan.stopDrivers()
         }
-        val locals = store.localDevices.any { !it.isShelly }
+        if (running) com.macerce.switchguard.api.LocalLan.startDrivers(this, store.localDevices, store.shellyAuth) { handler.post { refreshLocal() } }
+        else com.macerce.switchguard.api.LocalLan.stopDrivers()
+        val locals = store.localDevices.any { it.isSonoff }
         if (!running || !(store.lanControl && store.isLoggedIn) && !locals) {
             EwelinkLan.onPresence = null
             EwelinkLan.stop()

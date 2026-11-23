@@ -1656,7 +1656,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_shelly_step1">Hubungkan Shelly ke Wi-Fi: dengan aplikasi Shelly Smart Control, atau hubungkan ponsel ke Wi-Fi milik perangkat (shelly…), buka 192.168.33.1 di browser lalu isi nama dan sandi Wi-Fi di Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Sebelum mulai</string>
     <string name="lan_brand_title">Tambah %1$s</string>
-    <string name="lan_brand_soon">Segera hadir: Tasmota, ESPHome, Philips Hue, TP-Link dan Home Assistant.</string>
+    <string name="lan_brand_soon">Segera: Philips Hue, TP-Link, dan Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Perangkat eWeLink dalam mode DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relai dan colokan Gen1, Plus, Pro, Gen3 dan Gen4</string>
     <string name="lan_brand_hint">Pilih merek. Tanpa akun atau cloud: ponsel dan perangkat cukup berada di Wi-Fi yang sama.</string>
@@ -1681,4 +1681,19 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_shelly_setup_old_android">Di versi Android ini, hubungkan sendiri ponsel ke Wi-Fi Shelly (shelly…), buka 192.168.33.1 di browser, lalu masukkan Wi-Fi Anda di Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">Menunggu Shelly muncul di Wi-Fi Anda untuk mematikan jaringan terbukanya…</string>
     <string name="lan_shelly_setup_ap_on">Peringatan: Wi-Fi milik Shelly (shelly…) mungkin masih aktif dan siapa pun di dekat bisa terhubung. Buka halaman web Shelly (IP-nya di daftar) lalu matikan Settings → Wi-Fi → Access Point, atau pasang kata sandi.</string>
+    <string name="lan_brand_tasmota_desc">Perangkat dengan Tasmota (colokan, relai, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Perangkat ESPHome dengan server web aktif</string>
+    <string name="lan_tasmota_step1">Pastikan perangkat memakai Tasmota dan terhubung ke Wi-Fi Anda (halaman webnya terbuka di IP-nya).</string>
+    <string name="lan_tasmota_step2">Tasmota tidak mengumumkan dirinya di jaringan: ketuk Pindai jaringan atau masukkan IP-nya.</string>
+    <string name="lan_tasmota_step3">Jika Anda memasang kata sandi web di Tasmota, akan diminta.</string>
+    <string name="lan_esphome_step1">Tambahkan web_server: ke konfigurasi ESPHome perangkat lalu pasang.</string>
+    <string name="lan_esphome_step2">Tetap di Wi-Fi yang sama; perangkat muncul sendiri di bawah, atau masukkan IP-nya.</string>
+    <string name="lan_esphome_step3">Sakelar dan lampu menjadi kanal (maks. 4); sensor daya dalam W ditampilkan sebagai daya.</string>
+    <string name="lan_scan">Pindai jaringan</string>
+    <string name="lan_scan_done">Pemindaian selesai: %1$d ditemukan.</string>
+    <string name="lan_scan_no_wifi">Hubungkan ponsel ke Wi-Fi dulu.</string>
+    <string name="lan_locked_generic">Dilindungi kata sandi: ketuk Tambah dan masukkan kata sandi web perangkat.</string>
+    <string name="lan_unsupported_generic">Tidak ada sakelar atau relai di perangkat ini.</string>
+    <string name="lan_pw_title_generic">Kata sandi perangkat</string>
+    <string name="lan_pw_body_generic">Masukkan nama pengguna dan kata sandi halaman web perangkat. Disimpan terenkripsi hanya di ponsel ini dan tidak ikut dicadangkan.</string>
 </resources>

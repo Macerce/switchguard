@@ -1763,7 +1763,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_step1">Verbind de Shelly met je wifi: met de app Shelly Smart Control, of verbind de telefoon met het eigen wifi van het apparaat (shelly…), open 192.168.33.1 in de browser en vul onder Instellingen → Wi-Fi je netwerknaam en wachtwoord in.</string>
     <string name="lan_steps_title">Voordat je begint</string>
     <string name="lan_brand_title">%1$s toevoegen</string>
-    <string name="lan_brand_soon">Binnenkort: Tasmota, ESPHome, Philips Hue, TP-Link en Home Assistant.</string>
+    <string name="lan_brand_soon">Binnenkort: Philips Hue, TP-Link en Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
     <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
     <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
@@ -1788,4 +1788,19 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_setup_old_android">Op deze Android-versie verbind je de telefoon zelf met de wifi van de Shelly (shelly…), open je 192.168.33.1 in de browser en vul je je wifi in onder Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">Wachten op de Shelly op je wifi om zijn eigen open netwerk uit te zetten…</string>
     <string name="lan_shelly_setup_ap_on">Let op: het eigen wifi-netwerk van de Shelly (shelly…) staat mogelijk nog aan en iedereen in de buurt kan verbinden. Open de webpagina van de Shelly (zijn IP in de lijst) en zet Settings → Wi-Fi → Access Point uit, of stel een wachtwoord in.</string>
+    <string name="lan_brand_tasmota_desc">Apparaten met Tasmota (stekkers, relais, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">ESPHome-apparaten met ingeschakelde webserver</string>
+    <string name="lan_tasmota_step1">Het apparaat draait Tasmota en zit op je wifi (de webpagina opent op zijn IP-adres).</string>
+    <string name="lan_tasmota_step2">Tasmota meldt zich niet op het netwerk: tik op Netwerk scannen of vul het IP in.</string>
+    <string name="lan_tasmota_step3">Heb je een webwachtwoord in Tasmota ingesteld, dan wordt erom gevraagd.</string>
+    <string name="lan_esphome_step1">Voeg web_server: toe aan de ESPHome-configuratie van het apparaat en installeer die.</string>
+    <string name="lan_esphome_step2">Houd de telefoon op dezelfde wifi; het apparaat verschijnt vanzelf hieronder, of vul het IP in.</string>
+    <string name="lan_esphome_step3">Schakelaars en lampen worden kanalen (tot 4); een vermogenssensor in W wordt als vermogen getoond.</string>
+    <string name="lan_scan">Netwerk scannen</string>
+    <string name="lan_scan_done">Scan klaar: %1$d gevonden.</string>
+    <string name="lan_scan_no_wifi">Verbind de telefoon eerst met wifi.</string>
+    <string name="lan_locked_generic">Met wachtwoord beveiligd: tik op Toevoegen en voer het webwachtwoord van het apparaat in.</string>
+    <string name="lan_unsupported_generic">Geen schakelaar of relais gevonden op dit apparaat.</string>
+    <string name="lan_pw_title_generic">Apparaatwachtwoord</string>
+    <string name="lan_pw_body_generic">Voer gebruikersnaam en wachtwoord van de webpagina van het apparaat in. Ze blijven versleuteld alleen op deze telefoon en zitten niet in back-ups.</string>
 </resources>

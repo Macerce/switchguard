@@ -56,10 +56,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkLan
+import com.macerce.switchguard.api.LanScan
 import com.macerce.switchguard.api.LocalLan
 import com.macerce.switchguard.api.ShellyLan
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.DeviceSnapshot
+import com.macerce.switchguard.core.LanFound
 import com.macerce.switchguard.core.LocalDevice
 import com.macerce.switchguard.core.ShellyAuth
 import com.macerce.switchguard.data.Store
@@ -93,7 +95,31 @@ fun LanAddDialog(onDismiss: () -> Unit) {
     if (b == null) BrandPicker(onDismiss) { brand = it } else BrandPage(b, onBack = { brand = null }, onDismiss = onDismiss)
 }
 
-private fun brandName(brand: String) = if (brand == LocalDevice.BRAND_SHELLY) "Shelly" else "Sonoff"
+/** Ekleme penceresindeki markalar: marka, açıklama, renk. Yeni marka buraya ve [brandSteps]'e eklenir. */
+private val BRANDS = listOf(
+    Triple(LocalDevice.BRAND_SHELLY, R.string.lan_brand_shelly_desc, Hue.BLUE),
+    Triple(LocalDevice.BRAND_SONOFF, R.string.lan_brand_sonoff_desc, Hue.TEAL),
+    Triple(LocalDevice.BRAND_TASMOTA, R.string.lan_brand_tasmota_desc, Hue.GREEN),
+    Triple(LocalDevice.BRAND_ESPHOME, R.string.lan_brand_esphome_desc, Hue.SLATE),
+)
+
+fun brandName(brand: String) = when (brand) {
+    LocalDevice.BRAND_SHELLY -> "Shelly"
+    LocalDevice.BRAND_TASMOTA -> "Tasmota"
+    LocalDevice.BRAND_ESPHOME -> "ESPHome"
+    LocalDevice.BRAND_HUE -> "Philips Hue"
+    LocalDevice.BRAND_KASA -> "TP-Link Kasa"
+    LocalDevice.BRAND_TAPO -> "TP-Link Tapo"
+    LocalDevice.BRAND_HA -> "Home Assistant"
+    else -> "Sonoff"
+}
+
+private fun brandSteps(brand: String): List<Int> = when (brand) {
+    LocalDevice.BRAND_SHELLY -> listOf(R.string.lan_shelly_step1, R.string.lan_shelly_step2, R.string.lan_shelly_step3)
+    LocalDevice.BRAND_TASMOTA -> listOf(R.string.lan_tasmota_step1, R.string.lan_tasmota_step2, R.string.lan_tasmota_step3)
+    LocalDevice.BRAND_ESPHOME -> listOf(R.string.lan_esphome_step1, R.string.lan_esphome_step2, R.string.lan_esphome_step3)
+    else -> listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
+}
 
 @Composable
 private fun BrandPicker(onDismiss: () -> Unit, onPick: (String) -> Unit) {
@@ -102,17 +128,14 @@ private fun BrandPicker(onDismiss: () -> Unit, onPick: (String) -> Unit) {
         icon = { Icon(Icons.Rounded.Router, null) },
         title = { Text(stringResource(R.string.lan_add_title)) },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(stringResource(R.string.lan_brand_hint), style = MaterialTheme.typography.bodyMedium)
-                listOf(
-                    LocalDevice.BRAND_SHELLY to R.string.lan_brand_shelly_desc,
-                    LocalDevice.BRAND_SONOFF to R.string.lan_brand_sonoff_desc,
-                ).forEach { (b, desc) ->
+                BRANDS.forEach { (b, desc, hue) ->
                     Row(
                         Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(12.dp)).clickable { onPick(b) }.padding(vertical = 10.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        HueIcon(Icons.Rounded.Router, if (b == LocalDevice.BRAND_SHELLY) Hue.BLUE else Hue.TEAL, size = 36.dp)
+                        HueIcon(Icons.Rounded.Router, hue, size = 36.dp)
                         Column(Modifier.weight(1f).padding(start = 12.dp)) {
                             Text(brandName(b), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                             Text(stringResource(desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -133,6 +156,8 @@ private class FoundRow(
     val defaultName: String,
     /** Şifreli Shelly: dokununca önce şifre sorulur. [credentials]: doğrulanmış şifre (eklenince kaydedilir). */
     val shelly: ShellyLan.Found? = null, val credentials: ShellyAuth.Credentials? = null,
+    /** Yoklamalı marka ([com.macerce.switchguard.api.PolledLan]) satırı; kilitliyse şifre sorulur. */
+    val found: LanFound? = null,
     val make: (name: String, ssid: String?) -> LocalDevice,
 )
 
@@ -144,8 +169,13 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     val version by store.version.collectAsStateWithLifecycle()
     val ssid = remember { currentSsid(context) }
     val shelly = brand == LocalDevice.BRAND_SHELLY
+    val driver = remember(brand) { LocalLan.driver(brand) }
     DisposableEffect(brand) {
-        if (shelly) {
+        if (driver != null) {
+            driver.setCredentials(store.shellyAuth)
+            driver.startDiscovery(context)
+            onDispose { driver.stopDiscoveryIfIdle() }
+        } else if (shelly) {
             ShellyLan.setCredentials(store.shellyAuth)
             ShellyLan.startDiscovery(context)
             onDispose { ShellyLan.stopDiscoveryIfIdle() }
@@ -166,7 +196,21 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     val rows = remember(tick, version, manual) {
         val res = resources
         fun ch(n: Int) = if (n > 1) res.getString(R.string.lan_channels, n) else null
-        if (shelly) (ShellyLan.all() + manual).values.sortedBy { it.host }.map { f ->
+        if (driver != null) driver.all().values.sortedBy { it.host }.map { f ->
+            val existing = known[f.id]
+            val model = f.name ?: "${brandName(brand)} ${f.model}".trim()
+            FoundRow(
+                f.id, existing?.name ?: model, listOfNotNull(f.host, ch(f.channels)).joinToString(" · "),
+                addable = existing == null && (f.supported || f.locked),
+                warning = when {
+                    existing != null -> null
+                    f.locked -> res.getString(R.string.lan_locked_generic)
+                    !f.supported -> res.getString(R.string.lan_unsupported_generic)
+                    else -> null
+                },
+                defaultName = model, credentials = f.credentials, found = f,
+            ) { name, net -> f.toDevice(name, net) }
+        } else if (shelly) (ShellyLan.all() + manual).values.sortedBy { it.host }.map { f ->
             val existing = known[f.info.id]
             val model = "Shelly ${f.info.model}".trim()
             FoundRow(
@@ -194,6 +238,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     }
     var naming by remember { mutableStateOf<FoundRow?>(null) }
     var askPassword by remember { mutableStateOf<ShellyLan.Found?>(null) }
+    var askGeneric by remember { mutableStateOf<LanFound?>(null) }
     var setup by remember { mutableStateOf(false) }
     var help by remember { mutableStateOf(false) }
 
@@ -211,9 +256,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     )
                 }
                 Text(stringResource(R.string.lan_steps_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                val steps = if (shelly) listOf(R.string.lan_shelly_step1, R.string.lan_shelly_step2, R.string.lan_shelly_step3)
-                else listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
-                steps.forEachIndexed { i, res -> StepLine(i + 1, stringResource(res)) }
+                brandSteps(brand).forEachIndexed { i, res -> StepLine(i + 1, stringResource(res)) }
                 if (shelly) Row(
                     Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(8.dp)).clickable { setup = true }.padding(vertical = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -235,10 +278,20 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     Text(stringResource(R.string.lan_add_searching), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 rows.forEach { r ->
-                    FoundLine(r, added = known.containsKey(r.id)) { if (r.shelly?.locked == true) askPassword = r.shelly else naming = r }
+                    FoundLine(r, added = known.containsKey(r.id)) {
+                        when {
+                            r.shelly?.locked == true -> askPassword = r.shelly
+                            r.found?.locked == true -> askGeneric = r.found
+                            else -> naming = r
+                        }
+                    }
                 }
 
-                if (shelly) IpAdd { f -> manual = manual + (f.info.id to f) }
+                if (shelly) IpAdd({ h -> ShellyLan.probe(h)?.also { f -> manual = manual + (f.info.id to f) } != null })
+                if (driver != null) {
+                    IpAdd({ h -> driver.probe(h, null, quickly = false)?.also(driver::remember) != null })
+                    ScanLine(driver)
+                }
 
                 Row(
                     Modifier.fillMaxWidth().tvFocusRing(RoundedCornerShape(8.dp)).clickable { help = !help }.padding(vertical = 6.dp),
@@ -263,6 +316,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
             r.credentials?.let { c ->
                 store.shellyAuth = store.shellyAuth + (d.id to c)
                 ShellyLan.setCredentials(store.shellyAuth)
+                LocalLan.drivers.values.forEach { it.setCredentials(store.shellyAuth) }
             }
             store.localDevices = store.localDevices.filterNot { it.id == d.id } + d
             if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
@@ -272,6 +326,26 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
         }
     }
     if (setup) ShellySetupDialog(ssid) { setup = false }
+    askGeneric?.let { f ->
+        val d = driver
+        if (d != null) LanPasswordDialog("${brandName(brand)} · ${f.host}", onDismiss = { askGeneric = null }) { cred ->
+            val r = withContext(Dispatchers.IO) { d.probe(f.host, cred, quickly = false) }
+            when {
+                r == null -> resources.getString(R.string.lan_ip_not_found, f.host)
+                r.locked || r.wrongPassword -> resources.getString(R.string.lan_shelly_pw_wrong)
+                else -> {
+                    d.forget(f.id)
+                    d.remember(r)
+                    askGeneric = null
+                    if (r.supported) {
+                        val model = r.name ?: "${brandName(brand)} ${r.model}".trim()
+                        naming = FoundRow(r.id, model, r.host, true, null, model, credentials = r.credentials, found = r) { name, net -> r.toDevice(name, net) }
+                    }
+                    null
+                }
+            }
+        }
+    }
     askPassword?.let { f ->
         ShellyPasswordDialog(f, onDismiss = { askPassword = null }) { ok ->
             askPassword = null
@@ -377,9 +451,9 @@ private fun FoundLine(r: FoundRow, added: Boolean, onAdd: () -> Unit) {
     }
 }
 
-/** "IP adresiyle ekle": mDNS'te görünmeyen Shelly'yi adresinden sorgular; bulunursa listeye girer. */
+/** "IP adresiyle ekle": mDNS'te görünmeyen cihazı adresinden sorgular; [probe] bulunca listeye koyar ve true döner. */
 @Composable
-private fun IpAdd(onFound: (ShellyLan.Found) -> Unit) {
+private fun IpAdd(probe: (String) -> Boolean) {
     val resources = LocalResources.current
     val scope = rememberCoroutineScope()
     var ip by remember { mutableStateOf("") }
@@ -401,14 +475,94 @@ private fun IpAdd(onFound: (ShellyLan.Found) -> Unit) {
                 checking = true
                 val host = ip.trim()
                 scope.launch {
-                    val f = withContext(Dispatchers.IO) { ShellyLan.probe(host) }
+                    val ok = withContext(Dispatchers.IO) { probe(host) }
                     checking = false
-                    if (f == null) error = resources.getString(R.string.lan_ip_not_found, host) else onFound(f)
+                    if (!ok) error = resources.getString(R.string.lan_ip_not_found, host)
                 }
             },
         ) { Text(stringResource(if (checking) R.string.lan_ip_checking else R.string.lan_ip_find)) }
     }
     error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = StatusColors.warning) }
+}
+
+/** "Ağı tara": Wi-Fi alt ağındaki her adresi bu markaya sorar (mDNS yayınlamayan cihazlar için). */
+@Composable
+private fun ScanLine(driver: com.macerce.switchguard.api.PolledLan) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    val scope = rememberCoroutineScope()
+    var progress by remember { mutableStateOf<Int?>(null) }
+    var result by remember { mutableStateOf<String?>(null) }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        TextButton(
+            enabled = progress == null, modifier = Modifier.tvFocusRing(),
+            onClick = {
+                progress = 0
+                result = null
+                scope.launch {
+                    val n = withContext(Dispatchers.IO) {
+                        LanScan.scan(context, { h -> driver.probe(h, null, quickly = true)?.also(driver::remember) != null }) { p ->
+                            scope.launch { progress = p }
+                        }
+                    }
+                    progress = null
+                    result = if (n < 0) resources.getString(R.string.lan_scan_no_wifi) else resources.getString(R.string.lan_scan_done, n)
+                }
+            },
+        ) { Text(stringResource(R.string.lan_scan)) }
+        progress?.let { p ->
+            LinearProgressIndicator(progress = { p / 100f }, modifier = Modifier.weight(1f).padding(start = 8.dp))
+        }
+    }
+    result?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
+}
+
+/**
+ * Yoklamalı markaların şifre penceresi (kullanıcı adı + şifre). [check] şifreyi cihazda dener: hata metni ya da
+ * başarıda null döner (başarıda pencereyi çağıran kapatır).
+ */
+@Composable
+private fun LanPasswordDialog(label: String, onDismiss: () -> Unit, check: suspend (ShellyAuth.Credentials) -> String?) {
+    val scope = rememberCoroutineScope()
+    var user by remember { mutableStateOf(ShellyAuth.DEFAULT_USER) }
+    var password by remember { mutableStateOf("") }
+    var checking by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Lock, null) },
+        title = { Text(stringResource(R.string.lan_pw_title_generic)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(label, style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(R.string.lan_pw_body_generic), style = MaterialTheme.typography.bodySmall)
+                OutlinedTextField(
+                    value = user, onValueChange = { user = it.take(64); error = null }, singleLine = true,
+                    label = { Text(stringResource(R.string.lan_shelly_user)) }, modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = password, onValueChange = { password = it.take(128); error = null }, singleLine = true,
+                    label = { Text(stringResource(R.string.lan_shelly_pw)) }, visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), modifier = Modifier.fillMaxWidth(),
+                )
+                if (checking) LinearProgressIndicator(Modifier.fillMaxWidth())
+                error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = StatusColors.warning) }
+            }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        confirmButton = {
+            TextButton(
+                enabled = !checking && password.isNotEmpty() && user.isNotBlank(), modifier = Modifier.tvFocusRing(),
+                onClick = {
+                    checking = true
+                    scope.launch {
+                        error = check(ShellyAuth.Credentials(user.trim(), password))
+                        checking = false
+                    }
+                },
+            ) { Text(stringResource(if (checking) R.string.lan_ip_checking else R.string.lan_shelly_pw_ok)) }
+        },
+    )
 }
 
 /** Yerel ağdan eklenen cihazın detay kartı: eklendiği Wi-Fi ağı, şu anki adresi ve kaldırma. */

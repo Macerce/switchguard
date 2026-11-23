@@ -26,8 +26,11 @@ data class LocalDevice(
     val addedAt: Long = 0,
     val brand: String = BRAND_SONOFF,
     val gen: Int = 0,
+    /** Markaya özel kalıcı bilgi (JSON ya da düz metin; ör. ESPHome varlık yolları, Hue lamba kimliği). */
+    val extra: String = "",
 ) {
     val isShelly: Boolean get() = brand == BRAND_SHELLY
+    val isSonoff: Boolean get() = brand == BRAND_SONOFF
 
     /** Cihazlar ekranındaki kartı: durum yerel ağdan gelir; görülmüyorsa çevrimdışı ve son bilinen anahtarlar. */
     fun snapshot(seen: LocalReading?, previous: DeviceSnapshot?): DeviceSnapshot {
@@ -43,12 +46,18 @@ data class LocalDevice(
     companion object {
         const val BRAND_SONOFF = "sonoff"
         const val BRAND_SHELLY = "shelly"
+        const val BRAND_TASMOTA = "tasmota"
+        const val BRAND_ESPHOME = "esphome"
+        const val BRAND_HUE = "hue"
+        const val BRAND_KASA = "kasa"
+        const val BRAND_TAPO = "tapo"
+        const val BRAND_HA = "ha"
 
         fun listToJson(list: List<LocalDevice>): String = JSONArray().apply {
             list.forEach { d ->
                 put(JSONObject().put("id", d.id).put("name", d.name).put("channels", d.channels)
                     .put("ssid", d.ssid ?: JSONObject.NULL).put("ip", d.ip ?: JSONObject.NULL).put("addedAt", d.addedAt)
-                    .put("brand", d.brand).put("gen", d.gen))
+                    .put("brand", d.brand).put("gen", d.gen).put("extra", d.extra))
             }
         }.toString()
 
@@ -64,7 +73,7 @@ data class LocalDevice(
                         o.optString("ssid").takeIf { !o.isNull("ssid") && it.isNotEmpty() },
                         o.optString("ip").takeIf { !o.isNull("ip") && it.isNotEmpty() },
                         o.optLong("addedAt"),
-                        o.optString("brand").ifEmpty { BRAND_SONOFF }, o.optInt("gen"),
+                        o.optString("brand").ifEmpty { BRAND_SONOFF }, o.optInt("gen"), o.optString("extra"),
                     )
                 }.getOrNull()
             }

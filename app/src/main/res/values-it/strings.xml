@@ -1770,7 +1770,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_step1">Collega lo Shelly alla tua Wi-Fi: con l\'app Shelly Smart Control, oppure collega il telefono alla Wi-Fi del dispositivo (shelly…), apri 192.168.33.1 nel browser e inserisci nome e password della Wi-Fi in Impostazioni → Wi-Fi.</string>
     <string name="lan_steps_title">Prima di iniziare</string>
     <string name="lan_brand_title">Aggiungi %1$s</string>
-    <string name="lan_brand_soon">Prossimamente: Tasmota, ESPHome, Philips Hue, TP-Link e Home Assistant.</string>
+    <string name="lan_brand_soon">In arrivo: Philips Hue, TP-Link e Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Dispositivi eWeLink in modalità DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relè e prese Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Scegli la marca. Nessun account né cloud: telefono e dispositivo devono solo essere sulla stessa Wi-Fi.</string>
@@ -1795,4 +1795,19 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_setup_old_android">Su questa versione di Android collega tu il telefono al Wi-Fi dello Shelly (shelly…), apri 192.168.33.1 nel browser e inserisci il tuo Wi-Fi in Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">In attesa dello Shelly sul tuo Wi-Fi per spegnere la sua rete aperta…</string>
     <string name="lan_shelly_setup_ap_on">Attenzione: il Wi-Fi dello Shelly (shelly…) potrebbe essere ancora attivo e chiunque nelle vicinanze potrebbe collegarsi. Apri la pagina web dello Shelly (il suo IP nell’elenco) e disattiva Settings → Wi-Fi → Access Point, oppure imposta una password.</string>
+    <string name="lan_brand_tasmota_desc">Dispositivi con Tasmota (prese, relè, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Dispositivi ESPHome con web server attivo</string>
+    <string name="lan_tasmota_step1">Il dispositivo deve avere Tasmota ed essere sul tuo Wi-Fi (la sua pagina web si apre al suo IP).</string>
+    <string name="lan_tasmota_step2">Tasmota non si annuncia in rete: tocca Scansiona rete o inserisci il suo IP.</string>
+    <string name="lan_tasmota_step3">Se hai impostato una password web in Tasmota, ti verrà chiesta.</string>
+    <string name="lan_esphome_step1">Aggiungi web_server: alla configurazione ESPHome del dispositivo e installala.</string>
+    <string name="lan_esphome_step2">Tieni il telefono sullo stesso Wi-Fi; il dispositivo compare sotto da solo, oppure inserisci il suo IP.</string>
+    <string name="lan_esphome_step3">Interruttori e luci diventano canali (fino a 4); un sensore di potenza in W è mostrato come potenza.</string>
+    <string name="lan_scan">Scansiona rete</string>
+    <string name="lan_scan_done">Scansione finita: %1$d trovati.</string>
+    <string name="lan_scan_no_wifi">Collega prima il telefono al Wi-Fi.</string>
+    <string name="lan_locked_generic">Protetto da password: tocca Aggiungi e inserisci la password web del dispositivo.</string>
+    <string name="lan_unsupported_generic">Nessun interruttore o relè trovato su questo dispositivo.</string>
+    <string name="lan_pw_title_generic">Password del dispositivo</string>
+    <string name="lan_pw_body_generic">Inserisci nome utente e password della pagina web del dispositivo. Restano cifrati solo su questo telefono e non vanno nei backup.</string>
 </resources>

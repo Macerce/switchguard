@@ -1907,7 +1907,7 @@
     <string name="lan_shelly_step1">وصّل Shelly بشبكة Wi-Fi: عبر تطبيق Shelly Smart Control، أو وصّل الهاتف بشبكة الجهاز الخاصة (shelly…) وافتح 192.168.33.1 في المتصفح وأدخل اسم الشبكة وكلمة المرور في الإعدادات ← Wi-Fi.</string>
     <string name="lan_steps_title">قبل أن تبدأ</string>
     <string name="lan_brand_title">إضافة %1$s</string>
-    <string name="lan_brand_soon">قريبًا: Tasmota وESPHome وPhilips Hue وTP-Link وHome Assistant.</string>
+    <string name="lan_brand_soon">قريبًا: Philips Hue وTP-Link وHome Assistant.</string>
     <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
     <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
     <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
@@ -1932,4 +1932,19 @@
     <string name="lan_shelly_setup_old_android">في إصدار Android هذا، اربط الهاتف بشبكة Shelly (shelly…) بنفسك، وافتح 192.168.33.1 في المتصفح وأدخل شبكتك في Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">في انتظار ظهور Shelly على شبكتك لإيقاف شبكته المفتوحة…</string>
     <string name="lan_shelly_setup_ap_on">تنبيه: قد تظل شبكة Shelly الخاصة (shelly…) مفعّلة ويمكن لأي شخص قريب الاتصال بها. افتح صفحة Shelly (عنوان IP في القائمة) وأوقف Settings → Wi-Fi → Access Point أو عيّن كلمة مرور.</string>
+    <string name="lan_brand_tasmota_desc">أجهزة تعمل بـ Tasmota (مقابس، مرحلات، Sonoff)</string>
+    <string name="lan_brand_esphome_desc">أجهزة ESPHome مع تفعيل خادم الويب</string>
+    <string name="lan_tasmota_step1">تأكد أن الجهاز يعمل بـ Tasmota ومتصل بشبكتك (تفتح صفحته على عنوان IP الخاص به).</string>
+    <string name="lan_tasmota_step2">لا يعلن Tasmota عن نفسه في الشبكة: اضغط فحص الشبكة أو أدخل عنوان IP.</string>
+    <string name="lan_tasmota_step3">إذا عيّنت كلمة مرور ويب في Tasmota فستُطلب منك.</string>
+    <string name="lan_esphome_step1">أضف web_server: إلى إعداد ESPHome للجهاز وثبّته.</string>
+    <string name="lan_esphome_step2">أبقِ الهاتف على نفس الشبكة؛ يظهر الجهاز أدناه تلقائيًا، أو أدخل عنوان IP.</string>
+    <string name="lan_esphome_step3">تصبح المفاتيح والأضواء قنوات (حتى 4)؛ ويُعرض مستشعر القدرة بالواط كقدرة.</string>
+    <string name="lan_scan">فحص الشبكة</string>
+    <string name="lan_scan_done">انتهى الفحص: تم العثور على %1$d.</string>
+    <string name="lan_scan_no_wifi">اربط الهاتف بشبكة Wi-Fi أولًا.</string>
+    <string name="lan_locked_generic">محمي بكلمة مرور: اضغط إضافة وأدخل كلمة مرور الويب للجهاز.</string>
+    <string name="lan_unsupported_generic">لم يُعثر على مفتاح أو مرحل في هذا الجهاز.</string>
+    <string name="lan_pw_title_generic">كلمة مرور الجهاز</string>
+    <string name="lan_pw_body_generic">أدخل اسم المستخدم وكلمة المرور لصفحة الجهاز. تُحفظ مشفّرة على هذا الهاتف فقط ولا تدخل في النسخ الاحتياطية.</string>
 </resources>

@@ -1835,7 +1835,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_step1">Połącz Shelly z Wi-Fi: w aplikacji Shelly Smart Control albo połącz telefon z własną siecią urządzenia (shelly…), otwórz 192.168.33.1 w przeglądarce i w Ustawienia → Wi-Fi wpisz nazwę i hasło sieci.</string>
     <string name="lan_steps_title">Zanim zaczniesz</string>
     <string name="lan_brand_title">Dodaj %1$s</string>
-    <string name="lan_brand_soon">Wkrótce: Tasmota, ESPHome, Philips Hue, TP-Link i Home Assistant.</string>
+    <string name="lan_brand_soon">Wkrótce: Philips Hue, TP-Link i Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Urządzenia eWeLink w trybie DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Przekaźniki i gniazdka Gen1, Plus, Pro, Gen3 i Gen4</string>
     <string name="lan_brand_hint">Wybierz markę. Bez konta i chmury: telefon i urządzenie muszą tylko być w tej samej sieci Wi-Fi.</string>
@@ -1860,4 +1860,19 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_setup_old_android">W tej wersji Androida połącz telefon z Wi-Fi Shelly (shelly…) samodzielnie, otwórz 192.168.33.1 w przeglądarce i wpisz swoje Wi-Fi w Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">Czekam na Shelly w Twojej sieci, aby wyłączyć jego własną otwartą sieć…</string>
     <string name="lan_shelly_setup_ap_on">Uwaga: własna sieć Wi-Fi Shelly (shelly…) może być nadal włączona i każdy w pobliżu może się połączyć. Otwórz stronę Shelly (jego IP z listy) i wyłącz Settings → Wi-Fi → Access Point albo ustaw hasło.</string>
+    <string name="lan_brand_tasmota_desc">Urządzenia z Tasmota (gniazdka, przekaźniki, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Urządzenia ESPHome z włączonym serwerem WWW</string>
+    <string name="lan_tasmota_step1">Urządzenie musi mieć Tasmota i być w Twojej sieci (strona otwiera się pod jego IP).</string>
+    <string name="lan_tasmota_step2">Tasmota nie ogłasza się w sieci: dotknij Skanuj sieć lub wpisz jego IP.</string>
+    <string name="lan_tasmota_step3">Jeśli ustawiono hasło WWW w Tasmota, zostaniesz o nie poproszony.</string>
+    <string name="lan_esphome_step1">Dodaj web_server: do konfiguracji ESPHome urządzenia i wgraj ją.</string>
+    <string name="lan_esphome_step2">Telefon w tej samej sieci; urządzenie pojawi się niżej samo albo wpisz jego IP.</string>
+    <string name="lan_esphome_step3">Przełączniki i światła stają się kanałami (do 4); czujnik mocy w W jest pokazywany jako moc.</string>
+    <string name="lan_scan">Skanuj sieć</string>
+    <string name="lan_scan_done">Skan zakończony: znaleziono %1$d.</string>
+    <string name="lan_scan_no_wifi">Najpierw połącz telefon z Wi-Fi.</string>
+    <string name="lan_locked_generic">Chronione hasłem: dotknij Dodaj i wpisz hasło WWW urządzenia.</string>
+    <string name="lan_unsupported_generic">Nie znaleziono przełącznika ani przekaźnika w tym urządzeniu.</string>
+    <string name="lan_pw_title_generic">Hasło urządzenia</string>
+    <string name="lan_pw_body_generic">Wpisz nazwę użytkownika i hasło strony urządzenia. Są przechowywane zaszyfrowane tylko na tym telefonie i nie trafiają do kopii.</string>
 </resources>

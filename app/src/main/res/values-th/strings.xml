@@ -1698,7 +1698,7 @@
     <string name="lan_shelly_step1">เชื่อม Shelly กับ Wi-Fi: ใช้แอป Shelly Smart Control หรือเชื่อมโทรศัพท์กับ Wi-Fi ของอุปกรณ์เอง (shelly…) เปิด 192.168.33.1 ในเบราว์เซอร์ แล้วกรอกชื่อและรหัส Wi-Fi ที่ Settings → Wi-Fi</string>
     <string name="lan_steps_title">ก่อนเริ่ม</string>
     <string name="lan_brand_title">เพิ่ม %1$s</string>
-    <string name="lan_brand_soon">เร็ว ๆ นี้: Tasmota, ESPHome, Philips Hue, TP-Link และ Home Assistant</string>
+    <string name="lan_brand_soon">เร็ว ๆ นี้: Philips Hue, TP-Link และ Home Assistant</string>
     <string name="lan_brand_sonoff_desc">อุปกรณ์ eWeLink ในโหมด DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">รีเลย์และปลั๊ก Gen1, Plus, Pro, Gen3 และ Gen4</string>
     <string name="lan_brand_hint">เลือกแบรนด์ ไม่ต้องใช้บัญชีหรือคลาวด์ แค่โทรศัพท์และอุปกรณ์อยู่ใน Wi-Fi เดียวกัน</string>
@@ -1723,4 +1723,19 @@
     <string name="lan_shelly_setup_old_android">ใน Android รุ่นนี้ ให้เชื่อมต่อโทรศัพท์กับ Wi-Fi ของ Shelly (shelly…) เอง เปิด 192.168.33.1 ในเบราว์เซอร์ แล้วใส่ Wi-Fi ของคุณที่ Settings → Wi-Fi</string>
     <string name="lan_shelly_setup_stage3">กำลังรอ Shelly ปรากฏบน Wi-Fi ของคุณเพื่อปิดเครือข่ายเปิดของมัน…</string>
     <string name="lan_shelly_setup_ap_on">คำเตือน: Wi-Fi ของ Shelly เอง (shelly…) อาจยังเปิดอยู่ และใครก็ตามที่อยู่ใกล้อาจเชื่อมต่อได้ เปิดหน้าเว็บของ Shelly (IP ในรายการ) แล้วปิด Settings → Wi-Fi → Access Point หรือตั้งรหัสผ่าน</string>
+    <string name="lan_brand_tasmota_desc">อุปกรณ์ที่ลง Tasmota (ปลั๊ก รีเลย์ Sonoff)</string>
+    <string name="lan_brand_esphome_desc">อุปกรณ์ ESPHome ที่เปิดเว็บเซิร์ฟเวอร์</string>
+    <string name="lan_tasmota_step1">อุปกรณ์ต้องลง Tasmota และเชื่อมต่อ Wi-Fi ของคุณ (เปิดหน้าเว็บที่ IP ของมันได้)</string>
+    <string name="lan_tasmota_step2">Tasmota ไม่ประกาศตัวในเครือข่าย แตะสแกนเครือข่ายหรือใส่ IP</string>
+    <string name="lan_tasmota_step3">หากตั้งรหัสผ่านเว็บใน Tasmota ไว้ จะมีการขอรหัส</string>
+    <string name="lan_esphome_step1">เพิ่ม web_server: ในการตั้งค่า ESPHome ของอุปกรณ์แล้วติดตั้ง</string>
+    <string name="lan_esphome_step2">ให้โทรศัพท์อยู่ใน Wi-Fi เดียวกัน อุปกรณ์จะปรากฏด้านล่างเอง หรือใส่ IP</string>
+    <string name="lan_esphome_step3">สวิตช์และไฟจะเป็นช่อง (สูงสุด 4) เซ็นเซอร์กำลังไฟหน่วย W จะแสดงเป็นกำลังไฟ</string>
+    <string name="lan_scan">สแกนเครือข่าย</string>
+    <string name="lan_scan_done">สแกนเสร็จ: พบ %1$d</string>
+    <string name="lan_scan_no_wifi">เชื่อมต่อโทรศัพท์กับ Wi-Fi ก่อน</string>
+    <string name="lan_locked_generic">มีรหัสผ่านป้องกัน: แตะเพิ่มแล้วใส่รหัสผ่านเว็บของอุปกรณ์</string>
+    <string name="lan_unsupported_generic">ไม่พบสวิตช์หรือรีเลย์ในอุปกรณ์นี้</string>
+    <string name="lan_pw_title_generic">รหัสผ่านอุปกรณ์</string>
+    <string name="lan_pw_body_generic">ใส่ชื่อผู้ใช้และรหัสผ่านของหน้าเว็บอุปกรณ์ เก็บแบบเข้ารหัสในโทรศัพท์นี้เท่านั้นและไม่รวมในข้อมูลสำรอง</string>
 </resources>

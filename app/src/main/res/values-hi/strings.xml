@@ -1692,7 +1692,7 @@
     <string name="lan_shelly_step1">Shelly को अपने Wi-Fi से जोड़ें: Shelly Smart Control ऐप से, या फ़ोन को डिवाइस के अपने Wi-Fi (shelly…) से जोड़कर ब्राउज़र में 192.168.33.1 खोलें और Settings → Wi-Fi में नेटवर्क नाम व पासवर्ड डालें।</string>
     <string name="lan_steps_title">शुरू करने से पहले</string>
     <string name="lan_brand_title">%1$s जोड़ें</string>
-    <string name="lan_brand_soon">जल्द आ रहा है: Tasmota, ESPHome, Philips Hue, TP-Link और Home Assistant।</string>
+    <string name="lan_brand_soon">जल्द: Philips Hue, TP-Link और Home Assistant।</string>
     <string name="lan_brand_sonoff_desc">DIY (LAN) मोड वाले eWeLink डिवाइस</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 और Gen4 रिले और प्लग</string>
     <string name="lan_brand_hint">ब्रांड चुनें। खाता या क्लाउड ज़रूरी नहीं: फ़ोन और डिवाइस बस एक ही Wi-Fi पर हों।</string>
@@ -1717,4 +1717,19 @@
     <string name="lan_shelly_setup_old_android">इस Android संस्करण में फ़ोन को खुद Shelly के Wi-Fi (shelly…) से जोड़ें, ब्राउज़र में 192.168.33.1 खोलें और Settings → Wi-Fi में अपना Wi-Fi डालें।</string>
     <string name="lan_shelly_setup_stage3">Shelly की अपनी खुली नेटवर्क बंद करने के लिए उसके आपके Wi-Fi पर दिखने का इंतज़ार…</string>
     <string name="lan_shelly_setup_ap_on">चेतावनी: Shelly का अपना Wi-Fi (shelly…) अभी भी चालू हो सकता है और पास का कोई भी उससे जुड़ सकता है। Shelly का वेब पेज खोलें (सूची में उसका IP) और Settings → Wi-Fi → Access Point बंद करें या लॉगिन पासवर्ड लगाएँ।</string>
+    <string name="lan_brand_tasmota_desc">Tasmota वाले डिवाइस (प्लग, रिले, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">वेब सर्वर चालू वाले ESPHome डिवाइस</string>
+    <string name="lan_tasmota_step1">डिवाइस में Tasmota हो और वह आपके Wi-Fi पर हो (उसके IP पर वेब पेज खुलता हो)।</string>
+    <string name="lan_tasmota_step2">Tasmota नेटवर्क पर खुद को नहीं बताता: नेटवर्क स्कैन करें दबाएँ या IP डालें।</string>
+    <string name="lan_tasmota_step3">अगर Tasmota में वेब पासवर्ड रखा है तो वह पूछा जाएगा।</string>
+    <string name="lan_esphome_step1">डिवाइस की ESPHome कॉन्फ़िगरेशन में web_server: जोड़कर इंस्टॉल करें।</string>
+    <string name="lan_esphome_step2">फ़ोन उसी Wi-Fi पर रखें; डिवाइस नीचे अपने आप दिखेगा, या उसका IP डालें।</string>
+    <string name="lan_esphome_step3">स्विच और लाइट चैनल बनते हैं (अधिकतम 4); W वाला पावर सेंसर पावर के रूप में दिखता है।</string>
+    <string name="lan_scan">नेटवर्क स्कैन करें</string>
+    <string name="lan_scan_done">स्कैन पूरा: %1$d मिले।</string>
+    <string name="lan_scan_no_wifi">पहले फ़ोन को Wi-Fi से जोड़ें।</string>
+    <string name="lan_locked_generic">पासवर्ड से सुरक्षित: जोड़ें दबाएँ और डिवाइस का वेब पासवर्ड डालें।</string>
+    <string name="lan_unsupported_generic">इस डिवाइस में कोई स्विच या रिले नहीं मिला।</string>
+    <string name="lan_pw_title_generic">डिवाइस पासवर्ड</string>
+    <string name="lan_pw_body_generic">डिवाइस के वेब पेज का यूज़र नाम और पासवर्ड डालें। ये केवल इस फ़ोन पर एन्क्रिप्टेड रहते हैं और बैकअप में नहीं जाते।</string>
 </resources>

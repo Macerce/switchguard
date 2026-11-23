@@ -1726,7 +1726,7 @@
     <string name="lan_shelly_step1">將 Shelly 連上 Wi-Fi：使用 Shelly Smart Control App，或讓手機連上裝置自己的 Wi-Fi（shelly…），在瀏覽器開啟 192.168.33.1，於 設定 → Wi-Fi 輸入網路名稱和密碼。</string>
     <string name="lan_steps_title">開始之前</string>
     <string name="lan_brand_title">新增 %1$s</string>
-    <string name="lan_brand_soon">即將支援：Tasmota、ESPHome、Philips Hue、TP-Link 和 Home Assistant。</string>
+    <string name="lan_brand_soon">即將支援：Philips Hue、TP-Link 和 Home Assistant。</string>
     <string name="lan_brand_sonoff_desc">DIY（區域網路）模式的 eWeLink 裝置</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 繼電器與插座</string>
     <string name="lan_brand_hint">選擇品牌。不需要帳號或雲端：手機和裝置在同一個 Wi-Fi 即可。</string>
@@ -1751,4 +1751,19 @@
     <string name="lan_shelly_setup_old_android">在此 Android 版本上，請手動將手機連上 Shelly 的 Wi-Fi（shelly…），在瀏覽器開啟 192.168.33.1，並在 Settings → Wi-Fi 輸入你的 Wi-Fi。</string>
     <string name="lan_shelly_setup_stage3">正在等待 Shelly 出現在你的 Wi-Fi 上，以關閉它自己的開放網路…</string>
     <string name="lan_shelly_setup_ap_on">注意：Shelly 自己的 Wi-Fi（shelly…）可能仍在開啟，附近任何人都能連線。開啟 Shelly 的網頁（清單中的 IP），關閉 Settings → Wi-Fi → Access Point，或設定登入密碼。</string>
+    <string name="lan_brand_tasmota_desc">刷了 Tasmota 的裝置（插座、繼電器、Sonoff）</string>
+    <string name="lan_brand_esphome_desc">已啟用網頁伺服器的 ESPHome 裝置</string>
+    <string name="lan_tasmota_step1">確認裝置執行 Tasmota 並已連上你的 Wi-Fi（用它的 IP 能開啟網頁）。</string>
+    <string name="lan_tasmota_step2">Tasmota 不會在網路上自我廣播：點按「掃描網路」或輸入其 IP。</string>
+    <string name="lan_tasmota_step3">如果在 Tasmota 設定了網頁密碼，會請你輸入。</string>
+    <string name="lan_esphome_step1">在裝置的 ESPHome 設定中加入 web_server: 並安裝。</string>
+    <string name="lan_esphome_step2">手機保持在同一個 Wi-Fi；裝置會自動出現在下方，或輸入其 IP。</string>
+    <string name="lan_esphome_step3">開關和燈會成為通道（最多 4 個）；單位為 W 的功率感測器顯示為功率。</string>
+    <string name="lan_scan">掃描網路</string>
+    <string name="lan_scan_done">掃描完成：找到 %1$d 個。</string>
+    <string name="lan_scan_no_wifi">請先將手機連上 Wi-Fi。</string>
+    <string name="lan_locked_generic">已設密碼保護：點按「新增」並輸入裝置的網頁密碼。</string>
+    <string name="lan_unsupported_generic">此裝置上找不到開關或繼電器。</string>
+    <string name="lan_pw_title_generic">裝置密碼</string>
+    <string name="lan_pw_body_generic">輸入裝置網頁的使用者名稱和密碼。它們只加密保存在這支手機上，不會包含在備份中。</string>
 </resources>

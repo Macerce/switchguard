@@ -1698,7 +1698,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_step1">Kết nối Shelly với Wi-Fi: dùng ứng dụng Shelly Smart Control, hoặc nối điện thoại vào Wi-Fi riêng của thiết bị (shelly…), mở 192.168.33.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi trong Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Trước khi bắt đầu</string>
     <string name="lan_brand_title">Thêm %1$s</string>
-    <string name="lan_brand_soon">Sắp có: Tasmota, ESPHome, Philips Hue, TP-Link và Home Assistant.</string>
+    <string name="lan_brand_soon">Sắp có: Philips Hue, TP-Link và Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
     <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
@@ -1723,4 +1723,19 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_setup_old_android">Trên phiên bản Android này, hãy tự kết nối điện thoại vào Wi-Fi của Shelly (shelly…), mở 192.168.33.1 trong trình duyệt và nhập Wi-Fi của bạn ở Settings → Wi-Fi.</string>
     <string name="lan_shelly_setup_stage3">Đang chờ Shelly xuất hiện trên Wi-Fi của bạn để tắt mạng mở của nó…</string>
     <string name="lan_shelly_setup_ap_on">Cảnh báo: Wi-Fi riêng của Shelly (shelly…) có thể vẫn bật và ai ở gần cũng có thể kết nối. Mở trang web của Shelly (IP trong danh sách) rồi tắt Settings → Wi-Fi → Access Point, hoặc đặt mật khẩu.</string>
+    <string name="lan_brand_tasmota_desc">Thiết bị chạy Tasmota (ổ cắm, rơ-le, Sonoff)</string>
+    <string name="lan_brand_esphome_desc">Thiết bị ESPHome đã bật web server</string>
+    <string name="lan_tasmota_step1">Thiết bị phải chạy Tasmota và đã vào Wi-Fi của bạn (mở được trang web tại IP của nó).</string>
+    <string name="lan_tasmota_step2">Tasmota không tự quảng bá trên mạng: chạm Quét mạng hoặc nhập IP.</string>
+    <string name="lan_tasmota_step3">Nếu đã đặt mật khẩu web trong Tasmota, ứng dụng sẽ hỏi.</string>
+    <string name="lan_esphome_step1">Thêm web_server: vào cấu hình ESPHome của thiết bị rồi cài đặt.</string>
+    <string name="lan_esphome_step2">Giữ điện thoại cùng Wi-Fi; thiết bị sẽ tự hiện bên dưới, hoặc nhập IP.</string>
+    <string name="lan_esphome_step3">Công tắc và đèn thành kênh (tối đa 4); cảm biến công suất đơn vị W hiển thị là công suất.</string>
+    <string name="lan_scan">Quét mạng</string>
+    <string name="lan_scan_done">Quét xong: tìm thấy %1$d.</string>
+    <string name="lan_scan_no_wifi">Hãy kết nối điện thoại với Wi-Fi trước.</string>
+    <string name="lan_locked_generic">Có mật khẩu: chạm Thêm và nhập mật khẩu web của thiết bị.</string>
+    <string name="lan_unsupported_generic">Không tìm thấy công tắc hoặc rơ-le trên thiết bị này.</string>
+    <string name="lan_pw_title_generic">Mật khẩu thiết bị</string>
+    <string name="lan_pw_body_generic">Nhập tên người dùng và mật khẩu trang web của thiết bị. Chúng được mã hóa chỉ trên điện thoại này và không có trong bản sao lưu.</string>
 </resources>

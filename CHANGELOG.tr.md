@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.44.0 — 2026-11-24
+**Yeni**
+- Bulutsuz, yerel ağdan Tasmota ve ESPHome cihazlar: Cihaz ekle (yerel ağ) → Tasmota ya da ESPHome. ESPHome cihazlar (web_server açık) kendiliğinden bulunur; Tasmota cihazlar "Ağı tara" ya da IP adresiyle bulunur. Aç/kapa, alarmlar, otomasyonlar ve güç ölçümü çalışır; cihazda web şifresi varsa sorulur.
+
 ## 2.43.0 — 2026-11-24
 **Yeni**
 - Yeni ya da sıfırlanmış Shelly'yi uygulamadan Wi-Fi'a bağlama: Cihaz ekle (yerel ağ) → Shelly → "Yeni ya da sıfırlanmış Shelly mi?". Wi-Fi'ını yaz; telefon kısa süre Shelly'nin kendi ağına bağlanıp bilgileri gönderir ve Shelly listede belirir. Plus, Pro ve yeni modellerde uygulama ardından Shelly'nin kendi açık Wi-Fi ağını ev ağı üzerinden kapatır (kapatamazsa nasıl yapılacağını söyler). Android 10 ve üstü.
