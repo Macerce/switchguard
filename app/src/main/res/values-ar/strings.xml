@@ -1907,7 +1907,7 @@
     <string name="lan_shelly_step1">وصّل Shelly بشبكة Wi-Fi: عبر تطبيق Shelly Smart Control، أو وصّل الهاتف بشبكة الجهاز الخاصة (shelly…) وافتح 192.168.33.1 في المتصفح وأدخل اسم الشبكة وكلمة المرور في الإعدادات ← Wi-Fi.</string>
     <string name="lan_steps_title">قبل أن تبدأ</string>
     <string name="lan_brand_title">إضافة %1$s</string>
-    <string name="lan_brand_soon">قريبًا: TP-Link Kasa / Tapo وHome Assistant.</string>
+    <string name="lan_brand_soon">قريبًا: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
     <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
     <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
@@ -1957,4 +1957,14 @@
     <string name="lan_hue_pair_start">إقران</string>
     <string name="lan_hue_pair_waiting">في انتظار الزر…</string>
     <string name="lan_hue_pair_timeout">لم يُضغط الزر في الوقت المناسب. اضغطه ثم اضغط إقران مرة أخرى.</string>
+    <string name="lan_brand_kasa_desc">مقابس ومشتركات ومصابيح Kasa (دون حساب)</string>
+    <string name="lan_brand_tapo_desc">مقابس ومصابيح Tapo (بريد وكلمة مرور حساب TP-Link)</string>
+    <string name="lan_kasa_step1">اضبط الجهاز أولًا في تطبيق Kasa ليتصل بشبكتك.</string>
+    <string name="lan_kasa_step2">تظهر الأجهزة على نفس الشبكة أدناه تلقائيًا؛ ويمكنك أيضًا فحص الشبكة أو إدخال عنوان IP.</string>
+    <string name="lan_kasa_step3">تستخدم طرازات Kasa الأحدث التي لا تظهر هنا طريقة Tapo نفسها: أضفها من صفحة Tapo.</string>
+    <string name="lan_tapo_step1">اضبط الجهاز أولًا في تطبيق Tapo ليتصل بشبكتك.</string>
+    <string name="lan_tapo_step2">اضغط فحص الشبكة (أو أدخل IP)، ثم إضافة على جهاز وأدخل بريد وكلمة مرور حساب TP-Link مرة واحدة.</string>
+    <string name="lan_tapo_step3">تُفتح الأجهزة الأخرى على الحساب نفسه تلقائيًا. يبقى التحكم داخل شبكتك؛ يُستخدم الحساب فقط لفتح الجهاز محليًا.</string>
+    <string name="lan_tapo_email">بريد حساب TP-Link</string>
+    <string name="lan_tapo_pw_body">لا تُفتح أجهزة Tapo إلا ببريد وكلمة مرور حساب TP-Link الذي أُعدّت به. تُحفظ مشفّرة على هذا الهاتف فقط، ولا يرسلها SwitchGuard إلى الإنترنت أبدًا، ولا تدخل في النسخ الاحتياطية.</string>
 </resources>

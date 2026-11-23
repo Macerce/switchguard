@@ -1835,7 +1835,7 @@
     <string name="lan_shelly_step1">Подключите Shelly к Wi-Fi: в приложении Shelly Smart Control или подключите телефон к собственной сети устройства (shelly…), откройте 192.168.33.1 в браузере и введите имя и пароль Wi-Fi в Настройки → Wi-Fi.</string>
     <string name="lan_steps_title">Перед началом</string>
     <string name="lan_brand_title">Добавить %1$s</string>
-    <string name="lan_brand_soon">Скоро: TP-Link Kasa / Tapo и Home Assistant.</string>
+    <string name="lan_brand_soon">Скоро: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Устройства eWeLink в режиме DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Реле и розетки Gen1, Plus, Pro, Gen3 и Gen4</string>
     <string name="lan_brand_hint">Выберите марку. Аккаунт и облако не нужны: телефон и устройство просто должны быть в одной Wi-Fi.</string>
@@ -1885,4 +1885,14 @@
     <string name="lan_hue_pair_start">Связать</string>
     <string name="lan_hue_pair_waiting">Ждём нажатия кнопки…</string>
     <string name="lan_hue_pair_timeout">Кнопка не была нажата вовремя. Нажмите её и снова «Связать».</string>
+    <string name="lan_brand_kasa_desc">Розетки, удлинители и лампы Kasa (без аккаунта)</string>
+    <string name="lan_brand_tapo_desc">Розетки и лампы Tapo (email и пароль аккаунта TP-Link)</string>
+    <string name="lan_kasa_step1">Сначала настройте устройство в приложении Kasa, чтобы оно было в вашей сети.</string>
+    <string name="lan_kasa_step2">Устройства в той же сети появятся ниже сами; можно также сканировать сеть или ввести IP.</string>
+    <string name="lan_kasa_step3">Новые модели Kasa, которых здесь нет, работают как Tapo: добавьте их на странице Tapo.</string>
+    <string name="lan_tapo_step1">Сначала настройте устройство в приложении Tapo, чтобы оно было в вашей сети.</string>
+    <string name="lan_tapo_step2">Нажмите «Сканировать сеть» (или введите IP), затем «Добавить» у устройства и один раз введите email и пароль аккаунта TP-Link.</string>
+    <string name="lan_tapo_step3">Остальные устройства этого аккаунта откроются сами. Управление остаётся в сети; аккаунт нужен только для локальной разблокировки.</string>
+    <string name="lan_tapo_email">Email аккаунта TP-Link</string>
+    <string name="lan_tapo_pw_body">Устройства Tapo открываются только с email и паролем аккаунта TP-Link, к которому они привязаны. Данные хранятся в зашифрованном виде только на этом телефоне, SwitchGuard никогда не отправляет их в интернет, и они не попадают в резервные копии.</string>
 </resources>

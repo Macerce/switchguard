@@ -103,6 +103,8 @@ private val BRANDS = listOf(
     Triple(LocalDevice.BRAND_TASMOTA, R.string.lan_brand_tasmota_desc, Hue.GREEN),
     Triple(LocalDevice.BRAND_ESPHOME, R.string.lan_brand_esphome_desc, Hue.SLATE),
     Triple(LocalDevice.BRAND_HUE, R.string.lan_brand_hue_desc, Hue.AMBER),
+    Triple(LocalDevice.BRAND_KASA, R.string.lan_brand_kasa_desc, Hue.INDIGO),
+    Triple(LocalDevice.BRAND_TAPO, R.string.lan_brand_tapo_desc, Hue.PURPLE),
 )
 
 fun brandName(brand: String) = when (brand) {
@@ -121,6 +123,8 @@ private fun brandSteps(brand: String): List<Int> = when (brand) {
     LocalDevice.BRAND_TASMOTA -> listOf(R.string.lan_tasmota_step1, R.string.lan_tasmota_step2, R.string.lan_tasmota_step3)
     LocalDevice.BRAND_ESPHOME -> listOf(R.string.lan_esphome_step1, R.string.lan_esphome_step2, R.string.lan_esphome_step3)
     LocalDevice.BRAND_HUE -> listOf(R.string.lan_hue_step1, R.string.lan_hue_step2, R.string.lan_hue_step3)
+    LocalDevice.BRAND_KASA -> listOf(R.string.lan_kasa_step1, R.string.lan_kasa_step2, R.string.lan_kasa_step3)
+    LocalDevice.BRAND_TAPO -> listOf(R.string.lan_tapo_step1, R.string.lan_tapo_step2, R.string.lan_tapo_step3)
     else -> listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
 }
 
@@ -342,12 +346,23 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     }
     askGeneric?.let { f ->
         val d = driver
-        if (d != null) LanPasswordDialog("${brandName(brand)} · ${f.host}", onDismiss = { askGeneric = null }) { cred ->
+        val tapo = brand == LocalDevice.BRAND_TAPO
+        if (d != null) LanPasswordDialog(
+            "${brandName(brand)} · ${f.host}", onDismiss = { askGeneric = null },
+            defaultUser = if (tapo) "" else ShellyAuth.DEFAULT_USER,
+            userLabel = if (tapo) R.string.lan_tapo_email else R.string.lan_shelly_user,
+            body = if (tapo) R.string.lan_tapo_pw_body else R.string.lan_pw_body_generic,
+        ) { cred ->
             val r = withContext(Dispatchers.IO) { d.probe(f.host, cred, quickly = false) }
             when {
                 r == null -> resources.getString(R.string.lan_ip_not_found, f.host)
                 r.locked || r.wrongPassword -> resources.getString(R.string.lan_shelly_pw_wrong)
                 else -> {
+                    // Tapo: aynı TP-Link hesabı diğer cihazları da açar.
+                    if (tapo) r.credentials?.let { c ->
+                        store.shellyAuth = store.shellyAuth + (com.macerce.switchguard.api.TapoLan.ACCOUNT to c)
+                        d.setCredentials(store.shellyAuth)
+                    }
                     d.forget(f.id)
                     d.remember(r)
                     askGeneric = null
@@ -590,9 +605,13 @@ private fun HuePairDialog(bridge: LanFound, onDismiss: () -> Unit, onPaired: (St
  * başarıda null döner (başarıda pencereyi çağıran kapatır).
  */
 @Composable
-private fun LanPasswordDialog(label: String, onDismiss: () -> Unit, check: suspend (ShellyAuth.Credentials) -> String?) {
+private fun LanPasswordDialog(
+    label: String, onDismiss: () -> Unit, defaultUser: String = ShellyAuth.DEFAULT_USER,
+    userLabel: Int = R.string.lan_shelly_user, body: Int = R.string.lan_pw_body_generic,
+    check: suspend (ShellyAuth.Credentials) -> String?,
+) {
     val scope = rememberCoroutineScope()
-    var user by remember { mutableStateOf(ShellyAuth.DEFAULT_USER) }
+    var user by remember { mutableStateOf(defaultUser) }
     var password by remember { mutableStateOf("") }
     var checking by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
@@ -603,10 +622,10 @@ private fun LanPasswordDialog(label: String, onDismiss: () -> Unit, check: suspe
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text(label, style = MaterialTheme.typography.titleSmall)
-                Text(stringResource(R.string.lan_pw_body_generic), style = MaterialTheme.typography.bodySmall)
+                Text(stringResource(body), style = MaterialTheme.typography.bodySmall)
                 OutlinedTextField(
-                    value = user, onValueChange = { user = it.take(64); error = null }, singleLine = true,
-                    label = { Text(stringResource(R.string.lan_shelly_user)) }, modifier = Modifier.fillMaxWidth(),
+                    value = user, onValueChange = { user = it.take(128); error = null }, singleLine = true,
+                    label = { Text(stringResource(userLabel)) }, modifier = Modifier.fillMaxWidth(),
                 )
                 OutlinedTextField(
                     value = password, onValueChange = { password = it.take(128); error = null }, singleLine = true,

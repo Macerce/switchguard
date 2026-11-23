@@ -1763,7 +1763,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_step1">Verbind de Shelly met je wifi: met de app Shelly Smart Control, of verbind de telefoon met het eigen wifi van het apparaat (shelly…), open 192.168.33.1 in de browser en vul onder Instellingen → Wi-Fi je netwerknaam en wachtwoord in.</string>
     <string name="lan_steps_title">Voordat je begint</string>
     <string name="lan_brand_title">%1$s toevoegen</string>
-    <string name="lan_brand_soon">Binnenkort: TP-Link Kasa / Tapo en Home Assistant.</string>
+    <string name="lan_brand_soon">Binnenkort: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
     <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
     <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
@@ -1813,4 +1813,14 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_hue_pair_start">Koppelen</string>
     <string name="lan_hue_pair_waiting">Wachten op de knop…</string>
     <string name="lan_hue_pair_timeout">De knop is niet op tijd ingedrukt. Druk erop en tik opnieuw op Koppelen.</string>
+    <string name="lan_brand_kasa_desc">Kasa-stekkers, stekkerdozen en lampen (geen account nodig)</string>
+    <string name="lan_brand_tapo_desc">Tapo-stekkers en -lampen (e-mail en wachtwoord van je TP-Link-account)</string>
+    <string name="lan_kasa_step1">Stel het apparaat eerst in met de Kasa-app zodat het op je wifi zit.</string>
+    <string name="lan_kasa_step2">Apparaten op dezelfde wifi verschijnen vanzelf hieronder; je kunt ook het netwerk scannen of het IP invullen.</string>
+    <string name="lan_kasa_step3">Nieuwere Kasa-modellen die hier niet verschijnen werken zoals Tapo: voeg ze toe via de Tapo-pagina.</string>
+    <string name="lan_tapo_step1">Stel het apparaat eerst in met de Tapo-app zodat het op je wifi zit.</string>
+    <string name="lan_tapo_step2">Tik op Netwerk scannen (of vul het IP in), tik dan bij een apparaat op Toevoegen en voer één keer e-mail en wachtwoord van je TP-Link-account in.</string>
+    <string name="lan_tapo_step3">Andere apparaten op hetzelfde account gaan daarna vanzelf open. De bediening blijft op je netwerk; het account dient alleen om lokaal te ontgrendelen.</string>
+    <string name="lan_tapo_email">E-mail van TP-Link-account</string>
+    <string name="lan_tapo_pw_body">Tapo-apparaten openen alleen met e-mail en wachtwoord van het TP-Link-account waarmee ze zijn ingesteld. Ze blijven versleuteld alleen op deze telefoon, SwitchGuard stuurt ze nooit naar internet en ze zitten niet in back-ups.</string>
 </resources>

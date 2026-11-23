@@ -1835,7 +1835,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_step1">Połącz Shelly z Wi-Fi: w aplikacji Shelly Smart Control albo połącz telefon z własną siecią urządzenia (shelly…), otwórz 192.168.33.1 w przeglądarce i w Ustawienia → Wi-Fi wpisz nazwę i hasło sieci.</string>
     <string name="lan_steps_title">Zanim zaczniesz</string>
     <string name="lan_brand_title">Dodaj %1$s</string>
-    <string name="lan_brand_soon">Wkrótce: TP-Link Kasa / Tapo i Home Assistant.</string>
+    <string name="lan_brand_soon">Wkrótce: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Urządzenia eWeLink w trybie DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Przekaźniki i gniazdka Gen1, Plus, Pro, Gen3 i Gen4</string>
     <string name="lan_brand_hint">Wybierz markę. Bez konta i chmury: telefon i urządzenie muszą tylko być w tej samej sieci Wi-Fi.</string>
@@ -1885,4 +1885,14 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_hue_pair_start">Sparuj</string>
     <string name="lan_hue_pair_waiting">Czekam na przycisk…</string>
     <string name="lan_hue_pair_timeout">Przycisk nie został naciśnięty na czas. Naciśnij go i ponownie dotknij Sparuj.</string>
+    <string name="lan_brand_kasa_desc">Gniazdka, listwy i żarówki Kasa (bez konta)</string>
+    <string name="lan_brand_tapo_desc">Gniazdka i żarówki Tapo (e-mail i hasło konta TP-Link)</string>
+    <string name="lan_kasa_step1">Najpierw skonfiguruj urządzenie w aplikacji Kasa, by było w Twojej sieci.</string>
+    <string name="lan_kasa_step2">Urządzenia w tej samej sieci pojawią się niżej same; możesz też skanować sieć lub wpisać IP.</string>
+    <string name="lan_kasa_step3">Nowsze modele Kasa, których tu nie widać, działają jak Tapo: dodaj je ze strony Tapo.</string>
+    <string name="lan_tapo_step1">Najpierw skonfiguruj urządzenie w aplikacji Tapo, by było w Twojej sieci.</string>
+    <string name="lan_tapo_step2">Dotknij Skanuj sieć (lub wpisz IP), potem Dodaj przy urządzeniu i raz wpisz e-mail i hasło konta TP-Link.</string>
+    <string name="lan_tapo_step3">Inne urządzenia z tego konta odblokują się same. Sterowanie zostaje w sieci; konto służy tylko do lokalnego odblokowania.</string>
+    <string name="lan_tapo_email">E-mail konta TP-Link</string>
+    <string name="lan_tapo_pw_body">Urządzenia Tapo otwierają się tylko e-mailem i hasłem konta TP-Link, na którym je skonfigurowano. Są przechowywane zaszyfrowane tylko na tym telefonie, SwitchGuard nigdy nie wysyła ich do internetu i nie trafiają do kopii.</string>
 </resources>

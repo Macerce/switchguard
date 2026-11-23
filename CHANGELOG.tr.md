@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.46.0 — 2026-11-24
+**Yeni**
+- Yerel ağdan TP-Link Kasa ve Tapo: Cihaz ekle (yerel ağ) → TP-Link Kasa ya da TP-Link Tapo. Kasa prizler, çoklu prizler ve ampuller kendiliğinden bulunur, hesap gerekmez. Tapo cihazlar "Ağı tara" ile bulunur ve tüm cihazlar için bir kez girilen TP-Link hesap e-postası ve şifresiyle açılır; kontrol ağında kalır. P110/P115 ve enerji ölçen Kasa prizlerde güç okunur.
+
 ## 2.45.0 — 2026-11-24
 **Yeni**
 - Hue bulutu olmadan Philips Hue: Cihaz ekle (yerel ağ) → Philips Hue. Hue Köprüsü kendiliğinden bulunur; düğmesine basıp Eşleştir'e dokun, sonra istediğin ışıkları ve prizleri ekle. Aç/kapa, alarmlar ve otomasyonlar çalışır; elektriği kesilen lamba çevrimdışı görünür.

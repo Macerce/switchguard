@@ -1692,7 +1692,7 @@
     <string name="lan_shelly_step1">Shelly को अपने Wi-Fi से जोड़ें: Shelly Smart Control ऐप से, या फ़ोन को डिवाइस के अपने Wi-Fi (shelly…) से जोड़कर ब्राउज़र में 192.168.33.1 खोलें और Settings → Wi-Fi में नेटवर्क नाम व पासवर्ड डालें।</string>
     <string name="lan_steps_title">शुरू करने से पहले</string>
     <string name="lan_brand_title">%1$s जोड़ें</string>
-    <string name="lan_brand_soon">जल्द: TP-Link Kasa / Tapo और Home Assistant।</string>
+    <string name="lan_brand_soon">जल्द: Home Assistant।</string>
     <string name="lan_brand_sonoff_desc">DIY (LAN) मोड वाले eWeLink डिवाइस</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 और Gen4 रिले और प्लग</string>
     <string name="lan_brand_hint">ब्रांड चुनें। खाता या क्लाउड ज़रूरी नहीं: फ़ोन और डिवाइस बस एक ही Wi-Fi पर हों।</string>
@@ -1742,4 +1742,14 @@
     <string name="lan_hue_pair_start">जोड़ी बनाएँ</string>
     <string name="lan_hue_pair_waiting">बटन का इंतज़ार…</string>
     <string name="lan_hue_pair_timeout">बटन समय पर नहीं दबाया गया। उसे दबाएँ और फिर जोड़ी बनाएँ दबाएँ।</string>
+    <string name="lan_brand_kasa_desc">Kasa प्लग, पावर स्ट्रिप और बल्ब (खाता ज़रूरी नहीं)</string>
+    <string name="lan_brand_tapo_desc">Tapo प्लग और बल्ब (TP-Link खाते का ईमेल और पासवर्ड)</string>
+    <string name="lan_kasa_step1">पहले Kasa ऐप में डिवाइस सेट करें ताकि वह आपके Wi-Fi पर हो।</string>
+    <string name="lan_kasa_step2">उसी Wi-Fi के डिवाइस नीचे अपने आप दिखते हैं; आप नेटवर्क स्कैन भी कर सकते हैं या IP डाल सकते हैं।</string>
+    <string name="lan_kasa_step3">जो नए Kasa मॉडल यहाँ नहीं दिखते वे Tapo जैसा तरीका इस्तेमाल करते हैं: उन्हें Tapo पेज से जोड़ें।</string>
+    <string name="lan_tapo_step1">पहले Tapo ऐप में डिवाइस सेट करें ताकि वह आपके Wi-Fi पर हो।</string>
+    <string name="lan_tapo_step2">नेटवर्क स्कैन करें दबाएँ (या IP डालें), फिर किसी डिवाइस पर जोड़ें दबाकर एक बार TP-Link खाते का ईमेल और पासवर्ड डालें।</string>
+    <string name="lan_tapo_step3">उसी खाते के दूसरे डिवाइस फिर अपने आप खुल जाते हैं। नियंत्रण आपके नेटवर्क में रहता है; खाता केवल डिवाइस को स्थानीय रूप से खोलने के लिए है।</string>
+    <string name="lan_tapo_email">TP-Link खाते का ईमेल</string>
+    <string name="lan_tapo_pw_body">Tapo डिवाइस केवल उसी TP-Link खाते के ईमेल और पासवर्ड से खुलते हैं जिससे सेट किए गए थे। ये केवल इस फ़ोन पर एन्क्रिप्टेड रहते हैं, SwitchGuard इन्हें कभी इंटरनेट पर नहीं भेजता और ये बैकअप में नहीं जाते।</string>
 </resources>

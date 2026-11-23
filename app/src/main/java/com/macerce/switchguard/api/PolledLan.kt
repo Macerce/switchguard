@@ -60,7 +60,7 @@ abstract class PolledLan(val brand: String) {
     fun forget(id: String) { found.remove(id) }
 
     @Synchronized
-    fun startDiscovery(context: Context) {
+    open fun startDiscovery(context: Context) {
         val type = mdnsType ?: return
         val b = browser ?: MdnsBrowser(type, ::mdnsAccept, onFound = { _, host ->
             io.execute { probe(host, null, quickly = false)?.let(::remember) }

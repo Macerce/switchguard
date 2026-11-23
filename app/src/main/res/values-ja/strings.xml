@@ -1727,7 +1727,7 @@
     <string name="lan_shelly_step1">ShellyをWi-Fiにつなぎます：Shelly Smart Controlアプリを使うか、スマホをデバイス自身のWi-Fi（shelly…）につないでブラウザで192.168.33.1を開き、設定 → Wi-FiでWi-Fi名とパスワードを入力します。</string>
     <string name="lan_steps_title">始める前に</string>
     <string name="lan_brand_title">%1$sを追加</string>
-    <string name="lan_brand_soon">近日対応：TP-Link Kasa / Tapo、Home Assistant。</string>
+    <string name="lan_brand_soon">近日対応：Home Assistant。</string>
     <string name="lan_brand_sonoff_desc">DIY（LAN）モードの eWeLink デバイス</string>
     <string name="lan_brand_shelly_desc">Gen1・Plus・Pro・Gen3・Gen4 のリレーとプラグ</string>
     <string name="lan_brand_hint">ブランドを選んでください。アカウントやクラウドは不要で、スマホとデバイスが同じWi-Fiにあれば使えます。</string>
@@ -1777,4 +1777,14 @@
     <string name="lan_hue_pair_start">ペアリング</string>
     <string name="lan_hue_pair_waiting">ボタンを待っています…</string>
     <string name="lan_hue_pair_timeout">時間内にボタンが押されませんでした。押してからもう一度「ペアリング」をタップしてください。</string>
+    <string name="lan_brand_kasa_desc">Kasa のプラグ、電源タップ、電球（アカウント不要）</string>
+    <string name="lan_brand_tapo_desc">Tapo のプラグと電球（TP-Link アカウントのメールとパスワード）</string>
+    <string name="lan_kasa_step1">まず Kasa アプリで機器を設定し、Wi-Fi に接続してください。</string>
+    <string name="lan_kasa_step2">同じ Wi-Fi の機器は下に自動で表示されます。ネットワークのスキャンや IP 入力もできます。</string>
+    <string name="lan_kasa_step3">ここに出ない新しい Kasa 機種は Tapo と同じ方式です。Tapo のページから追加してください。</string>
+    <string name="lan_tapo_step1">まず Tapo アプリで機器を設定し、Wi-Fi に接続してください。</string>
+    <string name="lan_tapo_step2">「ネットワークをスキャン」（または IP 入力）後、機器の「追加」を押して TP-Link アカウントのメールとパスワードを一度入力します。</string>
+    <string name="lan_tapo_step3">同じアカウントの他の機器は自動で開きます。操作はネットワーク内で完結し、アカウントは機器をローカルで解錠するためだけに使われます。</string>
+    <string name="lan_tapo_email">TP-Link アカウントのメール</string>
+    <string name="lan_tapo_pw_body">Tapo 機器は、設定に使った TP-Link アカウントのメールとパスワードでのみ開きます。この端末にのみ暗号化して保存され、SwitchGuard がインターネットに送ることはなく、バックアップにも含まれません。</string>
 </resources>

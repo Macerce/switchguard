@@ -13,7 +13,7 @@ import com.macerce.switchguard.core.ShellyAuth
 object LocalLan {
     /** Yoklamalı markalar; yeni marka buraya eklenir. */
     val drivers: Map<String, PolledLan> by lazy {
-        listOf<PolledLan>(TasmotaLan, EsphomeLan, HueLan).associateBy { it.brand }
+        listOf<PolledLan>(TasmotaLan, EsphomeLan, HueLan, KasaLan, TapoLan).associateBy { it.brand }
     }
 
     fun driver(brand: String): PolledLan? = drivers[brand]

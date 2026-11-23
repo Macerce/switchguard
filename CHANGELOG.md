@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.46.0 — 2026-11-24
+**New**
+- TP-Link Kasa and Tapo over the local network: Add device (LAN) → TP-Link Kasa or TP-Link Tapo. Kasa plugs, power strips and bulbs are found automatically and need no account. Tapo devices are found with "Scan network" and unlock with your TP-Link account email and password, entered once for all devices; control stays on your network. Power readings on P110/P115 and Kasa energy-monitoring plugs.
+
 ## 2.45.0 — 2026-11-24
 **New**
 - Philips Hue without the Hue cloud: Add device (LAN) → Philips Hue. The Hue Bridge is found automatically; press its button and tap Pair, then add the lights and plugs you want. On/off, alarms and automations work; a light whose power is cut shows as offline.

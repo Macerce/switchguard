@@ -1770,7 +1770,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_step1">Collega lo Shelly alla tua Wi-Fi: con l\'app Shelly Smart Control, oppure collega il telefono alla Wi-Fi del dispositivo (shelly…), apri 192.168.33.1 nel browser e inserisci nome e password della Wi-Fi in Impostazioni → Wi-Fi.</string>
     <string name="lan_steps_title">Prima di iniziare</string>
     <string name="lan_brand_title">Aggiungi %1$s</string>
-    <string name="lan_brand_soon">In arrivo: TP-Link Kasa / Tapo e Home Assistant.</string>
+    <string name="lan_brand_soon">In arrivo: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Dispositivi eWeLink in modalità DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relè e prese Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Scegli la marca. Nessun account né cloud: telefono e dispositivo devono solo essere sulla stessa Wi-Fi.</string>
@@ -1820,4 +1820,14 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_hue_pair_start">Associa</string>
     <string name="lan_hue_pair_waiting">In attesa del pulsante…</string>
     <string name="lan_hue_pair_timeout">Il pulsante non è stato premuto in tempo. Premilo e tocca di nuovo Associa.</string>
+    <string name="lan_brand_kasa_desc">Prese, ciabatte e lampadine Kasa (senza account)</string>
+    <string name="lan_brand_tapo_desc">Prese e lampadine Tapo (email e password dell’account TP-Link)</string>
+    <string name="lan_kasa_step1">Configura prima il dispositivo nell’app Kasa così che sia sul tuo Wi-Fi.</string>
+    <string name="lan_kasa_step2">I dispositivi sullo stesso Wi-Fi compaiono sotto da soli; puoi anche scansionare la rete o inserire l’IP.</string>
+    <string name="lan_kasa_step3">I modelli Kasa recenti che non compaiono qui usano lo stesso metodo di Tapo: aggiungili dalla pagina Tapo.</string>
+    <string name="lan_tapo_step1">Configura prima il dispositivo nell’app Tapo così che sia sul tuo Wi-Fi.</string>
+    <string name="lan_tapo_step2">Tocca Scansiona rete (o inserisci l’IP), poi Aggiungi su un dispositivo e inserisci una volta email e password dell’account TP-Link.</string>
+    <string name="lan_tapo_step3">Gli altri dispositivi dello stesso account si sbloccano da soli. Il controllo resta nella tua rete; l’account serve solo a sbloccarli in locale.</string>
+    <string name="lan_tapo_email">Email account TP-Link</string>
+    <string name="lan_tapo_pw_body">I dispositivi Tapo si aprono solo con email e password dell’account TP-Link usato per configurarli. Restano cifrati solo su questo telefono, SwitchGuard non li invia mai su Internet e non vanno nei backup.</string>
 </resources>

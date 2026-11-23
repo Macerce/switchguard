@@ -1698,7 +1698,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_step1">Kết nối Shelly với Wi-Fi: dùng ứng dụng Shelly Smart Control, hoặc nối điện thoại vào Wi-Fi riêng của thiết bị (shelly…), mở 192.168.33.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi trong Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Trước khi bắt đầu</string>
     <string name="lan_brand_title">Thêm %1$s</string>
-    <string name="lan_brand_soon">Sắp có: TP-Link Kasa / Tapo và Home Assistant.</string>
+    <string name="lan_brand_soon">Sắp có: Home Assistant.</string>
     <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
     <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
@@ -1748,4 +1748,14 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_hue_pair_start">Ghép đôi</string>
     <string name="lan_hue_pair_waiting">Đang chờ nút…</string>
     <string name="lan_hue_pair_timeout">Nút không được nhấn kịp. Nhấn nút rồi chạm Ghép đôi lần nữa.</string>
+    <string name="lan_brand_kasa_desc">Ổ cắm, ổ chia và bóng đèn Kasa (không cần tài khoản)</string>
+    <string name="lan_brand_tapo_desc">Ổ cắm và bóng đèn Tapo (email và mật khẩu tài khoản TP-Link)</string>
+    <string name="lan_kasa_step1">Cài đặt thiết bị trong ứng dụng Kasa trước để nó vào Wi-Fi của bạn.</string>
+    <string name="lan_kasa_step2">Thiết bị cùng Wi-Fi tự hiện bên dưới; bạn cũng có thể quét mạng hoặc nhập IP.</string>
+    <string name="lan_kasa_step3">Các mẫu Kasa mới không hiện ở đây dùng cách giống Tapo: thêm từ trang Tapo.</string>
+    <string name="lan_tapo_step1">Cài đặt thiết bị trong ứng dụng Tapo trước để nó vào Wi-Fi của bạn.</string>
+    <string name="lan_tapo_step2">Chạm Quét mạng (hoặc nhập IP), rồi chạm Thêm ở một thiết bị và nhập một lần email, mật khẩu tài khoản TP-Link.</string>
+    <string name="lan_tapo_step3">Các thiết bị khác cùng tài khoản sẽ tự mở. Điều khiển vẫn trong mạng của bạn; tài khoản chỉ dùng để mở khóa thiết bị cục bộ.</string>
+    <string name="lan_tapo_email">Email tài khoản TP-Link</string>
+    <string name="lan_tapo_pw_body">Thiết bị Tapo chỉ mở bằng email và mật khẩu của tài khoản TP-Link đã dùng để cài đặt. Chúng được mã hóa chỉ trên điện thoại này, SwitchGuard không bao giờ gửi lên internet và không có trong bản sao lưu.</string>
 </resources>
