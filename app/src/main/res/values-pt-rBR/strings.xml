@@ -1822,4 +1822,6 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_shelly_setup_not_shelly">Conectado, mas nenhum Shelly respondeu em 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">O Shelly não aceitou os dados do Wi-Fi. Verifique o nome e a senha.</string>
     <string name="lan_shelly_setup_old_android">Nesta versão do Android, conecte você mesmo o telefone ao Wi-Fi do Shelly (shelly…), abra 192.168.33.1 no navegador e digite seu Wi-Fi em Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Aguardando o Shelly no seu Wi-Fi para desligar a rede aberta dele…</string>
+    <string name="lan_shelly_setup_ap_on">Atenção: o Wi-Fi do próprio Shelly (shelly…) pode continuar ligado e qualquer pessoa por perto pode se conectar. Abra a página web do Shelly (o IP na lista) e desligue Settings → Wi-Fi → Access Point, ou defina uma senha.</string>
 </resources>

@@ -1721,4 +1721,6 @@
     <string name="lan_shelly_setup_not_shelly">เชื่อมต่อแล้ว แต่ไม่มี Shelly ตอบที่ 192.168.33.1</string>
     <string name="lan_shelly_setup_rejected">Shelly ไม่ยอมรับข้อมูล Wi-Fi ตรวจสอบชื่อและรหัสผ่าน</string>
     <string name="lan_shelly_setup_old_android">ใน Android รุ่นนี้ ให้เชื่อมต่อโทรศัพท์กับ Wi-Fi ของ Shelly (shelly…) เอง เปิด 192.168.33.1 ในเบราว์เซอร์ แล้วใส่ Wi-Fi ของคุณที่ Settings → Wi-Fi</string>
+    <string name="lan_shelly_setup_stage3">กำลังรอ Shelly ปรากฏบน Wi-Fi ของคุณเพื่อปิดเครือข่ายเปิดของมัน…</string>
+    <string name="lan_shelly_setup_ap_on">คำเตือน: Wi-Fi ของ Shelly เอง (shelly…) อาจยังเปิดอยู่ และใครก็ตามที่อยู่ใกล้อาจเชื่อมต่อได้ เปิดหน้าเว็บของ Shelly (IP ในรายการ) แล้วปิด Settings → Wi-Fi → Access Point หรือตั้งรหัสผ่าน</string>
 </resources>

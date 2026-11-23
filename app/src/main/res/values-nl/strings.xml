@@ -1786,4 +1786,6 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_setup_not_shelly">Verbonden, maar er antwoordde geen Shelly op 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">De Shelly accepteerde de wifi-gegevens niet. Controleer naam en wachtwoord.</string>
     <string name="lan_shelly_setup_old_android">Op deze Android-versie verbind je de telefoon zelf met de wifi van de Shelly (shelly…), open je 192.168.33.1 in de browser en vul je je wifi in onder Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Wachten op de Shelly op je wifi om zijn eigen open netwerk uit te zetten…</string>
+    <string name="lan_shelly_setup_ap_on">Let op: het eigen wifi-netwerk van de Shelly (shelly…) staat mogelijk nog aan en iedereen in de buurt kan verbinden. Open de webpagina van de Shelly (zijn IP in de lijst) en zet Settings → Wi-Fi → Access Point uit, of stel een wachtwoord in.</string>
 </resources>

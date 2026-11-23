@@ -1728,4 +1728,6 @@
     <string name="lan_shelly_setup_not_shelly">已连接，但 192.168.33.1 上没有 Shelly 响应。</string>
     <string name="lan_shelly_setup_rejected">Shelly 未接受 Wi-Fi 信息。请检查名称和密码。</string>
     <string name="lan_shelly_setup_old_android">在此 Android 版本上，请手动将手机连接到 Shelly 的 Wi-Fi（shelly…），在浏览器中打开 192.168.33.1，并在 Settings → Wi-Fi 中输入你的 Wi-Fi。</string>
+    <string name="lan_shelly_setup_stage3">正在等待 Shelly 出现在你的 Wi-Fi 上，以关闭它自己的开放网络…</string>
+    <string name="lan_shelly_setup_ap_on">注意：Shelly 自己的 Wi-Fi（shelly…）可能仍然开启，附近任何人都能连接。打开 Shelly 的网页（列表中的 IP），关闭 Settings → Wi-Fi → Access Point，或设置登录密码。</string>
 </resources>

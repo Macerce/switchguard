@@ -1793,4 +1793,6 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_shelly_setup_not_shelly">Connesso, ma nessuno Shelly ha risposto su 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">Lo Shelly non ha accettato i dati Wi-Fi. Controlla nome e password.</string>
     <string name="lan_shelly_setup_old_android">Su questa versione di Android collega tu il telefono al Wi-Fi dello Shelly (shelly…), apri 192.168.33.1 nel browser e inserisci il tuo Wi-Fi in Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">In attesa dello Shelly sul tuo Wi-Fi per spegnere la sua rete aperta…</string>
+    <string name="lan_shelly_setup_ap_on">Attenzione: il Wi-Fi dello Shelly (shelly…) potrebbe essere ancora attivo e chiunque nelle vicinanze potrebbe collegarsi. Apri la pagina web dello Shelly (il suo IP nell’elenco) e disattiva Settings → Wi-Fi → Access Point, oppure imposta una password.</string>
 </resources>

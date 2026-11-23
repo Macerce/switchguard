@@ -1793,4 +1793,6 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_shelly_setup_not_shelly">Connected, but no Shelly answered at 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">The Shelly did not accept the Wi-Fi details. Check the name and password.</string>
     <string name="lan_shelly_setup_old_android">On this Android version, connect the phone to the Shelly\'s Wi-Fi (shelly…) yourself, open 192.168.33.1 in the browser and enter your Wi-Fi under Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Waiting for the Shelly on your Wi-Fi to turn off its own open network…</string>
+    <string name="lan_shelly_setup_ap_on">Warning: the Shelly\'s own Wi-Fi (shelly…) may still be on, and anyone nearby could connect to it. Open the Shelly\'s web page (its IP in the list) and turn off Settings → Wi-Fi → Access Point, or set a login password.</string>
 </resources>

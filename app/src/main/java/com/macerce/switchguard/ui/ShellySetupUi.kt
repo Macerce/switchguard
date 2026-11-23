@@ -27,10 +27,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.macerce.switchguard.R
+import com.macerce.switchguard.api.ShellyLan
 import com.macerce.switchguard.api.ShellySetup
 import com.macerce.switchguard.core.ShellyProtocol
 import com.macerce.switchguard.ui.theme.StatusColors
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -72,7 +74,13 @@ fun ShellySetupDialog(currentSsid: String?, onDismiss: () -> Unit) {
                 if (busy) {
                     LinearProgressIndicator(Modifier.fillMaxWidth())
                     Text(
-                        stringResource(if (stage == 1) R.string.lan_shelly_setup_stage1 else R.string.lan_shelly_setup_stage2),
+                        stringResource(
+                            when (stage) {
+                                1 -> R.string.lan_shelly_setup_stage1
+                                2 -> R.string.lan_shelly_setup_stage2
+                                else -> R.string.lan_shelly_setup_stage3
+                            }
+                        ),
                         style = MaterialTheme.typography.bodySmall,
                     )
                 }
@@ -94,13 +102,28 @@ fun ShellySetupDialog(currentSsid: String?, onDismiss: () -> Unit) {
                     message = null
                     val net = ssid.trim()
                     scope.launch {
-                        val r = withContext(Dispatchers.IO) {
+                        val out = withContext(Dispatchers.IO) {
                             ShellySetup.provision(context, net, password) { s -> scope.launch { stage = s } }
+                        }
+                        val r = out.result
+                        val info = out.info
+                        // Gen2+: kendi (şifresiz) erişim noktası açık kalır; cihaz ev ağında görününce kapatılır.
+                        var apOff = true
+                        if (r == ShellySetup.Result.OK && info != null && info.gen >= 2) {
+                            stage = 3
+                            apOff = false
+                            val until = System.currentTimeMillis() + 120_000
+                            while (!apOff && System.currentTimeMillis() < until) {
+                                delay(3000)
+                                val host = ShellyLan.all()[info.id]?.host ?: continue
+                                apOff = withContext(Dispatchers.IO) { ShellyLan.disableAp(host, info.gen) }
+                            }
                         }
                         stage = 0
                         done = r == ShellySetup.Result.OK
                         message = when (r) {
-                            ShellySetup.Result.OK -> resources.getString(R.string.lan_shelly_setup_ok, net)
+                            ShellySetup.Result.OK -> resources.getString(R.string.lan_shelly_setup_ok, net) +
+                                if (apOff) "" else "\n\n" + resources.getString(R.string.lan_shelly_setup_ap_on)
                             ShellySetup.Result.NOT_SHELLY -> resources.getString(R.string.lan_shelly_setup_not_shelly)
                             ShellySetup.Result.REJECTED -> resources.getString(R.string.lan_shelly_setup_rejected)
                             ShellySetup.Result.UNSUPPORTED -> resources.getString(R.string.lan_shelly_setup_old_android)

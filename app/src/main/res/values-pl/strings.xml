@@ -1858,4 +1858,6 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_shelly_setup_not_shelly">Połączono, ale żadne Shelly nie odpowiedziało pod 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">Shelly nie przyjęło danych Wi-Fi. Sprawdź nazwę i hasło.</string>
     <string name="lan_shelly_setup_old_android">W tej wersji Androida połącz telefon z Wi-Fi Shelly (shelly…) samodzielnie, otwórz 192.168.33.1 w przeglądarce i wpisz swoje Wi-Fi w Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Czekam na Shelly w Twojej sieci, aby wyłączyć jego własną otwartą sieć…</string>
+    <string name="lan_shelly_setup_ap_on">Uwaga: własna sieć Wi-Fi Shelly (shelly…) może być nadal włączona i każdy w pobliżu może się połączyć. Otwórz stronę Shelly (jego IP z listy) i wyłącz Settings → Wi-Fi → Access Point albo ustaw hasło.</string>
 </resources>

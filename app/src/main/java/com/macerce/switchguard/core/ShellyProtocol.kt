@@ -107,6 +107,16 @@ object ShellyProtocol {
         }
     }
 
+    /**
+     * Gen2+ kendi erişim noktasını ev ağına bağlandıktan sonra da açık (ve şifresiz) tutar; kurulum bitince ev ağı
+     * üzerinden bununla kapatılır. Gen1'de gerekmez (istemci kipine geçince erişim noktası kapanır).
+     */
+    fun apOffPath(): String =
+        "/rpc/WiFi.SetConfig?config=" + java.net.URLEncoder.encode(JSONObject().put("ap", JSONObject().put("enable", false)).toString(), "UTF-8")
+
+    /** `WiFi.SetConfig` yanıtı yeniden başlatma istiyor mu. */
+    fun restartRequired(json: String): Boolean = runCatching { JSONObject(json).optBoolean("restart_required") }.getOrDefault(false)
+
     fun rebootPath(gen: Int): String = if (gen <= 1) "/reboot" else "/rpc/Shelly.Reboot"
 
     /** Wi-Fi ayarı kabul edildi mi: Gen1 yanıtında `wifi_sta.ssid` (ya da `ssid`), Gen2'de hata kodu yok. */

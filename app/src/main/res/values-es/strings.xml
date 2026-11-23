@@ -1792,4 +1792,6 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="lan_shelly_setup_not_shelly">Conectado, pero ningún Shelly respondió en 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">El Shelly no aceptó los datos del Wi-Fi. Revisa el nombre y la contraseña.</string>
     <string name="lan_shelly_setup_old_android">En esta versión de Android, conecta tú el teléfono al Wi-Fi del Shelly (shelly…), abre 192.168.33.1 en el navegador e introduce tu Wi-Fi en Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Esperando al Shelly en tu Wi-Fi para apagar su propia red abierta…</string>
+    <string name="lan_shelly_setup_ap_on">Aviso: el Wi-Fi propio del Shelly (shelly…) puede seguir activo y cualquiera cerca podría conectarse. Abre la página web del Shelly (su IP en la lista) y desactiva Settings → Wi-Fi → Access Point, o pon una contraseña.</string>
 </resources>

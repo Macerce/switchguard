@@ -1750,4 +1750,6 @@
     <string name="lan_shelly_setup_not_shelly">연결되었지만 192.168.33.1에서 Shelly가 응답하지 않았습니다.</string>
     <string name="lan_shelly_setup_rejected">Shelly가 Wi-Fi 정보를 받아들이지 않았습니다. 이름과 비밀번호를 확인하세요.</string>
     <string name="lan_shelly_setup_old_android">이 Android 버전에서는 휴대폰을 직접 Shelly Wi-Fi(shelly…)에 연결하고 브라우저에서 192.168.33.1을 열어 Settings → Wi-Fi에 집 Wi-Fi를 입력하세요.</string>
+    <string name="lan_shelly_setup_stage3">Shelly 자체의 열린 네트워크를 끄기 위해 집 Wi-Fi에 나타나기를 기다리는 중…</string>
+    <string name="lan_shelly_setup_ap_on">주의: Shelly 자체 Wi-Fi(shelly…)가 아직 켜져 있어 근처 누구나 연결할 수 있습니다. Shelly 웹 페이지(목록의 IP)를 열어 Settings → Wi-Fi → Access Point를 끄거나 로그인 비밀번호를 설정하세요.</string>
 </resources>

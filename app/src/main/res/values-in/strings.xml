@@ -1679,4 +1679,6 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_shelly_setup_not_shelly">Terhubung, tetapi tidak ada Shelly yang menjawab di 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">Shelly tidak menerima data Wi-Fi. Periksa nama dan kata sandi.</string>
     <string name="lan_shelly_setup_old_android">Di versi Android ini, hubungkan sendiri ponsel ke Wi-Fi Shelly (shelly…), buka 192.168.33.1 di browser, lalu masukkan Wi-Fi Anda di Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Menunggu Shelly muncul di Wi-Fi Anda untuk mematikan jaringan terbukanya…</string>
+    <string name="lan_shelly_setup_ap_on">Peringatan: Wi-Fi milik Shelly (shelly…) mungkin masih aktif dan siapa pun di dekat bisa terhubung. Buka halaman web Shelly (IP-nya di daftar) lalu matikan Settings → Wi-Fi → Access Point, atau pasang kata sandi.</string>
 </resources>

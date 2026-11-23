@@ -1721,4 +1721,6 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_setup_not_shelly">Đã kết nối nhưng không có Shelly trả lời tại 192.168.33.1.</string>
     <string name="lan_shelly_setup_rejected">Shelly không chấp nhận thông tin Wi-Fi. Kiểm tra tên và mật khẩu.</string>
     <string name="lan_shelly_setup_old_android">Trên phiên bản Android này, hãy tự kết nối điện thoại vào Wi-Fi của Shelly (shelly…), mở 192.168.33.1 trong trình duyệt và nhập Wi-Fi của bạn ở Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Đang chờ Shelly xuất hiện trên Wi-Fi của bạn để tắt mạng mở của nó…</string>
+    <string name="lan_shelly_setup_ap_on">Cảnh báo: Wi-Fi riêng của Shelly (shelly…) có thể vẫn bật và ai ở gần cũng có thể kết nối. Mở trang web của Shelly (IP trong danh sách) rồi tắt Settings → Wi-Fi → Access Point, hoặc đặt mật khẩu.</string>
 </resources>

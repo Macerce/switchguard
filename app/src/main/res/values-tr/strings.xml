@@ -1789,4 +1789,6 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_shelly_setup_not_shelly">Bağlanıldı ama 192.168.33.1\'de Shelly yanıt vermedi.</string>
     <string name="lan_shelly_setup_rejected">Shelly Wi-Fi bilgilerini kabul etmedi. Ağ adını ve şifreyi kontrol et.</string>
     <string name="lan_shelly_setup_old_android">Bu Android sürümünde telefonu Shelly\'nin Wi-Fi\'ına (shelly…) kendin bağla, tarayıcıda 192.168.33.1\'i aç ve Settings → Wi-Fi altında ev Wi-Fi\'ni yaz.</string>
+    <string name="lan_shelly_setup_stage3">Shelly\'nin kendi açık ağını kapatmak için ev ağında görünmesi bekleniyor…</string>
+    <string name="lan_shelly_setup_ap_on">Uyarı: Shelly\'nin kendi Wi-Fi ağı (shelly…) hâlâ açık olabilir ve yakındaki herkes bağlanabilir. Shelly\'nin web sayfasını aç (listedeki IP) ve Settings → Wi-Fi → Access Point\'i kapat ya da bir giriş şifresi koy.</string>
 </resources>

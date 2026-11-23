@@ -144,6 +144,18 @@ object ShellyLan {
         return Found(host, full, supported = ok && full.channels > 0, credentials = c.takeIf { ok })
     }
 
+    /**
+     * Gen2+ Shelly'nin kendi Wi-Fi erişim noktasını ev ağı üzerinden kapatır (kurulumdan sonra açık kalmasın).
+     * Döner: cihaz kabul etti mi. Bloklayıcı.
+     */
+    fun disableAp(host: String, gen: Int, cred: ShellyAuth.Credentials? = null): Boolean {
+        val r = get(host, ShellyProtocol.apOffPath(), gen, cred).body ?: return false
+        if (r.contains("\"code\"")) return false
+        if (ShellyProtocol.restartRequired(r)) get(host, ShellyProtocol.rebootPath(gen), gen, cred)
+        Log.i(TAG, "AP disabled at $host")
+        return true
+    }
+
     /** Döner: cihaz kabul etti mi. Bloklayıcı. */
     fun trySwitch(device: LocalDevice, channel: Int, on: Boolean): Boolean {
         val host = host(device) ?: return false

@@ -1829,4 +1829,6 @@
     <string name="lan_shelly_setup_not_shelly">Підключено, але за адресою 192.168.33.1 Shelly не відповів.</string>
     <string name="lan_shelly_setup_rejected">Shelly не прийняв дані Wi-Fi. Перевірте назву й пароль.</string>
     <string name="lan_shelly_setup_old_android">У цій версії Android підключіть телефон до мережі Shelly (shelly…) вручну, відкрийте 192.168.33.1 у браузері й укажіть свою мережу в Settings → Wi-Fi.</string>
+    <string name="lan_shelly_setup_stage3">Чекаємо Shelly у вашій мережі, щоб вимкнути його власну відкриту мережу…</string>
+    <string name="lan_shelly_setup_ap_on">Увага: власна мережа Shelly (shelly…) може бути ще ввімкнена, і будь-хто поруч зможе підключитися. Відкрийте вебсторінку Shelly (його IP у списку) й вимкніть Settings → Wi-Fi → Access Point або задайте пароль.</string>
 </resources>

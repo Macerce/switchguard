@@ -1784,4 +1784,6 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_shelly_setup_not_shelly">Verbunden, aber unter 192.168.33.1 hat kein Shelly geantwortet.</string>
     <string name="lan_shelly_setup_rejected">Das Shelly hat die WLAN-Daten nicht angenommen. Prüfe Name und Passwort.</string>
     <string name="lan_shelly_setup_old_android">Auf dieser Android-Version verbinde das Telefon selbst mit dem WLAN des Shelly (shelly…), öffne 192.168.33.1 im Browser und gib dein WLAN unter Settings → Wi-Fi ein.</string>
+    <string name="lan_shelly_setup_stage3">Warte auf das Shelly im WLAN, um sein eigenes offenes Netz abzuschalten…</string>
+    <string name="lan_shelly_setup_ap_on">Achtung: Das eigene WLAN des Shelly (shelly…) ist eventuell noch an, und jeder in der Nähe könnte sich verbinden. Öffne die Webseite des Shelly (seine IP in der Liste) und schalte Settings → Wi-Fi → Access Point aus oder setze ein Anmeldepasswort.</string>
 </resources>
