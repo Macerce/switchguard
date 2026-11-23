@@ -1683,7 +1683,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
 • Trạng thái và điều khiển hoạt động khi đang bật giám sát.</string>
     <string name="lan_help_title">Không tìm thấy?</string>
     <string name="lan_shelly_unsupported">Mẫu này chưa được hỗ trợ (không có rơ-le).</string>
-    <string name="lan_shelly_auth">Có mật khẩu bảo vệ: tắt bảo vệ đăng nhập (Authentication) trong cài đặt Shelly rồi quay lại.</string>
+    <string name="lan_shelly_auth">Có mật khẩu bảo vệ: chạm Thêm và nhập mật khẩu của thiết bị.</string>
     <string name="lan_ip_not_found">Không có Shelly nào trả lời tại %1$s. Kiểm tra địa chỉ và điện thoại có cùng Wi-Fi không.</string>
     <string name="lan_ip_checking">Đang kiểm tra…</string>
     <string name="lan_ip_find">Tìm</string>
@@ -1702,4 +1702,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
     <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Mật khẩu Shelly</string>
+    <string name="lan_shelly_pw_body">Nhập mật khẩu đăng nhập đã đặt cho Shelly này (Cài đặt → Authentication). Mật khẩu chỉ lưu trên điện thoại này và không có trong bản sao lưu.</string>
+    <string name="lan_shelly_user">Tên người dùng</string>
+    <string name="lan_shelly_pw">Mật khẩu</string>
+    <string name="lan_shelly_pw_wrong">Sai mật khẩu. Kiểm tra rồi thử lại.</string>
+    <string name="lan_shelly_pw_ok">Tiếp tục</string>
 </resources>

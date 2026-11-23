@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -60,6 +61,7 @@ import com.macerce.switchguard.api.ShellyLan
 import com.macerce.switchguard.core.Cloud
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.LocalDevice
+import com.macerce.switchguard.core.ShellyAuth
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.MonitorService
 import com.macerce.switchguard.ui.theme.StatusColors
@@ -128,7 +130,10 @@ private fun BrandPicker(onDismiss: () -> Unit, onPick: (String) -> Unit) {
 /** Bulunan bir cihazın listedeki satırı (markalarda ortak). */
 private class FoundRow(
     val id: String, val title: String, val detail: String, val addable: Boolean, val warning: String?,
-    val defaultName: String, val make: (name: String, ssid: String?) -> LocalDevice,
+    val defaultName: String,
+    /** Şifreli Shelly: dokununca önce şifre sorulur. [credentials]: doğrulanmış şifre (eklenince kaydedilir). */
+    val shelly: ShellyLan.Found? = null, val credentials: ShellyAuth.Credentials? = null,
+    val make: (name: String, ssid: String?) -> LocalDevice,
 )
 
 @Composable
@@ -141,6 +146,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     val shelly = brand == LocalDevice.BRAND_SHELLY
     DisposableEffect(brand) {
         if (shelly) {
+            ShellyLan.setCredentials(store.shellyAuth)
             ShellyLan.startDiscovery(context)
             onDispose { ShellyLan.stopDiscoveryIfIdle() }
         } else {
@@ -155,24 +161,24 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     var tick by remember { mutableIntStateOf(0) }
     LaunchedEffect(Unit) { while (true) { delay(1500); tick++ } }
     val known = remember(version) { store.snapshots.associateBy { it.id } }
-    // IP ile bulunan (mDNS'te görünmeyen) Shelly'ler de listeye girer.
+    // IP ile bulunan (mDNS'te görünmeyen) ve şifresi doğrulanan Shelly'ler de listeye girer (aramadakinin yerine geçer).
     var manual by remember { mutableStateOf<Map<String, ShellyLan.Found>>(emptyMap()) }
     val rows = remember(tick, version, manual) {
         val res = resources
         fun ch(n: Int) = if (n > 1) res.getString(R.string.lan_channels, n) else null
-        if (shelly) (manual + ShellyLan.all()).values.sortedBy { it.host }.map { f ->
+        if (shelly) (ShellyLan.all() + manual).values.sortedBy { it.host }.map { f ->
             val existing = known[f.info.id]
             val model = "Shelly ${f.info.model}".trim()
             FoundRow(
                 f.info.id, existing?.name ?: model, listOfNotNull(f.host, ch(f.info.channels)).joinToString(" · "),
-                addable = existing == null && f.supported,
+                addable = existing == null && (f.supported || f.locked),
                 warning = when {
                     existing != null -> null
-                    f.info.auth -> res.getString(R.string.lan_shelly_auth)
+                    f.locked -> res.getString(R.string.lan_shelly_auth)
                     !f.supported -> res.getString(R.string.lan_shelly_unsupported)
                     else -> null
                 },
-                defaultName = model,
+                defaultName = model, shelly = f, credentials = f.credentials,
             ) { name, net ->
                 LocalDevice(f.info.id, name, f.info.channels.coerceIn(1, 4), net, f.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, f.info.gen)
             }
@@ -187,6 +193,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
         }
     }
     var naming by remember { mutableStateOf<FoundRow?>(null) }
+    var askPassword by remember { mutableStateOf<ShellyLan.Found?>(null) }
     var help by remember { mutableStateOf(false) }
 
     AlertDialog(
@@ -215,7 +222,9 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     LinearProgressIndicator(Modifier.fillMaxWidth())
                     Text(stringResource(R.string.lan_add_searching), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                rows.forEach { r -> FoundLine(r, added = known.containsKey(r.id)) { naming = r } }
+                rows.forEach { r ->
+                    FoundLine(r, added = known.containsKey(r.id)) { if (r.shelly?.locked == true) askPassword = r.shelly else naming = r }
+                }
 
                 if (shelly) IpAdd { f -> manual = manual + (f.info.id to f) }
 
@@ -239,6 +248,10 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     naming?.let { r ->
         NameDialog(stringResource(R.string.lan_add), r.defaultName, onDismiss = { naming = null }, label = R.string.automation_name) { name ->
             val d = r.make(name, ssid)
+            r.credentials?.let { c ->
+                store.shellyAuth = store.shellyAuth + (d.id to c)
+                ShellyLan.setCredentials(store.shellyAuth)
+            }
             store.localDevices = store.localDevices.filterNot { it.id == d.id } + d
             if (store.monitoringEnabled) MonitorService.send(context, MonitorService.ACTION_RESTART)
             naming = null
@@ -246,6 +259,74 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
             onDismiss()
         }
     }
+    askPassword?.let { f ->
+        ShellyPasswordDialog(f, onDismiss = { askPassword = null }) { ok ->
+            askPassword = null
+            manual = manual + (ok.info.id to ok)
+            // Şifre doğru ve rölesi var: doğrudan ad sorulur; rölesizse satırda "desteklenmiyor" görünür.
+            if (ok.supported) {
+                val model = "Shelly ${ok.info.model}".trim()
+                naming = FoundRow(ok.info.id, model, ok.host, true, null, model, ok, ok.credentials) { name, net ->
+                    LocalDevice(ok.info.id, name, ok.info.channels.coerceIn(1, 4), net, ok.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, ok.info.gen)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Şifreli Shelly'nin giriş bilgisi. Gen1'de kullanıcı adı ayarlanabilir (varsayılan admin), Gen2+'da her zaman admin
+ * olduğu için yalnızca şifre sorulur. Şifre cihazdan durum okunarak doğrulanır; doğruysa [onVerified].
+ */
+@Composable
+private fun ShellyPasswordDialog(found: ShellyLan.Found, onDismiss: () -> Unit, onVerified: (ShellyLan.Found) -> Unit) {
+    val resources = LocalResources.current
+    val scope = rememberCoroutineScope()
+    var user by remember { mutableStateOf(ShellyAuth.DEFAULT_USER) }
+    var password by remember { mutableStateOf("") }
+    var checking by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.Lock, null) },
+        title = { Text(stringResource(R.string.lan_shelly_pw_title)) },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text("Shelly ${found.info.model} · ${found.host}", style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(R.string.lan_shelly_pw_body), style = MaterialTheme.typography.bodySmall)
+                if (found.info.gen <= 1) OutlinedTextField(
+                    value = user, onValueChange = { user = it.take(64); error = null }, singleLine = true,
+                    label = { Text(stringResource(R.string.lan_shelly_user)) }, modifier = Modifier.fillMaxWidth(),
+                )
+                OutlinedTextField(
+                    value = password, onValueChange = { password = it.take(128); error = null }, singleLine = true,
+                    label = { Text(stringResource(R.string.lan_shelly_pw)) }, visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password), modifier = Modifier.fillMaxWidth(),
+                )
+                if (checking) LinearProgressIndicator(Modifier.fillMaxWidth())
+                error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = StatusColors.warning) }
+            }
+        },
+        dismissButton = { TextButton(modifier = Modifier.tvFocusRing(), onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) } },
+        confirmButton = {
+            TextButton(
+                enabled = !checking && password.isNotEmpty() && user.isNotBlank(), modifier = Modifier.tvFocusRing(),
+                onClick = {
+                    checking = true
+                    val cred = ShellyAuth.Credentials(user.trim(), password)
+                    scope.launch {
+                        val r = withContext(Dispatchers.IO) { ShellyLan.probe(found.host, cred) }
+                        checking = false
+                        when {
+                            r == null -> error = resources.getString(R.string.lan_ip_not_found, found.host)
+                            r.wrongPassword || r.locked -> error = resources.getString(R.string.lan_shelly_pw_wrong)
+                            else -> onVerified(r)
+                        }
+                    }
+                },
+            ) { Text(stringResource(if (checking) R.string.lan_ip_checking else R.string.lan_shelly_pw_ok)) }
+        },
+    )
 }
 
 @Composable
@@ -372,6 +453,7 @@ fun LocalDeviceCard(device: DeviceSnapshot, onRemoved: () -> Unit) {
                 TextButton(modifier = Modifier.tvFocusRing(), onClick = {
                     confirm = false
                     store.localDevices = store.localDevices.filterNot { it.id == device.id }
+                    if (device.id in store.shellyAuth) store.shellyAuth = store.shellyAuth - device.id
                     onRemoved()
                 }) { Text(stringResource(R.string.lan_device_remove)) }
             },

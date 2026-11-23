@@ -1755,7 +1755,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
 • Stato e controllo funzionano mentre il monitoraggio è attivo.</string>
     <string name="lan_help_title">Non lo trovi?</string>
     <string name="lan_shelly_unsupported">Questo modello non è ancora supportato (non ha relè).</string>
-    <string name="lan_shelly_auth">Protetto da password: disattiva la protezione di accesso (Authentication) nelle impostazioni dello Shelly, poi torna qui.</string>
+    <string name="lan_shelly_auth">Protetto da password: tocca Aggiungi e inserisci la password del dispositivo.</string>
     <string name="lan_ip_not_found">Nessuno Shelly ha risposto a %1$s. Controlla l\'indirizzo e che il telefono sia sulla stessa Wi-Fi.</string>
     <string name="lan_ip_checking">Verifica…</string>
     <string name="lan_ip_find">Cerca</string>
@@ -1774,4 +1774,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="lan_brand_sonoff_desc">Dispositivi eWeLink in modalità DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relè e prese Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Scegli la marca. Nessun account né cloud: telefono e dispositivo devono solo essere sulla stessa Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Password Shelly</string>
+    <string name="lan_shelly_pw_body">Inserisci la password di accesso impostata per questo Shelly (Impostazioni → Authentication). Resta solo su questo telefono e non è inclusa nei backup.</string>
+    <string name="lan_shelly_user">Nome utente</string>
+    <string name="lan_shelly_pw">Password</string>
+    <string name="lan_shelly_pw_wrong">Password errata. Controllala e riprova.</string>
+    <string name="lan_shelly_pw_ok">Continua</string>
 </resources>

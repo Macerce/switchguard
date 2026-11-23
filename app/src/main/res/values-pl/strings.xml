@@ -1820,7 +1820,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
 • Stan i sterowanie działają, gdy monitorowanie jest włączone.</string>
     <string name="lan_help_title">Nie możesz znaleźć?</string>
     <string name="lan_shelly_unsupported">Ten model nie jest jeszcze obsługiwany (brak przekaźnika).</string>
-    <string name="lan_shelly_auth">Chronione hasłem: wyłącz ochronę logowania (Authentication) w ustawieniach Shelly i wróć.</string>
+    <string name="lan_shelly_auth">Chronione hasłem: dotknij Dodaj i wpisz hasło urządzenia.</string>
     <string name="lan_ip_not_found">Żadne Shelly nie odpowiedziało pod %1$s. Sprawdź adres i czy telefon jest w tej samej sieci Wi-Fi.</string>
     <string name="lan_ip_checking">Sprawdzanie…</string>
     <string name="lan_ip_find">Szukaj</string>
@@ -1839,4 +1839,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="lan_brand_sonoff_desc">Urządzenia eWeLink w trybie DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Przekaźniki i gniazdka Gen1, Plus, Pro, Gen3 i Gen4</string>
     <string name="lan_brand_hint">Wybierz markę. Bez konta i chmury: telefon i urządzenie muszą tylko być w tej samej sieci Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Hasło Shelly</string>
+    <string name="lan_shelly_pw_body">Wpisz hasło logowania ustawione dla tego Shelly (Ustawienia → Authentication). Jest przechowywane tylko na tym telefonie i nie trafia do kopii zapasowych.</string>
+    <string name="lan_shelly_user">Nazwa użytkownika</string>
+    <string name="lan_shelly_pw">Hasło</string>
+    <string name="lan_shelly_pw_wrong">Nieprawidłowe hasło. Sprawdź je i spróbuj ponownie.</string>
+    <string name="lan_shelly_pw_ok">Dalej</string>
 </resources>

@@ -1820,7 +1820,7 @@
 • Состояние и управление работают, пока включён мониторинг.</string>
     <string name="lan_help_title">Не находится?</string>
     <string name="lan_shelly_unsupported">Эта модель пока не поддерживается (нет реле).</string>
-    <string name="lan_shelly_auth">Защищено паролем: отключите защиту входа (Authentication) в настройках Shelly и вернитесь.</string>
+    <string name="lan_shelly_auth">Защищено паролем: нажмите «Добавить» и введите пароль устройства.</string>
     <string name="lan_ip_not_found">По адресу %1$s Shelly не ответил. Проверьте адрес и что телефон в той же Wi-Fi.</string>
     <string name="lan_ip_checking">Проверка…</string>
     <string name="lan_ip_find">Найти</string>
@@ -1839,4 +1839,10 @@
     <string name="lan_brand_sonoff_desc">Устройства eWeLink в режиме DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Реле и розетки Gen1, Plus, Pro, Gen3 и Gen4</string>
     <string name="lan_brand_hint">Выберите марку. Аккаунт и облако не нужны: телефон и устройство просто должны быть в одной Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Пароль Shelly</string>
+    <string name="lan_shelly_pw_body">Введите пароль входа, заданный для этого Shelly (Настройки → Authentication). Он хранится только на этом телефоне и не попадает в резервные копии.</string>
+    <string name="lan_shelly_user">Имя пользователя</string>
+    <string name="lan_shelly_pw">Пароль</string>
+    <string name="lan_shelly_pw_wrong">Неверный пароль. Проверьте и попробуйте снова.</string>
+    <string name="lan_shelly_pw_ok">Продолжить</string>
 </resources>

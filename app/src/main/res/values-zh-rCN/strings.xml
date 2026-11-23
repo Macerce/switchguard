@@ -1690,7 +1690,7 @@
 • 状态和控制在监控开启时工作。</string>
     <string name="lan_help_title">找不到？</string>
     <string name="lan_shelly_unsupported">暂不支持此型号（没有继电器）。</string>
-    <string name="lan_shelly_auth">已设密码保护：请在 Shelly 设置中关闭登录保护（Authentication）后再回来。</string>
+    <string name="lan_shelly_auth">已设密码保护：点按“添加”并输入设备密码。</string>
     <string name="lan_ip_not_found">%1$s 处没有 Shelly 响应。请检查地址，并确认手机在同一 Wi-Fi。</string>
     <string name="lan_ip_checking">正在检查…</string>
     <string name="lan_ip_find">查找</string>
@@ -1709,4 +1709,10 @@
     <string name="lan_brand_sonoff_desc">DIY（局域网）模式的 eWeLink 设备</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 继电器与插座</string>
     <string name="lan_brand_hint">选择品牌。无需账号或云端：手机和设备在同一 Wi-Fi 即可。</string>
+    <string name="lan_shelly_pw_title">Shelly 密码</string>
+    <string name="lan_shelly_pw_body">输入为此 Shelly 设置的登录密码（设置 → Authentication）。密码只保存在此手机上，不会包含在备份中。</string>
+    <string name="lan_shelly_user">用户名</string>
+    <string name="lan_shelly_pw">密码</string>
+    <string name="lan_shelly_pw_wrong">密码错误。请检查后重试。</string>
+    <string name="lan_shelly_pw_ok">继续</string>
 </resources>

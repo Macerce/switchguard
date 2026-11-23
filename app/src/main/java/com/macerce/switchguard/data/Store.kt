@@ -263,6 +263,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
             runCatching { org.json.JSONObject(text).let { o -> o.keys().asSequence().associateWith { o.getString(it) } } }.getOrNull()
         }.orEmpty()
         set(v) = putSecret("lanKeys", if (v.isEmpty()) "" else org.json.JSONObject(v).toString())
+    /** Şifreli Shelly'lerin giriş bilgileri (cihaz → kullanıcı/şifre). Gizli; yedeğe ve aktarıma girmez. */
+    var shellyAuth: Map<String, com.macerce.switchguard.core.ShellyAuth.Credentials>
+        get() = com.macerce.switchguard.core.ShellyAuth.mapFromJson(secret("shellyAuth"))
+        set(v) = putSecret("shellyAuth", if (v.isEmpty()) "" else com.macerce.switchguard.core.ShellyAuth.mapToJson(v))
     /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
     var energyPrice: Double
         get() = str("energyPrice").toDoubleOrNull() ?: 0.0
@@ -628,7 +632,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     companion object {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         /** Keystore ile şifreli saklanan anahtarlar. */
-        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys")
+        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys", "shellyAuth")
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
         const val WATCHDOG_OFF = 0

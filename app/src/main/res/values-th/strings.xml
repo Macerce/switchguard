@@ -1683,7 +1683,7 @@
 • สถานะและการควบคุมทำงานขณะเปิดการเฝ้าระวัง</string>
     <string name="lan_help_title">หาไม่เจอ?</string>
     <string name="lan_shelly_unsupported">ยังไม่รองรับรุ่นนี้ (ไม่มีรีเลย์)</string>
-    <string name="lan_shelly_auth">มีรหัสผ่านป้องกัน: ปิดการป้องกันการเข้าสู่ระบบ (Authentication) ในการตั้งค่า Shelly แล้วกลับมา</string>
+    <string name="lan_shelly_auth">มีรหัสผ่านป้องกัน: แตะเพิ่มแล้วใส่รหัสผ่านของอุปกรณ์</string>
     <string name="lan_ip_not_found">ไม่มี Shelly ตอบที่ %1$s ตรวจสอบที่อยู่และว่าโทรศัพท์อยู่ใน Wi-Fi เดียวกัน</string>
     <string name="lan_ip_checking">กำลังตรวจสอบ…</string>
     <string name="lan_ip_find">ค้นหา</string>
@@ -1702,4 +1702,10 @@
     <string name="lan_brand_sonoff_desc">อุปกรณ์ eWeLink ในโหมด DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">รีเลย์และปลั๊ก Gen1, Plus, Pro, Gen3 และ Gen4</string>
     <string name="lan_brand_hint">เลือกแบรนด์ ไม่ต้องใช้บัญชีหรือคลาวด์ แค่โทรศัพท์และอุปกรณ์อยู่ใน Wi-Fi เดียวกัน</string>
+    <string name="lan_shelly_pw_title">รหัสผ่าน Shelly</string>
+    <string name="lan_shelly_pw_body">ใส่รหัสผ่านเข้าสู่ระบบที่ตั้งไว้สำหรับ Shelly นี้ (การตั้งค่า → Authentication) เก็บไว้ในโทรศัพท์เครื่องนี้เท่านั้นและไม่รวมในข้อมูลสำรอง</string>
+    <string name="lan_shelly_user">ชื่อผู้ใช้</string>
+    <string name="lan_shelly_pw">รหัสผ่าน</string>
+    <string name="lan_shelly_pw_wrong">รหัสผ่านไม่ถูกต้อง ตรวจสอบแล้วลองอีกครั้ง</string>
+    <string name="lan_shelly_pw_ok">ดำเนินการต่อ</string>
 </resources>

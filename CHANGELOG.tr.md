@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.42.0 — 2026-11-23
+**Yeni**
+- Şifre korumalı Shelly cihazlar eklenebilir: Ekle'ye dokunup cihazın giriş şifresini gir (Gen1'de kullanıcı adı da sorulur). Şifre cihazda doğrulanır, yalnızca bu telefonda şifreli tutulur; yedeğe ve aktarıma girmez.
+
 ## 2.41.0 — 2026-11-23
 **Yeni**
 - Hesap ya da bulut gerektirmeyen Shelly desteği: Cihazlar → Cihaz ekle (yerel ağ) → Shelly. Aynı Wi-Fi'deki Gen1, Plus, Pro, Gen3 ve Gen4 röle ve prizler kendiliğinden bulunur ya da IP adresiyle eklenir. Aç/kapa, alarmlar, otomasyonlar ve güç ölçümü (PM modeller) yerel ağdan çalışır.

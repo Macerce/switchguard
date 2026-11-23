@@ -1712,7 +1712,7 @@
 • 상태와 제어는 모니터링이 켜져 있을 때 작동합니다.</string>
     <string name="lan_help_title">찾을 수 없나요?</string>
     <string name="lan_shelly_unsupported">이 모델은 아직 지원되지 않습니다(릴레이 없음).</string>
-    <string name="lan_shelly_auth">비밀번호 보호됨: Shelly 설정에서 로그인 보호(Authentication)를 끄고 다시 오세요.</string>
+    <string name="lan_shelly_auth">비밀번호로 보호됨: 추가를 누르고 기기 비밀번호를 입력하세요.</string>
     <string name="lan_ip_not_found">%1$s에서 응답한 Shelly가 없습니다. 주소와 휴대폰이 같은 Wi-Fi에 있는지 확인하세요.</string>
     <string name="lan_ip_checking">확인 중…</string>
     <string name="lan_ip_find">찾기</string>
@@ -1731,4 +1731,10 @@
     <string name="lan_brand_sonoff_desc">DIY(LAN) 모드의 eWeLink 기기</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3, Gen4 릴레이와 플러그</string>
     <string name="lan_brand_hint">브랜드를 고르세요. 계정이나 클라우드가 필요 없고 휴대폰과 기기가 같은 Wi-Fi에 있으면 됩니다.</string>
+    <string name="lan_shelly_pw_title">Shelly 비밀번호</string>
+    <string name="lan_shelly_pw_body">이 Shelly에 설정한 로그인 비밀번호를 입력하세요(설정 → Authentication). 이 휴대폰에만 저장되며 백업에는 포함되지 않습니다.</string>
+    <string name="lan_shelly_user">사용자 이름</string>
+    <string name="lan_shelly_pw">비밀번호</string>
+    <string name="lan_shelly_pw_wrong">비밀번호가 틀렸습니다. 확인 후 다시 시도하세요.</string>
+    <string name="lan_shelly_pw_ok">계속</string>
 </resources>

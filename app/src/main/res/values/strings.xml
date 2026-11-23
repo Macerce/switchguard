@@ -1755,7 +1755,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
 • Status and control work while monitoring is on.</string>
     <string name="lan_help_title">Can\'t find it?</string>
     <string name="lan_shelly_unsupported">This model is not supported yet (it has no relay).</string>
-    <string name="lan_shelly_auth">Password protected: turn off login protection (Authentication) in the Shelly settings, then come back.</string>
+    <string name="lan_shelly_auth">Password protected: tap Add and enter the device password.</string>
     <string name="lan_ip_not_found">No Shelly answered at %1$s. Check the address and that the phone is on the same Wi-Fi.</string>
     <string name="lan_ip_checking">Checking…</string>
     <string name="lan_ip_find">Find</string>
@@ -1774,4 +1774,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_brand_sonoff_desc">eWeLink devices in DIY (LAN) mode</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 and Gen4 relays and plugs</string>
     <string name="lan_brand_hint">Pick the brand. No account or cloud needed: the phone and the device just have to be on the same Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Shelly password</string>
+    <string name="lan_shelly_pw_body">Enter the login password set for this Shelly (Settings → Authentication). It is kept only on this phone and is not included in backups.</string>
+    <string name="lan_shelly_user">User name</string>
+    <string name="lan_shelly_pw">Password</string>
+    <string name="lan_shelly_pw_wrong">Wrong password. Check it and try again.</string>
+    <string name="lan_shelly_pw_ok">Continue</string>
 </resources>

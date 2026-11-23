@@ -1754,7 +1754,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
 • El estado y el control funcionan mientras la vigilancia está activa.</string>
     <string name="lan_help_title">¿No lo encuentras?</string>
     <string name="lan_shelly_unsupported">Este modelo aún no es compatible (no tiene relé).</string>
-    <string name="lan_shelly_auth">Protegido con contraseña: desactiva la protección de acceso (Authentication) en los ajustes del Shelly y vuelve.</string>
+    <string name="lan_shelly_auth">Protegido con contraseña: toca Añadir e introduce la contraseña del dispositivo.</string>
     <string name="lan_ip_not_found">Ningún Shelly respondió en %1$s. Revisa la dirección y que el teléfono esté en la misma Wi-Fi.</string>
     <string name="lan_ip_checking">Comprobando…</string>
     <string name="lan_ip_find">Buscar</string>
@@ -1773,4 +1773,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="lan_brand_sonoff_desc">Dispositivos eWeLink en modo DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relés y enchufes Gen1, Plus, Pro, Gen3 y Gen4</string>
     <string name="lan_brand_hint">Elige la marca. No hace falta cuenta ni nube: el teléfono y el dispositivo solo deben estar en la misma Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Contraseña del Shelly</string>
+    <string name="lan_shelly_pw_body">Introduce la contraseña de acceso de este Shelly (Ajustes → Authentication). Solo se guarda en este teléfono y no se incluye en las copias de seguridad.</string>
+    <string name="lan_shelly_user">Usuario</string>
+    <string name="lan_shelly_pw">Contraseña</string>
+    <string name="lan_shelly_pw_wrong">Contraseña incorrecta. Revísala e inténtalo de nuevo.</string>
+    <string name="lan_shelly_pw_ok">Continuar</string>
 </resources>

@@ -1711,7 +1711,7 @@
 • 狀態和控制在監控開啟時運作。</string>
     <string name="lan_help_title">找不到嗎？</string>
     <string name="lan_shelly_unsupported">尚不支援此型號（沒有繼電器）。</string>
-    <string name="lan_shelly_auth">已設密碼保護：請在 Shelly 設定中關閉登入保護（Authentication）後再回來。</string>
+    <string name="lan_shelly_auth">已設密碼保護：點按「新增」並輸入裝置密碼。</string>
     <string name="lan_ip_not_found">%1$s 沒有 Shelly 回應。請檢查位址，並確認手機在同一個 Wi-Fi。</string>
     <string name="lan_ip_checking">檢查中…</string>
     <string name="lan_ip_find">尋找</string>
@@ -1730,4 +1730,10 @@
     <string name="lan_brand_sonoff_desc">DIY（區域網路）模式的 eWeLink 裝置</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 繼電器與插座</string>
     <string name="lan_brand_hint">選擇品牌。不需要帳號或雲端：手機和裝置在同一個 Wi-Fi 即可。</string>
+    <string name="lan_shelly_pw_title">Shelly 密碼</string>
+    <string name="lan_shelly_pw_body">輸入為此 Shelly 設定的登入密碼（設定 → Authentication）。密碼只保存在這支手機上，不會包含在備份中。</string>
+    <string name="lan_shelly_user">使用者名稱</string>
+    <string name="lan_shelly_pw">密碼</string>
+    <string name="lan_shelly_pw_wrong">密碼錯誤。請檢查後重試。</string>
+    <string name="lan_shelly_pw_ok">繼續</string>
 </resources>

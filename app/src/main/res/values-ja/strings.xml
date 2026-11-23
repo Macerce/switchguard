@@ -1712,7 +1712,7 @@
 • 状態表示と操作は監視がオンのときに動作します。</string>
     <string name="lan_help_title">見つからない場合</string>
     <string name="lan_shelly_unsupported">このモデルはまだ対応していません（リレーがありません）。</string>
-    <string name="lan_shelly_auth">パスワード保護中：Shellyの設定でログイン保護（Authentication）をオフにしてから戻ってください。</string>
+    <string name="lan_shelly_auth">パスワード保護あり：「追加」をタップしてデバイスのパスワードを入力してください。</string>
     <string name="lan_ip_not_found">%1$sでShellyが応答しませんでした。アドレスと、スマホが同じWi-Fiにあるか確認してください。</string>
     <string name="lan_ip_checking">確認中…</string>
     <string name="lan_ip_find">検索</string>
@@ -1731,4 +1731,10 @@
     <string name="lan_brand_sonoff_desc">DIY（LAN）モードの eWeLink デバイス</string>
     <string name="lan_brand_shelly_desc">Gen1・Plus・Pro・Gen3・Gen4 のリレーとプラグ</string>
     <string name="lan_brand_hint">ブランドを選んでください。アカウントやクラウドは不要で、スマホとデバイスが同じWi-Fiにあれば使えます。</string>
+    <string name="lan_shelly_pw_title">Shelly のパスワード</string>
+    <string name="lan_shelly_pw_body">この Shelly に設定したログインパスワードを入力してください（設定 → Authentication）。この端末にのみ保存され、バックアップには含まれません。</string>
+    <string name="lan_shelly_user">ユーザー名</string>
+    <string name="lan_shelly_pw">パスワード</string>
+    <string name="lan_shelly_pw_wrong">パスワードが違います。確認してもう一度お試しください。</string>
+    <string name="lan_shelly_pw_ok">続ける</string>
 </resources>

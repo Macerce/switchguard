@@ -1783,7 +1783,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
 • L\'état et la commande fonctionnent tant que la surveillance est active.</string>
     <string name="lan_help_title">Introuvable ?</string>
     <string name="lan_shelly_unsupported">Ce modèle n\'est pas encore pris en charge (pas de relais).</string>
-    <string name="lan_shelly_auth">Protégé par mot de passe : désactivez la protection de connexion (Authentication) dans les réglages du Shelly, puis revenez.</string>
+    <string name="lan_shelly_auth">Protégé par mot de passe : appuie sur Ajouter et saisis le mot de passe de l\'appareil.</string>
     <string name="lan_ip_not_found">Aucun Shelly n\'a répondu à %1$s. Vérifiez l\'adresse et que le téléphone est sur le même Wi-Fi.</string>
     <string name="lan_ip_checking">Vérification…</string>
     <string name="lan_ip_find">Chercher</string>
@@ -1802,4 +1802,10 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="lan_brand_sonoff_desc">Appareils eWeLink en mode DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relais et prises Gen1, Plus, Pro, Gen3 et Gen4</string>
     <string name="lan_brand_hint">Choisissez la marque. Ni compte ni cloud : le téléphone et l\'appareil doivent simplement être sur le même Wi-Fi.</string>
+    <string name="lan_shelly_pw_title">Mot de passe Shelly</string>
+    <string name="lan_shelly_pw_body">Saisis le mot de passe de connexion défini pour ce Shelly (Paramètres → Authentication). Il reste uniquement sur ce téléphone et n\'est pas inclus dans les sauvegardes.</string>
+    <string name="lan_shelly_user">Nom d\'utilisateur</string>
+    <string name="lan_shelly_pw">Mot de passe</string>
+    <string name="lan_shelly_pw_wrong">Mot de passe incorrect. Vérifie-le et réessaie.</string>
+    <string name="lan_shelly_pw_ok">Continuer</string>
 </resources>

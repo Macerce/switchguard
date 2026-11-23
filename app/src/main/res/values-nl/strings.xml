@@ -1748,7 +1748,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
 • Status en bediening werken zolang de bewaking aan staat.</string>
     <string name="lan_help_title">Kun je het niet vinden?</string>
     <string name="lan_shelly_unsupported">Dit model wordt nog niet ondersteund (geen relais).</string>
-    <string name="lan_shelly_auth">Met wachtwoord beveiligd: zet de inlogbeveiliging (Authentication) uit in de Shelly-instellingen en kom terug.</string>
+    <string name="lan_shelly_auth">Met wachtwoord beveiligd: tik op Toevoegen en voer het wachtwoord van het apparaat in.</string>
     <string name="lan_ip_not_found">Geen Shelly reageerde op %1$s. Controleer het adres en of de telefoon op hetzelfde wifi zit.</string>
     <string name="lan_ip_checking">Controleren…</string>
     <string name="lan_ip_find">Zoeken</string>
@@ -1767,4 +1767,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
     <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
     <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
+    <string name="lan_shelly_pw_title">Shelly-wachtwoord</string>
+    <string name="lan_shelly_pw_body">Voer het inlogwachtwoord in dat voor deze Shelly is ingesteld (Instellingen → Authentication). Het blijft alleen op deze telefoon en zit niet in back-ups.</string>
+    <string name="lan_shelly_user">Gebruikersnaam</string>
+    <string name="lan_shelly_pw">Wachtwoord</string>
+    <string name="lan_shelly_pw_wrong">Onjuist wachtwoord. Controleer het en probeer opnieuw.</string>
+    <string name="lan_shelly_pw_ok">Doorgaan</string>
 </resources>

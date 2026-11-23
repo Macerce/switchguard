@@ -758,6 +758,7 @@ class MonitorService : Service() {
     private fun restartLan() {
         val shelly = store.localDevices.filter { it.isShelly }
         if (running && shelly.isNotEmpty()) {
+            com.macerce.switchguard.api.ShellyLan.setCredentials(store.shellyAuth)
             com.macerce.switchguard.api.ShellyLan.start(this, shelly) { handler.post { refreshLocal() } }
         } else {
             com.macerce.switchguard.api.ShellyLan.stop()

@@ -1751,7 +1751,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
 • Durum ve kontrol izleme açıkken çalışır.</string>
     <string name="lan_help_title">Bulamıyor musun?</string>
     <string name="lan_shelly_unsupported">Bu model henüz desteklenmiyor (rölesi yok).</string>
-    <string name="lan_shelly_auth">Şifre korumalı: Shelly ayarlarında giriş korumasını (Authentication) kapatıp geri gel.</string>
+    <string name="lan_shelly_auth">Şifre korumalı: Ekle\'ye dokunup cihazın şifresini gir.</string>
     <string name="lan_ip_not_found">%1$s adresinde Shelly yanıt vermedi. Adresi ve telefonun aynı Wi-Fi\'de olduğunu kontrol et.</string>
     <string name="lan_ip_checking">Bakılıyor…</string>
     <string name="lan_ip_find">Bul</string>
@@ -1770,4 +1770,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="lan_brand_sonoff_desc">DIY (yerel ağ) kipindeki eWeLink cihazları</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 ve Gen4 röleler ve prizler</string>
     <string name="lan_brand_hint">Markayı seç. Hesap ya da bulut gerekmez: telefon ve cihazın aynı Wi-Fi\'de olması yeterli.</string>
+    <string name="lan_shelly_pw_title">Shelly şifresi</string>
+    <string name="lan_shelly_pw_body">Bu Shelly için belirlenen giriş şifresini gir (Ayarlar → Authentication). Şifre yalnızca bu telefonda tutulur, yedeğe girmez.</string>
+    <string name="lan_shelly_user">Kullanıcı adı</string>
+    <string name="lan_shelly_pw">Şifre</string>
+    <string name="lan_shelly_pw_wrong">Şifre yanlış. Kontrol edip yeniden dene.</string>
+    <string name="lan_shelly_pw_ok">Devam</string>
 </resources>

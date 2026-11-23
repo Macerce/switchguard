@@ -1746,7 +1746,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
 • Status und Steuerung funktionieren, solange die Überwachung läuft.</string>
     <string name="lan_help_title">Nicht gefunden?</string>
     <string name="lan_shelly_unsupported">Dieses Modell wird noch nicht unterstützt (kein Relais).</string>
-    <string name="lan_shelly_auth">Passwortgeschützt: Schalte den Anmeldeschutz (Authentication) in den Shelly-Einstellungen aus und komm zurück.</string>
+    <string name="lan_shelly_auth">Passwortgeschützt: Tippe auf Hinzufügen und gib das Gerätepasswort ein.</string>
     <string name="lan_ip_not_found">Unter %1$s hat kein Shelly geantwortet. Prüfe die Adresse und ob das Telefon im selben WLAN ist.</string>
     <string name="lan_ip_checking">Wird geprüft…</string>
     <string name="lan_ip_find">Suchen</string>
@@ -1765,4 +1765,10 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_brand_sonoff_desc">eWeLink-Geräte im DIY-(LAN-)Modus</string>
     <string name="lan_brand_shelly_desc">Relais und Steckdosen der Gen1, Plus, Pro, Gen3 und Gen4</string>
     <string name="lan_brand_hint">Wähle die Marke. Kein Konto und keine Cloud nötig: Telefon und Gerät müssen nur im selben WLAN sein.</string>
+    <string name="lan_shelly_pw_title">Shelly-Passwort</string>
+    <string name="lan_shelly_pw_body">Gib das für dieses Shelly festgelegte Anmeldepasswort ein (Einstellungen → Authentication). Es bleibt nur auf diesem Telefon und ist nicht in Sicherungen enthalten.</string>
+    <string name="lan_shelly_user">Benutzername</string>
+    <string name="lan_shelly_pw">Passwort</string>
+    <string name="lan_shelly_pw_wrong">Falsches Passwort. Prüfe es und versuche es erneut.</string>
+    <string name="lan_shelly_pw_ok">Weiter</string>
 </resources>

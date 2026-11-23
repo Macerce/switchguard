@@ -1892,7 +1892,7 @@
 • تعمل الحالة والتحكم أثناء تشغيل المراقبة.</string>
     <string name="lan_help_title">لا تجده؟</string>
     <string name="lan_shelly_unsupported">هذا الطراز غير مدعوم بعد (لا يحتوي على مرحّل).</string>
-    <string name="lan_shelly_auth">محمي بكلمة مرور: أوقف حماية الدخول (Authentication) في إعدادات Shelly ثم عد.</string>
+    <string name="lan_shelly_auth">محمي بكلمة مرور: اضغط إضافة وأدخل كلمة مرور الجهاز.</string>
     <string name="lan_ip_not_found">لم يستجب أي Shelly على %1$s. تحقق من العنوان ومن أن الهاتف على شبكة Wi-Fi نفسها.</string>
     <string name="lan_ip_checking">جارٍ التحقق…</string>
     <string name="lan_ip_find">بحث</string>
@@ -1911,4 +1911,10 @@
     <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
     <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
     <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
+    <string name="lan_shelly_pw_title">كلمة مرور Shelly</string>
+    <string name="lan_shelly_pw_body">أدخل كلمة مرور الدخول المعيّنة لهذا الجهاز Shelly (الإعدادات ← Authentication). تُحفظ على هذا الهاتف فقط ولا تُضمَّن في النسخ الاحتياطية.</string>
+    <string name="lan_shelly_user">اسم المستخدم</string>
+    <string name="lan_shelly_pw">كلمة المرور</string>
+    <string name="lan_shelly_pw_wrong">كلمة المرور خاطئة. تحقق منها وحاول مجددًا.</string>
+    <string name="lan_shelly_pw_ok">متابعة</string>
 </resources>

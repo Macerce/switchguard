@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.42.0 — 2026-11-23
+**New**
+- Password-protected Shelly devices can be added: tap Add and enter the device's login password (Gen1 also asks for the user name). The password is checked on the device, kept encrypted on this phone only and is not included in backups or transfers.
+
 ## 2.41.0 — 2026-11-23
 **New**
 - Shelly support without any account or cloud: Devices → Add device (LAN) → Shelly. Gen1, Plus, Pro, Gen3 and Gen4 relays and plugs on the same Wi-Fi are found automatically, or added by IP address. On/off, alarms, automations and power readings (PM models) work over the local network.
