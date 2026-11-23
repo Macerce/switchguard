@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.47.0 — 2026-11-24
+**Yeni**
+- Home Assistant bağlantısı: Cihaz ekle (yerel ağ) → Home Assistant. Yerel adresi, isteğe bağlı dış adresi (Home Assistant Cloud, Tailscale, Cloudflare Tunnel ya da kendi HTTPS adresin) ve uzun ömürlü erişim anahtarını gir; "Bağlantıyı dene" ikisini de sınar. Ardından anahtarlar, ışıklar, fanlar ve yardımcılar eklenebilir; alarmlar ve otomasyonlarla çalışır. Ev Wi-Fi'ında yerel adres, dışarıda dış adres kullanılır. Anahtar yalnızca bu telefonda şifreli tutulur.
+- Çok cihaz bulunduğunda ekleme listesinde arama kutusu çıkar.
+
 ## 2.46.0 — 2026-11-24
 **Yeni**
 - Yerel ağdan TP-Link Kasa ve Tapo: Cihaz ekle (yerel ağ) → TP-Link Kasa ya da TP-Link Tapo. Kasa prizler, çoklu prizler ve ampuller kendiliğinden bulunur, hesap gerekmez. Tapo cihazlar "Ağı tara" ile bulunur ve tüm cihazlar için bir kez girilen TP-Link hesap e-postası ve şifresiyle açılır; kontrol ağında kalır. P110/P115 ve enerji ölçen Kasa prizlerde güç okunur.

@@ -1727,7 +1727,7 @@
     <string name="lan_shelly_step1">Shelly를 Wi-Fi에 연결하세요: Shelly Smart Control 앱을 쓰거나, 휴대폰을 기기 자체 Wi-Fi(shelly…)에 연결한 뒤 브라우저에서 192.168.33.1을 열고 설정 → Wi-Fi에 네트워크 이름과 비밀번호를 입력하세요.</string>
     <string name="lan_steps_title">시작하기 전에</string>
     <string name="lan_brand_title">%1$s 추가</string>
-    <string name="lan_brand_soon">곧 지원: Home Assistant.</string>
+    <string name="lan_brand_soon">Matter 기기는 나중에 지원됩니다.</string>
     <string name="lan_brand_sonoff_desc">DIY(LAN) 모드의 eWeLink 기기</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3, Gen4 릴레이와 플러그</string>
     <string name="lan_brand_hint">브랜드를 고르세요. 계정이나 클라우드가 필요 없고 휴대폰과 기기가 같은 Wi-Fi에 있으면 됩니다.</string>
@@ -1787,4 +1787,27 @@
     <string name="lan_tapo_step3">같은 계정의 다른 기기는 자동으로 열립니다. 제어는 네트워크 안에서 이뤄지며 계정은 기기를 로컬로 여는 데만 쓰입니다.</string>
     <string name="lan_tapo_email">TP-Link 계정 이메일</string>
     <string name="lan_tapo_pw_body">Tapo 기기는 설정에 사용한 TP-Link 계정의 이메일과 비밀번호로만 열립니다. 이 휴대폰에만 암호화되어 저장되고, SwitchGuard가 인터넷으로 보내지 않으며 백업에도 포함되지 않습니다.</string>
+    <string name="lan_brand_ha_desc">Home Assistant 서버의 스위치와 조명(집 또는 원격)</string>
+    <string name="lan_ha_step1">Home Assistant에서 프로필 → 보안 → 장기 액세스 토큰 → 토큰 만들기를 열고 복사하세요.</string>
+    <string name="lan_ha_step2">아래에서 찾은 서버(또는 서버에 연결)를 누르고 토큰을 붙여넣은 뒤, 외부 주소가 있으면 추가하고 연결 테스트를 누르세요.</string>
+    <string name="lan_ha_step3">그러면 스위치, 조명, 팬, 도우미가 목록에 나타납니다. 원하는 것을 추가하세요. 집 Wi-Fi에서는 로컬 주소, 밖에서는 외부 주소를 씁니다.</string>
+    <string name="lan_ha_locked">아직 연결 안 됨: 추가를 누르고 액세스 토큰을 입력하세요.</string>
+    <string name="ha_connect_title">Home Assistant에 연결</string>
+    <string name="ha_local_url">로컬 주소(집 Wi-Fi)</string>
+    <string name="ha_remote_url">외부 주소(선택)</string>
+    <string name="ha_token">장기 액세스 토큰</string>
+    <string name="ha_token_hint">토큰은 이 휴대폰에만 암호화되어 저장되며 백업이나 전송에 포함되지 않습니다. Home Assistant에서 언제든 취소할 수 있습니다.</string>
+    <string name="ha_remote_help_title">밖에서는 어떻게 연결하나요?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud(Nabu Casa): 가장 쉬움. https://….ui.nabu.casa 주소를 사용하세요.\n• Tailscale: 서버와 휴대폰에 설치하고 서버의 Tailscale 주소(100.x.x.x:8123)를 사용하세요.\n• Cloudflare Tunnel: 포트를 열지 않아도 됩니다. 터널의 https 주소를 사용하세요.\n• 포트 8123 포워딩 + HTTPS(DuckDNS / Let\'s Encrypt): 회선에 공인 IP가 있을 때만. 대부분의 5G/4G 가정 회선은 CGNAT 뒤에 있어 포워딩이 안 되니 위 방법을 쓰세요.</string>
+    <string name="ha_test_ok">연결됨</string>
+    <string name="ha_test_token">토큰 거부됨</string>
+    <string name="ha_test_unreachable">연결할 수 없음</string>
+    <string name="ha_test_other">예상치 못한 응답(Home Assistant가 맞나요?)</string>
+    <string name="ha_test_local">로컬 주소: %1$s</string>
+    <string name="ha_test_remote">외부 주소: %1$s</string>
+    <string name="ha_entities_found">켜고 끌 수 있는 엔터티 %1$d개를 표시했습니다. 원하는 것을 추가하세요.</string>
+    <string name="ha_connect_test">연결 테스트</string>
+    <string name="ha_connect_open">주소로 서버에 연결</string>
+    <string name="ha_connect_edit">서버 주소 또는 토큰 변경</string>
+    <string name="lan_filter">검색</string>
 </resources>

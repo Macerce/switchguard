@@ -267,6 +267,10 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     var shellyAuth: Map<String, com.macerce.switchguard.core.ShellyAuth.Credentials>
         get() = com.macerce.switchguard.core.ShellyAuth.mapFromJson(secret("shellyAuth"))
         set(v) = putSecret("shellyAuth", if (v.isEmpty()) "" else com.macerce.switchguard.core.ShellyAuth.mapToJson(v))
+    /** Home Assistant sunucusu (yerel/dış adres + erişim anahtarı). Gizli; yedeğe ve aktarıma girmez. */
+    var haServer: com.macerce.switchguard.core.HaProtocol.Server?
+        get() = com.macerce.switchguard.core.HaProtocol.serverFromJson(secret("haServer").ifEmpty { null })
+        set(v) = putSecret("haServer", v?.toJson().orEmpty())
     /** Enerji raporunda maliyet için kWh birim fiyatı (yerel para birimi); 0 = maliyet gösterilmez. */
     var energyPrice: Double
         get() = str("energyPrice").toDoubleOrNull() ?: 0.0
@@ -632,7 +636,7 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     companion object {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
         /** Keystore ile şifreli saklanan anahtarlar. */
-        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys", "shellyAuth")
+        val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys", "shellyAuth", "haServer")
         const val MIN_POLL = 15
         const val MAX_ALARM_LINES = 20
         const val WATCHDOG_OFF = 0

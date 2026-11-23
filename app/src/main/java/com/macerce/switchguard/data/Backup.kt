@@ -44,6 +44,7 @@ object Backup {
         "tuyaTokenExp" to "Tuya erişim belirtecinin süresi",
         "lanControl" to "yerel ağ kontrolü cihaza özel (bu cihazın bağlı olduğu ağ)",
         "lanKeys" to "cihaz yerel ağ anahtarları (gizli; buluttan yeniden okunur)",
+        "haServer" to "Home Assistant adresi ve erişim anahtarı (gizli; yeni cihazda yeniden girilir)",
         "shellyAuth" to "Shelly şifreleri (gizli; yeni cihazda cihaz eklenirken yeniden girilir)",
         "areasInviteDismissed" to "alan davet kartının gizlenmesi bu cihazdaki ekrana özel",
         "tuyaLive" to "Tuya anlık güncellemeleri cihaza özel (aynı anahtarlarla tek cihaz anlık mesaj alır)",

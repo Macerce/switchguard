@@ -1656,7 +1656,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_shelly_step1">Hubungkan Shelly ke Wi-Fi: dengan aplikasi Shelly Smart Control, atau hubungkan ponsel ke Wi-Fi milik perangkat (shelly…), buka 192.168.33.1 di browser lalu isi nama dan sandi Wi-Fi di Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Sebelum mulai</string>
     <string name="lan_brand_title">Tambah %1$s</string>
-    <string name="lan_brand_soon">Segera: Home Assistant.</string>
+    <string name="lan_brand_soon">Perangkat Matter menyusul nanti.</string>
     <string name="lan_brand_sonoff_desc">Perangkat eWeLink dalam mode DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relai dan colokan Gen1, Plus, Pro, Gen3 dan Gen4</string>
     <string name="lan_brand_hint">Pilih merek. Tanpa akun atau cloud: ponsel dan perangkat cukup berada di Wi-Fi yang sama.</string>
@@ -1716,4 +1716,27 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="lan_tapo_step3">Perangkat lain di akun yang sama lalu terbuka sendiri. Kontrol tetap di jaringan Anda; akun hanya untuk membuka kunci perangkat secara lokal.</string>
     <string name="lan_tapo_email">Email akun TP-Link</string>
     <string name="lan_tapo_pw_body">Perangkat Tapo hanya terbuka dengan email dan sandi akun TP-Link yang dipakai saat penyiapan. Disimpan terenkripsi hanya di ponsel ini, tidak pernah dikirim SwitchGuard ke internet, dan tidak ikut dicadangkan.</string>
+    <string name="lan_brand_ha_desc">Sakelar dan lampu dari server Home Assistant Anda (di rumah atau jarak jauh)</string>
+    <string name="lan_ha_step1">Di Home Assistant buka profil → Keamanan → Token akses jangka panjang → Buat token, lalu salin.</string>
+    <string name="lan_ha_step2">Ketuk server yang ditemukan di bawah (atau Hubungkan ke server), tempel token, tambahkan alamat luar jika ada, lalu ketuk Uji koneksi.</string>
+    <string name="lan_ha_step3">Lalu sakelar, lampu, kipas, dan helper muncul; tambahkan yang diinginkan. Di Wi-Fi rumah ponsel memakai alamat lokal, di luar memakai alamat luar.</string>
+    <string name="lan_ha_locked">Belum terhubung: ketuk Tambah dan masukkan token akses.</string>
+    <string name="ha_connect_title">Hubungkan ke Home Assistant</string>
+    <string name="ha_local_url">Alamat lokal (di Wi-Fi rumah)</string>
+    <string name="ha_remote_url">Alamat luar (opsional)</string>
+    <string name="ha_token">Token akses jangka panjang</string>
+    <string name="ha_token_hint">Token disimpan terenkripsi hanya di ponsel ini dan tidak ikut cadangan atau transfer. Anda bisa mencabutnya di Home Assistant kapan saja.</string>
+    <string name="ha_remote_help_title">Bagaimana mengakses dari luar?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): paling mudah; pakai alamat https://….ui.nabu.casa.\n• Tailscale: pasang di server dan ponsel; pakai alamat Tailscale server (100.x.x.x:8123).\n• Cloudflare Tunnel: tanpa membuka port; pakai alamat https tunnel.\n• Teruskan port 8123 + HTTPS (DuckDNS / Let\'s Encrypt): hanya jika jalur punya IP publik. Kebanyakan jalur 5G/4G rumah di balik CGNAT, di mana ini tidak berfungsi; pakai salah satu opsi di atas.</string>
+    <string name="ha_test_ok">terhubung</string>
+    <string name="ha_test_token">token ditolak</string>
+    <string name="ha_test_unreachable">tidak terjangkau</string>
+    <string name="ha_test_other">jawaban tak terduga (apakah ini Home Assistant?)</string>
+    <string name="ha_test_local">Alamat lokal: %1$s</string>
+    <string name="ha_test_remote">Alamat luar: %1$s</string>
+    <string name="ha_entities_found">%1$d entitas yang bisa dinyalakan/dimatikan tercantum; tambahkan yang diinginkan.</string>
+    <string name="ha_connect_test">Uji koneksi</string>
+    <string name="ha_connect_open">Hubungkan ke server lewat alamat</string>
+    <string name="ha_connect_edit">Ubah alamat server atau token</string>
+    <string name="lan_filter">Cari</string>
 </resources>

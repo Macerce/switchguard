@@ -13,7 +13,7 @@ import com.macerce.switchguard.core.ShellyAuth
 object LocalLan {
     /** Yoklamalı markalar; yeni marka buraya eklenir. */
     val drivers: Map<String, PolledLan> by lazy {
-        listOf<PolledLan>(TasmotaLan, EsphomeLan, HueLan, KasaLan, TapoLan).associateBy { it.brand }
+        listOf<PolledLan>(TasmotaLan, EsphomeLan, HueLan, KasaLan, TapoLan, HaLan).associateBy { it.brand }
     }
 
     fun driver(brand: String): PolledLan? = drivers[brand]
@@ -28,7 +28,7 @@ object LocalLan {
     fun seenHost(d: LocalDevice): String? = when {
         d.isShelly -> ShellyLan.reading(d.id)?.let { ShellyLan.host(d) }
         d.isSonoff -> EwelinkLan.entry(d.id)?.host
-        else -> drivers[d.brand]?.let { dr -> dr.reading(d.id)?.let { dr.host(d) } }
+        else -> drivers[d.brand]?.let { dr -> dr.reading(d.id)?.let { dr.seenHost(d) } }
     }
 
     /** Bloklayıcı; ana thread'den çağırmayın. [local] yoksa Sonoff sayılır (eski kayıtlar). */

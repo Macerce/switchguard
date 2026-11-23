@@ -1761,7 +1761,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_shelly_step1">Verbinde das Shelly mit deinem WLAN: mit der App Shelly Smart Control oder verbinde das Telefon mit dem eigenen WLAN des Geräts (shelly…), öffne 192.168.33.1 im Browser und gib unter Einstellungen → WLAN Netzname und Passwort ein.</string>
     <string name="lan_steps_title">Bevor du beginnst</string>
     <string name="lan_brand_title">%1$s hinzufügen</string>
-    <string name="lan_brand_soon">Demnächst: Home Assistant.</string>
+    <string name="lan_brand_soon">Matter-Geräte folgen später.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-Geräte im DIY-(LAN-)Modus</string>
     <string name="lan_brand_shelly_desc">Relais und Steckdosen der Gen1, Plus, Pro, Gen3 und Gen4</string>
     <string name="lan_brand_hint">Wähle die Marke. Kein Konto und keine Cloud nötig: Telefon und Gerät müssen nur im selben WLAN sein.</string>
@@ -1821,4 +1821,27 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="lan_tapo_step3">Weitere Geräte desselben Kontos werden danach automatisch entsperrt. Die Steuerung bleibt im Netz; das Konto dient nur zum lokalen Entsperren.</string>
     <string name="lan_tapo_email">E-Mail des TP-Link-Kontos</string>
     <string name="lan_tapo_pw_body">Tapo-Geräte öffnen sich nur mit E-Mail und Passwort des TP-Link-Kontos, mit dem sie eingerichtet wurden. Sie bleiben verschlüsselt nur auf diesem Telefon, werden von SwitchGuard nie ins Internet gesendet und nicht gesichert.</string>
+    <string name="lan_brand_ha_desc">Schalter und Lichter deines Home-Assistant-Servers (zu Hause oder unterwegs)</string>
+    <string name="lan_ha_step1">Öffne in Home Assistant dein Profil → Sicherheit → Langlebige Zugriffstoken → Token erstellen und kopiere es.</string>
+    <string name="lan_ha_step2">Tippe auf den unten gefundenen Server (oder Mit Server verbinden), füge das Token ein, ergänze ggf. die externe Adresse und tippe auf Verbindung testen.</string>
+    <string name="lan_ha_step3">Danach erscheinen Schalter, Lichter, Lüfter und Helfer in der Liste; füge die gewünschten hinzu. Im Heim-WLAN nutzt das Telefon die lokale, sonst die externe Adresse.</string>
+    <string name="lan_ha_locked">Noch nicht verbunden: Tippe auf Hinzufügen und gib das Zugriffstoken ein.</string>
+    <string name="ha_connect_title">Mit Home Assistant verbinden</string>
+    <string name="ha_local_url">Lokale Adresse (im Heim-WLAN)</string>
+    <string name="ha_remote_url">Externe Adresse (optional)</string>
+    <string name="ha_token">Langlebiges Zugriffstoken</string>
+    <string name="ha_token_hint">Das Token bleibt verschlüsselt nur auf diesem Telefon und ist weder in Sicherungen noch Übertragungen enthalten. Du kannst es jederzeit in Home Assistant widerrufen.</string>
+    <string name="ha_remote_help_title">Wie erreiche ich es von unterwegs?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): am einfachsten; nutze die Adresse https://….ui.nabu.casa.\n• Tailscale: auf Server und Telefon installieren; nutze die Tailscale-Adresse des Servers (100.x.x.x:8123).\n• Cloudflare Tunnel: ohne Portfreigabe; nutze die https-Adresse des Tunnels.\n• Portweiterleitung 8123 + HTTPS (DuckDNS / Let\'s Encrypt): nur mit öffentlicher IP. Die meisten 5G/4G-Anschlüsse sind hinter CGNAT, wo Portweiterleitung nicht geht; nutze dann eine der Optionen oben.</string>
+    <string name="ha_test_ok">verbunden</string>
+    <string name="ha_test_token">Token abgelehnt</string>
+    <string name="ha_test_unreachable">nicht erreichbar</string>
+    <string name="ha_test_other">unerwartete Antwort (ist das Home Assistant?)</string>
+    <string name="ha_test_local">Lokale Adresse: %1$s</string>
+    <string name="ha_test_remote">Externe Adresse: %1$s</string>
+    <string name="ha_entities_found">%1$d schaltbare Entitäten aufgelistet; füge die gewünschten hinzu.</string>
+    <string name="ha_connect_test">Verbindung testen</string>
+    <string name="ha_connect_open">Per Adresse mit Server verbinden</string>
+    <string name="ha_connect_edit">Serveradresse oder Token ändern</string>
+    <string name="lan_filter">Suchen</string>
 </resources>

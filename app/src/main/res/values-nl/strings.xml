@@ -1763,7 +1763,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_shelly_step1">Verbind de Shelly met je wifi: met de app Shelly Smart Control, of verbind de telefoon met het eigen wifi van het apparaat (shelly…), open 192.168.33.1 in de browser en vul onder Instellingen → Wi-Fi je netwerknaam en wachtwoord in.</string>
     <string name="lan_steps_title">Voordat je begint</string>
     <string name="lan_brand_title">%1$s toevoegen</string>
-    <string name="lan_brand_soon">Binnenkort: Home Assistant.</string>
+    <string name="lan_brand_soon">Matter-apparaten volgen later.</string>
     <string name="lan_brand_sonoff_desc">eWeLink-apparaten in DIY-(LAN-)modus</string>
     <string name="lan_brand_shelly_desc">Relais en stekkers van Gen1, Plus, Pro, Gen3 en Gen4</string>
     <string name="lan_brand_hint">Kies het merk. Geen account of cloud nodig: telefoon en apparaat moeten alleen op hetzelfde wifi zitten.</string>
@@ -1823,4 +1823,27 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="lan_tapo_step3">Andere apparaten op hetzelfde account gaan daarna vanzelf open. De bediening blijft op je netwerk; het account dient alleen om lokaal te ontgrendelen.</string>
     <string name="lan_tapo_email">E-mail van TP-Link-account</string>
     <string name="lan_tapo_pw_body">Tapo-apparaten openen alleen met e-mail en wachtwoord van het TP-Link-account waarmee ze zijn ingesteld. Ze blijven versleuteld alleen op deze telefoon, SwitchGuard stuurt ze nooit naar internet en ze zitten niet in back-ups.</string>
+    <string name="lan_brand_ha_desc">Schakelaars en lampen van je Home Assistant-server (thuis of op afstand)</string>
+    <string name="lan_ha_step1">Open in Home Assistant je profiel → Beveiliging → Langdurige toegangstokens → Token aanmaken en kopieer het.</string>
+    <string name="lan_ha_step2">Tik op de gevonden server hieronder (of Verbinden met server), plak het token, vul eventueel het externe adres in en tik op Verbinding testen.</string>
+    <string name="lan_ha_step3">Daarna verschijnen schakelaars, lampen, ventilatoren en helpers; voeg toe wat je wilt. Thuis gebruikt de telefoon het lokale adres, elders het externe.</string>
+    <string name="lan_ha_locked">Nog niet verbonden: tik op Toevoegen en voer het toegangstoken in.</string>
+    <string name="ha_connect_title">Verbinden met Home Assistant</string>
+    <string name="ha_local_url">Lokaal adres (op je wifi)</string>
+    <string name="ha_remote_url">Extern adres (optioneel)</string>
+    <string name="ha_token">Langdurig toegangstoken</string>
+    <string name="ha_token_hint">Het token blijft versleuteld alleen op deze telefoon en zit niet in back-ups of overdrachten. Je kunt het altijd intrekken in Home Assistant.</string>
+    <string name="ha_remote_help_title">Hoe bereik ik het van buitenaf?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): het makkelijkst; gebruik het adres https://….ui.nabu.casa.\n• Tailscale: installeer op server en telefoon; gebruik het Tailscale-adres van de server (100.x.x.x:8123).\n• Cloudflare Tunnel: zonder poorten te openen; gebruik het https-adres van de tunnel.\n• Poort 8123 doorsturen + HTTPS (DuckDNS / Let\'s Encrypt): alleen met een publiek IP. De meeste 5G/4G-lijnen zitten achter CGNAT, waar doorsturen niet werkt; gebruik dan een optie hierboven.</string>
+    <string name="ha_test_ok">verbonden</string>
+    <string name="ha_test_token">token geweigerd</string>
+    <string name="ha_test_unreachable">niet bereikbaar</string>
+    <string name="ha_test_other">onverwacht antwoord (is dit Home Assistant?)</string>
+    <string name="ha_test_local">Lokaal adres: %1$s</string>
+    <string name="ha_test_remote">Extern adres: %1$s</string>
+    <string name="ha_entities_found">%1$d schakelbare entiteiten getoond; voeg toe wat je wilt.</string>
+    <string name="ha_connect_test">Verbinding testen</string>
+    <string name="ha_connect_open">Met server verbinden via adres</string>
+    <string name="ha_connect_edit">Serveradres of token wijzigen</string>
+    <string name="lan_filter">Zoeken</string>
 </resources>

@@ -1799,7 +1799,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_shelly_step1">Conecte o Shelly ao seu Wi-Fi: pelo app Shelly Smart Control, ou conecte o celular ao Wi-Fi próprio do dispositivo (shelly…), abra 192.168.33.1 no navegador e informe o nome e a senha do Wi-Fi em Configurações → Wi-Fi.</string>
     <string name="lan_steps_title">Antes de começar</string>
     <string name="lan_brand_title">Adicionar %1$s</string>
-    <string name="lan_brand_soon">Em breve: Home Assistant.</string>
+    <string name="lan_brand_soon">Dispositivos Matter virão depois.</string>
     <string name="lan_brand_sonoff_desc">Dispositivos eWeLink no modo DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relés e tomadas Gen1, Plus, Pro, Gen3 e Gen4</string>
     <string name="lan_brand_hint">Escolha a marca. Sem conta nem nuvem: o celular e o dispositivo só precisam estar no mesmo Wi-Fi.</string>
@@ -1859,4 +1859,27 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="lan_tapo_step3">Os outros dispositivos da mesma conta abrem sozinhos. O controle fica na sua rede; a conta só serve para liberar o dispositivo localmente.</string>
     <string name="lan_tapo_email">E-mail da conta TP-Link</string>
     <string name="lan_tapo_pw_body">Dispositivos Tapo só abrem com o e-mail e a senha da conta TP-Link usada na configuração. Ficam criptografados só neste telefone, o SwitchGuard nunca os envia à internet e não entram nos backups.</string>
+    <string name="lan_brand_ha_desc">Interruptores e luzes do seu servidor Home Assistant (em casa ou remoto)</string>
+    <string name="lan_ha_step1">No Home Assistant abra seu perfil → Segurança → Tokens de acesso de longa duração → Criar token e copie.</string>
+    <string name="lan_ha_step2">Toque no servidor encontrado abaixo (ou Conectar a um servidor), cole o token, adicione o endereço externo se tiver e toque em Testar conexão.</string>
+    <string name="lan_ha_step3">Depois aparecem interruptores, luzes, ventiladores e auxiliares; adicione os que quiser. Em casa o telefone usa o endereço local; fora, o externo.</string>
+    <string name="lan_ha_locked">Ainda não conectado: toque em Adicionar e informe o token de acesso.</string>
+    <string name="ha_connect_title">Conectar ao Home Assistant</string>
+    <string name="ha_local_url">Endereço local (no seu Wi-Fi)</string>
+    <string name="ha_remote_url">Endereço externo (opcional)</string>
+    <string name="ha_token">Token de acesso de longa duração</string>
+    <string name="ha_token_hint">O token fica criptografado só neste telefone e não entra em backups nem transferências. Você pode revogá-lo no Home Assistant a qualquer momento.</string>
+    <string name="ha_remote_help_title">Como acesso de fora?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): o mais fácil; use o endereço https://….ui.nabu.casa.\n• Tailscale: instale no servidor e no telefone; use o endereço Tailscale do servidor (100.x.x.x:8123).\n• Cloudflare Tunnel: funciona sem abrir portas; use o endereço https do túnel.\n• Redirecionar a porta 8123 + HTTPS (DuckDNS / Let\'s Encrypt): só se sua linha tiver IP público. A maioria das linhas 5G/4G fica atrás de CGNAT, onde isso não funciona; use uma das opções acima.</string>
+    <string name="ha_test_ok">conectado</string>
+    <string name="ha_test_token">token recusado</string>
+    <string name="ha_test_unreachable">inacessível</string>
+    <string name="ha_test_other">resposta inesperada (é o Home Assistant?)</string>
+    <string name="ha_test_local">Endereço local: %1$s</string>
+    <string name="ha_test_remote">Endereço externo: %1$s</string>
+    <string name="ha_entities_found">%1$d entidades comutáveis listadas; adicione as que quiser.</string>
+    <string name="ha_connect_test">Testar conexão</string>
+    <string name="ha_connect_open">Conectar a um servidor pelo endereço</string>
+    <string name="ha_connect_edit">Alterar endereço do servidor ou token</string>
+    <string name="lan_filter">Pesquisar</string>
 </resources>

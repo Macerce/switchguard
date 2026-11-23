@@ -1692,7 +1692,7 @@
     <string name="lan_shelly_step1">Shelly को अपने Wi-Fi से जोड़ें: Shelly Smart Control ऐप से, या फ़ोन को डिवाइस के अपने Wi-Fi (shelly…) से जोड़कर ब्राउज़र में 192.168.33.1 खोलें और Settings → Wi-Fi में नेटवर्क नाम व पासवर्ड डालें।</string>
     <string name="lan_steps_title">शुरू करने से पहले</string>
     <string name="lan_brand_title">%1$s जोड़ें</string>
-    <string name="lan_brand_soon">जल्द: Home Assistant।</string>
+    <string name="lan_brand_soon">Matter डिवाइस बाद में आएँगे।</string>
     <string name="lan_brand_sonoff_desc">DIY (LAN) मोड वाले eWeLink डिवाइस</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 और Gen4 रिले और प्लग</string>
     <string name="lan_brand_hint">ब्रांड चुनें। खाता या क्लाउड ज़रूरी नहीं: फ़ोन और डिवाइस बस एक ही Wi-Fi पर हों।</string>
@@ -1752,4 +1752,27 @@
     <string name="lan_tapo_step3">उसी खाते के दूसरे डिवाइस फिर अपने आप खुल जाते हैं। नियंत्रण आपके नेटवर्क में रहता है; खाता केवल डिवाइस को स्थानीय रूप से खोलने के लिए है।</string>
     <string name="lan_tapo_email">TP-Link खाते का ईमेल</string>
     <string name="lan_tapo_pw_body">Tapo डिवाइस केवल उसी TP-Link खाते के ईमेल और पासवर्ड से खुलते हैं जिससे सेट किए गए थे। ये केवल इस फ़ोन पर एन्क्रिप्टेड रहते हैं, SwitchGuard इन्हें कभी इंटरनेट पर नहीं भेजता और ये बैकअप में नहीं जाते।</string>
+    <string name="lan_brand_ha_desc">आपके Home Assistant सर्वर के स्विच और लाइटें (घर पर या दूर से)</string>
+    <string name="lan_ha_step1">Home Assistant में प्रोफ़ाइल → सुरक्षा → लंबे समय वाले एक्सेस टोकन → टोकन बनाएँ खोलें और उसे कॉपी करें।</string>
+    <string name="lan_ha_step2">नीचे मिले सर्वर पर (या सर्वर से जुड़ें पर) टैप करें, टोकन पेस्ट करें, बाहरी पता हो तो जोड़ें, फिर कनेक्शन जाँचें दबाएँ।</string>
+    <string name="lan_ha_step3">फिर स्विच, लाइटें, पंखे और हेल्पर सूची में दिखेंगे; जो चाहें जोड़ें। घर के Wi-Fi पर फ़ोन स्थानीय पता और बाहर बाहरी पता इस्तेमाल करता है।</string>
+    <string name="lan_ha_locked">अभी जुड़ा नहीं: जोड़ें दबाएँ और एक्सेस टोकन डालें।</string>
+    <string name="ha_connect_title">Home Assistant से जुड़ें</string>
+    <string name="ha_local_url">स्थानीय पता (घर के Wi-Fi पर)</string>
+    <string name="ha_remote_url">बाहरी पता (वैकल्पिक)</string>
+    <string name="ha_token">लंबे समय वाला एक्सेस टोकन</string>
+    <string name="ha_token_hint">टोकन केवल इस फ़ोन पर एन्क्रिप्टेड रहता है, बैकअप या ट्रांसफ़र में नहीं जाता। आप इसे Home Assistant में कभी भी रद्द कर सकते हैं।</string>
+    <string name="ha_remote_help_title">बाहर से कैसे पहुँचूँ?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): सबसे आसान; https://….ui.nabu.casa पता इस्तेमाल करें।\n• Tailscale: सर्वर और फ़ोन पर इंस्टॉल करें; सर्वर का Tailscale पता (100.x.x.x:8123) इस्तेमाल करें।\n• Cloudflare Tunnel: पोर्ट खोले बिना चलता है; टनल का https पता इस्तेमाल करें।\n• पोर्ट 8123 फ़ॉरवर्ड + HTTPS (DuckDNS / Let\'s Encrypt): केवल तब जब लाइन पर सार्वजनिक IP हो। ज़्यादातर 5G/4G घरेलू लाइनें CGNAT के पीछे होती हैं, जहाँ यह काम नहीं करता; ऊपर का कोई विकल्प चुनें।</string>
+    <string name="ha_test_ok">जुड़ गया</string>
+    <string name="ha_test_token">टोकन अस्वीकार</string>
+    <string name="ha_test_unreachable">पहुँच नहीं</string>
+    <string name="ha_test_other">अनपेक्षित जवाब (क्या यह Home Assistant है?)</string>
+    <string name="ha_test_local">स्थानीय पता: %1$s</string>
+    <string name="ha_test_remote">बाहरी पता: %1$s</string>
+    <string name="ha_entities_found">%1$d चालू/बंद होने वाली इकाइयाँ सूचीबद्ध; जो चाहें जोड़ें।</string>
+    <string name="ha_connect_test">कनेक्शन जाँचें</string>
+    <string name="ha_connect_open">पते से सर्वर से जुड़ें</string>
+    <string name="ha_connect_edit">सर्वर पता या टोकन बदलें</string>
+    <string name="lan_filter">खोजें</string>
 </resources>

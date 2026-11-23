@@ -766,6 +766,7 @@ class MonitorService : Service() {
             com.macerce.switchguard.api.ShellyLan.stop()
             com.macerce.switchguard.api.LocalLan.stopDrivers()
         }
+        com.macerce.switchguard.api.HaLan.server = store.haServer
         if (running) com.macerce.switchguard.api.LocalLan.startDrivers(this, store.localDevices, store.shellyAuth) { handler.post { refreshLocal() } }
         else com.macerce.switchguard.api.LocalLan.stopDrivers()
         val locals = store.localDevices.any { it.isSonoff }

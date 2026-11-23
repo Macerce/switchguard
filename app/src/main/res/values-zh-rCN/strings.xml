@@ -1705,7 +1705,7 @@
     <string name="lan_shelly_step1">将 Shelly 连接到 Wi-Fi：使用 Shelly Smart Control 应用，或让手机连接设备自身的 Wi-Fi（shelly…），在浏览器打开 192.168.33.1，在 设置 → Wi-Fi 中输入网络名称和密码。</string>
     <string name="lan_steps_title">开始之前</string>
     <string name="lan_brand_title">添加 %1$s</string>
-    <string name="lan_brand_soon">即将支持：Home Assistant。</string>
+    <string name="lan_brand_soon">Matter 设备稍后支持。</string>
     <string name="lan_brand_sonoff_desc">DIY（局域网）模式的 eWeLink 设备</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 继电器与插座</string>
     <string name="lan_brand_hint">选择品牌。无需账号或云端：手机和设备在同一 Wi-Fi 即可。</string>
@@ -1765,4 +1765,27 @@
     <string name="lan_tapo_step3">同一账号的其他设备随后会自动解锁。控制始终在你的网络内；账号仅用于在本地解锁设备。</string>
     <string name="lan_tapo_email">TP-Link 账号邮箱</string>
     <string name="lan_tapo_pw_body">Tapo 设备只能用设置时所用 TP-Link 账号的邮箱和密码打开。它们只加密保存在此手机上，SwitchGuard 从不将其发送到互联网，也不会包含在备份中。</string>
+    <string name="lan_brand_ha_desc">来自 Home Assistant 服务器的开关和灯（在家或远程）</string>
+    <string name="lan_ha_step1">在 Home Assistant 中打开个人资料 → 安全 → 长期访问令牌 → 创建令牌，并复制。</string>
+    <string name="lan_ha_step2">点按下方找到的服务器（或“连接服务器”），粘贴令牌，如有外部地址也填上，然后点按“测试连接”。</string>
+    <string name="lan_ha_step3">随后开关、灯、风扇和辅助元素会出现在列表中，添加你需要的。在家 Wi-Fi 下手机使用本地地址，在外使用外部地址。</string>
+    <string name="lan_ha_locked">尚未连接：点按“添加”并输入访问令牌。</string>
+    <string name="ha_connect_title">连接到 Home Assistant</string>
+    <string name="ha_local_url">本地地址（家中 Wi-Fi）</string>
+    <string name="ha_remote_url">外部地址（可选）</string>
+    <string name="ha_token">长期访问令牌</string>
+    <string name="ha_token_hint">令牌只加密保存在此手机上，不会包含在备份或迁移中。你可以随时在 Home Assistant 中撤销。</string>
+    <string name="ha_remote_help_title">如何从外部访问？</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud（Nabu Casa）：最简单；使用 https://….ui.nabu.casa 地址。\n• Tailscale：在服务器和手机上安装；使用服务器的 Tailscale 地址（100.x.x.x:8123）。\n• Cloudflare Tunnel：无需开放端口；使用隧道的 https 地址。\n• 端口转发 8123 + HTTPS（DuckDNS / Let\'s Encrypt）：仅在线路有公网 IP 时可用。大多数 5G/4G 家庭线路处于 CGNAT 之后，无法转发，请使用上面的方法。</string>
+    <string name="ha_test_ok">已连接</string>
+    <string name="ha_test_token">令牌被拒绝</string>
+    <string name="ha_test_unreachable">无法访问</string>
+    <string name="ha_test_other">意外的响应（这是 Home Assistant 吗？）</string>
+    <string name="ha_test_local">本地地址：%1$s</string>
+    <string name="ha_test_remote">外部地址：%1$s</string>
+    <string name="ha_entities_found">已列出 %1$d 个可开关的实体，添加你需要的。</string>
+    <string name="ha_connect_test">测试连接</string>
+    <string name="ha_connect_open">通过地址连接服务器</string>
+    <string name="ha_connect_edit">更改服务器地址或令牌</string>
+    <string name="lan_filter">搜索</string>
 </resources>

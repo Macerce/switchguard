@@ -1698,7 +1698,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_shelly_step1">Kết nối Shelly với Wi-Fi: dùng ứng dụng Shelly Smart Control, hoặc nối điện thoại vào Wi-Fi riêng của thiết bị (shelly…), mở 192.168.33.1 trên trình duyệt và nhập tên, mật khẩu Wi-Fi trong Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Trước khi bắt đầu</string>
     <string name="lan_brand_title">Thêm %1$s</string>
-    <string name="lan_brand_soon">Sắp có: Home Assistant.</string>
+    <string name="lan_brand_soon">Thiết bị Matter sẽ có sau.</string>
     <string name="lan_brand_sonoff_desc">Thiết bị eWeLink ở chế độ DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Rơ-le và ổ cắm Gen1, Plus, Pro, Gen3 và Gen4</string>
     <string name="lan_brand_hint">Chọn hãng. Không cần tài khoản hay đám mây: điện thoại và thiết bị chỉ cần cùng Wi-Fi.</string>
@@ -1758,4 +1758,27 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="lan_tapo_step3">Các thiết bị khác cùng tài khoản sẽ tự mở. Điều khiển vẫn trong mạng của bạn; tài khoản chỉ dùng để mở khóa thiết bị cục bộ.</string>
     <string name="lan_tapo_email">Email tài khoản TP-Link</string>
     <string name="lan_tapo_pw_body">Thiết bị Tapo chỉ mở bằng email và mật khẩu của tài khoản TP-Link đã dùng để cài đặt. Chúng được mã hóa chỉ trên điện thoại này, SwitchGuard không bao giờ gửi lên internet và không có trong bản sao lưu.</string>
+    <string name="lan_brand_ha_desc">Công tắc và đèn từ máy chủ Home Assistant (ở nhà hoặc từ xa)</string>
+    <string name="lan_ha_step1">Trong Home Assistant mở hồ sơ → Bảo mật → Mã truy cập dài hạn → Tạo mã, rồi sao chép.</string>
+    <string name="lan_ha_step2">Chạm máy chủ tìm thấy bên dưới (hoặc Kết nối máy chủ), dán mã, thêm địa chỉ bên ngoài nếu có, rồi chạm Kiểm tra kết nối.</string>
+    <string name="lan_ha_step3">Sau đó công tắc, đèn, quạt và helper sẽ hiện; thêm cái bạn muốn. Ở Wi-Fi nhà điện thoại dùng địa chỉ cục bộ, bên ngoài dùng địa chỉ ngoài.</string>
+    <string name="lan_ha_locked">Chưa kết nối: chạm Thêm và nhập mã truy cập.</string>
+    <string name="ha_connect_title">Kết nối Home Assistant</string>
+    <string name="ha_local_url">Địa chỉ cục bộ (trong Wi-Fi nhà)</string>
+    <string name="ha_remote_url">Địa chỉ bên ngoài (tùy chọn)</string>
+    <string name="ha_token">Mã truy cập dài hạn</string>
+    <string name="ha_token_hint">Mã chỉ được lưu mã hóa trên điện thoại này, không có trong bản sao lưu hay chuyển dữ liệu. Bạn có thể thu hồi trong Home Assistant bất cứ lúc nào.</string>
+    <string name="ha_remote_help_title">Truy cập từ bên ngoài thế nào?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): dễ nhất; dùng địa chỉ https://….ui.nabu.casa.\n• Tailscale: cài trên máy chủ và điện thoại; dùng địa chỉ Tailscale của máy chủ (100.x.x.x:8123).\n• Cloudflare Tunnel: không cần mở cổng; dùng địa chỉ https của tunnel.\n• Chuyển tiếp cổng 8123 + HTTPS (DuckDNS / Let\'s Encrypt): chỉ khi đường truyền có IP công cộng. Phần lớn mạng 5G/4G gia đình nằm sau CGNAT nên không dùng được; hãy chọn cách ở trên.</string>
+    <string name="ha_test_ok">đã kết nối</string>
+    <string name="ha_test_token">mã bị từ chối</string>
+    <string name="ha_test_unreachable">không truy cập được</string>
+    <string name="ha_test_other">phản hồi lạ (có phải Home Assistant?)</string>
+    <string name="ha_test_local">Địa chỉ cục bộ: %1$s</string>
+    <string name="ha_test_remote">Địa chỉ bên ngoài: %1$s</string>
+    <string name="ha_entities_found">Đã liệt kê %1$d thực thể bật/tắt được; thêm cái bạn muốn.</string>
+    <string name="ha_connect_test">Kiểm tra kết nối</string>
+    <string name="ha_connect_open">Kết nối máy chủ bằng địa chỉ</string>
+    <string name="ha_connect_edit">Đổi địa chỉ máy chủ hoặc mã</string>
+    <string name="lan_filter">Tìm kiếm</string>
 </resources>

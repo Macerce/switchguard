@@ -1798,7 +1798,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="lan_shelly_step1">Connectez le Shelly à votre Wi-Fi : avec l\'app Shelly Smart Control, ou connectez le téléphone au Wi-Fi propre de l\'appareil (shelly…), ouvrez 192.168.33.1 dans le navigateur et saisissez le nom et le mot de passe de votre Wi-Fi dans Paramètres → Wi-Fi.</string>
     <string name="lan_steps_title">Avant de commencer</string>
     <string name="lan_brand_title">Ajouter %1$s</string>
-    <string name="lan_brand_soon">Bientôt : Home Assistant.</string>
+    <string name="lan_brand_soon">Les appareils Matter suivront plus tard.</string>
     <string name="lan_brand_sonoff_desc">Appareils eWeLink en mode DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relais et prises Gen1, Plus, Pro, Gen3 et Gen4</string>
     <string name="lan_brand_hint">Choisissez la marque. Ni compte ni cloud : le téléphone et l\'appareil doivent simplement être sur le même Wi-Fi.</string>
@@ -1858,4 +1858,27 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="lan_tapo_step3">Les autres appareils du même compte s’ouvrent ensuite tout seuls. Le contrôle reste sur ton réseau ; le compte sert seulement à déverrouiller l’appareil localement.</string>
     <string name="lan_tapo_email">E-mail du compte TP-Link</string>
     <string name="lan_tapo_pw_body">Les appareils Tapo ne s’ouvrent qu’avec l’e-mail et le mot de passe du compte TP-Link utilisé pour les configurer. Ils restent chiffrés sur ce téléphone uniquement, ne sont jamais envoyés sur Internet par SwitchGuard et ne sont pas sauvegardés.</string>
+    <string name="lan_brand_ha_desc">Interrupteurs et lumières de ton serveur Home Assistant (à la maison ou à distance)</string>
+    <string name="lan_ha_step1">Dans Home Assistant, ouvre ton profil → Sécurité → Jetons d’accès longue durée → Créer un jeton, puis copie-le.</string>
+    <string name="lan_ha_step2">Appuie sur le serveur trouvé ci-dessous (ou Se connecter à un serveur), colle le jeton, ajoute l’adresse externe si tu en as une et appuie sur Tester la connexion.</string>
+    <string name="lan_ha_step3">Interrupteurs, lumières, ventilateurs et entrées apparaissent ensuite ; ajoute ceux que tu veux. Sur ton Wi-Fi le téléphone utilise l’adresse locale, ailleurs l’adresse externe.</string>
+    <string name="lan_ha_locked">Pas encore connecté : appuie sur Ajouter et saisis le jeton d’accès.</string>
+    <string name="ha_connect_title">Se connecter à Home Assistant</string>
+    <string name="ha_local_url">Adresse locale (sur ton Wi-Fi)</string>
+    <string name="ha_remote_url">Adresse externe (facultatif)</string>
+    <string name="ha_token">Jeton d’accès longue durée</string>
+    <string name="ha_token_hint">Le jeton reste chiffré sur ce téléphone uniquement et n’est ni sauvegardé ni transféré. Tu peux le révoquer à tout moment dans Home Assistant.</string>
+    <string name="ha_remote_help_title">Comment y accéder de l’extérieur ?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa) : le plus simple ; utilise l’adresse https://….ui.nabu.casa.\n• Tailscale : installe-le sur le serveur et le téléphone ; utilise l’adresse Tailscale du serveur (100.x.x.x:8123).\n• Cloudflare Tunnel : sans ouvrir de port ; utilise l’adresse https du tunnel.\n• Redirection du port 8123 + HTTPS (DuckDNS / Let\'s Encrypt) : seulement avec une IP publique. La plupart des lignes 5G/4G sont derrière un CGNAT, où la redirection ne marche pas ; utilise une option ci-dessus.</string>
+    <string name="ha_test_ok">connecté</string>
+    <string name="ha_test_token">jeton refusé</string>
+    <string name="ha_test_unreachable">injoignable</string>
+    <string name="ha_test_other">réponse inattendue (est-ce bien Home Assistant ?)</string>
+    <string name="ha_test_local">Adresse locale : %1$s</string>
+    <string name="ha_test_remote">Adresse externe : %1$s</string>
+    <string name="ha_entities_found">%1$d entités commutables listées ; ajoute celles que tu veux.</string>
+    <string name="ha_connect_test">Tester la connexion</string>
+    <string name="ha_connect_open">Se connecter à un serveur par adresse</string>
+    <string name="ha_connect_edit">Modifier l’adresse du serveur ou le jeton</string>
+    <string name="lan_filter">Rechercher</string>
 </resources>

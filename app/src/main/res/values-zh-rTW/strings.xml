@@ -1726,7 +1726,7 @@
     <string name="lan_shelly_step1">將 Shelly 連上 Wi-Fi：使用 Shelly Smart Control App，或讓手機連上裝置自己的 Wi-Fi（shelly…），在瀏覽器開啟 192.168.33.1，於 設定 → Wi-Fi 輸入網路名稱和密碼。</string>
     <string name="lan_steps_title">開始之前</string>
     <string name="lan_brand_title">新增 %1$s</string>
-    <string name="lan_brand_soon">即將支援：Home Assistant。</string>
+    <string name="lan_brand_soon">Matter 裝置稍後支援。</string>
     <string name="lan_brand_sonoff_desc">DIY（區域網路）模式的 eWeLink 裝置</string>
     <string name="lan_brand_shelly_desc">Gen1、Plus、Pro、Gen3 和 Gen4 繼電器與插座</string>
     <string name="lan_brand_hint">選擇品牌。不需要帳號或雲端：手機和裝置在同一個 Wi-Fi 即可。</string>
@@ -1786,4 +1786,27 @@
     <string name="lan_tapo_step3">同一帳號的其他裝置隨後會自動解鎖。控制始終在你的網路內；帳號只用來在本地解鎖裝置。</string>
     <string name="lan_tapo_email">TP-Link 帳號電子郵件</string>
     <string name="lan_tapo_pw_body">Tapo 裝置只能用設定時所用 TP-Link 帳號的電子郵件和密碼開啟。它們只加密保存在這支手機上，SwitchGuard 從不將其傳到網際網路，也不會包含在備份中。</string>
+    <string name="lan_brand_ha_desc">來自 Home Assistant 伺服器的開關和燈（在家或遠端）</string>
+    <string name="lan_ha_step1">在 Home Assistant 中開啟個人資料 → 安全 → 長期存取權杖 → 建立權杖，並複製。</string>
+    <string name="lan_ha_step2">點按下方找到的伺服器（或「連線到伺服器」），貼上權杖，如有外部位址也填上，然後點按「測試連線」。</string>
+    <string name="lan_ha_step3">接著開關、燈、風扇和輔助元件會出現在清單中，新增你要的。在家 Wi-Fi 下手機使用本地位址，在外使用外部位址。</string>
+    <string name="lan_ha_locked">尚未連線：點按「新增」並輸入存取權杖。</string>
+    <string name="ha_connect_title">連線到 Home Assistant</string>
+    <string name="ha_local_url">本地位址（家中 Wi-Fi）</string>
+    <string name="ha_remote_url">外部位址（選填）</string>
+    <string name="ha_token">長期存取權杖</string>
+    <string name="ha_token_hint">權杖只加密保存在這支手機上，不會包含在備份或轉移中。你可以隨時在 Home Assistant 中撤銷。</string>
+    <string name="ha_remote_help_title">如何從外部存取？</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud（Nabu Casa）：最簡單；使用 https://….ui.nabu.casa 位址。\n• Tailscale：在伺服器和手機上安裝；使用伺服器的 Tailscale 位址（100.x.x.x:8123）。\n• Cloudflare Tunnel：不需開放連接埠；使用通道的 https 位址。\n• 連接埠轉送 8123 + HTTPS（DuckDNS / Let\'s Encrypt）：僅在線路有公用 IP 時可用。多數 5G/4G 家用線路在 CGNAT 之後無法轉送，請改用上面的方法。</string>
+    <string name="ha_test_ok">已連線</string>
+    <string name="ha_test_token">權杖遭拒</string>
+    <string name="ha_test_unreachable">無法存取</string>
+    <string name="ha_test_other">非預期的回應（這是 Home Assistant 嗎？）</string>
+    <string name="ha_test_local">本地位址：%1$s</string>
+    <string name="ha_test_remote">外部位址：%1$s</string>
+    <string name="ha_entities_found">已列出 %1$d 個可開關的實體，新增你要的。</string>
+    <string name="ha_connect_test">測試連線</string>
+    <string name="ha_connect_open">透過位址連線到伺服器</string>
+    <string name="ha_connect_edit">變更伺服器位址或權杖</string>
+    <string name="lan_filter">搜尋</string>
 </resources>

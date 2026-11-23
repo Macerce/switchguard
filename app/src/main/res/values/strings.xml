@@ -1770,7 +1770,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_shelly_step1">Connect the Shelly to your Wi-Fi: use the Shelly Smart Control app, or connect the phone to the device\'s own Wi-Fi (shelly…), open 192.168.33.1 in the browser and enter your Wi-Fi name and password under Settings → Wi-Fi.</string>
     <string name="lan_steps_title">Before you start</string>
     <string name="lan_brand_title">Add %1$s</string>
-    <string name="lan_brand_soon">Coming soon: Home Assistant.</string>
+    <string name="lan_brand_soon">Matter devices will follow later.</string>
     <string name="lan_brand_sonoff_desc">eWeLink devices in DIY (LAN) mode</string>
     <string name="lan_brand_shelly_desc">Gen1, Plus, Pro, Gen3 and Gen4 relays and plugs</string>
     <string name="lan_brand_hint">Pick the brand. No account or cloud needed: the phone and the device just have to be on the same Wi-Fi.</string>
@@ -1830,4 +1830,27 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="lan_tapo_step3">Other devices on the same account then open by themselves. Control stays on your network; the account is only used to unlock the device locally.</string>
     <string name="lan_tapo_email">TP-Link account email</string>
     <string name="lan_tapo_pw_body">Tapo devices only open with the email and password of the TP-Link account they were set up with. They are kept encrypted on this phone only, never sent to the internet by SwitchGuard and not included in backups.</string>
+    <string name="lan_brand_ha_desc">Switches and lights from your Home Assistant server (at home or remotely)</string>
+    <string name="lan_ha_step1">In Home Assistant open your profile → Security → Long-lived access tokens → Create token, and copy it.</string>
+    <string name="lan_ha_step2">Tap the server found below (or Connect to a server), paste the token, add the outside address if you have one, and tap Test connection.</string>
+    <string name="lan_ha_step3">Switches, lights, fans and helpers then appear in the list; add the ones you want. The phone uses the home address on your Wi-Fi and the outside address elsewhere.</string>
+    <string name="lan_ha_locked">Not connected yet: tap Add and enter the access token.</string>
+    <string name="ha_connect_title">Connect to Home Assistant</string>
+    <string name="ha_local_url">Home address (on your Wi-Fi)</string>
+    <string name="ha_remote_url">Outside address (optional)</string>
+    <string name="ha_token">Long-lived access token</string>
+    <string name="ha_token_hint">The token is kept encrypted on this phone only and is not included in backups or transfers. You can revoke it in Home Assistant at any time.</string>
+    <string name="ha_remote_help_title">How do I reach it from outside?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): the easiest; use the https://….ui.nabu.casa address.\n• Tailscale: install it on the server and the phone; use the server\'s Tailscale address (100.x.x.x:8123).\n• Cloudflare Tunnel: works without opening ports; use your tunnel\'s https address.\n• Port forwarding 8123 + HTTPS (DuckDNS / Let\'s Encrypt): only if your line has a public IP. Most 5G/4G home lines are behind CGNAT, where port forwarding does not work; use one of the options above.</string>
+    <string name="ha_test_ok">connected</string>
+    <string name="ha_test_token">token rejected</string>
+    <string name="ha_test_unreachable">not reachable</string>
+    <string name="ha_test_other">unexpected answer (is this Home Assistant?)</string>
+    <string name="ha_test_local">Home address: %1$s</string>
+    <string name="ha_test_remote">Outside address: %1$s</string>
+    <string name="ha_entities_found">%1$d switchable entities listed; add the ones you want.</string>
+    <string name="ha_connect_test">Test connection</string>
+    <string name="ha_connect_open">Connect to a server by address</string>
+    <string name="ha_connect_edit">Change server address or token</string>
+    <string name="lan_filter">Search</string>
 </resources>

@@ -1769,7 +1769,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="lan_shelly_step1">Conecta el Shelly a tu Wi-Fi: con la app Shelly Smart Control, o conecta el teléfono a la Wi-Fi propia del dispositivo (shelly…), abre 192.168.33.1 en el navegador e introduce el nombre y la contraseña de tu Wi-Fi en Ajustes → Wi-Fi.</string>
     <string name="lan_steps_title">Antes de empezar</string>
     <string name="lan_brand_title">Añadir %1$s</string>
-    <string name="lan_brand_soon">Próximamente: Home Assistant.</string>
+    <string name="lan_brand_soon">Los dispositivos Matter llegarán más adelante.</string>
     <string name="lan_brand_sonoff_desc">Dispositivos eWeLink en modo DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Relés y enchufes Gen1, Plus, Pro, Gen3 y Gen4</string>
     <string name="lan_brand_hint">Elige la marca. No hace falta cuenta ni nube: el teléfono y el dispositivo solo deben estar en la misma Wi-Fi.</string>
@@ -1829,4 +1829,27 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="lan_tapo_step3">Los demás dispositivos de la misma cuenta se abren solos. El control se queda en tu red; la cuenta solo sirve para desbloquear el dispositivo localmente.</string>
     <string name="lan_tapo_email">Correo de la cuenta TP-Link</string>
     <string name="lan_tapo_pw_body">Los dispositivos Tapo solo se abren con el correo y la contraseña de la cuenta TP-Link con la que se configuraron. Se guardan cifrados solo en este teléfono, SwitchGuard nunca los envía a internet y no entran en las copias.</string>
+    <string name="lan_brand_ha_desc">Interruptores y luces de tu servidor Home Assistant (en casa o a distancia)</string>
+    <string name="lan_ha_step1">En Home Assistant abre tu perfil → Seguridad → Tokens de acceso de larga duración → Crear token y cópialo.</string>
+    <string name="lan_ha_step2">Toca el servidor encontrado abajo (o Conectar a un servidor), pega el token, añade la dirección externa si la tienes y toca Probar conexión.</string>
+    <string name="lan_ha_step3">Luego aparecen interruptores, luces, ventiladores y ayudantes; añade los que quieras. En tu Wi-Fi el teléfono usa la dirección local y fuera la externa.</string>
+    <string name="lan_ha_locked">Aún no conectado: toca Añadir e introduce el token de acceso.</string>
+    <string name="ha_connect_title">Conectar a Home Assistant</string>
+    <string name="ha_local_url">Dirección local (en tu Wi-Fi)</string>
+    <string name="ha_remote_url">Dirección externa (opcional)</string>
+    <string name="ha_token">Token de acceso de larga duración</string>
+    <string name="ha_token_hint">El token se guarda cifrado solo en este teléfono y no va en copias ni transferencias. Puedes revocarlo en Home Assistant cuando quieras.</string>
+    <string name="ha_remote_help_title">¿Cómo accedo desde fuera?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): lo más fácil; usa la dirección https://….ui.nabu.casa.\n• Tailscale: instálalo en el servidor y el teléfono; usa la dirección Tailscale del servidor (100.x.x.x:8123).\n• Cloudflare Tunnel: funciona sin abrir puertos; usa la dirección https del túnel.\n• Redirección del puerto 8123 + HTTPS (DuckDNS / Let\'s Encrypt): solo si tu línea tiene IP pública. La mayoría de líneas 5G/4G están tras CGNAT, donde no funciona; usa una de las opciones anteriores.</string>
+    <string name="ha_test_ok">conectado</string>
+    <string name="ha_test_token">token rechazado</string>
+    <string name="ha_test_unreachable">no accesible</string>
+    <string name="ha_test_other">respuesta inesperada (¿es Home Assistant?)</string>
+    <string name="ha_test_local">Dirección local: %1$s</string>
+    <string name="ha_test_remote">Dirección externa: %1$s</string>
+    <string name="ha_entities_found">%1$d entidades conmutables listadas; añade las que quieras.</string>
+    <string name="ha_connect_test">Probar conexión</string>
+    <string name="ha_connect_open">Conectar a un servidor por dirección</string>
+    <string name="ha_connect_edit">Cambiar dirección o token del servidor</string>
+    <string name="lan_filter">Buscar</string>
 </resources>

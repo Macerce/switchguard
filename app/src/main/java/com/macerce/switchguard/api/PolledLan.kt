@@ -50,6 +50,9 @@ abstract class PolledLan(val brand: String) {
     fun all(): Map<String, LanFound> = HashMap(found)
     fun reading(id: String): LocalReading? = readings[id]
     open fun host(d: LocalDevice): String? = found[d.id]?.host ?: d.ip
+
+    /** Detay kartında gösterilen adres; ağ isteği yapmaz (ana thread'den çağrılabilir). */
+    open fun seenHost(d: LocalDevice): String? = host(d)
     fun setCredentials(map: Map<String, ShellyAuth.Credentials>) { credentials = map }
     protected fun cred(id: String): ShellyAuth.Credentials? = credentials[id]
 

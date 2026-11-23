@@ -1907,7 +1907,7 @@
     <string name="lan_shelly_step1">وصّل Shelly بشبكة Wi-Fi: عبر تطبيق Shelly Smart Control، أو وصّل الهاتف بشبكة الجهاز الخاصة (shelly…) وافتح 192.168.33.1 في المتصفح وأدخل اسم الشبكة وكلمة المرور في الإعدادات ← Wi-Fi.</string>
     <string name="lan_steps_title">قبل أن تبدأ</string>
     <string name="lan_brand_title">إضافة %1$s</string>
-    <string name="lan_brand_soon">قريبًا: Home Assistant.</string>
+    <string name="lan_brand_soon">ستتوفر أجهزة Matter لاحقًا.</string>
     <string name="lan_brand_sonoff_desc">أجهزة eWeLink في وضع DIY (الشبكة المحلية)</string>
     <string name="lan_brand_shelly_desc">مرحّلات ومقابس Gen1 وPlus وPro وGen3 وGen4</string>
     <string name="lan_brand_hint">اختر العلامة التجارية. لا حاجة إلى حساب أو سحابة: يكفي أن يكون الهاتف والجهاز على شبكة Wi-Fi نفسها.</string>
@@ -1967,4 +1967,27 @@
     <string name="lan_tapo_step3">تُفتح الأجهزة الأخرى على الحساب نفسه تلقائيًا. يبقى التحكم داخل شبكتك؛ يُستخدم الحساب فقط لفتح الجهاز محليًا.</string>
     <string name="lan_tapo_email">بريد حساب TP-Link</string>
     <string name="lan_tapo_pw_body">لا تُفتح أجهزة Tapo إلا ببريد وكلمة مرور حساب TP-Link الذي أُعدّت به. تُحفظ مشفّرة على هذا الهاتف فقط، ولا يرسلها SwitchGuard إلى الإنترنت أبدًا، ولا تدخل في النسخ الاحتياطية.</string>
+    <string name="lan_brand_ha_desc">المفاتيح والأضواء من خادم Home Assistant (في المنزل أو عن بُعد)</string>
+    <string name="lan_ha_step1">في Home Assistant افتح ملفك → الأمان → رموز الوصول طويلة الأمد → إنشاء رمز، وانسخه.</string>
+    <string name="lan_ha_step2">اضغط على الخادم الموجود أدناه (أو اتصال بخادم)، والصق الرمز، وأضف العنوان الخارجي إن وُجد، ثم اضغط اختبار الاتصال.</string>
+    <string name="lan_ha_step3">بعدها تظهر المفاتيح والأضواء والمراوح والمساعدات؛ أضف ما تريد. يستخدم الهاتف العنوان المحلي على شبكتك والعنوان الخارجي خارجها.</string>
+    <string name="lan_ha_locked">غير متصل بعد: اضغط إضافة وأدخل رمز الوصول.</string>
+    <string name="ha_connect_title">الاتصال بـ Home Assistant</string>
+    <string name="ha_local_url">العنوان المحلي (على شبكتك)</string>
+    <string name="ha_remote_url">العنوان الخارجي (اختياري)</string>
+    <string name="ha_token">رمز وصول طويل الأمد</string>
+    <string name="ha_token_hint">يُحفظ الرمز مشفّرًا على هذا الهاتف فقط ولا يدخل في النسخ أو النقل. يمكنك إلغاؤه في Home Assistant متى شئت.</string>
+    <string name="ha_remote_help_title">كيف أصل إليه من الخارج؟</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): الأسهل؛ استخدم العنوان https://….ui.nabu.casa.\n• Tailscale: ثبّته على الخادم والهاتف؛ واستخدم عنوان Tailscale للخادم (100.x.x.x:8123).\n• Cloudflare Tunnel: يعمل دون فتح منافذ؛ استخدم عنوان https للنفق.\n• إعادة توجيه المنفذ 8123 + HTTPS (DuckDNS / Let\'s Encrypt): فقط إذا كان لخطك IP عام. معظم خطوط 5G/4G المنزلية خلف CGNAT حيث لا تعمل إعادة التوجيه؛ استخدم أحد الخيارات أعلاه.</string>
+    <string name="ha_test_ok">متصل</string>
+    <string name="ha_test_token">رُفض الرمز</string>
+    <string name="ha_test_unreachable">تعذّر الوصول</string>
+    <string name="ha_test_other">استجابة غير متوقعة (هل هذا Home Assistant؟)</string>
+    <string name="ha_test_local">العنوان المحلي: %1$s</string>
+    <string name="ha_test_remote">العنوان الخارجي: %1$s</string>
+    <string name="ha_entities_found">تم سرد %1$d كيانًا قابلًا للتبديل؛ أضف ما تريد.</string>
+    <string name="ha_connect_test">اختبار الاتصال</string>
+    <string name="ha_connect_open">الاتصال بخادم عبر العنوان</string>
+    <string name="ha_connect_edit">تغيير عنوان الخادم أو الرمز</string>
+    <string name="lan_filter">بحث</string>
 </resources>

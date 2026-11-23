@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.macerce.switchguard.R
 import com.macerce.switchguard.api.EwelinkLan
+import com.macerce.switchguard.api.HaLan
 import com.macerce.switchguard.api.HueLan
 import com.macerce.switchguard.api.LanScan
 import com.macerce.switchguard.api.LocalLan
@@ -105,6 +106,7 @@ private val BRANDS = listOf(
     Triple(LocalDevice.BRAND_HUE, R.string.lan_brand_hue_desc, Hue.AMBER),
     Triple(LocalDevice.BRAND_KASA, R.string.lan_brand_kasa_desc, Hue.INDIGO),
     Triple(LocalDevice.BRAND_TAPO, R.string.lan_brand_tapo_desc, Hue.PURPLE),
+    Triple(LocalDevice.BRAND_HA, R.string.lan_brand_ha_desc, Hue.ORANGE),
 )
 
 fun brandName(brand: String) = when (brand) {
@@ -125,6 +127,7 @@ private fun brandSteps(brand: String): List<Int> = when (brand) {
     LocalDevice.BRAND_HUE -> listOf(R.string.lan_hue_step1, R.string.lan_hue_step2, R.string.lan_hue_step3)
     LocalDevice.BRAND_KASA -> listOf(R.string.lan_kasa_step1, R.string.lan_kasa_step2, R.string.lan_kasa_step3)
     LocalDevice.BRAND_TAPO -> listOf(R.string.lan_tapo_step1, R.string.lan_tapo_step2, R.string.lan_tapo_step3)
+    LocalDevice.BRAND_HA -> listOf(R.string.lan_ha_step1, R.string.lan_ha_step2, R.string.lan_ha_step3)
     else -> listOf(R.string.lan_sonoff_step1, R.string.lan_sonoff_step2, R.string.lan_sonoff_step3)
 }
 
@@ -179,6 +182,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     val driver = remember(brand) { LocalLan.driver(brand) }
     DisposableEffect(brand) {
         if (driver != null) {
+            if (driver === HaLan) HaLan.server = store.haServer
             driver.setCredentials(store.shellyAuth)
             driver.startDiscovery(context)
             onDispose { driver.stopDiscoveryIfIdle() }
@@ -212,6 +216,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                 addable = existing == null && (f.supported || f.locked),
                 warning = when {
                     existing != null -> null
+                    f.locked && f.brand == LocalDevice.BRAND_HA -> res.getString(R.string.lan_ha_locked)
                     f.locked && f.extra == HueLan.BRIDGE -> res.getString(R.string.lan_hue_locked)
                     f.locked -> res.getString(R.string.lan_locked_generic)
                     !f.supported -> res.getString(R.string.lan_unsupported_generic)
@@ -249,6 +254,9 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
     var askPassword by remember { mutableStateOf<ShellyLan.Found?>(null) }
     var askGeneric by remember { mutableStateOf<LanFound?>(null) }
     var pairHue by remember { mutableStateOf<LanFound?>(null) }
+    /** Home Assistant bağlantı penceresi: null kapalı, "" boş adresle, diğerleri o yerel adresle açık. */
+    var haConnect by remember { mutableStateOf<String?>(null) }
+    var filter by remember { mutableStateOf("") }
     var setup by remember { mutableStateOf(false) }
     var help by remember { mutableStateOf(false) }
 
@@ -287,10 +295,19 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                     LinearProgressIndicator(Modifier.fillMaxWidth())
                     Text(stringResource(R.string.lan_add_searching), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                rows.forEach { r ->
+                if (brand == LocalDevice.BRAND_HA) TextButton(onClick = { haConnect = "" }, modifier = Modifier.tvFocusRing()) {
+                    Text(stringResource(if (store.haServer == null) R.string.ha_connect_open else R.string.ha_connect_edit))
+                }
+                // Çok varlık (Home Assistant, Hue) olduğunda arama kutusu.
+                if (rows.size > 12) OutlinedTextField(
+                    value = filter, onValueChange = { filter = it.take(40) }, singleLine = true,
+                    placeholder = { Text(stringResource(R.string.lan_filter)) }, modifier = Modifier.fillMaxWidth(),
+                )
+                rows.filter { filter.isBlank() || it.title.contains(filter.trim(), ignoreCase = true) || it.id.contains(filter.trim(), ignoreCase = true) }.forEach { r ->
                     FoundLine(r, added = known.containsKey(r.id)) {
                         when {
                             r.shelly?.locked == true -> askPassword = r.shelly
+                            r.found?.locked == true && r.found.brand == LocalDevice.BRAND_HA -> haConnect = r.found.host
                             r.found?.locked == true && r.found.extra == HueLan.BRIDGE -> pairHue = r.found
                             r.found?.locked == true -> askGeneric = r.found
                             else -> naming = r
@@ -337,6 +354,12 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
         }
     }
     if (setup) ShellySetupDialog(ssid) { setup = false }
+    haConnect?.let { pre ->
+        HaConnectDialog(pre.ifEmpty { null }, onDismiss = { haConnect = null }) { msg ->
+            haConnect = null
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+        }
+    }
     pairHue?.let { f ->
         HuePairDialog(f, onDismiss = { pairHue = null }) { key ->
             store.shellyAuth = store.shellyAuth + (f.id to ShellyAuth.Credentials(key, ""))

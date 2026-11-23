@@ -1835,7 +1835,7 @@
     <string name="lan_shelly_step1">Подключите Shelly к Wi-Fi: в приложении Shelly Smart Control или подключите телефон к собственной сети устройства (shelly…), откройте 192.168.33.1 в браузере и введите имя и пароль Wi-Fi в Настройки → Wi-Fi.</string>
     <string name="lan_steps_title">Перед началом</string>
     <string name="lan_brand_title">Добавить %1$s</string>
-    <string name="lan_brand_soon">Скоро: Home Assistant.</string>
+    <string name="lan_brand_soon">Устройства Matter появятся позже.</string>
     <string name="lan_brand_sonoff_desc">Устройства eWeLink в режиме DIY (LAN)</string>
     <string name="lan_brand_shelly_desc">Реле и розетки Gen1, Plus, Pro, Gen3 и Gen4</string>
     <string name="lan_brand_hint">Выберите марку. Аккаунт и облако не нужны: телефон и устройство просто должны быть в одной Wi-Fi.</string>
@@ -1895,4 +1895,27 @@
     <string name="lan_tapo_step3">Остальные устройства этого аккаунта откроются сами. Управление остаётся в сети; аккаунт нужен только для локальной разблокировки.</string>
     <string name="lan_tapo_email">Email аккаунта TP-Link</string>
     <string name="lan_tapo_pw_body">Устройства Tapo открываются только с email и паролем аккаунта TP-Link, к которому они привязаны. Данные хранятся в зашифрованном виде только на этом телефоне, SwitchGuard никогда не отправляет их в интернет, и они не попадают в резервные копии.</string>
+    <string name="lan_brand_ha_desc">Выключатели и свет с вашего сервера Home Assistant (дома или удалённо)</string>
+    <string name="lan_ha_step1">В Home Assistant откройте профиль → Безопасность → Долгосрочные токены доступа → Создать токен и скопируйте его.</string>
+    <string name="lan_ha_step2">Нажмите на найденный сервер (или «Подключиться к серверу»), вставьте токен, добавьте внешний адрес, если есть, и нажмите «Проверить подключение».</string>
+    <string name="lan_ha_step3">Затем появятся выключатели, свет, вентиляторы и помощники; добавьте нужные. Дома телефон использует локальный адрес, вне дома — внешний.</string>
+    <string name="lan_ha_locked">Ещё не подключено: нажмите «Добавить» и введите токен доступа.</string>
+    <string name="ha_connect_title">Подключение к Home Assistant</string>
+    <string name="ha_local_url">Локальный адрес (в домашней сети)</string>
+    <string name="ha_remote_url">Внешний адрес (необязательно)</string>
+    <string name="ha_token">Долгосрочный токен доступа</string>
+    <string name="ha_token_hint">Токен хранится в зашифрованном виде только на этом телефоне и не попадает в резервные копии и перенос. Его можно отозвать в Home Assistant в любой момент.</string>
+    <string name="ha_remote_help_title">Как подключиться извне?</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud (Nabu Casa): проще всего; используйте адрес https://….ui.nabu.casa.\n• Tailscale: установите на сервер и телефон; используйте Tailscale-адрес сервера (100.x.x.x:8123).\n• Cloudflare Tunnel: без открытия портов; используйте https-адрес туннеля.\n• Проброс порта 8123 + HTTPS (DuckDNS / Let\'s Encrypt): только при публичном IP. Большинство домашних 5G/4G-линий за CGNAT, где проброс не работает; выберите вариант выше.</string>
+    <string name="ha_test_ok">подключено</string>
+    <string name="ha_test_token">токен отклонён</string>
+    <string name="ha_test_unreachable">недоступен</string>
+    <string name="ha_test_other">неожиданный ответ (это Home Assistant?)</string>
+    <string name="ha_test_local">Локальный адрес: %1$s</string>
+    <string name="ha_test_remote">Внешний адрес: %1$s</string>
+    <string name="ha_entities_found">Показано переключаемых объектов: %1$d; добавьте нужные.</string>
+    <string name="ha_connect_test">Проверить подключение</string>
+    <string name="ha_connect_open">Подключиться к серверу по адресу</string>
+    <string name="ha_connect_edit">Изменить адрес сервера или токен</string>
+    <string name="lan_filter">Поиск</string>
 </resources>

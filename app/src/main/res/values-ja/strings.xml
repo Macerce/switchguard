@@ -1727,7 +1727,7 @@
     <string name="lan_shelly_step1">ShellyをWi-Fiにつなぎます：Shelly Smart Controlアプリを使うか、スマホをデバイス自身のWi-Fi（shelly…）につないでブラウザで192.168.33.1を開き、設定 → Wi-FiでWi-Fi名とパスワードを入力します。</string>
     <string name="lan_steps_title">始める前に</string>
     <string name="lan_brand_title">%1$sを追加</string>
-    <string name="lan_brand_soon">近日対応：Home Assistant。</string>
+    <string name="lan_brand_soon">Matter 機器は後日対応します。</string>
     <string name="lan_brand_sonoff_desc">DIY（LAN）モードの eWeLink デバイス</string>
     <string name="lan_brand_shelly_desc">Gen1・Plus・Pro・Gen3・Gen4 のリレーとプラグ</string>
     <string name="lan_brand_hint">ブランドを選んでください。アカウントやクラウドは不要で、スマホとデバイスが同じWi-Fiにあれば使えます。</string>
@@ -1787,4 +1787,27 @@
     <string name="lan_tapo_step3">同じアカウントの他の機器は自動で開きます。操作はネットワーク内で完結し、アカウントは機器をローカルで解錠するためだけに使われます。</string>
     <string name="lan_tapo_email">TP-Link アカウントのメール</string>
     <string name="lan_tapo_pw_body">Tapo 機器は、設定に使った TP-Link アカウントのメールとパスワードでのみ開きます。この端末にのみ暗号化して保存され、SwitchGuard がインターネットに送ることはなく、バックアップにも含まれません。</string>
+    <string name="lan_brand_ha_desc">Home Assistant サーバーのスイッチとライト（自宅でも外出先でも）</string>
+    <string name="lan_ha_step1">Home Assistant でプロフィール → セキュリティ → 長期アクセストークン → トークンを作成し、コピーします。</string>
+    <string name="lan_ha_step2">下に見つかったサーバー（または「サーバーに接続」）をタップし、トークンを貼り付け、外部アドレスがあれば追加して「接続テスト」をタップします。</string>
+    <string name="lan_ha_step3">するとスイッチ、ライト、ファン、ヘルパーが一覧に表示されます。必要なものを追加してください。自宅の Wi-Fi ではローカル、外ではアドレスを外部に切り替えます。</string>
+    <string name="lan_ha_locked">未接続：「追加」をタップしてアクセストークンを入力してください。</string>
+    <string name="ha_connect_title">Home Assistant に接続</string>
+    <string name="ha_local_url">ローカルアドレス（自宅の Wi-Fi）</string>
+    <string name="ha_remote_url">外部アドレス（任意）</string>
+    <string name="ha_token">長期アクセストークン</string>
+    <string name="ha_token_hint">トークンはこの端末にのみ暗号化して保存され、バックアップや転送には含まれません。Home Assistant でいつでも無効にできます。</string>
+    <string name="ha_remote_help_title">外出先からはどう接続する？</string>
+    <string name="ha_remote_help_body">• Home Assistant Cloud（Nabu Casa）：最も簡単。https://….ui.nabu.casa のアドレスを使います。\n• Tailscale：サーバーとスマホに入れ、サーバーの Tailscale アドレス（100.x.x.x:8123）を使います。\n• Cloudflare Tunnel：ポート開放不要。トンネルの https アドレスを使います。\n• ポート 8123 転送 + HTTPS（DuckDNS / Let\'s Encrypt）：回線にグローバル IP がある場合のみ。多くの 5G/4G 家庭回線は CGNAT 配下で転送できないため、上の方法を使ってください。</string>
+    <string name="ha_test_ok">接続済み</string>
+    <string name="ha_test_token">トークンが拒否されました</string>
+    <string name="ha_test_unreachable">到達できません</string>
+    <string name="ha_test_other">想定外の応答（Home Assistant ですか？）</string>
+    <string name="ha_test_local">ローカルアドレス：%1$s</string>
+    <string name="ha_test_remote">外部アドレス：%1$s</string>
+    <string name="ha_entities_found">オン/オフできるエンティティを %1$d 件表示しました。必要なものを追加してください。</string>
+    <string name="ha_connect_test">接続テスト</string>
+    <string name="ha_connect_open">アドレスでサーバーに接続</string>
+    <string name="ha_connect_edit">サーバーアドレスまたはトークンを変更</string>
+    <string name="lan_filter">検索</string>
 </resources>

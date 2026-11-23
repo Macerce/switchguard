@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.47.0 — 2026-11-24
+**New**
+- Home Assistant connection: Add device (LAN) → Home Assistant. Enter the home address, an optional outside address (Home Assistant Cloud, Tailscale, Cloudflare Tunnel or your own HTTPS address) and a long-lived access token; "Test connection" checks both. Switches, lights, fans and helpers can then be added and work with alarms and automations. On your Wi-Fi the home address is used, elsewhere the outside one. The token is stored encrypted on this phone only.
+- The add list has a search box when many devices are found.
+
 ## 2.46.0 — 2026-11-24
 **New**
 - TP-Link Kasa and Tapo over the local network: Add device (LAN) → TP-Link Kasa or TP-Link Tapo. Kasa plugs, power strips and bulbs are found automatically and need no account. Tapo devices are found with "Scan network" and unlock with your TP-Link account email and password, entered once for all devices; control stays on your network. Power readings on P110/P115 and Kasa energy-monitoring plugs.
