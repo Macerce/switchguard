@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Không mở được ứng dụng email nào; địa chỉ đã được sao chép vào bộ nhớ tạm.</string>
     <string name="desktop_secret_show">Hiện App Secret</string>
     <string name="desktop_secret_hide">Ẩn App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard gặp lỗi</string>
+    <string name="desktop_crash_text">Lần trước đã xảy ra lỗi không mong muốn. Gửi báo cáo sự cố để được khắc phục? Báo cáo chỉ gồm chi tiết lỗi, phiên bản ứng dụng và Windows; không có gì được chia sẻ nếu bạn không gửi.</string>
+    <string name="desktop_crash_copied">Không mở được ứng dụng email; báo cáo đã được sao chép vào bộ nhớ tạm. Hãy dán vào email gửi %s.</string>
+    <string name="desktop_website">Trang web</string>
 </resources>

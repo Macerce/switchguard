@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Keine E-Mail-App konnte geöffnet werden; die Adresse wurde in die Zwischenablage kopiert.</string>
     <string name="desktop_secret_show">App Secret anzeigen</string>
     <string name="desktop_secret_hide">App Secret verbergen</string>
+    <string name="desktop_crash_title">SwitchGuard hatte einen Fehler</string>
+    <string name="desktop_crash_text">Beim letzten Mal ist ein unerwarteter Fehler aufgetreten. Problembericht senden, damit er behoben werden kann? Er enthält nur die Fehlerdetails, die App- und die Windows-Version; ohne Ihr Senden wird nichts geteilt.</string>
+    <string name="desktop_crash_copied">Es konnte keine E-Mail-App geöffnet werden; der Bericht wurde in die Zwischenablage kopiert. Fügen Sie ihn in eine E-Mail an %s ein.</string>
+    <string name="desktop_website">Website</string>
 </resources>

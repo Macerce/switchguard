@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">เปิดแอปอีเมลไม่ได้ คัดลอกที่อยู่ไปยังคลิปบอร์ดแล้ว</string>
     <string name="desktop_secret_show">แสดง App Secret</string>
     <string name="desktop_secret_hide">ซ่อน App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard พบข้อผิดพลาด</string>
+    <string name="desktop_crash_text">ครั้งที่แล้วเกิดข้อผิดพลาดที่ไม่คาดคิด ส่งรายงานปัญหาเพื่อให้แก้ไขได้หรือไม่ รายงานมีเพียงรายละเอียดข้อผิดพลาด เวอร์ชันแอปและ Windows จะไม่มีการแชร์สิ่งใดหากคุณไม่ส่ง</string>
+    <string name="desktop_crash_copied">เปิดแอปอีเมลไม่ได้ คัดลอกรายงานไปยังคลิปบอร์ดแล้ว วางลงในอีเมลถึง %s</string>
+    <string name="desktop_website">เว็บไซต์</string>
 </resources>

@@ -12,6 +12,7 @@ import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.PowerSettingsNew
 import androidx.compose.material.icons.rounded.Sync
+import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material.icons.rounded.WifiOff
 import androidx.compose.runtime.Composable
@@ -68,6 +69,12 @@ fun MonitoringPage(graph: AppGraph, strings: Strings) {
         InfoRow(Icons.Rounded.WifiOff, str("blind_alert"), blindLabel(strings, blind), Modifier.clickable { dialog = "blind" })
         RowDivider()
         InfoRow(Icons.Rounded.Sync, str("poll_interval"), str("poll_interval_value", poll), Modifier.clickable { dialog = "poll" })
+        RowDivider()
+        // Telefon 2.37: dış canlılık adresi (healthchecks.io, Uptime Kuma).
+        InfoRow(
+            Icons.Rounded.MonitorHeart, str("hb_title"), remember(version, strings) { heartbeatSummary(store, strings) },
+            Modifier.clickable { dialog = "heartbeat" }.testTag("heartbeat"),
+        )
     }
 
     if (hasTuya) {
@@ -97,6 +104,7 @@ fun MonitoringPage(graph: AppGraph, strings: Strings) {
             str("poll_interval"), str("poll_interval_desc"), POLL_CHOICES, poll, { strings.format("poll_interval_value", it) },
             onPick = { store.pollIntervalSec = it }, onDismiss = close,
         )
+        "heartbeat" -> HeartbeatDialog(store, strings, close)
         "tuya-live" -> Confirm(strings, strings["desktop_tuya_live_warning"], strings["desktop_turn_on"], onDismiss = close) {
             store.tuyaLive = true
             applyEngineSettings(graph)

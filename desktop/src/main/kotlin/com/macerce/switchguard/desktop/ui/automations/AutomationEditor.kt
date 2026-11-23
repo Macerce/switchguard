@@ -1,6 +1,8 @@
 package com.macerce.switchguard.desktop.ui.automations
 
 import com.macerce.switchguard.core.SensorKind
+import com.macerce.switchguard.core.AutoAction
+import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.SensorsOff
 import androidx.compose.material.icons.rounded.Thermostat
 import androidx.compose.foundation.background
@@ -224,6 +226,13 @@ internal fun AutomationEditor(
                         }
                     }
                     if (f.triggerKind.usesCycle) CyclePick(cycles, f.triggerCycle, strings, "trigger-cycle") { form = f.copy(triggerCycle = it) }
+                    if (f.triggerKind.isClock) {
+                        // "Her gün 07:00", "hafta içi 22:30".
+                        TimeChip(strings["rule_clock_time"], formatMinute(strings, f.clockMinute), Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                            pickTime = "clock" to f.clockMinute
+                        }
+                        DayChips(f.clockDays, strings) { form = f.copy(clockDays = it) }
+                    }
                     if (f.triggerKind.isSun) {
                         // "Gün doğumundan 15 dk önce", "gün batımından 1 sa sonra".
                         Stepper(strings["sun_offset"], f.offset, Steps.OFFSET, strings, "offset", format = { offsetLabel(it, strings) }) {
@@ -415,6 +424,25 @@ internal fun AutomationEditor(
                         strings["automation_delay_short"], f.delay.toIntOrNull() ?: 0, Steps.DELAY, strings, "delay",
                         zeroLabel = strings["automation_now"],
                     ) { form = f.copy(delay = it.toString()) }
+                    if (mode != AutomationMode.ALERT) {
+                        val actionTargets = targets.filterNot { it.sensorOnly }
+                        f.extras.forEachIndexed { i, x ->
+                            ExtraActionEditor(
+                                x, i, mode.actions, actionTargets, scenes, cycles, strings,
+                                onChange = { n -> form = f.copy(extras = f.extras.toMutableList().also { it[i] = n }) },
+                                onDelete = { form = f.copy(extras = f.extras.filterIndexed { j, _ -> j != i }) },
+                            )
+                        }
+                        // Ek eylem: varsayılanı ilk hedefi kapatmak.
+                        TextButton(
+                            onClick = { form = f.copy(extras = f.extras + AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty())) },
+                            modifier = Modifier.padding(top = 4.dp).testTag("extra-add"),
+                        ) {
+                            Icon(Icons.Rounded.Add, null)
+                            Spacer(Modifier.width(8.dp))
+                            Text(strings["rule_add_action"])
+                        }
+                    }
                 }
 
                 // ------------------------------------------------ Özet
@@ -458,9 +486,13 @@ internal fun AutomationEditor(
 
     pickTime?.let { (which, initialMinute) ->
         TimeDialog(
-            strings[if (which == "start") "window_start" else "window_end"], initialMinute, strings.locale,
+            strings[when (which) { "start" -> "window_start"; "end" -> "window_end"; else -> "rule_clock_time" }], initialMinute, strings.locale,
             onPick = { m ->
-                form = if (which == "start") form.copy(windowStart = m) else form.copy(windowEnd = m)
+                form = when (which) {
+                    "start" -> form.copy(windowStart = m)
+                    "end" -> form.copy(windowEnd = m)
+                    else -> form.copy(clockMinute = m)
+                }
                 pickTime = null
             },
             onDismiss = { pickTime = null },
@@ -480,6 +512,65 @@ internal fun AutomationEditor(
             },
             dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text(strings["action_cancel"]) } },
         )
+    }
+}
+
+/** Bir ek eylemin düzenleyicisi (telefon 2.35): tür, hedef, önceki eylemden sonra bekleme ve silme. */
+@Composable
+private fun ExtraActionEditor(
+    x: AutoAction,
+    index: Int,
+    kinds: List<ActionKind>,
+    targets: List<DeviceSnapshot>,
+    scenes: List<com.macerce.switchguard.core.Scene>,
+    cycles: List<com.macerce.switchguard.core.Cycle>,
+    strings: Strings,
+    onChange: (AutoAction) -> Unit,
+    onDelete: () -> Unit,
+) {
+    val shape = RoundedCornerShape(16.dp)
+    Column(Modifier.fillMaxWidth().padding(top = 12.dp).clip(shape).border(1.dp, MaterialTheme.colorScheme.outlineVariant, shape).padding(12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(strings.format("rule_extra_n", index + 2), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+            IconButton(onClick = onDelete, modifier = Modifier.testTag("extra-remove-$index")) {
+                Icon(Icons.Rounded.Delete, strings["action_delete"], tint = MaterialTheme.colorScheme.error)
+            }
+        }
+        OptionGrid(
+            kinds, x.kind, wideColumns = 2,
+            icon = { it.icon() }, label = { strings[it.editorTitleKey()] }, tag = { "extra-$index-${it.name}" }, hue = { it.hue() },
+        ) { k ->
+            val target = when {
+                k.usesDevice -> x.deviceId.takeIf { id -> targets.any { it.id == id } } ?: targets.firstOrNull()?.id.orEmpty()
+                k == ActionKind.RUN_SCENE -> scenes.firstOrNull()?.id.orEmpty()
+                k.usesCycle -> cycles.firstOrNull()?.id.orEmpty()
+                else -> ""
+            }
+            onChange(x.copy(kind = k, deviceId = target, channel = if (k.usesDevice) x.channel else 0))
+        }
+        if (x.kind.usesDevice) {
+            FieldLabel(strings["automation_device"])
+            DeviceChooser(targets, x.deviceId, "extra-device-$index") { onChange(x.copy(deviceId = it.id, channel = 0)) }
+            targets.firstOrNull { it.id == x.deviceId }?.takeIf { it.isMultiChannel }?.let { d ->
+                FieldLabel(strings["automation_channel"])
+                ChannelChooser(d, x.channel, "extra-channel-$index") { onChange(x.copy(channel = it)) }
+            }
+        }
+        if (x.kind == ActionKind.RUN_SCENE) {
+            FieldLabel(strings["scenes_title"])
+            if (scenes.isEmpty()) {
+                Text(strings["scene_none_yet"], style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else {
+                OptionGrid(
+                    scenes.map { it.id }, x.deviceId, wideColumns = 3,
+                    icon = { Icons.Rounded.PlayArrow }, label = { id -> scenes.first { it.id == id }.name }, tag = { "extra-scene-$index-$it" },
+                ) { onChange(x.copy(deviceId = it)) }
+            }
+        }
+        if (x.kind.usesCycle) CyclePick(cycles, x.deviceId, strings, "extra-cycle-$index") { onChange(x.copy(deviceId = it)) }
+        Stepper(strings["rule_action_wait"], x.waitMinutes, Steps.DELAY, strings, "extra-wait-$index", zeroLabel = strings["automation_now"]) {
+            onChange(x.copy(waitMinutes = it))
+        }
     }
 }
 
@@ -807,6 +898,7 @@ private fun TriggerKind.icon(): ImageVector = when (this) {
     TriggerKind.SENSOR_BELOW -> Icons.Rounded.AcUnit
     TriggerKind.SENSOR_ACTIVE -> Icons.Rounded.Sensors
     TriggerKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
+    TriggerKind.TIME -> Icons.Rounded.Schedule
 }
 
 /** Kutucuklardaki kısa olay adları ("Açık kalınca"). */
@@ -833,6 +925,7 @@ internal fun TriggerKind.shortTitleKey(): String = when (this) {
     TriggerKind.SENSOR_BELOW -> "evt_sensor_below"
     TriggerKind.SENSOR_ACTIVE -> "evt_sensor_active"
     TriggerKind.SENSOR_CLEAR -> "evt_sensor_clear"
+    TriggerKind.TIME -> "evt_time"
 }
 
 /** İşlem kutucuklarındaki adlar: cihaz işlemleri "Cihazı aç / kapat" (kartta kısa "Aç / Kapat"). */

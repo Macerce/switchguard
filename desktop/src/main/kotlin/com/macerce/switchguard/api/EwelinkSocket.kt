@@ -27,7 +27,14 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
         fun onAuthRejected()
     }
 
-    private var socket: WebSocket? = null
+    @Volatile private var socket: WebSocket? = null
+    /**
+     * Bağlantı kuşağı: her connect/close artırır. Geri çağrılar kendi kuşaklarını [generation] ile karşılaştırır:
+     * eski soketin olayları ve kurulurken kapatılan bağlantı yok sayılır. (Soket alanıyla karşılaştırmak yarışlıydı:
+     * [socket] newWebSocket döndükten sonra yazıldığından çok erken bir onOpen kendi soketini tanımayabiliyordu.)
+     * Soket izleme thread'inde kapatılır, ağ thread'inde kurulur, OkHttp thread'inde okunur: alanlar @Volatile.
+     */
+    private val generation = java.util.concurrent.atomic.AtomicInteger()
     @Volatile private var heartbeatMs = WsMessages.DEFAULT_HB * 1000L
     @Volatile private var lastPingAt = 0L
     @Volatile var lastMessageAt = 0L
@@ -38,10 +45,16 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
     /** Bloklayıcı: dispatch adresini alır ve bağlanır. */
     fun connect() {
         close()
+        val gen = generation.get()
         val url = EwelinkClient(store).dispatchWebSocketUrl()
-        val client = EwelinkClient.http.newBuilder().pingInterval(0, TimeUnit.SECONDS).build()
-        socket = client.newWebSocket(Request.Builder().url(url).build(), object : WebSocketListener() {
+        // Dispatch sürerken kapatıldı (izleme durdu ya da yeniden bağlanılıyor): bağlanma.
+        if (gen != generation.get()) return
+        val client = EwelinkClient.http.newBuilder().callTimeout(0, TimeUnit.SECONDS).pingInterval(0, TimeUnit.SECONDS).build()
+        val ws = client.newWebSocket(Request.Builder().url(url).build(), object : WebSocketListener() {
+            private fun stale() = gen != generation.get()
+
             override fun onOpen(webSocket: WebSocket, response: Response) {
+                if (stale()) return
                 val now = System.currentTimeMillis()
                 lastMessageAt = now
                 webSocket.send(
@@ -60,7 +73,7 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
-                if (webSocket != socket) return
+                if (stale()) return
                 lastMessageAt = System.currentTimeMillis()
                 when (val e = WsMessages.parse(text) ?: return) {
                     is WsEvent.HandshakeOk -> {
@@ -71,7 +84,9 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
                     }
                     is WsEvent.HandshakeFailed -> {
                         ready = false
-                        socket = null // Sonraki onClosed geri çağrısı yok sayılsın, olay iki kez bildirilmesin.
+                        // Sonraki onClosed geri çağrısı yok sayılsın, olay iki kez bildirilmesin.
+                        generation.incrementAndGet()
+                        socket = null
                         webSocket.close(1000, null)
                         // 401/402: token sorunu (servis yeniler); diğerleri: bu App ID için WS yok.
                         if (e.error in setOf(401, 402)) listener.onAuthRejected()
@@ -82,17 +97,23 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                if (webSocket != socket) return
+                if (stale()) return
                 ready = false
                 listener.onClosed(t.message ?: "failure", fatal = false)
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                if (webSocket != socket) return
+                if (stale()) return
                 ready = false
                 listener.onClosed("closed $code", fatal = false)
             }
         })
+        socket = ws
+        // Kurulurken kapatıldıysa bu soket de kapansın.
+        if (gen != generation.get()) {
+            ws.cancel()
+            if (socket === ws) socket = null
+        }
     }
 
     /** Heartbeat zamanı geldiyse "ping" gönderir. Sunucu aralığının ~%60'ında bir, güvenli pay bırakır. */
@@ -108,6 +129,7 @@ class EwelinkSocket(private val store: Store, private val listener: Listener) {
     fun isStale(now: Long) = ready && now - lastMessageAt > heartbeatMs * 2
 
     fun close() {
+        generation.incrementAndGet()
         ready = false
         socket?.cancel()
         socket = null

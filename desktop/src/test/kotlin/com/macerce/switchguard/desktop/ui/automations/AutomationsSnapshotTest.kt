@@ -109,6 +109,20 @@ class AutomationsSnapshotTest {
         Snapshots.render("alerts-alarm-many", dark = true) { AlarmScreen(many, tr, onDismiss = {}) }
     }
 
+    @Test
+    fun clockRuleWithExtraActions() {
+        // Telefon 2.35: saat tetikleyicisi + ek eylemler (masaüstü 0.18.0).
+        val a = Automation(
+            id = "x-clock", name = "Sabah sulama", enabled = true,
+            trigger = Trigger(TriggerKind.TIME, "", minutes = 7 * 60, days = 0b0011111),
+            action = AutoAction(ActionKind.TURN_ON, Demo.PUMPS),
+            extraActions = listOf(AutoAction(ActionKind.TURN_OFF, Demo.PUMPS, waitMinutes = 20)),
+        )
+        graph.store.automations = graph.store.automations + a
+        forBoth("editor-clock", height = 1700) { editor(a) }
+        forBoth("list-clock") { AutomationsScreen(graph, tr) }
+    }
+
     @Composable
     private fun editor(initial: Automation?) = AutomationEditor(
         initial = initial,

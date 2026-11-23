@@ -314,7 +314,8 @@ class StringsTest {
         val nodes = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(resource(path)).getElementsByTagName("string")
         return (0 until nodes.length)
             .map { nodes.item(it) as Element }
-            .filter { it.getAttribute("translatable") != "false" }
+            // İngilizce kalabilen metinler (telefondaki gibi tools:ignore="MissingTranslation"; ör. yapay zekâ istemleri).
+            .filter { it.getAttribute("translatable") != "false" && !it.getAttribute("tools:ignore").contains("MissingTranslation") }
             .map { it.getAttribute("name") }
             .toSet()
     }

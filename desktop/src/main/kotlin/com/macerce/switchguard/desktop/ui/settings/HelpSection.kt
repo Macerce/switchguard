@@ -6,6 +6,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.MenuBook
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Email
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.Public
 import androidx.compose.material.icons.rounded.FolderOpen
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.PrivacyTip
@@ -44,6 +46,10 @@ import java.net.URI
 internal const val CONTACT_EMAIL = "switchguardapp@gmail.com"
 internal const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 
+/** Tanıtım sitesi: Türkçe kökte, diğer diller /en/ altında. */
+internal fun websiteUrl(language: String): String =
+    "https://switchguard.macerce.workers.dev/" + if (language == "tr") "" else "en/"
+
 /**
  * Ayarlar → Yardım ve hakkında (telefondaki AboutPage): resimli rehberler, uygulama içi kurulum anlatımları
  * ([HelpSection]), iletişim, günlük klasörü, gizlilik politikası, sürüm ve marka uyarısı. Tarayıcı ya da e-posta
@@ -52,6 +58,7 @@ internal const val PRIVACY_URL = "https://sites.google.com/view/switchguard-priv
 @Composable
 fun AboutPage(graph: AppGraph, strings: Strings) {
     var note by remember { mutableStateOf<Pair<String, String>?>(null) } // bölüm → not
+    var aiHelp by remember { mutableStateOf(false) }
     fun openLink(at: String, url: String) {
         note = if (Links.open(url)) null else at to strings["desktop_link_copied"]
     }
@@ -70,7 +77,17 @@ fun AboutPage(graph: AppGraph, strings: Strings) {
             Icons.AutoMirrored.Rounded.MenuBook, str("guide_tuya"), str("guide_desc"),
             Modifier.clickable { openLink("help", Links.guide("tuya", strings.language)) }, openIcon,
         )
+        RowDivider()
+        // Telefon 2.32: ChatGPT/Gemini/Claude için hazır istemler.
+        InfoRow(Icons.Rounded.AutoAwesome, str("ai_help"), str("ai_help_desc"), Modifier.clickable { aiHelp = true }.testTag("ai-help"))
+        RowDivider()
+        val site = websiteUrl(strings.language)
+        InfoRow(
+            Icons.Rounded.Public, str("desktop_website"), site.substringAfter("://").trimEnd('/'),
+            Modifier.clickable { openLink("help", site) }.testTag("website"), openIcon,
+        )
     }
+    if (aiHelp) AiHelpDialog(strings) { aiHelp = false }
     note?.takeIf { it.first == "help" }?.let { PageIntro(it.second, Modifier.padding(top = 8.dp)) }
 
     SectionTitle(str("desktop_settings_setup"))

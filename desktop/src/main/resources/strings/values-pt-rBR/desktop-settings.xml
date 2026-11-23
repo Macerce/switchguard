@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Nenhum app de e-mail pôde ser aberto; o endereço foi copiado para a área de transferência.</string>
     <string name="desktop_secret_show">Mostrar App Secret</string>
     <string name="desktop_secret_hide">Ocultar App Secret</string>
+    <string name="desktop_crash_title">O SwitchGuard encontrou um erro</string>
+    <string name="desktop_crash_text">Da última vez ocorreu um erro inesperado. Enviar um relatório do problema para que seja corrigido? Ele contém apenas os detalhes do erro, a versão do app e do Windows; nada é compartilhado se você não enviar.</string>
+    <string name="desktop_crash_copied">Nenhum app de e-mail pôde ser aberto; o relatório foi copiado para a área de transferência. Cole-o em um e-mail para %s.</string>
+    <string name="desktop_website">Site</string>
 </resources>

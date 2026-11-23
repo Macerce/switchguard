@@ -51,6 +51,8 @@ object BackupContent {
         "chatTemplates",
         // telefon 2.24–2.25: döngüler, bekleme ekranı
         "cycles", "standbyDim",
+        // telefon 2.37: ntfy / webhook (canlılık adresi cihaza özel, gruplarda yazanlar yeniden toplanır: girmez)
+        "ntfyUrl", "webhookUrl",
     )
 
     val CLEARED: Set<String> = setOf(

@@ -8,6 +8,12 @@ import com.macerce.switchguard.api.TuyaAuthException
 import com.macerce.switchguard.api.TuyaExpiredException
 import com.macerce.switchguard.api.TuyaSocket
 import com.macerce.switchguard.api.TelegramClient
+import com.macerce.switchguard.api.HookClient
+import com.macerce.switchguard.core.ActionSteps
+import com.macerce.switchguard.core.AlertHooks
+import com.macerce.switchguard.core.Heartbeat
+import com.macerce.switchguard.core.TelegramAuth
+import com.macerce.switchguard.core.TuyaListenerCheck
 import com.macerce.switchguard.core.ActionKind
 import com.macerce.switchguard.core.Cycle
 import com.macerce.switchguard.core.CycleEngine
@@ -146,6 +152,10 @@ class MonitorEngine(
     /** Bilgiler hatalı ya da deneme süresi bitmiş: kota harcamamak için seyrek denenir. */
     private var tuyaBlocked = false
     private var tuyaWarned = false
+    /** Bu bilgisayar Tuya mesajlarının sessiz yedeği mi (mesajlar aynı anahtarları kullanan başka cihaza gidiyor). */
+    private val tuyaFailover = TuyaListenerCheck()
+    /** Tuya mesaj servisi en son ne zaman hazır oldu (clock.elapsed); kapalıyken 0. */
+    private var tuyaReadySince = 0L
 
     /** Demo: gücü düşürülmüş kanallar (cihaz → kanallar) ve son dalgalanma zamanı. */
     private val demoStalled = mutableMapOf<String, MutableSet<Int>>()
@@ -193,6 +203,8 @@ class MonitorEngine(
             if (lines.isNotEmpty() && pending.isNotEmpty()) logDismissal(lines.size)
             store.pendingAlarm = rest
             if (rest.isEmpty()) {
+                // Gerçek bir alarm kapatıldı: ntfy / webhook'a kısa haber.
+                if (runtime.realAlarmAt != 0L) sendHooks(AlertHooks.Event.DISMISSED, strings()["hooks_dismissed"])
                 reminders.onDismiss(clock.wall())
                 persistRuntime()
                 runtime.silentAlarm = false
@@ -546,6 +558,8 @@ class MonitorEngine(
         checkSecrets()
         persistRuntime()
         heartbeat(wall)
+        heartbeatUrlTick(wall)
+        stepTick(wall)
         checkBlind(wall)
         checkSummary(wall)
         checkWeekly(wall)
@@ -823,15 +837,21 @@ class MonitorEngine(
             tuyaReconnectAttempt = 0
             tuyaNextConnectAt = 0
             tuyaIssue = ""
+            tuyaReadySince = clock.elapsed()
             // Bağlantı yokken olanları yakala; biriken eski mesajlar bu okumadan eski sayılıp atlanır.
             syncTuya()
         }
 
-        override fun onEvent(event: TuyaEvent) = scheduler.post { if (running) applyTuya(event) }
+        override fun onEvent(event: TuyaEvent) = scheduler.post {
+            if (!running) return@post
+            tuyaFailover.onEvent()
+            applyTuya(event)
+        }
 
         override fun onClosed(reason: String, rejected: Boolean) = scheduler.post {
             if (!running || !store.hasTuya) return@post
             Log.w(TAG, "Tuya message service closed: $reason (rejected=$rejected)")
+            tuyaReadySince = 0
             tuyaIssue = strings()[if (rejected) "tuya_ws_rejected" else "detail_reconnecting"] + " ($reason)"
             scheduleTuyaReconnect(rejected)
             if (!tuyaBlocked) setTuyaState(ConnState.POLLING, tuyaIssue)
@@ -855,7 +875,8 @@ class MonitorEngine(
         }
         val every = when {
             tuyaBlocked -> TUYA_BLOCKED_MS
-            tuyaSocket.ready -> TUYA_RESYNC_MS
+            // Sessiz yedekte soket açık ama mesaj gelmiyor: yoklama gibi davranılır.
+            tuyaSocket.ready && !tuyaFailover.standby -> TUYA_RESYNC_MS
             else -> TUYA_POLL_MS
         }
         if (lastTuyaSyncAt == 0L || now - lastTuyaSyncAt >= every) syncTuya()
@@ -876,20 +897,36 @@ class MonitorEngine(
         tuyaWarned = false
         tuyaReconnectAttempt = 0
         tuyaNextConnectAt = 0
+        tuyaReadySince = 0
+        tuyaFailover.reset()
         lastTuyaSyncAt = 0
         tuyaTick(clock.elapsed())
     }
 
     private fun syncTuya() {
+        val previousSync = lastTuyaSyncAt
         lastTuyaSyncAt = clock.elapsed()
         if (!store.hasTuya) return
         try {
-            replaceCloud(Cloud.TUYA, tuya.getDevices())
+            val fetched = tuya.getDevices()
+            // Soket önceki senkrondan beri hep açıktıysa, senkronun bulduğu her aç/kapa ya da bağlantı değişikliği
+            // soketten gelmiş olmalıydı; gelmediyse mesajlar başka bir cihaza gidiyor (Failover, telefon 2.35).
+            if (tuyaSocket.ready && previousSync != 0L && tuyaReadySince in 1..previousSync) {
+                val known = store.snapshots.filter { it.cloud == Cloud.TUYA }
+                if (tuyaFailover.onSync(TuyaListenerCheck.missed(known, fetched))) {
+                    Log.w(TAG, "Tuya: changes found only by sync; another device seems to receive the messages")
+                    host.notify(strings()["tuya_standby_notice"], null)
+                }
+            }
+            replaceCloud(Cloud.TUYA, fetched)
             tuyaSyncRetryAttempt = 0
             tuyaBlocked = false
             tuyaWarned = false
-            if (tuyaSocket.ready) setTuyaState(ConnState.LIVE, synced = true)
-            else setTuyaState(ConnState.POLLING, tuyaIssue, synced = true)
+            when {
+                tuyaSocket.ready && tuyaFailover.standby -> setTuyaState(ConnState.POLLING, strings()["tuya_standby_detail"], synced = true)
+                tuyaSocket.ready -> setTuyaState(ConnState.LIVE, synced = true)
+                else -> setTuyaState(ConnState.POLLING, tuyaIssue, synced = true)
+            }
         } catch (e: TuyaExpiredException) {
             onTuyaBlocked(strings()["tuya_expired"])
         } catch (e: TuyaAuthException) {
@@ -1099,12 +1136,64 @@ class MonitorEngine(
         }
     }
 
+    /** Canlılık adresine son istek (bellekte; uygulama yeniden açılınca hemen bir istek gider). */
+    private var heartbeatUrlAt = 0L
+
+    /** İzleme sağlıklıyken (canlı ya da yoklamada) dış canlılık adresine düzenli GET; durursa dış servis haber verir. */
+    private fun heartbeatUrlTick(wall: Long) {
+        val url = store.heartbeatUrl
+        val healthy = running && LiveState.connection.value.state in setOf(ConnState.LIVE, ConnState.POLLING)
+        if (!Heartbeat.due(heartbeatUrlAt, wall, store.heartbeatMin, healthy, url)) return
+        heartbeatUrlAt = wall
+        HOOKS.execute { runCatching { HookClient.ping(url) }.onFailure { Log.w(TAG, "heartbeat url failed: ${it.message}") } }
+    }
+
+    /** Alarmı ntfy / webhook ile de bildir (gerçek alarm başlayınca ve kapatılınca); ayrı iş parçacığında. */
+    private fun sendHooks(event: AlertHooks.Event, text: String) {
+        val ntfy = store.ntfyUrl
+        val hook = store.webhookUrl
+        if (!Heartbeat.isValidUrl(ntfy) && !Heartbeat.isValidUrl(hook)) return
+        val device = deviceName()
+        val now = clock.wall()
+        HOOKS.execute {
+            if (Heartbeat.isValidUrl(ntfy)) runCatching { HookClient.ntfy(ntfy, text, event, device) }.onFailure { Log.w(TAG, "ntfy failed: ${it.message}") }
+            if (Heartbeat.isValidUrl(hook)) runCatching { HookClient.webhook(hook, AlertHooks.webhookJson(event, device, text, now)) }
+                .onFailure { Log.w(TAG, "webhook failed: ${it.message}") }
+        }
+    }
+
+    /** Kural çalıştı: ek eylemlerinden beklemesizler hemen, beklemeliler kalıcı listeye (kural yeniden çalışırsa yenilenir). */
+    private fun startSteps(a: Automation) {
+        if (a.extraActions.isEmpty()) return
+        val (immediate, later) = ActionSteps.plan(a, clock.wall())
+        immediate.forEach { i -> execute(a.copy(action = a.extraActions[i])) }
+        runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id } + later
+    }
+
+    /** Vakti gelen ek eylemler; bu arada kapatılan ya da silinen kuralınki yapılmaz, düzenlendiyse güncel hali kullanılır. */
+    private fun stepTick(wall: Long) {
+        val list = runtime.actionSteps
+        if (list.isEmpty()) return
+        val due = list.filter { it.at <= wall }
+        if (due.isEmpty()) return
+        runtime.actionSteps = list - due.toSet()
+        val byId = store.engineAutomations().associateBy { it.id }
+        for (d in due.sortedBy { it.at }) {
+            val a = byId[d.automationId]?.takeIf { it.enabled } ?: continue
+            a.extraActions.getOrNull(d.step)?.let { execute(a.copy(action = it)) }
+        }
+    }
+
     private fun runAutomations(fired: List<Automation>) {
-        fired.forEach(::execute)
+        fired.forEach { a ->
+            execute(a)
+            startSteps(a)
+        }
         // Süre dolumu, gecikmeli eylem ya da saatli şablon varsa tam vaktinde uyan.
         val due = listOfNotNull(
             automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env(), clock.wall()),
             ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, clock.wall()),
+            runtime.actionSteps.minOfOrNull { it.at },
         ).minOrNull() ?: return
         scheduler.postDelayed((due - clock.wall()).coerceAtLeast(0) + 50) { tick() }
     }
@@ -1362,6 +1451,8 @@ class MonitorEngine(
             val first = Escalation.firstDelay(store.telegramRecipients, store.telegramStages, store.escalateMin)
             if (store.escalationReady && first != null) scheduler.postDelayed(first * 60_000L + 50) { tick() }
         }
+        // ntfy / webhook: test alarmı göndermez.
+        if (!test) sendHooks(AlertHooks.Event.ALARM, text)
         val time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(now))
         store.pendingAlarm = store.pendingAlarm + "$time  $text"
         host.showAlarm(store.pendingAlarm, sound, silent = runtime.silentAlarm)
@@ -1629,16 +1720,27 @@ class MonitorEngine(
         }
         val allowed = store.telegramRecipients.map { it.id }.toSet()
         var handled = runtime.tgHandled
+        var senders = store.telegramSenders
         for (u in updates.sortedBy { it.id }) {
             if (u.id <= handled) continue
             handled = u.id
             // Yalnızca haber verilecek kişiler (ve gruplar) komut verebilir.
             if (u.chatId !in allowed) continue
+            // Gruplarda yazanlar hatırlanır: Ayarlar'da "kim kontrol edebilir" listesinde seçilebilsinler.
+            senders = TelegramAuth.rememberSender(senders, u.chatId, u.fromId, u.from)
             if (u.callbackData != null) onTelegramButton(u)
             else if (store.telegramCommands) u.text?.let { onTelegramText(u, it, now) }
         }
         runtime.tgHandled = handled
+        if (senders != store.telegramSenders) store.telegramSenders = senders
     }
+
+    /** Bu güncellemeyi yazan kişi cihazları kontrol edebilir mi (grupta yalnızca seçilen kişiler). */
+    private fun telegramControl(u: TelegramBot.Update): Boolean =
+        TelegramAuth.canControl(store.telegramRecipients.firstOrNull { it.id == u.chatId }, u.fromId, store.telegramControl)
+
+    /** Kontrol izni yoksa yanıt: aç/kapa tümden kapalı mı, yoksa bu kişiye/bu gruba mı kapalı. */
+    private fun controlRefusal(): String = strings()[if (store.telegramControl) "tg_control_not_allowed" else "tg_control_off"]
 
     /** "Gördüm" düğmesi: alarm bu bilgisayarınsa ve hâlâ sürüyorsa üstlenilir, alarm susar. */
     private fun onTelegramButton(u: TelegramBot.Update) {
@@ -1675,7 +1777,8 @@ class MonitorEngine(
      */
     private fun onTelegramText(u: TelegramBot.Update, text: String, now: Long) {
         val age = now - u.date
-        val intent = ChatCommand.parse(text) ?: chatRunner.followUp(text, u.from)
+        val key = TelegramAuth.pendingKey(u.chatId, u.fromId)
+        val intent = ChatCommand.parse(text) ?: chatRunner.followUp(text, u.from, key)
         if (intent == null) {
             if (u.chatId > 0 && age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, strings()["chat_not_understood"])
             return
@@ -1689,16 +1792,19 @@ class MonitorEngine(
             is ChatCommand.Intent.Switch -> return onTelegramSwitch(u, intent, age)
             else -> Unit
         }
-        // Durum/güç/sıcaklık soruları.
-        if (age > TelegramBot.STATUS_MAX_AGE_MS) return
-        chatNow(intent, u.from, store.telegramControl) { reply(u.chatId, it) }
+        // Durumu değiştiren komutlar (süreli, hepsini, onay, döngü) 2 dk, sorular 10 dk eski olabilir.
+        if (age > TelegramAuth.maxAge(intent)) {
+            if (TelegramAuth.changesState(intent)) reply(u.chatId, strings()["tg_cmd_too_old"])
+            return
+        }
+        chatNow(intent, u.from, telegramControl(u), key) { reply(u.chatId, it) }
     }
 
     /** Birden çok hedefli aç/kapat ("/ac salon, mutfak", "bütün ışıkları kapat"); her cihaz kendi yanıtını verir. */
     private fun onTelegramSwitch(u: TelegramBot.Update, intent: ChatCommand.Intent.Switch, age: Long) {
         val s = strings()
         if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, s["tg_cmd_too_old"])
-        if (!store.telegramControl) return reply(u.chatId, s["tg_control_off"])
+        if (!telegramControl(u)) return reply(u.chatId, controlRefusal())
         if (intent.targets.all { it.isBlank() }) return reply(u.chatId, s[if (intent.on) "tg_usage_on" else "tg_usage_off"])
         val devices = store.snapshotsWithGroups
         fun one(d: DeviceSnapshot, ch: Int) =
@@ -1723,13 +1829,14 @@ class MonitorEngine(
             TelegramBot.Command.Status -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, statusText())
             TelegramBot.Command.Help -> if (age <= TelegramBot.STATUS_MAX_AGE_MS) reply(u.chatId, s["tg_help"])
             is TelegramBot.Command.SetPresence -> {
-                if (age > TelegramBot.STATUS_MAX_AGE_MS) return
+                // Evde/dışarıda kuralları değiştirir: aç/kapa gibi kısa yaş sınırı.
+                if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, s["tg_cmd_too_old"])
                 awayNow(cmd.away, by = u.from.ifEmpty { s["tg_someone"] })
                 reply(u.chatId, s[if (cmd.away) "tg_presence_away" else "tg_presence_home"])
             }
             is TelegramBot.Command.RunScene -> {
                 if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, s["tg_cmd_too_old"])
-                if (!store.telegramControl) return reply(u.chatId, s["tg_control_off"])
+                if (!telegramControl(u)) return reply(u.chatId, controlRefusal())
                 val scenes = store.scenes
                 val scene = Scene.find(cmd.query, scenes)
                     ?: return reply(u.chatId, s.format("tg_scene_not_found", cmd.query, scenes.joinToString(", ") { it.name }.ifEmpty { "—" }))
@@ -1744,7 +1851,7 @@ class MonitorEngine(
             }
             is TelegramBot.Command.Switch -> {
                 if (age > TelegramBot.SWITCH_MAX_AGE_MS) return reply(u.chatId, s["tg_cmd_too_old"])
-                if (!store.telegramControl) return reply(u.chatId, s["tg_control_off"])
+                if (!telegramControl(u)) return reply(u.chatId, controlRefusal())
                 if (cmd.query.isBlank()) return reply(u.chatId, s[if (cmd.on) "tg_usage_on" else "tg_usage_off"])
                 // Gruplar da adıyla bulunur ("/ac bahçe").
                 when (val m = TelegramBot.match(cmd.query, store.snapshotsWithGroups)) {
@@ -1993,17 +2100,17 @@ class MonitorEngine(
      * Sohbet komutunu yürütür; yanıt [onResult]'a motor iş parçacığında. Dış sıcaklık ağdan [telegramRunner]'da
      * okunur (telefonda sohbet her soruda anlık okur), motor beklemez.
      */
-    private fun chatNow(intent: ChatCommand.Intent, by: String?, control: Boolean, onResult: (String) -> Unit) {
+    private fun chatNow(intent: ChatCommand.Intent, by: String?, control: Boolean, pendingKey: String? = null, onResult: (String) -> Unit) {
         val lat = store.latitude
         val lon = store.longitude
         if (intent == ChatCommand.Intent.Briefing) {
             // Brifing günün havasıyla başlar: ağdan okunur, motor beklemez.
-            if (lat == null || lon == null) return onResult(chatRunner.run(intent, by, control))
+            if (lat == null || lon == null) return onResult(chatRunner.run(intent, by, control, pendingKey = pendingKey))
             telegramRunner {
                 val today = runCatching { sources.weatherToday(lat, lon) }.getOrNull()
                 scheduler.post {
                     if (today != null) runtime.outdoorTemp = today.temp
-                    onResult(chatRunner.run(intent, by, control, today))
+                    onResult(chatRunner.run(intent, by, control, today, pendingKey))
                 }
             }
             return
@@ -2109,7 +2216,7 @@ class MonitorEngine(
             record("", t.name, EventKind.AUTOMATION, text, if (failed) AlertAction.NOTIFY.name else "")
         }
         val intent = ChatCommand.parse(t.text) ?: return done(s["chat_not_understood"])
-        runCatching { chatNow(intent, t.name, control = true, ::done) }.onFailure { done("⚠️ " + it.message.orEmpty()) }
+        runCatching { chatNow(intent, t.name, control = true, onResult = ::done) }.onFailure { done("⚠️ " + it.message.orEmpty()) }
     }
 
     /** Sıcaklık kuralı varsa yarım saatte bir dış sıcaklığı okur (Open-Meteo); okunamazsa son değer kalır. */
@@ -2365,6 +2472,8 @@ class MonitorEngine(
          * "alarm kapatıldı" mesajı da gidebilsin.
          */
         private val TELEGRAM = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "telegram").apply { isDaemon = true } }
+        /** Canlılık adresi, ntfy ve webhook istekleri: yavaş bir adres Telegram'ı ya da izlemeyi bekletmesin. */
+        private val HOOKS = java.util.concurrent.Executors.newSingleThreadExecutor { r -> Thread(r, "hooks").apply { isDaemon = true } }
         private const val CONFIRM_DELAY_MS = 5_000L
         /**
          * Tuya ücretsiz planı ayda ≈26 bin API çağrısı verir; her senkron 2 çağrı.

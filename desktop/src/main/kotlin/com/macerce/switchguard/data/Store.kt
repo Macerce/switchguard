@@ -421,6 +421,38 @@ class Store internal constructor(
         get() = bool("tgCommands", true)
         set(v) = edit { put("tgCommands", v) }
     /** Telegram'dan cihaz açıp kapatmaya izin (varsayılan kapalı: yalnızca durum sorulabilir). */
+    /** Telegram gruplarında son yazan kişiler (sohbet → [kimlik, ad]); yalnızca "kim kontrol edebilir" seçimi için. */
+    var telegramSenders: Map<Long, List<Pair<Long, String>>>
+        get() = runCatching {
+            val o = JSONObject(str("tgSenders").ifEmpty { "{}" })
+            o.keys().asSequence().associate { chat ->
+                val a = o.getJSONArray(chat)
+                chat.toLong() to (0 until a.length()).map { i -> a.getJSONObject(i).let { it.getLong("id") to it.optString("name") } }
+            }
+        }.getOrDefault(emptyMap())
+        set(v) = edit {
+            val o = JSONObject()
+            v.forEach { (chat, list) ->
+                o.put(chat.toString(), org.json.JSONArray(list.map { (id, name) -> JSONObject().put("id", id).put("name", name) }))
+            }
+            put("tgSenders", o.toString())
+        }
+    /** Dış canlılık adresi (healthchecks.io, Uptime Kuma); boş = kapalı. Cihaza özel: yedeğe girmez. */
+    var heartbeatUrl: String
+        get() = str("hbUrl")
+        set(v) = edit { put("hbUrl", v.trim()) }
+    /** Canlılık isteklerinin aralığı (dakika). */
+    var heartbeatMin: Int
+        get() = int("hbMin", com.macerce.switchguard.core.Heartbeat.DEFAULT_MIN)
+        set(v) = edit { put("hbMin", v) }
+    /** Alarmda ntfy konu adresi (https://ntfy.sh/konu); boş = kapalı. */
+    var ntfyUrl: String
+        get() = str("ntfyUrl")
+        set(v) = edit { put("ntfyUrl", v.trim()) }
+    /** Alarmda JSON gönderilecek webhook adresi; boş = kapalı. */
+    var webhookUrl: String
+        get() = str("webhookUrl")
+        set(v) = edit { put("webhookUrl", v.trim()) }
     var telegramControl: Boolean
         get() = bool("tgControl", false)
         set(v) = edit { put("tgControl", v) }

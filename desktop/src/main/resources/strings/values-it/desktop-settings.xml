@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Impossibile aprire un\'app di posta; l\'indirizzo è stato copiato negli appunti.</string>
     <string name="desktop_secret_show">Mostra App Secret</string>
     <string name="desktop_secret_hide">Nascondi App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard ha riscontrato un errore</string>
+    <string name="desktop_crash_text">L\'ultima volta si è verificato un errore imprevisto. Inviare una segnalazione del problema per correggerlo? Contiene solo i dettagli dell\'errore, la versione dell\'app e di Windows; nulla viene condiviso se non lo invii.</string>
+    <string name="desktop_crash_copied">Impossibile aprire un\'app di posta; la segnalazione è stata copiata negli appunti. Incollala in un\'email a %s.</string>
+    <string name="desktop_website">Sito web</string>
 </resources>

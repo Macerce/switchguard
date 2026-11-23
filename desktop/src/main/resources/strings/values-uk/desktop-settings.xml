@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Не вдалося відкрити поштовий застосунок; адресу скопійовано в буфер обміну.</string>
     <string name="desktop_secret_show">Показати App Secret</string>
     <string name="desktop_secret_hide">Сховати App Secret</string>
+    <string name="desktop_crash_title">У SwitchGuard сталася помилка</string>
+    <string name="desktop_crash_text">Минулого разу сталася неочікувана помилка. Надіслати звіт про проблему, щоб її виправили? Він містить лише відомості про помилку, версію застосунку та Windows; без вашого надсилання нічим не діляться.</string>
+    <string name="desktop_crash_copied">Не вдалося відкрити поштовий застосунок; звіт скопійовано в буфер обміну. Вставте його в лист на адресу %s.</string>
+    <string name="desktop_website">Вебсайт</string>
 </resources>

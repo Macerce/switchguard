@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">メールアプリを開けませんでした。アドレスをクリップボードにコピーしました。</string>
     <string name="desktop_secret_show">App Secret を表示</string>
     <string name="desktop_secret_hide">App Secret を隠す</string>
+    <string name="desktop_crash_title">SwitchGuard でエラーが発生しました</string>
+    <string name="desktop_crash_text">前回、予期しないエラーが発生しました。修正のために問題レポートを送信しますか？レポートにはエラーの詳細、アプリと Windows のバージョンのみが含まれ、送信しない限り何も共有されません。</string>
+    <string name="desktop_crash_copied">メールアプリを開けませんでした。レポートをクリップボードにコピーしました。%s 宛てのメールに貼り付けてください。</string>
+    <string name="desktop_website">ウェブサイト</string>
 </resources>

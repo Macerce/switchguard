@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">No se pudo abrir ninguna app de correo; la dirección se copió al portapapeles.</string>
     <string name="desktop_secret_show">Mostrar App Secret</string>
     <string name="desktop_secret_hide">Ocultar App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard encontró un error</string>
+    <string name="desktop_crash_text">La última vez se produjo un error inesperado. ¿Enviar un informe del problema para que se pueda corregir? Solo contiene los detalles del error, la versión de la app y la de Windows; no se comparte nada si no lo envías.</string>
+    <string name="desktop_crash_copied">No se pudo abrir ninguna app de correo; el informe se copió al portapapeles. Pégalo en un correo a %s.</string>
+    <string name="desktop_website">Sitio web</string>
 </resources>

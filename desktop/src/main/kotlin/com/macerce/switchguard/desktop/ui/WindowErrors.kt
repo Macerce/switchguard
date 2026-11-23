@@ -25,6 +25,8 @@ internal fun windowErrorHandler(name: String, onError: (Throwable) -> Unit): Win
             val n = count.incrementAndGet()
             if (n <= MAX_LOGGED) {
                 Log.w(TAG, "$name window failed (#$n)", throwable)
+                // İlk hata bir sonraki açılışta "rapor gönderilsin mi" diye sorulsun (telefon 2.33).
+                if (n == 1) com.macerce.switchguard.desktop.CrashLog.record("$name window", throwable)
             } else if (n % 1000 == 0) {
                 Log.w(TAG, "$name window failed $n times so far (${throwable.javaClass.name}: ${throwable.message})")
             }

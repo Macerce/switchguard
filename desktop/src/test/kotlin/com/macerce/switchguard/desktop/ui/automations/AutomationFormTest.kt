@@ -115,4 +115,24 @@ class AutomationFormTest {
         assertEquals("0", f.grace)
         assertEquals(a, f.build(a.id, a.enabled))
     }
+
+    @Test
+    fun clockTriggerAndExtraActionsRoundTrip() {
+        val a = Automation(
+            "c1", "Sabah pompa", true,
+            Trigger(TriggerKind.TIME, "", minutes = 7 * 60 + 30, days = 0b0011111),
+            AutoAction(ActionKind.TURN_ON, "pump"),
+            extraActions = listOf(AutoAction(ActionKind.TURN_OFF, "pump", waitMinutes = 20), AutoAction(ActionKind.TURN_OFF, "lamp")),
+        )
+        val f = AutomationForm.from(a, devices, AutomationMode.AUTOMATION)
+
+        assertEquals(7 * 60 + 30, f.clockMinute)
+        assertEquals(0b0011111, f.clockDays)
+        assertEquals(2, f.extras.size)
+        assertTrue(f.isValid(devices))
+        assertEquals(a, f.build(a.id, a.enabled))
+        assertFalse("no day chosen", f.copy(clockDays = 0).isValid(devices))
+        assertFalse("extra action on a missing device", f.copy(extras = listOf(AutoAction(ActionKind.TURN_OFF, "gone"))).isValid(devices))
+        assertTrue("alerts have no extra actions", f.inMode(AutomationMode.ALERT).extras.isEmpty())
+    }
 }

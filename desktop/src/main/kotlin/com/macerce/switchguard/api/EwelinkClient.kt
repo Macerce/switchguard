@@ -1,11 +1,11 @@
 package com.macerce.switchguard.api
 
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import com.macerce.switchguard.core.DeviceParser
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Signer
 import com.macerce.switchguard.core.TokenRefresh
 import com.macerce.switchguard.data.Store
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -209,6 +209,9 @@ class EwelinkClient(private val store: Store) {
         val http: OkHttpClient = OkHttpClient.Builder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .readTimeout(20, TimeUnit.SECONDS)
+            // Tek bir istek (yeniden denemeler, yönlendirmeler dahil) en çok 30 sn sürsün; kötü ağda takılmasın.
+            // WebSocket istemcileri bunu callTimeout(0) ile kapatır (uzun ömürlü bağlantı kesilmesin).
+            .callTimeout(30, TimeUnit.SECONDS)
             .build()
 
         fun host(region: String) =

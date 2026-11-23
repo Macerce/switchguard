@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">कोई ईमेल ऐप नहीं खुल सका; पता क्लिपबोर्ड पर कॉपी कर दिया गया।</string>
     <string name="desktop_secret_show">App Secret दिखाएं</string>
     <string name="desktop_secret_hide">App Secret छिपाएं</string>
+    <string name="desktop_crash_title">SwitchGuard में एक त्रुटि हुई</string>
+    <string name="desktop_crash_text">पिछली बार एक अनपेक्षित त्रुटि हुई थी। क्या समस्या रिपोर्ट भेजें ताकि इसे ठीक किया जा सके? इसमें केवल त्रुटि का विवरण, ऐप और Windows का संस्करण होता है; आपके भेजे बिना कुछ भी साझा नहीं होता।</string>
+    <string name="desktop_crash_copied">कोई ईमेल ऐप नहीं खुल सका; रिपोर्ट क्लिपबोर्ड पर कॉपी कर दी गई। इसे %s को भेजे जाने वाले ईमेल में चिपकाएँ।</string>
+    <string name="desktop_website">वेबसाइट</string>
 </resources>

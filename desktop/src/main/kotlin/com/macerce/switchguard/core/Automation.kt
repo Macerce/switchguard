@@ -31,7 +31,9 @@ enum class TriggerKind {
     /** Cihazın sensör değeri ([Trigger.sensor]) [Trigger.watts] eşiğinin üstüne çıktı / altına indi (ör. oda sıcaklığı). */
     SENSOR_ABOVE, SENSOR_BELOW,
     /** İkili sensör etkinleşti (kapı açıldı, hareket, su kaçağı) / durdu. */
-    SENSOR_ACTIVE, SENSOR_CLEAR;
+    SENSOR_ACTIVE, SENSOR_CLEAR,
+    /** Saat: her seçili günde [Trigger.minutes] (gece yarısından dakika, SS:DD) vaktinde; günler [Trigger.days]. Cihaz yok. */
+    TIME;
 
     val usesChannel get() = this in setOf(TURNED_ON, TURNED_OFF, STAYED_ON, STAYED_OFF, CHANNEL_POWER_LOW)
     /** Açık/kapalı kalma süresi tetikleyicileri. */
@@ -48,8 +50,9 @@ enum class TriggerKind {
     val usesSensorValue get() = this == SENSOR_ABOVE || this == SENSOR_BELOW
     val usesSensorState get() = this == SENSOR_ACTIVE || this == SENSOR_CLEAR
     val usesSensor get() = usesSensorValue || usesSensorState
-    /** Bir cihaza bağlı tetikleyici (gün doğumu, sıcaklık ve bölge değil). */
-    val usesDevice get() = !isSun && !usesTemp && !usesZone && !usesCycle
+    val isClock get() = this == TIME
+    /** Bir cihaza bağlı tetikleyici (gün doğumu, sıcaklık, bölge, döngü ve saat değil). */
+    val usesDevice get() = !isSun && !usesTemp && !usesZone && !usesCycle && !isClock
 }
 
 data class Trigger(
@@ -62,6 +65,8 @@ data class Trigger(
     val graceMinutes: Int = 0,
     /** Sensör tetikleyicilerinde hangi değer. */
     val sensor: SensorKind? = null,
+    /** [TriggerKind.TIME]: hangi günler (bit 0 = pazartesi … bit 6 = pazar). */
+    val days: Int = ActiveWindow.ALL_DAYS,
 )
 
 enum class ActionKind {
@@ -78,7 +83,8 @@ enum class ActionKind {
 /** Kural yalnızca evdeyken ya da dışarıdayken geçerli. */
 enum class PresenceRule { HOME, AWAY }
 
-data class AutoAction(val kind: ActionKind, val deviceId: String = "", val channel: Int = 0)
+/** [waitMinutes]: yalnız ek eylemlerde, kendinden önceki eylemden sonra beklenecek süre. */
+data class AutoAction(val kind: ActionKind, val deviceId: String = "", val channel: Int = 0, val waitMinutes: Int = 0)
 
 data class Automation(
     val id: String,
@@ -96,7 +102,15 @@ data class Automation(
     val conditionMatch: ConditionMatch = ConditionMatch.ALL,
     /** Yalnızca evdeyken / dışarıdayken; null = her zaman. */
     val presence: PresenceRule? = null,
+    /**
+     * İlk eylemden sonra sırayla yapılacak ek eylemler (her biri kendi [AutoAction.waitMinutes] beklemesiyle).
+     * JSON'da ayrı alandadır ("more"): bunu bilmeyen eski sürümler yalnız ilk eylemi çalıştırır.
+     */
+    val extraActions: List<AutoAction> = emptyList(),
 ) {
+    /** İlk eylem ve ek eylemler, sırayla. */
+    val allActions: List<AutoAction> get() = listOf(action) + extraActions
+
     /** Tetiklenen kural şimdi uygulanabilir mi (saat aralığı, ek koşullar, evde/dışarıda). */
     fun allowed(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Boolean =
         (window?.contains(now) ?: true) && Condition.allHold(conditions, conditionMatch, devices, outdoorTemp) &&
@@ -112,10 +126,18 @@ data class Automation(
                             .put("kind", a.trigger.kind.name).put("device", a.trigger.deviceId)
                             .put("channel", a.trigger.channel).put("minutes", a.trigger.minutes).put("watts", a.trigger.watts)
                             .put("grace", a.trigger.graceMinutes)
-                            .apply { a.trigger.sensor?.let { put("sensor", it.name) } })
+                            .apply {
+                                a.trigger.sensor?.let { put("sensor", it.name) }
+                                if (a.trigger.days != ActiveWindow.ALL_DAYS) put("days", a.trigger.days)
+                            })
                         .put("action", JSONObject()
                             .put("kind", a.action.kind.name).put("device", a.action.deviceId).put("channel", a.action.channel))
                         .apply {
+                            if (a.extraActions.isNotEmpty()) put("more", JSONArray().apply {
+                                a.extraActions.forEach { x ->
+                                    put(JSONObject().put("kind", x.kind.name).put("device", x.deviceId).put("channel", x.channel).put("wait", x.waitMinutes))
+                                }
+                            })
                             a.window?.let { put("window", JSONObject().put("start", it.startMinute).put("end", it.endMinute).put("days", it.days)) }
                             if (a.conditions.isNotEmpty()) {
                                 put("conds", JSONArray().apply {
@@ -150,7 +172,16 @@ data class Automation(
                             t.optInt("channel"), t.optInt("minutes"), t.optDouble("watts", 0.0),
                             t.optInt("grace", 0),
                             t.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
+                            t.optInt("days", ActiveWindow.ALL_DAYS),
                         ),
+                        extraActions = o.optJSONArray("more")?.let { arr ->
+                            (0 until arr.length()).mapNotNull { i ->
+                                runCatching {
+                                    val x = arr.getJSONObject(i)
+                                    AutoAction(ActionKind.valueOf(x.getString("kind")), x.optString("device"), x.optInt("channel"), x.optInt("wait"))
+                                }.getOrNull()
+                            }
+                        }.orEmpty(),
                         action = AutoAction(ActionKind.valueOf(a.getString("kind")), a.optString("device"), a.optInt("channel")),
                         window = o.optJSONObject("window")?.let { w ->
                             ActiveWindow(w.optInt("start"), w.optInt("end"), w.optInt("days", ActiveWindow.ALL_DAYS))
@@ -202,6 +233,8 @@ class AutomationEngine {
     private val sunFiredDay = mutableMapOf<String, Long>()
     /** Sıcaklık tetikleyicisi yeniden tetiklenebilir mi (1 °C histerezis). */
     private val tempArmed = mutableMapOf<String, Boolean>()
+    /** Saat tetikleyicisinin son çalıştığı gün ("kimlik@dakika" → gün başlangıcı; 0 = bugün vakti henüz gelmedi). */
+    private val clockFiredDay = mutableMapOf<String, Long>()
     private val pending = mutableListOf<Pending>()
     /** Son verilen ortam (evde/dışarıda); tetiklenen kuralların koşulları buna göre. */
     private var env = Environment()
@@ -245,7 +278,7 @@ class AutomationEngine {
                 TriggerKind.CAME_ONLINE -> before != null && !before.online && after.online
                 TriggerKind.POWER_ABOVE, TriggerKind.POWER_BELOW -> t.minutes <= 0 && powerHit(a, after.power)
                 TriggerKind.STAYED_ON, TriggerKind.STAYED_OFF, TriggerKind.CHANNEL_POWER_LOW,
-                TriggerKind.SUNRISE, TriggerKind.SUNSET, TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> false // tick'te bakılır
+                TriggerKind.SUNRISE, TriggerKind.SUNSET, TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW, TriggerKind.TIME -> false // tick'te bakılır
                 TriggerKind.ZONE_ENTER, TriggerKind.ZONE_EXIT -> false // [onZone]
                 TriggerKind.CYCLE_STARTED, TriggerKind.CYCLE_FINISHED -> false // [onCycle]
                 TriggerKind.SENSOR_ACTIVE, TriggerKind.SENSOR_CLEAR -> {
@@ -269,7 +302,7 @@ class AutomationEngine {
         this.env = env
         val out = (durationHits(current, automations, now) + channelPowerHits(current, automations, now) +
             powerHoldHits(current, automations, now) + sunHits(current, automations, now, env) +
-            tempHits(current, automations, now, env)).toMutableList()
+            tempHits(current, automations, now, env) + clockHits(current, automations, now)).toMutableList()
         val due = pending.filter { it.dueAt <= now }
         pending.removeAll(due)
         // Bekleme sırasında kapatılan ya da silinen otomasyonun eylemi yapılmaz; düzenlendiyse güncel hali kullanılır.
@@ -301,7 +334,9 @@ class AutomationEngine {
         val holdDue = automations.filter { it.enabled && it.trigger.kind.allowsHold && it.trigger.minutes > 0 && it.id !in holdFired }
             .mapNotNull { a -> holdSince[a.id]?.plus(a.trigger.minutes * 60_000L) }
         val sunDue = automations.filter { it.enabled && it.trigger.kind.isSun }.mapNotNull { sunTime(it, now, env) }.filter { it > now }
-        return (durations + lowDue + holdDue + sunDue + pending.map { it.dueAt }).minOrNull()
+        val clockDue = automations.filter { it.enabled && it.trigger.kind.isClock }
+            .mapNotNull { ClockTrigger.nextAt(it.trigger.minutes, it.trigger.days, now) }
+        return (durations + lowDue + holdDue + sunDue + clockDue + pending.map { it.dueAt }).minOrNull()
     }
 
     private fun durationHits(current: Map<String, DeviceSnapshot>, automations: List<Automation>, now: Long): List<Automation> {
@@ -406,6 +441,26 @@ class AutomationEngine {
             val at = sunTime(a, now, env) ?: continue
             if (now < at) continue
             sunFiredDay[a.id] = today
+            if (now - at <= SUN_LATE_MS) fire(a, now, fired, current)
+        }
+        return fired
+    }
+
+    /**
+     * Saat: seçili günlerde vakti gelince günde bir kez. Vakit [SUN_LATE_MS]'den fazla geçtikten sonra fark edildiyse
+     * (telefon kapalıydı) o günkü atlanır. Yeni kurulan (ya da saati değiştirilen) kural, kurulduğu andan önceki
+     * vakitte çalışmaz: ilk kez görüldüğünde bugünün vakti geçmişse bugün atlanır.
+     */
+    private fun clockHits(current: Map<String, DeviceSnapshot>, automations: List<Automation>, now: Long): List<Automation> {
+        val fired = mutableListOf<Automation>()
+        val today = ClockTrigger.dayStart(now)
+        for (a in automations) {
+            if (!a.enabled || !a.trigger.kind.isClock) continue
+            val key = a.id + "@" + a.trigger.minutes
+            val at = ClockTrigger.todayAt(a.trigger.minutes, a.trigger.days, now)
+            if (key !in clockFiredDay) clockFiredDay[key] = if (at != null && now >= at) today else 0L
+            if (at == null || now < at || clockFiredDay[key] == today) continue
+            clockFiredDay[key] = today
             if (now - at <= SUN_LATE_MS) fire(a, now, fired, current)
         }
         return fired
@@ -531,6 +586,7 @@ class AutomationEngine {
         .put("holdFired", JSONArray(holdFired.toList()))
         .put("sunDay", JSONObject(sunFiredDay.toMap()))
         .put("tempArmed", JSONObject(tempArmed.toMap()))
+        .put("clockDay", JSONObject(clockFiredDay.toMap()))
         .put("pending", JSONArray().apply { pending.forEach { put(JSONObject().put("id", it.automation.id).put("due", it.dueAt)) } })
         .toString()
 
@@ -553,6 +609,7 @@ class AutomationEngine {
             holdFired += strings("holdFired")
             sunFiredDay.putAll(longs("sunDay"))
             o.optJSONObject("tempArmed")?.let { m -> m.keys().forEach { tempArmed[it] = m.getBoolean(it) } }
+            clockFiredDay.putAll(longs("clockDay"))
             val byId = automations.associateBy { it.id }
             val arr = o.optJSONArray("pending") ?: JSONArray()
             for (i in 0 until arr.length()) {

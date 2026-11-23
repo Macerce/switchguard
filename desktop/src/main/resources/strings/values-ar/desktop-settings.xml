@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">تعذّر فتح أي تطبيق بريد؛ نُسخ العنوان إلى الحافظة.</string>
     <string name="desktop_secret_show">إظهار App Secret</string>
     <string name="desktop_secret_hide">إخفاء App Secret</string>
+    <string name="desktop_crash_title">واجه SwitchGuard خطأً</string>
+    <string name="desktop_crash_text">حدث خطأ غير متوقع في المرة الماضية. هل تريد إرسال تقرير بالمشكلة لإصلاحها؟ يحتوي فقط على تفاصيل الخطأ وإصدار التطبيق وإصدار Windows؛ لا تتم مشاركة أي شيء ما لم ترسله.</string>
+    <string name="desktop_crash_copied">تعذّر فتح تطبيق بريد؛ تم نسخ التقرير إلى الحافظة. الصقه في رسالة بريد إلى %s.</string>
+    <string name="desktop_website">الموقع الإلكتروني</string>
 </resources>

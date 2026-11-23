@@ -16,6 +16,7 @@ import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.Snooze
+import androidx.compose.material.icons.rounded.Webhook
 import androidx.compose.material.icons.rounded.Summarize
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.Icon
@@ -119,6 +120,12 @@ fun AlarmPage(
             Icons.AutoMirrored.Rounded.Send, str("tg_title"), escalation,
             Modifier.clickable(onClick = onTelegram),
         ) { Icon(Icons.AutoMirrored.Rounded.KeyboardArrowRight, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+        RowDivider()
+        // Telefon 2.37: alarm ntfy / webhook ile de gönderilir.
+        InfoRow(
+            Icons.Rounded.Webhook, str("hooks_title"), remember(version, strings) { hooksSummary(store, strings) },
+            Modifier.clickable { dialog = "hooks" }.testTag("hooks"),
+        )
     }
 
     SectionTitle(str("settings_try_it"))
@@ -135,6 +142,7 @@ fun AlarmPage(
             str("reminder"), str("reminder_desc"), REMINDER_CHOICES, reminder, { reminderLabel(strings, it) },
             onPick = { store.reminderMin = it }, onDismiss = { dialog = null },
         )
+        "hooks" -> HooksDialog(store, strings) { dialog = null }
         "test" -> TestAlarmDialog(
             onStart = { silent, delayMs ->
                 testAlarm(silent, delayMs)

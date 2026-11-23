@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">无法打开邮件应用；地址已复制到剪贴板。</string>
     <string name="desktop_secret_show">显示 App Secret</string>
     <string name="desktop_secret_hide">隐藏 App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard 遇到错误</string>
+    <string name="desktop_crash_text">上次发生了意外错误。要发送问题报告以便修复吗？报告仅包含错误详情、应用版本和 Windows 版本；除非你发送，否则不会共享任何内容。</string>
+    <string name="desktop_crash_copied">无法打开邮件应用；报告已复制到剪贴板。请将其粘贴到发往 %s 的邮件中。</string>
+    <string name="desktop_website">网站</string>
 </resources>

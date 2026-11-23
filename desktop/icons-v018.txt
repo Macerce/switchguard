@@ -1,0 +1,7 @@
+# Masaüstü 0.18 (telefon 2.32–2.37): Telegram grup yetkisi, ntfy / webhook, yapay zekâ yardımı, web sitesi.
+rounded/Groups
+rounded/Webhook
+rounded/Search
+rounded/Build
+rounded/Public
+automirrored/rounded/Chat

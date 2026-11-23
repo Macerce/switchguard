@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Aucune application de messagerie n\'a pu être ouverte ; l\'adresse a été copiée dans le presse-papiers.</string>
     <string name="desktop_secret_show">Afficher l\'App Secret</string>
     <string name="desktop_secret_hide">Masquer l\'App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard a rencontré une erreur</string>
+    <string name="desktop_crash_text">Une erreur inattendue s\'est produite la dernière fois. Envoyer un rapport de problème pour qu\'elle soit corrigée ? Il contient uniquement les détails de l\'erreur, la version de l\'app et celle de Windows ; rien n\'est partagé sans votre envoi.</string>
+    <string name="desktop_crash_copied">Aucune app de messagerie n\'a pu être ouverte ; le rapport a été copié dans le presse-papiers. Collez-le dans un e-mail à %s.</string>
+    <string name="desktop_website">Site web</string>
 </resources>

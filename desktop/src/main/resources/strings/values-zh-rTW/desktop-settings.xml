@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">無法開啟郵件應用程式；網址已複製到剪貼簿。</string>
     <string name="desktop_secret_show">顯示 App Secret</string>
     <string name="desktop_secret_hide">隱藏 App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard 發生錯誤</string>
+    <string name="desktop_crash_text">上次發生了未預期的錯誤。要傳送問題回報以便修正嗎？回報只包含錯誤詳細資料、App 版本與 Windows 版本；除非你傳送，否則不會分享任何內容。</string>
+    <string name="desktop_crash_copied">無法開啟郵件 App；回報已複製到剪貼簿。請貼到寄給 %s 的郵件中。</string>
+    <string name="desktop_website">網站</string>
 </resources>

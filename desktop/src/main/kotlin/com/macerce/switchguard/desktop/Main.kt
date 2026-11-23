@@ -45,7 +45,7 @@ fun main(args: Array<String>) {
     val dataDir = dataDir()
     Log.init(dataDir)
     // javaw'ın konsolu yok: hiçbir iş parçacığının hatası iz bırakmadan kaybolmasın.
-    CrashLog.install()
+    CrashLog.install(dataDir)
 
     // Tek örnek kilidi AppGraph'tan ÖNCE alınır: ikinci örnek veritabanlarını açmaz, ikinci bir motor başlatmaz;
     // yalnızca ilk örneğe "göster" der ve çıkar. Kilit alınamıyorsa (dizin/dosya hatası) asla başlanmaz.

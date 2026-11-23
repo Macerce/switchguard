@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Er kon geen e-mailapp worden geopend; het adres is naar het klembord gekopieerd.</string>
     <string name="desktop_secret_show">App Secret tonen</string>
     <string name="desktop_secret_hide">App Secret verbergen</string>
+    <string name="desktop_crash_title">SwitchGuard heeft een fout gehad</string>
+    <string name="desktop_crash_text">De vorige keer is er een onverwachte fout opgetreden. Een probleemrapport sturen zodat het opgelost kan worden? Het bevat alleen de foutdetails, de app-versie en de Windows-versie; er wordt niets gedeeld tenzij u het verstuurt.</string>
+    <string name="desktop_crash_copied">Er kon geen e-mailapp worden geopend; het rapport is naar het klembord gekopieerd. Plak het in een e-mail aan %s.</string>
+    <string name="desktop_website">Website</string>
 </resources>

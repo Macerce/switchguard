@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Tidak ada aplikasi email yang dapat dibuka; alamat disalin ke papan klip.</string>
     <string name="desktop_secret_show">Tampilkan App Secret</string>
     <string name="desktop_secret_hide">Sembunyikan App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard mengalami kesalahan</string>
+    <string name="desktop_crash_text">Terakhir kali terjadi kesalahan tak terduga. Kirim laporan masalah agar bisa diperbaiki? Isinya hanya detail kesalahan, versi aplikasi, dan versi Windows; tidak ada yang dibagikan kecuali Anda mengirimnya.</string>
+    <string name="desktop_crash_copied">Tidak ada aplikasi email yang bisa dibuka; laporan disalin ke papan klip. Tempelkan ke email untuk %s.</string>
+    <string name="desktop_website">Situs web</string>
 </resources>

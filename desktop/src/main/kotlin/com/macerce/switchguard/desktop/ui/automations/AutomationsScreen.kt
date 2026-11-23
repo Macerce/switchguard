@@ -308,6 +308,9 @@ internal fun describe(
         else if (!t.kind.usesDevice) null
         else devices.firstOrNull { it.id == t.deviceId }?.let { channelLabel(it, t.channel, t.kind.usesChannel, strings) } ?: strings["device_missing"]
     val trigger = when (t.kind) {
+        // "Saatte 07:00 · hafta içi".
+        TriggerKind.TIME -> strings[t.kind.titleKey()] + " " + com.macerce.switchguard.desktop.ui.settings.formatMinute(strings, t.minutes) + " · " +
+            daysText(t.days, strings)
         TriggerKind.SUNRISE, TriggerKind.SUNSET -> strings[t.kind.titleKey()] + (if (t.minutes == 0) "" else " · " + offsetLabel(t.minutes, strings))
         TriggerKind.TEMP_ABOVE, TriggerKind.TEMP_BELOW -> strings[t.kind.titleKey()] + " " + formatTemp(t.watts)
         // "Salon sensörü · Sıcaklık > 26 °C", "Ön kapı · Kapı açık".
@@ -324,8 +327,7 @@ internal fun describe(
             else strings.format("automation_low_for_nograce", t.minutes)
         else -> strings[t.kind.titleKey()]
     }
-    val act = a.action
-    val action = when {
+    fun actionText(act: com.macerce.switchguard.core.AutoAction): String = when {
         act.kind.usesDevice -> {
             val dstName = devices.firstOrNull { it.id == act.deviceId }?.let { channelLabel(it, act.channel, true, strings) } ?: strings["device_missing"]
             "$dstName: " + strings[act.kind.titleKey()]
@@ -336,6 +338,11 @@ internal fun describe(
             strings.format("auto_action_scene", scenes.firstOrNull { it.id == act.deviceId }?.name ?: strings["device_missing"])
         else -> strings[act.kind.titleKey()]
     }
+    // İlk eylem ve ek eylemler: "Pompa: Kapat → 5 dk sonra: Vana: Kapat".
+    val action = a.allActions.mapIndexed { i, act ->
+        val text = actionText(act)
+        if (i > 0 && act.waitMinutes > 0) strings.format("rule_step_after", holdLabel(act.waitMinutes, strings), text) else text
+    }.joinToString(" → ")
     val delay = if (a.delayMinutes > 0) " · " + strings.format("automation_after", a.delayMinutes) else ""
     val extras = buildList {
         a.window?.let { add(windowText(it, strings)) }
@@ -363,6 +370,14 @@ internal fun holdLabel(minutes: Int, strings: Strings): String = when {
 }
 
 internal fun formatTemp(v: Double): String = (if (v == Math.floor(v)) v.toLong().toString() else v.toString()) + " °C"
+
+/** Gün seçimi: "her gün", "hafta içi", "Pzt Çar Cum". */
+internal fun daysText(days: Int, strings: Strings): String = when (days) {
+    ActiveWindow.ALL_DAYS -> strings["days_every"]
+    0b0011111 -> strings["days_weekdays"]
+    0b1100000 -> strings["days_weekend"]
+    else -> strings.array("day_short").filterIndexed { i, _ -> days and (1 shl i) != 0 }.joinToString(" ")
+}
 
 /** "22:00–06:00, hafta içi". */
 internal fun windowText(w: ActiveWindow, strings: Strings): String {
@@ -438,6 +453,7 @@ internal fun TriggerKind.titleKey(): String = when (this) {
     TriggerKind.SENSOR_BELOW -> "trigger_sensor_below"
     TriggerKind.SENSOR_ACTIVE -> "trigger_sensor_active"
     TriggerKind.SENSOR_CLEAR -> "trigger_sensor_clear"
+    TriggerKind.TIME -> "trigger_time"
 }
 
 /** İşlemin kısa adı ("Aç", "Alarm çal"); kartta ve özette. */

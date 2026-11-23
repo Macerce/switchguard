@@ -131,6 +131,10 @@ class RuntimeState(private val file: Path) {
     var tgOffset: Long
         get() = long("tgOffset")
         set(v) = set("tgOffset", v)
+    /** Kuralların beklemeli ek eylemleri (vakti gelince çalıştırılır; uygulama yeniden açılsa da kaybolmaz). */
+    var actionSteps: List<com.macerce.switchguard.core.ActionSteps.Due>
+        get() = com.macerce.switchguard.core.ActionSteps.fromJson(str("actionSteps"))
+        set(v) = set("actionSteps", com.macerce.switchguard.core.ActionSteps.toJson(v))
     var tgHandled: Long
         get() = long("tgHandled")
         set(v) = set("tgHandled", v)

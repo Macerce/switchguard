@@ -100,6 +100,7 @@ fun MainWindow(graph: AppGraph, onCloseRequest: () -> Unit) {
                             }
                         } else {
                             AppNav(graph, strings)
+                            CrashPromptHost(strings)
                         }
                     }
                     }

@@ -20,6 +20,8 @@ object TelegramBot {
         val callbackData: String? = null,
         /** Düğmenin bulunduğu mesaj (düğmeyi kaldırmak için). */
         val messageId: Long = 0,
+        /** Yazan kişinin Telegram kullanıcı kimliği (grupta kimin kontrol edebileceği bununla seçilir); yoksa 0. */
+        val fromId: Long = 0,
     )
 
     sealed class Command {
@@ -47,12 +49,16 @@ object TelegramBot {
             return Update(
                 id, chat.optLong("id"), personName(q.optJSONObject("from")), message.optLong("date") * 1000,
                 callbackId = q.optString("id"), callbackData = q.optString("data"), messageId = message.optLong("message_id"),
+                fromId = q.optJSONObject("from")?.optLong("id") ?: 0,
             )
         }
         val m = u.optJSONObject("message") ?: return null
         val chat = m.optJSONObject("chat") ?: return null
         val text = m.optString("text").takeIf { it.isNotEmpty() } ?: return null
-        return Update(id, chat.optLong("id"), personName(m.optJSONObject("from")), m.optLong("date") * 1000, text = text)
+        return Update(
+            id, chat.optLong("id"), personName(m.optJSONObject("from")), m.optLong("date") * 1000, text = text,
+            fromId = m.optJSONObject("from")?.optLong("id") ?: 0,
+        )
     }
 
     private fun personName(from: JSONObject?): String {

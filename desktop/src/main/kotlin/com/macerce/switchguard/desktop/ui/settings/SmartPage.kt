@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.BeachAccess
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.ElectricBolt
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.MonitorHeart
 import androidx.compose.material.icons.rounded.Payments
@@ -173,6 +174,14 @@ fun SmartPage(graph: AppGraph, strings: Strings, snackbar: SnackbarHostState? = 
                 SwitchInfoRow(Icons.Rounded.PowerSettingsNew, str("smart_tg_control"), str("smart_tg_control_desc"), checked = s.telegramControl) {
                     store.telegramControl = it
                 }
+                // Gruplarda aç/kapa (telefon 2.35): varsayılan kapalı, açılırsa yalnızca seçilen kişiler.
+                if (s.telegramControl && s.telegramRecipients.any { com.macerce.switchguard.core.TelegramAuth.isGroup(it.id) }) {
+                    RowDivider()
+                    InfoRow(
+                        Icons.Rounded.Groups, str("tg_group_control_title"), groupControlSummary(s, strings),
+                        Modifier.clickable { dialog = "group-control" }.testTag("group-control"),
+                    )
+                }
             }
             RowDivider()
             InfoRow(Icons.Rounded.Stairs, str("stages_title"), stagesSummary(s, strings), Modifier.clickable { dialog = "stages" }.testTag("stages"))
@@ -193,6 +202,7 @@ fun SmartPage(graph: AppGraph, strings: Strings, snackbar: SnackbarHostState? = 
         "tariff" -> TariffDialog(store, strings, close)
         "budget" -> BudgetDialog(store, strings, close)
         "stages" -> StagesDialog(store, strings, close)
+        "group-control" -> GroupControlDialog(store, strings, close)
         "watchdog" -> {
             val modes = listOf(Store.WATCHDOG_OFF, Store.WATCHDOG_SEND) + Watchdog.WATCH_MINUTES.map { -it }
             val current = if (s.watchdogMode == Store.WATCHDOG_WATCH) -s.watchdogMin else s.watchdogMode

@@ -70,8 +70,8 @@ class ChatRunner(
      * Komut olarak anlaşılmayan mesaj bekleyen sorunun yanıtı olabilir: "Hangi kanal?" → "iki", "Hangisi?" →
      * "salon ışık". Öyleyse tamamlanmış aç/kapat komutu, değilse null.
      */
-    fun followUp(text: String, by: String?): ChatCommand.Intent? {
-        val p = pending[by.orEmpty()]?.takeIf { now() - it.at < PENDING_MS && it.target != null } ?: return null
+    fun followUp(text: String, by: String?, pendingKey: String? = null): ChatCommand.Intent? {
+        val p = pending[pendingKey ?: by.orEmpty()]?.takeIf { now() - it.at < PENDING_MS && it.target != null } ?: return null
         if (DeviceKinds.words(text).isEmpty()) return null
         return ChatCommand.Intent.Switch(p.on, listOf(if (p.needChannel) p.target + " " + text.trim() else text.trim()))
     }
@@ -80,9 +80,13 @@ class ChatRunner(
      * [control] false ise aç/kapat, döngü ve sahne reddedilir (Telegram'dan kontrol kapalı). [weather]: brifing
      * için motorun az önce okuduğu günün havası. Sıcaklık için [temperature].
      */
-    fun run(intent: ChatCommand.Intent, by: String?, control: Boolean, weather: WeatherClient.Today? = null): String {
+    fun run(
+        intent: ChatCommand.Intent, by: String?, control: Boolean, weather: WeatherClient.Today? = null,
+        pendingKey: String? = null,
+    ): String {
         val s = strings()
-        val key = by.orEmpty()
+        // Telegram sohbet + kişi anahtarı verir (TelegramAuth.pendingKey): aynı adlı farklı kişiler birbirinin onayını kullanamaz.
+        val key = pendingKey ?: by.orEmpty()
         val waiting = pending.remove(key)?.takeIf { now() - it.at < PENDING_MS }
         val refused = s["tg_control_off"]
         return when (intent) {

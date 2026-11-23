@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">Nie udało się otworzyć aplikacji pocztowej; adres skopiowano do schowka.</string>
     <string name="desktop_secret_show">Pokaż App Secret</string>
     <string name="desktop_secret_hide">Ukryj App Secret</string>
+    <string name="desktop_crash_title">SwitchGuard napotkał błąd</string>
+    <string name="desktop_crash_text">Ostatnio wystąpił nieoczekiwany błąd. Wysłać raport o problemie, aby można go było naprawić? Zawiera tylko szczegóły błędu, wersję aplikacji i Windows; nic nie zostanie udostępnione, jeśli go nie wyślesz.</string>
+    <string name="desktop_crash_copied">Nie udało się otworzyć aplikacji poczty; raport skopiowano do schowka. Wklej go do wiadomości e-mail na adres %s.</string>
+    <string name="desktop_website">Strona internetowa</string>
 </resources>

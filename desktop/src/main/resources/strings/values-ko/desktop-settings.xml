@@ -29,4 +29,8 @@
     <string name="desktop_contact_copied">이메일 앱을 열 수 없어 주소를 클립보드에 복사했습니다.</string>
     <string name="desktop_secret_show">App Secret 표시</string>
     <string name="desktop_secret_hide">App Secret 숨기기</string>
+    <string name="desktop_crash_title">SwitchGuard에 오류가 발생했습니다</string>
+    <string name="desktop_crash_text">지난번에 예기치 않은 오류가 발생했습니다. 문제를 해결할 수 있도록 문제 보고서를 보낼까요? 오류 세부 정보, 앱 버전, Windows 버전만 포함되며 직접 보내지 않으면 아무것도 공유되지 않습니다.</string>
+    <string name="desktop_crash_copied">이메일 앱을 열 수 없어 보고서를 클립보드에 복사했습니다. %s(으)로 보내는 이메일에 붙여 넣으세요.</string>
+    <string name="desktop_website">웹사이트</string>
 </resources>

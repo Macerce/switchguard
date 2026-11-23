@@ -60,12 +60,18 @@ data class AutomationForm(
     /** Sensör tetikleyicisinde hangi değer ve eşik (metin). */
     val sensor: SensorKind? = null,
     val sensorValue: String = "",
+    /** Saat tetikleyicisi (telefon 2.35): gece yarısından dakika ve günler (bit 0 = pazartesi). */
+    val clockMinute: Int = 7 * 60,
+    val clockDays: Int = ActiveWindow.ALL_DAYS,
+    /** İlk eylemden sonra sırayla yapılacak ek eylemler (yalnız Otomasyon; uyarıda boş). */
+    val extras: List<AutoAction> = emptyList(),
 ) {
     /** Seçili cihaz bu olayı bildiremiyorsa (ör. güç ölçmüyor) olay "açıldı"ya döner. */
     fun normalized(devices: List<DeviceSnapshot>): AutomationForm {
         val src = devices.firstOrNull { it.id == triggerDevice }
         val kinds = kindsFor(src)
-        var f = if (triggerKind in kinds) this else copy(triggerKind = kinds.firstOrNull() ?: TriggerKind.TURNED_ON)
+        // Telefondan gelen bölge kuralı olduğu gibi kalır (masaüstünde yeni bölge kuralı seçilmez).
+        var f = if (triggerKind in kinds || triggerKind.usesZone) this else copy(triggerKind = kinds.firstOrNull() ?: TriggerKind.TURNED_ON)
         // Sensör olayında seçili değer bu cihazda yoksa ilkine geçilir; eşik boşsa şu anki değerle (yuvarlanmış) dolar.
         if (f.triggerKind.usesSensor) {
             val choices = sensorChoices(src, f.triggerKind)
@@ -99,6 +105,8 @@ data class AutomationForm(
             (!actionKind.usesCycle || cycles.any { it.id == actionCycle }) &&
             (!triggerKind.usesChannelPower || (lowValue != null && lowValue >= 0 && graceValue != null && graceValue >= 0)) &&
             (!triggerKind.usesMinutes || (minutesValue != null && minutesValue > 0)) &&
+            (!triggerKind.isClock || clockDays != 0) &&
+            extras.all { extraValid(it, devices, scenes, cycles) } &&
             (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
             (!actionKind.usesDevice || (devices.any { it.id == actionDevice && !it.sensorOnly } && !DeviceCategory.isCategory(actionDevice))) &&
             delayValue != null && delayValue >= 0
@@ -121,6 +129,7 @@ data class AutomationForm(
                 triggerKind.usesChannelPower -> lowMinutes.toIntOrNull() ?: 0
                 triggerKind.allowsHold -> holdMinutes
                 triggerKind.isSun -> offset
+                triggerKind.isClock -> clockMinute
                 else -> 0
             },
             watts = when {
@@ -131,6 +140,7 @@ data class AutomationForm(
             },
             graceMinutes = if (triggerKind.usesChannelPower) grace.toIntOrNull() ?: 0 else 0,
             sensor = if (triggerKind.usesSensor) sensor else null,
+            days = if (triggerKind.isClock) clockDays else ActiveWindow.ALL_DAYS,
         ),
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
@@ -143,6 +153,7 @@ data class AutomationForm(
         conditions = conds.map { it.toCondition() },
         conditionMatch = condMatch,
         presence = presence,
+        extraActions = extras,
     )
 
     /** Sıcaklık eşiği (eksi olabilir). */
@@ -154,7 +165,11 @@ data class AutomationForm(
     private fun wattsValue(): Double? = watts.trim().replace(',', '.').toDoubleOrNull()
 
     /** İşlem bu modda sunulmuyorsa modun varsayılan işlemine döner (düzenleyici yalnızca modun işlemlerini gösterir). */
-    fun inMode(mode: AutomationMode): AutomationForm = if (actionKind in mode.actions) this else copy(actionKind = mode.defaultAction)
+    fun inMode(mode: AutomationMode): AutomationForm {
+        val f = if (actionKind in mode.actions) this else copy(actionKind = mode.defaultAction)
+        // Ek eylemler yalnız otomasyonda (telefonda da uyarı sekmesinde yok).
+        return if (mode == AutomationMode.ALERT && f.extras.isNotEmpty()) f.copy(extras = emptyList()) else f
+    }
 
     companion object {
         /**
@@ -195,12 +210,17 @@ data class AutomationForm(
                 actionCycle = if (initial.action.kind.usesCycle) initial.action.deviceId else "",
                 sensor = t.sensor,
                 sensorValue = if (t.kind.usesSensorValue) formatNumber(t.watts) else "",
+                clockMinute = if (t.kind.isClock) t.minutes else 7 * 60,
+                clockDays = if (t.kind.isClock) t.days else ActiveWindow.ALL_DAYS,
+                extras = initial.extraActions,
             )
         }
 
         /** Güç olayları yalnızca enerji ölçen, kanal gücü olayı kanal başına ölçen cihazlarda sunulur. */
         fun kindsFor(device: DeviceSnapshot?): List<TriggerKind> = TriggerKind.entries.filter {
             when {
+                // Bölgeler telefonun konumuyla çalışır: masaüstünde sunulmaz.
+                it.usesZone -> false
                 // Kategori: yalnız anahtar ve bağlantı olayları (gün doğumu/sıcaklık cihazsız, yine sunulur).
                 device != null && DeviceCategory.isCategory(device.id) -> !it.usesDevice || it in DeviceCategory.TRIGGER_KINDS
                 it.usesChannelPower -> device?.hasChannelPower == true
@@ -216,6 +236,14 @@ data class AutomationForm(
         /** Seçili olaya uyan sensörler (sayısal ya da ikili). */
         fun sensorChoices(device: DeviceSnapshot?, kind: TriggerKind): List<SensorKind> =
             if (!kind.usesSensor) emptyList() else device?.sensors?.keys?.filter { it.binary == kind.usesSensorState }.orEmpty()
+
+        /** Ek eylem kaydedilebilir mi: cihaz eyleminde hedef, sahnede/döngüde var olan kayıt. */
+        fun extraValid(x: AutoAction, devices: List<DeviceSnapshot>, scenes: List<Scene>, cycles: List<Cycle>): Boolean = when {
+            x.kind.usesDevice -> devices.any { it.id == x.deviceId && !it.sensorOnly } && !DeviceCategory.isCategory(x.deviceId)
+            x.kind == ActionKind.RUN_SCENE -> scenes.any { it.id == x.deviceId }
+            x.kind.usesCycle -> cycles.any { it.id == x.deviceId }
+            else -> true
+        }
 
         internal fun formatNumber(v: Double): String = if (v == Math.floor(v)) v.toLong().toString() else v.toString()
     }

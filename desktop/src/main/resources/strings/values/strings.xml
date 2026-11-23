@@ -899,7 +899,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="smart_tg_commands">Commands and “Got it” button</string>
     <string name="smart_tg_commands_desc">People in your list can send /status and take over a ringing alarm. The alarm message gets a “Got it” button: pressing it silences the phone.</string>
     <string name="smart_tg_control">Allow turning devices on and off</string>
-    <string name="smart_tg_control_desc">/on and /off commands. Only people in your list can use them.</string>
+    <string name="smart_tg_control_desc">/on and /off commands. In a private chat the people in your list can use them; in a group only the people you choose.</string>
     <string name="smart_tg_forward">Send smart alerts to Telegram</string>
     <string name="smart_tg_forward_desc">Power outages, unusual consumption, the budget alert and the weekly report are also written to Telegram.</string>
     <string name="smart_wd">Watchdog</string>
@@ -1093,7 +1093,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="presence_section">At home / Away</string>
     <string name="presence_home">At home</string>
     <string name="presence_away">Away</string>
-    <string name="presence_home_desc">Rules marked "only when away" do not run. Switch to Away when you leave (also from the widget, the watch or Telegram /away).</string>
+    <string name="presence_home_desc">Rules marked "only when away" do not run. Switch to Away when you leave (also from the widget or Telegram /away).</string>
     <string name="presence_away_desc">You are away: rules marked "only when away" are active.</string>
     <string name="presence_soften">Softer alerts at home</string>
     <string name="presence_soften_desc">While at home, alarms of non-critical devices become notifications (like quiet hours). Critical devices always ring.</string>
@@ -1600,4 +1600,65 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="sensor_max">Max</string>
     <string name="sensor_alerts_hint">These also appear under Alerts › Conditional alerts, where you can edit them in detail.</string>
     <string name="board_sensors">Sensors</string>
+    <string name="crash_prompt_title">SwitchGuard closed unexpectedly</string>
+    <string name="crash_prompt_text">An error closed the app last time. Send a problem report so it can be fixed? Nothing is shared unless you send it.</string>
+    <string name="crash_prompt_send">Send report</string>
+    <string name="ai_help">Get help from AI</string>
+    <string name="ai_help_desc">Ready prompts for ChatGPT, Gemini, Claude…: find a setting, get setup steps, write commands</string>
+    <string name="ai_help_intro">Pick a prompt, write your own request in the square brackets and send it to the AI chat you like. The prompt describes the app\'s menus and features, so the AI explains the settings correctly and prepares commands you can paste into Chat.</string>
+    <string name="ai_help_privacy">The prompt only describes the app; your devices, account or other personal data are not added.</string>
+    <string name="ai_prompt_hint">Copy or share it, then replace the [bracketed] part with your own request in the chat.</string>
+    <string name="ai_copy">Copy</string>
+    <string name="ai_copied">Prompt copied to clipboard</string>
+    <string name="ai_p_ask">Where is a setting?</string>
+    <string name="ai_p_ask_desc">Ask about a setting or feature, get the menu path</string>
+    <string name="ai_p_setup">Set it up for me</string>
+    <string name="ai_p_setup_desc">Describe what you want; step-by-step for alarms, rules, cycles</string>
+    <string name="ai_p_commands">Write Chat commands</string>
+    <string name="ai_p_commands_desc">Turn your request into commands Chat understands; paste them and the app does it</string>
+    <string name="ai_p_ideas">Ideas for my home</string>
+    <string name="ai_p_ideas_desc">Alarm, automation and saving ideas based on your devices</string>
+    <string name="ai_p_fix">Fix a problem</string>
+    <string name="ai_p_fix_desc">No alarm, no notification, device offline…</string>
+    <string name="ai_p_ask_body" tools:ignore="MissingTranslation">TASK: Answer my question using the description above. Show where the setting is as a menu path; if the app doesn\'t have it, say clearly “this app doesn\'t have it” and suggest the closest option.\n\nMY QUESTION: [write your question here]</string>
+    <string name="ai_p_setup_body" tools:ignore="MissingTranslation">TASK: Below I describe what I want. Choose the best SwitchGuard feature for it (device alert, conditional alert, rule, cycle, scene, group, Chat template) and explain step by step: which tab, which button, which trigger/condition/action, which values. A rule can have several actions in order, with an optional wait between them; for many devices at once a scene or a group is simpler. If anything is missing (e.g. what the device is, how many channels it has), ask me first.\n\nMY REQUEST: [e.g. “Run the garden pump for 20 minutes every morning at 07:00; ring an alarm if the freezer turns off while I\'m away”]</string>
+    <string name="ai_p_commands_body" tools:ignore="MissingTranslation">TASK: The app\'s Chat screen (and Telegram bot) only understands short commands like the examples above. Turn my request into such commands. Rules: Chat matches a device by its name in the app, so use device, group, scene and cycle names exactly as I write them; if you don\'t know a device\'s name, don\'t invent one, ask me. One message per line, no numbers or explanations; add the channel number for multi-channel devices; for timed jobs use “turn on … for … minutes” or “turn off … in … minutes”. Put the commands in a code block so I can copy them; I will paste each line into Chat separately. If something can\'t be done with a command (e.g. repeat every day), add a short note below the code block on how to set it up.\n\nMY REQUEST (with my device names): [e.g. “I\'m leaving: turn off Living room and Kitchen lights, turn off Boiler in 1 hour, then tell me the status”]</string>
+    <string name="ai_p_ideas_body" tools:ignore="MissingTranslation">TASK: Give me SwitchGuard ideas for my home or workplace. First look at my info below; if it isn\'t enough, ask which smart devices I have (name and what is plugged in). Then: (1) which devices should ring an alarm and which should only notify, and which alert category (Critical/Important/Normal) fits, (2) 3–5 useful automations, cycles or scenes, (3) conditional alerts for saving energy. Add a short setup path to each idea; start with the 3 most important.\n\nMY DEVICES AND PLACE: [e.g. “Summer house: freezer plug, garden pump (2 channels), door sensor, living room light; empty in winter”]</string>
+    <string name="ai_p_fix_body" tools:ignore="MissingTranslation">TASK: Help me solve my problem. List the possible causes from most to least likely and tell me where to look in the app for each. Common causes: a missing permission in Settings → Permissions (notifications, background running/battery restriction, full-screen alarm, Xiaomi lock-screen alarm and autostart), monitoring turned off (Settings → Monitoring), quiet hours and alert category, the device itself being offline (Wi-Fi), the account session expiring (Settings → Accounts), zone and sunrise rules while location is off. If it isn\'t solved, tell me to report it via Settings → Help and about → Send error report. Ask for my phone brand and Android version if you need them.\n\nMY PROBLEM: [e.g. “The alarm sometimes doesn\'t ring at night when the door opens”]</string>
+    <string name="tuya_live_title">Tuya live updates on this device</string>
+    <string name="tuya_live_desc">If the same Tuya keys are used on several devices, live messages go to only one of them. When off, this device checks Tuya every 5 minutes.</string>
+    <string name="tuya_standby_detail">Tuya live messages are going to another device; checking every 5 minutes</string>
+    <string name="tuya_live_off_detail">Tuya live updates are off on this device; checking every 5 minutes</string>
+    <string name="tuya_standby_notice">Tuya live messages are going to another device that uses the same Tuya keys. This device will check Tuya every 5 minutes. Choose which device gets live updates in Settings → Monitoring.</string>
+    <string name="tg_group_control_title">Who can control in groups</string>
+    <string name="tg_group_control_nobody">Nobody: groups get alerts and status only</string>
+    <string name="tg_group_control_count">People who can control: %d</string>
+    <string name="tg_group_control_on">Turn devices on and off from this group</string>
+    <string name="tg_group_control_hint">Only the people ticked here can give on/off commands in this group. Someone not listed appears after writing a message in the group.</string>
+    <string name="tg_control_not_allowed">You are not allowed to turn devices on or off from this chat.</string>
+    <string name="trigger_time">At a time</string>
+    <string name="evt_time">At a time</string>
+    <string name="rule_clock_time">Time</string>
+    <string name="rule_add_action">Add action</string>
+    <string name="rule_action_wait">Wait after the previous action</string>
+    <string name="rule_step_after">after %1$s: %2$s</string>
+    <string name="rule_extra_n">Action %d</string>
+    <string name="hb_title">Heartbeat URL</string>
+    <string name="hb_desc">While monitoring is healthy, this device calls the address regularly. If the calls stop (phone off, monitoring stopped or blind), the outside service (healthchecks.io, Uptime Kuma) alerts you.</string>
+    <string name="hb_hint">Set the grace time in the outside service to about twice the interval. Use a separate address for each device.</string>
+    <string name="hb_url_label">Address (https://…)</string>
+    <string name="action_try">Try</string>
+    <string name="hook_sent">Sent (HTTP %d)</string>
+    <string name="hook_failed">Could not send: %s</string>
+    <string name="hook_invalid_url">The address must start with https:// or http://</string>
+    <string name="hooks_title">ntfy and webhook</string>
+    <string name="hooks_desc">Another way to be told about alarms besides Telegram: when a real alarm starts it is sent at once, and a short message follows when it is dismissed.</string>
+    <string name="hooks_ntfy_label">ntfy topic address</string>
+    <string name="hooks_webhook_label">Webhook address (JSON POST)</string>
+    <string name="hooks_hint">Pick a hard-to-guess ntfy topic: on ntfy.sh anyone who knows the topic can read its messages. Messages go only to the addresses you enter.</string>
+    <string name="hooks_test_text">SwitchGuard test message</string>
+    <string name="hooks_dismissed">The alarm was dismissed.</string>
+    <string name="alarm_swipe_dismiss">Swipe to dismiss</string>
+    <string name="alarm_screen_title">ALARM</string>
+    <string name="energy_live_power">Live power</string>
 </resources>
