@@ -1466,6 +1466,13 @@
     <string name="board_dream_missing">このスマートフォンにはスクリーンセーバーの設定がありません。代わりに「スタンバイ画面を開く」を使用してください。</string>
     <string name="board_dim">夜間は暗くする</string>
     <string name="board_dim_desc">23:00から7:00の間、文字が薄くなります</string>
+    <string name="board_launcher">ホーム画面（ランチャー）として使う</string>
+    <string name="board_launcher_desc">ホームボタンで SwitchGuard が開きます。壁掛けのスマホやタブレット向け。オフにすると以前のホーム画面に戻ります。</string>
+    <string name="board_launcher_on">有効：ホームボタンで SwitchGuard が開きます</string>
+    <string name="board_launcher_pick">まだ選ばれていません。タップしてホームアプリに SwitchGuard を選んでください</string>
+    <string name="board_boot">起動時にスタンバイ画面</string>
+    <string name="board_boot_desc">端末を再起動するとスタンバイ画面が自動で開きます</string>
+    <string name="board_boot_overlay">「他のアプリの上に重ねて表示」の許可が必要です（またはホーム画面として使用）。タップして許可</string>
     <string name="board_open_app">アプリを開く</string>
     <string name="board_close">閉じる</string>
     <string name="board_edit">レイアウトを編集</string>

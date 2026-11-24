@@ -1574,6 +1574,13 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="board_dream_missing">Ten telefon nie ma ustawienia wygaszacza ekranu; użyj zamiast tego „Otwórz ekran gotowości”.</string>
     <string name="board_dim">Przyciemniaj w nocy</string>
     <string name="board_dim_desc">Tekst przygasa między 23:00 a 07:00</string>
+    <string name="board_launcher">Używaj jako ekranu głównego (launcher)</string>
+    <string name="board_launcher_desc">Przycisk Home otwiera SwitchGuard — dla telefonu lub tabletu na ścianie. Wyłącz, aby wrócić do poprzedniego ekranu głównego.</string>
+    <string name="board_launcher_on">Aktywne: przycisk Home otwiera SwitchGuard</string>
+    <string name="board_launcher_pick">Jeszcze nie wybrano — dotknij i wybierz SwitchGuard jako aplikację ekranu głównego</string>
+    <string name="board_boot">Ekran czuwania przy starcie</string>
+    <string name="board_boot_desc">Po ponownym uruchomieniu urządzenia ekran czuwania otworzy się sam</string>
+    <string name="board_boot_overlay">Wymaga uprawnienia „Wyświetlanie nad innymi aplikacjami” (lub użyj jako ekranu głównego) — dotknij, aby zezwolić</string>
     <string name="board_open_app">Otwórz aplikację</string>
     <string name="board_close">Zamknij</string>
     <string name="board_edit">Edytuj układ</string>

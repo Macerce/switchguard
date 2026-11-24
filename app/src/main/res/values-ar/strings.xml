@@ -1646,6 +1646,13 @@
     <string name="board_dream_missing">لا يحتوي هذا الهاتف على إعداد شاشة توقف؛ استخدم «فتح شاشة الاستعداد» بدلًا من ذلك.</string>
     <string name="board_dim">تعتيم ليلًا</string>
     <string name="board_dim_desc">يخفت النص بين 23:00 و07:00</string>
+    <string name="board_launcher">استخدامه كشاشة رئيسية (مشغّل)</string>
+    <string name="board_launcher_desc">يفتح زر الصفحة الرئيسية SwitchGuard — لهاتف أو جهاز لوحي معلّق على الحائط. أوقفه للعودة إلى شاشتك الرئيسية السابقة.</string>
+    <string name="board_launcher_on">مفعّل: زر الصفحة الرئيسية يفتح SwitchGuard</string>
+    <string name="board_launcher_pick">لم يُختر بعد — انقر واختر SwitchGuard تطبيقًا للشاشة الرئيسية</string>
+    <string name="board_boot">شاشة الانتظار عند التشغيل</string>
+    <string name="board_boot_desc">عند إعادة تشغيل الجهاز تُفتح شاشة الانتظار تلقائيًا</string>
+    <string name="board_boot_overlay">يتطلب إذن «الظهور فوق التطبيقات الأخرى» (أو استخدامه كشاشة رئيسية) — انقر للسماح</string>
     <string name="board_open_app">فتح التطبيق</string>
     <string name="board_close">إغلاق</string>
     <string name="board_edit">تعديل التخطيط</string>

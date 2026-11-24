@@ -148,6 +148,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import com.macerce.switchguard.core.HomeLauncher
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.currentStateAsState
@@ -824,6 +825,14 @@ private fun StandbyPage() {
     val context = LocalContext.current
     val (store, version) = settingsState()
     val dim = remember(version) { store.standbyDim }
+    val onBoot = remember(version) { store.standbyOnBoot }
+    // Ana ekran ve izin seçimi sistem ayarlarında yapılır: dönünce yeniden oku.
+    val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    val resumed = lifecycle.isAtLeast(Lifecycle.State.RESUMED)
+    var offered by remember { mutableStateOf(HomeLauncher.isOffered(context)) }
+    val isHome = remember(resumed, offered) { HomeLauncher.isDefault(context) }
+    val canOverlay = remember(resumed) { AlarmActivity.canShowOverApps(context) }
+    val tv = remember { FormFactor.isTv(context) }
     PageIntro(stringResource(R.string.board_desc))
     SectionCard(Modifier.padding(top = 12.dp)) {
         InfoRow(
@@ -843,6 +852,38 @@ private fun StandbyPage() {
         Divider()
         InfoRow(Icons.Rounded.Nightlight, stringResource(R.string.board_dim), stringResource(R.string.board_dim_desc)) {
             Switch(checked = dim, onCheckedChange = { store.standbyDim = it })
+        }
+    }
+    // Duvar panosu: ana ekran olarak kullanma ve açılışta bekleme ekranı.
+    SectionCard(Modifier.padding(top = 12.dp)) {
+        if (!tv) {
+            InfoRow(
+                Icons.Rounded.Home, stringResource(R.string.board_launcher),
+                stringResource(
+                    when {
+                        offered && isHome -> R.string.board_launcher_on
+                        offered -> R.string.board_launcher_pick
+                        else -> R.string.board_launcher_desc
+                    },
+                ),
+                Modifier.clickable { if (offered) HomeLauncher.openChooser(context) },
+            ) {
+                Switch(checked = offered, onCheckedChange = {
+                    HomeLauncher.setOffered(context, it)
+                    offered = it
+                    // Açınca seçiciyi aç; kapatınca da sistem eski ana ekranı sorsun.
+                    HomeLauncher.openChooser(context)
+                })
+            }
+            Divider()
+        }
+        val needsOverlay = onBoot && !isHome && !canOverlay
+        InfoRow(
+            Icons.Rounded.RestartAlt, stringResource(R.string.board_boot),
+            stringResource(if (needsOverlay) R.string.board_boot_overlay else R.string.board_boot_desc),
+            if (needsOverlay) Modifier.clickable { AlarmActivity.openOverlaySettings(context) } else Modifier,
+        ) {
+            Switch(checked = onBoot, onCheckedChange = { store.standbyOnBoot = it })
         }
     }
 }

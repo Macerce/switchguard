@@ -1574,6 +1574,13 @@
     <string name="board_dream_missing">В этом телефоне нет настройки заставки; используйте «Открыть экран ожидания».</string>
     <string name="board_dim">Затемнять ночью</string>
     <string name="board_dim_desc">Текст тускнеет с 23:00 до 07:00</string>
+    <string name="board_launcher">Использовать как главный экран (лаунчер)</string>
+    <string name="board_launcher_desc">Кнопка «Домой» открывает SwitchGuard — для телефона или планшета на стене. Выключите, чтобы вернуть прежний главный экран.</string>
+    <string name="board_launcher_on">Включено: кнопка «Домой» открывает SwitchGuard</string>
+    <string name="board_launcher_pick">Ещё не выбран — нажмите и выберите SwitchGuard приложением главного экрана</string>
+    <string name="board_boot">Экран ожидания при запуске</string>
+    <string name="board_boot_desc">После перезагрузки устройства экран ожидания открывается сам</string>
+    <string name="board_boot_overlay">Нужно разрешение «Поверх других приложений» (или используйте как главный экран) — нажмите, чтобы разрешить</string>
     <string name="board_open_app">Открыть приложение</string>
     <string name="board_close">Закрыть</string>
     <string name="board_edit">Изменить макет</string>

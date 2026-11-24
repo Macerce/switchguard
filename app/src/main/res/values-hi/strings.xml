@@ -1431,6 +1431,13 @@
     <string name="board_dream_missing">इस फ़ोन में स्क्रीन सेवर की सेटिंग नहीं है; इसकी जगह “स्टैंडबाय स्क्रीन खोलें” इस्तेमाल करें।</string>
     <string name="board_dim">रात में मंद करें</string>
     <string name="board_dim_desc">23:00 से 07:00 के बीच टेक्स्ट धुंधला हो जाता है</string>
+    <string name="board_launcher">होम स्क्रीन (लॉन्चर) के रूप में उपयोग करें</string>
+    <string name="board_launcher_desc">होम बटन SwitchGuard खोलता है — दीवार पर लगे फ़ोन या टैबलेट के लिए। पुरानी होम स्क्रीन पर लौटने के लिए बंद करें।</string>
+    <string name="board_launcher_on">चालू: होम बटन SwitchGuard खोलता है</string>
+    <string name="board_launcher_pick">अभी चुना नहीं गया — टैप करें और SwitchGuard को होम ऐप चुनें</string>
+    <string name="board_boot">चालू होने पर स्टैंडबाय स्क्रीन</string>
+    <string name="board_boot_desc">डिवाइस रीस्टार्ट होने पर स्टैंडबाय स्क्रीन अपने आप खुलती है</string>
+    <string name="board_boot_overlay">“दूसरे ऐप्स के ऊपर दिखाएँ” अनुमति चाहिए (या होम स्क्रीन के रूप में उपयोग करें) — अनुमति देने के लिए टैप करें</string>
     <string name="board_open_app">ऐप खोलें</string>
     <string name="board_close">बंद करें</string>
     <string name="board_edit">लेआउट बदलें</string>

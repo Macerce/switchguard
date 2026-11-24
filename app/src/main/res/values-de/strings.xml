@@ -1500,6 +1500,13 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_dream_missing">Dieses Handy hat keine Bildschirmschoner-Einstellung; verwende stattdessen „Standby-Bildschirm öffnen“.</string>
     <string name="board_dim">Nachts abdunkeln</string>
     <string name="board_dim_desc">Der Text blendet zwischen 23:00 und 07:00 ab</string>
+    <string name="board_launcher">Als Startbildschirm (Launcher) nutzen</string>
+    <string name="board_launcher_desc">Die Home-Taste öffnet SwitchGuard – für ein an der Wand montiertes Handy oder Tablet. Ausschalten bringt den alten Startbildschirm zurück.</string>
+    <string name="board_launcher_on">Aktiv: Die Home-Taste öffnet SwitchGuard</string>
+    <string name="board_launcher_pick">Noch nicht gewählt – tippen und SwitchGuard als Start-App wählen</string>
+    <string name="board_boot">Standby-Bildschirm beim Start</string>
+    <string name="board_boot_desc">Nach einem Neustart öffnet sich der Standby-Bildschirm von selbst</string>
+    <string name="board_boot_overlay">Benötigt die Berechtigung „Über anderen Apps einblenden“ (oder als Startbildschirm nutzen) – zum Erlauben tippen</string>
     <string name="board_open_app">App öffnen</string>
     <string name="board_close">Schließen</string>
     <string name="board_edit">Layout bearbeiten</string>

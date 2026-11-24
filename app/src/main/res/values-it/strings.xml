@@ -1509,6 +1509,13 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_dream_missing">Questo telefono non ha l\'impostazione del salvaschermo; usa invece “Apri la schermata di standby”.</string>
     <string name="board_dim">Attenua di notte</string>
     <string name="board_dim_desc">Il testo si attenua tra le 23:00 e le 07:00</string>
+    <string name="board_launcher">Usa come schermata Home (launcher)</string>
+    <string name="board_launcher_desc">Il tasto Home apre SwitchGuard: per un telefono o tablet a parete. Disattiva per tornare alla Home precedente.</string>
+    <string name="board_launcher_on">Attivo: il tasto Home apre SwitchGuard</string>
+    <string name="board_launcher_pick">Non ancora scelto: tocca e scegli SwitchGuard come app Home</string>
+    <string name="board_boot">Schermata di attesa all\'avvio</string>
+    <string name="board_boot_desc">Al riavvio del dispositivo la schermata di attesa si apre da sola</string>
+    <string name="board_boot_overlay">Serve il permesso «Mostra sopra altre app» (oppure usalo come Home): tocca per consentire</string>
     <string name="board_open_app">Apri app</string>
     <string name="board_close">Chiudi</string>
     <string name="board_edit">Modifica layout</string>

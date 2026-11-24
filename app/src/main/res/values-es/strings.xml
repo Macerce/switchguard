@@ -1508,6 +1508,13 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_dream_missing">Este teléfono no tiene el ajuste de protector de pantalla; usa “Abrir pantalla de espera” en su lugar.</string>
     <string name="board_dim">Atenuar de noche</string>
     <string name="board_dim_desc">El texto se atenúa entre las 23:00 y las 07:00</string>
+    <string name="board_launcher">Usar como pantalla de inicio (launcher)</string>
+    <string name="board_launcher_desc">El botón Inicio abre SwitchGuard: para un teléfono o tableta en la pared. Desactívalo para volver a tu pantalla de inicio anterior.</string>
+    <string name="board_launcher_on">Activo: el botón Inicio abre SwitchGuard</string>
+    <string name="board_launcher_pick">Aún no elegido: toca y elige SwitchGuard como app de inicio</string>
+    <string name="board_boot">Pantalla de espera al iniciar</string>
+    <string name="board_boot_desc">Al reiniciar el dispositivo, la pantalla de espera se abre sola</string>
+    <string name="board_boot_overlay">Necesita el permiso «Mostrar sobre otras apps» (o usarlo como pantalla de inicio): toca para permitir</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Cerrar</string>
     <string name="board_edit">Editar diseño</string>

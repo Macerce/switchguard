@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.48.0 — 2026-11-25
+**New**
+- Wall panel mode (Settings → Standby screen): "Use as home screen (launcher)" makes the Home button open SwitchGuard; switch it off to return to your old home screen. "Standby screen at startup" opens the standby screen by itself after the device restarts (as home screen, or with the "Display over other apps" permission).
+
 ## 2.47.1 — 2026-11-24
 **Fixed**
 - Home Assistant addresses like homeassistant.local:8123 were opened over HTTPS instead of HTTP.

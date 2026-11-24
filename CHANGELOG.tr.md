@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.48.0 — 2026-11-25
+**Yeni**
+- Duvar panosu kipi (Ayarlar → Bekleme ekranı): "Ana ekran (launcher) olarak kullan" ana ekran tuşunu SwitchGuard'a bağlar; kapatınca eski ana ekranına dönersin. "Açılışta bekleme ekranı" cihaz kapanıp açılınca bekleme ekranını kendiliğinden açar (ana ekran olarak ya da "Diğer uygulamaların üzerinde göster" izniyle).
+
 ## 2.47.1 — 2026-11-24
 **Düzeltme**
 - homeassistant.local:8123 gibi Home Assistant adresleri HTTP yerine HTTPS ile açılıyordu.

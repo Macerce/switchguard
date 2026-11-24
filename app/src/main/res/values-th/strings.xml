@@ -1437,6 +1437,13 @@
     <string name="board_dream_missing">โทรศัพท์เครื่องนี้ไม่มีการตั้งค่าภาพพักหน้าจอ ใช้ “เปิดหน้าจอสแตนด์บาย” แทน</string>
     <string name="board_dim">หรี่ตอนกลางคืน</string>
     <string name="board_dim_desc">ข้อความจางลงระหว่าง 23:00 ถึง 07:00</string>
+    <string name="board_launcher">ใช้เป็นหน้าจอหลัก (ลันเชอร์)</string>
+    <string name="board_launcher_desc">ปุ่มหน้าหลักจะเปิด SwitchGuard — สำหรับโทรศัพท์หรือแท็บเล็ตที่ติดผนัง ปิดเพื่อกลับไปใช้หน้าจอหลักเดิม</string>
+    <string name="board_launcher_on">เปิดอยู่: ปุ่มหน้าหลักเปิด SwitchGuard</string>
+    <string name="board_launcher_pick">ยังไม่ได้เลือก — แตะแล้วเลือก SwitchGuard เป็นแอปหน้าจอหลัก</string>
+    <string name="board_boot">หน้าจอพักเมื่อเปิดเครื่อง</string>
+    <string name="board_boot_desc">เมื่อรีสตาร์ทอุปกรณ์ หน้าจอพักจะเปิดขึ้นเอง</string>
+    <string name="board_boot_overlay">ต้องใช้สิทธิ์ “แสดงทับแอปอื่น” (หรือใช้เป็นหน้าจอหลัก) — แตะเพื่ออนุญาต</string>
     <string name="board_open_app">เปิดแอป</string>
     <string name="board_close">ปิด</string>
     <string name="board_edit">แก้ไขเลย์เอาต์</string>

@@ -36,6 +36,12 @@ class MainActivity : ComponentActivity() {
         // Kanallar ilk açılışta oluşsun ki kullanıcı ayarlardan görebilsin.
         Notifier.createChannels(this)
         val store = Store.get(this)
+        // Ana ekran olarak açıldıysa ve cihaz yeni açıldıysa: bekleme ekranı (duvar panosu).
+        if (savedInstanceState == null && intent?.hasCategory(android.content.Intent.CATEGORY_HOME) == true &&
+            store.standbyOnBoot && com.macerce.switchguard.core.HomeLauncher.firstSinceBoot(this)
+        ) {
+            StandbyActivity.start(this)
+        }
         setContent {
             // Alarm çalarken ses tuşları alarmın sesini ayarlasın (yoksa medya sesi değişir, alarm aynı şiddette sürer).
             val version by store.version.collectAsStateWithLifecycle()

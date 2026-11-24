@@ -507,6 +507,16 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = str("lon").toDoubleOrNull()
         set(v) = put { putString("lon", v?.toString() ?: "") }
 
+    /** Cihaz yeniden açılınca bekleme ekranı kendiliğinden gelsin (duvar panosu). */
+    var standbyOnBoot: Boolean
+        get() = prefs.getBoolean("standbyOnBoot", false)
+        set(v) = put { putBoolean("standbyOnBoot", v) }
+
+    /** Bekleme ekranının en son açıldığı açılış sayacı ([com.macerce.switchguard.core.HomeLauncher.firstSinceBoot]). */
+    var standbyBootSeen: Int
+        get() = prefs.getInt("standbyBootSeen", -1)
+        set(v) = put { putInt("standbyBootSeen", v) }
+
     /** Bekleme ekranı 23:00–07:00 arası soluklaşsın. */
     var standbyDim: Boolean
         get() = prefs.getBoolean("standbyDim", true)

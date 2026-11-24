@@ -53,6 +53,8 @@ object Backup {
         "snapshots" to "cihazların canlı durumu (buluttan yeniden okunur)",
         "onboardingDone" to "geri yüklemede ayrıca yazılır",
         "wdMode" to "bekçi kipi bu cihaza özel",
+        "standbyOnBoot" to "açılışta bekleme ekranı bu cihazın kullanımına özel (duvar panosu)",
+        "standbyBootSeen" to "bu cihazın açılış sayacı",
         "wdMin" to "bekçi aralığı bu cihaza özel",
         "chargerOutage" to "şarj kesintisinden elektrik kesintisi çıkarımı bu cihazın donanımına bağlı",
         "alarmSound" to "seçilen zil sesi bu cihazdaki bir dosyayı gösterir; yeni cihazda olmayabilir",

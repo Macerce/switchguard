@@ -1537,6 +1537,13 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="board_dream_missing">Ce téléphone n\'a pas de réglage d\'économiseur d\'écran ; utilisez plutôt « Ouvrir l\'écran de veille ».</string>
     <string name="board_dim">Atténuer la nuit</string>
     <string name="board_dim_desc">Le texte s\'estompe entre 23:00 et 07:00</string>
+    <string name="board_launcher">Utiliser comme écran d\'accueil (launcher)</string>
+    <string name="board_launcher_desc">Le bouton Accueil ouvre SwitchGuard — pour un téléphone ou une tablette fixé au mur. Désactivez pour retrouver votre ancien écran d\'accueil.</string>
+    <string name="board_launcher_on">Actif : le bouton Accueil ouvre SwitchGuard</string>
+    <string name="board_launcher_pick">Pas encore choisi — touchez et choisissez SwitchGuard comme application d\'accueil</string>
+    <string name="board_boot">Écran de veille au démarrage</string>
+    <string name="board_boot_desc">Au redémarrage de l\'appareil, l\'écran de veille s\'ouvre tout seul</string>
+    <string name="board_boot_overlay">Nécessite l\'autorisation « Afficher par-dessus d\'autres applis » (ou l\'utiliser comme écran d\'accueil) — touchez pour autoriser</string>
     <string name="board_open_app">Ouvrir l\'application</string>
     <string name="board_close">Fermer</string>
     <string name="board_edit">Modifier la disposition</string>

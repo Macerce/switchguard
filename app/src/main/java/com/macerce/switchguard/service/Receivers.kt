@@ -20,6 +20,14 @@ class BootReceiver : BroadcastReceiver() {
         if (Store.get(context).monitoringEnabled) {
             MonitorService.send(context, MonitorService.ACTION_START)
         }
+        // Açılışta bekleme ekranı. Ana ekran SwitchGuard ise onu MainActivity açar (hangisi önce gelirse);
+        // değilse arka plandan açabilmek için "diğer uygulamaların üzerinde göster" izni gerekir.
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED && Store.get(context).standbyOnBoot &&
+            com.macerce.switchguard.ui.AlarmActivity.canShowOverApps(context) &&
+            com.macerce.switchguard.core.HomeLauncher.firstSinceBoot(context)
+        ) {
+            runCatching { com.macerce.switchguard.ui.StandbyActivity.start(context) }
+        }
     }
 }
 

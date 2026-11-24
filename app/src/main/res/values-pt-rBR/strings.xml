@@ -1538,6 +1538,13 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="board_dream_missing">Este celular não tem ajuste de protetor de tela; use “Abrir tela de espera”.</string>
     <string name="board_dim">Escurecer à noite</string>
     <string name="board_dim_desc">O texto esmaece entre 23:00 e 07:00</string>
+    <string name="board_launcher">Usar como tela inicial (launcher)</string>
+    <string name="board_launcher_desc">O botão Início abre o SwitchGuard — para um celular ou tablet na parede. Desative para voltar à tela inicial anterior.</string>
+    <string name="board_launcher_on">Ativo: o botão Início abre o SwitchGuard</string>
+    <string name="board_launcher_pick">Ainda não escolhido — toque e escolha o SwitchGuard como app de início</string>
+    <string name="board_boot">Tela de espera ao iniciar</string>
+    <string name="board_boot_desc">Quando o aparelho reinicia, a tela de espera abre sozinha</string>
+    <string name="board_boot_overlay">Precisa da permissão “Sobrepor a outros apps” (ou usar como tela inicial) — toque para permitir</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Fechar</string>
     <string name="board_edit">Editar layout</string>

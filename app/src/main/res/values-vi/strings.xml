@@ -1437,6 +1437,13 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_dream_missing">Điện thoại này không có cài đặt trình bảo vệ màn hình; hãy dùng “Mở màn hình chờ”.</string>
     <string name="board_dim">Làm mờ vào ban đêm</string>
     <string name="board_dim_desc">Chữ mờ dần từ 23:00 đến 07:00</string>
+    <string name="board_launcher">Dùng làm màn hình chính (launcher)</string>
+    <string name="board_launcher_desc">Nút Màn hình chính sẽ mở SwitchGuard — cho điện thoại hoặc máy tính bảng treo tường. Tắt để quay lại màn hình chính cũ.</string>
+    <string name="board_launcher_on">Đang bật: nút Màn hình chính mở SwitchGuard</string>
+    <string name="board_launcher_pick">Chưa chọn — chạm và chọn SwitchGuard làm ứng dụng màn hình chính</string>
+    <string name="board_boot">Màn hình chờ khi khởi động</string>
+    <string name="board_boot_desc">Khi thiết bị khởi động lại, màn hình chờ tự mở</string>
+    <string name="board_boot_overlay">Cần quyền “Hiển thị trên ứng dụng khác” (hoặc dùng làm màn hình chính) — chạm để cho phép</string>
     <string name="board_open_app">Mở ứng dụng</string>
     <string name="board_close">Đóng</string>
     <string name="board_edit">Sửa bố cục</string>

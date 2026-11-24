@@ -1466,6 +1466,13 @@
     <string name="board_dream_missing">이 휴대폰에는 화면 보호기 설정이 없습니다. 대신 “대기 화면 열기”를 사용하세요.</string>
     <string name="board_dim">밤에 어둡게</string>
     <string name="board_dim_desc">23:00부터 07:00까지 글자가 흐려집니다</string>
+    <string name="board_launcher">홈 화면(런처)으로 사용</string>
+    <string name="board_launcher_desc">홈 버튼이 SwitchGuard를 엽니다 — 벽에 거는 휴대폰이나 태블릿용. 끄면 이전 홈 화면으로 돌아갑니다.</string>
+    <string name="board_launcher_on">사용 중: 홈 버튼이 SwitchGuard를 엽니다</string>
+    <string name="board_launcher_pick">아직 선택되지 않음 — 눌러서 홈 앱으로 SwitchGuard를 선택하세요</string>
+    <string name="board_boot">시작 시 대기 화면</string>
+    <string name="board_boot_desc">기기를 다시 시작하면 대기 화면이 자동으로 열립니다</string>
+    <string name="board_boot_overlay">‘다른 앱 위에 표시’ 권한이 필요합니다(또는 홈 화면으로 사용) — 눌러서 허용</string>
     <string name="board_open_app">앱 열기</string>
     <string name="board_close">닫기</string>
     <string name="board_edit">레이아웃 편집</string>

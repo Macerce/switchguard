@@ -1503,6 +1503,13 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_dream_missing">This phone has no screen saver setting; use “Open standby screen” instead.</string>
     <string name="board_dim">Dim at night</string>
     <string name="board_dim_desc">Text fades between 23:00 and 07:00</string>
+    <string name="board_launcher">Use as home screen (launcher)</string>
+    <string name="board_launcher_desc">Turns the Home button into SwitchGuard — for a wall-mounted phone or tablet. Switch off to go back to your old home screen.</string>
+    <string name="board_launcher_on">Active: the Home button opens SwitchGuard</string>
+    <string name="board_launcher_pick">Not chosen yet — tap and pick SwitchGuard as the home app</string>
+    <string name="board_boot">Standby screen at startup</string>
+    <string name="board_boot_desc">When the device restarts, the standby screen opens by itself</string>
+    <string name="board_boot_overlay">Needs “Display over other apps” permission (or use as home screen) — tap to allow</string>
     <string name="board_open_app">Open app</string>
     <string name="board_close">Close</string>
     <string name="board_edit">Edit layout</string>

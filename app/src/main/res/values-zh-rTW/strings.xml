@@ -1465,6 +1465,13 @@
     <string name="board_dream_missing">這支手機沒有螢幕保護程式設定；請改用「開啟待機畫面」。</string>
     <string name="board_dim">夜間調暗</string>
     <string name="board_dim_desc">文字在 23:00 到 07:00 之間變暗</string>
+    <string name="board_launcher">用作主畫面（啟動器）</string>
+    <string name="board_launcher_desc">按主畫面鍵會開啟 SwitchGuard——適合掛在牆上的手機或平板。關閉即可回到原來的主畫面。</string>
+    <string name="board_launcher_on">已啟用：主畫面鍵會開啟 SwitchGuard</string>
+    <string name="board_launcher_pick">尚未選擇——輕觸並將 SwitchGuard 選為主畫面應用程式</string>
+    <string name="board_boot">開機時顯示待機畫面</string>
+    <string name="board_boot_desc">裝置重新啟動後，待機畫面會自動開啟</string>
+    <string name="board_boot_overlay">需要「顯示在其他應用程式上層」權限（或用作主畫面）——輕觸以允許</string>
     <string name="board_open_app">開啟應用程式</string>
     <string name="board_close">關閉</string>
     <string name="board_edit">編輯版面</string>

@@ -1395,6 +1395,13 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="board_dream_missing">Ponsel ini tidak memiliki pengaturan screensaver; gunakan “Buka layar siaga” sebagai gantinya.</string>
     <string name="board_dim">Redupkan di malam hari</string>
     <string name="board_dim_desc">Teks memudar antara 23:00 dan 07:00</string>
+    <string name="board_launcher">Gunakan sebagai layar utama (launcher)</string>
+    <string name="board_launcher_desc">Tombol Beranda membuka SwitchGuard — untuk ponsel atau tablet di dinding. Matikan untuk kembali ke layar utama lama.</string>
+    <string name="board_launcher_on">Aktif: tombol Beranda membuka SwitchGuard</string>
+    <string name="board_launcher_pick">Belum dipilih — ketuk dan pilih SwitchGuard sebagai aplikasi layar utama</string>
+    <string name="board_boot">Layar siaga saat menyala</string>
+    <string name="board_boot_desc">Saat perangkat dinyalakan ulang, layar siaga terbuka sendiri</string>
+    <string name="board_boot_overlay">Perlu izin “Tampilkan di atas aplikasi lain” (atau gunakan sebagai layar utama) — ketuk untuk mengizinkan</string>
     <string name="board_open_app">Buka aplikasi</string>
     <string name="board_close">Tutup</string>
     <string name="board_edit">Ubah tata letak</string>

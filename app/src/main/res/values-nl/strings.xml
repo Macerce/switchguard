@@ -1502,6 +1502,13 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_dream_missing">Deze telefoon heeft geen screensaverinstelling; gebruik in plaats daarvan “Stand-byscherm openen”.</string>
     <string name="board_dim">\'s Nachts dimmen</string>
     <string name="board_dim_desc">Tekst vervaagt tussen 23:00 en 07:00</string>
+    <string name="board_launcher">Gebruiken als startscherm (launcher)</string>
+    <string name="board_launcher_desc">De Home-knop opent SwitchGuard — voor een telefoon of tablet aan de muur. Zet uit om terug te gaan naar je oude startscherm.</string>
+    <string name="board_launcher_on">Actief: de Home-knop opent SwitchGuard</string>
+    <string name="board_launcher_pick">Nog niet gekozen — tik en kies SwitchGuard als start-app</string>
+    <string name="board_boot">Standby-scherm bij opstarten</string>
+    <string name="board_boot_desc">Na een herstart opent het standby-scherm vanzelf</string>
+    <string name="board_boot_overlay">Vereist de toestemming ‘Weergeven over andere apps’ (of gebruik als startscherm) — tik om toe te staan</string>
     <string name="board_open_app">App openen</string>
     <string name="board_close">Sluiten</string>
     <string name="board_edit">Indeling bewerken</string>
