@@ -42,6 +42,17 @@ class MainActivity : ComponentActivity() {
         ) {
             StandbyActivity.start(this)
         }
+        // Ana ekran (launcher) iken en üst ekranda Geri uygulamayı kapatmasın: kapanınca sistem ana ekranı hemen
+        // yeniden açıyor, "çıkıp geri geliyor" gibi görünüyordu. Ekranların kendi Geri işleyicileri bundan sonra
+        // eklendiği için önce onlar çalışır; bu yalnız en üst ekranda devreye girer.
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (com.macerce.switchguard.core.HomeLauncher.isDefault(this@MainActivity)) return
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+                isEnabled = true
+            }
+        })
         setContent {
             // Alarm çalarken ses tuşları alarmın sesini ayarlasın (yoksa medya sesi değişir, alarm aynı şiddette sürer).
             val version by store.version.collectAsStateWithLifecycle()

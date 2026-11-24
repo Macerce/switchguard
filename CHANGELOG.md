@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.48.1 — 2026-11-25
+**Fixed**
+- When SwitchGuard is the home screen, Back on the main screen no longer closes the app (it looked like the app exited and came straight back).
+
 ## 2.48.0 — 2026-11-25
 **New**
 - Wall panel mode (Settings → Standby screen): "Use as home screen (launcher)" makes the Home button open SwitchGuard; switch it off to return to your old home screen. "Standby screen at startup" opens the standby screen by itself after the device restarts (as home screen, or with the "Display over other apps" permission).
