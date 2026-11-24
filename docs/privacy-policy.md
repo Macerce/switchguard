@@ -1,6 +1,6 @@
 # SwitchGuard – Privacy Policy / Gizlilik Politikası
 
-_Last updated / Son güncelleme: 18 November 2026 / 18 Kasım 2026_
+_Last updated / Son güncelleme: 24 November 2026 / 24 Kasım 2026_
 
 ## English
 
