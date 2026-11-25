@@ -6,7 +6,6 @@ import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.OpenInFull
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -84,6 +83,7 @@ import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Grain
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.NightsStay
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.RecordVoiceOver
@@ -304,6 +304,24 @@ private fun channelsOf(d: DeviceSnapshot): List<Int> =
  */
 @Composable
 fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost? = null, heard: Pair<Long, String>? = null) {
+    // Home Assistant'ın yazı tipi Roboto; bazı telefonlarda (MIUI) sistem yazısı farklı olduğundan uygulamayla gelir.
+    CompositionLocalProvider(androidx.compose.material3.LocalTextStyle provides androidx.compose.material3.LocalTextStyle.current.copy(fontFamily = HaFont)) {
+        StandbyBoard(onOpenApp, onClose, host, heard)
+    }
+}
+
+@OptIn(androidx.compose.ui.text.ExperimentalTextApi::class)
+private val HaFont = androidx.compose.ui.text.font.FontFamily(
+    listOf(400, 500, 600).map { w ->
+        androidx.compose.ui.text.font.Font(
+            R.font.roboto, FontWeight(w),
+            variationSettings = androidx.compose.ui.text.font.FontVariation.Settings(androidx.compose.ui.text.font.FontVariation.weight(w)),
+        )
+    },
+)
+
+@Composable
+private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost?, heard: Pair<Long, String>?) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     // Alttaki pencere: sesli komutun yanıtı, durum özeti ya da günün özeti; dokununca kapanır, okuma kesilir.
@@ -413,8 +431,11 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
     var grid by remember { mutableStateOf(StandbyGrid.parse(store.standbyGrid)) }
     var editing by remember { mutableStateOf(false) }
     var adding by remember { mutableStateOf(false) }
+    // Düzenlemede "⋮" ile açılan kart menüsü (boyut + kaldır).
+    var cardMenu by remember { mutableStateOf<String?>(null) }
     // Son yerleşim ("Ekle" mevcutları ekrandaki yerlerinde sabitler).
     val lastPlaced = remember { object { var value: List<StandbyGrid.Placed> = emptyList() } }
+    val lastCols = remember { object { var value = 8 } }
     val available = remember(tiles, sensors, energyIds, rules.isNotEmpty()) {
         buildList {
             add(StandbyGrid.CLOCK); add(StandbyGrid.WEATHER); add(StandbyGrid.STATUS)
@@ -472,6 +493,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             val cell = (maxWidth - Gap * (cols - 1)) / cols
             val placed = remember(shown, cols) { StandbyGrid.pack(shown, cols) }
             lastPlaced.value = placed
+            lastCols.value = cols
             val scroll = rememberScrollState()
             val viewport = with(LocalDensity.current) { maxHeight.toPx() }
             val topPad = with(LocalDensity.current) { (if (editing) 64.dp else 0.dp).toPx() }
@@ -482,7 +504,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     onStartEdit = { menu = false; panel = null; Speaker.stop(); editing = true },
                     onPlace = { id, x, y, w, h -> StandbyGrid.place(placed, id, x, y, w, h, cols)?.let { save(it) } },
                     onMove = { id, x, y -> StandbyGrid.move(placed, id, x, y, cols)?.let { save(it) } },
-                    onRemove = { id -> save(StandbyGrid.freeze(placed).filter { it.id != id }, grid.removed + id) },
+                    onMenu = { id -> adding = false; cardMenu = id },
                 ) { id, w, h ->
                     when (id) {
                         StandbyGrid.CLOCK -> ClockWidget(now, w, h)
@@ -522,7 +544,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 TextButton(onClick = { grid = StandbyGrid.State(emptyList(), emptySet()); store.standbyGrid = null; adding = false }) {
                     Text(stringResource(R.string.board_reset), color = Ink)
                 }
-                TextButton(onClick = { editing = false; adding = false }) { Text(stringResource(R.string.action_done), color = Teal) }
+                TextButton(onClick = { editing = false; adding = false; cardMenu = null }) { Text(stringResource(R.string.action_done), color = Teal) }
             }
             AnimatedVisibility(adding && addable.isNotEmpty(), Modifier.align(Alignment.TopCenter).padding(top = 72.dp), enter = fadeIn(), exit = fadeOut()) {
                 Column(
@@ -541,6 +563,53 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                             Icon(Icons.Rounded.Add, stringResource(R.string.board_show), tint = Teal, modifier = Modifier.size(20.dp))
                             Text(widgetName(id, ruleDevices), color = Ink, fontSize = 16.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         }
+                    }
+                }
+            }
+        }
+        val menuItem = cardMenu?.let { id -> lastPlaced.value.firstOrNull { it.item.id == id } }
+        if (editing && menuItem != null) {
+            val id = menuItem.item.id
+            val cols = lastCols.value
+            Box(
+                Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f))
+                    .clickable(remember { MutableInteractionSource() }, indication = null) { cardMenu = null },
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    Modifier.padding(24.dp).widthIn(max = 420.dp).fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Card)
+                        .border(1.dp, Edge, RoundedCornerShape(16.dp))
+                        .clickable(remember { MutableInteractionSource() }, indication = null) {}
+                        .padding(16.dp),
+                ) {
+                    Text(widgetName(id, ruleDevices), color = Ink, fontSize = 20.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Spacer(Modifier.height(16.dp))
+                    Text(stringResource(R.string.board_size) + " · ${menuItem.w} × ${menuItem.h}", color = Dim, fontSize = 14.sp)
+                    Spacer(Modifier.height(8.dp))
+                    val (mw, mh) = StandbyGrid.minSize(id)
+                    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                        for (y in 0 until 6) Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                            for (x in 0 until cols) {
+                                val inside = x < menuItem.w && y < menuItem.h
+                                val allowed = x + 1 >= mw && y + 1 >= mh
+                                Box(
+                                    Modifier.weight(1f).height(28.dp).clip(RoundedCornerShape(6.dp))
+                                        .background(if (inside) Teal.copy(alpha = 0.55f) else Color.White.copy(alpha = if (allowed) 0.08f else 0.03f))
+                                        .clickable {
+                                            val (w, h) = StandbyGrid.clampSize(id, x + 1, y + 1, cols)
+                                            StandbyGrid.resize(lastPlaced.value, id, w, h, cols)?.let { save(it) }
+                                        },
+                                )
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(onClick = {
+                            save(StandbyGrid.freeze(lastPlaced.value).filter { it.id != id }, grid.removed + id)
+                            cardMenu = null
+                        }) { Text(stringResource(R.string.board_hide), color = Red) }
+                        TextButton(onClick = { cardMenu = null }) { Text(stringResource(R.string.action_done), color = Teal) }
                     }
                 }
             }
@@ -593,7 +662,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
 }
 
 /** Liste widget'ında yüksekliğe sığan satır sayısı. */
-private fun rowsFor(h: Dp): Int = maxOf(1, ((h - 64.dp) / 48.dp).toInt())
+private fun rowsFor(h: Dp): Int = maxOf(1, ((h - 56.dp) / 48.dp).toInt())
 
 /**
  * Widget ızgarası. Basılı tutunca düzenleme açılır ve widget sürüklenir; diğer widget'lar yerinden oynamaz. Bırakılacak
@@ -613,7 +682,7 @@ private fun WidgetGrid(
     onStartEdit: () -> Unit,
     onPlace: (String, Int, Int, Int, Int) -> Unit,
     onMove: (String, Int, Int) -> Unit,
-    onRemove: (String) -> Unit,
+    onMenu: (String) -> Unit,
     body: @Composable (String, Dp, Dp) -> Unit,
 ) {
     val density = LocalDensity.current
@@ -722,28 +791,7 @@ private fun WidgetGrid(
                 body(id, w, h)
                 if (editing) {
                     Box(Modifier.matchParentSize().border(1.dp, Teal.copy(alpha = if (dragging) 0.7f else 0.35f), CardShape))
-                    EditKey(Icons.Rounded.Close, stringResource(R.string.board_hide), Modifier.align(Alignment.TopStart)) { onRemove(id) }
-                    // Boyut tutamağı: sürükledikçe canlı büyür, bırakınca en yakın hücre sayısına oturur (alan boşsa).
-                    EditKey(
-                        Icons.Rounded.OpenInFull, stringResource(R.string.board_edit),
-                        Modifier.align(Alignment.BottomEnd).pointerInput(id) {
-                            detectDragGestures(
-                                onDragStart = {
-                                    val me = latest.value.firstOrNull { it.item.id == id }
-                                    if (me != null) sizing = Triple(id, me.w * stepX - gapPx, me.h * stepY - gapPx)
-                                },
-                                onDrag = { change, amount ->
-                                    change.consume()
-                                    sizing = sizing?.let { (i, sw, sh) -> Triple(i, (sw + amount.x).coerceAtLeast(stepX - gapPx), (sh + amount.y).coerceAtLeast(stepY - gapPx)) }
-                                },
-                                onDragEnd = {
-                                    target(id)?.let { t -> place.value(id, t[0], t[1], t[2], t[3]) }
-                                    sizing = null
-                                },
-                                onDragCancel = { sizing = null },
-                            )
-                        },
-                    ) {}
+                    EditKey(Icons.Rounded.MoreVert, stringResource(R.string.board_edit), Modifier.align(Alignment.TopEnd)) { onMenu(id) }
                 }
             }
         }

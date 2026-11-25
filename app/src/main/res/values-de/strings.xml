@@ -1512,7 +1512,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_open_app">App öffnen</string>
     <string name="board_close">Schließen</string>
     <string name="board_edit">Layout bearbeiten</string>
-    <string name="board_edit_hint">Gedrückt halten und ziehen zum Verschieben, Ecke ziehen zum Skalieren, × entfernt</string>
+    <string name="board_edit_hint">Gedrückt halten und ziehen zum Verschieben; ⋮ für Größe oder Entfernen</string>
     <string name="board_reset">Zurücksetzen</string>
     <string name="board_add">Hinzufügen</string>
     <string name="board_sec_clock">Uhr</string>
@@ -1520,6 +1520,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_sec_status">Status</string>
     <string name="board_sec_power">Leistung</string>
     <string name="board_hide">Entfernen</string>
+    <string name="board_size">Größe</string>
     <string name="board_show">Wieder hinzufügen</string>
     <string name="board_all_ok">Alles in Ordnung</string>
     <string name="board_watching">%1$d Geräte überwacht</string>

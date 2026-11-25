@@ -1514,7 +1514,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_open_app">App openen</string>
     <string name="board_close">Sluiten</string>
     <string name="board_edit">Indeling bewerken</string>
-    <string name="board_edit_hint">Houd vast en sleep om te verplaatsen, sleep de hoek om te schalen, × verwijdert</string>
+    <string name="board_edit_hint">Vasthouden en slepen om te verplaatsen; ⋮ voor grootte of verwijderen</string>
     <string name="board_reset">Herstellen</string>
     <string name="board_add">Toevoegen</string>
     <string name="board_sec_clock">Klok</string>
@@ -1522,6 +1522,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_sec_status">Status</string>
     <string name="board_sec_power">Vermogen</string>
     <string name="board_hide">Verwijderen</string>
+    <string name="board_size">Grootte</string>
     <string name="board_show">Weer toevoegen</string>
     <string name="board_all_ok">Alles in orde</string>
     <string name="board_watching">%1$d apparaten in de gaten</string>

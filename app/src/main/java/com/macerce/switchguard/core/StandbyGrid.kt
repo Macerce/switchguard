@@ -212,6 +212,33 @@ object StandbyGrid {
         }
     }
 
+    /**
+     * Boyut değiştirme (HA'daki gibi): widget yerinde kalır, gerekirse sola kayarak sığar; yeni alanın altında kalan
+     * widget'lar ilk boş yere iner, geri kalanlar yerinde kalır.
+     */
+    fun resize(placed: List<Placed>, id: String, w: Int, h: Int, columns: Int): List<Item>? {
+        val me = placed.firstOrNull { it.item.id == id } ?: return null
+        val nw = w.coerceIn(1, columns)
+        val x = me.x.coerceAtMost(columns - nw)
+        place(placed, id, x, me.y, nw, h, columns)?.let { return it }
+        val hit = placed.filter { p -> p.item.id != id && x < p.x + p.w && p.x < x + nw && me.y < p.y + p.h && p.y < me.y + h }
+        val hitIds = hit.map { it.item.id }.toSet()
+        val occ = Occupancy(columns)
+        val pos = HashMap<String, Pair<Int, Int>>()
+        for (p in placed) if (p.item.id != id && p.item.id !in hitIds) { occ.take(p.x, p.y, p.w, p.h); pos[p.item.id] = p.x to p.y }
+        occ.take(x, me.y, nw, h)
+        pos[id] = x to me.y
+        for (p in hit.sortedWith(compareBy({ it.y }, { it.x }))) {
+            val (nx, ny) = occ.firstFree(p.w, p.h)
+            occ.take(nx, ny, p.w, p.h)
+            pos[p.item.id] = nx to ny
+        }
+        return placed.map { p ->
+            val (px, py) = pos.getValue(p.item.id)
+            if (p.item.id == id) p.item.copy(w = nw, h = h, x = x, y = me.y) else p.item.copy(w = p.w, x = px, y = py)
+        }
+    }
+
     /** Ekrandaki yerleri sabitler (kaldırma/ekleme sonrası diğerleri kaymasın). */
     fun freeze(placed: List<Placed>): List<Item> = placed.map { it.item.copy(w = it.w, x = it.x, y = it.y) }
 

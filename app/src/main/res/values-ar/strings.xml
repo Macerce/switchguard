@@ -1658,7 +1658,7 @@
     <string name="board_open_app">فتح التطبيق</string>
     <string name="board_close">إغلاق</string>
     <string name="board_edit">تعديل التخطيط</string>
-    <string name="board_edit_hint">اضغط مطولًا واسحب للنقل، واسحب الزاوية لتغيير الحجم، و× للإزالة</string>
+    <string name="board_edit_hint">اضغط مطولًا واسحب للنقل؛ ⋮ للحجم أو الإزالة</string>
     <string name="board_reset">إعادة الضبط</string>
     <string name="board_add">إضافة</string>
     <string name="board_sec_clock">الساعة</string>
@@ -1666,6 +1666,7 @@
     <string name="board_sec_status">الحالة</string>
     <string name="board_sec_power">القدرة</string>
     <string name="board_hide">إزالة</string>
+    <string name="board_size">الحجم</string>
     <string name="board_show">إضافة مجددًا</string>
     <string name="board_all_ok">كل شيء على ما يرام</string>
     <string name="board_watching">مراقبة %1$d أجهزة</string>

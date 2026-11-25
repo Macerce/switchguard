@@ -1449,7 +1449,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_open_app">Mở ứng dụng</string>
     <string name="board_close">Đóng</string>
     <string name="board_edit">Sửa bố cục</string>
-    <string name="board_edit_hint">Nhấn giữ và kéo để di chuyển, kéo góc để đổi kích thước, × để gỡ</string>
+    <string name="board_edit_hint">Giữ và kéo để di chuyển; ⋮ để đổi kích thước hoặc gỡ</string>
     <string name="board_reset">Đặt lại</string>
     <string name="board_add">Thêm</string>
     <string name="board_sec_clock">Đồng hồ</string>
@@ -1457,6 +1457,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_sec_status">Trạng thái</string>
     <string name="board_sec_power">Công suất</string>
     <string name="board_hide">Gỡ</string>
+    <string name="board_size">Kích thước</string>
     <string name="board_show">Thêm lại</string>
     <string name="board_all_ok">Mọi thứ ổn</string>
     <string name="board_watching">Đang theo dõi %1$d thiết bị</string>

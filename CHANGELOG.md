@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.50.4 — 2026-11-25
+**Improved**
+- Standby screen uses Roboto (the Home Assistant font) on every phone, also where the system font is different.
+- Layout editing works like Home Assistant: each card has a ⋮ button that opens a size grid (tap a cell to set width × height) and Remove. The card stays in place while it grows and the cards it covers move to free space. The × and corner handles are gone.
+- List cards show one more row.
+
 ## 2.50.0 — 2026-11-25
 **New**
 - Standby screen now uses the Home Assistant card layout: 56 dp rows with 8 dp gaps, #1C1C1C cards with a thin divider border and 12 dp corners, tile cards for devices, sensors and status (36 dp round icon, name above state), an entities-style card with a large title for recent events, upcoming and rules, a centred clock card, a weather card with the temperature on the right and a gauge card for power. Your saved layout is converted to the new rows automatically.

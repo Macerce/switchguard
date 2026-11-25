@@ -1407,7 +1407,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="board_open_app">Buka aplikasi</string>
     <string name="board_close">Tutup</string>
     <string name="board_edit">Ubah tata letak</string>
-    <string name="board_edit_hint">Tahan dan seret untuk memindahkan, seret sudut untuk mengubah ukuran, × menghapus</string>
+    <string name="board_edit_hint">Tahan dan seret untuk memindah; ⋮ untuk ukuran atau hapus</string>
     <string name="board_reset">Atur ulang</string>
     <string name="board_add">Tambah</string>
     <string name="board_sec_clock">Jam</string>
@@ -1415,6 +1415,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="board_sec_status">Status</string>
     <string name="board_sec_power">Daya</string>
     <string name="board_hide">Hapus</string>
+    <string name="board_size">Ukuran</string>
     <string name="board_show">Tambahkan lagi</string>
     <string name="board_all_ok">Semua baik</string>
     <string name="board_watching">Memantau %1$d perangkat</string>

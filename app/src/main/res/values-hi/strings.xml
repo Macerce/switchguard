@@ -1443,7 +1443,7 @@
     <string name="board_open_app">ऐप खोलें</string>
     <string name="board_close">बंद करें</string>
     <string name="board_edit">लेआउट बदलें</string>
-    <string name="board_edit_hint">खिसकाने के लिए दबाकर खींचें, आकार बदलने के लिए कोना खींचें, × हटाता है</string>
+    <string name="board_edit_hint">हिलाने के लिए दबाकर खींचें; ⋮ से आकार या हटाएँ</string>
     <string name="board_reset">रीसेट करें</string>
     <string name="board_add">जोड़ें</string>
     <string name="board_sec_clock">घड़ी</string>
@@ -1451,6 +1451,7 @@
     <string name="board_sec_status">स्थिति</string>
     <string name="board_sec_power">बिजली</string>
     <string name="board_hide">हटाएँ</string>
+    <string name="board_size">आकार</string>
     <string name="board_show">वापस जोड़ें</string>
     <string name="board_all_ok">सब ठीक है</string>
     <string name="board_watching">%1$d डिवाइस देख रहा है</string>

@@ -1477,7 +1477,7 @@
     <string name="board_open_app">開啟應用程式</string>
     <string name="board_close">關閉</string>
     <string name="board_edit">編輯版面</string>
-    <string name="board_edit_hint">長按拖曳可移動，拖曳角落可調整大小，× 移除</string>
+    <string name="board_edit_hint">長按拖曳可移動；⋮ 可調整大小或移除</string>
     <string name="board_reset">恢復預設</string>
     <string name="board_add">新增</string>
     <string name="board_sec_clock">時鐘</string>
@@ -1485,6 +1485,7 @@
     <string name="board_sec_status">狀態</string>
     <string name="board_sec_power">功率</string>
     <string name="board_hide">移除</string>
+    <string name="board_size">大小</string>
     <string name="board_show">重新加入</string>
     <string name="board_all_ok">一切正常</string>
     <string name="board_watching">監看 %1$d 個裝置</string>

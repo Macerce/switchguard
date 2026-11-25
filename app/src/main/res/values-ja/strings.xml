@@ -1478,7 +1478,7 @@
     <string name="board_open_app">アプリを開く</string>
     <string name="board_close">閉じる</string>
     <string name="board_edit">レイアウトを編集</string>
-    <string name="board_edit_hint">長押ししてドラッグで移動、角をドラッグでサイズ変更、× で削除</string>
+    <string name="board_edit_hint">長押ししてドラッグで移動。⋮ でサイズ変更・削除</string>
     <string name="board_reset">リセット</string>
     <string name="board_add">追加</string>
     <string name="board_sec_clock">時計</string>
@@ -1486,6 +1486,7 @@
     <string name="board_sec_status">状態</string>
     <string name="board_sec_power">電力</string>
     <string name="board_hide">削除</string>
+    <string name="board_size">サイズ</string>
     <string name="board_show">元に戻す</string>
     <string name="board_all_ok">すべて正常</string>
     <string name="board_watching">%1$d台を監視中</string>

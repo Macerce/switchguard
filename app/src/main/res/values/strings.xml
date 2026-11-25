@@ -1515,7 +1515,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_open_app">Open app</string>
     <string name="board_close">Close</string>
     <string name="board_edit">Edit layout</string>
-    <string name="board_edit_hint">Hold and drag to move, drag the corner to resize, × removes</string>
+    <string name="board_edit_hint">Hold and drag to move; ⋮ sets the size or removes</string>
     <string name="board_reset">Reset</string>
     <string name="board_add">Add</string>
     <string name="board_sec_clock">Clock</string>
@@ -1523,6 +1523,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_sec_status">Status</string>
     <string name="board_sec_power">Power</string>
     <string name="board_hide">Remove</string>
+    <string name="board_size">Size</string>
     <string name="board_show">Add back</string>
     <string name="board_all_ok">All good</string>
     <string name="board_watching">Watching %1$d devices</string>

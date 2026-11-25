@@ -1478,7 +1478,7 @@
     <string name="board_open_app">앱 열기</string>
     <string name="board_close">닫기</string>
     <string name="board_edit">레이아웃 편집</string>
-    <string name="board_edit_hint">길게 눌러 끌어 이동하고, 모서리를 끌어 크기를 바꾸고, × 로 제거</string>
+    <string name="board_edit_hint">길게 눌러 끌어서 이동, ⋮ 로 크기 조절 또는 제거</string>
     <string name="board_reset">초기화</string>
     <string name="board_add">추가</string>
     <string name="board_sec_clock">시계</string>
@@ -1486,6 +1486,7 @@
     <string name="board_sec_status">상태</string>
     <string name="board_sec_power">전력</string>
     <string name="board_hide">제거</string>
+    <string name="board_size">크기</string>
     <string name="board_show">다시 추가</string>
     <string name="board_all_ok">모두 정상</string>
     <string name="board_watching">기기 %1$d대 감시 중</string>

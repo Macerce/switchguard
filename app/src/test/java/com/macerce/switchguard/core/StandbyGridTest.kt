@@ -89,4 +89,14 @@ class StandbyGridTest {
         // Çakışma yok.
         for (a in r) for (b in r) if (a !== b) assert(!(a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h)) { "${a.item.id}/${b.item.id}" }
     }
+
+    @Test
+    fun resizeStaysAndPushesCoveredOnes() {
+        // a 0,0  b 4,0  c 0,1 (4x1, 8 sütun). a'yı 4x2 yap: a yerinde kalır, altındaki c ilk boş yere iner.
+        val placed = StandbyGrid.pack(listOf(Item("a", 4, 1, 0, 0), Item("b", 4, 1, 4, 0), Item("c", 4, 1, 0, 1)), 8)
+        val r = StandbyGrid.resize(placed, "a", 4, 2, 8)!!.associateBy { it.id }
+        assertEquals(Item("a", 4, 2, 0, 0), r.getValue("a"))
+        assertEquals(Item("b", 4, 1, 4, 0), r.getValue("b"))
+        assertEquals(Item("c", 4, 1, 4, 1), r.getValue("c"))
+    }
 }

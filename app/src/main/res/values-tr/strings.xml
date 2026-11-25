@@ -1511,7 +1511,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="board_open_app">Uygulamayı aç</string>
     <string name="board_close">Kapat</string>
     <string name="board_edit">Yerleşimi düzenle</string>
-    <string name="board_edit_hint">Basılı tutup sürükleyerek taşıyın, köşeden sürükleyerek boyutlandırın, × kaldırır</string>
+    <string name="board_edit_hint">Basılı tutup sürükleyerek taşıyın; ⋮ ile boyut ya da kaldır</string>
     <string name="board_reset">Varsayılana dön</string>
     <string name="board_add">Ekle</string>
     <string name="board_sec_clock">Saat</string>
@@ -1519,6 +1519,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="board_sec_status">Durum</string>
     <string name="board_sec_power">Güç</string>
     <string name="board_hide">Kaldır</string>
+    <string name="board_size">Boyut</string>
     <string name="board_show">Geri ekle</string>
     <string name="board_all_ok">Her şey yolunda</string>
     <string name="board_watching">%1$d cihaz izleniyor</string>
