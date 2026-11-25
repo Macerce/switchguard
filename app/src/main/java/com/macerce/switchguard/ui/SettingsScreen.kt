@@ -101,6 +101,7 @@ import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Snooze
 import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material.icons.rounded.Nightlight
+import androidx.compose.material.icons.rounded.BrightnessLow
 import androidx.compose.material.icons.rounded.PlayCircle
 import androidx.compose.material.icons.rounded.Wallpaper
 
@@ -826,6 +827,7 @@ private fun StandbyPage() {
     val context = LocalContext.current
     val (store, version) = settingsState()
     val dim = remember(version) { store.standbyDim }
+    val idleDim = remember(version) { store.standbyIdleDim }
     val onBoot = remember(version) { store.standbyOnBoot }
     // Ana ekran ve izin seçimi sistem ayarlarında yapılır: dönünce yeniden oku.
     val lifecycle by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
@@ -853,6 +855,10 @@ private fun StandbyPage() {
         Divider()
         InfoRow(Icons.Rounded.Nightlight, stringResource(R.string.board_dim), stringResource(R.string.board_dim_desc)) {
             Switch(checked = dim, onCheckedChange = { store.standbyDim = it })
+        }
+        Divider()
+        InfoRow(Icons.Rounded.BrightnessLow, stringResource(R.string.board_idle_dim), stringResource(R.string.board_idle_dim_desc)) {
+            Switch(checked = idleDim, onCheckedChange = { store.standbyIdleDim = it })
         }
     }
     // Duvar panosu: ana ekran olarak kullanma ve açılışta bekleme ekranı.

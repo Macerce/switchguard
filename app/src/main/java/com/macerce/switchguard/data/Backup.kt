@@ -54,6 +54,8 @@ object Backup {
         "onboardingDone" to "geri yüklemede ayrıca yazılır",
         "wdMode" to "bekçi kipi bu cihaza özel",
         "standbyOnBoot" to "açılışta bekleme ekranı bu cihazın kullanımına özel (duvar panosu)",
+        "standbyIdleDim" to "bekleme ekranını kısma bu cihazın ekranına özel",
+        "standbyControl" to "bekleme ekranında kart dokunuş kilidi bu cihazın kullanımına özel (duvar panosu)",
         "standbyBootSeen" to "bu cihazın açılış sayacı",
         "wdMin" to "bekçi aralığı bu cihaza özel",
         "chargerOutage" to "şarj kesintisinden elektrik kesintisi çıkarımı bu cihazın donanımına bağlı",

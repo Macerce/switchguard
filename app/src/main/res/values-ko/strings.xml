@@ -1465,7 +1465,7 @@
     <string name="board_dream_desc">Android 설정을 엽니다. 화면 보호기에서 SwitchGuard를 선택하고 충전 중에 시작하도록 설정하세요. 그러면 충전기에 연결된 동안 보드가 잠금 화면을 대신합니다.</string>
     <string name="board_dream_missing">이 휴대폰에는 화면 보호기 설정이 없습니다. 대신 “대기 화면 열기”를 사용하세요.</string>
     <string name="board_dim">밤에 어둡게</string>
-    <string name="board_dim_desc">23:00부터 07:00까지 글자가 흐려집니다</string>
+    <string name="board_dim_desc">23:00–07:00에는 화면을 최저 밝기로</string>
     <string name="board_launcher">홈 화면(런처)으로 사용</string>
     <string name="board_launcher_desc">홈 버튼이 SwitchGuard를 엽니다 — 벽에 거는 휴대폰이나 태블릿용. 끄면 이전 홈 화면으로 돌아갑니다.</string>
     <string name="board_launcher_on">사용 중: 홈 버튼이 SwitchGuard를 엽니다</string>
@@ -1820,4 +1820,16 @@
     <string name="ha_connect_open">서버에 연결</string>
     <string name="ha_connect_edit">서버 주소 또는 토큰 변경</string>
     <string name="lan_filter">검색</string>
+    <string name="board_last_sync">마지막 업데이트 %1$s</string>
+    <string name="board_pending">전송 중…</string>
+    <string name="board_tap">탭할 때</string>
+    <string name="board_tap_toggle">켜기/끄기</string>
+    <string name="board_tap_confirm">먼저 확인</string>
+    <string name="board_tap_none">제어 안 함</string>
+    <string name="board_confirm_on">%1$s을(를) 켤까요?</string>
+    <string name="board_confirm_off">%1$s을(를) 끌까요?</string>
+    <string name="board_turn_on">켜기</string>
+    <string name="board_turn_off">끄기</string>
+    <string name="board_idle_dim">터치 없으면 어둡게</string>
+    <string name="board_idle_dim_desc">10분 동안 터치가 없으면 화면이 어두워지며, 첫 터치는 화면만 깨웁니다</string>
 </resources>

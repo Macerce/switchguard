@@ -1498,7 +1498,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="board_dream_desc">Android ayarları açılır: Ekran koruyucu’da SwitchGuard’ı seçip “Şarj olurken” başlamasını ayarlayın. Böylece şarjdayken kilit ekranının yerine pano görünür.</string>
     <string name="board_dream_missing">Bu telefonda ekran koruyucu ayarı yok; “Bekleme ekranını aç”ı kullanın.</string>
     <string name="board_dim">Geceleri karart</string>
-    <string name="board_dim_desc">23:00–07:00 arası yazılar soluklaşır</string>
+    <string name="board_dim_desc">23:00–07:00 arası ekran ışığı en kısığa iner</string>
     <string name="board_launcher">Ana ekran (launcher) olarak kullan</string>
     <string name="board_launcher_desc">Ana ekran tuşu SwitchGuard\'ı açar — duvara asılı telefon ya da tablet için. Kapatınca eski ana ekranına dönersin.</string>
     <string name="board_launcher_on">Etkin: ana ekran tuşu SwitchGuard\'ı açıyor</string>
@@ -1859,4 +1859,16 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="ha_connect_open">Sunucuya bağlan</string>
     <string name="ha_connect_edit">Sunucu adresini ya da anahtarı değiştir</string>
     <string name="lan_filter">Ara</string>
+    <string name="board_last_sync">Son güncelleme %1$s</string>
+    <string name="board_pending">Gönderiliyor…</string>
+    <string name="board_tap">Dokununca</string>
+    <string name="board_tap_toggle">Aç/kapat</string>
+    <string name="board_tap_confirm">Onay iste</string>
+    <string name="board_tap_none">Kontrol etme</string>
+    <string name="board_confirm_on">%1$s açılsın mı?</string>
+    <string name="board_confirm_off">%1$s kapatılsın mı?</string>
+    <string name="board_turn_on">Aç</string>
+    <string name="board_turn_off">Kapat</string>
+    <string name="board_idle_dim">Dokunulmayınca kıs</string>
+    <string name="board_idle_dim_desc">10 dakika dokunulmazsa ekran kısılır; ilk dokunuş yalnız uyandırır</string>
 </resources>

@@ -1430,7 +1430,7 @@
     <string name="board_dream_desc">Android सेटिंग खोलता है: स्क्रीन सेवर में SwitchGuard चुनें और उसे चार्ज होते समय शुरू होने के लिए सेट करें। तब चार्जर पर रहते हुए बोर्ड लॉक स्क्रीन की जगह ले लेता है।</string>
     <string name="board_dream_missing">इस फ़ोन में स्क्रीन सेवर की सेटिंग नहीं है; इसकी जगह “स्टैंडबाय स्क्रीन खोलें” इस्तेमाल करें।</string>
     <string name="board_dim">रात में मंद करें</string>
-    <string name="board_dim_desc">23:00 से 07:00 के बीच टेक्स्ट धुंधला हो जाता है</string>
+    <string name="board_dim_desc">23:00–07:00 के बीच स्क्रीन न्यूनतम चमक पर</string>
     <string name="board_launcher">होम स्क्रीन (लॉन्चर) के रूप में उपयोग करें</string>
     <string name="board_launcher_desc">होम बटन SwitchGuard खोलता है — दीवार पर लगे फ़ोन या टैबलेट के लिए। पुरानी होम स्क्रीन पर लौटने के लिए बंद करें।</string>
     <string name="board_launcher_on">चालू: होम बटन SwitchGuard खोलता है</string>
@@ -1785,4 +1785,16 @@
     <string name="ha_connect_open">सर्वर से जुड़ें</string>
     <string name="ha_connect_edit">सर्वर पता या टोकन बदलें</string>
     <string name="lan_filter">खोजें</string>
+    <string name="board_last_sync">अंतिम अपडेट %1$s</string>
+    <string name="board_pending">भेजा जा रहा है…</string>
+    <string name="board_tap">टैप करने पर</string>
+    <string name="board_tap_toggle">चालू/बंद</string>
+    <string name="board_tap_confirm">पहले पूछें</string>
+    <string name="board_tap_none">नियंत्रित न करें</string>
+    <string name="board_confirm_on">%1$s चालू करें?</string>
+    <string name="board_confirm_off">%1$s बंद करें?</string>
+    <string name="board_turn_on">चालू करें</string>
+    <string name="board_turn_off">बंद करें</string>
+    <string name="board_idle_dim">छुए बिना मंद करें</string>
+    <string name="board_idle_dim_desc">10 मिनट तक न छूने पर स्क्रीन मंद हो जाती है; पहला स्पर्श केवल उसे जगाता है</string>
 </resources>

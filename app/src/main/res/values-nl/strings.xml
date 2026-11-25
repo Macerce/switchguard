@@ -1501,7 +1501,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_dream_desc">Opent de Android-instellingen: kies SwitchGuard onder Screensaver en stel in dat die start tijdens het opladen. Het bord vervangt dan het vergrendelscherm zolang het aan de oplader ligt.</string>
     <string name="board_dream_missing">Deze telefoon heeft geen screensaverinstelling; gebruik in plaats daarvan “Stand-byscherm openen”.</string>
     <string name="board_dim">\'s Nachts dimmen</string>
-    <string name="board_dim_desc">Tekst vervaagt tussen 23:00 en 07:00</string>
+    <string name="board_dim_desc">Van 23:00–07:00 laagste schermhelderheid</string>
     <string name="board_launcher">Gebruiken als startscherm (launcher)</string>
     <string name="board_launcher_desc">De Home-knop opent SwitchGuard — voor een telefoon of tablet aan de muur. Zet uit om terug te gaan naar je oude startscherm.</string>
     <string name="board_launcher_on">Actief: de Home-knop opent SwitchGuard</string>
@@ -1856,4 +1856,16 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="ha_connect_open">Verbinden met server</string>
     <string name="ha_connect_edit">Serveradres of token wijzigen</string>
     <string name="lan_filter">Zoeken</string>
+    <string name="board_last_sync">Laatst bijgewerkt %1$s</string>
+    <string name="board_pending">Verzenden…</string>
+    <string name="board_tap">Bij tikken</string>
+    <string name="board_tap_toggle">Aan/uit</string>
+    <string name="board_tap_confirm">Eerst vragen</string>
+    <string name="board_tap_none">Niet bedienen</string>
+    <string name="board_confirm_on">%1$s aanzetten?</string>
+    <string name="board_confirm_off">%1$s uitzetten?</string>
+    <string name="board_turn_on">Aanzetten</string>
+    <string name="board_turn_off">Uitzetten</string>
+    <string name="board_idle_dim">Dimmen zonder aanraking</string>
+    <string name="board_idle_dim_desc">Na 10 minuten zonder aanraking dimt het scherm; de eerste aanraking wekt het alleen</string>
 </resources>

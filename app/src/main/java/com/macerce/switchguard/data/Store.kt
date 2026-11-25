@@ -522,6 +522,16 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = prefs.getBoolean("standbyDim", true)
         set(v) = put { putBoolean("standbyDim", v) }
 
+    /** Bekleme ekranı uzun süre dokunulmayınca gündüz de kısılsın. */
+    var standbyIdleDim: Boolean
+        get() = prefs.getBoolean("standbyIdleDim", true)
+        set(v) = put { putBoolean("standbyIdleDim", v) }
+
+    /** Bekleme ekranında kart başına dokunuş modu ([com.macerce.switchguard.core.StandbyControl] metni). */
+    var standbyControl: String?
+        get() = prefs.getString("standbyControl", null)
+        set(v) = put { putString("standbyControl", v) }
+
     /** Bekleme ekranı widget düzeni ([com.macerce.switchguard.core.StandbyGrid] metni); null = varsayılan. */
     var standbyGrid: String?
         get() = prefs.getString("standbyGrid", null)

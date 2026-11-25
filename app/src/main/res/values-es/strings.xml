@@ -1507,7 +1507,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_dream_desc">Abre los ajustes de Android: elige SwitchGuard en Protector de pantalla y configúralo para que se inicie al cargar. El panel sustituirá entonces la pantalla de bloqueo mientras esté en el cargador.</string>
     <string name="board_dream_missing">Este teléfono no tiene el ajuste de protector de pantalla; usa “Abrir pantalla de espera” en su lugar.</string>
     <string name="board_dim">Atenuar de noche</string>
-    <string name="board_dim_desc">El texto se atenúa entre las 23:00 y las 07:00</string>
+    <string name="board_dim_desc">De 23:00 a 07:00 la pantalla baja al brillo mínimo</string>
     <string name="board_launcher">Usar como pantalla de inicio (launcher)</string>
     <string name="board_launcher_desc">El botón Inicio abre SwitchGuard: para un teléfono o tableta en la pared. Desactívalo para volver a tu pantalla de inicio anterior.</string>
     <string name="board_launcher_on">Activo: el botón Inicio abre SwitchGuard</string>
@@ -1862,4 +1862,16 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="ha_connect_open">Conectar a un servidor</string>
     <string name="ha_connect_edit">Cambiar dirección o token del servidor</string>
     <string name="lan_filter">Buscar</string>
+    <string name="board_last_sync">Última actualización %1$s</string>
+    <string name="board_pending">Enviando…</string>
+    <string name="board_tap">Al tocar</string>
+    <string name="board_tap_toggle">Encender/apagar</string>
+    <string name="board_tap_confirm">Preguntar antes</string>
+    <string name="board_tap_none">No controlar</string>
+    <string name="board_confirm_on">¿Encender %1$s?</string>
+    <string name="board_confirm_off">¿Apagar %1$s?</string>
+    <string name="board_turn_on">Encender</string>
+    <string name="board_turn_off">Apagar</string>
+    <string name="board_idle_dim">Atenuar sin uso</string>
+    <string name="board_idle_dim_desc">Tras 10 minutos sin tocar, la pantalla se atenúa; el primer toque solo la despierta</string>
 </resources>

@@ -1394,7 +1394,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="board_dream_desc">Membuka pengaturan Android: pilih SwitchGuard di Screensaver dan atur agar mulai saat mengisi daya. Papan ini kemudian menggantikan layar kunci saat tercolok pengisi daya.</string>
     <string name="board_dream_missing">Ponsel ini tidak memiliki pengaturan screensaver; gunakan “Buka layar siaga” sebagai gantinya.</string>
     <string name="board_dim">Redupkan di malam hari</string>
-    <string name="board_dim_desc">Teks memudar antara 23:00 dan 07:00</string>
+    <string name="board_dim_desc">Pukul 23:00–07:00 layar ke kecerahan terendah</string>
     <string name="board_launcher">Gunakan sebagai layar utama (launcher)</string>
     <string name="board_launcher_desc">Tombol Beranda membuka SwitchGuard — untuk ponsel atau tablet di dinding. Matikan untuk kembali ke layar utama lama.</string>
     <string name="board_launcher_on">Aktif: tombol Beranda membuka SwitchGuard</string>
@@ -1749,4 +1749,16 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="ha_connect_open">Hubungkan ke server</string>
     <string name="ha_connect_edit">Ubah alamat server atau token</string>
     <string name="lan_filter">Cari</string>
+    <string name="board_last_sync">Pembaruan terakhir %1$s</string>
+    <string name="board_pending">Mengirim…</string>
+    <string name="board_tap">Saat diketuk</string>
+    <string name="board_tap_toggle">Nyala/mati</string>
+    <string name="board_tap_confirm">Tanya dulu</string>
+    <string name="board_tap_none">Jangan kendalikan</string>
+    <string name="board_confirm_on">Nyalakan %1$s?</string>
+    <string name="board_confirm_off">Matikan %1$s?</string>
+    <string name="board_turn_on">Nyalakan</string>
+    <string name="board_turn_off">Matikan</string>
+    <string name="board_idle_dim">Redupkan jika tak disentuh</string>
+    <string name="board_idle_dim_desc">Setelah 10 menit tanpa sentuhan layar meredup; sentuhan pertama hanya membangunkannya</string>
 </resources>

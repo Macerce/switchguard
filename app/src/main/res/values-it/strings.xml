@@ -1508,7 +1508,7 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_dream_desc">Apre le impostazioni di Android: scegli SwitchGuard in Salvaschermo e impostalo perché parta durante la ricarica. La bacheca sostituisce poi la schermata di blocco mentre è in carica.</string>
     <string name="board_dream_missing">Questo telefono non ha l\'impostazione del salvaschermo; usa invece “Apri la schermata di standby”.</string>
     <string name="board_dim">Attenua di notte</string>
-    <string name="board_dim_desc">Il testo si attenua tra le 23:00 e le 07:00</string>
+    <string name="board_dim_desc">Dalle 23:00 alle 07:00 lo schermo va alla luminosità minima</string>
     <string name="board_launcher">Usa come schermata Home (launcher)</string>
     <string name="board_launcher_desc">Il tasto Home apre SwitchGuard: per un telefono o tablet a parete. Disattiva per tornare alla Home precedente.</string>
     <string name="board_launcher_on">Attivo: il tasto Home apre SwitchGuard</string>
@@ -1863,4 +1863,16 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="ha_connect_open">Connetti a un server</string>
     <string name="ha_connect_edit">Cambia indirizzo del server o token</string>
     <string name="lan_filter">Cerca</string>
+    <string name="board_last_sync">Ultimo aggiornamento %1$s</string>
+    <string name="board_pending">Invio…</string>
+    <string name="board_tap">Al tocco</string>
+    <string name="board_tap_toggle">Accendi/spegni</string>
+    <string name="board_tap_confirm">Chiedi prima</string>
+    <string name="board_tap_none">Non controllare</string>
+    <string name="board_confirm_on">Accendere %1$s?</string>
+    <string name="board_confirm_off">Spegnere %1$s?</string>
+    <string name="board_turn_on">Accendi</string>
+    <string name="board_turn_off">Spegni</string>
+    <string name="board_idle_dim">Attenua senza tocchi</string>
+    <string name="board_idle_dim_desc">Dopo 10 minuti senza tocchi lo schermo si attenua; il primo tocco lo risveglia soltanto</string>
 </resources>

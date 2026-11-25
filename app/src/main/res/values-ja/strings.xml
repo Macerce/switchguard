@@ -1465,7 +1465,7 @@
     <string name="board_dream_desc">Androidの設定が開きます。スクリーンセーバーでSwitchGuardを選び、充電中に開始するよう設定してください。充電器に接続中は、ボードがロック画面の代わりに表示されます。</string>
     <string name="board_dream_missing">このスマートフォンにはスクリーンセーバーの設定がありません。代わりに「スタンバイ画面を開く」を使用してください。</string>
     <string name="board_dim">夜間は暗くする</string>
-    <string name="board_dim_desc">23:00から7:00の間、文字が薄くなります</string>
+    <string name="board_dim_desc">23:00〜07:00は画面を最低の明るさに</string>
     <string name="board_launcher">ホーム画面（ランチャー）として使う</string>
     <string name="board_launcher_desc">ホームボタンで SwitchGuard が開きます。壁掛けのスマホやタブレット向け。オフにすると以前のホーム画面に戻ります。</string>
     <string name="board_launcher_on">有効：ホームボタンで SwitchGuard が開きます</string>
@@ -1820,4 +1820,16 @@
     <string name="ha_connect_open">サーバーに接続</string>
     <string name="ha_connect_edit">サーバーアドレスまたはトークンを変更</string>
     <string name="lan_filter">検索</string>
+    <string name="board_last_sync">最終更新 %1$s</string>
+    <string name="board_pending">送信中…</string>
+    <string name="board_tap">タップ時</string>
+    <string name="board_tap_toggle">オン/オフ</string>
+    <string name="board_tap_confirm">確認する</string>
+    <string name="board_tap_none">操作しない</string>
+    <string name="board_confirm_on">%1$sをオンにしますか？</string>
+    <string name="board_confirm_off">%1$sをオフにしますか？</string>
+    <string name="board_turn_on">オンにする</string>
+    <string name="board_turn_off">オフにする</string>
+    <string name="board_idle_dim">操作がないとき暗くする</string>
+    <string name="board_idle_dim_desc">10分間触れないと画面が暗くなります。最初のタッチは画面を起こすだけです</string>
 </resources>

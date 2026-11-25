@@ -52,7 +52,11 @@ class StandbyDream : DreamService(), LifecycleOwner, SavedStateRegistryOwner, Vi
             setViewTreeLifecycleOwner(this@StandbyDream)
             setViewTreeSavedStateRegistryOwner(this@StandbyDream)
             setViewTreeViewModelStoreOwner(this@StandbyDream)
-            setContent { SwitchGuardTheme { if (tv) com.macerce.switchguard.ui.TvStandby() else StandbyBoardScreen(onOpenApp = null, onClose = null) } }
+            setContent { SwitchGuardTheme { if (tv) com.macerce.switchguard.ui.TvStandby() else StandbyBoardScreen(onOpenApp = null, onClose = null, onBrightness = { b ->
+                // Gece (gece kısma açıksa) ekran koruyucu da en kısığa iner; gündüz sistemin parlaklığı.
+                isScreenBright = b == null
+                com.macerce.switchguard.ui.applyBrightness(window, b)
+            }) } }
         }
         window?.decorView?.let {
             it.setViewTreeLifecycleOwner(this)

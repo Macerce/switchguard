@@ -1537,7 +1537,7 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="board_dream_desc">Abre os ajustes do Android: escolha o SwitchGuard em Protetor de tela e defina para iniciar durante o carregamento. O painel então substitui a tela de bloqueio enquanto estiver no carregador.</string>
     <string name="board_dream_missing">Este celular não tem ajuste de protetor de tela; use “Abrir tela de espera”.</string>
     <string name="board_dim">Escurecer à noite</string>
-    <string name="board_dim_desc">O texto esmaece entre 23:00 e 07:00</string>
+    <string name="board_dim_desc">Das 23:00 às 07:00 a tela vai ao brilho mínimo</string>
     <string name="board_launcher">Usar como tela inicial (launcher)</string>
     <string name="board_launcher_desc">O botão Início abre o SwitchGuard — para um celular ou tablet na parede. Desative para voltar à tela inicial anterior.</string>
     <string name="board_launcher_on">Ativo: o botão Início abre o SwitchGuard</string>
@@ -1892,4 +1892,16 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="ha_connect_open">Conectar a um servidor</string>
     <string name="ha_connect_edit">Alterar endereço do servidor ou token</string>
     <string name="lan_filter">Pesquisar</string>
+    <string name="board_last_sync">Última atualização %1$s</string>
+    <string name="board_pending">Enviando…</string>
+    <string name="board_tap">Ao tocar</string>
+    <string name="board_tap_toggle">Ligar/desligar</string>
+    <string name="board_tap_confirm">Perguntar antes</string>
+    <string name="board_tap_none">Não controlar</string>
+    <string name="board_confirm_on">Ligar %1$s?</string>
+    <string name="board_confirm_off">Desligar %1$s?</string>
+    <string name="board_turn_on">Ligar</string>
+    <string name="board_turn_off">Desligar</string>
+    <string name="board_idle_dim">Escurecer sem toque</string>
+    <string name="board_idle_dim_desc">Após 10 minutos sem toque a tela escurece; o primeiro toque só a desperta</string>
 </resources>

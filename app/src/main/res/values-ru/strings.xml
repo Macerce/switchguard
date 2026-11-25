@@ -1573,7 +1573,7 @@
     <string name="board_dream_desc">Открывает настройки Android: выберите SwitchGuard в разделе «Заставка» и включите запуск во время зарядки. Тогда табло заменит экран блокировки, пока телефон на зарядке.</string>
     <string name="board_dream_missing">В этом телефоне нет настройки заставки; используйте «Открыть экран ожидания».</string>
     <string name="board_dim">Затемнять ночью</string>
-    <string name="board_dim_desc">Текст тускнеет с 23:00 до 07:00</string>
+    <string name="board_dim_desc">С 23:00 до 07:00 минимальная яркость экрана</string>
     <string name="board_launcher">Использовать как главный экран (лаунчер)</string>
     <string name="board_launcher_desc">Кнопка «Домой» открывает SwitchGuard — для телефона или планшета на стене. Выключите, чтобы вернуть прежний главный экран.</string>
     <string name="board_launcher_on">Включено: кнопка «Домой» открывает SwitchGuard</string>
@@ -1928,4 +1928,16 @@
     <string name="ha_connect_open">Подключиться к серверу</string>
     <string name="ha_connect_edit">Изменить адрес сервера или токен</string>
     <string name="lan_filter">Поиск</string>
+    <string name="board_last_sync">Последнее обновление %1$s</string>
+    <string name="board_pending">Отправка…</string>
+    <string name="board_tap">При касании</string>
+    <string name="board_tap_toggle">Вкл/выкл</string>
+    <string name="board_tap_confirm">Спрашивать</string>
+    <string name="board_tap_none">Не управлять</string>
+    <string name="board_confirm_on">Включить %1$s?</string>
+    <string name="board_confirm_off">Выключить %1$s?</string>
+    <string name="board_turn_on">Включить</string>
+    <string name="board_turn_off">Выключить</string>
+    <string name="board_idle_dim">Затемнять без касаний</string>
+    <string name="board_idle_dim_desc">Через 10 минут без касаний экран затемняется; первое касание только будит его</string>
 </resources>

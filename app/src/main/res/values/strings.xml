@@ -1502,7 +1502,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_dream_desc">Opens Android settings: choose SwitchGuard under Screen saver and set it to start while charging. The board then replaces the lock screen while on the charger.</string>
     <string name="board_dream_missing">This phone has no screen saver setting; use “Open standby screen” instead.</string>
     <string name="board_dim">Dim at night</string>
-    <string name="board_dim_desc">Text fades between 23:00 and 07:00</string>
+    <string name="board_dim_desc">Screen drops to lowest brightness 23:00–07:00</string>
     <string name="board_launcher">Use as home screen (launcher)</string>
     <string name="board_launcher_desc">Turns the Home button into SwitchGuard — for a wall-mounted phone or tablet. Switch off to go back to your old home screen.</string>
     <string name="board_launcher_on">Active: the Home button opens SwitchGuard</string>
@@ -1863,4 +1863,16 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="ha_connect_open">Connect to a server</string>
     <string name="ha_connect_edit">Change server address or token</string>
     <string name="lan_filter">Search</string>
+    <string name="board_last_sync">Last update %1$s</string>
+    <string name="board_pending">Sending…</string>
+    <string name="board_tap">On tap</string>
+    <string name="board_tap_toggle">On/off</string>
+    <string name="board_tap_confirm">Ask first</string>
+    <string name="board_tap_none">Don\'t control</string>
+    <string name="board_confirm_on">Turn on %1$s?</string>
+    <string name="board_confirm_off">Turn off %1$s?</string>
+    <string name="board_turn_on">Turn on</string>
+    <string name="board_turn_off">Turn off</string>
+    <string name="board_idle_dim">Dim when untouched</string>
+    <string name="board_idle_dim_desc">After 10 minutes without a touch the screen dims; the first touch only wakes it</string>
 </resources>

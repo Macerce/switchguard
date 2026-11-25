@@ -1436,7 +1436,7 @@
     <string name="board_dream_desc">เปิดการตั้งค่า Android: เลือก SwitchGuard ใต้ภาพพักหน้าจอ และตั้งให้เริ่มขณะชาร์จ บอร์ดจะแทนหน้าจอล็อกขณะอยู่บนที่ชาร์จ</string>
     <string name="board_dream_missing">โทรศัพท์เครื่องนี้ไม่มีการตั้งค่าภาพพักหน้าจอ ใช้ “เปิดหน้าจอสแตนด์บาย” แทน</string>
     <string name="board_dim">หรี่ตอนกลางคืน</string>
-    <string name="board_dim_desc">ข้อความจางลงระหว่าง 23:00 ถึง 07:00</string>
+    <string name="board_dim_desc">23:00–07:00 หน้าจอลดความสว่างต่ำสุด</string>
     <string name="board_launcher">ใช้เป็นหน้าจอหลัก (ลันเชอร์)</string>
     <string name="board_launcher_desc">ปุ่มหน้าหลักจะเปิด SwitchGuard — สำหรับโทรศัพท์หรือแท็บเล็ตที่ติดผนัง ปิดเพื่อกลับไปใช้หน้าจอหลักเดิม</string>
     <string name="board_launcher_on">เปิดอยู่: ปุ่มหน้าหลักเปิด SwitchGuard</string>
@@ -1791,4 +1791,16 @@
     <string name="ha_connect_open">เชื่อมต่อเซิร์ฟเวอร์</string>
     <string name="ha_connect_edit">เปลี่ยนที่อยู่เซิร์ฟเวอร์หรือโทเค็น</string>
     <string name="lan_filter">ค้นหา</string>
+    <string name="board_last_sync">อัปเดตล่าสุด %1$s</string>
+    <string name="board_pending">กำลังส่ง…</string>
+    <string name="board_tap">เมื่อแตะ</string>
+    <string name="board_tap_toggle">เปิด/ปิด</string>
+    <string name="board_tap_confirm">ถามก่อน</string>
+    <string name="board_tap_none">ไม่ควบคุม</string>
+    <string name="board_confirm_on">เปิด %1$s ไหม</string>
+    <string name="board_confirm_off">ปิด %1$s ไหม</string>
+    <string name="board_turn_on">เปิด</string>
+    <string name="board_turn_off">ปิด</string>
+    <string name="board_idle_dim">หรี่เมื่อไม่ได้แตะ</string>
+    <string name="board_idle_dim_desc">ไม่ได้แตะ 10 นาทีหน้าจอจะหรี่ลง การแตะครั้งแรกเพียงปลุกหน้าจอ</string>
 </resources>

@@ -1645,7 +1645,7 @@
     <string name="board_dream_desc">يفتح إعدادات Android: اختر SwitchGuard ضمن «شاشة التوقف» واضبطها على البدء أثناء الشحن. تحل اللوحة حينها محل شاشة القفل أثناء الشحن.</string>
     <string name="board_dream_missing">لا يحتوي هذا الهاتف على إعداد شاشة توقف؛ استخدم «فتح شاشة الاستعداد» بدلًا من ذلك.</string>
     <string name="board_dim">تعتيم ليلًا</string>
-    <string name="board_dim_desc">يخفت النص بين 23:00 و07:00</string>
+    <string name="board_dim_desc">من 23:00 إلى 07:00 أدنى سطوع للشاشة</string>
     <string name="board_launcher">استخدامه كشاشة رئيسية (مشغّل)</string>
     <string name="board_launcher_desc">يفتح زر الصفحة الرئيسية SwitchGuard — لهاتف أو جهاز لوحي معلّق على الحائط. أوقفه للعودة إلى شاشتك الرئيسية السابقة.</string>
     <string name="board_launcher_on">مفعّل: زر الصفحة الرئيسية يفتح SwitchGuard</string>
@@ -2000,4 +2000,16 @@
     <string name="ha_connect_open">اتصال بخادم</string>
     <string name="ha_connect_edit">تغيير عنوان الخادم أو الرمز</string>
     <string name="lan_filter">بحث</string>
+    <string name="board_last_sync">آخر تحديث %1$s</string>
+    <string name="board_pending">جارٍ الإرسال…</string>
+    <string name="board_tap">عند اللمس</string>
+    <string name="board_tap_toggle">تشغيل/إيقاف</string>
+    <string name="board_tap_confirm">اسأل أولاً</string>
+    <string name="board_tap_none">لا تتحكم</string>
+    <string name="board_confirm_on">تشغيل %1$s؟</string>
+    <string name="board_confirm_off">إيقاف %1$s؟</string>
+    <string name="board_turn_on">تشغيل</string>
+    <string name="board_turn_off">إيقاف</string>
+    <string name="board_idle_dim">تعتيم عند عدم اللمس</string>
+    <string name="board_idle_dim_desc">بعد 10 دقائق دون لمس تُعتَّم الشاشة؛ اللمسة الأولى توقظها فقط</string>
 </resources>

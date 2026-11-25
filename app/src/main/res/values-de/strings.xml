@@ -1499,7 +1499,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_dream_desc">Öffnet die Android-Einstellungen: Wähle unter Bildschirmschoner SwitchGuard und stelle ein, dass er beim Laden startet. Die Tafel ersetzt dann am Ladegerät den Sperrbildschirm.</string>
     <string name="board_dream_missing">Dieses Handy hat keine Bildschirmschoner-Einstellung; verwende stattdessen „Standby-Bildschirm öffnen“.</string>
     <string name="board_dim">Nachts abdunkeln</string>
-    <string name="board_dim_desc">Der Text blendet zwischen 23:00 und 07:00 ab</string>
+    <string name="board_dim_desc">Von 23:00–07:00 geringste Bildschirmhelligkeit</string>
     <string name="board_launcher">Als Startbildschirm (Launcher) nutzen</string>
     <string name="board_launcher_desc">Die Home-Taste öffnet SwitchGuard – für ein an der Wand montiertes Handy oder Tablet. Ausschalten bringt den alten Startbildschirm zurück.</string>
     <string name="board_launcher_on">Aktiv: Die Home-Taste öffnet SwitchGuard</string>
@@ -1854,4 +1854,16 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="ha_connect_open">Mit Server verbinden</string>
     <string name="ha_connect_edit">Serveradresse oder Token ändern</string>
     <string name="lan_filter">Suchen</string>
+    <string name="board_last_sync">Letzte Aktualisierung %1$s</string>
+    <string name="board_pending">Wird gesendet…</string>
+    <string name="board_tap">Beim Tippen</string>
+    <string name="board_tap_toggle">Ein/Aus</string>
+    <string name="board_tap_confirm">Erst fragen</string>
+    <string name="board_tap_none">Nicht steuern</string>
+    <string name="board_confirm_on">%1$s einschalten?</string>
+    <string name="board_confirm_off">%1$s ausschalten?</string>
+    <string name="board_turn_on">Einschalten</string>
+    <string name="board_turn_off">Ausschalten</string>
+    <string name="board_idle_dim">Ohne Berührung dimmen</string>
+    <string name="board_idle_dim_desc">Nach 10 Minuten ohne Berührung wird der Bildschirm gedimmt; die erste Berührung weckt ihn nur</string>
 </resources>

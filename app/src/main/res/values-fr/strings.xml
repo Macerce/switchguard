@@ -1536,7 +1536,7 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="board_dream_desc">Ouvre les réglages Android : choisissez SwitchGuard sous Économiseur d\'écran et réglez-le pour démarrer pendant la charge. Le tableau remplace alors l\'écran de verrouillage sur le chargeur.</string>
     <string name="board_dream_missing">Ce téléphone n\'a pas de réglage d\'économiseur d\'écran ; utilisez plutôt « Ouvrir l\'écran de veille ».</string>
     <string name="board_dim">Atténuer la nuit</string>
-    <string name="board_dim_desc">Le texte s\'estompe entre 23:00 et 07:00</string>
+    <string name="board_dim_desc">De 23:00 à 07:00, l\'écran passe à la luminosité minimale</string>
     <string name="board_launcher">Utiliser comme écran d\'accueil (launcher)</string>
     <string name="board_launcher_desc">Le bouton Accueil ouvre SwitchGuard — pour un téléphone ou une tablette fixé au mur. Désactivez pour retrouver votre ancien écran d\'accueil.</string>
     <string name="board_launcher_on">Actif : le bouton Accueil ouvre SwitchGuard</string>
@@ -1891,4 +1891,16 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="ha_connect_open">Se connecter à un serveur</string>
     <string name="ha_connect_edit">Modifier l’adresse du serveur ou le jeton</string>
     <string name="lan_filter">Rechercher</string>
+    <string name="board_last_sync">Dernière mise à jour %1$s</string>
+    <string name="board_pending">Envoi…</string>
+    <string name="board_tap">Au toucher</string>
+    <string name="board_tap_toggle">Marche/arrêt</string>
+    <string name="board_tap_confirm">Demander d\'abord</string>
+    <string name="board_tap_none">Ne pas contrôler</string>
+    <string name="board_confirm_on">Allumer %1$s ?</string>
+    <string name="board_confirm_off">Éteindre %1$s ?</string>
+    <string name="board_turn_on">Allumer</string>
+    <string name="board_turn_off">Éteindre</string>
+    <string name="board_idle_dim">Assombrir sans contact</string>
+    <string name="board_idle_dim_desc">Après 10 minutes sans toucher, l\'écran s\'assombrit ; le premier toucher ne fait que le réveiller</string>
 </resources>

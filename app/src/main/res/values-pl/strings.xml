@@ -1573,7 +1573,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="board_dream_desc">Otwiera ustawienia Androida: w Wygaszaczu ekranu wybierz SwitchGuard i ustaw uruchamianie podczas ładowania. Tablica zastąpi wtedy ekran blokady na ładowarce.</string>
     <string name="board_dream_missing">Ten telefon nie ma ustawienia wygaszacza ekranu; użyj zamiast tego „Otwórz ekran gotowości”.</string>
     <string name="board_dim">Przyciemniaj w nocy</string>
-    <string name="board_dim_desc">Tekst przygasa między 23:00 a 07:00</string>
+    <string name="board_dim_desc">W godz. 23:00–07:00 najniższa jasność ekranu</string>
     <string name="board_launcher">Używaj jako ekranu głównego (launcher)</string>
     <string name="board_launcher_desc">Przycisk Home otwiera SwitchGuard — dla telefonu lub tabletu na ścianie. Wyłącz, aby wrócić do poprzedniego ekranu głównego.</string>
     <string name="board_launcher_on">Aktywne: przycisk Home otwiera SwitchGuard</string>
@@ -1928,4 +1928,16 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="ha_connect_open">Połącz z serwerem</string>
     <string name="ha_connect_edit">Zmień adres serwera lub token</string>
     <string name="lan_filter">Szukaj</string>
+    <string name="board_last_sync">Ostatnia aktualizacja %1$s</string>
+    <string name="board_pending">Wysyłanie…</string>
+    <string name="board_tap">Po dotknięciu</string>
+    <string name="board_tap_toggle">Wł./wył.</string>
+    <string name="board_tap_confirm">Najpierw zapytaj</string>
+    <string name="board_tap_none">Nie steruj</string>
+    <string name="board_confirm_on">Włączyć %1$s?</string>
+    <string name="board_confirm_off">Wyłączyć %1$s?</string>
+    <string name="board_turn_on">Włącz</string>
+    <string name="board_turn_off">Wyłącz</string>
+    <string name="board_idle_dim">Przyciemniaj bez dotyku</string>
+    <string name="board_idle_dim_desc">Po 10 minutach bez dotyku ekran się przyciemnia; pierwsze dotknięcie tylko go budzi</string>
 </resources>

@@ -1436,7 +1436,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_dream_desc">Mở cài đặt Android: chọn SwitchGuard trong Trình bảo vệ màn hình và đặt để bắt đầu khi đang sạc. Khi đó bảng này thay thế màn hình khóa lúc cắm sạc.</string>
     <string name="board_dream_missing">Điện thoại này không có cài đặt trình bảo vệ màn hình; hãy dùng “Mở màn hình chờ”.</string>
     <string name="board_dim">Làm mờ vào ban đêm</string>
-    <string name="board_dim_desc">Chữ mờ dần từ 23:00 đến 07:00</string>
+    <string name="board_dim_desc">Từ 23:00–07:00 màn hình ở độ sáng thấp nhất</string>
     <string name="board_launcher">Dùng làm màn hình chính (launcher)</string>
     <string name="board_launcher_desc">Nút Màn hình chính sẽ mở SwitchGuard — cho điện thoại hoặc máy tính bảng treo tường. Tắt để quay lại màn hình chính cũ.</string>
     <string name="board_launcher_on">Đang bật: nút Màn hình chính mở SwitchGuard</string>
@@ -1791,4 +1791,16 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="ha_connect_open">Kết nối máy chủ</string>
     <string name="ha_connect_edit">Đổi địa chỉ máy chủ hoặc mã</string>
     <string name="lan_filter">Tìm kiếm</string>
+    <string name="board_last_sync">Cập nhật lần cuối %1$s</string>
+    <string name="board_pending">Đang gửi…</string>
+    <string name="board_tap">Khi chạm</string>
+    <string name="board_tap_toggle">Bật/tắt</string>
+    <string name="board_tap_confirm">Hỏi trước</string>
+    <string name="board_tap_none">Không điều khiển</string>
+    <string name="board_confirm_on">Bật %1$s?</string>
+    <string name="board_confirm_off">Tắt %1$s?</string>
+    <string name="board_turn_on">Bật</string>
+    <string name="board_turn_off">Tắt</string>
+    <string name="board_idle_dim">Làm tối khi không chạm</string>
+    <string name="board_idle_dim_desc">Sau 10 phút không chạm, màn hình tối đi; lần chạm đầu chỉ đánh thức màn hình</string>
 </resources>

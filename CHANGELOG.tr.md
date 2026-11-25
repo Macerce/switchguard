@@ -6,6 +6,17 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.51.0 — 2026-11-25
+**Yeni**
+- Bekleme ekranı: her cihaz kartı için (⋮ menü → Dokununca) aç/kapat, onay iste ya da kontrol etme seçilebilir; duvar panosundaki derin dondurucu veya pompa yanlışlıkla tek dokunuşla kapanmaz.
+- Bekleme ekranı 10 dakika dokunulmazsa kısılır (Ayarlar → Bekleme ekranı → Dokunulmayınca kıs); ilk dokunuş yalnız uyandırır.
+
+**İyileştirme**
+- Geceleri karartma artık yalnız yazıları değil ekran ışığını da kısar (ekran koruyucuda da). Gece dokununca bir süre okunacak kadar açılır.
+- Bağlantı kopunca üstte son güncelleme saatiyle bir şerit çıkar, bulut cihazlarının kartları soluklaşır; eski durum güncelmiş gibi görünmez. Yerel ağdaki cihazlar normal kalır.
+- Dokunulan kart cihaz yanıt verene kadar "Gönderiliyor…" gösterir; bu sırada ikinci dokunuş yok sayılır.
+- Bekleme ekranı saniyede bir değil dakikada bir yeniden çizilir: hep açık panoda daha az pil ve ısı.
+
 ## 2.50.4 — 2026-11-25
 **İyileştirme**
 - Bekleme ekranı her telefonda Roboto yazı tipini (Home Assistant'ın yazısı) kullanır; sistem yazısı farklı olsa da.

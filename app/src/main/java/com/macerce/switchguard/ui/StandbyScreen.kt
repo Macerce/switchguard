@@ -14,6 +14,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.zIndex
 import com.macerce.switchguard.core.StandbyGrid
+import com.macerce.switchguard.core.StandbyControl
+import com.macerce.switchguard.core.Cloud
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.VerifiedUser
 import android.app.KeyguardManager
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -228,6 +232,7 @@ class StandbyActivity : ComponentActivity() {
                     onClose = { finish() },
                     host = remember { StandbyHost(listen = { listen() }, unlocked = { unlocked(it) }) },
                     heard = heard,
+                    onBrightness = { applyBrightness(window, it) },
                 )
             }
         }
@@ -252,6 +257,14 @@ class StandbyActivity : ComponentActivity() {
             context.startActivity(Intent(context, StandbyActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
     }
+}
+
+/** Pencerenin ekran ışığını ayarlar; null sistemin parlaklığına bırakır. */
+fun applyBrightness(window: android.view.Window?, level: Float?) {
+    val w = window ?: return
+    val want = level ?: WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE
+    if (w.attributes.screenBrightness == want) return
+    w.attributes = w.attributes.apply { screenBrightness = want }
 }
 
 // Home Assistant koyu tema: #111111 zemin, #1C1C1C kart, %12 ayırıcı kenar, 12 dp köşe; durum renkleri HA'nınkiler.
@@ -303,10 +316,16 @@ private fun channelsOf(d: DeviceSnapshot): List<Int> =
  * [host] null ise (ekran koruyucu) cihazlar yalnız gösterilir, düğmeler çıkmaz. [heard] son sesli komut.
  */
 @Composable
-fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost? = null, heard: Pair<Long, String>? = null) {
+fun StandbyBoardScreen(
+    onOpenApp: (() -> Unit)?,
+    onClose: (() -> Unit)?,
+    host: StandbyHost? = null,
+    heard: Pair<Long, String>? = null,
+    onBrightness: ((Float?) -> Unit)? = null,
+) {
     // Home Assistant'ın yazı tipi Roboto; bazı telefonlarda (MIUI) sistem yazısı farklı olduğundan uygulamayla gelir.
     CompositionLocalProvider(androidx.compose.material3.LocalTextStyle provides androidx.compose.material3.LocalTextStyle.current.copy(fontFamily = HaFont)) {
-        StandbyBoard(onOpenApp, onClose, host, heard)
+        StandbyBoard(onOpenApp, onClose, host, heard, onBrightness)
     }
 }
 
@@ -321,7 +340,7 @@ private val HaFont = androidx.compose.ui.text.font.FontFamily(
 )
 
 @Composable
-private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost?, heard: Pair<Long, String>?) {
+private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: StandbyHost?, heard: Pair<Long, String>?, onBrightness: ((Float?) -> Unit)?) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     // Alttaki pencere: sesli komutun yanıtı, durum özeti ya da günün özeti; dokununca kapanır, okuma kesilir.
@@ -361,12 +380,12 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
     val eventsVersion by events.version.collectAsStateWithLifecycle()
     val conn by LiveState.connection.collectAsStateWithLifecycle()
 
-    // Saniyede bir tik; ağır işler dakikada bir.
+    // Dakikada bir tik (saat saniye göstermiyor): pano 7/24 açık, her saniye bütün kartları yeniden çizmek pil ve ısı demek.
     var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
     LaunchedEffect(Unit) {
         while (true) {
             now = System.currentTimeMillis()
-            delay(1000 - now % 1000)
+            delay(60_000 - now % 60_000 + 50)
         }
     }
     val minute = now / 60_000
@@ -420,6 +439,25 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
 
     val hour = remember(minute) { Calendar.getInstance().get(Calendar.HOUR_OF_DAY) }
     val night = dimAtNight && (hour >= 23 || hour < 7)
+    val idleDim = remember(version) { store.standbyIdleDim }
+    val canEditBoard = onOpenApp != null
+    // Son dokunuş; uzun süre dokunulmazsa ekran kısılır. Ekran koruyucuda dokunuş yok: hep "boşta" sayılır.
+    var lastTouch by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    var idle by remember { mutableStateOf(!canEditBoard) }
+    LaunchedEffect(lastTouch) {
+        if (!canEditBoard) return@LaunchedEffect
+        idle = false
+        delay(StandbyControl.IDLE_AFTER_MS)
+        idle = true
+    }
+    val brightness = StandbyControl.brightness(night, idle, idleDim, alarm = alarmLines.isNotEmpty())
+    LaunchedEffect(brightness) { onBrightness?.invoke(brightness) }
+    // Kısıkken ilk dokunuş yalnız uyandırır (karanlıkta yanlışlıkla bir cihaz kapanmasın).
+    val dimmed by rememberUpdatedState(brightness != null && idle)
+    // Kart başına dokunuş modu, gönderilmiş ama durumu henüz gelmemiş komutlar ve onay bekleyen komut.
+    val controls = remember(version) { StandbyControl.parse(store.standbyControl) }
+    var pending by remember { mutableStateOf(mapOf<String, Pair<Boolean, Long>>()) }
+    var confirm by remember { mutableStateOf<Triple<DeviceSnapshot, Int, Boolean>?>(null) }
     // Yanma (burn-in) olmasın: içerik her dakika birkaç dp kayar.
     val shifts = listOf(0 to 0, 6 to 4, -5 to 8, 4 to -6, -7 to -3, 2 to 7)
     val (sx, sy) = shifts[(minute % shifts.size).toInt()]
@@ -453,31 +491,63 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
     }
     val canEdit = onOpenApp != null
 
-    // Zemindeki ışık durumu söyler (TV'deki gibi): turkuaz yolunda, amber dikkat, kırmızı alarm/sorun, gri izleme kapalı.
     val offlineNames = snapshots.filter { it.id in monitored && !it.online }.map { it.name }
-    val accent by animateColorAsState(
-        when {
-            alarmLines.isNotEmpty() || conn.state in setOf(ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR) -> Red
-            conn.state == ConnState.STOPPED -> Tv.idle
-            offlineNames.isNotEmpty() || conn.state != ConnState.LIVE -> Amber
-            else -> Ok
-        },
-        tween(900),
-        label = "accent",
-    )
-    val onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)? = host?.let { h ->
-        { d, ch, on ->
-            if (!editing) h.unlocked {
-                scope.launch {
-                    val r = Actions.setSwitch(context, d, ch, on)
-                    if (r.isFailure) panel = "⚠️ ${d.name}: ${r.exceptionOrNull()?.message.orEmpty()}"
+    // Bağlantı yokken kartlar son bilinen durumu gösterir: üstte şerit, bulut cihazları soluk (yerel ağdakiler güncel).
+    val stale = conn.state in setOf(ConnState.STOPPED, ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR)
+    // Durumu gelen ya da süresi dolan komut "gönderiliyor" görünümünden çıkar.
+    LaunchedEffect(snapshots, pending) {
+        if (pending.isEmpty()) return@LaunchedEffect
+        val t = System.currentTimeMillis()
+        val left = pending.filter { (id, p) ->
+            val (did, ch) = StandbyGrid.parseDevice(id) ?: return@filter false
+            val d = tiles.firstOrNull { it.id == did }
+            d != null && d.switches[ch] != p.first && t - p.second < StandbyControl.PENDING_MS
+        }
+        if (left.size != pending.size) { pending = left; return@LaunchedEffect }
+        delay(StandbyControl.PENDING_MS - (t - left.values.minOf { it.second }) + 50)
+        pending = pending.filter { System.currentTimeMillis() - it.value.second < StandbyControl.PENDING_MS }
+    }
+    val send: (DeviceSnapshot, Int, Boolean) -> Unit = { d, ch, on ->
+        host?.unlocked {
+            val id = StandbyGrid.device(d.id, ch)
+            pending = pending + (id to (on to System.currentTimeMillis()))
+            scope.launch {
+                val r = Actions.setSwitch(context, d, ch, on)
+                if (r.isFailure) {
+                    pending = pending - id
+                    panel = "⚠️ ${d.name}: ${r.exceptionOrNull()?.message.orEmpty()}"
                 }
+            }
+        }
+    }
+    val onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)? = host?.let {
+        { d, ch, on ->
+            val id = StandbyGrid.device(d.id, ch)
+            if (!editing && id !in pending) when (controls[id]) {
+                StandbyControl.Mode.NONE -> Unit
+                StandbyControl.Mode.CONFIRM -> confirm = Triple(d, ch, on)
+                else -> send(d, ch, on)
             }
         }
     }
 
     Box(
         Modifier.fillMaxSize().background(Bg)
+            .then(
+                if (canEdit) Modifier.pointerInput(Unit) {
+                    awaitPointerEventScope {
+                        while (true) {
+                            val e = awaitPointerEvent(androidx.compose.ui.input.pointer.PointerEventPass.Initial)
+                            if (e.type == androidx.compose.ui.input.pointer.PointerEventType.Press) {
+                                val wake = dimmed
+                                lastTouch = System.currentTimeMillis()
+                                if (wake) e.changes.forEach { it.consume() }
+                            }
+                        }
+                    }
+                }
+                else Modifier
+            )
             .then(
                 if (canEdit) Modifier.clickable(remember { MutableInteractionSource() }, indication = null) {
                     if (editing) adding = false else if (panel != null) { panel = null; Speaker.stop() } else menu = !menu
@@ -516,9 +586,11 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
                         StandbyGrid.RULES -> Rules(rules, ruleDevices, rowsFor(h), Modifier.fillMaxSize())
                         else -> {
                             StandbyGrid.parseDevice(id)?.let { (did, ch) ->
-                                tiles.firstOrNull { it.id == did }?.let { d -> DeviceWidget(d, ch, accent, w, h, editing, onToggle) }
+                                tiles.firstOrNull { it.id == did }?.let { d ->
+                                    DeviceWidget(d, ch, w, h, editing, stale && d.cloud != Cloud.LAN, pending[id]?.first, controls[id] ?: StandbyControl.Mode.TOGGLE, onToggle)
+                                }
                             }
-                            StandbyGrid.parseSensor(id)?.let { sid -> sensors.firstOrNull { it.id == sid }?.let { SensorWidget(it, w, h) } }
+                            StandbyGrid.parseSensor(id)?.let { sid -> sensors.firstOrNull { it.id == sid }?.let { SensorWidget(it, w, h, stale && it.cloud != Cloud.LAN) } }
                         }
                     }
                 }
@@ -603,6 +675,31 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
                             }
                         }
                     }
+                    if (StandbyGrid.parseDevice(id) != null) {
+                        Spacer(Modifier.height(16.dp))
+                        Text(stringResource(R.string.board_tap), color = Dim, fontSize = 14.sp)
+                        Spacer(Modifier.height(8.dp))
+                        val current = controls[id] ?: StandbyControl.Mode.TOGGLE
+                        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                            for ((mode, label) in listOf(
+                                StandbyControl.Mode.TOGGLE to R.string.board_tap_toggle,
+                                StandbyControl.Mode.CONFIRM to R.string.board_tap_confirm,
+                                StandbyControl.Mode.NONE to R.string.board_tap_none,
+                            )) {
+                                val sel = mode == current
+                                Box(
+                                    Modifier.weight(1f).heightIn(min = 40.dp).clip(RoundedCornerShape(10.dp))
+                                        .background(if (sel) Teal.copy(alpha = 0.25f) else Color.White.copy(alpha = 0.06f))
+                                        .border(1.dp, if (sel) Teal else Edge, RoundedCornerShape(10.dp))
+                                        .clickable { store.standbyControl = StandbyControl.format(StandbyControl.with(controls, id, mode)) }
+                                        .padding(horizontal = 6.dp, vertical = 8.dp),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(stringResource(label), color = if (sel) Ink else Dim, fontSize = 13.sp, textAlign = TextAlign.Center, maxLines = 2)
+                                }
+                            }
+                        }
+                    }
                     Spacer(Modifier.height(12.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         TextButton(onClick = {
@@ -612,6 +709,26 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
                         TextButton(onClick = { cardMenu = null }) { Text(stringResource(R.string.action_done), color = Teal) }
                     }
                 }
+            }
+        }
+        if (stale && !editing) {
+            val title = stringResource(
+                when (conn.state) {
+                    ConnState.NO_INTERNET -> R.string.board_no_internet
+                    ConnState.AUTH_ERROR -> R.string.board_auth
+                    ConnState.STOPPED -> R.string.board_stopped
+                    else -> R.string.board_conn_error
+                },
+            )
+            val since = conn.lastSync.takeIf { it > 0 }?.let { stringResource(R.string.board_last_sync, eventTime(it)) }
+            Row(
+                Modifier.align(Alignment.TopCenter).padding(top = 8.dp, start = 16.dp, end = 16.dp).widthIn(max = 560.dp)
+                    .clip(RoundedCornerShape(20.dp)).background(Sheet).border(1.dp, Amber.copy(alpha = 0.6f), RoundedCornerShape(20.dp))
+                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Icon(Icons.Rounded.WarningAmber, null, tint = Amber, modifier = Modifier.size(18.dp))
+                Text(listOfNotNull(title, since).joinToString(" · "), color = Ink, fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         if (host != null && !editing) {
@@ -656,6 +773,30 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
                     Text(stringResource(R.string.board_edit), color = Ink)
                 }
                 onClose?.let { TextButton(onClick = it) { Text(stringResource(R.string.board_close), color = Ink) } }
+            }
+        }
+        confirm?.let { (d, ch, on) ->
+            val name = if (d.isMultiChannel) "${d.name} · ${ch + 1}" else d.name
+            Box(
+                Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f))
+                    .clickable(remember { MutableInteractionSource() }, indication = null) { confirm = null },
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    Modifier.padding(24.dp).widthIn(max = 420.dp).fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Card)
+                        .border(1.dp, Edge, RoundedCornerShape(16.dp))
+                        .clickable(remember { MutableInteractionSource() }, indication = null) {}
+                        .padding(20.dp),
+                ) {
+                    Text(stringResource(if (on) R.string.board_confirm_on else R.string.board_confirm_off, name), color = Ink, fontSize = 20.sp, lineHeight = 26.sp)
+                    Spacer(Modifier.height(16.dp))
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+                        TextButton(onClick = { confirm = null }) { Text(stringResource(R.string.action_cancel), color = Ink) }
+                        TextButton(onClick = { confirm = null; send(d, ch, on) }) {
+                            Text(stringResource(if (on) R.string.board_turn_on else R.string.board_turn_off), color = if (on) Teal else Red)
+                        }
+                    }
+                }
             }
         }
     }
@@ -872,23 +1013,38 @@ private fun HaTile(icon: ImageVector, color: Color?, name: String, state: String
     }
 }
 
-/** Cihaz kanalı: HA anahtar kutusu; dokununca açılır/kapanır, açıkken türünün renginde, watt durumun yanında. */
+/**
+ * Cihaz kanalı: HA anahtar kutusu; dokununca açılır/kapanır, açıkken türünün renginde, watt durumun yanında.
+ * [stale]: bağlantı yok, durum son bilinen (soluk). [pendingOn]: gönderilmiş komutun hedefi (durum gelene kadar
+ * "Gönderiliyor…", ikinci dokunuş yok sayılır). [mode] NONE ise kart dokunuşla kontrol etmez (kilit simgesi).
+ */
 @Composable
-private fun DeviceWidget(d: DeviceSnapshot, ch: Int, @Suppress("UNUSED_PARAMETER") accent: Color, w: Dp, h: Dp, editing: Boolean, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
+private fun DeviceWidget(
+    d: DeviceSnapshot, ch: Int, w: Dp, h: Dp, editing: Boolean, stale: Boolean, pendingOn: Boolean?,
+    mode: StandbyControl.Mode, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?,
+) {
     val on = d.online && d.switches[ch] == true
     val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud, d.sensorOnly) { DeviceKinds.of(d) }
     val name = if (d.isMultiChannel) "${d.name} · ${ch + 1}" else d.name
     val watts = d.power?.takeIf { on && it >= 1 }?.let { " · " + boardWatts(it) }.orEmpty()
-    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title) + watts
-    HaTile(
-        if (d.online) kind.icon() else Icons.Rounded.CloudOff, if (on) onColor(kind) else null, name, state, w, h,
-        onClick = if (onToggle != null && d.online && !editing) ({ onToggle(d, ch, !on) }) else null,
-    )
+    val state = if (pendingOn != null) stringResource(R.string.board_pending)
+    else stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title) + watts
+    val shownOn = pendingOn ?: on
+    Box(Modifier.fillMaxSize().alpha(if (stale) 0.5f else 1f)) {
+        HaTile(
+            if (d.online) kind.icon() else Icons.Rounded.CloudOff, if (shownOn && d.online) onColor(kind) else null, name, state, w, h,
+            onClick = if (onToggle != null && d.online && !editing && mode != StandbyControl.Mode.NONE) ({ onToggle(d, ch, !on) }) else null,
+        )
+        if (mode != StandbyControl.Mode.TOGGLE) Icon(
+            if (mode == StandbyControl.Mode.NONE) Icons.Rounded.Lock else Icons.Rounded.VerifiedUser, null, tint = Dim,
+            modifier = Modifier.align(Alignment.BottomEnd).padding(6.dp).size(14.dp),
+        )
+    }
 }
 
 /** Oda sensörü: HA sensör kutusu; durumda sıcaklık/nem, kapı/hareket/su; düşük pil (%20 altı) sonda. */
 @Composable
-private fun SensorWidget(d: DeviceSnapshot, w: Dp, h: Dp) {
+private fun SensorWidget(d: DeviceSnapshot, w: Dp, h: Dp, stale: Boolean) {
     val res = LocalContext.current.resources
     val s = d.sensors
     val alert = d.online && (d.sensorActive(SensorKind.WATER) == true || d.sensorActive(SensorKind.DOOR) == true)
@@ -901,7 +1057,9 @@ private fun SensorWidget(d: DeviceSnapshot, w: Dp, h: Dp) {
     }
     val state = if (!d.online) stringResource(R.string.label_offline_title) else parts.joinToString(" · ")
     val icon = s.keys.firstOrNull { it != SensorKind.BATTERY }?.icon() ?: Icons.Rounded.Sensors
-    HaTile(if (d.online) icon else Icons.Rounded.CloudOff, if (!d.online) null else if (alert) Red else if (busy) Amber else Teal, d.name, state, w, h)
+    Box(Modifier.fillMaxSize().alpha(if (stale) 0.5f else 1f)) {
+        HaTile(if (d.online) icon else Icons.Rounded.CloudOff, if (!d.online) null else if (alert) Red else if (busy) Amber else Teal, d.name, state, w, h)
+    }
 }
 
 /** HA kart başlığı (card-header): 24 sp, normal kalınlık. */

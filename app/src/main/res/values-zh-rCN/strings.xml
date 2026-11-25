@@ -1443,7 +1443,7 @@
     <string name="board_dream_desc">打开 Android 设置：在“屏保”下选择 SwitchGuard，并设为充电时启动。这样充电时看板会取代锁屏。</string>
     <string name="board_dream_missing">此手机没有屏保设置；请改用“打开待机屏幕”。</string>
     <string name="board_dim">夜间调暗</string>
-    <string name="board_dim_desc">23:00 至 07:00 文字变暗</string>
+    <string name="board_dim_desc">23:00–07:00 屏幕降至最低亮度</string>
     <string name="board_launcher">用作主屏幕（启动器）</string>
     <string name="board_launcher_desc">按主屏幕键会打开 SwitchGuard——适合挂在墙上的手机或平板。关闭即可回到原来的主屏幕。</string>
     <string name="board_launcher_on">已启用：主屏幕键会打开 SwitchGuard</string>
@@ -1798,4 +1798,16 @@
     <string name="ha_connect_open">连接服务器</string>
     <string name="ha_connect_edit">更改服务器地址或令牌</string>
     <string name="lan_filter">搜索</string>
+    <string name="board_last_sync">上次更新 %1$s</string>
+    <string name="board_pending">正在发送…</string>
+    <string name="board_tap">点按时</string>
+    <string name="board_tap_toggle">开/关</string>
+    <string name="board_tap_confirm">先询问</string>
+    <string name="board_tap_none">不控制</string>
+    <string name="board_confirm_on">打开%1$s？</string>
+    <string name="board_confirm_off">关闭%1$s？</string>
+    <string name="board_turn_on">打开</string>
+    <string name="board_turn_off">关闭</string>
+    <string name="board_idle_dim">无操作时调暗</string>
+    <string name="board_idle_dim_desc">10 分钟无触摸后屏幕变暗；第一次触摸仅唤醒屏幕</string>
 </resources>

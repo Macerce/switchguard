@@ -6,6 +6,17 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.51.0 — 2026-11-25
+**New**
+- Standby screen: each device card can be set (⋮ menu → On tap) to turn on/off, ask first, or not control at all — so a freezer or pump on a wall panel can't be switched off by one stray tap.
+- Standby screen dims after 10 minutes without a touch (Settings → Standby screen → Dim when untouched); the first touch only wakes it.
+
+**Improved**
+- Night dimming now lowers the actual screen brightness (also in the screen saver), not just the text. A touch at night brightens it for a while.
+- When the connection is lost, a strip at the top shows it with the last update time and cloud device cards fade, so old states don't look current. Local-network devices stay normal.
+- A tapped card shows "Sending…" until the device answers; a second tap meanwhile is ignored.
+- The standby screen redraws once a minute instead of every second: less battery and heat on an always-on panel.
+
 ## 2.50.4 — 2026-11-25
 **Improved**
 - Standby screen uses Roboto (the Home Assistant font) on every phone, also where the system font is different.
