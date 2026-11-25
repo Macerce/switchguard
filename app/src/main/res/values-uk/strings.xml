@@ -1917,4 +1917,10 @@
     <string name="confirm_off_desc">Застосунок, екран очікування та голосові/Telegram-команди питають перед вимкненням. Автоматизації не питають.</string>
     <string name="chat_confirm_off">%1$s буде вимкнено. Скажіть або напишіть «Так» для підтвердження, «Ні» для скасування.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: вимкнення потребує підтвердження — вимкніть його окремо</string>
+    <string name="area_icon">Значок</string>
+    <string name="area_icon_auto">Авто</string>
+    <string name="layout_hide">Сховати на головній</string>
+    <string name="layout_show">Показати на головній</string>
+    <string name="area_delete_confirm">Видалити зону «%1$s»? Пристрої залишаться без зони.</string>
+    <string name="hidden_items">Сховано: %1$d · Показати</string>
 </resources>

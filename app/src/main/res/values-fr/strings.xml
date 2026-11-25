@@ -1909,4 +1909,10 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="confirm_off_desc">Demandé dans l\'appli, sur l\'écran de veille et dans les commandes vocales/Telegram avant de l\'éteindre. Les automatisations ne demandent jamais.</string>
     <string name="chat_confirm_off">%1$s va être éteint. Dites ou écrivez « Oui » pour confirmer, « Non » pour annuler.</string>
     <string name="chat_confirm_skip">⚠️ %1$s : confirmation requise pour l\'éteindre — éteignez-le seul</string>
+    <string name="area_icon">Icône</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Masquer sur l\'accueil</string>
+    <string name="layout_show">Afficher sur l\'accueil</string>
+    <string name="area_delete_confirm">Supprimer la zone « %1$s » ? Ses appareils sont conservés, sans zone.</string>
+    <string name="hidden_items">Masqués : %1$d · Afficher</string>
 </resources>

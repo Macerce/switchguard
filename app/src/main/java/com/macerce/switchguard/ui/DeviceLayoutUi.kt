@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -179,6 +181,15 @@ fun LayoutEditBar(
             leadingIcon = { Icon(if (large) Icons.Rounded.CropLandscape else Icons.Rounded.CropSquare, null, Modifier.size(18.dp)) },
             modifier = Modifier.padding(start = 4.dp).tvFocusRing(RoundedCornerShape(8.dp)),
         )
+        // Ana ekranda gizle: cihaz izlenmeye devam eder, alan sayfasında görünür.
+        val hidden = id in layout.hidden
+        IconButton(onClick = { onChange(layout.toggleHidden(id)) }, modifier = Modifier.tvFocusRing()) {
+            Icon(
+                if (hidden) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
+                stringResource(if (hidden) R.string.layout_show else R.string.layout_hide),
+                tint = if (hidden) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
         Spacer(Modifier.weight(1f))
         val current = layout.categories.firstOrNull { it.id == layout.categoryOf[id] }
         Column {

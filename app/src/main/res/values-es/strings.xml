@@ -1880,4 +1880,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="confirm_off_desc">Se pregunta en la app, en la pantalla de espera y en comandos de voz/Telegram antes de apagarlo. Las automatizaciones nunca preguntan.</string>
     <string name="chat_confirm_off">Se apagará %1$s. Diga o escriba «Sí» para confirmar o «No» para cancelar.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: requiere confirmación para apagarse; apáguelo por separado</string>
+    <string name="area_icon">Icono</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Ocultar en inicio</string>
+    <string name="layout_show">Mostrar en inicio</string>
+    <string name="area_delete_confirm">¿Eliminar el área «%1$s»? Sus dispositivos se conservan y quedan sin área.</string>
+    <string name="hidden_items">Ocultos: %1$d · Mostrar</string>
 </resources>

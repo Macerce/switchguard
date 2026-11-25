@@ -3,8 +3,13 @@ package com.macerce.switchguard.core
 import org.json.JSONArray
 import org.json.JSONObject
 
-/** Kullanıcının oluşturduğu cihaz grubu (ör. "Rögarlar", "Aydınlatma"). */
-data class Category(val id: String, val name: String)
+/**
+ * Kullanıcının oluşturduğu alan (ör. "Mutfak", "Rögarlar"). [icon]: kullanıcının seçtiği simge ([AreaIcon] adı);
+ * null ise addan tahmin edilir.
+ */
+data class Category(val id: String, val name: String, val icon: String? = null) {
+    val iconKind: AreaIcon get() = icon?.let { runCatching { AreaIcon.valueOf(it) }.getOrNull() } ?: AreaSummary.iconKind(name)
+}
 
 /** Cihazlar ekranındaki bir bölüm: başlığı ve sıralı cihazları. */
 data class DeviceSection(val kind: Kind, val category: Category?, val devices: List<DeviceSnapshot>) {
@@ -31,7 +36,24 @@ data class DeviceLayout(
     val large: Set<String> = emptySet(),
     /** Alanın "Hepsini aç / Hepsini kapat"ından (ve alan grubundan) hariç tutulan cihazlar. */
     val allExcluded: Set<String> = emptySet(),
+    /** Ana ekranda büyük (tam satır, cihazlarıyla) gösterilen alanlar. */
+    val areaLarge: Set<String> = emptySet(),
+    /**
+     * Ana ekranda gizlenen cihazlar ve alanlar (kimlikleri). Gizli cihaz izlenmeye devam eder, alan sayfasında ve
+     * düzenlemede görünür; gizli alanın sayfası düzenlemeden açılır.
+     */
+    val hidden: Set<String> = emptySet(),
 ) {
+    fun toggleAreaLarge(id: String) = copy(areaLarge = if (id in areaLarge) areaLarge - id else areaLarge + id)
+    fun toggleHidden(id: String) = copy(hidden = if (id in hidden) hidden - id else hidden + id)
+    fun setAreaIcon(id: String, icon: AreaIcon?) = copy(categories = categories.map { if (it.id == id) it.copy(icon = icon?.name) else it })
+
+    /** Alanları [ids] sırasına dizer (sürükle-bırak); listede olmayanlar sona. */
+    fun orderCategories(ids: List<String>): DeviceLayout {
+        val index = ids.withIndex().associate { it.value to it.index }
+        return copy(categories = categories.sortedBy { index[it.id] ?: Int.MAX_VALUE })
+    }
+
     fun toggleAllExcluded(id: String) = copy(allExcluded = if (id in allExcluded) allExcluded - id else allExcluded + id)
 
     /**
@@ -120,6 +142,8 @@ data class DeviceLayout(
         categories = categories.filterNot { it.id == id },
         categoryOf = categoryOf.filterValues { it != id },
         collapsed = collapsed - id,
+        areaLarge = areaLarge - id,
+        hidden = hidden - id,
     )
 
     fun moveCategory(id: String, delta: Int): DeviceLayout {
@@ -135,11 +159,15 @@ data class DeviceLayout(
         .put("order", JSONArray(order))
         .put("priority", JSONArray(priority.toList()))
         .put("compact", JSONArray(compact.toList()))
-        .put("categories", JSONArray().apply { categories.forEach { put(JSONObject().put("id", it.id).put("name", it.name)) } })
+        .put("categories", JSONArray().apply {
+            categories.forEach { c -> put(JSONObject().put("id", c.id).put("name", c.name).apply { c.icon?.let { put("icon", it) } }) }
+        })
         .put("categoryOf", JSONObject(categoryOf))
         .put("collapsed", JSONArray(collapsed.toList()))
         .put("large", JSONArray(large.toList()))
         .put("allExcluded", JSONArray(allExcluded.toList()))
+        .put("areaLarge", JSONArray(areaLarge.toList()))
+        .put("hidden", JSONArray(hidden.toList()))
         .toString()
 
     companion object {
@@ -149,12 +177,13 @@ data class DeviceLayout(
                 val o = JSONObject(json)
                 fun strings(key: String) = o.optJSONArray(key)?.let { a -> (0 until a.length()).map { a.getString(it) } }.orEmpty()
                 val cats = o.optJSONArray("categories")?.let { a ->
-                    (0 until a.length()).map { a.getJSONObject(it).let { c -> Category(c.getString("id"), c.getString("name")) } }
+                    (0 until a.length()).map { a.getJSONObject(it).let { c -> Category(c.getString("id"), c.getString("name"), c.optString("icon").ifEmpty { null }) } }
                 }.orEmpty()
                 val of = o.optJSONObject("categoryOf")?.let { m -> m.keys().asSequence().associateWith { m.getString(it) } }.orEmpty()
                 DeviceLayout(
                     strings("order"), strings("priority").toSet(), strings("compact").toSet(), cats, of,
                     strings("collapsed").toSet(), strings("large").toSet(), strings("allExcluded").toSet(),
+                    strings("areaLarge").toSet(), strings("hidden").toSet(),
                 )
             }.getOrDefault(DeviceLayout())
         }

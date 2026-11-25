@@ -1946,4 +1946,10 @@
     <string name="confirm_off_desc">Приложение, экран ожидания и голосовые/Telegram-команды спрашивают перед выключением. Автоматизации не спрашивают.</string>
     <string name="chat_confirm_off">%1$s будет выключено. Скажите или напишите «Да» для подтверждения, «Нет» для отмены.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: выключение требует подтверждения — выключите его отдельно</string>
+    <string name="area_icon">Значок</string>
+    <string name="area_icon_auto">Авто</string>
+    <string name="layout_hide">Скрыть на главной</string>
+    <string name="layout_show">Показать на главной</string>
+    <string name="area_delete_confirm">Удалить зону «%1$s»? Устройства останутся без зоны.</string>
+    <string name="hidden_items">Скрыто: %1$d · Показать</string>
 </resources>

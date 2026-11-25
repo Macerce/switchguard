@@ -1837,4 +1837,10 @@
     <string name="confirm_off_desc">在應用程式、待機畫面以及語音/Telegram 指令中關閉前會詢問。自動化從不詢問。</string>
     <string name="chat_confirm_off">將關閉%1$s。說或輸入「是」確認，「否」取消。</string>
     <string name="chat_confirm_skip">⚠️ %1$s：關閉需要確認——請單獨關閉它</string>
+    <string name="area_icon">圖示</string>
+    <string name="area_icon_auto">自動</string>
+    <string name="layout_hide">在主畫面隱藏</string>
+    <string name="layout_show">在主畫面顯示</string>
+    <string name="area_delete_confirm">刪除區域「%1$s」？其裝置會保留，不再屬於任何區域。</string>
+    <string name="hidden_items">已隱藏：%1$d · 顯示</string>
 </resources>

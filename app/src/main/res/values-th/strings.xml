@@ -1809,4 +1809,10 @@
     <string name="confirm_off_desc">แอป หน้าจอสแตนด์บาย และคำสั่งเสียง/Telegram จะถามก่อนปิด ระบบอัตโนมัติจะไม่ถาม</string>
     <string name="chat_confirm_off">จะปิด %1$s พูดหรือพิมพ์ “ใช่” เพื่อยืนยัน “ไม่” เพื่อยกเลิก</string>
     <string name="chat_confirm_skip">⚠️ %1$s: ต้องยืนยันก่อนปิด — ปิดแยกทีละเครื่อง</string>
+    <string name="area_icon">ไอคอน</string>
+    <string name="area_icon_auto">อัตโนมัติ</string>
+    <string name="layout_hide">ซ่อนในหน้าหลัก</string>
+    <string name="layout_show">แสดงในหน้าหลัก</string>
+    <string name="area_delete_confirm">ลบพื้นที่ “%1$s” ไหม อุปกรณ์จะยังอยู่แต่ไม่มีพื้นที่</string>
+    <string name="hidden_items">ซ่อนอยู่: %1$d · แสดง</string>
 </resources>

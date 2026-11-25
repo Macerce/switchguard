@@ -1881,4 +1881,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="confirm_off_desc">Viene chiesto nell\'app, nella schermata di attesa e nei comandi vocali/Telegram prima di spegnerlo. Le automazioni non chiedono mai.</string>
     <string name="chat_confirm_off">%1$s verrà spento. Di\' o scrivi «Sì» per confermare, «No» per annullare.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: serve una conferma per spegnerlo, spegnilo da solo</string>
+    <string name="area_icon">Icona</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Nascondi nella home</string>
+    <string name="layout_show">Mostra nella home</string>
+    <string name="area_delete_confirm">Eliminare l\'area «%1$s»? I dispositivi restano, senza area.</string>
+    <string name="hidden_items">Nascosti: %1$d · Mostra</string>
 </resources>

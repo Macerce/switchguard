@@ -1946,4 +1946,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="confirm_off_desc">Aplikacja, ekran czuwania i polecenia głosowe/Telegram pytają przed wyłączeniem. Automatyzacje nigdy nie pytają.</string>
     <string name="chat_confirm_off">%1$s zostanie wyłączone. Powiedz lub napisz „Tak”, aby potwierdzić, „Nie”, aby anulować.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: wyłączenie wymaga potwierdzenia — wyłącz je osobno</string>
+    <string name="area_icon">Ikona</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Ukryj na ekranie głównym</string>
+    <string name="layout_show">Pokaż na ekranie głównym</string>
+    <string name="area_delete_confirm">Usunąć obszar „%1$s”? Urządzenia zostaną, bez obszaru.</string>
+    <string name="hidden_items">Ukryte: %1$d · Pokaż</string>
 </resources>

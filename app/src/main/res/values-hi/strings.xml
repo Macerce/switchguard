@@ -1803,4 +1803,10 @@
     <string name="confirm_off_desc">ऐप, स्टैंडबाय स्क्रीन और वॉइस/Telegram कमांड में बंद करने से पहले पूछा जाता है। ऑटोमेशन कभी नहीं पूछते।</string>
     <string name="chat_confirm_off">%1$s बंद किया जाएगा। पुष्टि के लिए “हाँ”, रद्द करने के लिए “नहीं” कहें या लिखें।</string>
     <string name="chat_confirm_skip">⚠️ %1$s: बंद करने के लिए पुष्टि चाहिए — इसे अकेले बंद करें</string>
+    <string name="area_icon">आइकन</string>
+    <string name="area_icon_auto">स्वतः</string>
+    <string name="layout_hide">होम स्क्रीन पर छिपाएँ</string>
+    <string name="layout_show">होम स्क्रीन पर दिखाएँ</string>
+    <string name="area_delete_confirm">क्षेत्र “%1$s” हटाएँ? इसके डिवाइस बने रहेंगे, बिना क्षेत्र के।</string>
+    <string name="hidden_items">छिपे: %1$d · दिखाएँ</string>
 </resources>

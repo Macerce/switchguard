@@ -6,6 +6,13 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.53.0 — 2026-11-25
+**Yeni**
+- Ana ekrandaki alan kartları cihaz kartları gibi düzenlenir: basılı tutup sürükleyerek sıralanır; düzenleme kipinde her alanın araç çubuğu var: taşı, küçük/büyük yap, simge seç, ana ekranda gizle, yeniden adlandır, sil (cihazlar silinmez).
+- Alan kartında hepsini aç/kapat düğmesi var (kapanacak kritik cihaz varsa önce sorar).
+- Büyük alan kartı alandaki anahtarları çip olarak listeler; her biri tek dokunuşla, kanal kanal açılıp kapanır.
+- Cihazlar da ana ekranda gizlenebilir (düzenlemede göz düğmesi). İzlenmeye devam eder, alan sayfasında görünür; en alttaki "Gizli · Göster" satırı geri almak için düzenlemeyi açar.
+
 ## 2.52.0 — 2026-11-25
 **Yeni**
 - Cihaz detayında "Kapatırken onay iste": kritik cihazlar (derin dondurucu, pompa) kapatılmadan önce sorulur — ana ekranda, alanlarda ("hepsini kapat"), bekleme ekranında ve sesli/Telegram komutlarında. Açarken sorulmaz; otomasyonlar hiç sormaz.

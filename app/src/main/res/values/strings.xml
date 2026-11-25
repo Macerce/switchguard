@@ -1881,4 +1881,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="confirm_off_desc">Asked in the app, on the standby screen and in voice/Telegram commands before switching it off. Automations never ask.</string>
     <string name="chat_confirm_off">%1$s will be turned off. Say or type “Yes” to confirm, “No” to cancel.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: needs confirmation to turn off — turn it off on its own</string>
+    <string name="area_icon">Icon</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Hide on home screen</string>
+    <string name="layout_show">Show on home screen</string>
+    <string name="area_delete_confirm">Delete the area “%1$s”? Its devices are kept and become unassigned.</string>
+    <string name="hidden_items">Hidden: %1$d · Show</string>
 </resources>

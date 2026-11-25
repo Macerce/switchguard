@@ -1874,4 +1874,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="confirm_off_desc">In de app, op het standby-scherm en bij spraak-/Telegram-opdrachten wordt gevraagd voordat het uitgaat. Automatiseringen vragen nooit.</string>
     <string name="chat_confirm_off">%1$s wordt uitgezet. Zeg of typ „Ja” om te bevestigen, „Nee” om te annuleren.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: uitzetten moet bevestigd worden — zet het apart uit</string>
+    <string name="area_icon">Pictogram</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Verbergen op start</string>
+    <string name="layout_show">Tonen op start</string>
+    <string name="area_delete_confirm">Ruimte „%1$s” verwijderen? De apparaten blijven, zonder ruimte.</string>
+    <string name="hidden_items">Verborgen: %1$d · Tonen</string>
 </resources>

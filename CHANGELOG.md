@@ -6,6 +6,13 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.53.0 — 2026-11-25
+**New**
+- Area cards on the home screen are editable like device cards: long-press and drag to reorder; in edit mode each area gets a toolbar to move it, make it small or large, pick an icon, hide it from the home screen, rename or delete it (devices are kept).
+- Area cards have an all on/off button (asks first if a critical device would turn off).
+- A large area card lists its switches as chips that turn on/off with one tap, channel by channel.
+- Devices can also be hidden from the home screen (eye button in edit mode). They stay monitored and show on their area page; a "Hidden · Show" line at the bottom opens edit mode to bring them back.
+
 ## 2.52.0 — 2026-11-25
 **New**
 - "Ask before turning off" in device details: critical devices (freezer, pump) ask before being switched off — on the home screen, in areas ("all off"), on the standby screen and in voice/Telegram commands. Turning on never asks; automations never ask.

@@ -1816,4 +1816,10 @@
     <string name="confirm_off_desc">在应用、待机屏幕以及语音/Telegram 命令中关闭前会询问。自动化从不询问。</string>
     <string name="chat_confirm_off">将关闭%1$s。说或输入“是”确认，“否”取消。</string>
     <string name="chat_confirm_skip">⚠️ %1$s：关闭需要确认——请单独关闭它</string>
+    <string name="area_icon">图标</string>
+    <string name="area_icon_auto">自动</string>
+    <string name="layout_hide">在主屏幕隐藏</string>
+    <string name="layout_show">在主屏幕显示</string>
+    <string name="area_delete_confirm">删除区域“%1$s”？其设备会保留，不再属于任何区域。</string>
+    <string name="hidden_items">已隐藏：%1$d · 显示</string>
 </resources>

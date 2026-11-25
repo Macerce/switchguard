@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.VisibilityOff
 import kotlinx.coroutines.Job
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.draw.alpha
@@ -200,20 +201,25 @@ fun DevicesScreen(
     val inviteDismissed = remember(version) { store.areasInviteDismissed }
     var openAreaId by rememberSaveable { mutableStateOf<String?>(null) }
     val openArea = layout.categories.firstOrNull { it.id == openAreaId }
+    // Alan kartlarının sürükle-bırak sırası (cihazlarınki gibi): bırakınca bir kez kaydedilir.
+    val areaOrder = remember { DragOrder() }
+    val areaGroups = remember(version) { store.snapshotsWithGroups.filter { DeviceGroup.isArea(it.id) }.associateBy { it.id } }
     val areaSummaries = remember(version) { layout.categories.associate { it.id to AreaSummary.of(it.id, layout, devices) } }
+    var editMode by rememberSaveable { mutableStateOf(false) }
     // Koruma kartındaki sayıya dokununca liste süzülür (açık / çevrimdışı / güç çeken); tekrar dokununca kalkar.
     var filter by rememberSaveable { mutableStateOf<DeviceFilter?>(null) }
-    val sections = remember(shownLayout, shown, openArea, filter) {
+    val sections = remember(shownLayout, shown, openArea, filter, editMode) {
         val f = filter
-        if (f != null && openArea == null) listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(shown).filter { f.matches(it) }))
-        else if (openArea == null) shownLayout.sections(shown)
+        // Ana ekranda gizlenen cihazlar yalnız düzenlemede (soluk) görünür; alan sayfasında hep görünür.
+        val home = if (editMode) shown else shown.filterNot { it.id in shownLayout.hidden }
+        if (f != null && openArea == null) listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(home).filter { f.matches(it) }))
+        else if (openArea == null) shownLayout.sections(home)
         else listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(shown).filter { shownLayout.categoryOf[it.id] == openArea.id }))
     }
     val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
     val currentSectionOf by rememberUpdatedState(sectionOf)
     val haptic = LocalHapticFeedback.current
     val gridState = rememberLazyGridState()
-    var editMode by rememberSaveable { mutableStateOf(false) }
     // TV: uzun basılan kart taşıma modunda; yön tuşları kartı kaydırır, OK ya da Geri bitirir.
     var movingId by rememberSaveable { mutableStateOf<String?>(null) }
     BackHandler(enabled = movingId != null) { movingId = null }
@@ -349,8 +355,10 @@ fun DevicesScreen(
             val reorder = rememberReorderableLazyGridState(gridState) { from, to ->
                 val a = from.key as? String
                 val b = to.key as? String
-                // Bölümler arası taşıma yok: öncelik ve kategori kendi araçlarıyla değişir.
-                if (a != null && b != null && currentSectionOf[a] != null && currentSectionOf[a] == currentSectionOf[b]) {
+                if (a != null && b != null && a.startsWith(AREA_KEY) && b.startsWith(AREA_KEY)) {
+                    areaOrder.move(a.removePrefix(AREA_KEY), b.removePrefix(AREA_KEY))
+                } else if (a != null && b != null && currentSectionOf[a] != null && currentSectionOf[a] == currentSectionOf[b]) {
+                    // Bölümler arası taşıma yok: öncelik ve kategori kendi araçlarıyla değişir.
                     order.move(a, b)
                 }
             }
@@ -441,18 +449,65 @@ fun DevicesScreen(
                     }
                 }
                 // Ana sayfada alan kartları (Home Assistant'ın alanları gibi); dokununca alanın sayfası açılır.
-                if (!editMode && openArea == null && devices.isNotEmpty() && filter == null) {
+                // Cihaz kartları gibi basılı tutup sürüklenir; düzenlemede araç çubuğu (taşı, boyut, simge, gizle, sil).
+                if (openArea == null && devices.isNotEmpty() && filter == null) {
                     if (layout.categories.isEmpty()) {
-                        if (!inviteDismissed) item(key = "area-invite", span = full) {
+                        if (!editMode && !inviteDismissed) item(key = "area-invite", span = full) {
                             AreaInviteCard(onCreate = { newArea = true }, onDismiss = { store.areasInviteDismissed = true })
                         }
                     } else {
-                        item(key = "areas-title", span = full) {
+                        val byId = layout.categories.associateBy { it.id }
+                        val ordered = areaOrder.displayed(layout.categories.map { it.id }).mapNotNull { byId[it] }
+                        val areaList = ordered.filter { editMode || it.id !in layout.hidden }
+                        if (areaList.isNotEmpty()) item(key = "areas-title", span = full) {
                             Text(stringResource(R.string.areas_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold,
                                 modifier = Modifier.padding(start = 4.dp, top = 6.dp))
                         }
-                        items(layout.categories, key = { "area-" + it.id }) { area ->
-                            AreaTile(area, areaSummaries[area.id] ?: AreaSummary.of(emptyList()), onOpen = { openAreaId = area.id })
+                        itemsIndexed(
+                            areaList, key = { _, area -> AREA_KEY + area.id },
+                            span = { _, area -> if (editMode || area.id in layout.areaLarge) GridItemSpan(maxLineSpan) else GridItemSpan(1) },
+                        ) { i, area ->
+                            ReorderableItem(reorder, key = AREA_KEY + area.id) { isDragging ->
+                                val lift by animateFloatAsState(if (isDragging) 1f else 0f, label = "areaLift")
+                                val members = remember(layout, devices, area.id) {
+                                    layout.sorted(devices.filter { layout.categoryOf[it.id] == area.id && !DeviceGroup.isGroup(it.id) && !it.sensorOnly && it.switches.isNotEmpty() })
+                                }
+                                AreaTile(
+                                    area, areaSummaries[area.id] ?: AreaSummary.of(emptyList()),
+                                    onOpen = { if (!areaOrder.dragging) openAreaId = area.id },
+                                    large = area.id in layout.areaLarge,
+                                    group = areaGroups[DeviceGroup.areaDeviceId(area.id)],
+                                    members = members,
+                                    controls = !editMode,
+                                    hidden = area.id in layout.hidden,
+                                    editBar = if (editMode) {
+                                        { AreaEditBar(area, layout, canBack = i > 0, canForward = i < areaList.lastIndex, onChange = saveLayout) }
+                                    } else null,
+                                    modifier = Modifier
+                                        .graphicsLayer {
+                                            val scale = 1f + 0.03f * lift
+                                            scaleX = scale
+                                            scaleY = scale
+                                            shadowElevation = 16.dp.toPx() * lift
+                                            shape = RoundedCornerShape(20.dp)
+                                            clip = false
+                                        }
+                                        .then(
+                                            if (tv) Modifier
+                                            else Modifier.longPressDraggableHandle(
+                                                onDragStarted = {
+                                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                    areaOrder.begin(layout.categories.map { it.id })
+                                                },
+                                                onDragStopped = {
+                                                    val ids = areaOrder.end()
+                                                    if (ids != null) store.deviceLayout = store.deviceLayout.orderCategories(ids)
+                                                    else if (!editMode) editMode = true
+                                                },
+                                            ),
+                                        ),
+                                )
+                            }
                         }
                     }
                 }
@@ -517,6 +572,7 @@ fun DevicesScreen(
                                         { LayoutEditBar(device, layout, shown, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
                                     } else null,
                                     modifier = Modifier
+                                        .alpha(if (editMode && device.id in layout.hidden) 0.5f else 1f)
                                         .bringIntoViewRequester(bringIntoView)
                                         .graphicsLayer {
                                             val scale = 1f + 0.03f * lift
@@ -567,6 +623,18 @@ fun DevicesScreen(
                                         ),
                                 )
                             }
+                        }
+                    }
+                }
+                // Ana ekranda gizlenenler: sayısı en altta; dokununca düzenleme açılır (orada soluk görünür, göz ile geri alınır).
+                if (!editMode && openArea == null && filter == null) {
+                    val known = devices.map { it.id }.toSet() + layout.categories.map { it.id } + groups.map { it.deviceId }
+                    val hiddenCount = layout.hidden.count { it in known }
+                    if (hiddenCount > 0) item(key = "hidden-hint", span = full) {
+                        TextButton(onClick = { editMode = true }, modifier = Modifier.tvFocusRing()) {
+                            Icon(Icons.Rounded.VisibilityOff, null, Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text(stringResource(R.string.hidden_items, hiddenCount))
                         }
                     }
                 }
@@ -1203,3 +1271,6 @@ enum class DeviceFilter(val label: Int) {
         POWER -> d.online && (d.power ?: 0.0) >= 1 && !DeviceGroup.isGroup(d.id)
     }
 }
+
+/** Alan kartlarının ızgara anahtarı öneki (cihaz kimlikleriyle karışmasın). */
+private const val AREA_KEY = "area-"

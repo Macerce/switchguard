@@ -1,5 +1,24 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.CloudOff
+import androidx.compose.material.icons.rounded.CropLandscape
+import androidx.compose.material.icons.rounded.CropSquare
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -104,34 +123,198 @@ fun areaStatusText(s: AreaSummary): String {
     return parts.joinToString(" · ")
 }
 
-/** Cihazlar ekranındaki alan kartı (Home Assistant'ın alan kartı gibi); dokununca alanın sayfası açılır. */
+/**
+ * Cihazlar ekranındaki alan kartı (Home Assistant'ın alan kartı gibi); dokununca alanın sayfası açılır.
+ * Sağ üstte alanın hepsini aç/kapat düğmesi ([group]: alanın sanal grubu; kapatırken onaylı cihaz varsa sorulur).
+ * [large]: tam satır; alandaki cihazlar tek dokunuşla açılıp kapanan çipler olarak altında listelenir.
+ * [hidden]: ana ekranda gizli (yalnız düzenlemede soluk görünür). [editBar]: düzenleme araçları.
+ */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun AreaTile(area: Category, summary: AreaSummary, onOpen: () -> Unit, modifier: Modifier = Modifier) {
+fun AreaTile(
+    area: Category,
+    summary: AreaSummary,
+    onOpen: () -> Unit,
+    modifier: Modifier = Modifier,
+    large: Boolean = false,
+    group: DeviceSnapshot? = null,
+    members: List<DeviceSnapshot> = emptyList(),
+    controls: Boolean = true,
+    hidden: Boolean = false,
+    editBar: (@Composable () -> Unit)? = null,
+) {
     val dark = LocalDarkTheme.current
     val shape = RoundedCornerShape(20.dp)
-    val active = summary.anyOn
+    val active = summary.anyOn && editBar == null
     val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
     val fg = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurface
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Column(
-        modifier.fillMaxWidth().tvFocusRing(shape).heightIn(min = 104.dp)
+        modifier.fillMaxWidth().tvFocusRing(shape).clip(shape)
             .background(background, shape)
-            .then(if (summary.water > 0) Modifier.border(1.5.dp, Brand.alarm, shape) else Modifier)
-            .clickable(onClick = onOpen).padding(14.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+            .then(if (summary.water > 0) Modifier.border(1.5.dp, Brand.alarm, shape) else Modifier),
     ) {
-        IconBadge(
-            AreaSummary.iconKind(area.name).vector(),
-            tint = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurfaceVariant,
-            background = if (active) androidx.compose.ui.graphics.Color.White.copy(alpha = 0.2f) else raisedOnTile(),
-            size = 38,
-        )
-        Column {
-            Text(area.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = fg,
-                maxLines = 1, overflow = TextOverflow.Ellipsis)
-            Text(areaStatusText(summary), style = MaterialTheme.typography.bodySmall, color = muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
+        Box {
+            Box(Modifier.matchParentSize().clickable(onClick = onOpen))
+            Column(
+                Modifier.fillMaxWidth().heightIn(min = 104.dp).alpha(if (hidden) 0.5f else 1f).padding(14.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Row(verticalAlignment = Alignment.Top) {
+                    IconBadge(
+                        area.iconKind.vector(),
+                        tint = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurfaceVariant,
+                        background = if (active) Color.White.copy(alpha = 0.2f) else raisedOnTile(),
+                        size = 38,
+                    )
+                    Spacer(Modifier.weight(1f))
+                    if (hidden) Icon(Icons.Rounded.VisibilityOff, stringResource(R.string.layout_show), tint = muted, modifier = Modifier.size(18.dp))
+                    if (controls && group != null && summary.switchesTotal > 0) {
+                        val on = group.switches[0] == true
+                        val control = rememberSwitchControl(group, 0, on)
+                        PowerButton(control.shown, control.busy, group.online, control.toggle, size = 38.dp, onBrand = active)
+                    }
+                }
+                Column {
+                    Text(area.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, color = fg,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(areaStatusText(summary), style = MaterialTheme.typography.bodySmall,
+                        color = if (summary.offline > 0 && !active) Brand.alarm else muted, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                }
+                if (large && controls && members.isNotEmpty()) {
+                    // Alandaki her anahtar tek dokunuşla (detaya girmeden); çok kanallıda kanal kanal.
+                    val chips = members.flatMap { d -> d.switches.keys.sorted().map { d to it } }
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        chips.take(MAX_CHIPS).forEach { (d, ch) -> MemberChip(d, ch, active) }
+                        if (chips.size > MAX_CHIPS) {
+                            Text("+" + (chips.size - MAX_CHIPS), color = muted, style = MaterialTheme.typography.labelLarge,
+                                modifier = Modifier.padding(horizontal = 6.dp, vertical = 8.dp))
+                        }
+                    }
+                }
+            }
         }
+        editBar?.invoke()
     }
+}
+
+private const val MAX_CHIPS = 12
+
+/** Büyük alan kartında bir anahtar: ad ve durum rengi; dokununca açılır/kapanır (kapatırken onay kuralı geçerli). */
+@Composable
+private fun MemberChip(d: DeviceSnapshot, channel: Int, onBrand: Boolean) {
+    val control = rememberSwitchControl(d, channel, d.switches[channel] == true)
+    val on = control.shown && d.online
+    val shape = RoundedCornerShape(12.dp)
+    val scheme = MaterialTheme.colorScheme
+    val bg = when {
+        on && onBrand -> Color.White.copy(alpha = 0.25f)
+        on -> scheme.primaryContainer
+        onBrand -> Color.Black.copy(alpha = 0.12f)
+        else -> raisedOnTile()
+    }
+    val fg = when {
+        !d.online -> Brand.alarm
+        onBrand -> Brand.onActive
+        on -> scheme.onPrimaryContainer
+        else -> scheme.onSurfaceVariant
+    }
+    val name = if (d.isMultiChannel) "${d.name} · ${channel + 1}" else d.name
+    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title)
+    Row(
+        Modifier.tvFocusRing(shape).clip(shape).background(bg, shape)
+            .clickable(enabled = d.online, role = androidx.compose.ui.semantics.Role.Switch) { if (!control.busy) control.toggle(!control.shown) }
+            .semantics(mergeDescendants = true) { contentDescription = "$name, $state" }
+            .padding(horizontal = 10.dp, vertical = 7.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(if (d.online) Icons.Rounded.PowerSettingsNew else Icons.Rounded.CloudOff, null, tint = fg, modifier = Modifier.size(14.dp).alpha(if (control.busy) 0.4f else 1f))
+        Spacer(Modifier.width(6.dp))
+        Text(name, color = fg, style = MaterialTheme.typography.labelLarge, maxLines = 1, overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.widthIn(max = 150.dp))
+    }
+}
+
+/**
+ * Düzenleme modunda alan kartının altındaki araçlar: sola/sağa taşı, küçük/büyük, simge, ana ekranda gizle,
+ * yeniden adlandır, sil (cihazlar silinmez, alansız kalır).
+ */
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun AreaEditBar(area: Category, layout: DeviceLayout, canBack: Boolean, canForward: Boolean, onChange: (DeviceLayout) -> Unit) {
+    var iconMenu by remember { mutableStateOf(false) }
+    var renaming by remember { mutableStateOf(false) }
+    var deleting by remember { mutableStateOf(false) }
+    RowDivider(inset = 0.dp)
+    FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp, vertical = 2.dp), itemVerticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = { onChange(layout.moveCategory(area.id, -1)) }, enabled = canBack, modifier = Modifier.tvFocusRing()) {
+            Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.layout_move_up))
+        }
+        IconButton(onClick = { onChange(layout.moveCategory(area.id, +1)) }, enabled = canForward, modifier = Modifier.tvFocusRing()) {
+            Icon(Icons.AutoMirrored.Rounded.ArrowForward, stringResource(R.string.layout_move_down))
+        }
+        val large = area.id in layout.areaLarge
+        AssistChip(
+            onClick = { onChange(layout.toggleAreaLarge(area.id)) },
+            label = { Text(stringResource(if (large) R.string.layout_large else R.string.layout_compact), maxLines = 1) },
+            leadingIcon = { Icon(if (large) Icons.Rounded.CropLandscape else Icons.Rounded.CropSquare, null, Modifier.size(18.dp)) },
+            modifier = Modifier.padding(horizontal = 4.dp).tvFocusRing(RoundedCornerShape(8.dp)),
+        )
+        Box {
+            AssistChip(
+                onClick = { iconMenu = true },
+                label = { Text(stringResource(R.string.area_icon), maxLines = 1) },
+                leadingIcon = { Icon(area.iconKind.vector(), null, Modifier.size(18.dp)) },
+                modifier = Modifier.padding(horizontal = 4.dp).tvFocusRing(RoundedCornerShape(8.dp)),
+            )
+        }
+        Spacer(Modifier.weight(1f))
+        val hidden = area.id in layout.hidden
+        IconButton(onClick = { onChange(layout.toggleHidden(area.id)) }, modifier = Modifier.tvFocusRing()) {
+            Icon(
+                if (hidden) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
+                stringResource(if (hidden) R.string.layout_show else R.string.layout_hide),
+                tint = if (hidden) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        IconButton(onClick = { renaming = true }, modifier = Modifier.tvFocusRing()) { Icon(Icons.Rounded.Edit, stringResource(R.string.action_rename)) }
+        IconButton(onClick = { deleting = true }, modifier = Modifier.tvFocusRing()) { Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete)) }
+    }
+    if (iconMenu) AlertDialog(
+        onDismissRequest = { iconMenu = false },
+        title = { Text(stringResource(R.string.area_icon)) },
+        text = {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                // İlk seçenek: addan tahmin (otomatik).
+                val options = listOf<AreaIcon?>(null) + AreaIcon.entries
+                options.forEach { icon ->
+                    val selected = area.icon == icon?.name
+                    val shape = RoundedCornerShape(14.dp)
+                    Box(
+                        Modifier.size(52.dp).tvFocusRing(shape).clip(shape)
+                            .background(if (selected) MaterialTheme.colorScheme.primaryContainer else raisedOnTile(), shape)
+                            .clickable { onChange(layout.setAreaIcon(area.id, icon)); iconMenu = false },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        if (icon == null) Text(stringResource(R.string.area_icon_auto), style = MaterialTheme.typography.labelSmall, maxLines = 1)
+                        else Icon(icon.vector(), null, tint = if (selected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { iconMenu = false }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_cancel)) } },
+    )
+    if (renaming) NameDialog(stringResource(R.string.action_rename), area.name, onDismiss = { renaming = false }) { onChange(layout.renameCategory(area.id, it)) }
+    if (deleting) AlertDialog(
+        onDismissRequest = { deleting = false },
+        title = { Text(stringResource(R.string.area_delete_confirm, area.name)) },
+        confirmButton = {
+            TextButton(onClick = { deleting = false; onChange(layout.deleteCategory(area.id)) }, modifier = Modifier.tvFocusRing()) {
+                Text(stringResource(R.string.action_delete), color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = { TextButton(onClick = { deleting = false }, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_cancel)) } },
+    )
 }
 
 /** Hiç alan yokken Cihazlar ekranında bir kez görünen davet kartı. */
@@ -163,7 +346,7 @@ fun AreaHero(
     SectionCard(horizontalPadding = 0) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconBadge(AreaSummary.iconKind(area.name).vector(), MaterialTheme.colorScheme.onPrimaryContainer,
+                IconBadge(area.iconKind.vector(), MaterialTheme.colorScheme.onPrimaryContainer,
                     MaterialTheme.colorScheme.primaryContainer, 44)
                 Column(Modifier.padding(start = 12.dp).weight(1f)) {
                     Text(area.name, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
@@ -290,7 +473,7 @@ fun DeviceAreaRow(deviceId: String) {
     SectionCard {
         Column {
             InfoRow(
-                current?.let { AreaSummary.iconKind(it.name).vector() } ?: Icons.Rounded.MeetingRoom,
+                current?.iconKind?.vector() ?: Icons.Rounded.MeetingRoom,
                 stringResource(R.string.area_title),
                 current?.name ?: stringResource(R.string.category_none),
                 Modifier.clickable { menu = true },

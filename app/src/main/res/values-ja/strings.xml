@@ -1838,4 +1838,10 @@
     <string name="confirm_off_desc">アプリ、待機画面、音声/Telegram コマンドでオフにする前に確認します。オートメーションは確認しません。</string>
     <string name="chat_confirm_off">%1$sをオフにします。確認は「はい」、取り消しは「いいえ」と話すか入力してください。</string>
     <string name="chat_confirm_skip">⚠️ %1$s: オフにするには確認が必要です。単独でオフにしてください</string>
+    <string name="area_icon">アイコン</string>
+    <string name="area_icon_auto">自動</string>
+    <string name="layout_hide">ホームで非表示</string>
+    <string name="layout_show">ホームに表示</string>
+    <string name="area_delete_confirm">エリア「%1$s」を削除しますか？デバイスは残り、エリアなしになります。</string>
+    <string name="hidden_items">非表示: %1$d · 表示</string>
 </resources>

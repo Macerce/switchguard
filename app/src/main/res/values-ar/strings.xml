@@ -2018,4 +2018,10 @@
     <string name="confirm_off_desc">يُسأل في التطبيق وشاشة الانتظار وأوامر الصوت/تيليجرام قبل إيقافه. الأتمتة لا تسأل أبدًا.</string>
     <string name="chat_confirm_off">سيتم إيقاف %1$s. قل أو اكتب «نعم» للتأكيد، «لا» للإلغاء.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: الإيقاف يحتاج تأكيدًا — أوقفه وحده</string>
+    <string name="area_icon">الرمز</string>
+    <string name="area_icon_auto">تلقائي</string>
+    <string name="layout_hide">إخفاء من الشاشة الرئيسية</string>
+    <string name="layout_show">إظهار في الشاشة الرئيسية</string>
+    <string name="area_delete_confirm">حذف المنطقة «%1$s»؟ تبقى أجهزتها دون منطقة.</string>
+    <string name="hidden_items">مخفي: %1$d · إظهار</string>
 </resources>

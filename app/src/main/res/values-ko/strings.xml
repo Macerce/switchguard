@@ -1838,4 +1838,10 @@
     <string name="confirm_off_desc">앱, 대기 화면, 음성/Telegram 명령에서 끄기 전에 묻습니다. 자동화는 묻지 않습니다.</string>
     <string name="chat_confirm_off">%1$s을(를) 끕니다. 확인하려면 “예”, 취소하려면 “아니요”라고 말하거나 입력하세요.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: 끄려면 확인이 필요합니다 — 따로 끄세요</string>
+    <string name="area_icon">아이콘</string>
+    <string name="area_icon_auto">자동</string>
+    <string name="layout_hide">홈에서 숨기기</string>
+    <string name="layout_show">홈에 표시</string>
+    <string name="area_delete_confirm">“%1$s” 영역을 삭제할까요? 기기는 영역 없이 남습니다.</string>
+    <string name="hidden_items">숨김: %1$d · 표시</string>
 </resources>

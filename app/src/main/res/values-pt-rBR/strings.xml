@@ -1910,4 +1910,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="confirm_off_desc">O app, a tela de espera e os comandos de voz/Telegram perguntam antes de desligar. Automações nunca perguntam.</string>
     <string name="chat_confirm_off">%1$s será desligado. Diga ou digite “Sim” para confirmar, “Não” para cancelar.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: precisa de confirmação para desligar — desligue-o sozinho</string>
+    <string name="area_icon">Ícone</string>
+    <string name="area_icon_auto">Auto</string>
+    <string name="layout_hide">Ocultar no início</string>
+    <string name="layout_show">Mostrar no início</string>
+    <string name="area_delete_confirm">Excluir a área “%1$s”? Os dispositivos são mantidos, sem área.</string>
+    <string name="hidden_items">Ocultos: %1$d · Mostrar</string>
 </resources>

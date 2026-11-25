@@ -1767,4 +1767,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="confirm_off_desc">Aplikasi, layar siaga, dan perintah suara/Telegram bertanya sebelum mematikan. Otomasi tidak pernah bertanya.</string>
     <string name="chat_confirm_off">%1$s akan dimatikan. Ucapkan atau ketik “Ya” untuk konfirmasi, “Tidak” untuk batal.</string>
     <string name="chat_confirm_skip">⚠️ %1$s: perlu konfirmasi untuk dimatikan — matikan secara terpisah</string>
+    <string name="area_icon">Ikon</string>
+    <string name="area_icon_auto">Otomatis</string>
+    <string name="layout_hide">Sembunyikan di beranda</string>
+    <string name="layout_show">Tampilkan di beranda</string>
+    <string name="area_delete_confirm">Hapus area “%1$s”? Perangkatnya tetap ada, tanpa area.</string>
+    <string name="hidden_items">Tersembunyi: %1$d · Tampilkan</string>
 </resources>
