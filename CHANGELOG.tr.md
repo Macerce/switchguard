@@ -6,6 +6,11 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.56.1 — 2026-11-26
+**İyileştirme**
+- Ana ekrandaki alan kartları cihaz kartlarıyla aynı stilde: alanda açık bir şey varsa kart sakin kalır, simgesi amber dolar ve kenarında ince amber çizgi olur.
+- README ekran görüntüleri yenilendi (alanlı ana ekran, bekleme ekranı, sohbet, yapay zekâ yardımı, ev enerjisi, kural düzenleyici, iki bölmeli tablet).
+
 ## 2.56.0 — 2026-11-26
 **Yeni**
 - **Ev enerjisi** (Cihazlar → ⋮ → Ev enerjisi): tüm ev tek sayfada — şu anki güç, gün/ay/yıl toplamı ve maliyeti, çubuk grafik, önceki dönem ve her cihazın payı. Shelly EM / Pro 3EM ana sayaç sayılır: prizler onun parçası olarak gösterilir (hiçbir şey iki kez sayılmaz), kalanı "ölçülmeyen" olarak görünür.

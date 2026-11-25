@@ -8,7 +8,11 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
   <img src="docs/screenshots/readme/tr/01-devices.png" width="200" alt="Cihazlar">
   <img src="docs/screenshots/readme/tr/02-standby.png" width="200" alt="Bekleme ekranı">
   <img src="docs/screenshots/readme/tr/03-chat.png" width="200" alt="Sohbet">
+</p>
+<p>
   <img src="docs/screenshots/readme/tr/04-ai-help.png" width="200" alt="Yapay zekâ yardımı">
+  <img src="docs/screenshots/readme/tr/07-energy.png" width="200" alt="Ev enerjisi">
+  <img src="docs/screenshots/readme/tr/08-rule.png" width="200" alt="Kural düzenleyici">
 </p>
 <p>
   <img src="docs/screenshots/readme/tr/05-tablet.png" width="480" alt="Tablet">

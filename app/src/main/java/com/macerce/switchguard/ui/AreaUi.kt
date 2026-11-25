@@ -71,6 +71,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -145,14 +146,24 @@ fun AreaTile(
 ) {
     val dark = LocalDarkTheme.current
     val shape = RoundedCornerShape(20.dp)
-    val active = summary.anyOn && editBar == null
-    val background: Brush = if (active) Brand.active(dark) else SolidColor(tileColor())
-    val fg = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurface
-    val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
+    // Cihaz kartlarıyla aynı dil: açık alan düz kalır, simgesi amber dolar, kenarında ince amber çizgi.
+    val lit = summary.anyOn && editBar == null
+    val active = false
+    val accent = com.macerce.switchguard.core.DeviceKind.SWITCH.onColor()
+    val background: Brush =
+        if (lit) SolidColor(accent.copy(alpha = if (dark) 0.10f else 0.08f).compositeOver(tileColor())) else SolidColor(tileColor())
+    val fg = MaterialTheme.colorScheme.onSurface
+    val muted = MaterialTheme.colorScheme.onSurfaceVariant
     Column(
         modifier.fillMaxWidth().tvFocusRing(shape).clip(shape)
             .background(background, shape)
-            .then(if (summary.water > 0) Modifier.border(1.5.dp, Brand.alarm, shape) else Modifier),
+            .then(
+                when {
+                    summary.water > 0 -> Modifier.border(1.5.dp, Brand.alarm, shape)
+                    lit -> Modifier.border(1.5.dp, accent.copy(alpha = 0.6f), shape)
+                    else -> Modifier
+                }
+            ),
     ) {
         Box {
             Box(Modifier.matchParentSize().clickable(onClick = onOpen))
@@ -163,8 +174,8 @@ fun AreaTile(
                 Row(verticalAlignment = Alignment.Top) {
                     IconBadge(
                         area.iconKind.vector(),
-                        tint = if (active) Brand.onActive else MaterialTheme.colorScheme.onSurfaceVariant,
-                        background = if (active) Color.White.copy(alpha = 0.2f) else raisedOnTile(),
+                        tint = if (lit) Color(0xFF1C1C1C) else MaterialTheme.colorScheme.onSurfaceVariant,
+                        background = if (lit) accent else raisedOnTile(),
                         size = 38,
                     )
                     Spacer(Modifier.weight(1f))

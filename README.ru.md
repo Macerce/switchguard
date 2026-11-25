@@ -8,7 +8,11 @@ SwitchGuard следит за умными розетками и выключа�
   <img src="docs/screenshots/readme/en/01-devices.png" width="200" alt="Devices">
   <img src="docs/screenshots/readme/en/02-standby.png" width="200" alt="Standby screen">
   <img src="docs/screenshots/readme/en/03-chat.png" width="200" alt="Chat">
+</p>
+<p>
   <img src="docs/screenshots/readme/en/04-ai-help.png" width="200" alt="AI help">
+  <img src="docs/screenshots/readme/en/07-energy.png" width="200" alt="Home energy">
+  <img src="docs/screenshots/readme/en/08-rule.png" width="200" alt="Rule editor">
 </p>
 <p>
   <img src="docs/screenshots/readme/en/05-tablet.png" width="480" alt="Tablet">

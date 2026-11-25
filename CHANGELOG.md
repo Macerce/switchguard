@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.56.1 — 2026-11-26
+**Improved**
+- Area cards on the home screen use the same style as device cards: when something in the area is on, the card stays calm with an amber icon and a thin amber edge.
+- README screenshots renewed (home screen with areas, standby, chat, AI help, home energy, rule editor, two-pane tablet).
+
 ## 2.56.0 — 2026-11-26
 **New**
 - **Home energy** (Devices → ⋮ → Home energy): the whole home in one page — power now, day/month/year total and cost, bar chart, previous period, and each device's share. A Shelly EM / Pro 3EM is used as the main meter: plugs are shown as its parts (nothing counted twice) and the rest appears as "not measured".
