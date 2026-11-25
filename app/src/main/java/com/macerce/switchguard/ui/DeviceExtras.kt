@@ -163,7 +163,7 @@ fun EnergySection(device: DeviceSnapshot) {
 }
 
 @Composable
-private fun Metric(label: String, value: String, big: Boolean = false) {
+internal fun Metric(label: String, value: String, big: Boolean = false) {
     Column {
         Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(
@@ -194,7 +194,7 @@ private fun PowerHero(value: String) {
 
 /** Küçük değer kutucuğu (Gerilim, Akım, Bugün, Bu ay). */
 @Composable
-private fun StatTile(label: String, value: String, modifier: Modifier = Modifier) {
+internal fun StatTile(label: String, value: String, modifier: Modifier = Modifier) {
     Column(
         modifier.clip(RoundedCornerShape(18.dp)).background(tileColor()).padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
@@ -416,7 +416,7 @@ private fun formatPrice(v: Double): String = java.math.BigDecimal.valueOf(v).str
 
 /** Dönemin dilimleri dikey çubuklarla; dokunulan çubuk vurgulanır. */
 @Composable
-private fun PeriodBars(summary: EnergySummary, selected: Int?, locale: Locale, onSelect: (Int) -> Unit) {
+internal fun PeriodBars(summary: EnergySummary, selected: Int?, locale: Locale, onSelect: (Int) -> Unit) {
     val buckets = summary.buckets
     val max = buckets.maxOf { it.kwh }.takeIf { it > 0 } ?: 1.0
     val every = when (summary.period) { EnergyPeriod.DAY -> 3; EnergyPeriod.MONTH -> 5; EnergyPeriod.YEAR -> 1 }

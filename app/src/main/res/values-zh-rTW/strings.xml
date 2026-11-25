@@ -2007,4 +2007,12 @@
     <string name="step_level_failed">規則「%1$s」：無法調整 %2$s 的燈光</string>
     <string name="step_send_log">規則「%1$s」已傳送：%2$s</string>
     <string name="website">網站</string>
+    <string name="home_energy">全屋能耗</string>
+    <string name="home_energy_now">目前</string>
+    <string name="home_energy_devices_count">計量裝置</string>
+    <string name="home_energy_by_device">依裝置</string>
+    <string name="home_energy_untracked">未計量（其他負載）</string>
+    <string name="home_energy_previous">上一期間：%1$s</string>
+    <string name="home_energy_empty">還沒有計量電能的裝置。監控可測功率的插座或電表後，用電量會顯示在這裡。</string>
+    <string name="home_energy_meter_hint">總量取自主電表；插座顯示為其組成部分，不會重複計算。</string>
 </resources>

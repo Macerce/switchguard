@@ -2188,4 +2188,12 @@
     <string name="step_level_failed">القاعدة “%1$s”: تعذّر ضبط إضاءة %2$s</string>
     <string name="step_send_log">أرسلت القاعدة “%1$s”: %2$s</string>
     <string name="website">الموقع الإلكتروني</string>
+    <string name="home_energy">طاقة المنزل</string>
+    <string name="home_energy_now">الآن</string>
+    <string name="home_energy_devices_count">أجهزة تقيس</string>
+    <string name="home_energy_by_device">حسب الجهاز</string>
+    <string name="home_energy_untracked">غير مُقاس (أحمال أخرى)</string>
+    <string name="home_energy_previous">الفترة السابقة: %1$s</string>
+    <string name="home_energy_empty">لا يوجد جهاز يقيس الطاقة بعد. يظهر الاستهلاك هنا عند مراقبة مقبس أو عداد يقيس القدرة.</string>
+    <string name="home_energy_meter_hint">يُؤخذ الإجمالي من العداد الرئيسي؛ تظهر المقابس كأجزاء منه فلا يُحسب شيء مرتين.</string>
 </resources>

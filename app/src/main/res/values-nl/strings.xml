@@ -2044,4 +2044,12 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="step_level_failed">Regel ‘%1$s’: licht van %2$s kon niet worden ingesteld</string>
     <string name="step_send_log">Regel ‘%1$s’ verstuurde: %2$s</string>
     <string name="website">Website</string>
+    <string name="home_energy">Energie in huis</string>
+    <string name="home_energy_now">Nu</string>
+    <string name="home_energy_devices_count">Meetende apparaten</string>
+    <string name="home_energy_by_device">Per apparaat</string>
+    <string name="home_energy_untracked">Niet gemeten (overige verbruikers)</string>
+    <string name="home_energy_previous">Vorige periode: %1$s</string>
+    <string name="home_energy_empty">Nog geen apparaat meet energie. Het verbruik verschijnt hier zodra een stekker of meter met vermogensmeting wordt bewaakt.</string>
+    <string name="home_energy_meter_hint">Het totaal komt van de hoofdmeter; stekkers worden als delen ervan getoond, niets wordt dubbel geteld.</string>
 </resources>

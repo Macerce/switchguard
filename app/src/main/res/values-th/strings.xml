@@ -1979,4 +1979,12 @@
     <string name="step_level_failed">กฎ “%1$s”: ปรับไฟของ %2$s ไม่ได้</string>
     <string name="step_send_log">กฎ “%1$s” ส่งแล้ว: %2$s</string>
     <string name="website">เว็บไซต์</string>
+    <string name="home_energy">พลังงานในบ้าน</string>
+    <string name="home_energy_now">ตอนนี้</string>
+    <string name="home_energy_devices_count">อุปกรณ์ที่วัดได้</string>
+    <string name="home_energy_by_device">แยกตามอุปกรณ์</string>
+    <string name="home_energy_untracked">ไม่ได้วัด (โหลดอื่น)</string>
+    <string name="home_energy_previous">ช่วงก่อนหน้า: %1$s</string>
+    <string name="home_energy_empty">ยังไม่มีอุปกรณ์ที่วัดพลังงาน การใช้ไฟจะแสดงที่นี่เมื่อมีการเฝ้าดูปลั๊กหรือมิเตอร์ที่วัดกำลังไฟ</string>
+    <string name="home_energy_meter_hint">ยอดรวมมาจากมิเตอร์หลัก ปลั๊กแสดงเป็นส่วนหนึ่งของมิเตอร์ จึงไม่นับซ้ำ</string>
 </resources>

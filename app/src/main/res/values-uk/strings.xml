@@ -2087,4 +2087,12 @@
     <string name="step_level_failed">Правило «%1$s»: не вдалося налаштувати світло %2$s</string>
     <string name="step_send_log">Правило «%1$s» надіслало: %2$s</string>
     <string name="website">Вебсайт</string>
+    <string name="home_energy">Енергія дому</string>
+    <string name="home_energy_now">Зараз</string>
+    <string name="home_energy_devices_count">Пристроїв із вимірюванням</string>
+    <string name="home_energy_by_device">За пристроями</string>
+    <string name="home_energy_untracked">Не виміряно (інше навантаження)</string>
+    <string name="home_energy_previous">Попередній період: %1$s</string>
+    <string name="home_energy_empty">Поки жоден пристрій не вимірює енергію. Споживання з’явиться тут, коли відстежуватиметься розетка або лічильник із вимірюванням потужності.</string>
+    <string name="home_energy_meter_hint">Підсумок береться з основного лічильника; розетки показано як його частини, нічого не рахується двічі.</string>
 </resources>

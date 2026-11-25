@@ -1973,4 +1973,12 @@
     <string name="step_level_failed">नियम “%1$s”: %2$s की लाइट सेट नहीं हो सकी</string>
     <string name="step_send_log">नियम “%1$s” ने भेजा: %2$s</string>
     <string name="website">वेबसाइट</string>
+    <string name="home_energy">घर की ऊर्जा</string>
+    <string name="home_energy_now">अभी</string>
+    <string name="home_energy_devices_count">मापने वाले डिवाइस</string>
+    <string name="home_energy_by_device">डिवाइस के अनुसार</string>
+    <string name="home_energy_untracked">नहीं मापा गया (अन्य लोड)</string>
+    <string name="home_energy_previous">पिछली अवधि: %1$s</string>
+    <string name="home_energy_empty">अभी कोई डिवाइस ऊर्जा नहीं मापता। पावर मापने वाले प्लग या मीटर की निगरानी शुरू होते ही खपत यहाँ दिखेगी।</string>
+    <string name="home_energy_meter_hint">कुल मुख्य मीटर से लिया जाता है; प्लग उसके हिस्सों के रूप में दिखते हैं, कुछ भी दो बार नहीं गिना जाता।</string>
 </resources>

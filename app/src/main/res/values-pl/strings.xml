@@ -2116,4 +2116,12 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="step_level_failed">Reguła „%1$s”: nie udało się ustawić światła %2$s</string>
     <string name="step_send_log">Reguła „%1$s” wysłała: %2$s</string>
     <string name="website">Strona internetowa</string>
+    <string name="home_energy">Energia w domu</string>
+    <string name="home_energy_now">Teraz</string>
+    <string name="home_energy_devices_count">Urządzenia z pomiarem</string>
+    <string name="home_energy_by_device">Według urządzeń</string>
+    <string name="home_energy_untracked">Niezmierzone (inne odbiorniki)</string>
+    <string name="home_energy_previous">Poprzedni okres: %1$s</string>
+    <string name="home_energy_empty">Żadne urządzenie nie mierzy jeszcze energii. Zużycie pojawi się tutaj, gdy będzie monitorowane gniazdko lub licznik mierzący moc.</string>
+    <string name="home_energy_meter_hint">Suma pochodzi z licznika głównego; gniazdka są pokazane jako jego części, nic nie jest liczone podwójnie.</string>
 </resources>

@@ -1979,4 +1979,12 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="step_level_failed">Quy tắc “%1$s”: không chỉnh được đèn %2$s</string>
     <string name="step_send_log">Quy tắc “%1$s” đã gửi: %2$s</string>
     <string name="website">Trang web</string>
+    <string name="home_energy">Điện năng cả nhà</string>
+    <string name="home_energy_now">Hiện tại</string>
+    <string name="home_energy_devices_count">Thiết bị đo</string>
+    <string name="home_energy_by_device">Theo thiết bị</string>
+    <string name="home_energy_untracked">Không đo (tải khác)</string>
+    <string name="home_energy_previous">Kỳ trước: %1$s</string>
+    <string name="home_energy_empty">Chưa có thiết bị nào đo điện năng. Mức tiêu thụ sẽ hiện ở đây khi một ổ cắm hoặc đồng hồ đo công suất được theo dõi.</string>
+    <string name="home_energy_meter_hint">Tổng lấy từ đồng hồ chính; các ổ cắm được hiển thị là phần của nó, không tính trùng.</string>
 </resources>

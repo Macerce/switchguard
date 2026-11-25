@@ -2051,4 +2051,12 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="trace_step_timeout">time ran out</string>
     <string name="trace_step_limit">stopped by safety limit</string>
     <string name="website">Website</string>
+    <string name="home_energy">Home energy</string>
+    <string name="home_energy_now">Now</string>
+    <string name="home_energy_devices_count">Measuring devices</string>
+    <string name="home_energy_by_device">By device</string>
+    <string name="home_energy_untracked">Not measured (other loads)</string>
+    <string name="home_energy_previous">Previous period: %1$s</string>
+    <string name="home_energy_empty">No device measures energy yet. Consumption appears here once a plug or meter that measures power is monitored.</string>
+    <string name="home_energy_meter_hint">The total is taken from the main meter; plugs are shown as its parts so nothing is counted twice.</string>
 </resources>

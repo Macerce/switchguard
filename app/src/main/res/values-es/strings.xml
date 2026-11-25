@@ -2050,4 +2050,12 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="step_level_failed">Regla «%1$s»: no se pudo ajustar la luz de %2$s</string>
     <string name="step_send_log">La regla «%1$s» envió: %2$s</string>
     <string name="website">Sitio web</string>
+    <string name="home_energy">Energía de la casa</string>
+    <string name="home_energy_now">Ahora</string>
+    <string name="home_energy_devices_count">Dispositivos que miden</string>
+    <string name="home_energy_by_device">Por dispositivo</string>
+    <string name="home_energy_untracked">Sin medir (otras cargas)</string>
+    <string name="home_energy_previous">Periodo anterior: %1$s</string>
+    <string name="home_energy_empty">Aún ningún dispositivo mide energía. El consumo aparece aquí cuando se vigila un enchufe o medidor que mide potencia.</string>
+    <string name="home_energy_meter_hint">El total se toma del medidor principal; los enchufes se muestran como partes de él, nada se cuenta dos veces.</string>
 </resources>

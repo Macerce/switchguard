@@ -2079,4 +2079,12 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="step_level_failed">Règle « %1$s » : impossible de régler la lumière de %2$s</string>
     <string name="step_send_log">La règle « %1$s » a envoyé : %2$s</string>
     <string name="website">Site web</string>
+    <string name="home_energy">Énergie de la maison</string>
+    <string name="home_energy_now">Maintenant</string>
+    <string name="home_energy_devices_count">Appareils mesurés</string>
+    <string name="home_energy_by_device">Par appareil</string>
+    <string name="home_energy_untracked">Non mesuré (autres charges)</string>
+    <string name="home_energy_previous">Période précédente : %1$s</string>
+    <string name="home_energy_empty">Aucun appareil ne mesure encore l’énergie. La consommation apparaît ici dès qu’une prise ou un compteur mesurant la puissance est surveillé.</string>
+    <string name="home_energy_meter_hint">Le total provient du compteur principal ; les prises en sont des parts, rien n’est compté deux fois.</string>
 </resources>

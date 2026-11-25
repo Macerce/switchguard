@@ -48,6 +48,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.Alarm
 import androidx.compose.material.icons.rounded.Router
 import androidx.compose.material.icons.rounded.AlarmOff
@@ -282,6 +283,8 @@ fun DevicesScreen(
             onDismiss = { areaConfirm = false }) { areaConfirm = false; areaAll(false) }
     }
     var menuOpen by remember { mutableStateOf(false) }
+    var homeEnergy by rememberSaveable { mutableStateOf(false) }
+    if (homeEnergy) HomeEnergyDialog(devices, onOpenDevice = { homeEnergy = false; onOpenDevice(it) }) { homeEnergy = false }
 
     val doRefresh: () -> Unit = {
         scope.launch {
@@ -332,6 +335,7 @@ fun DevicesScreen(
                             if (devices.isNotEmpty()) MenuEntry(Icons.Rounded.Tune, R.string.action_edit_layout) {
                                 menuOpen = false; openAreaId = null; filter = null; editMode = true
                             }
+                            if (devices.any { it.hasEnergy }) MenuEntry(Icons.Rounded.Bolt, R.string.home_energy) { menuOpen = false; homeEnergy = true }
                             if (loggedIn) MenuEntry(Icons.Rounded.Add, R.string.area_new) { menuOpen = false; newArea = true }
                             if (loggedIn) MenuEntry(Icons.Rounded.Router, R.string.lan_add) { menuOpen = false; lanAdd = true }
                         }

@@ -2047,4 +2047,12 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="trace_step_timeout">süre doldu</string>
     <string name="trace_step_limit">güvenlik sınırıyla kesildi</string>
     <string name="website">Web sitesi</string>
+    <string name="home_energy">Ev enerjisi</string>
+    <string name="home_energy_now">Şu an</string>
+    <string name="home_energy_devices_count">Ölçen cihaz</string>
+    <string name="home_energy_by_device">Cihazlara göre</string>
+    <string name="home_energy_untracked">Ölçülmeyen (diğer yükler)</string>
+    <string name="home_energy_previous">Önceki dönem: %1$s</string>
+    <string name="home_energy_empty">Henüz enerji ölçen cihaz yok. Güç ölçen bir priz ya da sayaç izlenince tüketim burada görünür.</string>
+    <string name="home_energy_meter_hint">Toplam ana sayaçtan alınır; prizler onun parçası olarak gösterilir, hiçbir şey iki kez sayılmaz.</string>
 </resources>

@@ -2051,4 +2051,12 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="step_level_failed">Regola “%1$s”: impossibile regolare la luce di %2$s</string>
     <string name="step_send_log">La regola “%1$s” ha inviato: %2$s</string>
     <string name="website">Sito web</string>
+    <string name="home_energy">Energia della casa</string>
+    <string name="home_energy_now">Adesso</string>
+    <string name="home_energy_devices_count">Dispositivi che misurano</string>
+    <string name="home_energy_by_device">Per dispositivo</string>
+    <string name="home_energy_untracked">Non misurato (altri carichi)</string>
+    <string name="home_energy_previous">Periodo precedente: %1$s</string>
+    <string name="home_energy_empty">Nessun dispositivo misura ancora l’energia. Il consumo appare qui quando viene monitorata una presa o un contatore che misura la potenza.</string>
+    <string name="home_energy_meter_hint">Il totale viene dal contatore principale; le prese sono mostrate come sue parti, nulla è contato due volte.</string>
 </resources>

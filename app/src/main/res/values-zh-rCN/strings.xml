@@ -1986,4 +1986,12 @@
     <string name="step_level_failed">规则“%1$s”：无法调节 %2$s 的灯光</string>
     <string name="step_send_log">规则“%1$s”已发送：%2$s</string>
     <string name="website">网站</string>
+    <string name="home_energy">全屋能耗</string>
+    <string name="home_energy_now">当前</string>
+    <string name="home_energy_devices_count">计量设备</string>
+    <string name="home_energy_by_device">按设备</string>
+    <string name="home_energy_untracked">未计量（其他负载）</string>
+    <string name="home_energy_previous">上一周期：%1$s</string>
+    <string name="home_energy_empty">还没有计量电能的设备。监控可测功率的插座或电表后，用电量会显示在这里。</string>
+    <string name="home_energy_meter_hint">总量取自主电表；插座显示为其组成部分，不会重复计算。</string>
 </resources>

@@ -2008,4 +2008,12 @@
     <string name="step_level_failed">ルール「%1$s」: %2$s のライトを設定できませんでした</string>
     <string name="step_send_log">ルール「%1$s」が送信: %2$s</string>
     <string name="website">ウェブサイト</string>
+    <string name="home_energy">家全体の電力</string>
+    <string name="home_energy_now">現在</string>
+    <string name="home_energy_devices_count">計測中の機器</string>
+    <string name="home_energy_by_device">機器別</string>
+    <string name="home_energy_untracked">未計測（その他の負荷）</string>
+    <string name="home_energy_previous">前の期間: %1$s</string>
+    <string name="home_energy_empty">まだ電力を計測する機器がありません。電力を計測するプラグやメーターを監視すると、ここに使用量が表示されます。</string>
+    <string name="home_energy_meter_hint">合計はメインメーターの値です。プラグはその内訳として表示され、二重に数えません。</string>
 </resources>

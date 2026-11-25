@@ -2042,4 +2042,12 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="step_level_failed">Regel „%1$s“: Licht von %2$s konnte nicht eingestellt werden</string>
     <string name="step_send_log">Regel „%1$s“ gesendet: %2$s</string>
     <string name="website">Website</string>
+    <string name="home_energy">Energie im Haus</string>
+    <string name="home_energy_now">Jetzt</string>
+    <string name="home_energy_devices_count">Messende Geräte</string>
+    <string name="home_energy_by_device">Nach Gerät</string>
+    <string name="home_energy_untracked">Nicht gemessen (übrige Verbraucher)</string>
+    <string name="home_energy_previous">Vorheriger Zeitraum: %1$s</string>
+    <string name="home_energy_empty">Noch misst kein Gerät Energie. Der Verbrauch erscheint hier, sobald eine Steckdose oder ein Zähler mit Leistungsmessung überwacht wird.</string>
+    <string name="home_energy_meter_hint">Die Summe stammt vom Hauptzähler; Steckdosen werden als Anteile davon gezeigt, nichts wird doppelt gezählt.</string>
 </resources>

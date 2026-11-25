@@ -2008,4 +2008,12 @@
     <string name="step_level_failed">규칙 “%1$s”: %2$s 조명을 설정하지 못했습니다</string>
     <string name="step_send_log">규칙 “%1$s” 전송: %2$s</string>
     <string name="website">웹사이트</string>
+    <string name="home_energy">집 전체 에너지</string>
+    <string name="home_energy_now">현재</string>
+    <string name="home_energy_devices_count">측정 기기</string>
+    <string name="home_energy_by_device">기기별</string>
+    <string name="home_energy_untracked">측정 안 됨(기타 부하)</string>
+    <string name="home_energy_previous">이전 기간: %1$s</string>
+    <string name="home_energy_empty">아직 에너지를 측정하는 기기가 없습니다. 전력을 측정하는 플러그나 계량기를 모니터링하면 여기에 사용량이 표시됩니다.</string>
+    <string name="home_energy_meter_hint">합계는 주 계량기 값입니다. 플러그는 그 일부로 표시되어 중복 계산되지 않습니다.</string>
 </resources>
