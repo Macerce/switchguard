@@ -2071,4 +2071,6 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
         <item quantity="one">Die Regel wird zu %1$d Zeitplan im Gerät selbst und läuft auch, wenn das Telefon aus oder offline ist. Danach wird die Regel auf dem Telefon ausgeschaltet.</item>
         <item quantity="other">Die Regel wird zu %1$d Zeitplänen in den Geräten selbst und läuft auch, wenn das Telefon aus oder offline ist. Danach wird die Regel auf dem Telefon ausgeschaltet.</item>
     </plurals>
+    <string name="rule_options_tag">OPTIONEN</string>
+    <string name="rule_options">Schleifenschutz und Ausführungsmodus</string>
 </resources>

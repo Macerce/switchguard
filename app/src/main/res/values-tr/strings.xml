@@ -2076,4 +2076,6 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item quantity="one">Bu kural cihazın kendisinde %1$d zamanlayıcı olur; telefon kapalı ya da internetsizken de çalışır. Ardından bu telefondaki kural kapatılır.</item>
         <item quantity="other">Bu kural cihazların kendisinde %1$d zamanlayıcı olur; telefon kapalı ya da internetsizken de çalışır. Ardından bu telefondaki kural kapatılır.</item>
     </plurals>
+    <string name="rule_options_tag">SEÇENEKLER</string>
+    <string name="rule_options">Döngü koruması ve çalışma kipi</string>
 </resources>

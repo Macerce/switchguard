@@ -2035,4 +2035,6 @@
     <plurals name="rule_to_device_desc">
         <item quantity="other">このルールは機器自体の %1$d 件のタイマーになり、電話がオフやオフラインでも動作します。その後、この電話のルールはオフになります。</item>
     </plurals>
+    <string name="rule_options_tag">オプション</string>
+    <string name="rule_options">ループ保護と実行モード</string>
 </resources>

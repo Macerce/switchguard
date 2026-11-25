@@ -2225,4 +2225,6 @@
         <item quantity="many">تصبح القاعدة %1$d مؤقتًا في الأجهزة نفسها فتعمل حتى لو كان الهاتف مغلقًا. ثم تُوقف على هذا الهاتف.</item>
         <item quantity="other">تصبح القاعدة %1$d مؤقت في الأجهزة نفسها فتعمل حتى لو كان الهاتف مغلقًا. ثم تُوقف على هذا الهاتف.</item>
     </plurals>
+    <string name="rule_options_tag">خيارات</string>
+    <string name="rule_options">الحماية من التكرار ووضع التشغيل</string>
 </resources>

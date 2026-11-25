@@ -2111,4 +2111,6 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
         <item quantity="many">A regra vira %1$d timers nos próprios dispositivos e funciona mesmo com o celular desligado ou sem internet. Depois ela é desligada neste celular.</item>
         <item quantity="other">A regra vira %1$d timers nos próprios dispositivos e funciona mesmo com o celular desligado ou sem internet. Depois ela é desligada neste celular.</item>
     </plurals>
+    <string name="rule_options_tag">OPÇÕES</string>
+    <string name="rule_options">Proteção de loop e modo de execução</string>
 </resources>

@@ -2013,4 +2013,6 @@
     <plurals name="rule_to_device_desc">
         <item quantity="other">此规则将变为设备上的 %1$d 个定时器，即使手机关机或离线也会运行。之后本手机上的规则会关闭。</item>
     </plurals>
+    <string name="rule_options_tag">选项</string>
+    <string name="rule_options">循环保护与运行模式</string>
 </resources>

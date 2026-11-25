@@ -2082,4 +2082,6 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
         <item quantity="many">La regola diventa %1$d timer nei dispositivi stessi e funziona anche a telefono spento o offline. Poi viene disattivata su questo telefono.</item>
         <item quantity="other">La regola diventa %1$d timer nei dispositivi stessi e funziona anche a telefono spento o offline. Poi viene disattivata su questo telefono.</item>
     </plurals>
+    <string name="rule_options_tag">OPZIONI</string>
+    <string name="rule_options">Protezione dai cicli e modalità di esecuzione</string>
 </resources>

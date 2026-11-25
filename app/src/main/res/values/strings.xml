@@ -2080,4 +2080,6 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="one">This rule becomes %1$d timer on the device itself, so it runs even when this phone is off or offline. The rule on this phone is then switched off.</item>
         <item quantity="other">This rule becomes %1$d timers on the devices themselves, so it runs even when this phone is off or offline. The rule on this phone is then switched off.</item>
     </plurals>
+    <string name="rule_options_tag">OPTIONS</string>
+    <string name="rule_options">Loop guard and run mode</string>
 </resources>

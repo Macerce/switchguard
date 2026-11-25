@@ -126,6 +126,7 @@ private fun HomeEnergyBody(devices: List<DeviceSnapshot>, onOpenDevice: (String)
             Modifier.weight(1f),
         )
     }
+    Spacer(Modifier.height(8.dp))
 
     SectionCard {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {

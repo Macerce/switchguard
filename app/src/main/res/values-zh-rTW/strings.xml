@@ -2034,4 +2034,6 @@
     <plurals name="rule_to_device_desc">
         <item quantity="other">此規則將變為裝置上的 %1$d 個定時器，即使手機關機或離線也會執行。之後本手機上的規則會關閉。</item>
     </plurals>
+    <string name="rule_options_tag">選項</string>
+    <string name="rule_options">迴圈保護與執行模式</string>
 </resources>

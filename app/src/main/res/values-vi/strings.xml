@@ -2006,4 +2006,6 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <plurals name="rule_to_device_desc">
         <item quantity="other">Quy tắc này trở thành %1$d bộ hẹn giờ ngay trên thiết bị, nên vẫn chạy khi điện thoại tắt hoặc mất mạng. Sau đó quy tắc trên điện thoại sẽ tắt.</item>
     </plurals>
+    <string name="rule_options_tag">TÙY CHỌN</string>
+    <string name="rule_options">Chống lặp và chế độ chạy</string>
 </resources>

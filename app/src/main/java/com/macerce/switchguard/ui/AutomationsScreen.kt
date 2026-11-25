@@ -110,6 +110,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.Memory
@@ -1118,61 +1119,6 @@ fun AutomationEditor(
                 }
             }
 
-            // ------------------------------------------------ İse
-            StepCard(Icons.Rounded.Bolt, Hue.BLUE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
-                if (tv) actionContent()
-                else ChoiceSummary(
-                    actionText(draft.action, devices),
-                    actionKind.icon(),
-                    if (actionKind == ActionKind.ALARM) Brand.alarm else MaterialTheme.colorScheme.primary,
-                ) { sheet = "action" }
-                if (!alert) {
-                    extras.forEachIndexed { i, x ->
-                        if (tv) {
-                            // Kumandada adım yerinde düzenlenir; iç adımlara bu kutunun içinde geçilir.
-                            var open by rememberSaveable(i) { mutableStateOf(i.toString()) }
-                            val path = StepTree.Path.parse(open)?.takeIf { it.top == i && StepTree.get(extras, it) != null } ?: StepTree.Path(i)
-                            StepTree.get(extras, path)?.let { step ->
-                                StepEditor(path, step, stepCtx, name,
-                                    onChange = { n -> setExtras(StepTree.update(extras, path) { n }) },
-                                    onDelete = { setExtras(StepTree.remove(extras, path)); open = (path.parent() ?: StepTree.Path(i)).toString() },
-                                    onOpen = { open = it.toString() },
-                                    onAdd = { b -> val (l, np) = StepTree.append(extras, path, b, AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty())); setExtras(l); open = np.toString() },
-                                    onMove = { d -> val (l, np) = StepTree.move(extras, path, d); setExtras(l); open = np.toString() })
-                            }
-                        } else {
-                            val text = actionText(x, devices)
-                            ChoiceSummary(
-                                if (x.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(x.waitMinutes), text) else text,
-                                x.kind.icon(),
-                                MaterialTheme.colorScheme.primary,
-                            ) { sheet = "step:$i" }
-                        }
-                    }
-                    // Döngü koruması: bir saatte çok kez çalışırsa cihazı kapalı bırak, alarm ver, kuralı durdur.
-                    ToggleLine(stringResource(R.string.loop_guard_toggle), loopGuard > 0) {
-                        loopGuard = if (it) AutomationEngine.LOOP_GUARD_DEFAULT else 0
-                    }
-                    if (loopGuard > 0) {
-                        Stepper(stringResource(R.string.loop_guard_times), loopGuard, (2..10).toList(),
-                            format = { n -> stringResource(R.string.loop_guard_n, n) }) { loopGuard = it }
-                        Text(stringResource(R.string.loop_guard_hint), style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
-                    }
-                    // Yeniden tetiklenince ne olacağı (bekleyen adımı olan kurallarda anlamlı).
-                    RunModeBlock(runMode, maxRuns) { m, n -> runMode = m; maxRuns = n }
-                    // Ek eylem: varsayılanı ilk hedefi kapatmak; alttan açılan sayfada değiştirilir.
-                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = {
-                        extras.add(AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty()))
-                        if (!tv) sheet = "step:" + (extras.size - 1)
-                    }) {
-                        Icon(Icons.Rounded.Add, null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.rule_add_action))
-                    }
-                }
-            }
-
             // ------------------------------------------------ Koşullar (isteğe bağlı)
             StepCard(Icons.Rounded.Tune, Hue.PURPLE, stringResource(R.string.auto_only), stringResource(R.string.rule_conditions_optional)) {
                 var openCond by rememberSaveable { mutableStateOf<String?>(null) }
@@ -1251,6 +1197,67 @@ fun AutomationEditor(
                         { stringResource(if (it == PresenceRule.AWAY) R.string.presence_away else R.string.presence_home) }) { presenceRule = it }
                 }
                 }
+            }
+
+            // ------------------------------------------------ İse
+            StepCard(Icons.Rounded.Bolt, Hue.BLUE, stringResource(R.string.auto_then), stringResource(R.string.automation_then)) {
+                if (tv) actionContent()
+                else ChoiceSummary(
+                    actionText(draft.action, devices),
+                    actionKind.icon(),
+                    if (actionKind == ActionKind.ALARM) Brand.alarm else MaterialTheme.colorScheme.primary,
+                ) { sheet = "action" }
+                if (!alert) {
+                    extras.forEachIndexed { i, x ->
+                        if (tv) {
+                            // Kumandada adım yerinde düzenlenir; iç adımlara bu kutunun içinde geçilir.
+                            var open by rememberSaveable(i) { mutableStateOf(i.toString()) }
+                            val path = StepTree.Path.parse(open)?.takeIf { it.top == i && StepTree.get(extras, it) != null } ?: StepTree.Path(i)
+                            StepTree.get(extras, path)?.let { step ->
+                                StepEditor(path, step, stepCtx, name,
+                                    onChange = { n -> setExtras(StepTree.update(extras, path) { n }) },
+                                    onDelete = { setExtras(StepTree.remove(extras, path)); open = (path.parent() ?: StepTree.Path(i)).toString() },
+                                    onOpen = { open = it.toString() },
+                                    onAdd = { b -> val (l, np) = StepTree.append(extras, path, b, AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty())); setExtras(l); open = np.toString() },
+                                    onMove = { d -> val (l, np) = StepTree.move(extras, path, d); setExtras(l); open = np.toString() })
+                            }
+                        } else {
+                            val text = actionText(x, devices)
+                            ChoiceSummary(
+                                if (x.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(x.waitMinutes), text) else text,
+                                x.kind.icon(),
+                                MaterialTheme.colorScheme.primary,
+                            ) { sheet = "step:$i" }
+                        }
+                    }
+                    // Ek eylem: varsayılanı ilk hedefi kapatmak; alttan açılan sayfada değiştirilir.
+                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = {
+                        extras.add(AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty()))
+                        if (!tv) sheet = "step:" + (extras.size - 1)
+                    }) {
+                        Icon(Icons.Rounded.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.rule_add_action))
+                    }
+                }
+            }
+
+
+            // ------------------------------------------------ Kural seçenekleri
+            // Adımların altında değil ayrı kartta: "Eylem ekle" adımların hemen altında kalsın.
+            if (!alert) StepCard(Icons.Rounded.Settings, Hue.SLATE, stringResource(R.string.rule_options_tag), stringResource(R.string.rule_options)) {
+                // Döngü koruması: bir saatte çok kez çalışırsa cihazı kapalı bırak, alarm ver, kuralı durdur.
+                ToggleLine(stringResource(R.string.loop_guard_toggle), loopGuard > 0) {
+                    loopGuard = if (it) AutomationEngine.LOOP_GUARD_DEFAULT else 0
+                }
+                if (loopGuard > 0) {
+                    Stepper(stringResource(R.string.loop_guard_times), loopGuard, (2..10).toList(),
+                        format = { n -> stringResource(R.string.loop_guard_n, n) }) { loopGuard = it }
+                    Text(stringResource(R.string.loop_guard_hint), style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
+                }
+                // Yeniden tetiklenince ne olacağı (bekleyen adımı olan kurallarda anlamlı).
+                RunModeBlock(runMode, maxRuns) { m, n -> runMode = m; maxRuns = n }
             }
 
             if (sheet != null && !tv) {

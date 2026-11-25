@@ -2081,4 +2081,6 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
         <item quantity="many">La regla se convierte en %1$d temporizadores en los propios dispositivos y funciona aunque el teléfono esté apagado o sin conexión. Después se desactiva en este teléfono.</item>
         <item quantity="other">La regla se convierte en %1$d temporizadores en los propios dispositivos y funciona aunque el teléfono esté apagado o sin conexión. Después se desactiva en este teléfono.</item>
     </plurals>
+    <string name="rule_options_tag">OPCIONES</string>
+    <string name="rule_options">Protección de bucle y modo de ejecución</string>
 </resources>

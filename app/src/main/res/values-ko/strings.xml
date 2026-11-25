@@ -2035,4 +2035,6 @@
     <plurals name="rule_to_device_desc">
         <item quantity="other">이 규칙은 기기 자체의 타이머 %1$d개가 되어 휴대폰이 꺼져 있거나 오프라인이어도 실행됩니다. 이후 이 휴대폰의 규칙은 꺼집니다.</item>
     </plurals>
+    <string name="rule_options_tag">옵션</string>
+    <string name="rule_options">반복 보호 및 실행 모드</string>
 </resources>

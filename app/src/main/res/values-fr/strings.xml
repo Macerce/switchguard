@@ -2110,4 +2110,6 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
         <item quantity="many">La règle devient %1$d minuteries dans les appareils eux-mêmes et fonctionne même téléphone éteint ou hors ligne. Elle est ensuite désactivée sur ce téléphone.</item>
         <item quantity="other">La règle devient %1$d minuteries dans les appareils eux-mêmes et fonctionne même téléphone éteint ou hors ligne. Elle est ensuite désactivée sur ce téléphone.</item>
     </plurals>
+    <string name="rule_options_tag">OPTIONS</string>
+    <string name="rule_options">Protection anti-boucle et mode d’exécution</string>
 </resources>

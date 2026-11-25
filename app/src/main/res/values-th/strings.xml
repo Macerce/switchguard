@@ -2006,4 +2006,6 @@
     <plurals name="rule_to_device_desc">
         <item quantity="other">กฎนี้จะกลายเป็นตัวตั้งเวลา %1$d รายการบนอุปกรณ์เอง จึงทำงานได้แม้โทรศัพท์ปิดหรือออฟไลน์ จากนั้นกฎบนโทรศัพท์นี้จะถูกปิด</item>
     </plurals>
+    <string name="rule_options_tag">ตัวเลือก</string>
+    <string name="rule_options">ป้องกันการวนซ้ำและโหมดการทำงาน</string>
 </resources>

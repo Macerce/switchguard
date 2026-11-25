@@ -2149,4 +2149,6 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
         <item quantity="many">Reguła stanie się %1$d harmonogramami w urządzeniach i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
         <item quantity="other">Reguła stanie się %1$d harmonogramami w urządzeniach i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
     </plurals>
+    <string name="rule_options_tag">OPCJE</string>
+    <string name="rule_options">Ochrona przed pętlą i tryb działania</string>
 </resources>

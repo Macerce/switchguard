@@ -2073,4 +2073,6 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
         <item quantity="one">De regel wordt %1$d timer in het apparaat zelf en werkt ook als de telefoon uit of offline is. Daarna wordt hij op deze telefoon uitgezet.</item>
         <item quantity="other">De regel wordt %1$d timers in de apparaten zelf en werkt ook als de telefoon uit of offline is. Daarna wordt hij op deze telefoon uitgezet.</item>
     </plurals>
+    <string name="rule_options_tag">OPTIES</string>
+    <string name="rule_options">Lusbeveiliging en uitvoermodus</string>
 </resources>

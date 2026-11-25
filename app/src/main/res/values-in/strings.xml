@@ -1964,4 +1964,6 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <plurals name="rule_to_device_desc">
         <item quantity="other">Aturan ini menjadi %1$d timer di perangkat itu sendiri, jadi tetap berjalan saat ponsel mati atau offline. Lalu aturan di ponsel ini dimatikan.</item>
     </plurals>
+    <string name="rule_options_tag">OPSI</string>
+    <string name="rule_options">Pelindung loop dan mode jalan</string>
 </resources>
