@@ -452,6 +452,7 @@ class MonitorService : Service() {
 
     override fun onDestroy() {
         com.macerce.switchguard.data.TraceLog.flush()
+        Store.get(this).flushSnapshots()
         instance = null
         running = false
         networkCallback?.let { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) }

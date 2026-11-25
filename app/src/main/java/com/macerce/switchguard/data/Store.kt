@@ -46,6 +46,8 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        // Dışarıdan (geri yükleme, aktarım, temizleme) yazılan durum bellektekini geçersiz kılar.
+        if (key == null || (key == "snapshots" && prefs.getString("snapshots", null) != lastSnapshotJson)) liveSnapshots = null
         _version.value++
     }
 
@@ -595,11 +597,49 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     // --- Cihazlar ---
     /** Son bilinen cihaz durumları; boşsa henüz temel alınmış durum yok demektir. */
+    /**
+     * Cihazların canlı durumu. Bellekte tutulur; yalnız ölçüm değişikliği (güç, gerilim, akım, sinyal, sayısal sensör)
+     * diske en çok [SNAPSHOT_WRITE_MS]'de bir yazılır (güç ölçen cihazlar birkaç saniyede bir değer yollar: ayar dosyası
+     * her seferinde baştan yazılmasın). Aç/kapa, çevrimiçi, ad, cihaz listesi ve ikili sensör değişince hemen yazılır.
+     */
     var snapshots: List<DeviceSnapshot>
-        get() = parsed.get("snapshots", prefs.getString("snapshots", null)) { raw ->
+        get() = liveSnapshots ?: parsed.get("snapshots", prefs.getString("snapshots", null)) { raw ->
             raw?.let { runCatching { DeviceParser.snapshotsFromJson(it) }.getOrNull() } ?: emptyList()
+        }.also { liveSnapshots = it }
+        set(v) {
+            val old = liveSnapshots
+            liveSnapshots = v
+            if (old != null && com.macerce.switchguard.core.SnapshotDiff.onlyReadings(old, v)) {
+                _version.value++
+                scheduleSnapshotWrite()
+            } else writeSnapshots()
         }
-        set(v) = put { putString("snapshots", DeviceParser.snapshotsToJson(v)) }
+
+    @Volatile private var liveSnapshots: List<DeviceSnapshot>? = null
+    @Volatile private var lastSnapshotJson: String? = null
+    private val snapshotWriter = android.os.Handler(android.os.Looper.getMainLooper())
+    private val snapshotFlush = Runnable { writeSnapshots() }
+    @Volatile private var snapshotPending = false
+
+    private fun scheduleSnapshotWrite() {
+        if (snapshotPending) return
+        snapshotPending = true
+        snapshotWriter.postDelayed(snapshotFlush, SNAPSHOT_WRITE_MS)
+    }
+
+    @Synchronized
+    private fun writeSnapshots() {
+        snapshotWriter.removeCallbacks(snapshotFlush)
+        snapshotPending = false
+        val v = liveSnapshots ?: return
+        val json = DeviceParser.snapshotsToJson(v)
+        if (json == lastSnapshotJson) return
+        lastSnapshotJson = json
+        put { putString("snapshots", json) }
+    }
+
+    /** Bekleyen ölçüm yazımını hemen yapar (servis kapanırken). */
+    fun flushSnapshots() { if (snapshotPending) writeSnapshots() }
 
     /** Cihazlar ekranının düzeni: sıra, öncelikliler, küçük kartlar, kategoriler. */
     var deviceLayout: com.macerce.switchguard.core.DeviceLayout
@@ -681,6 +721,8 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     companion object {
         const val DEFAULT_REDIRECT = "https://127.0.0.1"
+        /** Yalnız ölçüm değişen canlı durumun diske yazılma aralığı. */
+        const val SNAPSHOT_WRITE_MS = 30_000L
         /** Keystore ile şifreli saklanan anahtarlar. */
         val SECRET_KEYS = setOf("appSecret", "at", "rt", "apikey", "tuyaSecret", "tuyaToken", "tgToken", "lanKeys", "shellyAuth", "haServer")
         const val MIN_POLL = 15
