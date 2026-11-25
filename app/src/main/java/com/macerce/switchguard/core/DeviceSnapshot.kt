@@ -36,8 +36,8 @@ data class DeviceSnapshot(
 ) {
     val isMultiChannel: Boolean get() = switches.size > 1
     val hasSensors: Boolean get() = sensors.isNotEmpty()
-    /** Yalnızca sensör: açılıp kapatılacak rölesi yok (kapı, hareket, sıcaklık sensörü). */
-    val sensorOnly: Boolean get() = switches.isEmpty() && sensors.isNotEmpty()
+    /** Yalnızca sensör ya da ölçer: açılıp kapatılacak rölesi yok (kapı, hareket, sıcaklık sensörü, Shelly EM). */
+    val sensorOnly: Boolean get() = switches.isEmpty() && (sensors.isNotEmpty() || power != null)
     fun sensorActive(kind: SensorKind): Boolean? = sensors[kind]?.let { it >= 0.5 }
     /** Komutlar `switches` dizisiyle gider (tek kanallı olsa da diziyle çalışan modeller dahil). */
     val usesSwitchArray: Boolean get() = isMultiChannel || uiid in CHANNEL_LIMITS || uiid in SWITCH_ARRAY_UIIDS

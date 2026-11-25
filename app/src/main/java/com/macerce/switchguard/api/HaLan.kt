@@ -145,7 +145,7 @@ object HaLan : PolledLan(LocalDevice.BRAND_HA) {
     private fun onState(m: HaProtocol.WsMessage.StateChanged) {
         for (d in watched()) {
             if (d.extra != m.entityId) continue
-            pushReading(d.id, m.state?.takeIf { it.available }?.let { LocalReading(mapOf(0 to it.on)) })
+            pushReading(d.id, m.state?.reading())
         }
     }
 
@@ -198,7 +198,7 @@ object HaLan : PolledLan(LocalDevice.BRAND_HA) {
         val body = get("$b/api/states", auth(s.token)).body ?: return -1
         val list = HaProtocol.parseStates(body)
         list.forEach { e ->
-            remember(LanFound(HaProtocol.idFor(e.id), brand, b, e.domain, 1, supported = true, extra = e.id, name = e.name))
+            remember(LanFound(HaProtocol.idFor(e.id), brand, b, e.deviceClass.ifEmpty { e.domain }, if (e.controllable) 1 else 0, supported = true, extra = e.id, name = e.name))
         }
         return list.size
     }
@@ -220,9 +220,7 @@ object HaLan : PolledLan(LocalDevice.BRAND_HA) {
         val s = server ?: return null
         val r = get("$host/api/states/${d.extra}", auth(s.token))
         if (r.code == 0) forgetRoute()
-        val e = r.body?.let(HaProtocol::parseState) ?: return null
-        if (!e.available) return null
-        return LocalReading(mapOf(0 to e.on))
+        return r.body?.let(HaProtocol::parseState)?.reading()
     }
 
     override fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean {
@@ -233,6 +231,7 @@ object HaLan : PolledLan(LocalDevice.BRAND_HA) {
 
     override fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean {
         val s = server ?: return false
+        if (d.channels == 0) return false
         return send("POST", host + HaProtocol.servicePath(d.extra, on), HaProtocol.serviceBody(d.extra), auth(s.token)).code in 200..299
     }
 

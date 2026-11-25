@@ -141,7 +141,9 @@ object ShellyLan {
         if (info.auth && status.code == 401) return Found(host, info, supported = false, wrongPassword = cred != null)
         val full = if (info.gen >= 2) info.copy(channels = status.body?.let(ShellyProtocol::channelsOf) ?: 0) else info
         val ok = !info.auth || status.body != null
-        return Found(host, full, supported = ok && full.channels > 0, credentials = c.takeIf { ok })
+        // Rölesiz ölçer/sensör (EM, PM Mini, Add-on, H&T) de eklenir: durumda okunacak bir şey varsa.
+        val readable = full.channels > 0 || status.body?.let { ShellyProtocol.parseStatus(info.gen, it, 0) } != null
+        return Found(host, full, supported = ok && readable, credentials = c.takeIf { ok })
     }
 
     /**

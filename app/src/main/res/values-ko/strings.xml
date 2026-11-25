@@ -2007,4 +2007,5 @@
     <string name="step_level_done">규칙 “%1$s”: 조명을 %2$s(으)로 설정</string>
     <string name="step_level_failed">규칙 “%1$s”: %2$s 조명을 설정하지 못했습니다</string>
     <string name="step_send_log">규칙 “%1$s” 전송: %2$s</string>
+    <string name="website">웹사이트</string>
 </resources>

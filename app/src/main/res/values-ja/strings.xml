@@ -2007,4 +2007,5 @@
     <string name="step_level_done">ルール「%1$s」: ライトを%2$sに設定</string>
     <string name="step_level_failed">ルール「%1$s」: %2$s のライトを設定できませんでした</string>
     <string name="step_send_log">ルール「%1$s」が送信: %2$s</string>
+    <string name="website">ウェブサイト</string>
 </resources>

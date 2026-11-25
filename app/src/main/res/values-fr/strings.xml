@@ -2078,4 +2078,5 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="step_level_done">Règle « %1$s » : lumière réglée sur %2$s</string>
     <string name="step_level_failed">Règle « %1$s » : impossible de régler la lumière de %2$s</string>
     <string name="step_send_log">La règle « %1$s » a envoyé : %2$s</string>
+    <string name="website">Site web</string>
 </resources>

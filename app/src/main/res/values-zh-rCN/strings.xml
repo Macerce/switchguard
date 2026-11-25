@@ -1985,4 +1985,5 @@
     <string name="step_level_done">规则“%1$s”：灯光已设为 %2$s</string>
     <string name="step_level_failed">规则“%1$s”：无法调节 %2$s 的灯光</string>
     <string name="step_send_log">规则“%1$s”已发送：%2$s</string>
+    <string name="website">网站</string>
 </resources>

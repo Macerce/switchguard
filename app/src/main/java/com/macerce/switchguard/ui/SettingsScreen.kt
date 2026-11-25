@@ -1476,6 +1476,11 @@ private fun AboutPage(showDialog: ((@Composable () -> Unit)?) -> Unit) {
         )
         Divider()
         InfoRow(
+            Icons.Rounded.Language, stringResource(R.string.website), Actions.websiteUrl(context).removePrefix("https://"),
+            Modifier.clickable { Actions.openUrl(context, Actions.websiteUrl(context)) },
+        ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }
+        Divider()
+        InfoRow(
             Icons.Rounded.PrivacyTip, stringResource(R.string.privacy_policy), null,
             Modifier.clickable { Actions.openUrl(context, Actions.PRIVACY_URL) },
         ) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, null, tint = MaterialTheme.colorScheme.onSurfaceVariant) }

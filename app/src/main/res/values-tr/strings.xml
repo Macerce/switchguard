@@ -2046,4 +2046,5 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="trace_manual">Elle çalıştırıldı</string>
     <string name="trace_step_timeout">süre doldu</string>
     <string name="trace_step_limit">güvenlik sınırıyla kesildi</string>
+    <string name="website">Web sitesi</string>
 </resources>

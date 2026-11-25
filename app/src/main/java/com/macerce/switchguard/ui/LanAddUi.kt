@@ -240,7 +240,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
                 },
                 defaultName = model, shelly = f, credentials = f.credentials,
             ) { name, net ->
-                LocalDevice(f.info.id, name, f.info.channels.coerceIn(1, 4), net, f.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, f.info.gen)
+                LocalDevice(f.info.id, name, f.info.channels.coerceIn(0, 4), net, f.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, f.info.gen)
             }
         } else EwelinkLan.all().entries.sortedBy { it.value.host }.map { (id, e) ->
             val existing = known[id]
@@ -408,7 +408,7 @@ private fun BrandPage(brand: String, onBack: () -> Unit, onDismiss: () -> Unit) 
             if (ok.supported) {
                 val model = "Shelly ${ok.info.model}".trim()
                 naming = FoundRow(ok.info.id, model, ok.host, true, null, model, ok, ok.credentials) { name, net ->
-                    LocalDevice(ok.info.id, name, ok.info.channels.coerceIn(1, 4), net, ok.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, ok.info.gen)
+                    LocalDevice(ok.info.id, name, ok.info.channels.coerceIn(0, 4), net, ok.host, System.currentTimeMillis(), LocalDevice.BRAND_SHELLY, ok.info.gen)
                 }
             }
         }

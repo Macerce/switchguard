@@ -49,18 +49,23 @@ object ShellyProtocol {
         if (gen <= 1) o.has("ison") && o.getBoolean("ison") == on else o.has("was_on") && !o.has("code")
     }.getOrDefault(false)
 
-    /** Durum yanıtı → anahtarlar ve güç. Röle bilgisi yoksa null. [channels]: kayıtlı kanal sayısı (fazlası atılır). */
+    /**
+     * Durum yanıtı → anahtarlar, güç ve sensörler. Ne röle ne ölçüm ne sensör varsa null. [channels]: kayıtlı kanal
+     * sayısı (fazlası atılır; 0 = yalnız ölçer/sensör: Shelly EM, Pro 3EM, PM Mini, Plus Add-on, H&T, Door/Window).
+     */
     fun parseStatus(gen: Int, json: String, channels: Int): LocalReading? = runCatching {
         val o = JSONObject(json)
-        val n = channels.coerceIn(1, 4)
+        val n = channels.coerceIn(0, 4)
         val switches = LinkedHashMap<Int, Boolean>()
         val power = LinkedHashMap<Int, Double>()
+        val sensors = LinkedHashMap<SensorKind, Double>()
+        var meter: Double? = null
         var voltage: Double? = null
         var current: Double? = null
         if (gen <= 1) {
-            val relays = o.optJSONArray("relays") ?: return null
-            for (i in 0 until minOf(relays.length(), n)) switches[i] = relays.getJSONObject(i).optBoolean("ison")
-            // Plug/1PM/2.5: meters[].power; EM ve 3EM: emeters[] (gerilim/akım da var).
+            val relays = o.optJSONArray("relays")
+            if (relays != null) for (i in 0 until minOf(relays.length(), n)) switches[i] = relays.getJSONObject(i).optBoolean("ison")
+            // Plug/1PM/2.5: meters[].power; EM ve 3EM: emeters[] (gerilim/akım da var; 3EM'de fazlar toplanır).
             val meters = o.optJSONArray("meters")
             if (meters != null) for (i in 0 until minOf(meters.length(), n)) {
                 val m = meters.getJSONObject(i)
@@ -69,10 +74,18 @@ object ShellyProtocol {
             val em = o.optJSONArray("emeters")
             if (em != null && em.length() > 0) {
                 val m = em.getJSONObject(0)
-                if (power.isEmpty() && m.has("power")) power[0] = m.getDouble("power")
                 if (m.has("voltage")) voltage = m.getDouble("voltage")
                 if (m.has("current")) current = m.getDouble("current")
+                val sum = (0 until em.length()).mapNotNull { em.getJSONObject(it).takeIf { e -> e.has("power") }?.getDouble("power") }
+                if (power.isEmpty() && sum.isNotEmpty()) meter = sum.sum()
             }
+            // H&T, Door/Window, Flood (pilli; uyanıkken okunur).
+            o.optJSONObject("tmp")?.takeIf { it.optBoolean("is_valid", true) && it.has("tC") }?.let { sensors[SensorKind.TEMPERATURE] = it.getDouble("tC") }
+            o.optJSONObject("hum")?.takeIf { it.optBoolean("is_valid", true) && it.has("value") }?.let { sensors[SensorKind.HUMIDITY] = it.getDouble("value") }
+            o.optJSONObject("lux")?.takeIf { it.optBoolean("is_valid", true) && it.has("value") }?.let { sensors[SensorKind.ILLUMINANCE] = it.getDouble("value") }
+            o.optJSONObject("sensor")?.optString("state")?.takeIf { it == "open" || it == "close" }?.let { sensors[SensorKind.DOOR] = if (it == "open") 1.0 else 0.0 }
+            if (o.has("flood")) sensors[SensorKind.WATER] = if (o.optBoolean("flood")) 1.0 else 0.0
+            if (sensors.isNotEmpty()) o.optJSONObject("bat")?.takeIf { it.has("value") }?.let { sensors[SensorKind.BATTERY] = it.getDouble("value") }
         } else {
             for (i in 0 until n) {
                 val s = o.optJSONObject("switch:$i") ?: continue
@@ -81,12 +94,38 @@ object ShellyProtocol {
                 if (voltage == null && s.has("voltage")) voltage = s.getDouble("voltage")
                 if (s.has("current")) current = (current ?: 0.0) + s.getDouble("current")
             }
+            // Ölçerler: Pro 3EM (em:0), Pro EM / EM Gen3 (em1:N), PM Mini (pm1:0).
+            o.optJSONObject("em:0")?.let { e ->
+                if (e.has("total_act_power")) meter = e.getDouble("total_act_power")
+                if (e.has("a_voltage")) voltage = e.getDouble("a_voltage")
+                if (e.has("total_current")) current = e.getDouble("total_current")
+            }
+            if (meter == null) {
+                val parts = (0 until 3).mapNotNull { o.optJSONObject("em1:$it") }
+                if (parts.isNotEmpty()) {
+                    meter = parts.sumOf { it.optDouble("act_power", 0.0) }
+                    parts.first().takeIf { it.has("voltage") }?.let { voltage = it.getDouble("voltage") }
+                    current = parts.sumOf { it.optDouble("current", 0.0) }
+                }
+            }
+            if (meter == null) o.optJSONObject("pm1:0")?.let { p ->
+                if (p.has("apower")) meter = p.getDouble("apower")
+                if (p.has("voltage")) voltage = p.getDouble("voltage")
+                if (p.has("current")) current = p.getDouble("current")
+            }
+            // Sensörler: Plus Add-on / H&T / Gen3 (temperature:N, humidity:N, illuminance:N, devicepower:0).
+            o.optJSONObject("temperature:0")?.takeIf { it.has("tC") && !it.isNull("tC") }?.let { sensors[SensorKind.TEMPERATURE] = it.getDouble("tC") }
+            o.optJSONObject("humidity:0")?.takeIf { it.has("rh") && !it.isNull("rh") }?.let { sensors[SensorKind.HUMIDITY] = it.getDouble("rh") }
+            o.optJSONObject("illuminance:0")?.takeIf { it.has("lux") && !it.isNull("lux") }?.let { sensors[SensorKind.ILLUMINANCE] = it.getDouble("lux") }
+            if (sensors.isNotEmpty()) o.optJSONObject("devicepower:0")?.optJSONObject("battery")?.takeIf { it.has("percent") }
+                ?.let { sensors[SensorKind.BATTERY] = it.getDouble("percent") }
         }
-        if (switches.isEmpty()) return null
-        val total = if (power.isEmpty()) null else power.values.sum()
+        if (switches.isEmpty() && meter == null && sensors.isEmpty()) return null
+        val total = meter ?: if (power.isEmpty()) null else power.values.sum()
         LocalReading(
             switches, power = total, voltage = voltage, current = current,
             channelPower = if (switches.size > 1) power else emptyMap(),
+            sensors = sensors,
         )
     }.getOrNull()
 

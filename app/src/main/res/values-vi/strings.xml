@@ -1978,4 +1978,5 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="step_level_done">Quy tắc “%1$s”: đã chỉnh đèn thành %2$s</string>
     <string name="step_level_failed">Quy tắc “%1$s”: không chỉnh được đèn %2$s</string>
     <string name="step_send_log">Quy tắc “%1$s” đã gửi: %2$s</string>
+    <string name="website">Trang web</string>
 </resources>

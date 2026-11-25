@@ -1936,4 +1936,5 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="step_level_done">Aturan “%1$s”: lampu diatur ke %2$s</string>
     <string name="step_level_failed">Aturan “%1$s”: tidak dapat mengatur lampu %2$s</string>
     <string name="step_send_log">Aturan “%1$s” mengirim: %2$s</string>
+    <string name="website">Situs web</string>
 </resources>

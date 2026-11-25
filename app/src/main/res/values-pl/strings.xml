@@ -2115,4 +2115,5 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="step_level_done">Reguła „%1$s”: światło ustawione na %2$s</string>
     <string name="step_level_failed">Reguła „%1$s”: nie udało się ustawić światła %2$s</string>
     <string name="step_send_log">Reguła „%1$s” wysłała: %2$s</string>
+    <string name="website">Strona internetowa</string>
 </resources>

@@ -2079,4 +2079,5 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="step_level_done">Regra “%1$s”: luz ajustada para %2$s</string>
     <string name="step_level_failed">Regra “%1$s”: não foi possível ajustar a luz de %2$s</string>
     <string name="step_send_log">A regra “%1$s” enviou: %2$s</string>
+    <string name="website">Site</string>
 </resources>

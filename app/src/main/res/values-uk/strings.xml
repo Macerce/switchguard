@@ -2086,4 +2086,5 @@
     <string name="step_level_done">Правило «%1$s»: світло встановлено на %2$s</string>
     <string name="step_level_failed">Правило «%1$s»: не вдалося налаштувати світло %2$s</string>
     <string name="step_send_log">Правило «%1$s» надіслало: %2$s</string>
+    <string name="website">Вебсайт</string>
 </resources>

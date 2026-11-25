@@ -2187,4 +2187,5 @@
     <string name="step_level_done">القاعدة “%1$s”: ضُبطت الإضاءة على %2$s</string>
     <string name="step_level_failed">القاعدة “%1$s”: تعذّر ضبط إضاءة %2$s</string>
     <string name="step_send_log">أرسلت القاعدة “%1$s”: %2$s</string>
+    <string name="website">الموقع الإلكتروني</string>
 </resources>

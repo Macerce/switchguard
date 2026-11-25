@@ -982,14 +982,15 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
                 when {
                     !device.online -> stringResource(R.string.label_offline_title)
                     groupCounts != null -> stringResource(R.string.channels_on_short, groupCounts.first, groupCounts.second)
-                    device.sensorOnly -> sensorText
+                    // Yalnız ölçer (Shelly EM, PM Mini): durum yerine güç.
+                    device.sensorOnly -> sensorText.ifEmpty { device.power?.let { formatWatts(it) }.orEmpty() }
                     device.isMultiChannel -> stringResource(R.string.channels_on_short, onCount, device.switches.size)
                     onCount > 0 -> stringResource(R.string.state_on_title)
                     else -> stringResource(R.string.state_off_title)
                 }
             )
             // Güç yalnız gerçekten çekiyorsa: kapalı prizde "Kapalı · 0 W" kalabalık.
-            device.power?.takeIf { device.online && device.hasEnergy && it >= 1 }?.let { append(" · ").append(formatWatts(it)) }
+            device.power?.takeIf { device.online && device.hasEnergy && it >= 1 && !(device.sensorOnly && sensorText.isEmpty()) }?.let { append(" · ").append(formatWatts(it)) }
             // Röleli sensörlü cihaz (TH16, THR320): "Açık · 23,5 °C".
             if (device.online && !device.sensorOnly && sensorText.isNotEmpty()) append(" · ").append(sensorText)
             if (stale && device.online) append(" · ").append(lastKnown)

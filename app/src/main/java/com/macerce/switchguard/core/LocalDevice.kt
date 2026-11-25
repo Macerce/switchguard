@@ -10,6 +10,8 @@ data class LocalReading(
     val voltage: Double? = null,
     val current: Double? = null,
     val channelPower: Map<Int, Double> = emptyMap(),
+    /** Sensör değerleri (yerel sensörler, Home Assistant sensör/klima varlıkları); bkz. [DeviceSnapshot.sensors]. */
+    val sensors: Map<SensorKind, Double> = emptyMap(),
 )
 
 /**
@@ -34,12 +36,14 @@ data class LocalDevice(
 
     /** Cihazlar ekranındaki kartı: durum yerel ağdan gelir; görülmüyorsa çevrimdışı ve son bilinen anahtarlar. */
     fun snapshot(seen: LocalReading?, previous: DeviceSnapshot?): DeviceSnapshot {
-        val base = (0 until channels.coerceAtLeast(1)).associateWith { false }
+        // channels = 0: yalnız sensör (rölesi yok).
+        val base = (0 until channels.coerceAtLeast(0)).associateWith { false }
         val switches = base + (previous?.switches ?: emptyMap()).filterKeys { it in base } + (seen?.switches ?: emptyMap()).filterKeys { it in base }
         return DeviceSnapshot(
             id, name, online = seen != null, switches = switches, uiid = if (channels > 1) 0 else 1, cloud = Cloud.LAN,
             power = seen?.power, voltage = seen?.voltage, current = seen?.current,
             channelPower = seen?.channelPower.orEmpty().filterKeys { it in base },
+            sensors = seen?.sensors ?: previous?.sensors.orEmpty(),
         )
     }
 
@@ -69,7 +73,7 @@ data class LocalDevice(
                 runCatching {
                     val o = arr.getJSONObject(i)
                     LocalDevice(
-                        o.getString("id"), o.optString("name"), o.optInt("channels", 1).coerceIn(1, 4),
+                        o.getString("id"), o.optString("name"), o.optInt("channels", 1).coerceIn(0, 4),
                         o.optString("ssid").takeIf { !o.isNull("ssid") && it.isNotEmpty() },
                         o.optString("ip").takeIf { !o.isNull("ip") && it.isNotEmpty() },
                         o.optLong("addedAt"),

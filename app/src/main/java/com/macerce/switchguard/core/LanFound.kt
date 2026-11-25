@@ -19,5 +19,5 @@ data class LanFound(
     val name: String? = null,
 ) {
     fun toDevice(name: String, ssid: String?, now: Long = System.currentTimeMillis()) =
-        LocalDevice(id, name, channels.coerceIn(1, 4), ssid, host, now, brand, 0, extra)
+        LocalDevice(id, name, channels.coerceIn(0, 4), ssid, host, now, brand, 0, extra)
 }

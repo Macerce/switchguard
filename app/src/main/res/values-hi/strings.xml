@@ -1972,4 +1972,5 @@
     <string name="step_level_done">नियम “%1$s”: लाइट %2$s पर सेट</string>
     <string name="step_level_failed">नियम “%1$s”: %2$s की लाइट सेट नहीं हो सकी</string>
     <string name="step_send_log">नियम “%1$s” ने भेजा: %2$s</string>
+    <string name="website">वेबसाइट</string>
 </resources>

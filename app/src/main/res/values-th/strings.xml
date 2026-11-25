@@ -1978,4 +1978,5 @@
     <string name="step_level_done">กฎ “%1$s”: ตั้งไฟเป็น %2$s</string>
     <string name="step_level_failed">กฎ “%1$s”: ปรับไฟของ %2$s ไม่ได้</string>
     <string name="step_send_log">กฎ “%1$s” ส่งแล้ว: %2$s</string>
+    <string name="website">เว็บไซต์</string>
 </resources>

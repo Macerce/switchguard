@@ -13,7 +13,7 @@ import org.json.JSONObject
  * gizli depoda tutulur; yerel adres önce denenir, ulaşılamazsa dış adres (Nabu Casa, Tailscale, tünel ...).
  */
 object HaProtocol {
-    val DOMAINS = setOf("switch", "light", "input_boolean", "fan", "siren", "humidifier")
+    val DOMAINS = setOf("switch", "light", "input_boolean", "fan", "siren", "humidifier", "climate")
     const val DEFAULT_PORT = 8123
 
     data class Server(val local: String, val remote: String, val token: String) {
@@ -44,24 +44,82 @@ object HaProtocol {
 
     fun idFor(entityId: String) = "ha-$entityId"
 
-    data class Entity(val id: String, val name: String, val state: String) {
+    data class Entity(
+        val id: String,
+        val name: String,
+        val state: String,
+        val deviceClass: String = "",
+        val unit: String = "",
+        /** climate: odanın sıcaklığı (°C) / nemi (`current_temperature`, `current_humidity`). */
+        val currentTemp: Double? = null,
+        val currentHumidity: Double? = null,
+    ) {
         val domain: String get() = id.substringBefore('.')
-        val on: Boolean get() = state == "on" || state == "open" || state == "playing"
+        val on: Boolean get() =
+            if (domain == "climate") available && state != "off" else state == "on" || state == "open" || state == "playing"
         val available: Boolean get() = state != "unavailable" && state != "unknown"
+        val controllable: Boolean get() = domain in DOMAINS
+
+        /** sensor / binary_sensor varlığının SwitchGuard sensör türü (eşlenemiyorsa null). */
+        val sensorKind: SensorKind? get() = when (domain) {
+            "sensor" -> when (deviceClass) {
+                "temperature" -> SensorKind.TEMPERATURE
+                "humidity" -> SensorKind.HUMIDITY
+                "battery" -> SensorKind.BATTERY
+                "illuminance" -> SensorKind.ILLUMINANCE
+                else -> null
+            }
+            "binary_sensor" -> when (deviceClass) {
+                "door", "window", "garage_door", "opening" -> SensorKind.DOOR
+                "motion", "occupancy", "presence" -> SensorKind.MOTION
+                "moisture" -> SensorKind.WATER
+                else -> null
+            }
+            else -> null
+        }
+
+        /** Sensör değeri (°F → °C; ikili sensörde 1.0 = etkin). Okunamıyorsa null. */
+        val sensorValue: Double? get() {
+            val k = sensorKind ?: return null
+            if (!available) return null
+            if (k.binary) return if (state == "on") 1.0 else 0.0
+            val v = state.toDoubleOrNull() ?: return null
+            return if (k == SensorKind.TEMPERATURE && unit == "°F") (v - 32) * 5 / 9 else v
+        }
+
+        /** Listede gösterilip eklenebilir: aç/kapa yapılabilen ya da eşlenen sensör. */
+        val listable: Boolean get() = controllable || sensorKind != null
+
+        /** Yerel okuma: anahtar + (climate'te) oda sıcaklığı/nem; sensör varlığında yalnız sensör. Erişilemezse null. */
+        fun reading(): LocalReading? {
+            if (!available) return null
+            sensorKind?.let { k -> return LocalReading(emptyMap(), sensors = sensorValue?.let { mapOf(k to it) }.orEmpty()) }
+            val sensors = buildMap {
+                currentTemp?.let { put(SensorKind.TEMPERATURE, it) }
+                currentHumidity?.let { put(SensorKind.HUMIDITY, it) }
+            }
+            return LocalReading(mapOf(0 to on), sensors = sensors)
+        }
     }
 
     private fun entity(o: JSONObject): Entity? {
         val id = o.optString("entity_id").takeIf { it.contains('.') } ?: return null
-        val name = o.optJSONObject("attributes")?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
-        return Entity(id, name, o.optString("state"))
+        val a = o.optJSONObject("attributes")
+        val name = a?.optString("friendly_name")?.takeIf { it.isNotBlank() } ?: id
+        fun num(k: String) = a?.opt(k)?.toString()?.toDoubleOrNull()
+        val unit = a?.optString("unit_of_measurement").orEmpty()
+        val fahrenheit = a?.optString("temperature_unit") == "°F"
+        val temp = num("current_temperature")?.let { if (fahrenheit) (it - 32) * 5 / 9 else it }
+        return Entity(id, name, o.optString("state"), a?.optString("device_class").orEmpty(), unit, temp, num("current_humidity"))
     }
 
     fun parseState(json: String): Entity? = runCatching { entity(JSONObject(json)) }.getOrNull()
 
-    /** Aç/kapa yapılabilen varlıklar, ada göre sıralı. */
+    /** Eklenebilen varlıklar (aç/kapa yapılabilenler önce, sonra sensörler), ada göre sıralı. */
     fun parseStates(json: String): List<Entity> = runCatching {
         val a = JSONArray(json)
-        (0 until a.length()).mapNotNull { a.optJSONObject(it)?.let(::entity) }.filter { it.domain in DOMAINS }.sortedBy { it.name.lowercase() }
+        (0 until a.length()).mapNotNull { a.optJSONObject(it)?.let(::entity) }.filter { it.listable }
+            .sortedWith(compareBy<Entity> { !it.controllable }.thenBy { it.name.lowercase() })
     }.getOrDefault(emptyList())
 
     fun servicePath(entityId: String, on: Boolean) = "/api/services/${entityId.substringBefore('.')}/${if (on) "turn_on" else "turn_off"}"

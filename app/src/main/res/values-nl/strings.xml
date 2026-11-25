@@ -2043,4 +2043,5 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="step_level_done">Regel ‘%1$s’: licht ingesteld op %2$s</string>
     <string name="step_level_failed">Regel ‘%1$s’: licht van %2$s kon niet worden ingesteld</string>
     <string name="step_send_log">Regel ‘%1$s’ verstuurde: %2$s</string>
+    <string name="website">Website</string>
 </resources>

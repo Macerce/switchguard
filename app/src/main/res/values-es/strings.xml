@@ -2049,4 +2049,5 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="step_level_done">Regla «%1$s»: luz ajustada a %2$s</string>
     <string name="step_level_failed">Regla «%1$s»: no se pudo ajustar la luz de %2$s</string>
     <string name="step_send_log">La regla «%1$s» envió: %2$s</string>
+    <string name="website">Sitio web</string>
 </resources>

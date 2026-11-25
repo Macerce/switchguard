@@ -378,5 +378,10 @@ object Actions {
         val lang = if (context.resources.configuration.locales[0].language == "tr") "tr" else "en"
         return "$GUIDE_BASE$cloud.$lang.md"
     }
+    /** Tanıtım sitesi: Türkçe kökte, diğer diller /en/. */
+    fun websiteUrl(context: Context): String =
+        "https://switchguard.macerce.workers.dev/" +
+            if (context.resources.configuration.locales[0].language == "tr") "" else "en/"
+
     const val PRIVACY_URL = "https://sites.google.com/view/switchguard-privacy"
 }
