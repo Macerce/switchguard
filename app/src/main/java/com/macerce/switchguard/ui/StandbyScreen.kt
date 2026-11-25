@@ -283,14 +283,7 @@ private val StateIcon = Color(0xFF44739E)
 private val Sheet = Color(0xF5262626)
 private val CardShape = RoundedCornerShape(12.dp)
 
-/** Açık cihazın HA durum rengi: ışık/priz amber, su ve soğutma mavi, hava camgöbeği, ısıtma turuncu, kapı mor. */
-private fun onColor(kind: DeviceKind): Color = when (kind) {
-    DeviceKind.WATER, DeviceKind.COLD -> Color(0xFF2196F3)
-    DeviceKind.AIR -> Color(0xFF00BCD4)
-    DeviceKind.HEAT -> Color(0xFFFF9800)
-    DeviceKind.DOOR -> Color(0xFF9C27B0)
-    else -> Color(0xFFFFC107)
-}
+private fun onColor(kind: DeviceKind): Color = kind.onColor()
 
 /** HA kartı (ha-card): düz kart zemini, ince ayırıcı kenar. */
 private fun Modifier.glass(): Modifier = clip(CardShape).background(Card, CardShape).border(1.dp, Edge, CardShape)

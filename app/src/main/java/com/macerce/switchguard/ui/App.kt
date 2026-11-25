@@ -27,6 +27,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationRail
+import androidx.compose.runtime.key
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.VerticalDivider
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.foundation.text.TextAutoSize
@@ -109,7 +113,9 @@ fun App() {
     // Sıra önemli: sonra kaydedilen BackHandler önce çalışır.
     BackHandler(enabled = tab != Tab.DEVICES) { tab = Tab.DEVICES }
     BackHandler(enabled = tv && !tvHome) { tvHome = true; tab = Tab.DEVICES }
-    BackHandler(enabled = openDeviceId != null) { closeDevice() }
+    // Büyük tablet (yatay): Cihazlar'da liste solda, seçilen cihazın sayfası sağda (iki bölme); TV'de yok.
+    val twoPane = isWideScreen() && !tv && LocalConfiguration.current.screenWidthDp >= TWO_PANE_DP
+    BackHandler(enabled = openDeviceId != null && (!twoPane || tab == Tab.DEVICES)) { closeDevice() }
     BackHandler(enabled = chatOpen) { chatOpen = false }
 
     // Geçmiş rozeti: son bakıştan beri alarm/bildirim üretmiş olay sayısı. Geçmiş açıkken yeni olaylar da görülmüş sayılır.
@@ -131,6 +137,7 @@ fun App() {
     LaunchedEffect(version) { com.macerce.switchguard.service.ZoneWatcher.syncIfChanged(context) }
 
     val wide = isWideScreen()
+    // Büyük tablet (yatay): Cihazlar'da liste solda, seçilen cihazın sayfası sağda (iki bölme); TV'de yok.
     val tabIcon: @Composable (Tab) -> Unit = { t ->
         if (t == Tab.HISTORY && unseen > 0) {
             BadgedBox(badge = { Badge { Text(if (unseen > 99) "99+" else unseen.toString()) } }) {
@@ -175,7 +182,7 @@ fun App() {
     }
 
     AnimatedContent(
-        targetState = openDeviceId,
+        targetState = openDeviceId.takeUnless { twoPane },
         transitionSpec = { fadeIn() togetherWith fadeOut() },
         label = "detail",
     ) { deviceId ->
@@ -224,6 +231,13 @@ fun App() {
                     Box(Modifier.weight(1f).fillMaxHeight(), contentAlignment = Alignment.TopCenter) {
                         tabContent(Modifier.readableWidth())
                     }
+                    val paneId = openDeviceId
+                    if (twoPane && paneId != null && tab == Tab.DEVICES) {
+                        VerticalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        Box(Modifier.width(DETAIL_PANE_DP.dp).fillMaxHeight()) {
+                            key(paneId) { DeviceDetailScreen(deviceId = paneId, onBack = closeDevice) }
+                        }
+                    }
                 }
             } else {
                 Scaffold(
@@ -269,3 +283,7 @@ private fun TabLabel(text: String) {
         autoSize = TextAutoSize.StepBased(minFontSize = 9.sp, maxFontSize = size, stepSize = 0.5.sp),
     )
 }
+
+/** İki bölmeli Cihazlar düzeni için en az ekran genişliği ve sağdaki cihaz bölmesinin genişliği. */
+private const val TWO_PANE_DP = 1000
+private const val DETAIL_PANE_DP = 460

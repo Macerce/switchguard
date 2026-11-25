@@ -104,6 +104,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -902,13 +903,16 @@ private fun DeviceTile(
     val dark = LocalDarkTheme.current
     val anyOn = device.switches.values.any { it }
     // Çok kanallıda kanal düğmeleri kendi durumunu gösterir; kutucuğun kendisi renklenmez.
-    val active = anyOn && device.online && !device.isMultiChannel && editBar == null
+    // Bekleme panosuyla aynı dil: açık cihazın kartı düz kalır; simgesi türünün renginde dolar, kenarı o renkte ince çizgi.
+    val lit = anyOn && device.online && !device.isMultiChannel && editBar == null
+    val active = false
+    val kindColor = remember(device.name, device.isMultiChannel, device.hasEnergy, device.cloud, device.sensorOnly) { DeviceKinds.of(device).onColor() }
     val shape = RoundedCornerShape(20.dp)
-    // Çevrimdışı cihaz (grup değilse) videodaki gibi kırmızımsı zemin + kırmızı çerçeveyle öne çıkar.
+    // Çevrimdışı cihaz (grup değilse) kırmızımsı zemin + kırmızı çerçeveyle öne çıkar.
     val warn = !device.online && groupCounts == null
     val background: Brush = when {
-        active -> Brand.active(dark)
         warn -> SolidColor(Brand.warnTile(dark))
+        lit -> SolidColor(kindColor.copy(alpha = if (dark) 0.10f else 0.08f).compositeOver(tileColor()))
         else -> SolidColor(tileColor())
     }
     val controls = editBar == null
@@ -919,7 +923,13 @@ private fun DeviceTile(
             .then(if (tv && controls) Modifier.tvFocusRing(shape).focusGroup() else Modifier)
             .clip(shape)
             .background(background)
-            .then(if (warn) Modifier.border(1.5.dp, Brand.alarm, shape) else Modifier),
+            .then(
+                when {
+                    warn -> Modifier.border(1.5.dp, Brand.alarm, shape)
+                    lit -> Modifier.border(1.5.dp, kindColor.copy(alpha = 0.6f), shape)
+                    else -> Modifier
+                }
+            ),
     ) {
         Box {
             // Zemin: dokununca detay. İçerik onun üstündedir; düğmeler kendi dokunuşlarını alır.
@@ -953,6 +963,8 @@ fun DeviceGlyph(device: DeviceSnapshot, active: Boolean, size: Int = 42) {
     val (bg, tint) = when {
         !device.online -> raised to Brand.alarm
         active -> Color.White.copy(alpha = 0.2f) to Color.White
+        // Açık: türünün renginde dolu daire (bekleme panosundaki gibi); çok kanallıda kanal düğmeleri gösterir.
+        anyOn && !device.isMultiChannel -> kind.onColor() to Color(0xFF1C1C1C)
         anyOn -> scheme.primaryContainer to scheme.onPrimaryContainer
         else -> raised to scheme.onSurfaceVariant
     }

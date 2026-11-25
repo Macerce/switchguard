@@ -197,6 +197,18 @@ fun InfoRow(
     }
 }
 
+/**
+ * Açık cihazın durum rengi (Home Assistant dili; ana ekranda ve bekleme panosunda aynı): ışık/priz amber, su ve
+ * soğutma mavi, hava camgöbeği, ısıtma turuncu, kapı mor.
+ */
+fun DeviceKind.onColor(): Color = when (this) {
+    DeviceKind.WATER, DeviceKind.COLD -> Color(0xFF2196F3)
+    DeviceKind.AIR -> Color(0xFF00BCD4)
+    DeviceKind.HEAT -> Color(0xFFFF9800)
+    DeviceKind.DOOR -> Color(0xFF9C27B0)
+    else -> Color(0xFFFFC107)
+}
+
 /** Ayarlar menüsündeki kategori satırının simge kutusu renkleri. */
 enum class Hue(val light: Color, val dark: Color) {
     TEAL(Color(0xFF00897B), Color(0xFF26A69A)),
