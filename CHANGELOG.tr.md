@@ -6,6 +6,22 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.56.0 — 2026-11-26
+**Yeni**
+- **Ev enerjisi** (Cihazlar → ⋮ → Ev enerjisi): tüm ev tek sayfada — şu anki güç, gün/ay/yıl toplamı ve maliyeti, çubuk grafik, önceki dönem ve her cihazın payı. Shelly EM / Pro 3EM ana sayaç sayılır: prizler onun parçası olarak gösterilir (hiçbir şey iki kez sayılmaz), kalanı "ölçülmeyen" olarak görünür.
+- **Home Assistant sensörleri ve klima**: sıcaklık, nem, pil, ışık, kapı/pencere, hareket ve su kaçağı sensörleri ile klima varlıkları (aç/kapa + oda sıcaklığı ve nemi) Home Assistant'tan eklenebilir. Kurallarda, sensör uyarılarında, sensör geçmişinde ve bekleme ekranında çalışır.
+- **Shelly sayaç ve sensörleri**: Shelly EM, Pro 3EM, Pro EM ve PM Mini (rölesiz güç ölçümü), Plus Add-on sıcaklık/nem probları ve Gen1 H&T, Door/Window, Flood (uyanıkken okunur).
+- **Kural paylaşma**: kural düzenleyicide Paylaş, metin ve QR kod verir; diğer telefonda Otomasyon → Kural içe aktar. Cihazlar adına göre eşlenir, kural kapalı eklenir. İçinde yalnız kural ve cihaz adları vardır; anahtar ya da hesap bilgisi yoktur.
+- **Cihaza yaz**: yalnız eWeLink cihazlarını açıp kapatan basit saatli kural (ör. "hafta içi 07:00 aç, 20 dk sonra kapat") cihaza zamanlayıcı olarak yazılabilir; telefon kapalıyken de çalışır. Ardından telefondaki kural kapatılır.
+- Ayarlar → Yardım ve hakkında → **Web sitesi**.
+
+**İyileştirme**
+- Cihaz kartları bekleme panosunun dilinde: açık cihazın kartı sakin kalır, simgesi türünün renginde dolar (ışık amber, su mavi, ısıtma turuncu…) ve kenarında aynı renkte ince çizgi olur.
+- Kural düzenleyici sırayla okunur: EĞER → YALNIZCA → O ZAMAN; "Eylem ekle" adımların hemen altında; döngü koruması ve çalışma kipi kendi kartında.
+- **Yapay zekâ ile yardım** tam sayfa: büyük istem kartları yerinde açılır (kopyala / paylaş); yapay zekâya verilen uygulama tarifi artık yerel markaları, alanları, kural motorunu, ev enerjisini ve paylaşmayı da anlatıyor.
+- Büyük tablet yatayken: Cihazlar listesi solda, seçilen cihaz sağda.
+- Pil: güç ve sinyal ölçümleri bellekte tutulur, depolamaya en çok 30 sn'de bir yazılır (aç/kapa ve çevrimiçi değişiklikleri yine hemen kaydedilir).
+
 ## 2.55.0 — 2026-11-25
 **Yeni: kural motoru (Home Assistant tarzı)**
 - Bir kurala birden çok tetikleyici: "kapı açılınca **veya** hareket olunca **veya** saat 22:00 olunca". Her tetikleyicinin kendi durumu tutulur; kural izi kuralı hangi tetikleyicinin başlattığını gösterir, yeni "Şu tetikleyiciyle başladıysa" koşuluyla adımlar tetikleyiciye göre farklı davranabilir.

@@ -72,6 +72,16 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - Cihaz sayfası: kurallar, kendi alarm sesi, uyarı kategorisi, enerji geçmişi ve maliyet, eWeLink cihaz zamanlayıcıları, Wi-Fi sinyali ve kopma teşhisi, bekleme tüketimi ve son olaylar.
 - **Cihazları düzenle**: Yıldız = en üstte tut · oklar = taşı · kart boyutu = küçük ya da büyük · etiket = kategori. Buraya dönmek için bir karta uzun basın.
 
+### Yerel ağ (bulutsuz) ve diğer markalar
+
+- **Aynı Wi-Fi'daki eWeLink cihazları** önce doğrudan yerel ağdan kontrol edilir (daha hızlı, internetsiz de çalışır); bulut yedektir. Cihaz başına: Otomatik / Yerel / Bulut.
+- **Cihaz ekle (yerel ağ)** — numaralı adımlar, canlı "Bulunanlar" listesi, "IP adresiyle ekle" ve "Bulamıyor musun?" yardımı:
+  - **Sonoff** LAN/DIY (hesapsız), **Shelly** Gen1–Gen4 röle ve prizler (şifreli olanlar da; yeni Shelly uygulamadan Wi-Fi'a bağlanabilir), Shelly **EM / Pro 3EM / PM Mini** sayaçlar ve Add-on / H&T sensörleri,
+  - **Tasmota**, **ESPHome**, **Philips Hue** (köprü, Hue bulutu yok), **TP-Link Kasa** ve **Tapo**,
+  - **Home Assistant** (yerel ve dış adres, uzun ömürlü erişim anahtarı; WebSocket ile anlık): anahtar, ışık, fan, klima, yardımcılar ve sıcaklık / nem / kapı / hareket / su kaçağı sensörleri.
+- **Alanlar**: odalar ana ekranda hepsini aç/kapat düğmeli kartlar; her alan kurallarda grup gibi çalışır. Kartlar sıralanır, büyütülür, simge alır ya da gizlenir.
+- **Kapatırken onay iste** (cihaz sayfası): dondurucu ve pompa kapatılmadan önce sorulur — ana ekranda, alanlarda, bekleme ekranında, sesli ve Telegram komutlarında.
+
 ### Sensörler (eWeLink, Tuya)
 
 - Sıcaklık / nem (TH16, THR316/320, SNZB-02), kapı (DW2, SNZB-04), hareket / varlık (SNZB-03, SNZB-06P), su kaçağı (SNZB-05) ve pil değerleri cihaz kutucuklarında, bekleme ekranında ve Sohbet'te. Tuya'nın standart kodlarını kullanan Tuya / Smart Life sensörleri (sıcaklık-nem, kapı, su kaçağı, hareket, pil) de okunur.
@@ -95,6 +105,9 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - **Gruplar** — Gruptaki cihazları seçin. Grup, Cihazlar ekranında bir cihaz gibi görünür: düğmesi hepsini birlikte açar ya da kapatır; otomasyonlarda da seçilebilir.
 - **Döngü ve zamanlayıcılar** — Geri sayım, Aç, sonra kapat, Aç/kapa döngüsü, Sırayla, Özel adımlar. Düğmeyle, seçilen günlerde belirli saatte ya da bir saat aralığında başlar; isteğe bağlı rastgele değişim (evde biri var görünümü) ve "elle değiştirilince dur".
 - Otomasyonlar izleme açıkken bu telefonda çalışır. Telefon kapalıyken de çalışması gereken saatli işler için cihaz sayfasındaki zamanlayıcıları kullanın.
+- **Kural motoru** (2.55): bir kurala birden çok tetikleyici, tersine çevrilip gruplanabilen koşullar ("A ve (B veya C)"), akış adımları (bekle, şu olana kadar bekle, eğer/değilse, tekrarla, kuralı bitir, başka kuralı çalıştır), değiştir, ışığı ayarla (parlaklık/renk), mesaj gönder (ntfy / webhook / Telegram), durumu hatırla ve geri getir, çalışma kipleri, **Şimdi çalıştır**, kural başına çalışma geçmişi ("neden çalıştı/çalışmadı"), hazır şablonlar ve döngü koruması.
+- **Yardımcılar**: sanal anahtar, sayaç ve zamanlayıcı — tetikleyici, koşul ve adım olarak kullanılır.
+- **Kuralı paylaş**: metin / QR kod olarak gönder, diğer telefonda **Kural içe aktar** (cihazlar adına göre eşlenir). eWeLink cihazları için basit saatli kural **cihaza yazılabilir**: telefon kapalıyken de çalışır.
 
 ### Enerji
 
@@ -103,6 +116,7 @@ SwitchGuard, size ait **eWeLink / SONOFF** ve **Tuya / Smart Life** hesaplarınd
 - Bekleme tüketimi (cihazın hiç altına inmediği güç) ve aylık maliyeti.
 - Enerji raporu PDF (yazdırmak ya da paylaşmak için) veya CSV (Excel, Google E-Tablolar) olarak.
 - Tüketim, izleme açıkken alınan güç ölçümlerinden SwitchGuard tarafından hesaplanır; cihazın kendi uygulamasındaki (eWeLink, Smart Life) değerden biraz farklı olabilir.
+- **Ev enerjisi** (Cihazlar → ⋮): tüm ev — şu anki güç, toplamlar ve maliyet, önceki dönem ve her cihazın payı; Shelly EM / 3EM ana sayaç sayılır.
 
 ### Geçmiş
 

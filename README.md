@@ -72,6 +72,16 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - Device page: rules, own alarm sound, alert category, energy history and cost, eWeLink device timers, Wi-Fi signal and drop diagnosis, standby consumption and recent events.
 - **Arrange devices**: Star = keep at the top · arrows = move · card size = small or large · tag = category. Long-press a card to come back here.
 
+### Local network (no cloud) and more brands
+
+- **eWeLink on the same Wi-Fi** is switched directly over the local network first (faster, works without internet); the cloud is the fallback. Per device: Automatic / Local / Cloud.
+- **Add device (local network)** — guided steps, a live "Found" list, "Add by IP" and "Can't find it?" help:
+  - **Sonoff** LAN/DIY (no account), **Shelly** Gen1–Gen4 relays and plugs (password-protected too; a new Shelly can be put on your Wi-Fi from the app), Shelly **EM / Pro 3EM / PM Mini** meters and Add-on / H&T sensors,
+  - **Tasmota**, **ESPHome**, **Philips Hue** (bridge, no Hue cloud), **TP-Link Kasa** and **Tapo**,
+  - **Home Assistant** (local and external address, long-lived token; live over WebSocket): switches, lights, fans, climate, helpers and temperature / humidity / door / motion / leak sensors.
+- **Areas**: rooms as cards on the home screen with an all on/off button; each area works as a group in rules. Cards can be reordered, resized, given an icon or hidden.
+- **Ask before turning off** (device page): freezers and pumps ask before they are switched off — on the home screen, areas, standby screen, voice and Telegram.
+
 ### Sensors (eWeLink, Tuya)
 
 - Temperature / humidity (TH16, THR316/320, SNZB-02), door (DW2, SNZB-04), motion / presence (SNZB-03, SNZB-06P), water leak (SNZB-05) and battery readings on device tiles, on the standby screen and in Chat. Tuya / Smart Life sensors that use Tuya's standard codes (temperature-humidity, door, water leak, motion, battery) are read too.
@@ -95,6 +105,9 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - **Groups** — Pick the devices in the group. The group shows up on the Devices screen like a device: its button turns them all on or off together, and you can use it in automations.
 - **Cycles & timers** — Countdown, On, then off, On/off cycle, One by one, Custom steps. Start with a button, at a set time on chosen days or during a time window; optional random variation (lived-in look) and "stop when changed by hand".
 - Automations run on this phone while monitoring is on. For schedules that must work even when the phone is off, use the timers on the device page.
+- **Rule engine** (2.55): several triggers per rule, conditions that can be inverted and grouped ("A and (B or C)"), flow steps (wait, wait until, if/else, repeat, stop, run another rule), toggle, set light level/colour, send a message (ntfy / webhook / Telegram), remember and restore state, run modes, **Run now**, a run history per rule ("why did/didn't it run"), ready-made templates and a loop guard.
+- **Helpers**: virtual switch, counter and timer — usable as triggers, conditions and steps.
+- **Share a rule** as text / QR code and **Import rule** on another phone (devices matched by name). A simple timed rule for eWeLink devices can be **written to the device** as timers, so it runs with the phone off.
 
 ### Energy
 
@@ -103,6 +116,7 @@ SwitchGuard watches the smart plugs and switches in your own **eWeLink / SONOFF*
 - Standby consumption (the power a device never goes below) and its monthly cost.
 - Energy report as PDF (to print or share) or CSV (Excel, Google Sheets).
 - Consumption is calculated by SwitchGuard from power readings taken while monitoring is on, so it may differ slightly from the device maker's app (eWeLink, Smart Life).
+- **Home energy** (Devices → ⋮): the whole home — power now, totals and cost, previous period and each device's share; a Shelly EM / 3EM counts as the main meter.
 
 ### History
 

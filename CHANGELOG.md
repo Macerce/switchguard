@@ -6,6 +6,22 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.56.0 — 2026-11-26
+**New**
+- **Home energy** (Devices → ⋮ → Home energy): the whole home in one page — power now, day/month/year total and cost, bar chart, previous period, and each device's share. A Shelly EM / Pro 3EM is used as the main meter: plugs are shown as its parts (nothing counted twice) and the rest appears as "not measured".
+- **Home Assistant sensors and climate**: temperature, humidity, battery, light, door/window, motion and leak sensors, and climate entities (on/off plus room temperature and humidity) can be added from Home Assistant. They work in rules, sensor alerts, sensor history and the standby screen.
+- **Shelly meters and sensors**: Shelly EM, Pro 3EM, Pro EM and PM Mini (power without a relay), the Plus Add-on temperature/humidity probes, and Gen1 H&T, Door/Window and Flood (read when awake).
+- **Share a rule**: in the rule editor, Share gives a text and a QR code; on another phone, Automations → Import rule. Devices are matched by name; the rule is added switched off. Only the rule and device names are inside — no keys or account data.
+- **Write to device**: a simple timed rule that only switches eWeLink devices (e.g. "weekdays 07:00 on, 20 min later off") can be written to the device as timers, so it runs even with the phone off. The rule on the phone is then switched off.
+- Settings → Help and about → **Website**.
+
+**Improved**
+- Device cards follow the standby dashboard: a device that is on keeps a calm card with its icon filled in its colour (lights amber, water blue, heating orange…) and a thin edge in the same colour.
+- Rule editor reads in order: IF → ONLY WHEN → THEN; "Add action" sits right under the steps; loop guard and run mode have their own card.
+- **Get help from AI** is a full page with large prompt cards that open in place (copy / share); the app description given to the AI now covers local brands, areas, the rule engine, home energy and sharing.
+- Large tablets in landscape: Devices list on the left, the selected device on the right.
+- Battery: power and signal readings are kept in memory and written to storage at most every 30 s (on/off and online changes are still saved at once).
+
 ## 2.55.0 — 2026-11-25
 **New — rule engine (Home Assistant style)**
 - Several triggers per rule: "when the door opens **or** motion is detected **or** it's 22:00". Each trigger keeps its own state; the run history shows which trigger started the rule, and a new condition "Started by trigger N" lets the steps behave differently per trigger.
