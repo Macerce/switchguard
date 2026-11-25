@@ -1832,4 +1832,10 @@
     <string name="board_turn_off">オフにする</string>
     <string name="board_idle_dim">操作がないとき暗くする</string>
     <string name="board_idle_dim_desc">10分間触れないと画面が暗くなります。最初のタッチは画面を起こすだけです</string>
+    <string name="action_more">その他</string>
+    <string name="last_known">最終既知</string>
+    <string name="confirm_off_title">オフにする前に確認</string>
+    <string name="confirm_off_desc">アプリ、待機画面、音声/Telegram コマンドでオフにする前に確認します。オートメーションは確認しません。</string>
+    <string name="chat_confirm_off">%1$sをオフにします。確認は「はい」、取り消しは「いいえ」と話すか入力してください。</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: オフにするには確認が必要です。単独でオフにしてください</string>
 </resources>

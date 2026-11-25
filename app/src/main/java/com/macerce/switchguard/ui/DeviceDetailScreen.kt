@@ -1,5 +1,6 @@
 package com.macerce.switchguard.ui
 
+import androidx.compose.material.icons.rounded.VerifiedUser
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
@@ -172,6 +173,22 @@ fun DeviceAlertRules(deviceId: String, focusRequester: FocusRequester? = null) {
     val device = remember(version) { store.snapshots.firstOrNull { it.id == deviceId } }
     // Sensör uyarıları koşullu uyarı kaydıdır: cihazın "izle" anahtarından bağımsız çalışır.
     if (device != null && device.hasSensors) SensorAlertRules(device)
+
+    // Kritik cihaz (derin dondurucu, pompa): elle kapatmadan önce sorulur; otomasyonlar sormaz.
+    if (device != null && !device.sensorOnly && device.switches.isNotEmpty()) {
+        val confirm = remember(version) { deviceId in store.confirmOff }
+        SectionCard(Modifier.padding(top = 12.dp)) {
+            InfoRow(
+                Icons.Rounded.VerifiedUser,
+                stringResource(R.string.confirm_off_title),
+                stringResource(R.string.confirm_off_desc),
+            ) {
+                Switch(checked = confirm, onCheckedChange = { on ->
+                    store.confirmOff = if (on) store.confirmOff + deviceId else store.confirmOff - deviceId
+                })
+            }
+        }
+    }
 
     if (!monitored) return
 

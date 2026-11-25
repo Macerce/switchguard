@@ -1874,4 +1874,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_turn_off">Apagar</string>
     <string name="board_idle_dim">Atenuar sin uso</string>
     <string name="board_idle_dim_desc">Tras 10 minutos sin tocar, la pantalla se atenúa; el primer toque solo la despierta</string>
+    <string name="action_more">Más</string>
+    <string name="last_known">último conocido</string>
+    <string name="confirm_off_title">Preguntar antes de apagar</string>
+    <string name="confirm_off_desc">Se pregunta en la app, en la pantalla de espera y en comandos de voz/Telegram antes de apagarlo. Las automatizaciones nunca preguntan.</string>
+    <string name="chat_confirm_off">Se apagará %1$s. Diga o escriba «Sí» para confirmar o «No» para cancelar.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: requiere confirmación para apagarse; apáguelo por separado</string>
 </resources>

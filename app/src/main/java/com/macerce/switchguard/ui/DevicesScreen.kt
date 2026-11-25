@@ -1,5 +1,11 @@
 package com.macerce.switchguard.ui
 
+import kotlinx.coroutines.Job
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.draw.alpha
+import androidx.compose.material.icons.rounded.MoreVert
+import androidx.compose.material.icons.rounded.Close
+import com.macerce.switchguard.core.Cloud
 import android.text.format.DateUtils
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -195,8 +201,12 @@ fun DevicesScreen(
     var openAreaId by rememberSaveable { mutableStateOf<String?>(null) }
     val openArea = layout.categories.firstOrNull { it.id == openAreaId }
     val areaSummaries = remember(version) { layout.categories.associate { it.id to AreaSummary.of(it.id, layout, devices) } }
-    val sections = remember(shownLayout, shown, openArea) {
-        if (openArea == null) shownLayout.sections(shown)
+    // Koruma kartındaki sayıya dokununca liste süzülür (açık / çevrimdışı / güç çeken); tekrar dokununca kalkar.
+    var filter by rememberSaveable { mutableStateOf<DeviceFilter?>(null) }
+    val sections = remember(shownLayout, shown, openArea, filter) {
+        val f = filter
+        if (f != null && openArea == null) listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(shown).filter { f.matches(it) }))
+        else if (openArea == null) shownLayout.sections(shown)
         else listOf(DeviceSection(DeviceSection.Kind.ALL, null, shownLayout.sorted(shown).filter { shownLayout.categoryOf[it.id] == openArea.id }))
     }
     val sectionOf = remember(sections) { sections.flatMap { s -> s.devices.map { it.id to s.key } }.toMap() }
@@ -243,6 +253,22 @@ fun DevicesScreen(
     BackHandler(enabled = editMode) { editMode = false }
     BackHandler(enabled = !editMode && openArea != null) { openAreaId = null }
     var refreshing by remember { mutableStateOf(false) }
+    // Bağlantı yokken bulut cihazlarının durumu son bilinen: kartlar soluk (yerel ağdakiler güncel kalır).
+    val stale = loggedIn && (!monitoring || connection.state in setOf(ConnState.STOPPED, ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR))
+    var areaConfirm by remember { mutableStateOf(false) }
+    val areaAll: (Boolean) -> Unit = { on ->
+        val area = openArea
+        if (area != null) scope.launch {
+            Actions.setGroup(context, DeviceGroup.areaDeviceId(area.id), on).onFailure {
+                Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+    if (areaConfirm && openArea != null) {
+        ConfirmOffDialog(DeviceSnapshot(DeviceGroup.areaDeviceId(openArea.id), openArea.name, true, mapOf(0 to true)), 0,
+            onDismiss = { areaConfirm = false }) { areaConfirm = false; areaAll(false) }
+    }
+    var menuOpen by remember { mutableStateOf(false) }
 
     val doRefresh: () -> Unit = {
         scope.launch {
@@ -266,11 +292,6 @@ fun DevicesScreen(
                         Text(stringResource(R.string.action_done))
                     }
                 } else {
-                    if (devices.isNotEmpty()) {
-                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { editMode = true }) {
-                            Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
-                        }
-                    }
                     val homeCtx = LocalContext.current
                     if (remember { com.macerce.switchguard.core.HomeLauncher.isDefault(homeCtx) }) {
                         IconButton(modifier = Modifier.tvFocusRing(), onClick = { com.macerce.switchguard.core.HomeLauncher.returnToSystemHome(homeCtx) }) {
@@ -288,8 +309,19 @@ fun DevicesScreen(
                             Icon(Icons.Rounded.Mic, stringResource(R.string.chat_voice))
                         }
                     }
-                    IconButton(modifier = Modifier.tvFocusRing(), onClick = doRefresh, enabled = loggedIn) {
-                        Icon(Icons.Rounded.Refresh, stringResource(R.string.action_refresh))
+                    // Seyrek kullanılanlar ⋮ menüsünde: üst çubuk telefonda kalabalık olmasın.
+                    Box {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { menuOpen = true }) {
+                            Icon(Icons.Rounded.MoreVert, stringResource(R.string.action_more))
+                        }
+                        androidx.compose.material3.DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
+                            MenuEntry(Icons.Rounded.Refresh, R.string.action_refresh, enabled = loggedIn) { menuOpen = false; doRefresh() }
+                            if (devices.isNotEmpty()) MenuEntry(Icons.Rounded.Tune, R.string.action_edit_layout) {
+                                menuOpen = false; openAreaId = null; filter = null; editMode = true
+                            }
+                            if (loggedIn) MenuEntry(Icons.Rounded.Add, R.string.area_new) { menuOpen = false; newArea = true }
+                            if (loggedIn) MenuEntry(Icons.Rounded.Router, R.string.lan_add) { menuOpen = false; lanAdd = true }
+                        }
                     }
                 }
             },
@@ -338,14 +370,14 @@ fun DevicesScreen(
                 if (!editMode && openArea == null) {
                     item(span = full) {
                         if (loggedIn) {
-                            GuardCard(connection.state, connection.detail, connection.lastSync, monitoring, devices)
+                            GuardCard(connection.state, connection.detail, connection.lastSync, monitoring, devices, filter) { filter = if (filter == it) null else it }
                         } else {
                             LoginPromptCard(sessionLost = remember(version) { store.sessionLost })
                         }
                     }
                 }
                 // En üstte: yeni alan ve yerel ağdan Sonoff ekleme.
-                if (!editMode && openArea == null && loggedIn) {
+                if (!editMode && openArea == null && loggedIn && layout.categories.isEmpty()) {
                     item(key = "add-row", span = full) {
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { newArea = true }, modifier = Modifier.weight(1f).tvFocusRing(),
@@ -381,11 +413,7 @@ fun DevicesScreen(
                         AreaHero(
                             openArea, areaSummaries[openArea.id] ?: AreaSummary.of(emptyList()),
                             onAll = { on ->
-                                scope.launch {
-                                    Actions.setGroup(context, DeviceGroup.areaDeviceId(openArea.id), on).onFailure {
-                                        Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
-                                    }
-                                }
+                                if (store.needsConfirm(DeviceGroup.areaDeviceId(openArea.id), on)) areaConfirm = true else areaAll(on)
                             },
                             onMembers = { areaMembers = true },
                             onRename = { areaRename = true },
@@ -402,8 +430,18 @@ fun DevicesScreen(
                         }
                     }
                 }
+                val f = filter
+                if (f != null && !editMode && openArea == null) item(key = "filter", span = full) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        androidx.compose.material3.InputChip(
+                            selected = true, onClick = { filter = null }, modifier = Modifier.tvFocusRing(),
+                            label = { Text(stringResource(f.label) + " · " + sections.sumOf { it.devices.size }) },
+                            trailingIcon = { Icon(Icons.Rounded.Close, stringResource(R.string.action_clear), Modifier.size(18.dp)) },
+                        )
+                    }
+                }
                 // Ana sayfada alan kartları (Home Assistant'ın alanları gibi); dokununca alanın sayfası açılır.
-                if (!editMode && openArea == null && devices.isNotEmpty()) {
+                if (!editMode && openArea == null && devices.isNotEmpty() && filter == null) {
                     if (layout.categories.isEmpty()) {
                         if (!inviteDismissed) item(key = "area-invite", span = full) {
                             AreaInviteCard(onCreate = { newArea = true }, onDismiss = { store.areasInviteDismissed = true })
@@ -473,6 +511,7 @@ fun DevicesScreen(
                                     }) else null,
                                     focusRequester = if (device.id == restoreFocusTo) restoreFocus else null,
                                     groupCounts = groupCounts[device.id],
+                                    stale = stale && device.cloud != Cloud.LAN && !DeviceGroup.isGroup(device.id),
                                     moveArrows = targets?.let { t -> MoveArrows(t.left != null, t.right != null, t.up != null, t.down != null) },
                                     editBar = if (editMode) {
                                         { LayoutEditBar(device, layout, shown, canUp = i > 0, canDown = i < section.devices.lastIndex, onChange = saveLayout) }
@@ -588,7 +627,10 @@ private fun AlarmBanner(lines: List<String>, onDismiss: () -> Unit) {
  * turuncu-kırmızı, izleme kapalıyken sade kart.
  */
 @Composable
-private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitoring: Boolean, devices: List<DeviceSnapshot>) {
+private fun GuardCard(
+    state: ConnState, detail: String, lastSync: Long, monitoring: Boolean, devices: List<DeviceSnapshot>,
+    filter: DeviceFilter?, onFilter: (DeviceFilter) -> Unit,
+) {
     val context = LocalContext.current
     val dark = LocalDarkTheme.current
     // "2 dk önce" metni kendiliğinden güncellensin.
@@ -655,12 +697,15 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
             val power = devices.filter { it.online && it.hasEnergy }.sumOf { it.power ?: 0.0 }
             Row(Modifier.fillMaxWidth()) {
                 Stat(devices.size.toString(), stringResource(R.string.stat_devices), content, muted, Modifier.weight(1f))
-                Stat(on.toString(), stringResource(R.string.stat_on), content, muted, Modifier.weight(1f))
+                Stat(on.toString(), stringResource(R.string.stat_on), content, muted, Modifier.weight(1f),
+                    selected = filter == DeviceFilter.ON) { onFilter(DeviceFilter.ON) }
                 Stat(
                     offline.toString(), stringResource(R.string.stat_offline),
                     if (offline > 0 && !branded) StatusColors.offline else content, muted, Modifier.weight(1f),
-                )
-                if (devices.any { it.hasEnergy }) Stat(formatWatts(power), stringResource(R.string.stat_power), content, muted, Modifier.weight(1.3f))
+                    selected = filter == DeviceFilter.OFFLINE,
+                ) { onFilter(DeviceFilter.OFFLINE) }
+                if (devices.any { it.hasEnergy }) Stat(formatWatts(power), stringResource(R.string.stat_power), content, muted, Modifier.weight(1.3f),
+                    selected = filter == DeviceFilter.POWER) { onFilter(DeviceFilter.POWER) }
             }
         }
         if (!monitoring) {
@@ -675,8 +720,14 @@ private fun GuardCard(state: ConnState, detail: String, lastSync: Long, monitori
 }
 
 @Composable
-private fun Stat(value: String, label: String, color: Color, muted: Color, modifier: Modifier = Modifier) {
-    Column(modifier) {
+private fun Stat(value: String, label: String, color: Color, muted: Color, modifier: Modifier = Modifier, selected: Boolean = false, onClick: (() -> Unit)? = null) {
+    val shape = RoundedCornerShape(10.dp)
+    Column(
+        modifier.clip(shape)
+            .then(if (selected) Modifier.background(color.copy(alpha = 0.16f), shape) else Modifier)
+            .then(onClick?.let { Modifier.tvFocusRing(shape).clickable(onClick = it) } ?: Modifier)
+            .padding(horizontal = 6.dp, vertical = 2.dp),
+    ) {
         Text(value, style = MaterialTheme.typography.titleMedium, color = color, maxLines = 1)
         Text(label, style = MaterialTheme.typography.labelSmall, color = muted, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
@@ -762,6 +813,8 @@ private fun DeviceTile(
     focusRequester: FocusRequester? = null,
     /** Grup kartı: (açık, toplam) üye sayısı; normal cihazda null. */
     groupCounts: Pair<Int, Int>? = null,
+    /** Bağlantı yok: durum son bilinen (soluk kart, "son bilinen"). */
+    stale: Boolean = false,
     moveArrows: MoveArrows? = null,
 ) {
     val tv = LocalIsTv.current
@@ -797,8 +850,12 @@ private fun DeviceTile(
                         .combinedClickable(onClick = onClick, onLongClick = onLongClick),
                 )
             }
-            if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts)
-            else SmallTileContent(device, active, monitored, priority, controls, groupCounts)
+            CompositionLocalProvider(LocalStale provides stale) {
+                Box(Modifier.alpha(if (stale) 0.55f else 1f)) {
+                    if (large) LargeTileContent(device, active, monitored, priority, controls, groupCounts)
+                    else SmallTileContent(device, active, monitored, priority, controls, groupCounts)
+                }
+            }
             if (moveArrows != null) MoveArrowsOverlay(moveArrows, shape)
         }
         editBar?.invoke()
@@ -837,6 +894,8 @@ fun sensorSummary(device: DeviceSnapshot): String {
 /** Durum satırı: "Açık · 118 W", "2/4 açık", "Kapalı" ya da kırmızı "Çevrimdışı". */
 @Composable
 private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boolean, groupCounts: Pair<Int, Int>? = null) {
+    val stale = LocalStale.current
+    val lastKnown = stringResource(R.string.last_known)
     val muted = if (active) Brand.onActive.copy(alpha = 0.85f) else MaterialTheme.colorScheme.onSurfaceVariant
     Row(verticalAlignment = Alignment.CenterVertically) {
         val onCount = device.switches.values.count { it }
@@ -852,9 +911,11 @@ private fun TileStatus(device: DeviceSnapshot, active: Boolean, monitored: Boole
                     else -> stringResource(R.string.state_off_title)
                 }
             )
-            if (device.online && device.hasEnergy) append(" · ").append(formatWatts(device.power ?: 0.0))
+            // Güç yalnız gerçekten çekiyorsa: kapalı prizde "Kapalı · 0 W" kalabalık.
+            device.power?.takeIf { device.online && device.hasEnergy && it >= 1 }?.let { append(" · ").append(formatWatts(it)) }
             // Röleli sensörlü cihaz (TH16, THR320): "Açık · 23,5 °C".
             if (device.online && !device.sensorOnly && sensorText.isNotEmpty()) append(" · ").append(sensorText)
+            if (stale && device.online) append(" · ").append(lastKnown)
         }
         Text(
             text,
@@ -922,6 +983,11 @@ private fun SmallTileContent(device: DeviceSnapshot, active: Boolean, monitored:
             TileName(device, active, priority, large = false)
             Spacer(Modifier.height(2.dp))
             TileStatus(device, active, monitored, groupCounts)
+            // Çok kanallı cihaz küçük kartta da kanal kanal açılıp kapanır (detaya girmeden).
+            if (controls && device.isMultiChannel) {
+                Spacer(Modifier.height(10.dp))
+                ChannelButtons(device, height = 36, compact = true)
+            }
         }
     }
 }
@@ -953,13 +1019,13 @@ private fun LargeTileContent(device: DeviceSnapshot, active: Boolean, monitored:
 
 /** Çok kanallı cihazın kanal düğmeleri: satır başına en çok dört, her biri kanal numarası ve (ölçülüyorsa) gücü. */
 @Composable
-fun ChannelButtons(device: DeviceSnapshot, modifier: Modifier = Modifier, height: Int = 64) {
+fun ChannelButtons(device: DeviceSnapshot, modifier: Modifier = Modifier, height: Int = 64, compact: Boolean = false) {
     val channels = device.switches.toSortedMap().entries.toList()
     Column(modifier, verticalArrangement = Arrangement.spacedBy(8.dp)) {
         channels.chunked(4).forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(if (compact) 4.dp else 8.dp)) {
                 row.forEach { (channel, on) ->
-                    ChannelButton(device, channel, on, Modifier.weight(1f).height(height.dp))
+                    ChannelButton(device, channel, on, Modifier.weight(1f).height(height.dp), compact)
                 }
                 // Son satır eksikse düğmeler genişlemesin: boş yer tutucular.
                 repeat(4 - row.size) { Spacer(Modifier.weight(1f)) }
@@ -969,12 +1035,12 @@ fun ChannelButtons(device: DeviceSnapshot, modifier: Modifier = Modifier, height
 }
 
 @Composable
-private fun ChannelButton(device: DeviceSnapshot, channel: Int, on: Boolean, modifier: Modifier) {
+private fun ChannelButton(device: DeviceSnapshot, channel: Int, on: Boolean, modifier: Modifier, compact: Boolean = false) {
     val control = rememberSwitchControl(device, channel, on)
     val scheme = MaterialTheme.colorScheme
     val shown = control.shown
     val enabled = device.online
-    val shape = RoundedCornerShape(18.dp)
+    val shape = RoundedCornerShape(if (compact) 12.dp else 18.dp)
     val bg = when {
         !enabled -> Color.Transparent
         shown -> scheme.primary
@@ -999,12 +1065,14 @@ private fun ChannelButton(device: DeviceSnapshot, channel: Int, on: Boolean, mod
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Rounded.PowerSettingsNew, null, tint = fg, modifier = Modifier.size(16.dp))
-                Spacer(Modifier.width(4.dp))
+                if (!compact) {
+                    Icon(Icons.Rounded.PowerSettingsNew, null, tint = fg, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(4.dp))
+                }
                 Text("${channel + 1}", style = MaterialTheme.typography.titleMedium, color = fg)
             }
             val watts = device.channelPower[channel]
-            if (watts != null && enabled) {
+            if (watts != null && enabled && !compact) {
                 Text(formatWatts(watts), style = MaterialTheme.typography.labelSmall, color = fg.copy(alpha = 0.85f), maxLines = 1)
             }
         }
@@ -1021,11 +1089,14 @@ fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): Sw
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var pending by remember(device.id, channel) { mutableStateOf<Boolean?>(null) }
+    // Son komutun işi: yeni komut gelince eskisinin 15 sn'lik zamanlayıcısı yenisinin bekleme durumunu silmesin.
+    var job by remember(device.id, channel) { mutableStateOf<Job?>(null) }
     // Gerçek durum beklenen değere ulaşınca bekleme durumunu temizle.
     LaunchedEffect(on) { if (pending == on) pending = null }
-    return SwitchControl(pending ?: on, pending != null) { target ->
+    val send: (Boolean) -> Unit = { target ->
         pending = target
-        scope.launch {
+        job?.cancel()
+        job = scope.launch {
             Actions.setSwitch(context, device, channel, target).onFailure {
                 pending = null
                 Toast.makeText(context, resources.getString(R.string.control_failed, it.message ?: ""), Toast.LENGTH_LONG).show()
@@ -1035,6 +1106,29 @@ fun rememberSwitchControl(device: DeviceSnapshot, channel: Int, on: Boolean): Sw
             pending = null
         }
     }
+    // Kritik cihaz (Kapatırken onay iste) elle kapatılmadan önce sorulur.
+    var asking by remember(device.id, channel) { mutableStateOf(false) }
+    if (asking) ConfirmOffDialog(device, channel, onDismiss = { asking = false }) { asking = false; send(false) }
+    return SwitchControl(pending ?: on, pending != null) { target ->
+        if (Store.get(context).needsConfirm(device.id, target)) asking = true else send(target)
+    }
+}
+
+/** "X kapatılsın mı?" penceresi (kapatırken onay istenen cihaz, grup ya da alan). */
+@Composable
+fun ConfirmOffDialog(device: DeviceSnapshot, channel: Int, onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    val name = if (device.isMultiChannel) "${device.name} · ${channel + 1}" else device.name
+    androidx.compose.material3.AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = { Icon(Icons.Rounded.PowerSettingsNew, null) },
+        title = { Text(stringResource(R.string.board_confirm_off, name)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm, modifier = Modifier.tvFocusRing()) {
+                Text(stringResource(R.string.board_turn_off), color = MaterialTheme.colorScheme.error)
+            }
+        },
+        dismissButton = { TextButton(onClick = onDismiss, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.action_cancel)) } },
+    )
 }
 
 /** TV taşıma modunda kartın gidebileceği yönler; gidilemeyen yönün oku çizilmez. */
@@ -1086,4 +1180,26 @@ private fun BoxScope.MoveArrowsOverlay(arrows: MoveArrows, shape: RoundedCornerS
     if (arrows.right) Arrow(Icons.Rounded.KeyboardArrowRight, Alignment.CenterEnd)
     if (arrows.up) Arrow(Icons.Rounded.KeyboardArrowUp, Alignment.TopCenter)
     if (arrows.down) Arrow(Icons.Rounded.KeyboardArrowDown, Alignment.BottomCenter)
+}
+
+@Composable
+private fun MenuEntry(icon: androidx.compose.ui.graphics.vector.ImageVector, label: Int, enabled: Boolean = true, onClick: () -> Unit) {
+    androidx.compose.material3.DropdownMenuItem(
+        text = { Text(stringResource(label)) }, leadingIcon = { Icon(icon, null) }, enabled = enabled,
+        onClick = onClick, modifier = Modifier.tvFocusRing(),
+    )
+}
+
+/** Bağlantı yokken kart içeriğine "son bilinen" bilgisini taşır. */
+private val LocalStale = androidx.compose.runtime.staticCompositionLocalOf { false }
+
+/** Koruma kartındaki sayılardan seçilen süzgeç. */
+enum class DeviceFilter(val label: Int) {
+    ON(R.string.stat_on), OFFLINE(R.string.stat_offline), POWER(R.string.stat_power);
+
+    fun matches(d: DeviceSnapshot): Boolean = when (this) {
+        ON -> d.online && d.switches.values.any { it } && !DeviceGroup.isGroup(d.id)
+        OFFLINE -> !d.online && !DeviceGroup.isGroup(d.id)
+        POWER -> d.online && (d.power ?: 0.0) >= 1 && !DeviceGroup.isGroup(d.id)
+    }
 }

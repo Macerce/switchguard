@@ -1831,4 +1831,10 @@
     <string name="board_turn_off">關閉</string>
     <string name="board_idle_dim">無操作時調暗</string>
     <string name="board_idle_dim_desc">10 分鐘未觸碰後螢幕變暗；第一次觸碰僅喚醒螢幕</string>
+    <string name="action_more">更多</string>
+    <string name="last_known">最後已知</string>
+    <string name="confirm_off_title">關閉前詢問</string>
+    <string name="confirm_off_desc">在應用程式、待機畫面以及語音/Telegram 指令中關閉前會詢問。自動化從不詢問。</string>
+    <string name="chat_confirm_off">將關閉%1$s。說或輸入「是」確認，「否」取消。</string>
+    <string name="chat_confirm_skip">⚠️ %1$s：關閉需要確認——請單獨關閉它</string>
 </resources>

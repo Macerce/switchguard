@@ -1803,4 +1803,10 @@
     <string name="board_turn_off">ปิด</string>
     <string name="board_idle_dim">หรี่เมื่อไม่ได้แตะ</string>
     <string name="board_idle_dim_desc">ไม่ได้แตะ 10 นาทีหน้าจอจะหรี่ลง การแตะครั้งแรกเพียงปลุกหน้าจอ</string>
+    <string name="action_more">เพิ่มเติม</string>
+    <string name="last_known">สถานะล่าสุดที่ทราบ</string>
+    <string name="confirm_off_title">ถามก่อนปิด</string>
+    <string name="confirm_off_desc">แอป หน้าจอสแตนด์บาย และคำสั่งเสียง/Telegram จะถามก่อนปิด ระบบอัตโนมัติจะไม่ถาม</string>
+    <string name="chat_confirm_off">จะปิด %1$s พูดหรือพิมพ์ “ใช่” เพื่อยืนยัน “ไม่” เพื่อยกเลิก</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: ต้องยืนยันก่อนปิด — ปิดแยกทีละเครื่อง</string>
 </resources>

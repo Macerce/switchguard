@@ -1940,4 +1940,10 @@
     <string name="board_turn_off">Выключить</string>
     <string name="board_idle_dim">Затемнять без касаний</string>
     <string name="board_idle_dim_desc">Через 10 минут без касаний экран затемняется; первое касание только будит его</string>
+    <string name="action_more">Ещё</string>
+    <string name="last_known">последнее известное</string>
+    <string name="confirm_off_title">Спрашивать перед выключением</string>
+    <string name="confirm_off_desc">Приложение, экран ожидания и голосовые/Telegram-команды спрашивают перед выключением. Автоматизации не спрашивают.</string>
+    <string name="chat_confirm_off">%1$s будет выключено. Скажите или напишите «Да» для подтверждения, «Нет» для отмены.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: выключение требует подтверждения — выключите его отдельно</string>
 </resources>

@@ -495,6 +495,18 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
         get() = runCatching { org.json.JSONObject(prefs.getString("cycleDone", "{}")!!).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())
         set(v) = put { putString("cycleDone", org.json.JSONObject(v).toString()) }
 
+    /** Elle kapatılırken onay istenen cihazlar (bkz. [com.macerce.switchguard.core.ConfirmOff]). */
+    var confirmOff: Set<String>
+        get() = prefs.getStringSet("confirmOff", null) ?: emptySet()
+        set(v) = put { putStringSet("confirmOff", v) }
+
+    /** [deviceId] (cihaz, grup ya da alan) [on] yapılırken önce sorulmalı mı. */
+    fun needsConfirm(deviceId: String, on: Boolean): Boolean {
+        val ids = confirmOff
+        if (on || ids.isEmpty()) return false
+        return com.macerce.switchguard.core.ConfirmOff.needed(deviceId, on, ids, groups, snapshots.associateBy { it.id })
+    }
+
     /** Gerçek cihazlar + grupların sanal cihazları. */
     val snapshotsWithGroups: List<DeviceSnapshot>
         get() = com.macerce.switchguard.core.DeviceGroup.withGroups(snapshots, groups)

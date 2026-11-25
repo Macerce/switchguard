@@ -1797,4 +1797,10 @@
     <string name="board_turn_off">बंद करें</string>
     <string name="board_idle_dim">छुए बिना मंद करें</string>
     <string name="board_idle_dim_desc">10 मिनट तक न छूने पर स्क्रीन मंद हो जाती है; पहला स्पर्श केवल उसे जगाता है</string>
+    <string name="action_more">अधिक</string>
+    <string name="last_known">अंतिम ज्ञात</string>
+    <string name="confirm_off_title">बंद करने से पहले पूछें</string>
+    <string name="confirm_off_desc">ऐप, स्टैंडबाय स्क्रीन और वॉइस/Telegram कमांड में बंद करने से पहले पूछा जाता है। ऑटोमेशन कभी नहीं पूछते।</string>
+    <string name="chat_confirm_off">%1$s बंद किया जाएगा। पुष्टि के लिए “हाँ”, रद्द करने के लिए “नहीं” कहें या लिखें।</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: बंद करने के लिए पुष्टि चाहिए — इसे अकेले बंद करें</string>
 </resources>

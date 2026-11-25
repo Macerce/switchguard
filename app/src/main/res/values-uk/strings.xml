@@ -1911,4 +1911,10 @@
     <string name="board_turn_off">Вимкнути</string>
     <string name="board_idle_dim">Затемнювати без дотиків</string>
     <string name="board_idle_dim_desc">Через 10 хвилин без дотиків екран затемнюється; перший дотик лише будить його</string>
+    <string name="action_more">Більше</string>
+    <string name="last_known">останнє відоме</string>
+    <string name="confirm_off_title">Питати перед вимкненням</string>
+    <string name="confirm_off_desc">Застосунок, екран очікування та голосові/Telegram-команди питають перед вимкненням. Автоматизації не питають.</string>
+    <string name="chat_confirm_off">%1$s буде вимкнено. Скажіть або напишіть «Так» для підтвердження, «Ні» для скасування.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: вимкнення потребує підтвердження — вимкніть його окремо</string>
 </resources>

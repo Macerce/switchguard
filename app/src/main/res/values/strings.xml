@@ -1875,4 +1875,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_turn_off">Turn off</string>
     <string name="board_idle_dim">Dim when untouched</string>
     <string name="board_idle_dim_desc">After 10 minutes without a touch the screen dims; the first touch only wakes it</string>
+    <string name="action_more">More</string>
+    <string name="last_known">last known</string>
+    <string name="confirm_off_title">Ask before turning off</string>
+    <string name="confirm_off_desc">Asked in the app, on the standby screen and in voice/Telegram commands before switching it off. Automations never ask.</string>
+    <string name="chat_confirm_off">%1$s will be turned off. Say or type “Yes” to confirm, “No” to cancel.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: needs confirmation to turn off — turn it off on its own</string>
 </resources>

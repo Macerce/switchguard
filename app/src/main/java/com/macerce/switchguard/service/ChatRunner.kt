@@ -40,7 +40,11 @@ object ChatRunner {
      * Yanıt bekleyen soru. [all] true: "hepsini kapat/aç" onayı. [target] dolu: kanalı ya da adı netleşmemiş aç/kapat;
      * sıradaki mesaj komut değilse eksik parça sayılır ("iki", "salon ışık").
      */
-    private class Pending(val at: Long, val on: Boolean, val all: Boolean, val target: String? = null, val needChannel: Boolean = false)
+    private class Pending(
+        val at: Long, val on: Boolean, val all: Boolean, val target: String? = null, val needChannel: Boolean = false,
+        /** Kapatırken onay istenen cihaz: "evet" gelince kapatılacak (cihaz/grup kimliği, kanal, ad). */
+        val confirmId: String? = null, val confirmChannel: Int = 0, val confirmLabel: String = "",
+    )
 
     private const val PENDING_MS = 90_000L
     private val pending = ConcurrentHashMap<String, Pending>()
@@ -86,6 +90,15 @@ object ChatRunner {
                 context.getString(if (intent.on) R.string.chat_confirm_all_on else R.string.chat_confirm_all_off, count)
             }
             is ChatCommand.Intent.Confirm -> when {
+                waiting?.confirmId != null -> when {
+                    !intent.yes -> context.getString(R.string.chat_cancelled)
+                    !control -> refused
+                    else -> {
+                        val device = store.snapshotsWithGroups.firstOrNull { it.id == waiting.confirmId }
+                        if (device == null) context.getString(R.string.chat_nothing_pending)
+                        else apply(context, device, waiting.confirmChannel, false, waiting.confirmLabel, low(context, EventLog.strings(context).labels.off))
+                    }
+                }
                 waiting == null || !waiting.all -> context.getString(R.string.chat_nothing_pending)
                 !intent.yes -> context.getString(R.string.chat_cancelled)
                 !control -> refused
@@ -150,12 +163,20 @@ object ChatRunner {
             when (val t = ChatCommand.resolve(target, devices)) {
                 is ChatCommand.Target.One -> {
                     val label = if (t.device.isMultiChannel) labels.channel(t.device.name, t.channel + 1) else t.device.name
-                    apply(context, t.device, t.channel, intent.on, label, state)
+                    // Kritik cihaz: tek komutla verildiyse onay sorulur, birkaç cihazlık komutta atlanır.
+                    if (store.needsConfirm(t.device.id, intent.on)) {
+                        if (single) {
+                            pending[askKey!!] = Pending(System.currentTimeMillis(), false, all = false, confirmId = t.device.id, confirmChannel = t.channel, confirmLabel = label)
+                            context.getString(R.string.chat_confirm_off, label)
+                        } else context.getString(R.string.chat_confirm_skip, label)
+                    } else apply(context, t.device, t.channel, intent.on, label, state)
                 }
                 is ChatCommand.Target.Many -> t.devices.flatMap { d ->
                     val channels = if (DeviceGroup.isGroup(d.id)) listOf(0) else d.switches.keys.sorted()
                     channels.map { ch ->
-                        apply(context, d, ch, intent.on, if (d.isMultiChannel) labels.channel(d.name, ch + 1) else d.name, state)
+                        val label = if (d.isMultiChannel) labels.channel(d.name, ch + 1) else d.name
+                        if (store.needsConfirm(d.id, intent.on)) context.getString(R.string.chat_confirm_skip, label)
+                        else apply(context, d, ch, intent.on, label, state)
                     }
                 }.joinToString("\n")
                 is ChatCommand.Target.NeedChannel -> {

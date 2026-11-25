@@ -1832,4 +1832,10 @@
     <string name="board_turn_off">끄기</string>
     <string name="board_idle_dim">터치 없으면 어둡게</string>
     <string name="board_idle_dim_desc">10분 동안 터치가 없으면 화면이 어두워지며, 첫 터치는 화면만 깨웁니다</string>
+    <string name="action_more">더보기</string>
+    <string name="last_known">마지막으로 알려진 상태</string>
+    <string name="confirm_off_title">끄기 전에 확인</string>
+    <string name="confirm_off_desc">앱, 대기 화면, 음성/Telegram 명령에서 끄기 전에 묻습니다. 자동화는 묻지 않습니다.</string>
+    <string name="chat_confirm_off">%1$s을(를) 끕니다. 확인하려면 “예”, 취소하려면 “아니요”라고 말하거나 입력하세요.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: 끄려면 확인이 필요합니다 — 따로 끄세요</string>
 </resources>

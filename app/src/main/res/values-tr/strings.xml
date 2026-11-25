@@ -1871,4 +1871,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="board_turn_off">Kapat</string>
     <string name="board_idle_dim">Dokunulmayınca kıs</string>
     <string name="board_idle_dim_desc">10 dakika dokunulmazsa ekran kısılır; ilk dokunuş yalnız uyandırır</string>
+    <string name="action_more">Diğer</string>
+    <string name="last_known">son bilinen</string>
+    <string name="confirm_off_title">Kapatırken onay iste</string>
+    <string name="confirm_off_desc">Uygulamada, bekleme ekranında ve sesli/Telegram komutlarında kapatmadan önce sorulur. Otomasyonlar sormaz.</string>
+    <string name="chat_confirm_off">%1$s kapatılacak. Onaylamak için “Evet”, vazgeçmek için “Hayır” deyin ya da yazın.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: kapatmak için onay gerekiyor — yalnız bu cihazı kapatın</string>
 </resources>

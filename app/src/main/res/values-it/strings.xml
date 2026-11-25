@@ -1875,4 +1875,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_turn_off">Spegni</string>
     <string name="board_idle_dim">Attenua senza tocchi</string>
     <string name="board_idle_dim_desc">Dopo 10 minuti senza tocchi lo schermo si attenua; il primo tocco lo risveglia soltanto</string>
+    <string name="action_more">Altro</string>
+    <string name="last_known">ultimo noto</string>
+    <string name="confirm_off_title">Chiedi prima di spegnere</string>
+    <string name="confirm_off_desc">Viene chiesto nell\'app, nella schermata di attesa e nei comandi vocali/Telegram prima di spegnerlo. Le automazioni non chiedono mai.</string>
+    <string name="chat_confirm_off">%1$s verrà spento. Di\' o scrivi «Sì» per confermare, «No» per annullare.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: serve una conferma per spegnerlo, spegnilo da solo</string>
 </resources>

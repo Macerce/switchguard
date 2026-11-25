@@ -1904,4 +1904,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="board_turn_off">Desligar</string>
     <string name="board_idle_dim">Escurecer sem toque</string>
     <string name="board_idle_dim_desc">Após 10 minutos sem toque a tela escurece; o primeiro toque só a desperta</string>
+    <string name="action_more">Mais</string>
+    <string name="last_known">último conhecido</string>
+    <string name="confirm_off_title">Perguntar antes de desligar</string>
+    <string name="confirm_off_desc">O app, a tela de espera e os comandos de voz/Telegram perguntam antes de desligar. Automações nunca perguntam.</string>
+    <string name="chat_confirm_off">%1$s será desligado. Diga ou digite “Sim” para confirmar, “Não” para cancelar.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: precisa de confirmação para desligar — desligue-o sozinho</string>
 </resources>

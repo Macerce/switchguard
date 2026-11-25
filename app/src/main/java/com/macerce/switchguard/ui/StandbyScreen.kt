@@ -526,7 +526,7 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
             if (!editing && id !in pending) when (controls[id]) {
                 StandbyControl.Mode.NONE -> Unit
                 StandbyControl.Mode.CONFIRM -> confirm = Triple(d, ch, on)
-                else -> send(d, ch, on)
+                else -> if (store.needsConfirm(d.id, on)) confirm = Triple(d, ch, on) else send(d, ch, on)
             }
         }
     }

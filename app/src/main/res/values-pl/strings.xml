@@ -1940,4 +1940,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="board_turn_off">Wyłącz</string>
     <string name="board_idle_dim">Przyciemniaj bez dotyku</string>
     <string name="board_idle_dim_desc">Po 10 minutach bez dotyku ekran się przyciemnia; pierwsze dotknięcie tylko go budzi</string>
+    <string name="action_more">Więcej</string>
+    <string name="last_known">ostatnio znany</string>
+    <string name="confirm_off_title">Pytaj przed wyłączeniem</string>
+    <string name="confirm_off_desc">Aplikacja, ekran czuwania i polecenia głosowe/Telegram pytają przed wyłączeniem. Automatyzacje nigdy nie pytają.</string>
+    <string name="chat_confirm_off">%1$s zostanie wyłączone. Powiedz lub napisz „Tak”, aby potwierdzić, „Nie”, aby anulować.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: wyłączenie wymaga potwierdzenia — wyłącz je osobno</string>
 </resources>

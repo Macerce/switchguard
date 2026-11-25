@@ -1866,4 +1866,10 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_turn_off">Ausschalten</string>
     <string name="board_idle_dim">Ohne Berührung dimmen</string>
     <string name="board_idle_dim_desc">Nach 10 Minuten ohne Berührung wird der Bildschirm gedimmt; die erste Berührung weckt ihn nur</string>
+    <string name="action_more">Mehr</string>
+    <string name="last_known">zuletzt bekannt</string>
+    <string name="confirm_off_title">Vor dem Ausschalten fragen</string>
+    <string name="confirm_off_desc">In der App, auf dem Standby-Bildschirm und bei Sprach-/Telegram-Befehlen wird vor dem Ausschalten gefragt. Automationen fragen nie.</string>
+    <string name="chat_confirm_off">%1$s wird ausgeschaltet. Sagen oder schreiben Sie „Ja“ zum Bestätigen, „Nein“ zum Abbrechen.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: Ausschalten muss bestätigt werden – schalten Sie es einzeln aus</string>
 </resources>

@@ -6,6 +6,20 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.52.0 — 2026-11-25
+**New**
+- "Ask before turning off" in device details: critical devices (freezer, pump) ask before being switched off — on the home screen, in areas ("all off"), on the standby screen and in voice/Telegram commands. Turning on never asks; automations never ask.
+- Tap the numbers on the guard card (on / offline / power) to show only those devices; tap again or the chip to clear.
+- Multi-channel devices get channel buttons on small cards too, so each channel can be switched without opening the device.
+
+**Improved**
+- When the connection is lost, cloud device cards fade and say "last known"; local-network devices stay normal.
+- Refresh, edit layout, new area and add Sonoff moved into the ⋮ menu; the add buttons stay on the page only until the first area exists.
+- "Off · 0 W" is gone: power shows only when the device actually draws power.
+
+**Fixed**
+- Switching the same device twice within 15 seconds could briefly show the wrong state.
+
 ## 2.51.0 — 2026-11-25
 **New**
 - Standby screen: each device card can be set (⋮ menu → On tap) to turn on/off, ask first, or not control at all — so a freezer or pump on a wall panel can't be switched off by one stray tap.

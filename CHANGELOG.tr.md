@@ -6,6 +6,20 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.52.0 — 2026-11-25
+**Yeni**
+- Cihaz detayında "Kapatırken onay iste": kritik cihazlar (derin dondurucu, pompa) kapatılmadan önce sorulur — ana ekranda, alanlarda ("hepsini kapat"), bekleme ekranında ve sesli/Telegram komutlarında. Açarken sorulmaz; otomasyonlar hiç sormaz.
+- Koruma kartındaki sayılara (açık / çevrimdışı / güç) dokununca yalnız o cihazlar listelenir; tekrar dokununca ya da etikete basınca kalkar.
+- Çok kanallı cihazların küçük kartında da kanal düğmeleri var; her kanal detaya girmeden açılıp kapanır.
+
+**İyileştirme**
+- Bağlantı kopunca bulut cihazlarının kartları soluklaşır ve "son bilinen" yazar; yerel ağdaki cihazlar normal kalır.
+- Yenile, yerleşimi düzenle, yeni alan ve Sonoff ekle ⋮ menüsüne taşındı; ekleme düğmeleri sayfada yalnız ilk alan oluşana kadar durur.
+- "Kapalı · 0 W" kalktı: güç yalnız cihaz gerçekten çekiyorsa görünür.
+
+**Düzeltme**
+- Aynı cihaz 15 saniye içinde iki kez açılıp kapatılınca kısa süre yanlış durum görünebiliyordu.
+
 ## 2.51.0 — 2026-11-25
 **Yeni**
 - Bekleme ekranı: her cihaz kartı için (⋮ menü → Dokununca) aç/kapat, onay iste ya da kontrol etme seçilebilir; duvar panosundaki derin dondurucu veya pompa yanlışlıkla tek dokunuşla kapanmaz.

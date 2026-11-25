@@ -1803,4 +1803,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_turn_off">Tắt</string>
     <string name="board_idle_dim">Làm tối khi không chạm</string>
     <string name="board_idle_dim_desc">Sau 10 phút không chạm, màn hình tối đi; lần chạm đầu chỉ đánh thức màn hình</string>
+    <string name="action_more">Thêm</string>
+    <string name="last_known">trạng thái cuối</string>
+    <string name="confirm_off_title">Hỏi trước khi tắt</string>
+    <string name="confirm_off_desc">Ứng dụng, màn hình chờ và lệnh giọng nói/Telegram sẽ hỏi trước khi tắt. Tự động hóa không bao giờ hỏi.</string>
+    <string name="chat_confirm_off">%1$s sẽ bị tắt. Nói hoặc gõ “Có” để xác nhận, “Không” để hủy.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: cần xác nhận để tắt — hãy tắt riêng thiết bị này</string>
 </resources>

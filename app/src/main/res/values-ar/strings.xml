@@ -2012,4 +2012,10 @@
     <string name="board_turn_off">إيقاف</string>
     <string name="board_idle_dim">تعتيم عند عدم اللمس</string>
     <string name="board_idle_dim_desc">بعد 10 دقائق دون لمس تُعتَّم الشاشة؛ اللمسة الأولى توقظها فقط</string>
+    <string name="action_more">المزيد</string>
+    <string name="last_known">آخر حالة معروفة</string>
+    <string name="confirm_off_title">اسأل قبل الإيقاف</string>
+    <string name="confirm_off_desc">يُسأل في التطبيق وشاشة الانتظار وأوامر الصوت/تيليجرام قبل إيقافه. الأتمتة لا تسأل أبدًا.</string>
+    <string name="chat_confirm_off">سيتم إيقاف %1$s. قل أو اكتب «نعم» للتأكيد، «لا» للإلغاء.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: الإيقاف يحتاج تأكيدًا — أوقفه وحده</string>
 </resources>

@@ -94,7 +94,7 @@ fun areaStatusText(s: AreaSummary): String {
     val parts = mutableListOf<String>()
     if (s.devices == 0) return stringResource(R.string.area_empty_short)
     if (s.switchesTotal > 0) parts += stringResource(R.string.channels_on_short, s.switchesOn, s.switchesTotal)
-    s.watts?.let { parts += formatWatts(it) }
+    s.watts?.takeIf { it >= 1 }?.let { parts += formatWatts(it) }
     s.temperature?.let { parts += formatSensor(SensorKind.TEMPERATURE, it) }
     s.humidity?.let { parts += formatSensor(SensorKind.HUMIDITY, it) }
     if (s.doorsOpen > 0) parts += stringResource(R.string.area_doors_open, s.doorsOpen)

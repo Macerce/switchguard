@@ -1868,4 +1868,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_turn_off">Uitzetten</string>
     <string name="board_idle_dim">Dimmen zonder aanraking</string>
     <string name="board_idle_dim_desc">Na 10 minuten zonder aanraking dimt het scherm; de eerste aanraking wekt het alleen</string>
+    <string name="action_more">Meer</string>
+    <string name="last_known">laatst bekend</string>
+    <string name="confirm_off_title">Vragen voor uitzetten</string>
+    <string name="confirm_off_desc">In de app, op het standby-scherm en bij spraak-/Telegram-opdrachten wordt gevraagd voordat het uitgaat. Automatiseringen vragen nooit.</string>
+    <string name="chat_confirm_off">%1$s wordt uitgezet. Zeg of typ „Ja” om te bevestigen, „Nee” om te annuleren.</string>
+    <string name="chat_confirm_skip">⚠️ %1$s: uitzetten moet bevestigd worden — zet het apart uit</string>
 </resources>
