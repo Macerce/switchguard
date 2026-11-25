@@ -132,7 +132,36 @@ class MonitorService : Service() {
     private var automations = newEngine()
 
     /** Kural motoru; tetiklenişler kural izine yazılır. */
-    private fun newEngine() = AutomationEngine().also { e -> e.onTrace = { com.macerce.switchguard.data.TraceLog.record(this, it) } }
+    private fun newEngine() = AutomationEngine().also { e ->
+        e.onTrace = { com.macerce.switchguard.data.TraceLog.record(this, it) }
+        e.onLockout = { onLoopLockout(it) }
+    }
+
+    /**
+     * Döngü koruması: kural bir saatte çok kez çalıştı. Bekleyen ek eylemler (ör. "geri getir") iptal, tetikleyen cihaz
+     * (yoksa kuralın aç/kapa hedefi) kapatılıp kapalı bırakılır, kural kapatılır, alarm çalar. Kullanıcı cihazı kontrol
+     * edip kuralı yeniden açar.
+     */
+    private fun onLoopLockout(a: Automation) {
+        runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id }
+        store.saveAutomation(a.copy(enabled = false))
+        val byId = store.snapshots.associateBy { it.id }
+        val t = a.trigger
+        val triggerDevice = byId[t.deviceId]?.takeIf { t.kind.usesDevice && !it.sensorOnly }
+        val target = triggerDevice
+            ?: a.allActions.firstOrNull { it.kind.usesDevice || it.kind == ActionKind.SAVE_STATE }?.deviceId?.let { byId[it] }
+        // Kanal tetikleyicisinde o kanal; güç/çevrimdışı gibi cihaz geneli tetikleyicide açık olan bütün kanallar.
+        val channels = when {
+            target == null -> emptyList()
+            target === triggerDevice && t.kind.usesChannel -> listOf(t.channel)
+            else -> target.switches.filterValues { it }.keys.sorted()
+        }
+        channels.forEach { ch -> sendAutomationSwitch(a.name, target!!, ch, on = false, attempt = 1, logSuccess = true) }
+        val name = target?.name ?: a.name
+        val text = getString(R.string.loop_guard_alarm, a.name, a.loopGuard, name)
+        log.add(target?.id.orEmpty(), name, EventKind.AUTOMATION, text, AlertAction.ALARM.name)
+        addAlarm(text, store.rulesFor(target?.id.orEmpty()).soundUri, critical = true)
+    }
 
     private val blindWatch = BlindWatch()
     /** Kapatılan ama sürmekte olan alarmların hatırlatmaları (bkz. [checkReminders]). */

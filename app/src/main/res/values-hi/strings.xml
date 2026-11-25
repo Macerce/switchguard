@@ -1862,4 +1862,10 @@
     <string name="snap_restore_hint">इस नियम की “वर्तमान स्थिति याद रखें” द्वारा सहेजी स्थिति पर लौटाता है। केवल उन्हीं डिवाइस और बदले चैनलों को आदेश जाता है।</string>
     <string name="relay_panel_details">विवरण</string>
     <string name="relay_panel_offline">डिवाइस ऑफ़लाइन है; अभी रिले नहीं बदले जा सकते।</string>
+    <string name="loop_guard_toggle">लूप सुरक्षा</string>
+    <string name="loop_guard_times">प्रति घंटे अनुमत बार</string>
+    <string name="loop_guard_n">%1$d बार</string>
+    <string name="loop_guard_hint">यदि नियम एक घंटे में इससे अधिक बार चलता, तो डिवाइस बंद करके बंद ही रखा जाता है, अलार्म बजता है और नियम रुक जाता है, ताकि बार-बार चालू/बंद से जुड़ा उपकरण खराब न हो। जाँच के बाद नियम फिर चालू करें।</string>
+    <string name="loop_guard_alarm">“%1$s” एक घंटे में %2$d बार चला। जुड़े उपकरण की सुरक्षा के लिए %3$s बंद करके बंद रखा गया और नियम रोका गया। जाँचें, फिर नियम चालू करें।</string>
+    <string name="trace_locked_out">लूप सुरक्षा: डिवाइस बंद, नियम रुका</string>
 </resources>

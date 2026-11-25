@@ -2005,4 +2005,10 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="snap_restore_hint">Przywraca to, co zapisała akcja „Zapamiętaj obecny stan” tej reguły. Polecenie trafia tylko do tych urządzeń i zmienionych kanałów.</string>
     <string name="relay_panel_details">Szczegóły</string>
     <string name="relay_panel_offline">Urządzenie offline; przekaźników nie można teraz przełączyć.</string>
+    <string name="loop_guard_toggle">Ochrona przed pętlą</string>
+    <string name="loop_guard_times">Dozwolone uruchomienia na godzinę</string>
+    <string name="loop_guard_n">%1$d razy</string>
+    <string name="loop_guard_hint">Jeśli reguła miałaby uruchomić się częściej w ciągu godziny, urządzenie zostaje wyłączone i pozostaje wyłączone, włącza się alarm, a reguła zostaje wstrzymana – podłączony sprzęt nie ucierpi od ciągłego włączania. Po sprawdzeniu włącz regułę ponownie.</string>
+    <string name="loop_guard_alarm">„%1$s” uruchomiła się %2$d razy w ciągu godziny. Aby chronić podłączony sprzęt, %3$s wyłączono i pozostawiono wyłączone, a regułę wstrzymano. Sprawdź, a potem włącz regułę ponownie.</string>
+    <string name="trace_locked_out">Ochrona przed pętlą: urządzenie wyłączone, reguła wstrzymana</string>
 </resources>

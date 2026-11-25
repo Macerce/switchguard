@@ -1933,4 +1933,10 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="snap_restore_hint">Zet terug wat “Huidige toestand onthouden” in deze regel heeft opgeslagen. Alleen die apparaten en gewijzigde kanalen krijgen een opdracht.</string>
     <string name="relay_panel_details">Details</string>
     <string name="relay_panel_offline">Apparaat offline; relais kunnen nu niet worden geschakeld.</string>
+    <string name="loop_guard_toggle">Lusbeveiliging</string>
+    <string name="loop_guard_times">Toegestane uitvoeringen per uur</string>
+    <string name="loop_guard_n">%1$d keer</string>
+    <string name="loop_guard_hint">Zou de regel binnen een uur vaker draaien, dan wordt het apparaat uitgezet en blijft het uit, klinkt er een alarm en wordt de regel gepauzeerd, zodat het aangesloten toestel niet beschadigt door steeds aan/uit. Zet de regel na controle weer aan.</string>
+    <string name="loop_guard_alarm">“%1$s” draaide %2$d keer binnen een uur. Om het aangesloten toestel te beschermen is %3$s uitgezet en uit gelaten, en is de regel gepauzeerd. Controleer en zet de regel daarna weer aan.</string>
+    <string name="trace_locked_out">Lusbeveiliging: apparaat uit, regel gepauzeerd</string>
 </resources>

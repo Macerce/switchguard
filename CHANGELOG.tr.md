@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.54.1 — 2026-11-25
+**Yeni**
+- Kurallarda döngü koruması: kural bir saat içinde ayarlanan sayıdan (2–10, varsayılan 3) fazla çalışacak olursa yeniden çalışmaz; bekleyen adımları iptal edilir, cihaz kapatılıp kapalı bırakılır, alarm çalar ve kural durdurulur. Bağlı cihaz sürekli aç-kapa yüzünden zarar görmez. Kontrol ettikten sonra kuralı yeniden aç. "Durdur, sonra eski hâline getir" şablonunda varsayılan açık (3); her otomasyonda seçenek olarak var.
+
 ## 2.54.0 — 2026-11-25
 **Yeni**
 - Her kural için çalışma geçmişi ("neden çalıştı / neden çalışmadı?"): her tetikleniş saatiyle, o anki değerle, hangi koşulun tutup tutmadığıyla ve her eylemin sonucuyla kaydedilir. Kural kartının altında "Son: 14:02 · Çalıştı" satırı; geçmiş düğmesi kural düzenleyicisinde. Art arda aynı nedenle engellenenler tek satırda sayılır.

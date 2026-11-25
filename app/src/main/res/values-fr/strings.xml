@@ -1968,4 +1968,10 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="snap_restore_hint">Rétablit ce que « Mémoriser l’état actuel » de cette règle a enregistré. Seuls ces appareils et les canaux modifiés reçoivent une commande.</string>
     <string name="relay_panel_details">Détails</string>
     <string name="relay_panel_offline">Appareil hors ligne ; les relais ne peuvent pas être commutés.</string>
+    <string name="loop_guard_toggle">Protection anti-boucle</string>
+    <string name="loop_guard_times">Exécutions autorisées par heure</string>
+    <string name="loop_guard_n">%1$d fois</string>
+    <string name="loop_guard_hint">Si la règle devait s’exécuter plus souvent en une heure, l’appareil est éteint et reste éteint, une alarme sonne et la règle est suspendue : l’appareil branché n’est pas abîmé par des marche/arrêt répétés. Réactivez la règle après vérification.</string>
+    <string name="loop_guard_alarm">« %1$s » s’est exécutée %2$d fois en une heure. Pour protéger l’appareil branché, %3$s a été éteint et laissé éteint, et la règle suspendue. Vérifiez puis réactivez la règle.</string>
+    <string name="trace_locked_out">Anti-boucle : appareil éteint, règle suspendue</string>
 </resources>

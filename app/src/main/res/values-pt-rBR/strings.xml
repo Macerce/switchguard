@@ -1969,4 +1969,10 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="snap_restore_hint">Retorna o que “Memorizar estado atual” desta regra salvou. Só esses dispositivos e só os canais alterados recebem comando.</string>
     <string name="relay_panel_details">Detalhes</string>
     <string name="relay_panel_offline">Dispositivo offline; os relés não podem ser alternados agora.</string>
+    <string name="loop_guard_toggle">Proteção contra loop</string>
+    <string name="loop_guard_times">Execuções permitidas por hora</string>
+    <string name="loop_guard_n">%1$d vezes</string>
+    <string name="loop_guard_hint">Se a regra fosse executar mais vezes em uma hora, o dispositivo é desligado e fica desligado, um alarme toca e a regra é pausada, para que o aparelho conectado não se danifique com o liga/desliga constante. Reative a regra após verificar.</string>
+    <string name="loop_guard_alarm">“%1$s” executou %2$d vezes em uma hora. Para proteger o aparelho conectado, %3$s foi desligado e mantido desligado, e a regra foi pausada. Verifique e reative a regra.</string>
+    <string name="trace_locked_out">Proteção contra loop: dispositivo desligado, regra pausada</string>
 </resources>

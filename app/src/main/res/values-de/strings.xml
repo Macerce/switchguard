@@ -1931,4 +1931,10 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="snap_restore_hint">Stellt wieder her, was „Aktuellen Zustand merken“ in dieser Regel gespeichert hat. Nur diese Geräte und nur geänderte Kanäle erhalten einen Befehl.</string>
     <string name="relay_panel_details">Details</string>
     <string name="relay_panel_offline">Gerät offline; Relais können gerade nicht geschaltet werden.</string>
+    <string name="loop_guard_toggle">Schleifenschutz</string>
+    <string name="loop_guard_times">Erlaubte Ausführungen pro Stunde</string>
+    <string name="loop_guard_n">%1$d-mal</string>
+    <string name="loop_guard_hint">Würde die Regel innerhalb einer Stunde öfter laufen, wird das Gerät ausgeschaltet und bleibt aus, ein Alarm ertönt und die Regel pausiert – so nimmt das angeschlossene Gerät durch ständiges Ein/Aus keinen Schaden. Nach der Prüfung die Regel wieder einschalten.</string>
+    <string name="loop_guard_alarm">„%1$s“ lief %2$d-mal innerhalb einer Stunde. Zum Schutz des angeschlossenen Geräts wurde %3$s ausgeschaltet und bleibt aus; die Regel wurde pausiert. Bitte prüfen und die Regel wieder einschalten.</string>
+    <string name="trace_locked_out">Schleifenschutz: Gerät aus, Regel pausiert</string>
 </resources>

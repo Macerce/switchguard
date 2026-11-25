@@ -1897,4 +1897,10 @@
     <string name="snap_restore_hint">このルールの「現在の状態を記憶」で保存した状態に戻します。そのデバイスの、変化したチャンネルにのみコマンドを送ります。</string>
     <string name="relay_panel_details">詳細</string>
     <string name="relay_panel_offline">デバイスはオフラインです。今はリレーを切り替えられません。</string>
+    <string name="loop_guard_toggle">ループ保護</string>
+    <string name="loop_guard_times">1時間あたりの許可回数</string>
+    <string name="loop_guard_n">%1$d回</string>
+    <string name="loop_guard_hint">1時間以内にこれより多く実行されそうな場合、デバイスをオフにしたままにし、アラームを鳴らしてルールを停止します。接続機器が頻繁なオン/オフで壊れるのを防ぎます。確認後にルールを再度オンにしてください。</string>
+    <string name="loop_guard_alarm">「%1$s」が1時間に%2$d回実行されました。接続機器を守るため %3$s をオフにしたままにし、ルールを停止しました。確認後、ルールを再度オンにしてください。</string>
+    <string name="trace_locked_out">ループ保護: デバイスをオフ、ルール停止</string>
 </resources>

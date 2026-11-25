@@ -142,7 +142,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -154,6 +153,8 @@ import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationTab
 import com.macerce.switchguard.core.DeviceCategory
+import androidx.compose.ui.res.pluralStringResource
+import com.macerce.switchguard.core.AutomationEngine
 import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
@@ -658,6 +659,7 @@ fun AutomationEditor(
     val extras = rememberSaveable(saver = extraActionsSaver) { mutableStateListOf<AutoAction>().apply { initial?.extraActions?.let(::addAll) } }
     var confirmDelete by remember { mutableStateOf(false) }
     var showTrace by rememberSaveable { mutableStateOf(false) }
+    var loopGuard by rememberSaveable { mutableStateOf(initial?.loopGuard ?: 0) }
     if (showTrace && existing != null) TraceSheet(existing, devices) { showTrace = false }
     // Kumanda: açan öğe (Ekle, kart) ekrandan kalkınca odak yan menüye düşüyordu; düzenleyicide geri okuna ver.
     // Ad alanına verilmez: programla odaklanınca TV klavyesi kendiliğinden açılıyor.
@@ -767,6 +769,7 @@ fun AutomationEditor(
         conditions = conds.map { it.toCondition() },
         conditionMatch = condMatch,
         extraActions = if (alert) emptyList() else extras.toList(),
+        loopGuard = if (alert) 0 else loopGuard,
     )
 
     Column(modifier.fillMaxSize()) {
@@ -975,6 +978,16 @@ fun AutomationEditor(
                                 MaterialTheme.colorScheme.primary,
                             ) { sheet = "extra:$i" }
                         }
+                    }
+                    // Döngü koruması: bir saatte çok kez çalışırsa cihazı kapalı bırak, alarm ver, kuralı durdur.
+                    ToggleLine(stringResource(R.string.loop_guard_toggle), loopGuard > 0) {
+                        loopGuard = if (it) AutomationEngine.LOOP_GUARD_DEFAULT else 0
+                    }
+                    if (loopGuard > 0) {
+                        Stepper(stringResource(R.string.loop_guard_times), loopGuard, (2..10).toList(),
+                            format = { n -> stringResource(R.string.loop_guard_n, n) }) { loopGuard = it }
+                        Text(stringResource(R.string.loop_guard_hint), style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
                     }
                     // Ek eylem: varsayılanı ilk hedefi kapatmak; alttan açılan sayfada değiştirilir.
                     TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = {

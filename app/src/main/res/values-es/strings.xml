@@ -1939,4 +1939,10 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="snap_restore_hint">Devuelve lo que guardó “Recordar estado actual” en esta regla. Solo esos dispositivos y solo los canales que cambiaron reciben una orden.</string>
     <string name="relay_panel_details">Detalles</string>
     <string name="relay_panel_offline">Dispositivo sin conexión; ahora no se pueden conmutar los relés.</string>
+    <string name="loop_guard_toggle">Protección contra bucles</string>
+    <string name="loop_guard_times">Ejecuciones permitidas por hora</string>
+    <string name="loop_guard_n">%1$d veces</string>
+    <string name="loop_guard_hint">Si la regla fuera a ejecutarse más veces en una hora, el dispositivo se apaga y queda apagado, suena una alarma y la regla se pausa, para que el aparato conectado no se dañe por el encendido y apagado constante. Vuelve a activar la regla tras revisarlo.</string>
+    <string name="loop_guard_alarm">“%1$s” se ejecutó %2$d veces en una hora. Para proteger el aparato conectado, %3$s se apagó y quedó apagado, y la regla se pausó. Revísalo y vuelve a activar la regla.</string>
+    <string name="trace_locked_out">Protección contra bucles: dispositivo apagado, regla pausada</string>
 </resources>

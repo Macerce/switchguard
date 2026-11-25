@@ -52,6 +52,8 @@ enum class AutomationTemplate(
                 trigger = Trigger(TriggerKind.POWER_ABOVE, id, watts = 2000.0),
                 action = AutoAction(ActionKind.SAVE_STATE, id),
                 extraActions = listOf(AutoAction(ActionKind.TURN_OFF, id), AutoAction(ActionKind.RESTORE_STATE, waitMinutes = 15)),
+                // Geri getirince yük hâlâ yüksekse aç-kapa döngüsüne girer: 3 kezden sonra kapalı bırak ve alarm ver.
+                loopGuard = AutomationEngine.LOOP_GUARD_DEFAULT,
             )
             SUNSET_ON -> base.copy(trigger = Trigger(TriggerKind.SUNSET, ""), action = AutoAction(ActionKind.TURN_ON, id))
             NIGHT_OFF -> base.copy(trigger = Trigger(TriggerKind.TIME, "", minutes = 23 * 60 + 30), action = AutoAction(ActionKind.TURN_OFF, id))

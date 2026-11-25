@@ -1940,4 +1940,10 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="snap_restore_hint">Ripristina ciò che “Memorizza stato attuale” di questa regola ha salvato. Solo quei dispositivi e solo i canali cambiati ricevono un comando.</string>
     <string name="relay_panel_details">Dettagli</string>
     <string name="relay_panel_offline">Dispositivo offline; ora i relè non si possono commutare.</string>
+    <string name="loop_guard_toggle">Protezione dai cicli</string>
+    <string name="loop_guard_times">Esecuzioni consentite all’ora</string>
+    <string name="loop_guard_n">%1$d volte</string>
+    <string name="loop_guard_hint">Se la regola dovesse scattare più spesso entro un’ora, il dispositivo viene spento e lasciato spento, suona un allarme e la regola viene sospesa, così l’apparecchio collegato non si danneggia con accensioni continue. Riattiva la regola dopo il controllo.</string>
+    <string name="loop_guard_alarm">“%1$s” è scattata %2$d volte in un’ora. Per proteggere l’apparecchio collegato, %3$s è stato spento e lasciato spento e la regola è stata sospesa. Controlla, poi riattiva la regola.</string>
+    <string name="trace_locked_out">Protezione cicli: dispositivo spento, regola sospesa</string>
 </resources>

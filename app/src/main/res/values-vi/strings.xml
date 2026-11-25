@@ -1868,4 +1868,10 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="snap_restore_hint">Khôi phục những gì “Ghi nhớ trạng thái hiện tại” của quy tắc này đã lưu. Chỉ các thiết bị đó và kênh đã thay đổi mới nhận lệnh.</string>
     <string name="relay_panel_details">Chi tiết</string>
     <string name="relay_panel_offline">Thiết bị ngoại tuyến; hiện không thể bật/tắt rơ-le.</string>
+    <string name="loop_guard_toggle">Chống lặp vòng</string>
+    <string name="loop_guard_times">Số lần chạy cho phép mỗi giờ</string>
+    <string name="loop_guard_n">%1$d lần</string>
+    <string name="loop_guard_hint">Nếu quy tắc sắp chạy nhiều hơn mức này trong một giờ, thiết bị sẽ bị tắt và giữ nguyên tắt, báo động vang lên và quy tắc tạm dừng, để thiết bị cắm vào không hỏng do bật/tắt liên tục. Bật lại quy tắc sau khi kiểm tra.</string>
+    <string name="loop_guard_alarm">“%1$s” đã chạy %2$d lần trong một giờ. Để bảo vệ thiết bị đang cắm, %3$s đã bị tắt và giữ tắt, quy tắc đã tạm dừng. Hãy kiểm tra rồi bật lại quy tắc.</string>
+    <string name="trace_locked_out">Chống lặp: đã tắt thiết bị, tạm dừng quy tắc</string>
 </resources>

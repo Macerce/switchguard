@@ -1875,4 +1875,10 @@
     <string name="snap_restore_hint">恢复此规则“记住当前状态”保存的内容。仅向这些设备中有变化的通道发送命令。</string>
     <string name="relay_panel_details">详情</string>
     <string name="relay_panel_offline">设备离线，暂时无法切换继电器。</string>
+    <string name="loop_guard_toggle">循环保护</string>
+    <string name="loop_guard_times">每小时允许运行次数</string>
+    <string name="loop_guard_n">%1$d 次</string>
+    <string name="loop_guard_hint">如果规则在一小时内运行次数将超过此值，设备会被关闭并保持关闭，响起警报并暂停规则，避免所接电器因频繁开关而损坏。检查后请重新开启规则。</string>
+    <string name="loop_guard_alarm">“%1$s”在一小时内运行了 %2$d 次。为保护所接电器，已关闭 %3$s 并保持关闭，规则已暂停。检查后请重新开启规则。</string>
+    <string name="trace_locked_out">循环保护：已关闭设备，规则已暂停</string>
 </resources>

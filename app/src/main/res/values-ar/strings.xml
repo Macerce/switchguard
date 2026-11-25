@@ -2077,4 +2077,10 @@
     <string name="snap_restore_hint">يعيد ما حفظه إجراء “تذكّر الحالة الحالية” في هذه القاعدة. تُرسل الأوامر لتلك الأجهزة وللقنوات المتغيرة فقط.</string>
     <string name="relay_panel_details">التفاصيل</string>
     <string name="relay_panel_offline">الجهاز غير متصل؛ لا يمكن تبديل المرحلات الآن.</string>
+    <string name="loop_guard_toggle">الحماية من التكرار</string>
+    <string name="loop_guard_times">عدد مرات التشغيل المسموح بها في الساعة</string>
+    <string name="loop_guard_n">%1$d مرات</string>
+    <string name="loop_guard_hint">إذا كانت القاعدة ستعمل أكثر من ذلك خلال ساعة، يُطفأ الجهاز ويبقى مطفأً، ويرن إنذار وتتوقف القاعدة، حتى لا يتضرر الجهاز المتصل من التشغيل والإيقاف المستمر. أعد تشغيل القاعدة بعد الفحص.</string>
+    <string name="loop_guard_alarm">عملت “%1$s” %2$d مرات خلال ساعة. لحماية الجهاز المتصل تم إطفاء %3$s وتركه مطفأً وإيقاف القاعدة. افحصه ثم أعد تشغيل القاعدة.</string>
+    <string name="trace_locked_out">الحماية من التكرار: أُطفئ الجهاز وأُوقفت القاعدة</string>
 </resources>

@@ -113,6 +113,12 @@ data class Automation(
      * JSON'da ayrı alandadır ("more"): bunu bilmeyen eski sürümler yalnız ilk eylemi çalıştırır.
      */
     val extraActions: List<AutoAction> = emptyList(),
+    /**
+     * Döngü koruması: kural [LOOP_WINDOW_MS] içinde bu kadar kez çalıştıysa bir sonraki tetiklenişte çalışmaz;
+     * tetikleyen cihaz kapatılıp kapalı bırakılır, alarm çalar ve kural kapatılır (bağlı cihaz sürekli aç-kapa
+     * yüzünden bozulmasın). 0 = kapalı.
+     */
+    val loopGuard: Int = 0,
 ) {
     /** İlk eylem ve ek eylemler, sırayla. */
     val allActions: List<AutoAction> get() = listOf(action) + extraActions
@@ -166,6 +172,7 @@ data class Automation(
                                 if (a.conditionMatch != ConditionMatch.ALL) put("condMatch", a.conditionMatch.name)
                             }
                             a.presence?.let { put("presence", it.name) }
+                            if (a.loopGuard > 0) put("guard", a.loopGuard)
                         }
                 )
             }
@@ -214,6 +221,7 @@ data class Automation(
                         },
                         conditionMatch = o.optString("condMatch").takeIf { it.isNotEmpty() }?.let { ConditionMatch.valueOf(it) } ?: ConditionMatch.ALL,
                         presence = o.optString("presence").takeIf { it.isNotEmpty() }?.let { PresenceRule.valueOf(it) },
+                        loopGuard = o.optInt("guard", 0),
                     )
                 }.getOrNull()
             }
@@ -258,6 +266,12 @@ class AutomationEngine {
 
     /** Kural izi: her tetiklenişin sonucu (çalıştı, gecikti, engellendi). Tek thread'den çağrılır. */
     var onTrace: ((TraceEntry) -> Unit)? = null
+
+    /** Döngü koruması devreye girdi: kural çalıştırılmadı; servis cihazı kapatır, alarm verir, kuralı kapatır. */
+    var onLockout: ((Automation) -> Unit)? = null
+
+    /** Döngü koruması için kuralın son çalışma anları (pencere içindekiler). */
+    private val recentRuns = mutableMapOf<String, List<Long>>()
 
     private fun trace(a: Automation, now: Long, outcome: TraceOutcome, conds: List<Boolean>, current: Map<String, DeviceSnapshot>) {
         val cb = onTrace ?: return
@@ -613,6 +627,18 @@ class AutomationEngine {
         val last = lastFiredAt[a.id]
         if (last != null && now - last < MIN_INTERVAL_MS) return trace(a, now, TraceOutcome.THROTTLED, v.conds, current)
         lastFiredAt[a.id] = now
+        if (a.loopGuard > 0) {
+            val runs = recentRuns[a.id].orEmpty().filter { now - it < LOOP_WINDOW_MS }
+            if (runs.size >= a.loopGuard) {
+                // Çok sık çalışıyor: bekleyen eylemleri (ör. "geri getir") de iptal et; servis cihazı kapalı bırakır.
+                recentRuns.remove(a.id)
+                pending.removeAll { it.automation.id == a.id }
+                trace(a, now, TraceOutcome.LOCKED_OUT, v.conds, current)
+                onLockout?.invoke(a)
+                return
+            }
+            recentRuns[a.id] = runs + now
+        }
         if (a.delayMinutes > 0) {
             pending += Pending(a, now + a.delayMinutes * 60_000L)
             trace(a, now, TraceOutcome.DELAYED, v.conds, current)
@@ -638,6 +664,7 @@ class AutomationEngine {
         .put("sunDay", JSONObject(sunFiredDay.toMap()))
         .put("tempArmed", JSONObject(tempArmed.toMap()))
         .put("clockDay", JSONObject(clockFiredDay.toMap()))
+        .put("runs", JSONObject().apply { recentRuns.forEach { (k, v) -> put(k, JSONArray(v)) } })
         .put("pending", JSONArray().apply { pending.forEach { put(JSONObject().put("id", it.automation.id).put("due", it.dueAt)) } })
         .toString()
 
@@ -661,6 +688,7 @@ class AutomationEngine {
             sunFiredDay.putAll(longs("sunDay"))
             o.optJSONObject("tempArmed")?.let { m -> m.keys().forEach { tempArmed[it] = m.getBoolean(it) } }
             clockFiredDay.putAll(longs("clockDay"))
+            o.optJSONObject("runs")?.let { m -> m.keys().forEach { k -> m.getJSONArray(k).let { a -> recentRuns[k] = (0 until a.length()).map { a.getLong(it) } } } }
             val byId = automations.associateBy { it.id }
             val arr = o.optJSONArray("pending") ?: JSONArray()
             for (i in 0 until arr.length()) {
@@ -672,6 +700,10 @@ class AutomationEngine {
 
     companion object {
         const val MIN_INTERVAL_MS = 10_000L
+        /** Döngü korumasının saydığı pencere. */
+        const val LOOP_WINDOW_MS = 3_600_000L
+        /** Yeni kuralda döngü koruması açılınca varsayılan sınır. */
+        const val LOOP_GUARD_DEFAULT = 3
         /** Gün doğumu/batımı bundan geç fark edilirse (telefon kapalıydı) o günkü çalıştırılmaz. */
         const val SUN_LATE_MS = 2 * 3_600_000L
     }

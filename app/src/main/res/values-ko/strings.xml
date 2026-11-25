@@ -1897,4 +1897,10 @@
     <string name="snap_restore_hint">이 규칙의 “현재 상태 기억”이 저장한 상태로 되돌립니다. 해당 기기의 바뀐 채널에만 명령을 보냅니다.</string>
     <string name="relay_panel_details">세부 정보</string>
     <string name="relay_panel_offline">기기가 오프라인이라 지금은 릴레이를 전환할 수 없습니다.</string>
+    <string name="loop_guard_toggle">반복 보호</string>
+    <string name="loop_guard_times">시간당 허용 실행 횟수</string>
+    <string name="loop_guard_n">%1$d회</string>
+    <string name="loop_guard_hint">한 시간 안에 이보다 자주 실행되려 하면 기기를 끄고 꺼진 채로 두며, 알람이 울리고 규칙이 일시 정지됩니다. 연결된 기기가 잦은 켜고 끄기로 손상되지 않게 합니다. 확인 후 규칙을 다시 켜세요.</string>
+    <string name="loop_guard_alarm">“%1$s”이(가) 한 시간 안에 %2$d번 실행되었습니다. 연결된 기기를 보호하기 위해 %3$s을(를) 끄고 꺼진 채로 두었으며 규칙을 일시 정지했습니다. 확인 후 규칙을 다시 켜세요.</string>
+    <string name="trace_locked_out">반복 보호: 기기 끔, 규칙 일시 정지</string>
 </resources>

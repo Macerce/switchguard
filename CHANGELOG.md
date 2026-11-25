@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.54.1 — 2026-11-25
+**New**
+- Loop protection for rules: if a rule would run more than the set number of times within an hour (2–10, default 3), it doesn't run again. Its pending steps are cancelled, the device is turned off and left off, an alarm rings and the rule is paused, so a connected appliance isn't damaged by constant on/off switching. Turn the rule back on after checking. On by default (3) in the "Pause, then put back" template; available as an option on every automation.
+
 ## 2.54.0 — 2026-11-25
 **New**
 - Run history for every rule ("why did it run / why didn't it?"): each trigger is logged with the time, the value at that moment, which condition held or failed, and the result of every action. A "Last: 14:02 · Ran" line sits under each rule card; the history button is in the rule editor. Repeated identical blocks collapse into one row.

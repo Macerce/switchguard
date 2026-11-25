@@ -1896,4 +1896,10 @@
     <string name="snap_restore_hint">還原此規則「記住目前狀態」儲存的內容。只對這些裝置中有變化的通道送出指令。</string>
     <string name="relay_panel_details">詳細資料</string>
     <string name="relay_panel_offline">裝置離線，目前無法切換繼電器。</string>
+    <string name="loop_guard_toggle">循環保護</string>
+    <string name="loop_guard_times">每小時允許執行次數</string>
+    <string name="loop_guard_n">%1$d 次</string>
+    <string name="loop_guard_hint">如果規則在一小時內執行次數將超過此值，裝置會被關閉並維持關閉，響起警報並暫停規則，避免所接電器因頻繁開關而損壞。檢查後請重新開啟規則。</string>
+    <string name="loop_guard_alarm">「%1$s」在一小時內執行了 %2$d 次。為保護所接電器，已關閉 %3$s 並維持關閉，規則已暫停。檢查後請重新開啟規則。</string>
+    <string name="trace_locked_out">循環保護：已關閉裝置，規則已暫停</string>
 </resources>

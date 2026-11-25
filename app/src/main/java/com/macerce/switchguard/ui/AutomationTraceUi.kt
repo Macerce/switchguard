@@ -106,11 +106,13 @@ private fun TraceOutcome.label(): Int = when (this) {
     TraceOutcome.BLOCKED_CONDITION -> R.string.trace_blocked_condition
     TraceOutcome.BLOCKED_PRESENCE -> R.string.trace_blocked_presence
     TraceOutcome.THROTTLED -> R.string.trace_throttled
+    TraceOutcome.LOCKED_OUT -> R.string.trace_locked_out
 }
 
 @Composable
 private fun TraceOutcome.color(failed: Boolean): Color = when {
     this == TraceOutcome.RAN && failed -> Brand.alarm
+    this == TraceOutcome.LOCKED_OUT -> Brand.alarm
     this == TraceOutcome.RAN -> Hue.GREEN.color()
     this == TraceOutcome.DELAYED -> Hue.BLUE.color()
     else -> Hue.AMBER.color()

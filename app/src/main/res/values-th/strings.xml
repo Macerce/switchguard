@@ -1868,4 +1868,10 @@
     <string name="snap_restore_hint">คืนค่าตามที่ “จำสถานะปัจจุบัน” ของกฎนี้บันทึกไว้ ส่งคำสั่งเฉพาะอุปกรณ์นั้นและช่องที่เปลี่ยน</string>
     <string name="relay_panel_details">รายละเอียด</string>
     <string name="relay_panel_offline">อุปกรณ์ออฟไลน์ ตอนนี้สลับรีเลย์ไม่ได้</string>
+    <string name="loop_guard_toggle">ป้องกันการวนซ้ำ</string>
+    <string name="loop_guard_times">จำนวนครั้งที่อนุญาตต่อชั่วโมง</string>
+    <string name="loop_guard_n">%1$d ครั้ง</string>
+    <string name="loop_guard_hint">หากกฎจะทำงานบ่อยกว่านี้ภายในหนึ่งชั่วโมง อุปกรณ์จะถูกปิดและคงปิดไว้ สัญญาณเตือนดัง และกฎหยุดชั่วคราว เพื่อไม่ให้เครื่องที่ต่ออยู่เสียหายจากการเปิดปิดถี่ ๆ เปิดกฎอีกครั้งหลังตรวจสอบ</string>
+    <string name="loop_guard_alarm">“%1$s” ทำงาน %2$d ครั้งภายในหนึ่งชั่วโมง เพื่อปกป้องเครื่องที่ต่ออยู่ จึงปิด %3$s และคงปิดไว้ และหยุดกฎชั่วคราว ตรวจสอบแล้วเปิดกฎอีกครั้ง</string>
+    <string name="trace_locked_out">ป้องกันวนซ้ำ: ปิดอุปกรณ์ หยุดกฎ</string>
 </resources>

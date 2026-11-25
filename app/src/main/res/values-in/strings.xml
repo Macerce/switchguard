@@ -1826,4 +1826,10 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="snap_restore_hint">Mengembalikan yang disimpan “Ingat keadaan saat ini” pada aturan ini. Hanya perangkat itu dan kanal yang berubah yang diberi perintah.</string>
     <string name="relay_panel_details">Detail</string>
     <string name="relay_panel_offline">Perangkat offline; relai tidak dapat diubah sekarang.</string>
+    <string name="loop_guard_toggle">Perlindungan loop</string>
+    <string name="loop_guard_times">Jalan yang diizinkan per jam</string>
+    <string name="loop_guard_n">%1$d kali</string>
+    <string name="loop_guard_hint">Jika aturan akan berjalan lebih sering dalam satu jam, perangkat dimatikan dan dibiarkan mati, alarm berbunyi dan aturan dijeda, agar alat yang terhubung tidak rusak karena terus dinyalakan/dimatikan. Aktifkan lagi aturan setelah dicek.</string>
+    <string name="loop_guard_alarm">“%1$s” berjalan %2$d kali dalam satu jam. Untuk melindungi alat yang terhubung, %3$s dimatikan dan dibiarkan mati, dan aturan dijeda. Periksa, lalu aktifkan lagi aturannya.</string>
+    <string name="trace_locked_out">Perlindungan loop: perangkat dimatikan, aturan dijeda</string>
 </resources>

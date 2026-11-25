@@ -14,7 +14,9 @@ enum class TraceOutcome {
     DELAYED,
     BLOCKED_WINDOW, BLOCKED_CONDITION, BLOCKED_PRESENCE,
     /** 10 sn içinde ikinci kez tetiklendi (birbirini tetikleyen kurallar döngüye girmesin). */
-    THROTTLED;
+    THROTTLED,
+    /** Döngü koruması: bir saatte çok kez çalıştı; cihaz kapatıldı, alarm verildi, kural durduruldu. */
+    LOCKED_OUT;
 
     val blocked get() = this != RAN && this != DELAYED
 }

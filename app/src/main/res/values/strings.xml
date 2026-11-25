@@ -1940,4 +1940,10 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="snap_restore_hint">Returns what this rule’s “Remember current state” saved. Only those devices, and only channels that changed, get a command.</string>
     <string name="relay_panel_details">Details</string>
     <string name="relay_panel_offline">Device is offline; relays can’t be switched now.</string>
+    <string name="loop_guard_toggle">Loop protection</string>
+    <string name="loop_guard_times">Allowed runs per hour</string>
+    <string name="loop_guard_n">%1$d times</string>
+    <string name="loop_guard_hint">If the rule would run more often than this within an hour, the device is turned off and left off, an alarm rings and the rule is paused, so the connected appliance isn’t damaged by constant on/off switching. Turn the rule back on after checking.</string>
+    <string name="loop_guard_alarm">“%1$s” ran %2$d times within an hour. To protect the connected appliance, %3$s was turned off and left off, and the rule was paused. Check it, then turn the rule back on.</string>
+    <string name="trace_locked_out">Loop protection: device turned off, rule paused</string>
 </resources>

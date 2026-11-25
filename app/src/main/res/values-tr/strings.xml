@@ -1936,4 +1936,10 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="snap_restore_hint">Bu kuralın “Şu anki durumu hatırla” eylemiyle kaydettiğine döner. Yalnız o cihazlara, yalnız değişen kanallara komut gider.</string>
     <string name="relay_panel_details">Ayrıntılar</string>
     <string name="relay_panel_offline">Cihaz çevrimdışı; röleler şu an açılıp kapatılamaz.</string>
+    <string name="loop_guard_toggle">Döngü koruması</string>
+    <string name="loop_guard_times">Saatte izin verilen çalışma</string>
+    <string name="loop_guard_n">%1$d kez</string>
+    <string name="loop_guard_hint">Kural bir saat içinde bundan sık çalışacak olursa cihaz kapatılıp kapalı bırakılır, alarm çalar ve kural durdurulur; bağlı cihaz sürekli aç-kapa yüzünden zarar görmez. Kontrol ettikten sonra kuralı yeniden aç.</string>
+    <string name="loop_guard_alarm">“%1$s” bir saat içinde %2$d kez çalıştı. Bağlı cihazı korumak için %3$s kapatıldı ve kapalı bırakıldı, kural durduruldu. Kontrol et, sonra kuralı yeniden aç.</string>
+    <string name="trace_locked_out">Döngü koruması: cihaz kapatıldı, kural durduruldu</string>
 </resources>
