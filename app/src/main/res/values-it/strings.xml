@@ -1516,6 +1516,8 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="board_boot">Schermata di attesa all\'avvio</string>
     <string name="board_boot_desc">Al riavvio del dispositivo la schermata di attesa si apre da sola</string>
     <string name="board_boot_overlay">Serve il permesso «Mostra sopra altre app» (oppure usalo come Home): tocca per consentire</string>
+    <string name="board_system_home">Torna alla Home normale</string>
+    <string name="board_system_home_desc">SwitchGuard non è più la Home e si apre quella abituale. Per usarlo di nuovo come pannello, attiva «Usa come schermata Home».</string>
     <string name="board_open_app">Apri app</string>
     <string name="board_close">Chiudi</string>
     <string name="board_edit">Modifica layout</string>

@@ -172,6 +172,40 @@ object StandbyGrid {
         }
     }
 
+    /**
+     * Sürükleyip bırakma (uygulamadaki gibi yer değiştirme): alan boşsa oraya konur; doluysa taşınan widget yine
+     * oraya konur, altında kalanlar taşınanın boşalttığı yere geçer (aynı boyuttaysa düz takas). Oraya sığmayan
+     * ilk boş yere iner. Geri kalan widget'lar yerinde kalır. Ekran dışıysa null.
+     */
+    fun move(placed: List<Placed>, id: String, x: Int, y: Int, columns: Int): List<Item>? {
+        val me = placed.firstOrNull { it.item.id == id } ?: return null
+        if (x < 0 || y < 0 || x + me.w > columns) return null
+        if (x == me.x && y == me.y) return null
+        place(placed, id, x, y, me.w, me.h, columns)?.let { return it }
+        val hit = placed.filter { p -> p.item.id != id && x < p.x + p.w && p.x < x + me.w && y < p.y + p.h && p.y < y + me.h }
+        val hitIds = hit.map { it.item.id }.toSet()
+        val occ = Occupancy(columns)
+        val pos = HashMap<String, Pair<Int, Int>>()
+        // Yerinde kalanlar ve taşınan.
+        for (p in placed) if (p.item.id != id && p.item.id !in hitIds) { occ.take(p.x, p.y, p.w, p.h); pos[p.item.id] = p.x to p.y }
+        occ.take(x, y, me.w, me.h)
+        pos[id] = x to y
+        // Altında kalanlar: taşınanın eski yerine (aynı göreli konumla), olmazsa ilk boş yere.
+        for (p in hit.sortedWith(compareBy({ it.y }, { it.x }))) {
+            val tx = me.x + (p.x - x).coerceAtLeast(0)
+            val ty = me.y + (p.y - y).coerceAtLeast(0)
+            val (nx, ny) = if (occ.free(tx, ty, p.w, p.h)) tx to ty
+            else if (occ.free(me.x, me.y, p.w, p.h)) me.x to me.y
+            else occ.firstFree(p.w, p.h)
+            occ.take(nx, ny, p.w, p.h)
+            pos[p.item.id] = nx to ny
+        }
+        return placed.map { p ->
+            val (px, py) = pos.getValue(p.item.id)
+            p.item.copy(w = p.w, x = px, y = py)
+        }
+    }
+
     /** Ekrandaki yerleri sabitler (kaldırma/ekleme sonrası diğerleri kaymasın). */
     fun freeze(placed: List<Placed>): List<Item> = placed.map { it.item.copy(w = it.w, x = it.x, y = it.y) }
 

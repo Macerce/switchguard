@@ -1472,6 +1472,8 @@
     <string name="board_boot">開機時顯示待機畫面</string>
     <string name="board_boot_desc">裝置重新啟動後，待機畫面會自動開啟</string>
     <string name="board_boot_overlay">需要「顯示在其他應用程式上層」權限（或用作主畫面）——輕觸以允許</string>
+    <string name="board_system_home">返回一般主畫面</string>
+    <string name="board_system_home_desc">SwitchGuard 不再作為主畫面，並開啟平常的主畫面。要再次用作面板，請開啟「用作主畫面」。</string>
     <string name="board_open_app">開啟應用程式</string>
     <string name="board_close">關閉</string>
     <string name="board_edit">編輯版面</string>

@@ -1581,6 +1581,8 @@
     <string name="board_boot">Экран ожидания при запуске</string>
     <string name="board_boot_desc">После перезагрузки устройства экран ожидания открывается сам</string>
     <string name="board_boot_overlay">Нужно разрешение «Поверх других приложений» (или используйте как главный экран) — нажмите, чтобы разрешить</string>
+    <string name="board_system_home">Вернуться к обычному главному экрану</string>
+    <string name="board_system_home_desc">SwitchGuard перестаёт быть главным экраном, открывается привычный. Чтобы снова использовать как панель, включите «Использовать как главный экран».</string>
     <string name="board_open_app">Открыть приложение</string>
     <string name="board_close">Закрыть</string>
     <string name="board_edit">Изменить макет</string>

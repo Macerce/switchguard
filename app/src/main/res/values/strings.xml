@@ -1510,6 +1510,8 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="board_boot">Standby screen at startup</string>
     <string name="board_boot_desc">When the device restarts, the standby screen opens by itself</string>
     <string name="board_boot_overlay">Needs “Display over other apps” permission (or use as home screen) — tap to allow</string>
+    <string name="board_system_home">Back to normal home screen</string>
+    <string name="board_system_home_desc">SwitchGuard stops being the home screen and your usual one opens. To use it as a panel again, switch on “Use as home screen”.</string>
     <string name="board_open_app">Open app</string>
     <string name="board_close">Close</string>
     <string name="board_edit">Edit layout</string>

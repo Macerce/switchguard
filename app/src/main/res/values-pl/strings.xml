@@ -1581,6 +1581,8 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="board_boot">Ekran czuwania przy starcie</string>
     <string name="board_boot_desc">Po ponownym uruchomieniu urządzenia ekran czuwania otworzy się sam</string>
     <string name="board_boot_overlay">Wymaga uprawnienia „Wyświetlanie nad innymi aplikacjami” (lub użyj jako ekranu głównego) — dotknij, aby zezwolić</string>
+    <string name="board_system_home">Wróć do zwykłego ekranu głównego</string>
+    <string name="board_system_home_desc">SwitchGuard przestaje być ekranem głównym i otwiera się zwykły. Aby znów używać go jako panelu, włącz „Używaj jako ekranu głównego”.</string>
     <string name="board_open_app">Otwórz aplikację</string>
     <string name="board_close">Zamknij</string>
     <string name="board_edit">Edytuj układ</string>

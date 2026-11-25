@@ -1507,6 +1507,8 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="board_boot">Standby-Bildschirm beim Start</string>
     <string name="board_boot_desc">Nach einem Neustart öffnet sich der Standby-Bildschirm von selbst</string>
     <string name="board_boot_overlay">Benötigt die Berechtigung „Über anderen Apps einblenden“ (oder als Startbildschirm nutzen) – zum Erlauben tippen</string>
+    <string name="board_system_home">Zurück zum normalen Startbildschirm</string>
+    <string name="board_system_home_desc">SwitchGuard ist dann nicht mehr Startbildschirm und dein gewohnter öffnet sich. Für den Panel-Betrieb „Als Startbildschirm nutzen“ wieder einschalten.</string>
     <string name="board_open_app">App öffnen</string>
     <string name="board_close">Schließen</string>
     <string name="board_edit">Layout bearbeiten</string>

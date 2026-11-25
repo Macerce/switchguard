@@ -1473,6 +1473,8 @@
     <string name="board_boot">起動時にスタンバイ画面</string>
     <string name="board_boot_desc">端末を再起動するとスタンバイ画面が自動で開きます</string>
     <string name="board_boot_overlay">「他のアプリの上に重ねて表示」の許可が必要です（またはホーム画面として使用）。タップして許可</string>
+    <string name="board_system_home">通常のホーム画面に戻る</string>
+    <string name="board_system_home_desc">SwitchGuard をホーム画面から外し、いつものホーム画面を開きます。再びパネルにするには「ホーム画面として使う」をオンにします。</string>
     <string name="board_open_app">アプリを開く</string>
     <string name="board_close">閉じる</string>
     <string name="board_edit">レイアウトを編集</string>

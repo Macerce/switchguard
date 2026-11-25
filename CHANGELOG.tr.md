@@ -6,6 +6,12 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.49.2 — 2026-11-25
+**Yeni**
+- Bekleme ekranı sakin bir ev panosu düzenine geçti: düz koyu kartlar, önce cihaz adı altında durumu, açık cihazın simgesi türüne göre renkli (ışık ve priz sarı, su mavi, soğutma camgöbeği, ısıtma turuncu), durum yanında anlık watt, zeminde hareketli ışık yok.
+- Kutular uygulamadaki gibi yer değiştirir: basılı tutup başka bir kutunun üstüne bırakın; üst ya da alt kenara sürükleyince sayfa kendiliğinden kayar.
+- “Normal ana ekrana dön”: SwitchGuard ana ekranken Cihazlar çubuğundaki, bekleme ekranı menüsündeki ve Ayarlar → Bekleme ekranı'ndaki düğme ana ekranlığı kapatır ve telefonun normal ana ekranını açar.
+
 ## 2.48.1 — 2026-11-25
 **Düzeltildi**
 - SwitchGuard ana ekranken ana sayfada Geri tuşu artık uygulamayı kapatmıyor (uygulama çıkıp hemen geri geliyor gibi görünüyordu).

@@ -1653,6 +1653,8 @@
     <string name="board_boot">شاشة الانتظار عند التشغيل</string>
     <string name="board_boot_desc">عند إعادة تشغيل الجهاز تُفتح شاشة الانتظار تلقائيًا</string>
     <string name="board_boot_overlay">يتطلب إذن «الظهور فوق التطبيقات الأخرى» (أو استخدامه كشاشة رئيسية) — انقر للسماح</string>
+    <string name="board_system_home">العودة إلى الشاشة الرئيسية العادية</string>
+    <string name="board_system_home_desc">يتوقف SwitchGuard عن كونه الشاشة الرئيسية وتُفتح شاشتك المعتادة. لاستخدامه كلوحة مجددًا، فعّل «استخدامه كشاشة رئيسية».</string>
     <string name="board_open_app">فتح التطبيق</string>
     <string name="board_close">إغلاق</string>
     <string name="board_edit">تعديل التخطيط</string>

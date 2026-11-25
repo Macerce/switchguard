@@ -6,6 +6,12 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.49.2 — 2026-11-25
+**New**
+- Standby screen redesigned in a calm home-dashboard style: solid dark cards, device name first with its state underneath, the icon of a device that is on is coloured by type (lights and plugs yellow, water blue, cooling cyan, heating orange), live watts next to the state, no moving glow in the background.
+- Tiles swap places like in the app: hold a tile and drop it on another one; the page scrolls by itself when you drag to the top or bottom edge.
+- “Back to normal home screen”: when SwitchGuard is the home screen, a button in the Devices bar, the standby menu and Settings → Standby screen turns it off and opens your usual home screen.
+
 ## 2.48.1 — 2026-11-25
 **Fixed**
 - When SwitchGuard is the home screen, Back on the main screen no longer closes the app (it looked like the app exited and came straight back).

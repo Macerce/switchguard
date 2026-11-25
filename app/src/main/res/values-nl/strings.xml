@@ -1509,6 +1509,8 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="board_boot">Standby-scherm bij opstarten</string>
     <string name="board_boot_desc">Na een herstart opent het standby-scherm vanzelf</string>
     <string name="board_boot_overlay">Vereist de toestemming ‘Weergeven over andere apps’ (of gebruik als startscherm) — tik om toe te staan</string>
+    <string name="board_system_home">Terug naar normaal startscherm</string>
+    <string name="board_system_home_desc">SwitchGuard is dan geen startscherm meer en je gewone opent. Om het weer als paneel te gebruiken, zet ‘Gebruiken als startscherm’ aan.</string>
     <string name="board_open_app">App openen</string>
     <string name="board_close">Sluiten</string>
     <string name="board_edit">Indeling bewerken</string>

@@ -1545,6 +1545,8 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="board_boot">Tela de espera ao iniciar</string>
     <string name="board_boot_desc">Quando o aparelho reinicia, a tela de espera abre sozinha</string>
     <string name="board_boot_overlay">Precisa da permissão “Sobrepor a outros apps” (ou usar como tela inicial) — toque para permitir</string>
+    <string name="board_system_home">Voltar à tela inicial normal</string>
+    <string name="board_system_home_desc">O SwitchGuard deixa de ser a tela inicial e a de sempre abre. Para usá-lo de novo como painel, ative “Usar como tela inicial”.</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Fechar</string>
     <string name="board_edit">Editar layout</string>

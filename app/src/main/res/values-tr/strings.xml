@@ -1506,6 +1506,8 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="board_boot">Açılışta bekleme ekranı</string>
     <string name="board_boot_desc">Cihaz kapanıp açılınca bekleme ekranı kendiliğinden açılır</string>
     <string name="board_boot_overlay">“Diğer uygulamaların üzerinde göster” izni gerekir (ya da ana ekran olarak kullan) — izin vermek için dokun</string>
+    <string name="board_system_home">Normal ana ekrana dön</string>
+    <string name="board_system_home_desc">SwitchGuard ana ekran olmaktan çıkar, telefonun normal ana ekranı açılır. Yeniden pano yapmak için “Ana ekran olarak kullan”ı aç.</string>
     <string name="board_open_app">Uygulamayı aç</string>
     <string name="board_close">Kapat</string>
     <string name="board_edit">Yerleşimi düzenle</string>

@@ -1438,6 +1438,8 @@
     <string name="board_boot">चालू होने पर स्टैंडबाय स्क्रीन</string>
     <string name="board_boot_desc">डिवाइस रीस्टार्ट होने पर स्टैंडबाय स्क्रीन अपने आप खुलती है</string>
     <string name="board_boot_overlay">“दूसरे ऐप्स के ऊपर दिखाएँ” अनुमति चाहिए (या होम स्क्रीन के रूप में उपयोग करें) — अनुमति देने के लिए टैप करें</string>
+    <string name="board_system_home">सामान्य होम स्क्रीन पर लौटें</string>
+    <string name="board_system_home_desc">SwitchGuard होम स्क्रीन नहीं रहता और आपकी सामान्य होम स्क्रीन खुलती है। फिर से पैनल बनाने के लिए “होम स्क्रीन के रूप में उपयोग करें” चालू करें।</string>
     <string name="board_open_app">ऐप खोलें</string>
     <string name="board_close">बंद करें</string>
     <string name="board_edit">लेआउट बदलें</string>

@@ -1515,6 +1515,8 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="board_boot">Pantalla de espera al iniciar</string>
     <string name="board_boot_desc">Al reiniciar el dispositivo, la pantalla de espera se abre sola</string>
     <string name="board_boot_overlay">Necesita el permiso «Mostrar sobre otras apps» (o usarlo como pantalla de inicio): toca para permitir</string>
+    <string name="board_system_home">Volver a la pantalla de inicio normal</string>
+    <string name="board_system_home_desc">SwitchGuard deja de ser la pantalla de inicio y se abre la habitual. Para usarlo otra vez como panel, activa «Usar como pantalla de inicio».</string>
     <string name="board_open_app">Abrir app</string>
     <string name="board_close">Cerrar</string>
     <string name="board_edit">Editar diseño</string>

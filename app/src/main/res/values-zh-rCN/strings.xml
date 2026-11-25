@@ -1451,6 +1451,8 @@
     <string name="board_boot">开机时显示待机屏幕</string>
     <string name="board_boot_desc">设备重启后，待机屏幕会自动打开</string>
     <string name="board_boot_overlay">需要“显示在其他应用上层”权限（或用作主屏幕）——点按以允许</string>
+    <string name="board_system_home">返回普通主屏幕</string>
+    <string name="board_system_home_desc">SwitchGuard 不再作为主屏幕，并打开平时的主屏幕。要再次用作面板，请开启“用作主屏幕”。</string>
     <string name="board_open_app">打开应用</string>
     <string name="board_close">关闭</string>
     <string name="board_edit">编辑布局</string>

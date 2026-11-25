@@ -62,4 +62,30 @@ class StandbyGridTest {
         val after = StandbyGrid.freeze(placed).filter { it.id != "a" }
         assertEquals(listOf(2 to 0, 4 to 0), StandbyGrid.pack(after, 8).map { it.x to it.y })
     }
+
+    @Test
+    fun moveSwapsLikeTheApp() {
+        // a b c yan yana (her biri 4x2, 8 sütun: a 0,0  b 4,0  c 0,2).
+        val placed = StandbyGrid.pack(listOf(Item("a", 4, 2), Item("b", 4, 2), Item("c", 4, 2)), 8)
+        // a'yı b'nin üstüne bırak: takas.
+        val swapped = StandbyGrid.pack(StandbyGrid.move(placed, "a", 4, 0, 8)!!, 8).associate { it.item.id to (it.x to it.y) }
+        assertEquals(4 to 0, swapped["a"]); assertEquals(0 to 0, swapped["b"]); assertEquals(0 to 2, swapped["c"])
+        // Boş yere bırakmak düz taşımadır; diğerleri kımıldamaz.
+        val free = StandbyGrid.pack(StandbyGrid.move(placed, "c", 4, 2, 8)!!, 8).associate { it.item.id to (it.x to it.y) }
+        assertEquals(4 to 2, free["c"]); assertEquals(0 to 0, free["a"])
+        // Ekran dışı / aynı yer: değişiklik yok.
+        assertNull(StandbyGrid.move(placed, "a", 6, 0, 8))
+        assertNull(StandbyGrid.move(placed, "a", 0, 0, 8))
+    }
+
+    @Test
+    fun moveBigOntoSmallPushesToFreeSpot() {
+        // Saat 8x4 üstte, iki cihaz 4x2 altta. Cihazı saatin üstüne bırak: saat cihazın eski yerine sığmaz, ilk boş yere iner.
+        val placed = StandbyGrid.pack(listOf(Item("clock", 8, 4), Item("d1", 4, 2), Item("d2", 4, 2)), 8)
+        val r = StandbyGrid.pack(StandbyGrid.move(placed, "d1", 0, 0, 8)!!, 8)
+        val m = r.associate { it.item.id to (it.x to it.y) }
+        assertEquals(0 to 0, m["d1"])
+        // Çakışma yok.
+        for (a in r) for (b in r) if (a !== b) assert(!(a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h)) { "${a.item.id}/${b.item.id}" }
+    }
 }

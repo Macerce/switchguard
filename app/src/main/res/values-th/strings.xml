@@ -1444,6 +1444,8 @@
     <string name="board_boot">หน้าจอพักเมื่อเปิดเครื่อง</string>
     <string name="board_boot_desc">เมื่อรีสตาร์ทอุปกรณ์ หน้าจอพักจะเปิดขึ้นเอง</string>
     <string name="board_boot_overlay">ต้องใช้สิทธิ์ “แสดงทับแอปอื่น” (หรือใช้เป็นหน้าจอหลัก) — แตะเพื่ออนุญาต</string>
+    <string name="board_system_home">กลับไปหน้าจอหลักปกติ</string>
+    <string name="board_system_home_desc">SwitchGuard จะเลิกเป็นหน้าจอหลักและเปิดหน้าจอหลักเดิม หากต้องการใช้เป็นแผงอีกครั้ง ให้เปิด “ใช้เป็นหน้าจอหลัก”</string>
     <string name="board_open_app">เปิดแอป</string>
     <string name="board_close">ปิด</string>
     <string name="board_edit">แก้ไขเลย์เอาต์</string>

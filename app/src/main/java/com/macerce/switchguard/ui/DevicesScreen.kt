@@ -61,6 +61,7 @@ import androidx.compose.material.icons.rounded.Shield
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Tune
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.Nightlight
 import androidx.compose.material.icons.rounded.WorkspacePremium
@@ -268,6 +269,12 @@ fun DevicesScreen(
                     if (devices.isNotEmpty()) {
                         IconButton(modifier = Modifier.tvFocusRing(), onClick = { editMode = true }) {
                             Icon(Icons.Rounded.Tune, stringResource(R.string.action_edit_layout))
+                        }
+                    }
+                    val homeCtx = LocalContext.current
+                    if (remember { com.macerce.switchguard.core.HomeLauncher.isDefault(homeCtx) }) {
+                        IconButton(modifier = Modifier.tvFocusRing(), onClick = { com.macerce.switchguard.core.HomeLauncher.returnToSystemHome(homeCtx) }) {
+                            Icon(Icons.Rounded.Apps, stringResource(R.string.board_system_home))
                         }
                     }
                     if (devices.isNotEmpty()) {

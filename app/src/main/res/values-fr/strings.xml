@@ -1544,6 +1544,8 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="board_boot">Écran de veille au démarrage</string>
     <string name="board_boot_desc">Au redémarrage de l\'appareil, l\'écran de veille s\'ouvre tout seul</string>
     <string name="board_boot_overlay">Nécessite l\'autorisation « Afficher par-dessus d\'autres applis » (ou l\'utiliser comme écran d\'accueil) — touchez pour autoriser</string>
+    <string name="board_system_home">Revenir à l\'écran d\'accueil normal</string>
+    <string name="board_system_home_desc">SwitchGuard n\'est plus l\'écran d\'accueil et votre écran habituel s\'ouvre. Pour le réutiliser comme panneau, activez « Utiliser comme écran d\'accueil ».</string>
     <string name="board_open_app">Ouvrir l\'application</string>
     <string name="board_close">Fermer</string>
     <string name="board_edit">Modifier la disposition</string>

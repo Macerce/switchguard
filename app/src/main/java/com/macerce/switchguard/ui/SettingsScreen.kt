@@ -3,6 +3,7 @@ package com.macerce.switchguard.ui
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.BeachAccess
 import androidx.compose.material.icons.rounded.Stairs
@@ -876,6 +877,13 @@ private fun StandbyPage() {
                 })
             }
             Divider()
+            if (offered && isHome) {
+                InfoRow(
+                    Icons.Rounded.Apps, stringResource(R.string.board_system_home), stringResource(R.string.board_system_home_desc),
+                    Modifier.clickable { HomeLauncher.returnToSystemHome(context); offered = false },
+                )
+                Divider()
+            }
         }
         val needsOverlay = onBoot && !isHome && !canOverlay
         InfoRow(

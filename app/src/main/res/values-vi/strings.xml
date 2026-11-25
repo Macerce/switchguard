@@ -1444,6 +1444,8 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="board_boot">Màn hình chờ khi khởi động</string>
     <string name="board_boot_desc">Khi thiết bị khởi động lại, màn hình chờ tự mở</string>
     <string name="board_boot_overlay">Cần quyền “Hiển thị trên ứng dụng khác” (hoặc dùng làm màn hình chính) — chạm để cho phép</string>
+    <string name="board_system_home">Quay về màn hình chính thường</string>
+    <string name="board_system_home_desc">SwitchGuard thôi làm màn hình chính và màn hình quen thuộc sẽ mở. Để dùng lại làm bảng điều khiển, bật “Dùng làm màn hình chính”.</string>
     <string name="board_open_app">Mở ứng dụng</string>
     <string name="board_close">Đóng</string>
     <string name="board_edit">Sửa bố cục</string>

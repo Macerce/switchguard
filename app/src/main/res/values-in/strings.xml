@@ -1402,6 +1402,8 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="board_boot">Layar siaga saat menyala</string>
     <string name="board_boot_desc">Saat perangkat dinyalakan ulang, layar siaga terbuka sendiri</string>
     <string name="board_boot_overlay">Perlu izin “Tampilkan di atas aplikasi lain” (atau gunakan sebagai layar utama) — ketuk untuk mengizinkan</string>
+    <string name="board_system_home">Kembali ke layar utama biasa</string>
+    <string name="board_system_home_desc">SwitchGuard tidak lagi menjadi layar utama dan layar biasa terbuka. Untuk memakainya lagi sebagai panel, aktifkan “Gunakan sebagai layar utama”.</string>
     <string name="board_open_app">Buka aplikasi</string>
     <string name="board_close">Tutup</string>
     <string name="board_edit">Ubah tata letak</string>

@@ -36,6 +36,18 @@ object HomeLauncher {
         return r?.activityInfo?.packageName == context.packageName
     }
 
+    /**
+     * Normal ana ekrana dönüş: SwitchGuard'ın ana ekran adaylığını kapatır (sistem eski ana ekranı yeniden varsayılan
+     * yapar) ve onu açar. Yalnız açmak yetmez: MIUI gibi başlatıcılar varsayılan değilken kendini hemen kapatıyor.
+     * Yeniden pano olmak için Ayarlar > Bekleme ekranı'ndaki anahtar açılır.
+     */
+    fun returnToSystemHome(context: Context) {
+        setOffered(context, false)
+        runCatching {
+            context.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
+    }
+
     /** Sistemin "Varsayılan ana ekran uygulaması" sayfası; yoksa genel ayarlar. */
     fun openChooser(context: Context) {
         val tries = listOf(Settings.ACTION_HOME_SETTINGS, Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS, Settings.ACTION_SETTINGS)

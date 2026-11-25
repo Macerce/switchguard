@@ -1,5 +1,7 @@
 package com.macerce.switchguard.ui
 
+import com.macerce.switchguard.core.DeviceKind
+import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
@@ -68,6 +70,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.gestures.scrollBy
+import com.macerce.switchguard.core.HomeLauncher
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -252,23 +256,36 @@ class StandbyActivity : ComponentActivity() {
 }
 
 // TV panosuyla aynı görünüm: koyu zemin, yavaş süzülen ışıklar, cam kartlar (bkz. TvHome).
-private val Bg = Tv.ink
-private val Ink = Tv.text
-private val Dim = Tv.muted
-private val Faint = Tv.glass
-private val Edge = Tv.edge
-private val Teal = Tv.ok
-private val Amber = Tv.warn
-private val Red = Tv.bad
-private val Sheet = Color(0xF2101619)
+// Ev panosu düzeni: düz koyu zemin, dolgun kartlar, sade yazı; renk yalnız açık cihazın simgesinde ve uyarılarda.
+private val Bg = Color(0xFF111318)
+private val Bg2 = Color(0xFF15181E)
+private val Card = Color(0xFF1C1F25)
+private val Ink = Color(0xFFE8E8EA)
+private val Dim = Color(0xFF9DA1A8)
+private val Faint = Card
+private val Edge = Color(0x0DFFFFFF)
+private val Teal = Color(0xFF5BB0E8)
+private val Ok = Color(0xFF6CC28A)
+private val Amber = Color(0xFFF2B84B)
+private val Red = Color(0xFFE57373)
+private val Sheet = Color(0xF5202329)
+private val CardShape = RoundedCornerShape(16.dp)
+
+/** Açık cihazın rengi, türüne göre (ışık/priz sarı, su mavi, soğutma/hava camgöbeği, ısıtma turuncu, kapı mor). */
+private fun onColor(kind: DeviceKind): Color = when (kind) {
+    DeviceKind.WATER -> Color(0xFF64B5F6)
+    DeviceKind.COLD, DeviceKind.AIR -> Color(0xFF4DD0E1)
+    DeviceKind.HEAT -> Color(0xFFFF8A65)
+    DeviceKind.DOOR -> Color(0xFFB39DDB)
+    else -> Color(0xFFFFC14D)
+}
 
 /** Cam kart: hafif beyaz zemin + ince kenar; [tint] verilirse o renkte yatay ışık (uyarı/alarm). */
-private fun Modifier.glass(radius: Int = 22, tint: Color? = null): Modifier {
+private fun Modifier.glass(radius: Int = 16, tint: Color? = null): Modifier {
     val shape = RoundedCornerShape(radius.dp)
     val c = clip(shape)
     return if (tint != null) {
-        c.background(Brush.horizontalGradient(listOf(tint.copy(alpha = 0.22f), tint.copy(alpha = 0.06f))), shape)
-            .border(1.dp, tint.copy(alpha = 0.4f), shape)
+        c.background(Card, shape).background(tint.copy(alpha = 0.10f), shape).border(1.dp, tint.copy(alpha = 0.30f), shape)
     } else c.background(Faint, shape).border(1.dp, Edge, shape)
 }
 
@@ -279,7 +296,7 @@ class StandbyHost(val listen: () -> Unit, val unlocked: (() -> Unit) -> Unit)
 
 /** Izgara hücresi (~40 dp) ve aralık: telefon dikeyde 8 sütun, yatayda ~19, tablette 25+. */
 private val CellTarget = 38.dp
-private val Gap = 6.dp
+private val Gap = 8.dp
 
 private fun channelsOf(d: DeviceSnapshot): List<Int> =
     if (d.isMultiChannel) d.switches.keys.sorted() else listOf(d.switches.keys.minOrNull() ?: 0)
@@ -428,7 +445,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             alarmLines.isNotEmpty() || conn.state in setOf(ConnState.NO_INTERNET, ConnState.AUTH_ERROR, ConnState.ERROR) -> Red
             conn.state == ConnState.STOPPED -> Tv.idle
             offlineNames.isNotEmpty() || conn.state != ConnState.LIVE -> Amber
-            else -> Teal
+            else -> Ok
         },
         tween(900),
         label = "accent",
@@ -453,7 +470,15 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 else Modifier
             ),
     ) {
-        Box(Modifier.fillMaxSize().alpha(if (night) 0.45f else 1f).aurora(accent, frameMs = 60))
+        // Zemin: hareketli ışık yerine durumu belli eden çok hafif, sabit bir ışık.
+        Box(
+            Modifier.fillMaxSize().alpha(if (night) 0.5f else 1f).drawBehind {
+                drawRect(Brush.verticalGradient(listOf(Bg2, Bg)))
+                val c = Offset(size.width * 0.15f, 0f)
+                val rad = size.maxDimension * 0.7f
+                drawCircle(Brush.radialGradient(listOf(accent.copy(alpha = 0.05f), Color.Transparent), center = c, radius = rad), radius = rad, center = c)
+            },
+        )
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 14.dp)
                 .then(if (editing) Modifier else Modifier.offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f)),
@@ -462,12 +487,16 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
             val cell = (maxWidth - Gap * (cols - 1)) / cols
             val placed = remember(shown, cols) { StandbyGrid.pack(shown, cols) }
             lastPlaced.value = placed
-            Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState())) {
+            val scroll = rememberScrollState()
+            val viewport = with(LocalDensity.current) { maxHeight.toPx() }
+            val topPad = with(LocalDensity.current) { (if (editing) 64.dp else 0.dp).toPx() }
+            Column(Modifier.fillMaxSize().verticalScroll(scroll)) {
                 if (editing) Spacer(Modifier.height(64.dp))
                 WidgetGrid(
-                    placed, cols, cell, editing, canEdit,
+                    placed, cols, cell, editing, canEdit, scroll, viewport, topPad,
                     onStartEdit = { menu = false; panel = null; Speaker.stop(); editing = true },
                     onPlace = { id, x, y, w, h -> StandbyGrid.place(placed, id, x, y, w, h, cols)?.let { save(it) } },
+                    onMove = { id, x, y -> StandbyGrid.move(placed, id, x, y, cols)?.let { save(it) } },
                     onRemove = { id -> save(StandbyGrid.freeze(placed).filter { it.id != id }, grid.removed + id) },
                 ) { id, w, h ->
                     when (id) {
@@ -534,7 +563,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
         if (host != null && !editing) {
             Row(
                 Modifier.align(Alignment.BottomCenter).padding(bottom = 20.dp).offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f)
-                    .clip(CircleShape).background(Color.White.copy(alpha = 0.05f)).border(1.dp, Edge, CircleShape).padding(6.dp),
+                    .clip(CircleShape).background(Sheet).border(1.dp, Edge, CircleShape).padding(6.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 BoardAction(Icons.Rounded.Mic, stringResource(R.string.chat_voice)) { host.unlocked { host.listen() } }
@@ -565,6 +594,10 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 onOpenApp?.let { TextButton(onClick = it) { Text(stringResource(R.string.board_open_app), color = Teal) } }
+                // SwitchGuard ana ekransa telefonun kendi ana ekranına geçiş (ana ekran tuşu yine buraya döner).
+                if (canEdit && remember { HomeLauncher.isDefault(context) }) TextButton(onClick = { menu = false; HomeLauncher.returnToSystemHome(context) }) {
+                    Text(stringResource(R.string.board_system_home), color = Ink)
+                }
                 if (canEdit) TextButton(onClick = { menu = false; panel = null; Speaker.stop(); editing = true }) {
                     Text(stringResource(R.string.board_edit), color = Ink)
                 }
@@ -589,8 +622,12 @@ private fun WidgetGrid(
     cell: Dp,
     editing: Boolean,
     canEdit: Boolean,
+    scroll: androidx.compose.foundation.ScrollState,
+    viewport: Float,
+    topPad: Float,
     onStartEdit: () -> Unit,
     onPlace: (String, Int, Int, Int, Int) -> Unit,
+    onMove: (String, Int, Int) -> Unit,
     onRemove: (String) -> Unit,
     body: @Composable (String, Dp, Dp) -> Unit,
 ) {
@@ -599,6 +636,7 @@ private fun WidgetGrid(
     val gapPx = with(density) { Gap.toPx() }
     val latest = rememberUpdatedState(placed)
     val place = rememberUpdatedState(onPlace)
+    val move = rememberUpdatedState(onMove)
     val startEdit = rememberUpdatedState(onStartEdit)
     var dragId by remember { mutableStateOf<String?>(null) }
     var dragPos by remember { mutableStateOf(Offset.Zero) }
@@ -618,6 +656,27 @@ private fun WidgetGrid(
             )
         } else null
     }
+    // Sürüklenen widget ekranın üst/alt kenarına gelince sayfa kendiliğinden kayar (uzak bir yere taşınabilsin).
+    LaunchedEffect(dragId) {
+        val id = dragId ?: return@LaunchedEffect
+        val edge = with(density) { 72.dp.toPx() }
+        val speed = with(density) { 12.dp.toPx() }
+        while (dragId == id) {
+            val me = latest.value.firstOrNull { it.item.id == id }
+            val hPx = (me?.h ?: 1) * step - gapPx
+            val top = dragPos.y + topPad - scroll.value
+            val want = when {
+                top < edge -> -speed
+                top + hPx > viewport - edge -> speed
+                else -> 0f
+            }
+            if (want != 0f) {
+                val used = scroll.scrollBy(want)
+                if (used != 0f) dragPos = Offset(dragPos.x, (dragPos.y + used).coerceAtLeast(0f))
+            }
+            delay(16)
+        }
+    }
     val active = dragId ?: sizing?.first
     val ghost = active?.let { id -> target(id)?.let { id to it } }
     val rows = maxOf(
@@ -627,11 +686,12 @@ private fun WidgetGrid(
     fun span(n: Int) = cell * n + Gap * (n - 1)
     Box(Modifier.fillMaxWidth().height(if (rows == 0) 0.dp else span(rows))) {
         ghost?.let { (id, t) ->
-            val ok = StandbyGrid.canPlace(latest.value, id, t[0], t[1], t[2], t[3], cols)
+            // Taşırken dolu yer de olur (yer değiştirir); boyutlarken yalnız boş alan.
+            val ok = if (dragId == id) true else StandbyGrid.canPlace(latest.value, id, t[0], t[1], t[2], t[3], cols)
             Box(
                 Modifier.offset { IntOffset((t[0] * step).roundToInt(), (t[1] * step).roundToInt()) }.size(span(t[2]), span(t[3]))
-                    .clip(RoundedCornerShape(22.dp)).background((if (ok) Teal else Red).copy(alpha = 0.12f))
-                    .border(2.dp, (if (ok) Teal else Red).copy(alpha = 0.8f), RoundedCornerShape(22.dp)),
+                    .clip(CardShape).background((if (ok) Teal else Red).copy(alpha = 0.10f))
+                    .border(1.5.dp, (if (ok) Teal else Red).copy(alpha = 0.6f), CardShape),
             )
         }
         for (p in placed) key(p.item.id) {
@@ -664,7 +724,7 @@ private fun WidgetGrid(
                                     if (dragId == id) dragPos += amount
                                 },
                                 onDragEnd = {
-                                    target(id)?.let { t -> place.value(id, t[0], t[1], t[2], t[3]) }
+                                    target(id)?.let { t -> move.value(id, t[0], t[1]) }
                                     dragId = null
                                 },
                                 onDragCancel = { dragId = null },
@@ -674,7 +734,7 @@ private fun WidgetGrid(
             ) {
                 body(id, w, h)
                 if (editing) {
-                    Box(Modifier.matchParentSize().border(1.5.dp, Teal.copy(alpha = if (dragging) 0.9f else 0.5f), RoundedCornerShape(22.dp)))
+                    Box(Modifier.matchParentSize().border(1.dp, Teal.copy(alpha = if (dragging) 0.7f else 0.35f), CardShape))
                     EditKey(Icons.Rounded.Close, stringResource(R.string.board_hide), Modifier.align(Alignment.TopStart)) { onRemove(id) }
                     // Boyut tutamağı: sürükledikçe canlı büyür, bırakınca en yakın hücre sayısına oturur (alan boşsa).
                     EditKey(
@@ -706,8 +766,8 @@ private fun WidgetGrid(
 @Composable
 private fun EditKey(icon: ImageVector, label: String?, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Box(
-        modifier.padding(4.dp).size(30.dp).clip(CircleShape).background(Color(0xE6202A2E))
-            .border(1.dp, Color.White.copy(alpha = 0.25f), CircleShape).clickable(onClick = onClick),
+        modifier.padding(4.dp).size(30.dp).clip(CircleShape).background(Color(0xF02A2D35))
+            .border(1.dp, Color.White.copy(alpha = 0.12f), CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) { Icon(icon, label, tint = Ink, modifier = Modifier.size(18.dp)) }
 }
@@ -736,7 +796,7 @@ private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
     Box(
         Modifier.size(48.dp).clip(CircleShape).clickable(onClick = onClick),
         contentAlignment = Alignment.Center,
-    ) { Icon(icon, label, tint = Ink.copy(alpha = 0.85f), modifier = Modifier.size(24.dp)) }
+    ) { Icon(icon, label, tint = Ink.copy(alpha = 0.75f), modifier = Modifier.size(22.dp)) }
 }
 
 /**
@@ -746,61 +806,53 @@ private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
 @Composable
 private fun DeviceWidget(d: DeviceSnapshot, ch: Int, accent: Color, w: Dp, h: Dp, editing: Boolean, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
     val on = d.online && d.switches[ch] == true
-    val lit = if (d.online) accent else Tv.faint
-    val shape = RoundedCornerShape(22.dp)
     val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud, d.sensorOnly) { DeviceKinds.of(d) }
+    val color = onColor(kind)
     val name = if (d.isMultiChannel) "${d.name} · ${ch + 1}" else d.name
-    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title)
-    val stateColor = when { !d.online -> Red.copy(alpha = 0.85f); on -> lit; else -> Ink }
+    val watts = d.power?.takeIf { on && it >= 1 }?.let { " · " + boardWatts(it) }.orEmpty()
+    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title) + watts
     val small = minOf(w, h)
-    val circle = (small * 0.42f).coerceIn(28.dp, 64.dp)
+    val circle = (small * 0.42f).coerceIn(34.dp, 52.dp)
+    val iconTint by animateColorAsState(if (on) color else if (d.online) Ink.copy(alpha = 0.75f) else Dim, tween(250), label = "devIcon")
+    val badge by animateColorAsState(if (on) color.copy(alpha = 0.20f) else Color.White.copy(alpha = 0.06f), tween(250), label = "devBadge")
     val iconCircle: @Composable () -> Unit = {
-        Box(
-            Modifier.size(circle)
-                .drawBehind { if (on) drawCircle(lit.copy(alpha = 0.22f), radius = size.minDimension * 0.66f) }
-                .background(if (on) lit else Color.White.copy(alpha = 0.07f), CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                if (d.online) kind.icon() else Icons.Rounded.CloudOff, null,
-                tint = if (on) Tv.ink else if (d.online) Ink else Tv.faint, modifier = Modifier.size(circle * 0.55f),
-            )
+        Box(Modifier.size(circle).background(badge, CircleShape), contentAlignment = Alignment.Center) {
+            Icon(if (d.online) kind.icon() else Icons.Rounded.CloudOff, null, tint = iconTint, modifier = Modifier.size(circle * 0.54f))
+        }
+    }
+    val nameSize = dpSp((small.value * 0.15f).coerceIn(13f, 18f))
+    val stateSize = dpSp((small.value * 0.115f).coerceIn(11f, 14f))
+    val labels: @Composable (Modifier, TextAlign) -> Unit = { m, align ->
+        Column(m) {
+            Text(name, color = Ink, fontSize = nameSize, fontWeight = FontWeight.SemiBold, lineHeight = nameSize * 1.2f,
+                maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = Modifier.fillMaxWidth())
+            Text(state, color = if (!d.online) Red else Dim, fontSize = stateSize, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                textAlign = align, modifier = Modifier.fillMaxWidth())
         }
     }
     Box(
-        Modifier.fillMaxSize().clip(shape)
-            .drawBehind {
-                if (on) drawRect(Brush.verticalGradient(listOf(Color.Transparent, lit.copy(alpha = 0.24f)), startY = size.height * 0.3f))
-            }
-            .background(Faint, shape)
-            .border(1.dp, if (on) lit.copy(alpha = 0.45f) else Edge, shape)
+        Modifier.fillMaxSize().clip(CardShape).background(Card, CardShape).border(1.dp, Edge, CardShape)
+            .alpha(if (d.online) 1f else 0.65f)
             .then(if (onToggle != null && d.online && !editing) Modifier.clickable { onToggle(d, ch, !on) } else Modifier)
-            .padding(if (small < 90.dp) 8.dp else 14.dp),
+            .padding(if (small < 90.dp) 10.dp else 14.dp),
     ) {
         when {
-            // Büyük kare: TV kartı.
+            // Büyük: simge üstte, ad ve durum altta.
             h >= 140.dp && w >= 120.dp -> Column(Modifier.fillMaxSize()) {
                 iconCircle()
                 Spacer(Modifier.weight(1f))
-                Text(state, color = stateColor, fontSize = dpSp((h.value * 0.14f).coerceIn(18f, 40f)), fontWeight = FontWeight.Light, maxLines = 1)
-                Text(name, color = Ink.copy(alpha = 0.92f), fontSize = dpSp((h.value * 0.085f).coerceIn(13f, 22f)), maxLines = 2, overflow = TextOverflow.Ellipsis)
+                labels(Modifier, TextAlign.Start)
             }
-            // Yatay: simge + durum/ad.
+            // Yatay: simge solda, ad ve durum yanında.
             w >= h * 1.4f && w >= 120.dp -> Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
                 iconCircle()
-                Spacer(Modifier.width(10.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(state, color = stateColor, fontSize = dpSp((h.value * 0.22f).coerceIn(14f, 30f)), fontWeight = FontWeight.Light, maxLines = 1)
-                    Text(name, color = Ink.copy(alpha = 0.92f), fontSize = dpSp((h.value * 0.15f).coerceIn(11f, 20f)), maxLines = if (h >= 110.dp) 2 else 1, overflow = TextOverflow.Ellipsis)
-                }
+                Spacer(Modifier.width(12.dp))
+                labels(Modifier.weight(1f), TextAlign.Start)
             }
-            // Küçük: simge + ad (durum renkten okunur).
+            // Küçük: ortada simge, altında ad ve durum.
             else -> Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
                 iconCircle()
-                Text(
-                    name, color = if (on) lit else Ink.copy(alpha = 0.92f), fontSize = dpSp((small.value * 0.13f).coerceIn(10f, 16f)),
-                    maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center, lineHeight = dpSp((small.value * 0.15f).coerceIn(12f, 18f)),
-                )
+                labels(Modifier, TextAlign.Center)
             }
         }
     }
@@ -816,21 +868,21 @@ private fun SensorWidget(d: DeviceSnapshot, h: Dp) {
     val s = d.sensors
     val alert = d.online && (d.sensorActive(SensorKind.WATER) == true || d.sensorActive(SensorKind.DOOR) == true)
     val busy = d.online && d.sensorActive(SensorKind.MOTION) == true
-    val accent = when { alert -> Color(0xFFFF6B6B); busy -> Amber; else -> Teal }
+    val accent = when { alert -> Red; busy -> Amber; else -> Teal }
     val big = dpSp((h.value * 0.32f).coerceIn(18f, 56f))
     val mid = dpSp((h.value * 0.18f).coerceIn(13f, 30f))
     Column(
-        Modifier.fillMaxSize().glass(20, tint = if (alert) accent else null)
+        Modifier.fillMaxSize().glass(tint = if (alert) accent else null)
             .alpha(if (d.online) 1f else 0.5f).padding(horizontal = 12.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             val icon = s.keys.firstOrNull { it != SensorKind.BATTERY }?.icon() ?: Icons.Rounded.Sensors
             Icon(if (d.online) icon else Icons.Rounded.CloudOff, null, tint = if (d.online) accent else Dim, modifier = Modifier.size(16.dp))
-            Text(d.name, color = Dim, fontSize = 13.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(d.name, color = Dim, fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            s[SensorKind.TEMPERATURE]?.let { Text(formatNumber(it) + "°", color = Ink, fontSize = big, fontWeight = FontWeight.Light, maxLines = 1) }
+            s[SensorKind.TEMPERATURE]?.let { Text(formatNumber(it) + "°", color = Ink, fontSize = big, fontWeight = FontWeight.Normal, maxLines = 1) }
             s[SensorKind.HUMIDITY]?.let { Text(formatNumber(it.roundToInt().toDouble()) + " %", color = Dim, fontSize = mid, maxLines = 1) }
             for (k in listOf(SensorKind.DOOR, SensorKind.MOTION, SensorKind.WATER)) {
                 val v = s[k] ?: continue
@@ -844,14 +896,14 @@ private fun SensorWidget(d: DeviceSnapshot, h: Dp) {
 /** Açık kurallar: ad ve "Eğer → O zaman" özeti; uyarılar zil, otomasyonlar şimşek simgesiyle. */
 @Composable
 private fun Rules(list: List<Automation>, devices: List<DeviceSnapshot>, max: Int, modifier: Modifier) {
-    Column(modifier.glass(22).padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         BoardTitle(stringResource(R.string.automations_rules_title) + " · " + list.size)
         for (a in list.take(max)) {
             val (cond, act) = describe(a, devices)
             val alert = a.action.kind == ActionKind.ALARM || a.action.kind == ActionKind.NOTIFY
             BoardRow(
                 if (alert) Icons.Rounded.NotificationsActive else Icons.Rounded.Bolt,
-                if (a.action.kind == ActionKind.ALARM) Color(0xFFFF6B6B) else if (alert) Amber else Teal,
+                if (a.action.kind == ActionKind.ALARM) Red else if (alert) Amber else Dim,
                 a.name.ifBlank { cond }, "", sub = "$cond → $act", lines = 1,
             )
         }
@@ -875,12 +927,12 @@ private fun ClockWidget(now: Long, w: Dp, h: Dp) {
     val size = minOf(h.value * (if (showDate) 0.6f else 0.78f), w.value * (if (h24) 0.27f else 0.2f))
     Column(Modifier.fillMaxSize().padding(horizontal = 4.dp), verticalArrangement = Arrangement.Center) {
         Text(
-            time, color = Ink, fontSize = dpSp(size), fontWeight = FontWeight.Thin, letterSpacing = (-2).sp,
+            time, color = Ink, fontSize = dpSp(size), fontWeight = FontWeight.Light, letterSpacing = (-1).sp,
             lineHeight = dpSp(size * 1.04f), maxLines = 1, softWrap = false,
         )
         if (showDate) Text(
-            date.uppercase(locale), color = Dim, fontSize = dpSp((h.value * 0.07f).coerceIn(11f, 22f)), fontWeight = FontWeight.Medium,
-            letterSpacing = 3.sp, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(start = 4.dp),
+            date.replaceFirstChar { it.titlecase(locale) }, color = Dim, fontSize = dpSp((h.value * 0.085f).coerceIn(13f, 24f)),
+            maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(start = 4.dp),
         )
     }
 }
@@ -897,10 +949,10 @@ private fun WeatherWidget(w: WeatherClient.Today?, hasLocation: Boolean, width: 
             return@Row
         }
         val (icon, label) = weatherLook(w.code, w.isDay)
-        Icon(icon, null, tint = if (w.code == 0 && w.isDay) Amber else Ink, modifier = Modifier.size((h * 0.45f).coerceIn(24.dp, 96.dp)))
-        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = dpSp((h.value * 0.5f).coerceIn(20f, 96f)), fontWeight = FontWeight.Thin, maxLines = 1)
+        Icon(icon, null, tint = if (w.code == 0 && w.isDay) Amber else Ink.copy(alpha = 0.85f), modifier = Modifier.size((h * 0.45f).coerceIn(24.dp, 96.dp)))
+        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = dpSp((h.value * 0.46f).coerceIn(20f, 88f)), fontWeight = FontWeight.Light, maxLines = 1)
         if (width >= 170.dp) Column {
-            Text(stringResource(label), color = Ink, fontSize = dpSp((h.value * 0.18f).coerceIn(13f, 26f)), maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(stringResource(label), color = Ink, fontSize = dpSp((h.value * 0.17f).coerceIn(13f, 24f)), fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
             val parts = listOfNotNull(
                 if (w.min != null && w.max != null) "↓${w.min.roundToInt()}°  ↑${w.max.roundToInt()}°" else null,
                 w.rainChance?.takeIf { it > 0 }?.let { stringResource(R.string.board_rain, it) },
@@ -934,17 +986,19 @@ private fun StatusWidget(alarm: List<String>, conn: ConnState, offline: List<Str
         conn == ConnState.ERROR -> Triple(Amber, stringResource(R.string.board_conn_error), null)
         conn == ConnState.STOPPED -> Triple(Amber, stringResource(R.string.board_stopped), null)
         offline.isNotEmpty() -> Triple(Amber, stringResource(R.string.board_offline, offline.size), offline.joinToString(", "))
-        else -> Triple(Teal, stringResource(R.string.board_all_ok), stringResource(R.string.board_watching, watched))
+        else -> Triple(Ok, stringResource(R.string.board_all_ok), stringResource(R.string.board_watching, watched))
     }
-    val ok = color == Teal
+    val ok = color == Ok
     Row(
-        Modifier.fillMaxSize().glass(22, tint = if (ok) null else color).padding(horizontal = 14.dp, vertical = 8.dp),
+        Modifier.fillMaxSize().glass(tint = if (ok) null else color).padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
-        Box(Modifier.size(24.dp), contentAlignment = Alignment.Center) { PulseDot(if (ok) accent else color, pulsing = ok || alarm.isNotEmpty()) }
+        Box(Modifier.size(40.dp).background(color.copy(alpha = 0.16f), CircleShape), contentAlignment = Alignment.Center) {
+            Icon(if (ok) Icons.Rounded.CheckCircle else Icons.Rounded.ErrorOutline, null, tint = color, modifier = Modifier.size(22.dp))
+        }
         Column(Modifier.weight(1f)) {
-            Text(title, color = Ink, fontSize = dpSp((h.value * 0.2f).coerceIn(15f, 30f)), fontWeight = FontWeight.Light, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(title, color = Ink, fontSize = dpSp((h.value * 0.17f).coerceIn(15f, 22f)), fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             val sub = listOfNotNull(detail, stringResource(if (away) R.string.board_away else R.string.board_home)).joinToString(" · ")
             Text(sub, color = Dim, fontSize = dpSp((h.value * 0.13f).coerceIn(12f, 20f)), maxLines = maxOf(1, ((h - 50.dp) / 18.dp).toInt()), overflow = TextOverflow.Ellipsis)
         }
@@ -954,7 +1008,7 @@ private fun StatusWidget(alarm: List<String>, conn: ConnState, offline: List<Str
 /** Güç widget'ı: yarım daire gösterge; yükseklik yetince son 6 saatin eğrisi. */
 @Composable
 private fun PowerWidget(watts: Double, p: PowerView?, w: Dp, h: Dp) {
-    Box(Modifier.fillMaxSize().glass(22).padding(12.dp), contentAlignment = Alignment.Center) {
+    Box(Modifier.fillMaxSize().glass().padding(12.dp), contentAlignment = Alignment.Center) {
         val iw = w - 24.dp
         val ih = h - 24.dp
         val withChart = minOf(iw, (ih - 72.dp) * 2)
@@ -988,7 +1042,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(boardWatts(watts), color = Ink, fontSize = dpSp((width.value * 0.15f).coerceIn(16f, 54f)), fontWeight = FontWeight.Thin, maxLines = 1)
+                Text(boardWatts(watts), color = Ink, fontSize = dpSp((width.value * 0.14f).coerceIn(16f, 48f)), fontWeight = FontWeight.Light, maxLines = 1)
                 Text(stringResource(R.string.board_power_now, boardWatts(max)), color = Dim, fontSize = dpSp((width.value * 0.05f).coerceIn(10f, 15f)), maxLines = 1)
             }
         }
@@ -1004,7 +1058,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
                     if (i == 0) line.moveTo(x, y) else line.lineTo(x, y)
                 }
                 val fill = Path().apply { addPath(line); lineTo(size.width, size.height); lineTo(0f, size.height); close() }
-                drawPath(fill, Brush.verticalGradient(listOf(Teal.copy(alpha = 0.35f), Color.Transparent)))
+                drawPath(fill, Brush.verticalGradient(listOf(Teal.copy(alpha = 0.22f), Color.Transparent)))
                 drawPath(line, Teal, style = Stroke(2.dp.toPx(), cap = StrokeCap.Round))
             }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
@@ -1020,19 +1074,19 @@ private fun boardWatts(w: Double): String =
 
 @Composable
 private fun BoardTitle(text: String) {
-    Text(text.uppercase(LocalConfiguration.current.locales[0]), color = Dim, fontSize = 12.sp, letterSpacing = 1.5.sp, maxLines = 1)
+    Text(text, color = Ink, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
 }
 
 @Composable
 private fun Recent(list: List<LoggedEvent>, modifier: Modifier) {
     val context = LocalContext.current
     val strings = remember(context) { EventLog.strings(context) }
-    Column(modifier.glass(22).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         BoardTitle(stringResource(R.string.board_recent))
         if (list.isEmpty()) Text(stringResource(R.string.board_no_recent), color = Dim, fontSize = 15.sp)
         for (e in list) {
             val alarm = e.action == AlertAction.ALARM.name
-            BoardRow(icon = e.icon(), tint = if (alarm) Red else Dim, text = e.text(strings), time = eventTime(e.time))
+            BoardRow(icon = e.icon(), tint = if (alarm) Red else Dim, text = e.text(strings), time = eventTime(e.time), lines = 2)
         }
     }
 }
@@ -1053,7 +1107,7 @@ private fun eventTime(t: Long): String {
 private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, modifier: Modifier) {
     val context = LocalContext.current
     val durations = remember(context) { EventLog.durations(context) }
-    Column(modifier.glass(22).padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         BoardTitle(stringResource(R.string.board_upcoming))
         if (list.isEmpty()) Text(stringResource(R.string.board_no_upcoming), color = Dim, fontSize = 15.sp)
         for (u in list) {
@@ -1080,13 +1134,13 @@ private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, modifier: Mod
 @Composable
 private fun BoardRow(icon: ImageVector, tint: Color, text: String, time: String, sub: String? = null, lines: Int = 1) {
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.size(34.dp).clip(CircleShape).background(tint.copy(alpha = 0.14f)), contentAlignment = Alignment.Center) {
-            Icon(icon, null, tint = tint, modifier = Modifier.size(18.dp))
+        Box(Modifier.size(32.dp).clip(CircleShape).background(tint.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
+            Icon(icon, null, tint = tint, modifier = Modifier.size(17.dp))
         }
         Column(Modifier.weight(1f)) {
-            Text(text, color = Ink, fontSize = 15.sp, maxLines = lines, overflow = TextOverflow.Ellipsis)
+            Text(text, color = Ink.copy(alpha = 0.92f), fontSize = 14.sp, lineHeight = 19.sp, maxLines = lines, overflow = TextOverflow.Ellipsis)
             if (sub != null) Text(sub, color = Dim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        Text(time, color = Dim, fontSize = 14.sp, maxLines = 1)
+        Text(time, color = Dim, fontSize = 12.sp, maxLines = 1)
     }
 }
