@@ -77,6 +77,7 @@ fun RuleShareDialog(rule: Automation, onDismiss: () -> Unit) {
 @Composable
 fun RuleImportDialog(onDismiss: () -> Unit, onImported: (Automation) -> Unit) {
     val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val store = remember { Store.get(context) }
     var text by remember {
         mutableStateOf(runCatching {
@@ -102,8 +103,8 @@ fun RuleImportDialog(onDismiss: () -> Unit, onImported: (Automation) -> Unit) {
                 val r = RuleShare.decode(text, ruleRefNames(store))
                 if (r == null) { error = true; return@TextButton }
                 store.saveAutomation(r.rule)
-                val msg = context.getString(R.string.rule_import_done, r.rule.name) +
-                    if (r.unresolved > 0) "\n" + context.resources.getQuantityString(R.plurals.rule_import_unresolved, r.unresolved, r.unresolved) else ""
+                val msg = res.getString(R.string.rule_import_done, r.rule.name) +
+                    if (r.unresolved > 0) "\n" + res.getQuantityString(R.plurals.rule_import_unresolved, r.unresolved, r.unresolved) else ""
                 Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
                 onImported(r.rule)
             }, enabled = text.isNotBlank(), modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.rule_import_action)) }
@@ -119,13 +120,14 @@ fun RuleImportDialog(onDismiss: () -> Unit, onImported: (Automation) -> Unit) {
 @Composable
 fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core.RuleToDevice.Planned>, onDismiss: () -> Unit) {
     val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
     val store = remember { Store.get(context) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     var busy by remember { mutableStateOf(false) }
     AlertDialog(
         onDismissRequest = { if (!busy) onDismiss() },
         title = { Text(stringResource(R.string.rule_to_device)) },
-        text = { Text(context.resources.getQuantityString(R.plurals.rule_to_device_desc, plan.size, plan.size)) },
+        text = { Text(res.getQuantityString(R.plurals.rule_to_device_desc, plan.size, plan.size)) },
         confirmButton = {
             TextButton(enabled = !busy, modifier = Modifier.tvFocusRing(), onClick = {
                 busy = true
@@ -140,7 +142,7 @@ fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core
                     if (error == null) store.saveAutomation(rule.copy(enabled = false))
                     Toast.makeText(
                         context,
-                        error?.let { context.getString(R.string.rule_to_device_failed, it) } ?: context.getString(R.string.rule_to_device_done),
+                        error?.let { res.getString(R.string.rule_to_device_failed, it) } ?: res.getString(R.string.rule_to_device_done),
                         Toast.LENGTH_LONG,
                     ).show()
                     busy = false
