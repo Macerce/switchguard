@@ -117,6 +117,17 @@ class RuntimeState private constructor(context: Context) {
     var actionSteps: List<com.macerce.switchguard.core.ActionSteps.Due>
         get() = com.macerce.switchguard.core.ActionSteps.fromJson(prefs.getString("actionSteps", null))
         set(v) = put { putString("actionSteps", com.macerce.switchguard.core.ActionSteps.toJson(v)) }
+    /**
+     * Kuralların süren çalışmaları (beklemedeki adımlar, "şu olana kadar bekle", sıradakiler). İlk okunuşta 2.54 ve
+     * öncesinin [actionSteps] kaydı bu biçime çevrilir.
+     */
+    var scriptRuns: List<com.macerce.switchguard.core.ScriptRunner.Run>
+        get() {
+            val raw = prefs.getString("scriptRuns", null)
+            if (raw != null) return com.macerce.switchguard.core.ScriptRunner.fromJson(raw)
+            return com.macerce.switchguard.core.ScriptRunner.fromLegacy(actionSteps)
+        }
+        set(v) = put { putString("scriptRuns", com.macerce.switchguard.core.ScriptRunner.toJson(v)); remove("actionSteps") }
     /** Kural kimliği → o kuralın "durumu hatırla" eylemiyle kaydettiği kanal durumları ("geri getir" bunlara döner). */
     var savedStates: Map<String, List<com.macerce.switchguard.core.SceneAction>>
         get() = runCatching {

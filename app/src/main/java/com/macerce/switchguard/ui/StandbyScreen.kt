@@ -392,7 +392,7 @@ private fun StandbyBoard(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host:
 
     val snapshots = remember(version) { store.snapshots }
     // Yalnız sensörler aç/kapa widget'ı değil, kendi sensör widget'ında değerleriyle gösterilir.
-    val tiles = remember(version) { store.snapshotsWithGroups.filterNot { it.sensorOnly } }
+    val tiles = remember(version) { store.snapshotsForRules.filterNot { it.sensorOnly } }
     val sensors = remember(version) { snapshots.filter { it.hasSensors } }
     // Açık kurallar (otomasyon + koşullu uyarı); sensör hızlı uyarıları da dahil.
     val rules = remember(version) { store.automations.filter { it.enabled } }

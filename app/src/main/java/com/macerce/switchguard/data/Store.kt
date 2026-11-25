@@ -511,6 +511,18 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     val snapshotsWithGroups: List<DeviceSnapshot>
         get() = com.macerce.switchguard.core.DeviceGroup.withGroups(snapshots, groups)
 
+    /** Kural motoru ve düzenleyici için: cihazlar + gruplar + yardımcılar (sanal anahtar, sayaç, zamanlayıcı). */
+    val snapshotsForRules: List<DeviceSnapshot>
+        get() = rulesSnapshots(snapshots, helpers)
+
+    fun rulesSnapshots(devices: List<DeviceSnapshot>, helpers: List<com.macerce.switchguard.core.Helper>): List<DeviceSnapshot> =
+        com.macerce.switchguard.core.DeviceGroup.withGroups(devices, groups) + helpers.map { it.snapshot() }
+
+    /** Yardımcılar (değerleriyle birlikte); bkz. [com.macerce.switchguard.core.Helper]. */
+    var helpers: List<com.macerce.switchguard.core.Helper>
+        get() = parsed.get("helpers", prefs.getString("helpers", null)) { com.macerce.switchguard.core.Helpers.fromJson(it) }
+        set(v) = put { putString("helpers", com.macerce.switchguard.core.Helpers.toJson(v)) }
+
     /** Gün doğumu/batımı ve hava sıcaklığı kuralları için konum; null = girilmedi. */
     var latitude: Double?
         get() = str("lat").toDoubleOrNull()
@@ -619,7 +631,9 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
     /** Servisin değerlendirdiği otomasyonlar: kategori tetikleyicileri cihazlara açılmış. */
     fun engineAutomations(devices: List<DeviceSnapshot> = snapshots): List<com.macerce.switchguard.core.Automation> {
         val all = rules
-        return com.macerce.switchguard.core.DeviceCategory.expand(automations, devices) { id -> (all[id] ?: DeviceRules()).effectiveCategory } +
+        // Ek tetikleyiciler tetikleyici başına kopyaya, kategori tetikleyicileri cihaz başına kopyaya açılır.
+        val units = automations.flatMap { it.units() }
+        return com.macerce.switchguard.core.DeviceCategory.expand(units, devices) { id -> (all[id] ?: DeviceRules()).effectiveCategory } +
             com.macerce.switchguard.core.ChatTemplate.automations(chatTemplates.orEmpty())
     }
     fun setRules(deviceId: String, r: DeviceRules) { rules = rules + (deviceId to r) }

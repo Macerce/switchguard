@@ -38,9 +38,12 @@ class AlertsViewTest {
 
     @Test
     fun `her islem turu tam olarak bir sekmenin duzenleyicisinde`() {
+        // İlk eylem olarak sunulan türler tam bir sekmede; yalnız ek adım olan türler (bekle, eğer, gönder…) Otomasyon'da.
+        val offered = AutomationTab.entries.flatMap { it.actions }.toSet()
         for (kind in ActionKind.entries) {
             val tabs = AutomationTab.entries.filter { kind in it.actions }
-            assertEquals(listOf(AutomationTab.tabOf(kind)), tabs)
+            if (kind in offered) assertEquals(listOf(AutomationTab.tabOf(kind)), tabs)
+            else assertEquals(AutomationTab.AUTOMATIONS, AutomationTab.tabOf(kind))
         }
     }
 

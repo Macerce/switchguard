@@ -37,7 +37,7 @@ object Heartbeat {
  * bir mesaj; test alarmı göndermez (ayarlardaki "Dene" ayrı).
  */
 object AlertHooks {
-    enum class Event { ALARM, DISMISSED, TEST }
+    enum class Event { ALARM, DISMISSED, TEST, RULE }
 
     /** ntfy başlıkları: başlık, öncelik (alarm en yüksek) ve simge etiketi. */
     fun ntfyHeaders(event: Event, device: String): Map<String, String> = mapOf(
@@ -46,11 +46,13 @@ object AlertHooks {
             Event.ALARM -> "5"
             Event.DISMISSED -> "3"
             Event.TEST -> "3"
+            Event.RULE -> "3"
         },
         "Tags" to when (event) {
             Event.ALARM -> "rotating_light"
             Event.DISMISSED -> "white_check_mark"
             Event.TEST -> "test_tube"
+            Event.RULE -> "robot"
         },
     )
 

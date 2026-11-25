@@ -79,18 +79,122 @@ enum class ActionKind {
      * Şu anki aç/kapalı durumu hatırla ([AutoAction.deviceId] = tek cihaz ya da sahne kimliği: o sahnenin cihazları;
      * "tüm cihazlar" yoktur) / aynı kuralın hatırladığı duruma geri döndür ([StateSnapshot]).
      */
-    SAVE_STATE, RESTORE_STATE;
+    SAVE_STATE, RESTORE_STATE,
+    /** Açıksa kapat, kapalıysa aç. */
+    TOGGLE,
+    /** [AutoAction.seconds] saniye bekle. */
+    DELAY,
+    /** Koşul ([AutoAction.cond]) sağlanana kadar bekle; [AutoAction.seconds] > 0 ise en çok o kadar (sonra [AutoAction.stopOnTimeout]). */
+    WAIT_UNTIL,
+    /** Eğer [AutoAction.cond] sağlanıyorsa [AutoAction.then], değilse [AutoAction.otherwise]. */
+    IF,
+    /** [AutoAction.then] adımlarını [AutoAction.count] kez ya da (count = 0) [AutoAction.cond] sağlandıkça tekrarla. */
+    REPEAT,
+    /** Kuralı burada bitir. */
+    STOP,
+    /** Başka bir kuralın eylemlerini çalıştır ([AutoAction.deviceId] = kural kimliği; koşullarına bakılmaz). */
+    RUN_AUTOMATION,
+    /** Metni ntfy / webhook / Telegram'a gönder ([AutoAction.deviceId] = [SendTarget] adı, [AutoAction.text]). */
+    SEND,
+    /** Işık parlaklığı ([AutoAction.level] %) ve rengi ([AutoAction.color] 0xRRGGBB; -1 = değiştirme). */
+    SET_LEVEL,
+    /** Sayaca [AutoAction.count] ekle (eksi: çıkar) / sayacı [AutoAction.count] yap ([AutoAction.deviceId] = sayaç). */
+    COUNTER_ADD, COUNTER_SET;
 
-    val usesDevice get() = this == TURN_ON || this == TURN_OFF
+    val usesDevice get() = this == TURN_ON || this == TURN_OFF || this == TOGGLE || this == SET_LEVEL
     val usesSnapshot get() = this == SAVE_STATE || this == RESTORE_STATE
     val usesCycle get() = this == START_CYCLE || this == STOP_CYCLE
+    val usesCounter get() = this == COUNTER_ADD || this == COUNTER_SET
+    /** İçinde başka adımlar olan blok. */
+    val isBlock get() = this == IF || this == REPEAT
+    /** Akış adımı (bekle, eğer, tekrarla, dur): kendisi bir cihaza dokunmaz. */
+    val isFlow get() = isBlock || this == DELAY || this == WAIT_UNTIL || this == STOP
+    /** Bildirim/alarm/gönderim metni alır. */
+    val usesText get() = this == NOTIFY || this == ALARM || this == SEND
+}
+
+/** [ActionKind.SEND] hedefi. */
+enum class SendTarget { NTFY, WEBHOOK, TELEGRAM }
+
+/** Kural yeniden tetiklenince, önceki çalışması (beklemeli adımları) sürüyorsa ne olur. */
+enum class RunMode {
+    /** Öncekini iptal edip baştan başla (2.55 öncesi davranış). */
+    RESTART,
+    /** Yeni tetiklenişi yok say. */
+    SINGLE,
+    /** Sıraya al; öncekiler bitince çalışır ([Automation.maxRuns] kadar). */
+    QUEUED,
+    /** Aynı anda çalıştır ([Automation.maxRuns] kadar). */
+    PARALLEL,
 }
 
 /** Kural yalnızca evdeyken ya da dışarıdayken geçerli. */
 enum class PresenceRule { HOME, AWAY }
 
-/** [waitMinutes]: yalnız ek eylemlerde, kendinden önceki eylemden sonra beklenecek süre. */
-data class AutoAction(val kind: ActionKind, val deviceId: String = "", val channel: Int = 0, val waitMinutes: Int = 0)
+/**
+ * Kuralın bir adımı. [waitMinutes]: yalnız üst düzey ek eylemlerde, kendinden önceki eylemden sonra beklenecek süre
+ * (2.55 öncesi biçim; yeni kurallarda [ActionKind.DELAY] adımı).
+ */
+data class AutoAction(
+    val kind: ActionKind,
+    val deviceId: String = "",
+    val channel: Int = 0,
+    val waitMinutes: Int = 0,
+    /** [ActionKind.DELAY] süresi; [ActionKind.WAIT_UNTIL] en uzun bekleme (0 = sınırsız). */
+    val seconds: Int = 0,
+    /** [ActionKind.IF] / [ActionKind.WAIT_UNTIL] / [ActionKind.REPEAT] (count = 0 iken "sağlandıkça") koşulu. */
+    val cond: CondSet? = null,
+    /** [ActionKind.IF] "ise" dalı; [ActionKind.REPEAT] gövdesi. */
+    val then: List<AutoAction> = emptyList(),
+    /** [ActionKind.IF] "değilse" dalı. */
+    val otherwise: List<AutoAction> = emptyList(),
+    /** [ActionKind.REPEAT] tekrar sayısı; sayaç eylemlerinde değer. */
+    val count: Int = 0,
+    /** Bildirim/alarm/gönderim metni; boş = varsayılan metin. Yer tutucular: [TextTemplate]. */
+    val text: String = "",
+    /** [ActionKind.SET_LEVEL] parlaklık %1–100; null = değiştirme. */
+    val level: Int? = null,
+    /** [ActionKind.SET_LEVEL] renk 0xRRGGBB; null = değiştirme. */
+    val color: Int? = null,
+    /** [ActionKind.WAIT_UNTIL] süre dolunca kuralı bitir (false: sonraki adımla devam). */
+    val stopOnTimeout: Boolean = false,
+) {
+    /** Bu adım ve içindeki bütün adımlar (önce kendisi; "ise", sonra "değilse"). */
+    fun flatten(): List<AutoAction> = listOf(this) + then.flatMap { it.flatten() } + otherwise.flatMap { it.flatten() }
+
+    companion object {
+        fun toJson(x: AutoAction): JSONObject = JSONObject().put("kind", x.kind.name).put("device", x.deviceId).put("channel", x.channel).apply {
+            if (x.waitMinutes > 0) put("wait", x.waitMinutes)
+            if (x.seconds > 0) put("sec", x.seconds)
+            x.cond?.let { put("cond", it.toJson()) }
+            if (x.then.isNotEmpty()) put("then", listToJson(x.then))
+            if (x.otherwise.isNotEmpty()) put("else", listToJson(x.otherwise))
+            if (x.count != 0) put("count", x.count)
+            if (x.text.isNotEmpty()) put("text", x.text)
+            x.level?.let { put("level", it) }
+            x.color?.let { put("color", it) }
+            if (x.stopOnTimeout) put("stopTo", true)
+        }
+
+        fun listToJson(list: List<AutoAction>): JSONArray = JSONArray().apply { list.forEach { put(toJson(it)) } }
+
+        /** Tanınmayan tür (yeni sürümden) hata verir: yarım anlaşılmış adım çalıştırılmaz. */
+        fun fromJson(x: JSONObject): AutoAction = AutoAction(
+            ActionKind.valueOf(x.getString("kind")), x.optString("device"), x.optInt("channel"), x.optInt("wait"),
+            seconds = x.optInt("sec", 0),
+            cond = CondSet.fromJson(x.optJSONObject("cond")),
+            then = listFromJson(x.optJSONArray("then")),
+            otherwise = listFromJson(x.optJSONArray("else")),
+            count = x.optInt("count", 0),
+            text = x.optString("text"),
+            level = if (x.has("level")) x.getInt("level") else null,
+            color = if (x.has("color")) x.getInt("color") else null,
+            stopOnTimeout = x.optBoolean("stopTo", false),
+        )
+
+        fun listFromJson(arr: JSONArray?): List<AutoAction> = arr?.let { a -> (0 until a.length()).map { fromJson(a.getJSONObject(it)) } }.orEmpty()
+    }
+}
 
 data class Automation(
     val id: String,
@@ -109,70 +213,147 @@ data class Automation(
     /** Yalnızca evdeyken / dışarıdayken; null = her zaman. */
     val presence: PresenceRule? = null,
     /**
-     * İlk eylemden sonra sırayla yapılacak ek eylemler (her biri kendi [AutoAction.waitMinutes] beklemesiyle).
-     * JSON'da ayrı alandadır ("more"): bunu bilmeyen eski sürümler yalnız ilk eylemi çalıştırır.
+     * İlk eylemden sonra sırayla yapılacak ek eylemler (her biri kendi [AutoAction.waitMinutes] beklemesiyle; içlerinde
+     * eğer/tekrarla blokları olabilir). JSON'da ayrı alandadır ("more"): bunu bilmeyen eski sürümler yalnız ilk eylemi
+     * çalıştırır.
      */
     val extraActions: List<AutoAction> = emptyList(),
     /**
-     * Döngü koruması: kural [LOOP_WINDOW_MS] içinde bu kadar kez çalıştıysa bir sonraki tetiklenişte çalışmaz;
-     * tetikleyen cihaz kapatılıp kapalı bırakılır, alarm çalar ve kural kapatılır (bağlı cihaz sürekli aç-kapa
-     * yüzünden bozulmasın). 0 = kapalı.
+     * Döngü koruması: kural [AutomationEngine.LOOP_WINDOW_MS] içinde bu kadar kez çalıştıysa bir sonraki tetiklenişte
+     * çalışmaz; kuralın açıp kapattığı cihazlar kapatılıp kapalı bırakılır ([LoopGuard]), alarm çalar ve kural kapatılır.
+     * 0 = kapalı.
      */
     val loopGuard: Int = 0,
+    /** Ek tetikleyiciler: herhangi biri olunca da çalışır ("veya"). JSON'da "triggers2". */
+    val extraTriggers: List<Trigger> = emptyList(),
+    /** Koşul gruplarının kendi hepsi/herhangi biri kuralı ([Condition.group]). */
+    val groupMatch: Map<Int, ConditionMatch> = emptyMap(),
+    /** Önceki çalışması sürerken yeniden tetiklenirse. */
+    val mode: RunMode = RunMode.RESTART,
+    /** [RunMode.QUEUED] / [RunMode.PARALLEL] sınırı. */
+    val maxRuns: Int = 3,
+    /** Motorun tetikleyici başına kopyasında hangi tetikleyici (kaydedilmez; bkz. [units]). */
+    val triggerIndex: Int = 0,
 ) {
     /** İlk eylem ve ek eylemler, sırayla. */
     val allActions: List<AutoAction> get() = listOf(action) + extraActions
+
+    /** Bütün tetikleyiciler (ilki + ekler). */
+    val allTriggers: List<Trigger> get() = listOf(trigger) + extraTriggers
+
+    /** Bütün adımlar düzleştirilmiş (iç içe bloklar dahil); kural izindeki adım numaraları buna göredir. */
+    val flatActions: List<AutoAction> get() = allActions.flatMap { it.flatten() }
+
+    val condSet: CondSet get() = CondSet(conditions, conditionMatch, groupMatch)
+
+    /**
+     * Motor için tetikleyici başına bir kopya: ilki kendi kimliğiyle, ekler "kimlik~n" ile. Böylece her tetikleyicinin
+     * kendi durumu (eşik, süre) ayrı tutulur; çalışan kural [baseId] ile bulunur.
+     */
+    fun units(): List<Automation> =
+        if (extraTriggers.isEmpty()) listOf(this)
+        else allTriggers.mapIndexed { i, t -> copy(id = if (i == 0) id else "$id$TRIGGER_SEP$i", trigger = t, extraTriggers = emptyList(), triggerIndex = i) }
 
     /** Tetiklenen kural şimdi uygulanabilir mi (saat aralığı, ek koşullar, evde/dışarıda). */
     fun allowed(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Boolean =
         verdict(devices, now, away, outdoorTemp).ok
 
     /** [allowed]'ın ayrıntısı (kural izi için): hangi sınama tuttu, hangisi tutmadı. */
-    fun verdict(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Verdict {
-        val each = conditions.map { it.holds(devices, outdoorTemp) }
-        val condsOk = each.isEmpty() || if (conditionMatch == ConditionMatch.ALL) each.all { it } else each.any { it }
+    fun verdict(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Verdict =
+        verdict(devices, CondCtx(now = now, outdoorTemp = outdoorTemp, away = away, triggerIndex = triggerIndex))
+
+    fun verdict(devices: Map<String, DeviceSnapshot>, ctx: CondCtx): Verdict {
+        val set = condSet
+        val each = set.each(devices, ctx)
         return Verdict(
-            windowOk = window?.contains(now) ?: true,
+            windowOk = window?.contains(ctx.now) ?: true,
             conds = each,
-            condsOk = condsOk,
-            presenceOk = presence == null || away == null || (presence == PresenceRule.AWAY) == away,
+            condsOk = set.combine(each),
+            presenceOk = presence == null || ctx.away == null || (presence == PresenceRule.AWAY) == ctx.away,
         )
     }
 
     companion object {
+        /** Ek tetikleyici kopyalarının kimlik ayırıcısı ("kural~1"). */
+        const val TRIGGER_SEP = '~'
+
+        /** Motor kopyasının (tetikleyici "~n", kategori "@cihaz") ait olduğu kuralın kimliği. */
+        fun baseId(id: String): String = id.substringBefore(TRIGGER_SEP).substringBefore('@')
+
+        /** Tetikleyici eki atılmış kimlik (kategori kopyası ayrı kalır): döngü koruması kural başına sayar. */
+        fun ruleKey(id: String): String = if (TRIGGER_SEP !in id) id else id.substringBefore(TRIGGER_SEP) +
+            id.substringAfter(TRIGGER_SEP).dropWhile { it.isDigit() }
+
+        /**
+         * Eski sürümlerin (2.54 ve öncesi, bilgisayar 0.18) okuyamayacağı işaret: kuralın "action" alanına yazılır, gerçek
+         * eylem "action2"de durur. Eski okuyucu bu türü tanımaz ve kuralı hiç yüklemez; yanlış çalıştırmaktan iyidir.
+         */
+        const val NEWER_MARKER = "REQUIRES_SWITCHGUARD_2_55"
+
+        /** 2.55 öncesinde var olan türler. */
+        private val LEGACY_ACTIONS = setOf(
+            ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.ALARM, ActionKind.NOTIFY, ActionKind.RUN_SCENE,
+            ActionKind.START_CYCLE, ActionKind.STOP_CYCLE, ActionKind.SAVE_STATE, ActionKind.RESTORE_STATE,
+        )
+        private val LEGACY_CONDITIONS = setOf(
+            ConditionKind.IS_ON, ConditionKind.IS_OFF, ConditionKind.IS_ONLINE, ConditionKind.IS_OFFLINE,
+            ConditionKind.POWER_ABOVE, ConditionKind.POWER_BELOW, ConditionKind.SENSOR_ABOVE, ConditionKind.SENSOR_BELOW,
+            ConditionKind.SENSOR_ACTIVE, ConditionKind.SENSOR_CLEAR, ConditionKind.TEMP_ABOVE, ConditionKind.TEMP_BELOW,
+        )
+
+        /**
+         * Eski bir sürüm bu kuralı farklı (ör. ters) çalıştırır mı: "değilse" ya da gruplu koşul (eski okuyucu bunları
+         * sessizce atar), yeni koşul türü, ek tetikleyici, eski sürümün atlayacağı adım (bekle, eğer, dur… ya da içi dolu
+         * blok) ya da tekrar tetiklenince başka çalışma kipi. Öyleyse eski sürüm kuralı hiç yüklemesin.
+         */
+        fun needsNewReader(a: Automation): Boolean =
+            a.conditions.any { it.negate || it.group > 0 || it.kind !in LEGACY_CONDITIONS } ||
+                a.groupMatch.isNotEmpty() ||
+                a.extraTriggers.isNotEmpty() ||
+                a.mode != RunMode.RESTART ||
+                a.allActions.any { x ->
+                    x.kind !in LEGACY_ACTIONS || x.cond != null || x.then.isNotEmpty() || x.otherwise.isNotEmpty() || x.seconds > 0
+                }
+
+        fun triggerToJson(t: Trigger): JSONObject = JSONObject()
+            .put("kind", t.kind.name).put("device", t.deviceId)
+            .put("channel", t.channel).put("minutes", t.minutes).put("watts", t.watts)
+            .put("grace", t.graceMinutes)
+            .apply {
+                t.sensor?.let { put("sensor", it.name) }
+                if (t.days != ActiveWindow.ALL_DAYS) put("days", t.days)
+            }
+
+        fun triggerFromJson(t: JSONObject) = Trigger(
+            TriggerKind.valueOf(t.getString("kind")), t.getString("device"),
+            t.optInt("channel"), t.optInt("minutes"), t.optDouble("watts", 0.0),
+            t.optInt("grace", 0),
+            t.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
+            t.optInt("days", ActiveWindow.ALL_DAYS),
+        )
+
         fun listToJson(list: List<Automation>): String = JSONArray().apply {
             list.forEach { a ->
                 put(
                     JSONObject()
                         .put("id", a.id).put("name", a.name).put("enabled", a.enabled).put("delay", a.delayMinutes)
-                        .put("trigger", JSONObject()
-                            .put("kind", a.trigger.kind.name).put("device", a.trigger.deviceId)
-                            .put("channel", a.trigger.channel).put("minutes", a.trigger.minutes).put("watts", a.trigger.watts)
-                            .put("grace", a.trigger.graceMinutes)
-                            .apply {
-                                a.trigger.sensor?.let { put("sensor", it.name) }
-                                if (a.trigger.days != ActiveWindow.ALL_DAYS) put("days", a.trigger.days)
-                            })
-                        .put("action", JSONObject()
-                            .put("kind", a.action.kind.name).put("device", a.action.deviceId).put("channel", a.action.channel))
+                        .put("trigger", triggerToJson(a.trigger))
                         .apply {
-                            if (a.extraActions.isNotEmpty()) put("more", JSONArray().apply {
-                                a.extraActions.forEach { x ->
-                                    put(JSONObject().put("kind", x.kind.name).put("device", x.deviceId).put("channel", x.channel).put("wait", x.waitMinutes))
-                                }
-                            })
+                            if (needsNewReader(a)) {
+                                put("action", JSONObject().put("kind", NEWER_MARKER).put("device", "").put("channel", 0))
+                                put("action2", AutoAction.toJson(a.action))
+                            } else put("action", AutoAction.toJson(a.action))
+                            if (a.extraActions.isNotEmpty()) put("more", AutoAction.listToJson(a.extraActions))
+                            if (a.extraTriggers.isNotEmpty()) put("triggers2", JSONArray().apply { a.extraTriggers.forEach { put(triggerToJson(it)) } })
                             a.window?.let { put("window", JSONObject().put("start", it.startMinute).put("end", it.endMinute).put("days", it.days)) }
                             if (a.conditions.isNotEmpty()) {
-                                put("conds", JSONArray().apply {
-                                    a.conditions.forEach { c ->
-                                        put(JSONObject().put("kind", c.kind.name).put("device", c.deviceId).put("channel", c.channel)
-                                            .put("value", c.value).apply { c.sensor?.let { put("sensor", it.name) } })
-                                    }
-                                })
+                                put("conds", CondSet.condsToJson(a.conditions))
                                 if (a.conditionMatch != ConditionMatch.ALL) put("condMatch", a.conditionMatch.name)
+                                if (a.groupMatch.isNotEmpty()) put("groupMatch", CondSet.groupMatchToJson(a.groupMatch))
                             }
                             a.presence?.let { put("presence", it.name) }
                             if (a.loopGuard > 0) put("guard", a.loopGuard)
+                            if (a.mode != RunMode.RESTART) put("mode", a.mode.name).put("maxRuns", a.maxRuns)
                         }
                 )
             }
@@ -184,44 +365,32 @@ data class Automation(
             return (0 until arr.length()).mapNotNull { i ->
                 runCatching {
                     val o = arr.getJSONObject(i)
-                    val t = o.getJSONObject("trigger")
-                    val a = o.getJSONObject("action")
                     Automation(
                         id = o.getString("id"),
                         name = o.optString("name"),
                         enabled = o.optBoolean("enabled", true),
                         delayMinutes = o.optInt("delay", 0),
-                        trigger = Trigger(
-                            TriggerKind.valueOf(t.getString("kind")), t.getString("device"),
-                            t.optInt("channel"), t.optInt("minutes"), t.optDouble("watts", 0.0),
-                            t.optInt("grace", 0),
-                            t.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
-                            t.optInt("days", ActiveWindow.ALL_DAYS),
-                        ),
+                        trigger = triggerFromJson(o.getJSONObject("trigger")),
+                        // Bilinmeyen ek eylem atlanır (2.35 davranışı); içindeki bloklar kesin okunur.
                         extraActions = o.optJSONArray("more")?.let { arr ->
-                            (0 until arr.length()).mapNotNull { i ->
-                                runCatching {
-                                    val x = arr.getJSONObject(i)
-                                    AutoAction(ActionKind.valueOf(x.getString("kind")), x.optString("device"), x.optInt("channel"), x.optInt("wait"))
-                                }.getOrNull()
-                            }
+                            (0 until arr.length()).mapNotNull { j -> runCatching { AutoAction.fromJson(arr.getJSONObject(j)) }.getOrNull() }
                         }.orEmpty(),
-                        action = AutoAction(ActionKind.valueOf(a.getString("kind")), a.optString("device"), a.optInt("channel")),
+                        action = AutoAction.fromJson(o.optJSONObject("action2") ?: o.getJSONObject("action")),
                         window = o.optJSONObject("window")?.let { w ->
                             ActiveWindow(w.optInt("start"), w.optInt("end"), w.optInt("days", ActiveWindow.ALL_DAYS))
                         },
-                        // "cond" = 2.30.5 öncesi tek koşul.
+                        // "cond" = 2.30.5 öncesi tek koşul. Bilinmeyen koşul kuralı düşürür (koşulsuz çalışmasın).
                         conditions = (o.optJSONArray("conds")?.let { arr -> (0 until arr.length()).map { arr.getJSONObject(it) } }
-                            ?: listOfNotNull(o.optJSONObject("cond"))).map { c ->
-                            Condition(
-                                ConditionKind.valueOf(c.getString("kind")), c.optString("device"), c.optInt("channel"),
-                                c.optDouble("value", 0.0),
-                                c.optString("sensor").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) },
-                            )
-                        },
+                            ?: listOfNotNull(o.optJSONObject("cond"))).map { CondSet.condFromJson(it) },
                         conditionMatch = o.optString("condMatch").takeIf { it.isNotEmpty() }?.let { ConditionMatch.valueOf(it) } ?: ConditionMatch.ALL,
+                        groupMatch = CondSet.groupMatchFromJson(o.optJSONObject("groupMatch")),
                         presence = o.optString("presence").takeIf { it.isNotEmpty() }?.let { PresenceRule.valueOf(it) },
                         loopGuard = o.optInt("guard", 0),
+                        extraTriggers = o.optJSONArray("triggers2")?.let { arr ->
+                            (0 until arr.length()).map { j -> triggerFromJson(arr.getJSONObject(j)) }
+                        }.orEmpty(),
+                        mode = o.optString("mode").takeIf { it.isNotEmpty() }?.let { RunMode.valueOf(it) } ?: RunMode.RESTART,
+                        maxRuns = o.optInt("maxRuns", 3).coerceIn(1, 10),
                     )
                 }.getOrNull()
             }
@@ -270,6 +439,17 @@ class AutomationEngine {
     /** Döngü koruması devreye girdi: kural çalıştırılmadı; servis cihazı kapatır, alarm verir, kuralı kapatır. */
     var onLockout: ((Automation) -> Unit)? = null
 
+    /**
+     * Kural şu an yeni çalışma kabul etmiyor mu (tek kipte önceki çalışması sürüyor; sıra/aynı anda sınırı dolu).
+     * Öyleyse tetikleniş izde "zaten çalışıyordu" olur ve döngü korumasına sayılmaz.
+     */
+    var busy: ((Automation) -> Boolean)? = null
+
+    /** Kuralın (bütün kopyalarının) bekleyen gecikmeli eylemlerini iptal eder. */
+    fun cancelPending(baseId: String) {
+        pending.removeAll { Automation.baseId(it.automation.id) == baseId }
+    }
+
     /** Döngü koruması için kuralın son çalışma anları (pencere içindekiler). */
     private val recentRuns = mutableMapOf<String, List<Long>>()
 
@@ -284,12 +464,18 @@ class AutomationEngine {
             t.kind.usesTemp -> env.outdoorTemp
             else -> null
         }
-        cb(TraceEntry(a.id, now, outcome, conds, value, env.away))
+        cb(TraceEntry(Automation.baseId(a.id), now, outcome, conds, value, env.away, trigger = a.triggerIndex))
     }
 
     /** [Automation.allowed]; tutmazsa izine "engellendi" yazar (art arda aynıları tek satırda sayılır). */
+    /** Koşulların bağlamı: ortam, kanalların ne zamandan beri o durumda olduğu, hava karanlık mı, hangi tetikleyici. */
+    fun condCtx(now: Long, triggerIndex: Int? = null): CondCtx = CondCtx(
+        now = now, outdoorTemp = env.outdoorTemp, away = env.away,
+        sinceOf = { id, ch -> since[key(id, ch)] }, dark = isDark(now, env), triggerIndex = triggerIndex,
+    )
+
     private fun allowedTraced(a: Automation, current: Map<String, DeviceSnapshot>, now: Long): Boolean {
-        val v = a.verdict(current, now, env.away, env.outdoorTemp)
+        val v = a.verdict(current, condCtx(now, a.triggerIndex))
         if (!v.ok) trace(a, now, v.outcome, v.conds, current)
         return v.ok
     }
@@ -621,23 +807,26 @@ class AutomationEngine {
 
     private fun fire(a: Automation, now: Long, out: MutableList<Automation>, current: Map<String, DeviceSnapshot>) {
         // Saat aralığı ve "ve" koşulu.
-        val v = a.verdict(current, now, env.away, env.outdoorTemp)
+        val v = a.verdict(current, condCtx(now, a.triggerIndex))
         if (!v.ok) return trace(a, now, v.outcome, v.conds, current)
         // Birbirini tetikleyen otomasyonların sonsuz döngüye girmesini engeller.
         val last = lastFiredAt[a.id]
         if (last != null && now - last < MIN_INTERVAL_MS) return trace(a, now, TraceOutcome.THROTTLED, v.conds, current)
         lastFiredAt[a.id] = now
+        if (busy?.invoke(a) == true) return trace(a, now, TraceOutcome.BUSY, v.conds, current)
         if (a.loopGuard > 0) {
-            val runs = recentRuns[a.id].orEmpty().filter { now - it < LOOP_WINDOW_MS }
+            // Kural başına sayılır (ek tetikleyiciler birlikte); kategori kuralında cihaz başına.
+            val rk = Automation.ruleKey(a.id)
+            val runs = recentRuns[rk].orEmpty().filter { now - it < LOOP_WINDOW_MS }
             if (runs.size >= a.loopGuard) {
-                // Çok sık çalışıyor: bekleyen eylemleri (ör. "geri getir") de iptal et; servis cihazı kapalı bırakır.
-                recentRuns.remove(a.id)
-                pending.removeAll { it.automation.id == a.id }
+                // Çok sık çalışıyor: bekleyen eylemleri (ör. "geri getir") de iptal et; servis kuralın cihazlarını kapalı bırakır.
+                recentRuns.remove(rk)
+                pending.removeAll { Automation.ruleKey(it.automation.id) == rk }
                 trace(a, now, TraceOutcome.LOCKED_OUT, v.conds, current)
                 onLockout?.invoke(a)
                 return
             }
-            recentRuns[a.id] = runs + now
+            recentRuns[rk] = runs + now
         }
         if (a.delayMinutes > 0) {
             pending += Pending(a, now + a.delayMinutes * 60_000L)

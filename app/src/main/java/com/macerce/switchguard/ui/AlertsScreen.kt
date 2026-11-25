@@ -149,7 +149,7 @@ fun AlertsScreen(modifier: Modifier, onOpenPermissions: () -> Unit) {
                     tab = AutomationTab.ALERTS,
                     initial = initial,
                     // Gruplar ve uyarı kategorileri de cihaz gibi seçilir.
-                    devices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) },
+                    devices = remember(version) { automationDevices(store.snapshotsForRules, context.resources) },
                     modifier = Modifier,
                     onSave = { store.saveAutomation(it); back() },
                     onDelete = { store.deleteAutomation(target.id); back() },
@@ -190,7 +190,7 @@ private fun AlertsHome(
     val monitoredIds = remember(version) { store.monitoredIds() }
     val rules = remember(version) { store.rules }
     val alerts = remember(version) { AutomationTab.ALERTS.of(store.automations) }
-    val allDevices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) }
+    val allDevices = remember(version) { automationDevices(store.snapshotsForRules, context.resources) }
     val categoryOf = remember(version) { { id: String -> (rules[id] ?: DeviceRules()).effectiveCategory } }
     val counts = remember(version) { categoryCounts(store.snapshots, categoryOf) }
     var filter by rememberSaveable { mutableStateOf<DeviceCategory?>(null) }

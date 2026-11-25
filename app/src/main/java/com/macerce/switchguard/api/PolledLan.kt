@@ -153,6 +153,20 @@ abstract class PolledLan(val brand: String) {
     protected abstract fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean
 
     /** Bloklayıcı. Kabul edilirse okuma hemen güncellenir ve bir yoklama turu başlar. */
+    /** Işık parlaklığı/rengi (bkz. [com.macerce.switchguard.core.LightLevel]); desteklemeyen marka false döner. */
+    protected open fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean = false
+
+    fun trySetLevel(d: LocalDevice, channel: Int, level: Int?, color: Int?): Boolean {
+        val host = host(d) ?: return false
+        val ok = runCatching { level(d, host, channel, level, color, cred(d.id)) }.getOrDefault(false)
+        Log.i(tag, "level ${d.id} ch=$channel level=$level color=$color ok=$ok")
+        if (ok) {
+            readings[d.id]?.let { readings[d.id] = it.copy(switches = it.switches + (channel to true)) }
+            pollNow()
+        }
+        return ok
+    }
+
     fun trySwitch(d: LocalDevice, channel: Int, on: Boolean): Boolean {
         val host = host(d) ?: return false
         val ok = runCatching { switch(d, host, channel, on, cred(d.id)) }.getOrDefault(false)

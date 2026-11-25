@@ -225,6 +225,12 @@ object HaLan : PolledLan(LocalDevice.BRAND_HA) {
         return LocalReading(mapOf(0 to e.on))
     }
 
+    override fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean {
+        val s = server ?: return false
+        if (!d.extra.startsWith("light.")) return false
+        return send("POST", "$host/api/services/light/turn_on", com.macerce.switchguard.core.LightLevel.haBody(d.extra, level, color), auth(s.token)).code in 200..299
+    }
+
     override fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean {
         val s = server ?: return false
         return send("POST", host + HaProtocol.servicePath(d.extra, on), HaProtocol.serviceBody(d.extra), auth(s.token)).code in 200..299

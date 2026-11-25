@@ -18,6 +18,8 @@ enum class SensorKind(val binary: Boolean, val unit: String = "", val hysteresis
     MOTION(true),
     /** Su kaçağı algılandı. */
     WATER(true),
+    /** Yardımcı sayaç değeri ([Helper]); gerçek cihazlar bildirmez. */
+    COUNT(false, "", 0.0),
 }
 
 /**

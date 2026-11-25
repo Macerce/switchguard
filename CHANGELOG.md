@@ -6,6 +6,22 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.55.0 — 2026-11-25
+**New — rule engine (Home Assistant style)**
+- Several triggers per rule: "when the door opens **or** motion is detected **or** it's 22:00". Each trigger keeps its own state; the run history shows which trigger started the rule, and a new condition "Started by trigger N" lets the steps behave differently per trigger.
+- Steps with flow: **Wait** (seconds to hours), **Wait until** a condition holds (with an optional time limit and "stop the rule if time runs out"), **If / else**, **Repeat** (N times or while conditions hold), **Stop**, **Run another rule**. Blocks can be nested up to three levels; steps can be moved up and down.
+- New steps: **Toggle** (also for groups and areas), **Set light** (brightness and colour for Hue, ESPHome, Home Assistant and Tapo lights added on the local network), **Send message** to ntfy, webhook or Telegram, and custom notification/alarm text with placeholders {rule}, {device}, {value}, {time}, {date}.
+- Conditions: **reverse** any condition ("not"), put conditions into **groups** with their own all/any ("A and (B or C)"), and new kinds: on/off for at least N minutes, time range with days, dark/daylight outside, at home/away, started by trigger.
+- **Helpers**: virtual switches (e.g. "Holiday mode"), counters and timers. Rules can switch, count and start them, and use them as triggers and conditions like a device. Helpers have their own strip on the Automations tab and switches/timers can be put on the standby (wall panel) screen.
+- **Run mode** when a rule is triggered again while its steps are still running: start over (as before), ignore, queue, or run in parallel (with a limit).
+- **Run now** button on every rule card and in the editor: runs the steps immediately, skipping the trigger and conditions.
+- Running steps survive app and phone restarts and continue where they were; steps waiting from an older version are carried over.
+- Compatibility: a rule that uses "not", condition groups, extra triggers, flow steps or a non-default run mode is saved so that older versions (phone 2.54 and earlier, Windows 0.18 and earlier) skip it instead of running it differently, e.g. with a "not" condition reversed. Update the Windows app before moving such rules to it.
+
+**Fixed**
+- Loop protection turned off the device that *triggered* the rule (e.g. a freezer whose "power dropped" started the rule) instead of the devices the rule itself switches. Now only the rule's own targets (devices, group/area members, scene devices, remembered device) are turned off; the triggering device is never touched, and critical devices or devices that ask before turning off are left as they are and named in the alarm. A rule that only sends alarms or notifications just pauses.
+- Loop protection on a category rule (e.g. "any critical device") created a disabled copy instead of pausing the rule itself.
+
 ## 2.54.1 — 2026-11-25
 **New**
 - Loop protection for rules: if a rule would run more than the set number of times within an hour (2–10, default 3), it doesn't run again. Its pending steps are cancelled, the device is turned off and left off, an alarm rings and the rule is paused, so a connected appliance isn't damaged by constant on/off switching. Turn the rule back on after checking. On by default (3) in the "Pause, then put back" template; available as an option on every automation.

@@ -107,11 +107,14 @@ private fun TraceOutcome.label(): Int = when (this) {
     TraceOutcome.BLOCKED_PRESENCE -> R.string.trace_blocked_presence
     TraceOutcome.THROTTLED -> R.string.trace_throttled
     TraceOutcome.LOCKED_OUT -> R.string.trace_locked_out
+    TraceOutcome.BUSY -> R.string.trace_busy
+    TraceOutcome.MANUAL -> R.string.trace_manual
 }
 
 @Composable
 private fun TraceOutcome.color(failed: Boolean): Color = when {
-    this == TraceOutcome.RAN && failed -> Brand.alarm
+    ran && failed -> Brand.alarm
+    this == TraceOutcome.MANUAL -> Hue.INDIGO.color()
     this == TraceOutcome.LOCKED_OUT -> Brand.alarm
     this == TraceOutcome.RAN -> Hue.GREEN.color()
     this == TraceOutcome.DELAYED -> Hue.BLUE.color()
@@ -136,7 +139,7 @@ private fun clock(at: Long): String {
 @Composable
 internal fun LastRunLine(automationId: String) {
     val context = LocalContext.current
-    remember { TraceLog.init(context) }
+    remember { TraceLog.init(context); true }
     val all by TraceLog.flow.collectAsState()
     val last = remember(all, automationId) { all.lastOrNull { it.automationId == automationId } } ?: return
     Spacer(Modifier.height(4.dp))
@@ -151,7 +154,7 @@ internal fun LastRunLine(automationId: String) {
 @Composable
 internal fun TraceSheet(a: Automation, devices: List<DeviceSnapshot>, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    remember { TraceLog.init(context) }
+    remember { TraceLog.init(context); true }
     val all by TraceLog.flow.collectAsState()
     val list = remember(all, a.id) { AutomationTraces.of(all, a.id) }
     AdaptiveSheet(
@@ -183,15 +186,16 @@ private fun TraceCard(a: Automation, e: TraceEntry, devices: List<DeviceSnapshot
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 when {
-                    e.outcome == TraceOutcome.RAN && e.failed() -> Icons.Rounded.Cancel
-                    e.outcome == TraceOutcome.RAN -> Icons.Rounded.CheckCircle
+                    e.outcome.ran && e.failed() -> Icons.Rounded.Cancel
+                    e.outcome.ran -> Icons.Rounded.CheckCircle
                     e.outcome == TraceOutcome.DELAYED -> Icons.Rounded.HourglassTop
                     else -> Icons.Rounded.Block
                 },
                 null, tint = color, modifier = Modifier.size(20.dp),
             )
             Spacer(Modifier.width(8.dp))
-            Text(stringResource(e.outcome.label()), style = MaterialTheme.typography.titleSmall, color = color, modifier = Modifier.weight(1f))
+            val by = if (a.extraTriggers.isNotEmpty() && e.outcome != TraceOutcome.MANUAL) " · " + stringResource(R.string.cond_trigger_n, e.trigger + 1) else ""
+            Text(stringResource(e.outcome.label()) + by, style = MaterialTheme.typography.titleSmall, color = color, modifier = Modifier.weight(1f))
             Text(clock(e.at), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
         if (e.count > 1) {
@@ -219,7 +223,7 @@ private fun TraceCard(a: Automation, e: TraceEntry, devices: List<DeviceSnapshot
         if (e.steps.isNotEmpty()) {
             Text(stringResource(R.string.trace_actions), style = MaterialTheme.typography.labelLarge, modifier = Modifier.padding(top = 4.dp))
             e.steps.sortedBy { it.step }.forEach { s ->
-                val act = a.allActions.getOrNull(s.step)
+                val act = a.flatActions.getOrNull(s.step)
                 val what = act?.let { actionText(it, devices) } ?: "#${s.step + 1}"
                 val result = stringResource(
                     when (s.result) {
@@ -227,6 +231,8 @@ private fun TraceCard(a: Automation, e: TraceEntry, devices: List<DeviceSnapshot
                         StepResult.FAILED -> R.string.trace_step_failed
                         StepResult.MISSING -> R.string.trace_step_missing
                         StepResult.SILENCED -> R.string.trace_step_silenced
+                        StepResult.TIMEOUT -> R.string.trace_step_timeout
+                        StepResult.LIMIT -> R.string.trace_step_limit
                     }
                 )
                 val extra = when {

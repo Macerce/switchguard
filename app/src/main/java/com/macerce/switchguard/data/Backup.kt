@@ -19,7 +19,7 @@ object Backup {
      * Anahtar listesinin sürümü. 2: sohbet şablonları, sesli okuma ve bekleme ekranı düzeni eklendi ([KEYS_V2]).
      * Geri yüklemede "yedekte olmayanı temizle" kuralı, yedeğin alındığı sürümde var olmayan anahtarlara uygulanmaz.
      */
-    const val KEYS_VERSION = 4
+    const val KEYS_VERSION = 5
 
     /** Sürüm 2'de eklenen anahtarlar: bunlardan önce alınmış bir yedek yüklenince mevcut değerleri silinmez. */
     val KEYS_V2: Set<String> = setOf("chatTemplates", "chatDefaultsSeen", "chatTemplateUses", "chatSpeak", "standbyGrid", "standbyDim")
@@ -30,8 +30,11 @@ object Backup {
     /** Sürüm 4'te eklenenler: kapatırken onay istenen cihazlar. */
     val KEYS_V4: Set<String> = setOf("confirmOff")
 
+    /** Sürüm 5'te eklenenler: kural yardımcıları (sanal anahtar, sayaç, zamanlayıcı). */
+    val KEYS_V5: Set<String> = setOf("helpers")
+
     /** Telegram ile haber verme de girer: aynı kişinin yeni telefonu aynı kişilere haber versin. */
-    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages") + KEYS_V2 + KEYS_V3 + KEYS_V4
+    val KEYS: Set<String> = Transfer.KEYS + setOf("appId", "appSecret", "redirectUrl", "region", "alwaysAwake", "tgToken", "tgBot", "tgChats", "escalateMin", "energyPrice", "devicePrices", "tgCommands", "tgControl", "tgForward", "tgStages") + KEYS_V2 + KEYS_V3 + KEYS_V4 + KEYS_V5
 
     /**
      * Yedeğe bilerek girmeyen ayarlar ve nedenleri. Koruma testi, Store'daki her anahtarın ya [KEYS]'te ya burada
@@ -144,7 +147,7 @@ object Backup {
         val hasTuya = (backup["tuyaId"] as? String).orEmpty().isNotEmpty()
         val keep = (if (hasEwelink) emptySet() else EWELINK_KEYS) + (if (hasTuya) emptySet() else TUYA_KEYS)
         // Eski yedekte henüz var olmayan anahtarlar "yedekte yok" sayılıp silinmez (ör. sohbet şablonları).
-        val unknownThen = (if (keysVersion < 2) KEYS_V2 else emptySet()) + (if (keysVersion < 3) KEYS_V3 else emptySet()) + (if (keysVersion < 4) KEYS_V4 else emptySet())
+        val unknownThen = (if (keysVersion < 2) KEYS_V2 else emptySet()) + (if (keysVersion < 3) KEYS_V3 else emptySet()) + (if (keysVersion < 4) KEYS_V4 else emptySet()) + (if (keysVersion < 5) KEYS_V5 else emptySet())
         val remove = (KEYS - keep - unknownThen) + (if (hasTuya) setOf("tuyaToken", "tuyaTokenExp") else emptySet())
         val sameAccount = backup["appId"] == currentAppId && ((backup["region"] as? String) ?: currentRegion) == currentRegion
         return RestorePlan(

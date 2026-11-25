@@ -6,6 +6,22 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.55.0 — 2026-11-25
+**Yeni: kural motoru (Home Assistant tarzı)**
+- Bir kurala birden çok tetikleyici: "kapı açılınca **veya** hareket olunca **veya** saat 22:00 olunca". Her tetikleyicinin kendi durumu tutulur; kural izi kuralı hangi tetikleyicinin başlattığını gösterir, yeni "Şu tetikleyiciyle başladıysa" koşuluyla adımlar tetikleyiciye göre farklı davranabilir.
+- Akışlı adımlar: **Bekle** (saniyeden saate), **Şu olana kadar bekle** (isteğe bağlı süre sınırı ve "süre dolarsa kuralı bitir"), **Eğer / değilse**, **Tekrarla** (N kez ya da koşullar sağlandıkça), **Kuralı bitir**, **Başka kuralı çalıştır**. Bloklar üç kata kadar iç içe olabilir; adımlar yukarı/aşağı taşınabilir.
+- Yeni adımlar: **Değiştir (aç/kapat)** (grup ve alanlarda da), **Işığı ayarla** (yerel ağdan eklenen Hue, ESPHome, Home Assistant ve Tapo ışıklarında parlaklık ve renk), ntfy, webhook ya da Telegram'a **mesaj gönder**, ve {rule}, {device}, {value}, {time}, {date} yer tutuculu özel bildirim/alarm metni.
+- Koşullar: her koşul **tersine çevrilebilir** ("değilse"), koşullar kendi hepsi/herhangi biri kuralıyla **gruplanabilir** ("A ve (B veya C)"); yeni türler: en az N dakikadır açık/kapalı, günlerle saat aralığı, hava karanlık/aydınlık, evde/dışarıda, şu tetikleyiciyle başladıysa.
+- **Yardımcılar**: sanal anahtar (ör. "Tatil modu"), sayaç ve zamanlayıcı. Kurallar onları açıp kapatabilir, sayabilir, başlatabilir; cihaz gibi tetikleyici ve koşul olarak kullanabilir. Otomasyon sekmesinde kendi şeritleri var; anahtar ve zamanlayıcılar bekleme ekranına (duvar panosu) kart olarak eklenebilir.
+- **Çalışma kipi**: adımları sürerken kural yeniden tetiklenirse baştan başla (eskisi gibi), yok say, sıraya al ya da aynı anda çalıştır (sınırlı).
+- Her kural kartında ve düzenleyicide **Şimdi çalıştır** düğmesi: tetikleyici ve koşullar atlanıp adımlar hemen çalışır.
+- Süren adımlar uygulama ve telefon yeniden başlasa da kaldığı yerden sürer; eski sürümden bekleyen adımlar da aktarılır.
+- Uyumluluk: "değilse", koşul grubu, ek tetikleyici, akış adımı ya da farklı çalışma kipi kullanan kural, eski sürümler (telefon 2.54 ve öncesi, Windows 0.18 ve öncesi) onu farklı çalıştırmasın diye (ör. "değilse" koşulu ters dönmesin) onların hiç yüklemeyeceği biçimde kaydedilir. Böyle kuralları bilgisayara aktarmadan önce Windows uygulamasını güncelle.
+
+**Düzeltildi**
+- Döngü koruması, kuralın açıp kapattığı cihazları değil kuralı *başlatan* cihazı (ör. "gücü düştü" tetikleyicisi olan dondurucu) kapatıyordu. Artık yalnız kuralın kendi hedefleri (cihazlar, grup/alan üyeleri, sahne cihazları, durumu hatırlanan cihaz) kapatılır; kuralı başlatan cihaza hiç dokunulmaz, kritik ve kapatırken onay istenen cihazlar olduğu gibi bırakılıp alarmda adıyla yazılır. Yalnız alarm/bildirim veren kural sadece durdurulur.
+- Kategori kuralında (ör. "herhangi bir kritik cihaz") döngü koruması kuralın kendisini durdurmak yerine kapalı bir kopyasını oluşturuyordu.
+
 ## 2.54.1 — 2026-11-25
 **Yeni**
 - Kurallarda döngü koruması: kural bir saat içinde ayarlanan sayıdan (2–10, varsayılan 3) fazla çalışacak olursa yeniden çalışmaz; bekleyen adımları iptal edilir, cihaz kapatılıp kapalı bırakılır, alarm çalar ve kural durdurulur. Bağlı cihaz sürekli aç-kapa yüzünden zarar görmez. Kontrol ettikten sonra kuralı yeniden aç. "Durdur, sonra eski hâline getir" şablonunda varsayılan açık (3); her otomasyonda seçenek olarak var.

@@ -15,10 +15,16 @@ enum class TraceOutcome {
     BLOCKED_WINDOW, BLOCKED_CONDITION, BLOCKED_PRESENCE,
     /** 10 sn içinde ikinci kez tetiklendi (birbirini tetikleyen kurallar döngüye girmesin). */
     THROTTLED,
-    /** Döngü koruması: bir saatte çok kez çalıştı; cihaz kapatıldı, alarm verildi, kural durduruldu. */
-    LOCKED_OUT;
+    /** Döngü koruması: bir saatte çok kez çalıştı; kuralın cihazları kapatıldı, alarm verildi, kural durduruldu. */
+    LOCKED_OUT,
+    /** Önceki çalışması sürüyordu (tek kip) ya da sıra/aynı anda sınırı doluydu: yeni tetikleniş yok sayıldı. */
+    BUSY,
+    /** Elle çalıştırıldı ("Şimdi çalıştır", bekleme ekranı kartı, başka kuraldan): tetikleyici ve koşullar atlandı. */
+    MANUAL;
 
-    val blocked get() = this != RAN && this != DELAYED
+    val blocked get() = this != RAN && this != DELAYED && this != MANUAL
+    /** Eylemleri çalıştı (adım sonuçları bu satıra yazılır). */
+    val ran get() = this == RAN || this == MANUAL
 }
 
 /** Bir kuralın şu anki sınaması: saat aralığı, her koşulun tek tek sonucu, evde/dışarıda. */
@@ -40,9 +46,13 @@ enum class StepResult {
     MISSING,
     /** Sessiz saatlerde bildirim yok sayıldı. */
     SILENCED,
+    /** "Şu olana kadar bekle" süresi doldu. */
+    TIMEOUT,
+    /** Güvenlik sınırı: çok fazla adım/tekrar ya da iç içe kural çalıştırma; kural yarıda kesildi. */
+    LIMIT,
 }
 
-/** [step] 0 = ilk eylem, 1.. = ek eylemler. */
+/** [step]: [Automation.flatActions] sırası (0 = ilk eylem; iç içe adımlar dahil). */
 data class TraceStep(val step: Int, val result: StepResult, val at: Long, val error: String = "")
 
 data class TraceEntry(
@@ -58,6 +68,8 @@ data class TraceEntry(
     /** Aynı nedenle art arda kaç kez engellendi; [lastAt] sonuncusu. */
     val count: Int = 1,
     val lastAt: Long = at,
+    /** Hangi tetikleyici (0 = ilki; ek tetikleyiciler 1..). */
+    val trigger: Int = 0,
 )
 
 object AutomationTraces {
@@ -83,7 +95,7 @@ object AutomationTraces {
 
     /** Eylem sonucunu o kuralın en son çalışan satırına ekler; aynı adımın eski sonucu (yeniden deneme) yenilenir. */
     fun step(list: List<TraceEntry>, automationId: String, s: TraceStep): List<TraceEntry> {
-        val idx = list.indexOfLast { it.automationId == automationId && it.outcome == TraceOutcome.RAN }
+        val idx = list.indexOfLast { it.automationId == automationId && it.outcome.ran }
         if (idx < 0) return list
         val e = list[idx]
         return list.toMutableList().also { it[idx] = e.copy(steps = e.steps.filterNot { x -> x.step == s.step } + s) }
@@ -103,6 +115,7 @@ object AutomationTraces {
                 e.value?.let { put("v", it) }
                 e.away?.let { put("w", it) }
                 if (e.count > 1) put("n", e.count).put("l", e.lastAt)
+                if (e.trigger > 0) put("g", e.trigger)
                 if (e.steps.isNotEmpty()) put("s", JSONArray().apply {
                     e.steps.forEach { s -> put(JSONObject().put("i", s.step).put("r", s.result.name).put("t", s.at).apply { if (s.error.isNotEmpty()) put("e", s.error) }) }
                 })
@@ -134,6 +147,7 @@ object AutomationTraces {
                     }.orEmpty(),
                     count = o.optInt("n", 1),
                     lastAt = o.optLong("l", at),
+                    trigger = o.optInt("g", 0),
                 )
             }.getOrNull()
         }

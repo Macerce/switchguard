@@ -58,6 +58,11 @@ object EsphomeLan : PolledLan(LocalDevice.BRAND_ESPHOME) {
         return LocalReading(sw, power = power)
     }
 
+    override fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean {
+        val p = EsphomeProtocol.entitiesFromJson(d.extra).switches.getOrNull(channel)?.takeIf { it.startsWith("light/") } ?: return false
+        return send("POST", "http://$host${com.macerce.switchguard.core.LightLevel.esphomePath(p, level, color)}", "", auth(cred)).code in 200..299
+    }
+
     override fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean {
         val p = EsphomeProtocol.entitiesFromJson(d.extra).switches.getOrNull(channel) ?: return false
         return send("POST", "http://$host${EsphomeProtocol.switchPath(p, on)}", "", auth(cred)).code in 200..299

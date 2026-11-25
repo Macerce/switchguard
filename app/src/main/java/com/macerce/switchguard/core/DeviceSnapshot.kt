@@ -5,6 +5,8 @@ enum class Cloud {
     EWELINK, TUYA, DEMO,
     /** Hesaba bağlı olmayan, yerel ağdan (mDNS) eklenmiş Sonoff (DIY/şifresiz LAN kipi); bkz. [LocalDevice]. */
     LAN,
+    /** Kullanıcının tanımladığı yardımcı (sanal anahtar, sayaç, zamanlayıcı); bkz. [Helper]. Komutu buluta gitmez. */
+    HELPER,
 }
 
 /**

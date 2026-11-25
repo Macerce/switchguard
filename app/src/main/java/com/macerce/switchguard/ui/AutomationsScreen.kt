@@ -162,6 +162,15 @@ import com.macerce.switchguard.core.TriggerKind
 import com.macerce.switchguard.data.Store
 import com.macerce.switchguard.service.MonitorService
 import java.util.UUID
+import com.macerce.switchguard.core.StepTree
+import androidx.compose.material.icons.automirrored.rounded.Send
+import androidx.compose.material.icons.rounded.Block
+import androidx.compose.material.icons.rounded.Loop
+import androidx.compose.material.icons.rounded.AltRoute
+import androidx.compose.material.icons.rounded.Pending
+import androidx.compose.material.icons.rounded.Lightbulb
+import androidx.compose.material.icons.rounded.SwapHoriz
+import androidx.compose.material.icons.rounded.Numbers
 
 /** Düzenleyicide yeni kayıt (kimliği kaydederken verilir). */
 const val NEW_AUTOMATION = "new"
@@ -175,8 +184,11 @@ fun AutomationsScreen(modifier: Modifier) {
     val version by store.version.collectAsStateWithLifecycle()
     val automations = remember(version) { AutomationTab.AUTOMATIONS.of(store.automations) }
     // Gruplar ve uyarı kategorileri otomasyonda cihaz gibi seçilir.
-    val devices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) }
+    val devices = remember(version) { automationDevices(store.snapshotsForRules, context.resources) }
     val monitoring = remember(version) { store.monitoringEnabled }
+    val helpers = remember(version) { store.helpers }
+    var editingHelper by rememberSaveable { mutableStateOf<String?>(null) }
+    editingHelper?.let { id -> HelperDialog(helpers.firstOrNull { it.id == id }) { editingHelper = null } }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
     var templateName by rememberSaveable { mutableStateOf<String?>(null) }
     var pickTemplate by rememberSaveable { mutableStateOf(false) }
@@ -285,6 +297,9 @@ fun AutomationsScreen(modifier: Modifier) {
                         Text(stringResource(R.string.cycles_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                         CyclesStrip(cycles, cycleRuns) { editingCycle = it }
+                        Text(stringResource(R.string.helpers_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(start = 4.dp, top = 8.dp))
+                        HelpersStrip(helpers) { editingHelper = it }
                         Text(stringResource(R.string.automations_rules_title), style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.padding(start = 4.dp, top = 8.dp))
                     }
@@ -334,17 +349,9 @@ fun AutomationCard(
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (icon, hue) = when (a.action.kind) {
-        ActionKind.ALARM -> Icons.Rounded.Alarm to Hue.RED
-        ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive to Hue.BLUE
-        ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew to Hue.GREEN
-        ActionKind.TURN_OFF -> Icons.Rounded.PowerOff to Hue.SLATE
-        ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow to Hue.PURPLE
-        ActionKind.START_CYCLE -> Icons.Rounded.Repeat to Hue.TEAL
-        ActionKind.STOP_CYCLE -> Icons.Rounded.Stop to Hue.SLATE
-        ActionKind.SAVE_STATE -> Icons.Rounded.Bookmark to Hue.AMBER
-        ActionKind.RESTORE_STATE -> Icons.Rounded.Restore to Hue.AMBER
-    }
+    val icon = a.action.kind.icon()
+    val hue = a.action.kind.hue()
+    val context = LocalContext.current
     val (whenText, thenText) = describe(a, devices)
     val shape = RoundedCornerShape(24.dp)
     Row(
@@ -367,7 +374,15 @@ fun AutomationCard(
             LastRunLine(a.id)
         }
         Spacer(Modifier.width(8.dp))
-        Switch(checked = a.enabled, onCheckedChange = onToggle)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Switch(checked = a.enabled, onCheckedChange = onToggle)
+            // Şimdi çalıştır: tetikleyici ve koşullar atlanır, adımlar hemen başlar.
+            val started = stringResource(R.string.rule_run_now_done, a.name)
+            IconButton(modifier = Modifier.tvFocusRing(), onClick = {
+                MonitorService.runRule(context, a.id)
+                android.widget.Toast.makeText(context, started, android.widget.Toast.LENGTH_SHORT).show()
+            }) { Icon(Icons.Rounded.PlayArrow, stringResource(R.string.rule_run_now), tint = MaterialTheme.colorScheme.primary) }
+        }
     }
 }
 
@@ -389,7 +404,25 @@ private fun Clause(label: String, text: String) {
 /** ("Rögar · Kanal 1 açılınca", "Lamba: aç · 5 dk sonra") */
 @Composable
 internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String, String> {
-    val t = a.trigger
+    val or = " " + stringResource(R.string.cond_join_or) + " "
+    val triggers = a.allTriggers.map { triggerText(it, devices) }.joinToString(or)
+    // İlk eylem ve ek eylemler: "Pompa: Kapat → 5 dk sonra: Vana: Kapat".
+    val action = a.allActions.mapIndexed { i, act ->
+        val text = actionText(act, devices)
+        if (i > 0 && act.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(act.waitMinutes), text) else text
+    }.joinToString(" → ")
+    val delay = if (a.delayMinutes > 0) " · " + stringResource(R.string.automation_after, a.delayMinutes) else ""
+    val extras = buildList {
+        a.window?.let { add(windowText(it)) }
+        if (a.conditions.isNotEmpty()) add(conditionsText(a.conditions, a.conditionMatch, devices, a.groupMatch))
+        a.presence?.let { add(stringResource(if (it == PresenceRule.AWAY) R.string.presence_only_away else R.string.presence_only_home)) }
+    }.joinToString("") { " · $it" }
+    return triggers + extras to "$action$delay"
+}
+
+/** Tek tetikleyicinin metni: "Rögar · Kanal 1 açılınca", "Saatte 07:00 · her gün". */
+@Composable
+internal fun triggerText(t: Trigger, devices: List<DeviceSnapshot>): String {
     val src = devices.firstOrNull { it.id == t.deviceId }
     val zoneContext = LocalContext.current
     val srcName = when {
@@ -421,24 +454,14 @@ internal fun describe(a: Automation, devices: List<DeviceSnapshot>): Pair<String
             else stringResource(R.string.automation_low_for_nograce, t.minutes))
         else -> stringResource(t.kind.title())
     }
-    // İlk eylem ve ek eylemler: "Pompa: Kapat → 5 dk sonra: Vana: Kapat".
-    val action = a.allActions.mapIndexed { i, act ->
-        val text = actionText(act, devices)
-        if (i > 0 && act.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(act.waitMinutes), text) else text
-    }.joinToString(" → ")
-    val delay = if (a.delayMinutes > 0) " · " + stringResource(R.string.automation_after, a.delayMinutes) else ""
-    val extras = buildList {
-        a.window?.let { add(windowText(it)) }
-        if (a.conditions.isNotEmpty()) add(conditionsText(a.conditions, a.conditionMatch, devices))
-        a.presence?.let { add(stringResource(if (it == PresenceRule.AWAY) R.string.presence_only_away else R.string.presence_only_home)) }
-    }.joinToString("") { " · $it" }
-    return (if (srcName != null) "$srcName · $trigger" else trigger) + extras to "$action$delay"
+    return if (srcName != null) "$srcName · $trigger" else trigger
 }
 
 /** Tek eylemin metni: "Pompa: Kapat", "Sahne: Gece", "Döngüyü başlat: Sulama". */
 @Composable
 internal fun actionText(act: com.macerce.switchguard.core.AutoAction, devices: List<DeviceSnapshot>): String {
     val context = LocalContext.current
+    flowText(act, devices)?.let { return it }
     return when {
         act.kind.usesDevice -> {
             val dst = devices.firstOrNull { it.id == act.deviceId }
@@ -489,6 +512,7 @@ fun SensorKind.label(): Int = when (this) {
     SensorKind.DOOR -> R.string.sensor_door
     SensorKind.MOTION -> R.string.sensor_motion
     SensorKind.WATER -> R.string.sensor_water
+    SensorKind.COUNT -> R.string.sensor_count
 }
 
 /** İkili sensörün durumu: "Kapı açık" / "Kapı kapalı". */
@@ -507,11 +531,12 @@ fun SensorKind.icon(): ImageVector = when (this) {
     SensorKind.DOOR -> Icons.Rounded.DoorFront
     SensorKind.MOTION -> Icons.AutoMirrored.Rounded.DirectionsWalk
     SensorKind.WATER -> Icons.Rounded.Water
+    SensorKind.COUNT -> Icons.Rounded.Numbers
 }
 
 /** "22:00–06:00, hafta içi". */
 @Composable
-private fun windowText(w: ActiveWindow): String {
+internal fun windowText(w: ActiveWindow): String {
     val context = LocalContext.current
     val time = if (w.startMinute == w.endMinute) stringResource(R.string.window_all_day)
         else stringResource(R.string.time_range, formatMinute(context, w.startMinute), formatMinute(context, w.endMinute))
@@ -537,18 +562,26 @@ fun ConditionKind.title(): Int = when (this) {
     ConditionKind.SENSOR_CLEAR -> R.string.cond_sensor_clear
     ConditionKind.TEMP_ABOVE -> R.string.cond_temp_above
     ConditionKind.TEMP_BELOW -> R.string.cond_temp_below
+    ConditionKind.ON_FOR -> R.string.cond_on_for
+    ConditionKind.OFF_FOR -> R.string.cond_off_for
+    ConditionKind.TIME_BETWEEN -> R.string.cond_time_between
+    ConditionKind.DARK -> R.string.cond_dark
+    ConditionKind.LIGHT -> R.string.cond_light
+    ConditionKind.HOME -> R.string.cond_home
+    ConditionKind.AWAY -> R.string.cond_away
+    ConditionKind.TRIGGERED_BY -> R.string.cond_triggered_by
 }
 
 /** "45 dk", "6 sa", "1 sa 30 dk". */
 @Composable
-private fun holdLabel(minutes: Int): String = when {
+internal fun holdLabel(minutes: Int): String = when {
     minutes < 60 -> pluralStringResource(R.plurals.minutes_n, minutes, minutes)
     minutes % 60 == 0 -> pluralStringResource(R.plurals.hours_n, minutes / 60, minutes / 60)
     else -> stringResource(R.string.dur_hour_min, minutes / 60, minutes % 60)
 }
 
 @Composable
-private fun channelLabel(d: DeviceSnapshot, channel: Int, withChannel: Boolean): String =
+internal fun channelLabel(d: DeviceSnapshot, channel: Int, withChannel: Boolean): String =
     if (withChannel && d.isMultiChannel) "${d.name} · " + stringResource(R.string.channel_n, channel + 1) else d.name
 
 fun TriggerKind.title(): Int = when (this) {
@@ -586,6 +619,17 @@ fun ActionKind.title(): Int = when (this) {
     ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
     ActionKind.SAVE_STATE -> R.string.act_save_state
     ActionKind.RESTORE_STATE -> R.string.act_restore_state
+    ActionKind.TOGGLE -> R.string.act_toggle
+    ActionKind.SET_LEVEL -> R.string.act_set_level
+    ActionKind.DELAY -> R.string.act_delay
+    ActionKind.WAIT_UNTIL -> R.string.act_wait_until
+    ActionKind.IF -> R.string.act_if
+    ActionKind.REPEAT -> R.string.act_repeat
+    ActionKind.STOP -> R.string.act_stop
+    ActionKind.RUN_AUTOMATION -> R.string.act_run_rule
+    ActionKind.SEND -> R.string.act_send
+    ActionKind.COUNTER_ADD -> R.string.act_counter_add
+    ActionKind.COUNTER_SET -> R.string.act_counter_set
 }
 
 // ---------------------------------------------------------------- düzenleyici
@@ -657,6 +701,14 @@ fun AutomationEditor(
     var clockDays by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.isClock }?.days ?: ActiveWindow.ALL_DAYS) }
     // Ek eylemler (yalnız Otomasyon sekmesinde): ilk eylemden sonra sırayla, her biri kendi beklemesiyle.
     val extras = rememberSaveable(saver = extraActionsSaver) { mutableStateListOf<AutoAction>().apply { initial?.extraActions?.let(::addAll) } }
+    fun setExtras(list: List<AutoAction>) { extras.clear(); extras.addAll(list) }
+    // Bütün tetikleyiciler; düzenlenen [editingTrigger]'ın güncel hali yukarıdaki alanlarda.
+    val trigList = rememberSaveable(saver = triggersSaver) { mutableStateListOf<Trigger>().apply { initial?.allTriggers?.let(::addAll) } }
+    var editingTrigger by rememberSaveable { mutableStateOf(0) }
+    var groupMatchJson by rememberSaveable { mutableStateOf(com.macerce.switchguard.core.CondSet.groupMatchToJson(initial?.groupMatch.orEmpty()).toString()) }
+    val groupMatch = remember(groupMatchJson) { com.macerce.switchguard.core.CondSet.groupMatchFromJson(org.json.JSONObject(groupMatchJson)) }
+    var runMode by rememberSaveable { mutableStateOf(initial?.mode ?: com.macerce.switchguard.core.RunMode.RESTART) }
+    var maxRuns by rememberSaveable { mutableStateOf(initial?.maxRuns ?: 3) }
     var confirmDelete by remember { mutableStateOf(false) }
     var showTrace by rememberSaveable { mutableStateOf(false) }
     var loopGuard by rememberSaveable { mutableStateOf(initial?.loopGuard ?: 0) }
@@ -709,27 +761,9 @@ fun AutomationEditor(
     // Eylem hedefi açılıp kapatılabilen cihaz olmalı (yalnız sensör olanlar değil).
     val actionTargets = remember(targets) { targets.filterNot { it.sensorOnly } }
     if (dst?.sensorOnly == true) actionDevice = actionTargets.firstOrNull()?.id.orEmpty()
-    val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
-        (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
-        (!triggerKind.usesTemp || tempValue != null) &&
-        (!triggerKind.usesSensor || sensorKind != null) &&
-        (!triggerKind.usesSensorValue || sensorThreshold != null) &&
-        (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
-        conds.all { it.valid(targets) } &&
-        (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
-        (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
-        (actionKind != ActionKind.SAVE_STATE || snapshotTargetValid(saveScope, actionTargets, sceneList)) &&
-        (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
-        (!actionKind.usesCycle || cycleList.any { it.id == actionCycle }) &&
-        (!triggerKind.isClock || clockDays != 0) &&
-        (alert || extras.all { x -> extraValid(x, actionTargets, sceneList, cycleList) })
 
-    // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
-    val draft = Automation(
-        id = existing?.id ?: NEW_AUTOMATION,
-        name = name.trim(),
-        enabled = initial?.enabled ?: true,
-        trigger = Trigger(
+    // Düzenlenen tetikleyici (alanlardan).
+    val current = Trigger(
             triggerKind,
             when {
                 triggerKind.usesDevice -> triggerDevice
@@ -755,7 +789,79 @@ fun AutomationEditor(
             graceMinutes = if (triggerKind.usesChannelPower) grace else 0,
             sensor = if (triggerKind.usesSensor) sensorKind else null,
             days = if (triggerKind.isClock) clockDays else ActiveWindow.ALL_DAYS,
-        ),
+        )
+    val allTriggers = if (trigList.isEmpty()) listOf(current) else trigList.toMutableList().also { it[editingTrigger.coerceIn(0, it.size - 1)] = current }
+    /** Başka bir tetikleyiciyi düzenlemeye geç: şu ankini listeye yaz, onunkini alanlara yükle. */
+    fun editTrigger(i: Int) {
+        if (trigList.isEmpty()) trigList.add(current) else trigList[editingTrigger.coerceIn(0, trigList.size - 1)] = current
+        val t = trigList.getOrNull(i) ?: return
+        editingTrigger = i
+        triggerKind = t.kind
+        when {
+            t.kind.usesDevice -> triggerDevice = t.deviceId
+            t.kind.usesZone -> zoneId = t.deviceId
+            t.kind.usesCycle -> triggerCycle = t.deviceId
+        }
+        triggerChannel = t.channel
+        when {
+            t.kind.isClock -> { clockMinute = t.minutes; clockDays = t.days }
+            t.kind.usesMinutes -> minutes = t.minutes.coerceAtLeast(1)
+            t.kind.usesChannelPower -> { lowMinutes = t.minutes; grace = t.graceMinutes }
+            t.kind.allowsHold -> holdMinutes = t.minutes
+            t.kind.isSun -> offset = t.minutes
+        }
+        when {
+            t.kind.usesWatts -> watts = formatNumber(t.watts)
+            t.kind.usesTemp -> temp = formatNumber(t.watts)
+            t.kind.usesSensorValue -> sensorValue = formatNumber(t.watts)
+        }
+        sensorKind = t.sensor
+    }
+    fun addTrigger() {
+        editTrigger(editingTrigger)
+        trigList.add(current.copy())
+        editTrigger(trigList.size - 1)
+    }
+    fun removeTrigger(i: Int) {
+        if (trigList.size <= 1) return
+        editTrigger(if (i == 0) 1 else 0)
+        trigList.removeAt(i)
+        editTrigger(if (editingTrigger > i) editingTrigger - 1 else editingTrigger.coerceAtMost(trigList.size - 1))
+    }
+
+    val helperList = Store.get(LocalContext.current).helpers.let { remember(it) { it } }
+    val ruleList = Store.get(LocalContext.current).automations.let { list -> remember(list) { list.filter { it.id != existing?.id } } }
+    val storeForLights = Store.get(LocalContext.current)
+    val stepCtx = StepCtx(
+        targets = actionTargets, condTargets = targets, scenes = sceneList, cycles = cycleList, helpers = helperList, rules = ruleList,
+        lights = remember(actionTargets) { lightTargets(storeForLights, actionTargets) }, triggerCount = allTriggers.size, locationVersion = locationVersion,
+    )
+
+    val valid = name.isNotBlank() && (src != null || !triggerKind.usesDevice) &&
+        (!triggerKind.usesWatts || (wattsValue != null && wattsValue > 0)) &&
+        (!triggerKind.usesTemp || tempValue != null) &&
+        (!triggerKind.usesSensor || sensorKind != null) &&
+        (!triggerKind.usesSensorValue || sensorThreshold != null) &&
+        (!triggerKind.usesZone || zones.any { it.id == zoneId }) &&
+        conds.all { it.valid(targets) } &&
+        (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
+        (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
+        (actionKind != ActionKind.SAVE_STATE || snapshotTargetValid(saveScope, actionTargets, sceneList)) &&
+        (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
+        (!actionKind.usesCycle || cycleList.any { it.id == actionCycle }) &&
+        (!triggerKind.isClock || clockDays != 0) &&
+        (alert || extras.all { x -> stepValid(x, stepCtx) })
+
+    // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
+    val draft = Automation(
+        id = existing?.id ?: NEW_AUTOMATION,
+        name = name.trim(),
+        enabled = initial?.enabled ?: true,
+        trigger = allTriggers.first(),
+        extraTriggers = allTriggers.drop(1),
+        groupMatch = groupMatch.filterKeys { g -> conds.any { it.group == g } },
+        mode = if (alert) com.macerce.switchguard.core.RunMode.RESTART else runMode,
+        maxRuns = maxRuns,
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
             actionKind == ActionKind.RUN_SCENE -> AutoAction(actionKind, sceneId)
@@ -784,6 +890,12 @@ fun AutomationEditor(
             small = true,
             actions = {
                 if (existing != null) {
+                    val runContext = LocalContext.current
+                    val started = stringResource(R.string.rule_run_now_done, existing.name)
+                    IconButton(modifier = Modifier.tvFocusRing(), onClick = {
+                        MonitorService.runRule(runContext, existing.id)
+                        android.widget.Toast.makeText(runContext, started, android.widget.Toast.LENGTH_SHORT).show()
+                    }) { Icon(Icons.Rounded.PlayArrow, stringResource(R.string.rule_run_now)) }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = { showTrace = true }) {
                         Icon(Icons.Rounded.History, stringResource(R.string.trace_title))
                     }
@@ -954,8 +1066,32 @@ fun AutomationEditor(
                         }
             var sheet by rememberSaveable { mutableStateOf<String?>(null) }
             StepCard(Icons.Rounded.Sensors, Hue.TEAL, stringResource(R.string.auto_if), stringResource(R.string.automation_when)) {
-                if (tv) triggerContent()
-                else ChoiceSummary(summary?.first ?: stringResource(R.string.rule_tap_to_change), triggerKind.icon(), Brand.amber) { sheet = "trigger" }
+                if (tv) {
+                    // Kumandada: hangi tetikleyici düzenleniyor (birden çoksa) ve alanları yerinde.
+                    if (allTriggers.size > 1) {
+                        OptionChips(allTriggers.indices.toList(), editingTrigger, { Icons.Rounded.Bolt }, { stringResource(R.string.cond_trigger_n, it + 1) }) { editTrigger(it) }
+                    }
+                    triggerContent()
+                } else {
+                    allTriggers.forEachIndexed { i, t ->
+                        if (i > 0) Text(stringResource(R.string.cond_join_or), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.padding(top = 8.dp))
+                        val text = if (src != null || !t.kind.usesDevice || i != editingTrigger) triggerText(t, devices) else stringResource(R.string.rule_tap_to_change)
+                        ChoiceSummary(text, t.kind.icon(), Brand.amber) { editTrigger(i); sheet = "trigger" }
+                    }
+                }
+                TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = { addTrigger(); if (!tv) sheet = "trigger" }) {
+                    Icon(Icons.Rounded.Add, null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.rule_add_trigger))
+                }
+                if (tv && allTriggers.size > 1) {
+                    TextButton(modifier = Modifier.tvFocusRing(), onClick = { removeTrigger(editingTrigger) }) {
+                        Icon(Icons.Rounded.Delete, null, tint = MaterialTheme.colorScheme.error)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(R.string.rule_trigger_remove), color = MaterialTheme.colorScheme.error)
+                    }
+                }
             }
 
             // ------------------------------------------------ İse
@@ -969,14 +1105,24 @@ fun AutomationEditor(
                 if (!alert) {
                     extras.forEachIndexed { i, x ->
                         if (tv) {
-                            ExtraActionEditor(x, i, tab, actionTargets, sceneList, cycleList, onChange = { extras[i] = it }, onDelete = { extras.removeAt(i) })
+                            // Kumandada adım yerinde düzenlenir; iç adımlara bu kutunun içinde geçilir.
+                            var open by rememberSaveable(i) { mutableStateOf(i.toString()) }
+                            val path = StepTree.Path.parse(open)?.takeIf { it.top == i && StepTree.get(extras, it) != null } ?: StepTree.Path(i)
+                            StepTree.get(extras, path)?.let { step ->
+                                StepEditor(path, step, stepCtx, name,
+                                    onChange = { n -> setExtras(StepTree.update(extras, path) { n }) },
+                                    onDelete = { setExtras(StepTree.remove(extras, path)); open = (path.parent() ?: StepTree.Path(i)).toString() },
+                                    onOpen = { open = it.toString() },
+                                    onAdd = { b -> val (l, np) = StepTree.append(extras, path, b, AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty())); setExtras(l); open = np.toString() },
+                                    onMove = { d -> val (l, np) = StepTree.move(extras, path, d); setExtras(l); open = np.toString() })
+                            }
                         } else {
                             val text = actionText(x, devices)
                             ChoiceSummary(
                                 if (x.waitMinutes > 0) stringResource(R.string.rule_step_after, holdLabel(x.waitMinutes), text) else text,
                                 x.kind.icon(),
                                 MaterialTheme.colorScheme.primary,
-                            ) { sheet = "extra:$i" }
+                            ) { sheet = "step:$i" }
                         }
                     }
                     // Döngü koruması: bir saatte çok kez çalışırsa cihazı kapalı bırak, alarm ver, kuralı durdur.
@@ -989,10 +1135,12 @@ fun AutomationEditor(
                         Text(stringResource(R.string.loop_guard_hint), style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 4.dp))
                     }
+                    // Yeniden tetiklenince ne olacağı (bekleyen adımı olan kurallarda anlamlı).
+                    RunModeBlock(runMode, maxRuns) { m, n -> runMode = m; maxRuns = n }
                     // Ek eylem: varsayılanı ilk hedefi kapatmak; alttan açılan sayfada değiştirilir.
                     TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = {
                         extras.add(AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty()))
-                        if (!tv) sheet = "extra:" + (extras.size - 1)
+                        if (!tv) sheet = "step:" + (extras.size - 1)
                     }) {
                         Icon(Icons.Rounded.Add, null)
                         Spacer(Modifier.width(8.dp))
@@ -1057,29 +1205,8 @@ fun AutomationEditor(
                 fun newCond() = CondDraft(ConditionKind.IS_ON, targets.firstOrNull { !it.sensorOnly }?.id ?: targets.first().id)
                 ToggleLine(stringResource(R.string.cond_toggle), conds.isNotEmpty()) { conds = if (it) listOf(newCond()) else emptyList() }
                 if (conds.isNotEmpty()) {
-                    if (conds.size > 1) {
-                        FieldLabel(stringResource(R.string.cond_match))
-                        OptionGrid(ConditionMatch.entries, condMatch, { if (it == ConditionMatch.ALL) Icons.Rounded.DoneAll else Icons.Rounded.Done },
-                            { stringResource(if (it == ConditionMatch.ALL) R.string.cond_match_all else R.string.cond_match_any) }) { condMatch = it }
-                    }
-                    conds.forEachIndexed { i, c ->
-                        key(i) {
-                            ConditionBlock(i, c, targets, locationVersion,
-                                onChange = { n -> conds = conds.toMutableList().also { it[i] = n } },
-                                onRemove = { conds = conds.filterIndexed { j, _ -> j != i } })
-                        }
-                    }
-                    TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = { conds = conds + newCond() }) {
-                        Icon(Icons.Rounded.Add, null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.cond_add))
-                    }
-                    if (conds.any { it.kind.usesTemp }) {
-                        val context = LocalContext.current
-                        val store = remember { Store.get(context) }
-                        key(locationVersion) {
-                            LocationSetup(store, onChanged = { locationVersion++ }, modifier = Modifier.padding(top = 12.dp))
-                        }
+                    CondListEditor(conds, condMatch, groupMatch, targets, locationVersion, allTriggers.size) { d, m, g ->
+                        conds = d; condMatch = m; groupMatchJson = com.macerce.switchguard.core.CondSet.groupMatchToJson(g).toString()
                     }
                 }
                             }
@@ -1115,14 +1242,31 @@ fun AutomationEditor(
                         )
                         val s = sheet.orEmpty()
                         when {
-                            s == "trigger" -> triggerContent()
-                            s.startsWith("extra:") -> {
-                                val i = s.removePrefix("extra:").toIntOrNull()
-                                val x = i?.let { extras.getOrNull(it) }
-                                if (i != null && x != null) {
-                                    ExtraActionEditor(x, i, tab, actionTargets, sceneList, cycleList,
-                                        onChange = { extras[i] = it },
-                                        onDelete = { sheet = null; extras.removeAt(i) })
+                            s == "trigger" -> {
+                                if (allTriggers.size > 1) Text(stringResource(R.string.cond_trigger_n, editingTrigger + 1), style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.primary, modifier = Modifier.padding(top = 4.dp))
+                                triggerContent()
+                                if (allTriggers.size > 1) {
+                                    TextButton(modifier = Modifier.padding(top = 8.dp).tvFocusRing(), onClick = { removeTrigger(editingTrigger); sheet = null }) {
+                                        Icon(Icons.Rounded.Delete, null, tint = MaterialTheme.colorScheme.error)
+                                        Spacer(Modifier.width(8.dp))
+                                        Text(stringResource(R.string.rule_trigger_remove), color = MaterialTheme.colorScheme.error)
+                                    }
+                                }
+                            }
+                            s.startsWith("step:") -> {
+                                val path = StepTree.Path.parse(s.removePrefix("step:"))
+                                val x = path?.let { StepTree.get(extras, it) }
+                                if (path != null && x != null) {
+                                    StepEditor(path, x, stepCtx, name,
+                                        onChange = { n -> setExtras(StepTree.update(extras, path) { n }) },
+                                        onDelete = { setExtras(StepTree.remove(extras, path)); sheet = path.parent()?.let { "step:$it" } },
+                                        onOpen = { sheet = "step:$it" },
+                                        onAdd = { b ->
+                                            val (l, np) = StepTree.append(extras, path, b, AutoAction(ActionKind.TURN_OFF, actionTargets.firstOrNull()?.id.orEmpty()))
+                                            setExtras(l); sheet = "step:$np"
+                                        },
+                                        onMove = { d -> val (l, np) = StepTree.move(extras, path, d); setExtras(l); sheet = "step:$np" })
                                 }
                             }
                             else -> actionContent()
@@ -1190,7 +1334,7 @@ fun AutomationEditor(
 /** Gün doğumu/batımı kayması: eksi önce, artı sonra (dakikadan saate). */
 private val OFFSET_STEPS = listOf(-240, -180, -120, -90, -60, -45, -30, -20, -15, -10, -5, 0, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240)
 private val MINUTE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360, 480, 720, 1440)
-private val DELAY_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120)
+internal val DELAY_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30, 45, 60, 90, 120)
 private val LOW_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
 private val GRACE_STEPS = listOf(0, 1, 2, 3, 5, 10, 15, 20, 30)
 
@@ -1261,7 +1405,7 @@ internal fun DeviceChooser(devices: List<DeviceSnapshot>, selectedId: String, on
 
 /** Kanal seçimi: numaralı düğmeler. */
 @Composable
-private fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) -> Unit) {
+internal fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) -> Unit) {
     val scheme = MaterialTheme.colorScheme
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         device.switches.keys.sorted().forEach { ch ->
@@ -1283,7 +1427,7 @@ private fun ChannelChooser(device: DeviceSnapshot, selected: Int, onPick: (Int) 
 
 /** Otomasyonda döngü seçimi; hiç döngü yoksa nereden ekleneceği söylenir. */
 @Composable
-private fun CyclePick(cycles: List<com.macerce.switchguard.core.Cycle>, selected: String, onPick: (String) -> Unit) {
+internal fun CyclePick(cycles: List<com.macerce.switchguard.core.Cycle>, selected: String, onPick: (String) -> Unit) {
     FieldLabel(stringResource(R.string.cycle_choose))
     if (cycles.isEmpty()) {
         Text(stringResource(R.string.cycle_none_yet), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -1505,7 +1649,7 @@ internal fun DayChips(days: Int, onChange: (Int) -> Unit) {
     }
 }
 
-private fun ConditionKind.icon(): ImageVector = when (this) {
+internal fun ConditionKind.icon(): ImageVector = when (this) {
     ConditionKind.IS_ON -> Icons.Rounded.PowerSettingsNew
     ConditionKind.IS_OFF -> Icons.Rounded.PowerOff
     ConditionKind.IS_ONLINE -> Icons.Rounded.Cloud
@@ -1518,6 +1662,14 @@ private fun ConditionKind.icon(): ImageVector = when (this) {
     ConditionKind.SENSOR_CLEAR -> Icons.Rounded.SensorsOff
     ConditionKind.TEMP_ABOVE -> Icons.Rounded.WbSunny
     ConditionKind.TEMP_BELOW -> Icons.Rounded.AcUnit
+    ConditionKind.ON_FOR -> Icons.Rounded.Timer
+    ConditionKind.OFF_FOR -> Icons.Rounded.TimerOff
+    ConditionKind.TIME_BETWEEN -> Icons.Rounded.Schedule
+    ConditionKind.DARK -> Icons.Rounded.NightsStay
+    ConditionKind.LIGHT -> Icons.Rounded.WbSunny
+    ConditionKind.HOME -> Icons.Rounded.Home
+    ConditionKind.AWAY -> Icons.AutoMirrored.Rounded.DirectionsWalk
+    ConditionKind.TRIGGERED_BY -> Icons.Rounded.Bolt
 }
 
 /** Düzenleyicideki bir koşul; eşik yazıldığı gibi tutulur. */
@@ -1527,33 +1679,48 @@ internal data class CondDraft(
     val channel: Int = 0,
     val value: String = "",
     val sensor: SensorKind? = null,
+    val negate: Boolean = false,
+    val group: Int = 0,
+    val start: Int = 22 * 60,
+    val end: Int = 6 * 60,
+    val days: Int = ActiveWindow.ALL_DAYS,
 ) {
     fun number(): Double? = value.replace(',', '.').toDoubleOrNull()
     fun toCondition() = Condition(
-        kind, if (kind.usesDevice) deviceId else "", if (kind.usesChannel) channel else 0,
+        kind, if (kind.usesDevice) deviceId else "", if (kind.usesChannel || kind.isTrigger) channel else 0,
         if (kind.usesValue) number() ?: 0.0 else 0.0, if (kind.usesSensor) sensor else null,
+        negate = negate, group = group,
+        start = if (kind.isTime) start else 0, end = if (kind.isTime) end else 0, days = if (kind.isTime) days else ActiveWindow.ALL_DAYS,
     )
 
     companion object {
-        fun of(c: Condition) = CondDraft(c.kind, c.deviceId, c.channel, if (c.kind.usesValue) formatNumber(c.value) else "", c.sensor)
+        fun of(c: Condition) = CondDraft(
+            c.kind, c.deviceId, c.channel, if (c.kind.usesValue) formatNumber(c.value) else "", c.sensor, c.negate, c.group,
+            if (c.kind.isTime) c.start else 22 * 60, if (c.kind.isTime) c.end else 6 * 60, c.days,
+        )
+
+        fun encode(d: CondDraft): String = org.json.JSONObject().put("k", d.kind.name).put("d", d.deviceId).put("c", d.channel).put("v", d.value)
+            .put("s", d.sensor?.name ?: "").put("n", d.negate).put("g", d.group).put("a", d.start).put("b", d.end).put("y", d.days).toString()
+
+        fun decode(s: String): CondDraft {
+            val o = org.json.JSONObject(s)
+            return CondDraft(ConditionKind.valueOf(o.getString("k")), o.getString("d"), o.getInt("c"), o.getString("v"),
+                o.getString("s").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) }, o.optBoolean("n"), o.optInt("g"),
+                o.optInt("a", 22 * 60), o.optInt("b", 6 * 60), o.optInt("y", ActiveWindow.ALL_DAYS))
+        }
 
         val ListSaver = androidx.compose.runtime.saveable.listSaver<List<CondDraft>, String>(
-            save = { list -> list.map { d -> org.json.JSONObject().put("k", d.kind.name).put("d", d.deviceId).put("c", d.channel).put("v", d.value).put("s", d.sensor?.name ?: "").toString() } },
-            restore = { list ->
-                list.map { s ->
-                    val o = org.json.JSONObject(s)
-                    CondDraft(ConditionKind.valueOf(o.getString("k")), o.getString("d"), o.getInt("c"), o.getString("v"),
-                        o.getString("s").takeIf { it.isNotEmpty() }?.let { SensorKind.valueOf(it) })
-                }
-            },
+            save = { list -> list.map(::encode) },
+            restore = { list -> list.map(::decode) },
         )
     }
 }
 
-/** Seçili cihazda anlamlı koşul türleri (dış sıcaklık her zaman). */
-internal fun conditionKinds(d: DeviceSnapshot?): List<ConditionKind> = ConditionKind.entries.filter {
+/** Seçili cihazda anlamlı koşul türleri; cihaz dışı olanlar (sıcaklık, saat, güneş, evde) her zaman. */
+internal fun conditionKinds(d: DeviceSnapshot?, triggerCount: Int = 1): List<ConditionKind> = ConditionKind.entries.filter {
     when {
-        it.usesTemp -> true
+        it.isTrigger -> triggerCount > 1
+        it.deviceless -> true
         d == null -> !it.usesPower && !it.usesSensor
         it.usesChannel -> !d.sensorOnly && d.switches.isNotEmpty()
         it.usesPower -> d.hasEnergy
@@ -1565,7 +1732,7 @@ internal fun conditionKinds(d: DeviceSnapshot?): List<ConditionKind> = Condition
 
 /** Koşul hatasız mı (cihaz var, eşik yazılı, sensör seçili). */
 internal fun CondDraft.valid(targets: List<DeviceSnapshot>): Boolean =
-    (!kind.usesDevice || targets.any { it.id == deviceId }) && (!kind.usesValue || number() != null) && (!kind.usesSensor || sensor != null)
+    (!kind.usesDevice || targets.any { it.id == deviceId }) && (!kind.isTime || days != 0) && (!kind.usesValue || number() != null) && (!kind.usesSensor || sensor != null)
 
 /** Bir koşulun düzenleme kutusu: cihaz, durum, kanal/sensör, eşik. */
 @Composable
@@ -1576,9 +1743,12 @@ internal fun ConditionBlock(
     locationVersion: Int,
     onChange: (CondDraft) -> Unit,
     onRemove: () -> Unit,
+    triggerCount: Int = 1,
+    /** Grup seçimi sunulsun mu (koşul 2'den fazlaysa anlamlı). */
+    groups: Boolean = false,
 ) {
     val d = targets.firstOrNull { it.id == raw.deviceId }
-    val kinds = conditionKinds(d)
+    val kinds = conditionKinds(d, triggerCount)
     // Cihaz değişince seçili tür artık uymuyorsa düzeltilir (sensör cihazında önce sensör eşiği); sensör türü de uyacak
     // şekilde seçilir, boş eşik şu anki değerle dolar. Düzeltme aynı karede gösterilir, kayda SideEffect ile yazılır.
     var draft = raw
@@ -1593,7 +1763,7 @@ internal fun ConditionBlock(
             draft.kind.usesSensorValue -> draft.sensor?.let { d?.sensors?.get(it) }
             else -> null
         }
-        (now?.let { formatNumber(Math.round(it).toDouble()) } ?: if (draft.kind.usesTemp) "20" else null)?.let { draft = draft.copy(value = it) }
+        (now?.let { formatNumber(Math.round(it).toDouble()) } ?: if (draft.kind.usesTemp) "20" else if (draft.kind.usesDuration) "10" else null)?.let { draft = draft.copy(value = it) }
     }
     if (draft != raw) { val fixed = draft; SideEffect { onChange(fixed) } }
     val shape = RoundedCornerShape(18.dp)
@@ -1602,11 +1772,10 @@ internal fun ConditionBlock(
             Text(stringResource(R.string.cond_n, index + 1), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
             IconButton(modifier = Modifier.tvFocusRing(), onClick = onRemove) { Icon(Icons.Rounded.Delete, stringResource(R.string.cond_remove)) }
         }
-        if (draft.kind.usesDevice || draft.kind.usesTemp) {
-            FieldLabel(stringResource(R.string.automation_device))
-            DeviceChooser(targets, if (draft.kind.usesTemp) "" else draft.deviceId) {
-                onChange(draft.copy(deviceId = it.id, channel = 0, value = "", sensor = null, kind = if (draft.kind.usesTemp) ConditionKind.IS_ON else draft.kind))
-            }
+        // Cihaz dışı koşulda seçili cihaz yok; cihaz seçilince cihaz koşuluna geçilir.
+        FieldLabel(stringResource(R.string.automation_device))
+        DeviceChooser(targets, if (draft.kind.deviceless) "" else draft.deviceId) {
+            onChange(draft.copy(deviceId = it.id, channel = 0, value = "", sensor = null, kind = if (draft.kind.deviceless) ConditionKind.IS_ON else draft.kind))
         }
         FieldLabel(stringResource(R.string.cond_state))
         OptionChips(kinds, draft.kind, { it.icon() }, { stringResource(it.title()) }) { if (it != draft.kind) onChange(draft.copy(kind = it, value = "")) }
@@ -1626,6 +1795,29 @@ internal fun ConditionBlock(
                 NumberField(draft.value, stringResource(R.string.sensor_threshold), k.unit, allowNegative = k == SensorKind.TEMPERATURE) { onChange(draft.copy(value = it)) }
             }
             draft.kind.usesTemp -> NumberField(draft.value, stringResource(R.string.automation_temp), "°C", allowNegative = true) { onChange(draft.copy(value = it)) }
+            draft.kind.usesDuration -> NumberField(draft.value, stringResource(R.string.cond_minutes), "") { onChange(draft.copy(value = it)) }
+        }
+        if (draft.kind.isTime) {
+            val context = LocalContext.current
+            val picker = rememberTimePicker()
+            val startTitle = stringResource(R.string.window_start)
+            val endTitle = stringResource(R.string.window_end)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 8.dp)) {
+                TimeChip(startTitle, formatMinute(context, draft.start), Modifier.weight(1f)) { picker.pick(startTitle, draft.start) { onChange(draft.copy(start = it)) } }
+                TimeChip(endTitle, formatMinute(context, draft.end), Modifier.weight(1f)) { picker.pick(endTitle, draft.end) { onChange(draft.copy(end = it)) } }
+            }
+            DayChips(draft.days) { onChange(draft.copy(days = it)) }
+        }
+        if (draft.kind.isTrigger) {
+            FieldLabel(stringResource(R.string.cond_triggered_by))
+            OptionChips((0 until triggerCount).toList(), draft.channel.coerceIn(0, (triggerCount - 1).coerceAtLeast(0)), { Icons.Rounded.Bolt },
+                { stringResource(R.string.cond_trigger_n, it + 1) }) { onChange(draft.copy(channel = it)) }
+        }
+        ToggleLine(stringResource(R.string.cond_not), draft.negate) { onChange(draft.copy(negate = it)) }
+        if (groups) {
+            FieldLabel(stringResource(R.string.cond_group))
+            OptionChips(listOf(0, 1, 2, 3), draft.group, { if (it == 0) Icons.Rounded.Remove else Icons.Rounded.Rule },
+                { if (it == 0) stringResource(R.string.cond_group_none) else stringResource(R.string.cond_group_n, it) }) { onChange(draft.copy(group = it)) }
         }
         val current: String? = when {
             draft.kind.usesPower -> d?.power?.let { stringResource(R.string.automation_current_power, formatWatts(it)) }
@@ -1644,6 +1836,17 @@ internal fun ConditionBlock(
 /** Özet ve kart metni: "Salon sensörü sıcaklık < 20 °C", "Kombi açık", "Dış sıcaklık > 25 °C". */
 @Composable
 internal fun conditionText(c: Condition, devices: List<DeviceSnapshot>): String {
+    val plain = conditionTextPlain(c, devices)
+    return if (c.negate) stringResource(R.string.cond_not_text, plain) else plain
+}
+
+@Composable
+private fun conditionTextPlain(c: Condition, devices: List<DeviceSnapshot>): String {
+    when {
+        c.kind.isTime -> return windowText(ActiveWindow(c.start, c.end, c.days))
+        c.kind.isTrigger -> return stringResource(R.string.cond_trigger_n, c.channel + 1)
+        c.kind.isSun || c.kind.isPresence -> return stringResource(c.kind.title())
+    }
     val name = if (c.kind.usesTemp) null else devices.firstOrNull { it.id == c.deviceId }?.let { channelLabel(it, c.channel, c.kind.usesChannel) }
         ?: stringResource(R.string.device_missing)
     val cmp = if (c.kind.above) " > " else " < "
@@ -1652,20 +1855,32 @@ internal fun conditionText(c: Condition, devices: List<DeviceSnapshot>): String 
         c.kind.usesSensorValue -> c.sensor?.let { stringResource(it.label()) + cmp + formatSensor(it, c.value) } ?: stringResource(c.kind.title())
         c.kind.usesSensorState -> c.sensor?.let { stringResource(it.stateLabel(c.kind == ConditionKind.SENSOR_ACTIVE)) } ?: stringResource(c.kind.title())
         c.kind.usesTemp -> stringResource(R.string.cond_outdoor) + cmp + formatTemp(c.value)
+        c.kind == ConditionKind.ON_FOR -> stringResource(R.string.cond_on_for_text, holdLabel(c.value.toInt()))
+        c.kind == ConditionKind.OFF_FOR -> stringResource(R.string.cond_off_for_text, holdLabel(c.value.toInt()))
         else -> stringResource(c.kind.title())
     }
     return when {
         name == null -> stringResource(R.string.cond_clause_plain, state)
-        c.kind.usesChannel || c.kind == ConditionKind.IS_ONLINE || c.kind == ConditionKind.IS_OFFLINE -> stringResource(R.string.cond_clause, name, state)
+        c.kind == ConditionKind.IS_ON || c.kind == ConditionKind.IS_OFF || c.kind == ConditionKind.IS_ONLINE || c.kind == ConditionKind.IS_OFFLINE -> stringResource(R.string.cond_clause, name, state)
         else -> stringResource(R.string.cond_clause_value, name, state)
     }
 }
 
 /** Birden çok koşul "ve" / "veya" ile tek cümlede. */
 @Composable
-internal fun conditionsText(list: List<Condition>, match: ConditionMatch, devices: List<DeviceSnapshot>): String {
-    val join = " " + stringResource(if (match == ConditionMatch.ANY) R.string.cond_join_or else R.string.cond_join_and) + " "
-    return list.map { conditionText(it, devices) }.joinToString(join)
+internal fun conditionsText(list: List<Condition>, match: ConditionMatch, devices: List<DeviceSnapshot>, groupMatch: Map<Int, ConditionMatch> = emptyMap()): String {
+    val and = " " + stringResource(R.string.cond_join_and) + " "
+    val or = " " + stringResource(R.string.cond_join_or) + " "
+    val join = if (match == ConditionMatch.ANY) or else and
+    // Gruplar parantez içinde, kendi ve/veya bağlacıyla: "A ve (B veya C)".
+    val texts = list.map { conditionText(it, devices) }
+    val top = list.indices.filter { list[it].group <= 0 }.map { texts[it] }
+    val groups = list.indices.filter { list[it].group > 0 }.groupBy { list[it].group }.map { (g, idx) ->
+        val j = if ((groupMatch[g] ?: ConditionMatch.ALL) == ConditionMatch.ANY) or else and
+        val inner = idx.joinToString(j) { texts[it] }
+        if (idx.size > 1) "($inner)" else inner
+    }
+    return (top + groups).joinToString(join)
 }
 
 private fun TriggerKind.icon(): ImageVector = when (this) {
@@ -1719,7 +1934,7 @@ fun TriggerKind.shortTitle(): Int = when (this) {
     TriggerKind.SENSOR_CLEAR -> R.string.evt_sensor_clear
 }
 
-private fun ActionKind.icon(): ImageVector = when (this) {
+internal fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.ALARM -> Icons.Rounded.Alarm
     ActionKind.NOTIFY -> Icons.Rounded.NotificationsActive
     ActionKind.TURN_ON -> Icons.Rounded.PowerSettingsNew
@@ -1729,9 +1944,19 @@ private fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.STOP_CYCLE -> Icons.Rounded.Stop
     ActionKind.SAVE_STATE -> Icons.Rounded.Bookmark
     ActionKind.RESTORE_STATE -> Icons.Rounded.Restore
+    ActionKind.TOGGLE -> Icons.Rounded.SwapHoriz
+    ActionKind.SET_LEVEL -> Icons.Rounded.Lightbulb
+    ActionKind.DELAY -> Icons.Rounded.HourglassTop
+    ActionKind.WAIT_UNTIL -> Icons.Rounded.Pending
+    ActionKind.IF -> Icons.Rounded.AltRoute
+    ActionKind.REPEAT -> Icons.Rounded.Loop
+    ActionKind.STOP -> Icons.Rounded.Block
+    ActionKind.RUN_AUTOMATION -> Icons.Rounded.AutoMode
+    ActionKind.SEND -> Icons.AutoMirrored.Rounded.Send
+    ActionKind.COUNTER_ADD, ActionKind.COUNTER_SET -> Icons.Rounded.Numbers
 }
 
-private fun ActionKind.hue(): Hue = when (this) {
+internal fun ActionKind.hue(): Hue = when (this) {
     ActionKind.ALARM -> Hue.RED
     ActionKind.NOTIFY -> Hue.BLUE
     ActionKind.TURN_ON -> Hue.GREEN
@@ -1740,9 +1965,15 @@ private fun ActionKind.hue(): Hue = when (this) {
     ActionKind.START_CYCLE -> Hue.TEAL
     ActionKind.STOP_CYCLE -> Hue.SLATE
     ActionKind.SAVE_STATE, ActionKind.RESTORE_STATE -> Hue.AMBER
+    ActionKind.TOGGLE -> Hue.GREEN
+    ActionKind.SET_LEVEL -> Hue.AMBER
+    ActionKind.DELAY, ActionKind.WAIT_UNTIL -> Hue.SLATE
+    ActionKind.IF, ActionKind.REPEAT, ActionKind.STOP, ActionKind.RUN_AUTOMATION -> Hue.INDIGO
+    ActionKind.SEND -> Hue.BLUE
+    ActionKind.COUNTER_ADD, ActionKind.COUNTER_SET -> Hue.ORANGE
 }
 
-private fun ActionKind.editorTitle(): Int = when (this) {
+internal fun ActionKind.editorTitle(): Int = when (this) {
     ActionKind.ALARM -> R.string.auto_action_alarm
     ActionKind.NOTIFY -> R.string.auto_action_notify
     ActionKind.TURN_ON -> R.string.act_turn_on
@@ -1752,6 +1983,7 @@ private fun ActionKind.editorTitle(): Int = when (this) {
     ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
     ActionKind.SAVE_STATE -> R.string.act_save_state
     ActionKind.RESTORE_STATE -> R.string.act_restore_state
+    else -> title()
 }
 
 /** "Durumu hatırla" hedefi geçerli mi: gerçek bir cihaz (grup/kategori değil) ya da var olan bir sahne. Boş = geçersiz. */
@@ -1801,7 +2033,7 @@ fun <T> Picker(label: String, options: List<T>, selected: T?, text: @Composable 
 
 /** Seçili tetikleyici / eylem: renkli çerçeveli satır (videodaki "Banyo su sensörü · Etkin"); dokununca değiştirilir. */
 @Composable
-private fun ChoiceSummary(text: String, icon: ImageVector, color: Color, onClick: () -> Unit) {
+internal fun ChoiceSummary(text: String, icon: ImageVector, color: Color, onClick: () -> Unit) {
     val shape = RoundedCornerShape(16.dp)
     Row(
         Modifier.fillMaxWidth().padding(top = 12.dp)
@@ -1855,13 +2087,20 @@ private fun CondRow(icon: ImageVector, title: String, value: String, open: Boole
 
 /** Ek eylemlerin kaydedilebilir listesi (döndürmede kaybolmasın). */
 private val extraActionsSaver = listSaver<androidx.compose.runtime.snapshots.SnapshotStateList<AutoAction>, String>(
-    save = { list -> list.map { listOf(it.kind.name, it.deviceId, it.channel, it.waitMinutes).joinToString("|") } },
+    save = { list -> list.map { AutoAction.toJson(it).toString() } },
     restore = { saved ->
         mutableStateListOf<AutoAction>().apply {
-            saved.forEach { line ->
-                val p = line.split("|")
-                runCatching { add(AutoAction(ActionKind.valueOf(p[0]), p[1], p[2].toInt(), p[3].toInt())) }
-            }
+            saved.forEach { line -> runCatching { add(AutoAction.fromJson(org.json.JSONObject(line))) } }
+        }
+    },
+)
+
+/** Tetikleyici listesinin kaydedicisi (döndürmede kaybolmasın). */
+private val triggersSaver = listSaver<androidx.compose.runtime.snapshots.SnapshotStateList<Trigger>, String>(
+    save = { list -> list.map { Automation.triggerToJson(it).toString() } },
+    restore = { saved ->
+        mutableStateListOf<Trigger>().apply {
+            saved.forEach { line -> runCatching { add(Automation.triggerFromJson(org.json.JSONObject(line))) } }
         }
     },
 )

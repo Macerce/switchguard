@@ -70,6 +70,11 @@ object Actions {
     /** Cihazı uygulamadan açar/kapatır. Bu değişiklik alarm çaldırmaz, geçmişe "uygulamadan" diye yazılır. */
     suspend fun setSwitch(context: Context, device: DeviceSnapshot, channel: Int, on: Boolean): Result<Unit> =
         if (DeviceGroup.isGroup(device.id)) setGroup(context, device.id, on)
+        else if (com.macerce.switchguard.core.Helpers.isHelper(device.id)) {
+            // Yardımcı (sanal anahtar/zamanlayıcı): buluta gitmez, kurallar değişimi görür.
+            com.macerce.switchguard.service.HelperControl.switch(context, device.id, on)
+            Result.success(Unit)
+        }
         else withContext(Dispatchers.IO) {
             runCatching {
                 val store = Store.get(context)
@@ -88,6 +93,7 @@ object Actions {
                     Cloud.LAN -> if (!com.macerce.switchguard.api.LocalLan.trySwitch(device, store.localDevices.firstOrNull { it.id == device.id }, channel, on)) {
                         throw java.io.IOException(context.getString(R.string.lan_unreachable))
                     }
+                    Cloud.HELPER -> com.macerce.switchguard.service.HelperControl.switch(context, device.id, on)
                 }
                 val service = MonitorService.instance
                 if (store.monitoringEnabled && service != null) {

@@ -38,6 +38,10 @@ object LocalLan {
         else -> drivers[local.brand]?.trySwitch(local, channel, on) == true
     }
 
+    /** Işık parlaklığı/rengi; Sonoff ve Shelly'de yok. */
+    fun trySetLevel(local: LocalDevice?, channel: Int, level: Int?, color: Int?): Boolean =
+        local != null && drivers[local.brand]?.trySetLevel(local, channel, level, color) == true
+
     /** İzleme: her yoklamalı markayı kendi cihazlarıyla başlatır, cihazı olmayanı durdurur. */
     fun startDrivers(context: Context, devices: List<LocalDevice>, auth: Map<String, ShellyAuth.Credentials>, listener: () -> Unit) {
         drivers.values.forEach { dr ->

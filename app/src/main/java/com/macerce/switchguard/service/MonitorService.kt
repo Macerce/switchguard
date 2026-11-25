@@ -7,7 +7,16 @@ import com.macerce.switchguard.core.ConfirmOff
 import com.macerce.switchguard.api.HookClient
 import com.macerce.switchguard.core.Heartbeat
 import com.macerce.switchguard.core.AlertHooks
-import com.macerce.switchguard.core.ActionSteps
+import com.macerce.switchguard.core.LoopGuard
+import com.macerce.switchguard.core.RunPolicy
+import com.macerce.switchguard.core.ScriptRunner
+import com.macerce.switchguard.core.Helper
+import com.macerce.switchguard.core.Helpers
+import com.macerce.switchguard.core.TextTemplate
+import com.macerce.switchguard.core.SendTarget
+import com.macerce.switchguard.core.AutoAction
+import com.macerce.switchguard.core.TraceEntry
+import com.macerce.switchguard.core.TraceOutcome
 import com.macerce.switchguard.core.TelegramAuth
 import com.macerce.switchguard.core.TuyaListenerCheck
 import android.annotation.SuppressLint
@@ -135,32 +144,33 @@ class MonitorService : Service() {
     private fun newEngine() = AutomationEngine().also { e ->
         e.onTrace = { com.macerce.switchguard.data.TraceLog.record(this, it) }
         e.onLockout = { onLoopLockout(it) }
+        // Tek kipte önceki çalışması sürüyorsa (ya da sıra/aynı anda sınırı doluysa) yeni tetikleniş yok sayılır.
+        e.busy = { a -> runDecision(a) == RunPolicy.Decision.SKIP }
     }
 
     /**
-     * Döngü koruması: kural bir saatte çok kez çalıştı. Bekleyen ek eylemler (ör. "geri getir") iptal, tetikleyen cihaz
-     * (yoksa kuralın aç/kapa hedefi) kapatılıp kapalı bırakılır, kural kapatılır, alarm çalar. Kullanıcı cihazı kontrol
-     * edip kuralı yeniden açar.
+     * Döngü koruması: kural bir saatte çok kez çalıştı. Kuralın süren adımları (ör. "geri getir") iptal, kural kapatılır,
+     * alarm çalar. Yalnız kuralın KENDİSİNİN açıp kapattığı cihazlar kapatılıp kapalı bırakılır ([LoopGuard]); kuralı
+     * başlatan cihaza (ör. "dondurucunun gücü düştü") ve kapatırken onay istenen ya da kritik cihazlara dokunulmaz.
+     * Kullanıcı cihazları kontrol edip kuralı yeniden açar.
      */
-    private fun onLoopLockout(a: Automation) {
-        runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id }
-        store.saveAutomation(a.copy(enabled = false))
+    private fun onLoopLockout(unit: Automation) {
+        val baseId = Automation.baseId(unit.id)
+        val rule = store.automations.firstOrNull { it.id == baseId } ?: unit
+        runtime.scriptRuns = runtime.scriptRuns.filterNot { Automation.baseId(it.automationId) == baseId }
+        automations.cancelPending(baseId)
+        // Kategori ya da ek tetikleyici kopyası değil, kuralın kendisi kapatılır.
+        store.saveAutomation(rule.copy(enabled = false))
         val byId = store.snapshots.associateBy { it.id }
-        val t = a.trigger
-        val triggerDevice = byId[t.deviceId]?.takeIf { t.kind.usesDevice && !it.sensorOnly }
-        val target = triggerDevice
-            ?: a.allActions.firstOrNull { it.kind.usesDevice || it.kind == ActionKind.SAVE_STATE }?.deviceId?.let { byId[it] }
-        // Kanal tetikleyicisinde o kanal; güç/çevrimdışı gibi cihaz geneli tetikleyicide açık olan bütün kanallar.
-        val channels = when {
-            target == null -> emptyList()
-            target === triggerDevice && t.kind.usesChannel -> listOf(t.channel)
-            else -> target.switches.filterValues { it }.keys.sorted()
-        }
-        channels.forEach { ch -> sendAutomationSwitch(a.name, target!!, ch, on = false, attempt = 1, logSuccess = true) }
-        val name = target?.name ?: a.name
-        val text = getString(R.string.loop_guard_alarm, a.name, a.loopGuard, name)
-        log.add(target?.id.orEmpty(), name, EventKind.AUTOMATION, text, AlertAction.ALARM.name)
-        addAlarm(text, store.rulesFor(target?.id.orEmpty()).soundUri, critical = true)
+        val plan = LoopGuard.plan(rule.flatActions, byId, store.groups, store.scenes) { id -> id in store.confirmOff || isCritical(id) }
+        plan.turnOff.forEach { (d, ch) -> sendAutomationSwitch(rule.name, d, ch, on = false, attempt = 1, logSuccess = true) }
+        val off = plan.offDevices.joinToString(", ") { it.name }
+        var text = if (off.isNotEmpty()) getString(R.string.loop_guard_alarm, rule.name, rule.loopGuard, off)
+        else getString(R.string.loop_guard_alarm_none, rule.name, rule.loopGuard)
+        if (plan.kept.isNotEmpty()) text += " " + getString(R.string.loop_guard_kept, plan.kept.joinToString(", ") { it.name })
+        val first = plan.offDevices.firstOrNull()
+        log.add(first?.id.orEmpty(), first?.name ?: rule.name, EventKind.AUTOMATION, text, AlertAction.ALARM.name)
+        addAlarm(text, store.rulesFor(first?.id.orEmpty()).soundUri, critical = true)
     }
 
     private val blindWatch = BlindWatch()
@@ -316,6 +326,12 @@ class MonitorService : Service() {
             }
             ACTION_SYNC -> {
                 if (running) handler.post { sync() }
+                return START_STICKY
+            }
+            ACTION_RUN_RULE -> {
+                val id = intent.getStringExtra(EXTRA_RULE).orEmpty()
+                startMonitoring()
+                handler.post { runRuleNow(id) }
                 return START_STICKY
             }
             ACTION_CYCLE -> {
@@ -495,10 +511,11 @@ class MonitorService : Service() {
         checkOutage(wall)
         templateTick(wall)
         cycleTick(wall)
-        runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
+        runAutomations(automations.onTick(store.snapshotsForRules.associateBy { it.id }, store.engineAutomations(), wall, env()))
         retryTick(wall)
-        // Kuralların beklemeli ek eylemleri.
-        stepTick(wall)
+        // Kuralların bekleyen adımları ve zamanlayıcılar.
+        runsTick(wall)
+        helperTick(wall)
         heartbeatTick(wall)
         weatherTick(wall)
         tuyaTick(now)
@@ -743,6 +760,8 @@ class MonitorService : Service() {
             Cloud.LAN -> if (!com.macerce.switchguard.api.LocalLan.trySwitch(device, store.localDevices.firstOrNull { it.id == device.id }, channel, on)) {
                 throw IOException(getString(R.string.lan_unreachable))
             }
+            // Yardımcılar buraya gelmez (executeHelper); gelirse yalnız yerel değer değişir.
+            Cloud.HELPER -> HelperControl.switch(this, device.id, on)
         }
     }
 
@@ -1040,7 +1059,8 @@ class MonitorService : Service() {
         val previous = store.snapshots.associateBy { it.id }
         // Otomasyonlar grupları da cihaz sayar: grubun durumu üyelerinden türetilir.
         val groups = store.groups
-        val previousAuto = if (groups.isEmpty()) previous else DeviceGroup.withGroups(store.snapshots, groups).associateBy { it.id }
+        val helpers = store.helpers
+        val previousAuto = if (groups.isEmpty() && helpers.isEmpty()) previous else store.rulesSnapshots(store.snapshots, helpers).associateBy { it.id }
         store.snapshots = current
         runCatching { metrics.record(previous, current, wall) }
         // Cihaz düğmesi widget'ları açık/kapalı ve bağlantı değişince tazelenir.
@@ -1056,7 +1076,7 @@ class MonitorService : Service() {
         }
         val changes = ChangeDetector.detect(previous, current.associateBy { it.id }, store.monitoredIds())
         changes.forEach(::handle)
-        runAutomations(automations.onStates(previousAuto, DeviceGroup.withGroups(current, groups).associateBy { it.id }, store.engineAutomations(current), wall, env()))
+        runAutomations(automations.onStates(previousAuto, store.rulesSnapshots(current, helpers).associateBy { it.id }, store.engineAutomations(current), wall, env()))
         persistRuntime()
         heartbeat(wall)
     }
@@ -1208,45 +1228,134 @@ class MonitorService : Service() {
         }
     }
 
-    /** Kural çalıştı: ek eylemlerinden beklemesizler hemen, beklemeliler kalıcı listeye (kural yeniden çalışırsa yenilenir). */
-    private fun startSteps(a: Automation) {
-        if (a.extraActions.isEmpty()) return
-        val (immediate, later) = ActionSteps.plan(a, System.currentTimeMillis())
-        immediate.forEach { i -> execute(a.copy(action = a.extraActions[i]), step = i + 1) }
-        runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id } + later
-    }
-
-    /** Vakti gelen ek eylemler; bu arada kapatılan ya da silinen kuralınki yapılmaz, düzenlendiyse güncel hali kullanılır. */
-    private fun stepTick(wall: Long) {
-        val list = runtime.actionSteps
-        if (list.isEmpty()) return
-        val due = list.filter { it.at <= wall }
-        if (due.isEmpty()) return
-        runtime.actionSteps = list - due.toSet()
-        val byId = store.engineAutomations().associateBy { it.id }
-        for (d in due.sortedBy { it.at }) {
-            val a = byId[d.automationId]?.takeIf { it.enabled } ?: continue
-            a.extraActions.getOrNull(d.step)?.let { execute(a.copy(action = it), step = d.step + 1) }
-        }
-    }
-
     private fun runAutomations(fired: List<Automation>) {
-        fired.forEach { a ->
-            execute(a)
-            startSteps(a)
-        }
-        // Süre dolumu, gecikmeli eylem ya da saatli şablon varsa tam vaktinde uyan.
+        fired.forEach { startRule(it) }
+        // Bekleyen adımlar ve "şu olana kadar bekle" (durum değişmiş olabilir).
+        runsTick(System.currentTimeMillis())
+        // Süre dolumu, gecikmeli eylem, bekleyen adım, zamanlayıcı ya da saatli şablon varsa tam vaktinde uyan.
         val due = listOfNotNull(
-            automations.nextDueAt(store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), env()),
+            automations.nextDueAt(store.snapshotsForRules.associateBy { it.id }, store.engineAutomations(), env()),
             ChatTemplate.nextAt(store.chatTemplates.orEmpty(), runtime.templateRuns, System.currentTimeMillis()),
-            runtime.actionSteps.minOfOrNull { it.at },
+            runtime.scriptRuns.filter { !it.queued && it.resumeAt > 0 }.minOfOrNull { it.resumeAt },
+            Helpers.nextDueAt(store.helpers),
         ).minOrNull() ?: return
         wakeIn((due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
+    // ---------------------------------------------------------------- kural çalışmaları
+
+    private var runSeq = 0L
+    private fun newRunId() = "${System.currentTimeMillis()}-${runSeq++}"
+
+    /** Kuralın süren/sıradaki çalışmalarına göre yeni tetiklenişin akıbeti (tetikleyici kopyaları birlikte sayılır). */
+    private fun runDecision(a: Automation): RunPolicy.Decision {
+        val key = Automation.ruleKey(a.id)
+        val mine = runtime.scriptRuns.filter { Automation.ruleKey(it.automationId) == key }
+        return RunPolicy.decide(a.mode, a.maxRuns, mine.count { !it.queued }, mine.count { it.queued })
+    }
+
+    /** Kural tetiklendi ya da elle başlatıldı: kipine göre başlat, sıraya al ya da yok say. */
+    private fun startRule(a: Automation, triggerIndex: Int? = a.triggerIndex, depth: Int = 0) {
+        val now = System.currentTimeMillis()
+        val key = Automation.ruleKey(a.id)
+        val run = ScriptRunner.start(a, now, newRunId(), triggerIndex, depth)
+        when (runDecision(a)) {
+            RunPolicy.Decision.SKIP -> {
+                com.macerce.switchguard.data.TraceLog.record(this, TraceEntry(Automation.baseId(a.id), now, TraceOutcome.BUSY, trigger = a.triggerIndex))
+                return
+            }
+            RunPolicy.Decision.QUEUE -> {
+                runtime.scriptRuns = runtime.scriptRuns + run.copy(queued = true)
+                return
+            }
+            RunPolicy.Decision.START_CANCEL_OTHERS -> runtime.scriptRuns = runtime.scriptRuns.filterNot { Automation.ruleKey(it.automationId) == key }
+            RunPolicy.Decision.START -> Unit
+        }
+        advanceRun(a, run, now)
+    }
+
+    /** Elle çalıştır ("Şimdi çalıştır", bekleme ekranı kartı, başka kuraldan): tetikleyici ve koşullar atlanır. */
+    private fun runRuleNow(id: String, depth: Int = 0) {
+        val a = store.engineAutomations().firstOrNull { it.id == id } ?: store.automations.firstOrNull { it.id == id } ?: return
+        com.macerce.switchguard.data.TraceLog.record(this, TraceEntry(Automation.baseId(a.id), System.currentTimeMillis(), TraceOutcome.MANUAL))
+        startRule(a, triggerIndex = null, depth = depth)
+        persistRuntime()
+    }
+
+    /** Çalışmayı ilerletir ve çıkan eylemleri uygular; bittiyse sıradaki çalışmayı başlatır. */
+    private fun advanceRun(a: Automation, run: ScriptRunner.Run, now: Long = System.currentTimeMillis()) {
+        val devices = store.snapshotsForRules.associateBy { it.id }
+        val ctx = automations.condCtx(now, run.triggerIndex)
+        val res = ScriptRunner.advance(a, run, now) { set -> set.ok(devices, ctx) }
+        // Önce kayıt: eylemler (başka kural, yardımcı) çalışma listesini değiştirebilir.
+        runtime.scriptRuns = runtime.scriptRuns.filterNot { it.id == run.id } + listOfNotNull(res.run)
+        for (o in res.out) when (o) {
+            is ScriptRunner.Out.Do -> execute(a.copy(action = o.action), o.step)
+            is ScriptRunner.Out.Start -> {
+                traceStep(a, o.step, StepResult.DONE)
+                // Sıra karışmasın: başka kural bir sonraki turda başlar.
+                handler.post { runRuleNow(o.automationId, o.depth) }
+            }
+            is ScriptRunner.Out.Note -> traceStep(a, o.step, o.result)
+        }
+        if (res.run == null) startQueued(a)
+    }
+
+    /** Kuralın süren çalışması kalmadıysa sıradakini başlatır. */
+    private fun startQueued(a: Automation) {
+        val key = Automation.ruleKey(a.id)
+        val runs = runtime.scriptRuns
+        if (runs.any { Automation.ruleKey(it.automationId) == key && !it.queued }) return
+        val next = runs.firstOrNull { Automation.ruleKey(it.automationId) == key && it.queued } ?: return
+        val now = System.currentTimeMillis()
+        val started = next.copy(queued = false, startedAt = now)
+        runtime.scriptRuns = runs.map { if (it.id == next.id) started else it }
+        val rule = store.engineAutomations().firstOrNull { it.id == next.automationId } ?: return
+        advanceRun(rule, started, now)
+    }
+
+    /**
+     * Vakti gelen beklemeler ve koşul beklemeleri. Bu arada kapatılan ya da silinen kuralın çalışması atılır;
+     * düzenlendiyse güncel hali kullanılır.
+     */
+    private fun runsTick(wall: Long) {
+        val runs = runtime.scriptRuns
+        if (runs.isEmpty()) return
+        val byId = store.engineAutomations().associateBy { it.id }
+        val base = store.automations.associateBy { it.id }
+        fun ruleOf(id: String) = byId[id] ?: base[id]
+        val gone = runs.filter { r -> ruleOf(r.automationId)?.enabled != true }
+        if (gone.isNotEmpty()) runtime.scriptRuns = runs - gone.toSet()
+        val ready = (runs - gone.toSet()).filter { !it.queued && (it.waitingForCondition || it.resumeAt in 1..wall) }
+        for (r in ready.sortedBy { it.resumeAt }) {
+            val a = ruleOf(r.automationId) ?: continue
+            // Bu arada başka bir eylem çalışmayı iptal etmiş olabilir.
+            val current = runtime.scriptRuns.firstOrNull { it.id == r.id } ?: continue
+            advanceRun(a, current, wall)
+        }
+    }
+
+    /** Yardımcı değişti (kuraldan, uygulamadan, bekleme ekranından): kurallar sanal cihaz değişimi gibi görür. */
+    fun onHelpersChanged(old: List<Helper>, new: List<Helper>) {
+        handler.post {
+            if (!running) return@post
+            val wall = System.currentTimeMillis()
+            val prev = store.rulesSnapshots(store.snapshots, old).associateBy { it.id }
+            val cur = store.rulesSnapshots(store.snapshots, new).associateBy { it.id }
+            runAutomations(automations.onStates(prev, cur, store.engineAutomations(), wall, env()))
+            persistRuntime()
+        }
+    }
+
+    /** Süresi dolan zamanlayıcılar kapanır ("bitti" tetikleyicisi). */
+    private fun helperTick(wall: Long) {
+        val list = store.helpers
+        if (Helpers.expire(list, wall) !== list) HelperControl.update(this) { Helpers.expire(it, wall) }
+    }
+
     /** Kural izine eylem sonucu ([step] 0 = ilk eylem). */
     private fun traceStep(a: Automation, step: Int, result: StepResult, error: String = "") =
-        com.macerce.switchguard.data.TraceLog.step(this, a.id, TraceStep(step, result, System.currentTimeMillis(), error))
+        com.macerce.switchguard.data.TraceLog.step(this, Automation.baseId(a.id), TraceStep(step, result, System.currentTimeMillis(), error))
 
     private fun execute(a: Automation, step: Int = 0) {
         fun logMissing(deviceId: String = "") {
@@ -1254,25 +1363,56 @@ class MonitorService : Service() {
             log.add(deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
             traceStep(a, step, StepResult.MISSING)
         }
-        when (a.action.kind) {
-            ActionKind.TURN_ON, ActionKind.TURN_OFF -> {
-                val on = a.action.kind == ActionKind.TURN_ON
-                if (DeviceGroup.isGroup(a.action.deviceId)) return executeGroup(a, on, step)
-                val target = store.snapshots.firstOrNull { it.id == a.action.deviceId } ?: return logMissing(a.action.deviceId)
-                sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true) { sent ->
+        val act = a.action
+        when (act.kind) {
+            ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.TOGGLE -> {
+                if (Helpers.isHelper(act.deviceId)) return executeHelper(a, step)
+                if (DeviceGroup.isGroup(act.deviceId)) {
+                    val on = when (act.kind) {
+                        ActionKind.TURN_ON -> true
+                        ActionKind.TURN_OFF -> false
+                        // Grubu değiştir: üyelerden biri açıksa hepsini kapat, değilse hepsini aç.
+                        else -> store.snapshotsWithGroups.firstOrNull { it.id == act.deviceId }?.switches?.values?.any { it } != true
+                    }
+                    return executeGroup(a, on, step)
+                }
+                val target = store.snapshots.firstOrNull { it.id == act.deviceId } ?: return logMissing(act.deviceId)
+                val on = when (act.kind) {
+                    ActionKind.TURN_ON -> true
+                    ActionKind.TURN_OFF -> false
+                    else -> target.switches[act.channel] != true
+                }
+                sendAutomationSwitch(a.name, target, act.channel, on, attempt = 1, logSuccess = true) { sent ->
                     traceStep(a, step, if (sent) StepResult.DONE else StepResult.FAILED)
                 }
             }
+            ActionKind.SET_LEVEL -> {
+                val target = store.snapshots.firstOrNull { it.id == act.deviceId } ?: return logMissing(act.deviceId)
+                val local = store.localDevices.firstOrNull { it.id == target.id }
+                LiveState.expected.expect(target.id, act.channel, true, System.currentTimeMillis())
+                commands.execute {
+                    val ok = runCatching { com.macerce.switchguard.api.LocalLan.trySetLevel(local, act.channel, act.level, act.color) }.getOrDefault(false)
+                    handler.post {
+                        traceStep(a, step, if (ok) StepResult.DONE else StepResult.FAILED)
+                        if (ok) log.add(target.id, target.name, EventKind.AUTOMATION, getString(R.string.step_level_done, a.name, levelText(act)), "")
+                        else notifier.notifyEvent(getString(R.string.step_level_failed, a.name, target.name))
+                    }
+                }
+            }
+            ActionKind.COUNTER_ADD, ActionKind.COUNTER_SET -> {
+                if (!Helpers.isHelper(act.deviceId)) return logMissing(act.deviceId)
+                executeHelper(a, step)
+            }
             ActionKind.START_CYCLE, ActionKind.STOP_CYCLE -> {
-                if (!cycleButton(a.action.deviceId, a.action.kind == ActionKind.START_CYCLE, a.name)) logMissing()
+                if (!cycleButton(act.deviceId, act.kind == ActionKind.START_CYCLE, a.name)) logMissing()
                 else traceStep(a, step, StepResult.DONE)
             }
             ActionKind.RUN_SCENE -> {
-                if (ChatTemplate.isTemplate(a.action.deviceId)) {
-                    runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
+                if (ChatTemplate.isTemplate(act.deviceId)) {
+                    runTemplate(act.deviceId.removePrefix(ChatTemplate.PREFIX))
                     return traceStep(a, step, StepResult.DONE)
                 }
-                val scene = store.scenes.firstOrNull { it.id == a.action.deviceId } ?: return logMissing()
+                val scene = store.scenes.firstOrNull { it.id == act.deviceId } ?: return logMissing()
                 // Ağ işi: izleme iş parçacığı beklemesin.
                 telegram.execute {
                     val (ok, bad) = runBlocking { Actions.runScene(this@MonitorService, scene, a.name) }
@@ -1281,18 +1421,18 @@ class MonitorService : Service() {
             }
             ActionKind.SAVE_STATE -> {
                 // Yalnız seçilen cihaz ya da sahnenin cihazları; hedef boşsa hiçbir şey kaydedilmez (asla "tüm hesap").
-                val target = a.action.deviceId
+                val target = act.deviceId
                 val only = store.scenes.firstOrNull { it.id == target }?.actions?.map { it.deviceId }?.toSet()
                     ?: setOf(target).takeIf { target.isNotEmpty() && store.snapshots.any { it.id == target } }
                     ?: return logMissing(target)
                 val saved = StateSnapshot.capture(store.snapshots, only) { DeviceGroup.isGroup(it) || DeviceCategory.isCategory(it) }
                 // Her kuralın kendi kaydı: "geri getir" yalnız aynı kuralın hatırladığına döner.
-                runtime.savedStates = runtime.savedStates + (a.id to saved)
+                runtime.savedStates = runtime.savedStates + (Automation.baseId(a.id) to saved)
                 traceStep(a, step, StepResult.DONE, saved.size.toString())
             }
             ActionKind.RESTORE_STATE -> {
-                val saved = runtime.savedStates[a.id].orEmpty()
-                if (saved.isEmpty()) return logMissing()
+                val saved = runtime.savedStates[Automation.baseId(a.id)] ?: runtime.savedStates[a.id]
+                if (saved.isNullOrEmpty()) return logMissing()
                 val changes = StateSnapshot.changes(saved, store.snapshots.associateBy { it.id })
                 if (changes.isEmpty()) return traceStep(a, step, StepResult.DONE, "0")
                 val scene = com.macerce.switchguard.core.Scene("saved-state", a.name, changes)
@@ -1302,28 +1442,114 @@ class MonitorService : Service() {
                 }
             }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
-                val source = store.snapshotsWithGroups.firstOrNull { it.id == a.trigger.deviceId }
+                val source = store.snapshotsForRules.firstOrNull { it.id == a.trigger.deviceId }
                 val args = EventArgs.AutoAlert(a.name, source?.name)
-                val text = args.render(source?.name ?: a.name, strings)
-                val action = if (a.action.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
+                val custom = act.text.takeIf { it.isNotBlank() }?.let { TextTemplate.render(it, templateVars(a, source)) }
+                val text = custom ?: args.render(source?.name ?: a.name, strings)
+                val action = if (act.kind == ActionKind.ALARM) AlertAction.ALARM else AlertAction.NOTIFY
                 val rules = store.rulesFor(a.trigger.deviceId)
                 val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
-                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
+                log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, if (custom == null) args else null)
                 val sound = rules.soundUri
                 // Tetikleyen cihaz şu an açıksa bildirimde "Kapat" düğmesi (kapatırken onay istenen cihazlarda yok).
                 val offTarget = source?.takeIf {
-                    a.trigger.kind.usesDevice && it.online && !it.sensorOnly && !DeviceCategory.isCategory(it.id) &&
+                    a.trigger.kind.usesDevice && it.online && !it.sensorOnly && !DeviceCategory.isCategory(it.id) && !Helpers.isHelper(it.id) &&
                         it.switches[a.trigger.channel] == true &&
                         !ConfirmOff.needed(it.id, false, store.confirmOff, store.groups, store.snapshots.associateBy { d -> d.id })
                 }?.let { it.id to a.trigger.channel }
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound, critical = isCritical(a.trigger.deviceId))
-                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = "auto/" + a.id, offTarget = offTarget)
+                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = "auto/" + Automation.baseId(a.id), offTarget = offTarget)
                     AlertAction.IGNORE -> Unit
                 }
                 traceStep(a, step, if (effective == AlertAction.IGNORE) StepResult.SILENCED else StepResult.DONE)
             }
+            ActionKind.SEND -> executeSend(a, step)
+            // Akış adımları ScriptRunner'da işlenir; buraya gelmez.
+            ActionKind.DELAY, ActionKind.WAIT_UNTIL, ActionKind.IF, ActionKind.REPEAT, ActionKind.STOP, ActionKind.RUN_AUTOMATION -> Unit
         }
+    }
+
+    /** Bildirim/gönderim metnindeki yer tutucuların değerleri. */
+    private fun templateVars(a: Automation, source: DeviceSnapshot?): TextTemplate.Vars {
+        val t = a.trigger
+        val value = when {
+            source == null -> ""
+            t.kind.usesChannelPower -> source.channelPowerOf(t.channel)?.let { formatWattsPlain(it) }
+            t.kind.usesWatts -> source.power?.let { formatWattsPlain(it) }
+            t.kind.usesSensorValue -> t.sensor?.let { k -> source.sensors[k]?.let { com.macerce.switchguard.ui.formatSensor(k, it) } }
+            t.kind.usesTemp -> runtime.outdoorTemp?.let { com.macerce.switchguard.ui.formatNumber(it) + " °C" }
+            else -> null
+        }.orEmpty()
+        val now = java.util.Date()
+        return TextTemplate.Vars(
+            rule = a.name,
+            device = source?.name.orEmpty(),
+            value = value,
+            time = android.text.format.DateFormat.getTimeFormat(this).format(now),
+            date = android.text.format.DateFormat.getDateFormat(this).format(now),
+        )
+    }
+
+    private fun formatWattsPlain(w: Double) = com.macerce.switchguard.ui.formatNumber(Math.round(w).toDouble()) + " W"
+
+    private fun levelText(act: AutoAction): String = listOfNotNull(
+        act.level?.let { "$it%" },
+        act.color?.let { String.format("#%06X", it and 0xFFFFFF) },
+    ).joinToString(" · ")
+
+    /** ntfy / webhook / Telegram'a kural metni. Ayarlı değilse adım "yok" sayılır. */
+    private fun executeSend(a: Automation, step: Int) {
+        val act = a.action
+        val target = runCatching { SendTarget.valueOf(act.deviceId) }.getOrNull()
+        val source = store.snapshotsForRules.firstOrNull { it.id == a.trigger.deviceId }
+        val text = TextTemplate.render(act.text.ifBlank { a.name }, templateVars(a, source))
+        val ntfy = store.ntfyUrl
+        val hook = store.webhookUrl
+        val ready = when (target) {
+            SendTarget.NTFY -> Heartbeat.isValidUrl(ntfy)
+            SendTarget.WEBHOOK -> Heartbeat.isValidUrl(hook)
+            SendTarget.TELEGRAM -> store.telegramToken.isNotEmpty() && store.telegramRecipients.isNotEmpty()
+            null -> false
+        }
+        if (!ready) return traceStep(a, step, StepResult.MISSING)
+        val device = deviceName()
+        escalation.execute {
+            val error = runCatching {
+                when (target) {
+                    SendTarget.NTFY -> HookClient.ntfy(ntfy, text, AlertHooks.Event.RULE, device)
+                    SendTarget.WEBHOOK -> HookClient.webhook(hook, AlertHooks.webhookJson(AlertHooks.Event.RULE, device, text, System.currentTimeMillis()))
+                    SendTarget.TELEGRAM -> store.telegramRecipients.forEach { r -> TelegramClient.send(store.telegramToken, r.id, text) }
+                    null -> Unit
+                }
+            }.exceptionOrNull()
+            handler.post { traceStep(a, step, if (error == null) StepResult.DONE else StepResult.FAILED, error?.message.orEmpty()) }
+        }
+        log.add(source?.id.orEmpty(), source?.name ?: a.name, EventKind.AUTOMATION, getString(R.string.step_send_log, a.name, text), "")
+    }
+
+    /** Yardımcıya aç/kapat/değiştir ya da sayaç eylemi (ağ yok: hemen). */
+    private fun executeHelper(a: Automation, step: Int) {
+        val act = a.action
+        val now = System.currentTimeMillis()
+        if (store.helpers.none { it.deviceId == act.deviceId }) {
+            val args = EventArgs.AutoMissing(a.name)
+            log.add(act.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+            return traceStep(a, step, StepResult.MISSING)
+        }
+        HelperControl.update(this) { list ->
+            list.map { h ->
+                if (h.deviceId != act.deviceId) h else when (act.kind) {
+                    ActionKind.TURN_ON -> Helpers.switch(h, true, now)
+                    ActionKind.TURN_OFF -> Helpers.switch(h, false, now)
+                    ActionKind.TOGGLE -> Helpers.switch(h, !h.on, now)
+                    ActionKind.COUNTER_ADD -> Helpers.count(h, add = act.count)
+                    ActionKind.COUNTER_SET -> Helpers.count(h, set = act.count)
+                    else -> h
+                }
+            }
+        }
+        traceStep(a, step, StepResult.DONE)
     }
 
     /**
@@ -2274,7 +2500,7 @@ class MonitorService : Service() {
             val wall = System.currentTimeMillis()
             for (e in r.events) {
                 runAutomations(automations.onCycle(e.cycle.id, e.kind == CycleEventKind.STARTED,
-                    store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), wall, env()))
+                    store.snapshotsForRules.associateBy { it.id }, store.engineAutomations(), wall, env()))
             }
         }
         val byId = store.snapshots.associateBy { it.id }
@@ -2302,7 +2528,7 @@ class MonitorService : Service() {
     private fun onZone(zoneId: String, entered: Boolean) {
         if (store.zones.none { it.id == zoneId }) return
         val now = System.currentTimeMillis()
-        runAutomations(automations.onZone(zoneId, entered, store.snapshotsWithGroups.associateBy { it.id }, store.engineAutomations(), now, env()))
+        runAutomations(automations.onZone(zoneId, entered, store.snapshotsForRules.associateBy { it.id }, store.engineAutomations(), now, env()))
     }
 
     /** Şablonun mesajını sohbetteki gibi yürütür; sonuç geçmişe yazılır, yanlışsa bildirilir. */
@@ -2333,7 +2559,7 @@ class MonitorService : Service() {
                 weatherBusy = false
                 t.onSuccess {
                     runtime.outdoorTemp = it
-                    runAutomations(automations.onTick(store.snapshotsWithGroups.associateBy { d -> d.id }, store.engineAutomations(), System.currentTimeMillis(), env()))
+                    runAutomations(automations.onTick(store.snapshotsForRules.associateBy { d -> d.id }, store.engineAutomations(), System.currentTimeMillis(), env()))
                 }.onFailure {
                     Log.w(TAG, "weather failed: ${it.javaClass.simpleName}")
                     weatherAt = System.currentTimeMillis() + WEATHER_RETRY_MS
@@ -2534,6 +2760,13 @@ class MonitorService : Service() {
         const val ACTION_DEMO = "demo"
         /** Bölgeye giriş/çıkış ([ZoneReceiver]): [EXTRA_ZONE] bölge kimliği, [EXTRA_ENTERED] girdi mi. */
         const val ACTION_ZONE = "zone"
+        /** Kuralı elle çalıştır ([EXTRA_RULE] kural kimliği): tetikleyici ve koşullar atlanır. */
+        const val ACTION_RUN_RULE = "runRule"
+        const val EXTRA_RULE = "rule"
+        /** Kuralı elle çalıştırır (izleme kapalıysa açılır). */
+        fun runRule(context: Context, id: String) {
+            context.startService(Intent(context, MonitorService::class.java).setAction(ACTION_RUN_RULE).putExtra(EXTRA_RULE, id))
+        }
         /** Döngüyü düğmeyle başlat / durdur ([EXTRA_CYCLE], [EXTRA_CYCLE_START]). */
         const val ACTION_CYCLE = "cycle"
         /** Geçmişte döngü kayıtlarının cihaz kimliği öneki. */

@@ -83,6 +83,9 @@ object TapoLan : PolledLan(LocalDevice.BRAND_TAPO) {
         return LocalReading(mapOf(0 to info.on), power = power)
     }
 
+    override fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean =
+        request(host, com.macerce.switchguard.core.LightLevel.tapoBody(level, color), credFor(d.id, cred))?.let(TapoProtocol::isOk) == true
+
     override fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean =
         request(host, TapoProtocol.setOn(on), credFor(d.id, cred))?.let(TapoProtocol::isOk) == true
 }

@@ -76,6 +76,14 @@ object HueLan : PolledLan(LocalDevice.BRAND_HUE) {
         return LocalReading(mapOf(0 to l.on))
     }
 
+    override fun level(d: LocalDevice, host: String, channel: Int, level: Int?, color: Int?, cred: ShellyAuth.Credentials?): Boolean {
+        val (bridge, num) = HueProtocol.parseExtra(d.extra) ?: return false
+        val key = keyFor(bridge) ?: return false
+        cache.remove(host)
+        return send("PUT", "http://$host/api/$key/lights/$num/state", com.macerce.switchguard.core.LightLevel.hueBody(level, color))
+            .body?.let(HueProtocol::isStateOk) == true
+    }
+
     override fun switch(d: LocalDevice, host: String, channel: Int, on: Boolean, cred: ShellyAuth.Credentials?): Boolean {
         val (bridge, num) = HueProtocol.parseExtra(d.extra) ?: return false
         val key = keyFor(bridge) ?: return false
