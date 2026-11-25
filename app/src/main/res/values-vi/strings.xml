@@ -1987,4 +1987,16 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="home_energy_previous">Kỳ trước: %1$s</string>
     <string name="home_energy_empty">Chưa có thiết bị nào đo điện năng. Mức tiêu thụ sẽ hiện ở đây khi một ổ cắm hoặc đồng hồ đo công suất được theo dõi.</string>
     <string name="home_energy_meter_hint">Tổng lấy từ đồng hồ chính; các ổ cắm được hiển thị là phần của nó, không tính trùng.</string>
+    <string name="rule_share">Chia sẻ quy tắc</string>
+    <string name="rule_share_desc">Gửi văn bản này hoặc đưa mã QR cho SwitchGuard khác. Chỉ gồm quy tắc và tên các thiết bị nó dùng, không có khóa hay dữ liệu tài khoản. Quy tắc được thêm ở trạng thái tắt; thiết bị được ghép theo tên.</string>
+    <string name="rule_share_too_long">Quá dài cho mã QR: hãy gửi văn bản.</string>
+    <string name="rule_share_copied">Đã sao chép</string>
+    <string name="rule_import">Nhập quy tắc</string>
+    <string name="rule_import_action">Nhập</string>
+    <string name="rule_import_hint">Dán văn bản quy tắc được chia sẻ (bắt đầu bằng SGRULE1:).</string>
+    <string name="rule_import_bad">Không có quy tắc chia sẻ hợp lệ trong văn bản này.</string>
+    <string name="rule_import_done">Đã thêm \"%1$s\" ở trạng thái tắt. Kiểm tra rồi bật.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">Không tìm thấy %1$d thiết bị hoặc mục ở đây: hãy chọn trong trình chỉnh sửa.</item>
+    </plurals>
 </resources>

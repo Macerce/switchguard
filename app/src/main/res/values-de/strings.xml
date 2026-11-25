@@ -2050,4 +2050,17 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="home_energy_previous">Vorheriger Zeitraum: %1$s</string>
     <string name="home_energy_empty">Noch misst kein Gerät Energie. Der Verbrauch erscheint hier, sobald eine Steckdose oder ein Zähler mit Leistungsmessung überwacht wird.</string>
     <string name="home_energy_meter_hint">Die Summe stammt vom Hauptzähler; Steckdosen werden als Anteile davon gezeigt, nichts wird doppelt gezählt.</string>
+    <string name="rule_share">Regel teilen</string>
+    <string name="rule_share_desc">Sende diesen Text oder zeige den QR-Code einem anderen SwitchGuard. Enthalten sind nur die Regel und die Namen der verwendeten Geräte, keine Schlüssel oder Kontodaten. Sie wird ausgeschaltet hinzugefügt; Geräte werden über den Namen zugeordnet.</string>
+    <string name="rule_share_too_long">Zu lang für einen QR-Code: sende stattdessen den Text.</string>
+    <string name="rule_share_copied">Kopiert</string>
+    <string name="rule_import">Regel importieren</string>
+    <string name="rule_import_action">Importieren</string>
+    <string name="rule_import_hint">Füge den geteilten Regeltext ein (er beginnt mit SGRULE1:).</string>
+    <string name="rule_import_bad">In diesem Text ist keine gültige geteilte Regel.</string>
+    <string name="rule_import_done">„%1$s“ ausgeschaltet hinzugefügt. Prüfen und einschalten.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d Gerät oder Element wurde hier nicht gefunden: im Editor auswählen.</item>
+        <item quantity="other">%1$d Geräte oder Elemente wurden hier nicht gefunden: im Editor auswählen.</item>
+    </plurals>
 </resources>

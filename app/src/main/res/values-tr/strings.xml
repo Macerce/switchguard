@@ -2055,4 +2055,17 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="home_energy_previous">Önceki dönem: %1$s</string>
     <string name="home_energy_empty">Henüz enerji ölçen cihaz yok. Güç ölçen bir priz ya da sayaç izlenince tüketim burada görünür.</string>
     <string name="home_energy_meter_hint">Toplam ana sayaçtan alınır; prizler onun parçası olarak gösterilir, hiçbir şey iki kez sayılmaz.</string>
+    <string name="rule_share">Kuralı paylaş</string>
+    <string name="rule_share_desc">Bu metni gönderin ya da QR kodu başka bir SwitchGuard\'a gösterin. Yalnız kural ve kullandığı cihazların adları vardır; anahtar ya da hesap bilgisi yoktur. Kapalı olarak eklenir; cihazlar adına göre eşlenir.</string>
+    <string name="rule_share_too_long">QR kod için çok uzun: metni gönderin.</string>
+    <string name="rule_share_copied">Kopyalandı</string>
+    <string name="rule_import">Kural içe aktar</string>
+    <string name="rule_import_action">İçe aktar</string>
+    <string name="rule_import_hint">Paylaşılan kural metnini yapıştırın (SGRULE1: ile başlar).</string>
+    <string name="rule_import_bad">Bu metinde geçerli bir paylaşılmış kural yok.</string>
+    <string name="rule_import_done">\"%1$s\" kapalı olarak eklendi. Gözden geçirip açın.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d cihaz ya da öğe burada bulunamadı: düzenleyicide seçin.</item>
+        <item quantity="other">%1$d cihaz ya da öğe burada bulunamadı: düzenleyicide seçin.</item>
+    </plurals>
 </resources>

@@ -2058,4 +2058,18 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="home_energy_previous">Periodo anterior: %1$s</string>
     <string name="home_energy_empty">Aún ningún dispositivo mide energía. El consumo aparece aquí cuando se vigila un enchufe o medidor que mide potencia.</string>
     <string name="home_energy_meter_hint">El total se toma del medidor principal; los enchufes se muestran como partes de él, nada se cuenta dos veces.</string>
+    <string name="rule_share">Compartir regla</string>
+    <string name="rule_share_desc">Envía este texto o muestra el código QR a otro SwitchGuard. Solo incluye la regla y los nombres de los dispositivos que usa, sin claves ni datos de cuenta. Se añade desactivada; los dispositivos se emparejan por nombre.</string>
+    <string name="rule_share_too_long">Demasiado largo para un código QR: envía el texto.</string>
+    <string name="rule_share_copied">Copiado</string>
+    <string name="rule_import">Importar regla</string>
+    <string name="rule_import_action">Importar</string>
+    <string name="rule_import_hint">Pega el texto de la regla compartida (empieza por SGRULE1:).</string>
+    <string name="rule_import_bad">No hay una regla compartida válida en este texto.</string>
+    <string name="rule_import_done">«%1$s» añadida, desactivada. Revísala y actívala.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d dispositivo o elemento no se encontró aquí: elígelo en el editor.</item>
+        <item quantity="many">%1$d dispositivos o elementos no se encontraron aquí: elígelos en el editor.</item>
+        <item quantity="other">%1$d dispositivos o elementos no se encontraron aquí: elígelos en el editor.</item>
+    </plurals>
 </resources>

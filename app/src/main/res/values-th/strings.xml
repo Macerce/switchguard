@@ -1987,4 +1987,16 @@
     <string name="home_energy_previous">ช่วงก่อนหน้า: %1$s</string>
     <string name="home_energy_empty">ยังไม่มีอุปกรณ์ที่วัดพลังงาน การใช้ไฟจะแสดงที่นี่เมื่อมีการเฝ้าดูปลั๊กหรือมิเตอร์ที่วัดกำลังไฟ</string>
     <string name="home_energy_meter_hint">ยอดรวมมาจากมิเตอร์หลัก ปลั๊กแสดงเป็นส่วนหนึ่งของมิเตอร์ จึงไม่นับซ้ำ</string>
+    <string name="rule_share">แชร์กฎ</string>
+    <string name="rule_share_desc">ส่งข้อความนี้หรือแสดงคิวอาร์โค้ดให้ SwitchGuard อีกเครื่อง มีเพียงกฎและชื่ออุปกรณ์ที่ใช้ ไม่มีคีย์หรือข้อมูลบัญชี กฎจะถูกเพิ่มแบบปิดไว้ และจับคู่อุปกรณ์ตามชื่อ</string>
+    <string name="rule_share_too_long">ยาวเกินกว่าจะเป็นคิวอาร์โค้ด ให้ส่งข้อความแทน</string>
+    <string name="rule_share_copied">คัดลอกแล้ว</string>
+    <string name="rule_import">นำเข้ากฎ</string>
+    <string name="rule_import_action">นำเข้า</string>
+    <string name="rule_import_hint">วางข้อความกฎที่แชร์ (ขึ้นต้นด้วย SGRULE1:)</string>
+    <string name="rule_import_bad">ไม่มีกฎที่แชร์ที่ถูกต้องในข้อความนี้</string>
+    <string name="rule_import_done">เพิ่ม \"%1$s\" แบบปิดไว้แล้ว ตรวจสอบแล้วเปิดใช้</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">ไม่พบอุปกรณ์หรือรายการ %1$d รายการที่นี่ ให้เลือกในตัวแก้ไข</item>
+    </plurals>
 </resources>

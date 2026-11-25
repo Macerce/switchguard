@@ -2196,4 +2196,21 @@
     <string name="home_energy_previous">الفترة السابقة: %1$s</string>
     <string name="home_energy_empty">لا يوجد جهاز يقيس الطاقة بعد. يظهر الاستهلاك هنا عند مراقبة مقبس أو عداد يقيس القدرة.</string>
     <string name="home_energy_meter_hint">يُؤخذ الإجمالي من العداد الرئيسي؛ تظهر المقابس كأجزاء منه فلا يُحسب شيء مرتين.</string>
+    <string name="rule_share">مشاركة القاعدة</string>
+    <string name="rule_share_desc">أرسل هذا النص أو اعرض رمز QR على SwitchGuard آخر. يحتوي فقط على القاعدة وأسماء الأجهزة التي تستخدمها، دون مفاتيح أو بيانات حساب. تُضاف مُعطّلة، وتُطابق الأجهزة حسب الاسم.</string>
+    <string name="rule_share_too_long">طويل جدًا لرمز QR: أرسل النص بدلًا منه.</string>
+    <string name="rule_share_copied">تم النسخ</string>
+    <string name="rule_import">استيراد قاعدة</string>
+    <string name="rule_import_action">استيراد</string>
+    <string name="rule_import_hint">الصق نص القاعدة المشتركة (يبدأ بـ SGRULE1:).</string>
+    <string name="rule_import_bad">لا توجد قاعدة مشتركة صالحة في هذا النص.</string>
+    <string name="rule_import_done">أُضيفت \"%1$s\" مُعطّلة. راجعها ثم فعّلها.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="zero">لم يُعثر على %1$d جهاز أو عنصر هنا: اختره في المحرر.</item>
+        <item quantity="one">لم يُعثر على جهاز أو عنصر واحد هنا: اختره في المحرر.</item>
+        <item quantity="two">لم يُعثر على جهازين أو عنصرين هنا: اخترهما في المحرر.</item>
+        <item quantity="few">لم يُعثر على %1$d أجهزة أو عناصر هنا: اخترها في المحرر.</item>
+        <item quantity="many">لم يُعثر على %1$d جهازًا أو عنصرًا هنا: اخترها في المحرر.</item>
+        <item quantity="other">لم يُعثر على %1$d جهاز أو عنصر هنا: اخترها في المحرر.</item>
+    </plurals>
 </resources>

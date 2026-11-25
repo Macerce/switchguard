@@ -1981,4 +1981,17 @@
     <string name="home_energy_previous">पिछली अवधि: %1$s</string>
     <string name="home_energy_empty">अभी कोई डिवाइस ऊर्जा नहीं मापता। पावर मापने वाले प्लग या मीटर की निगरानी शुरू होते ही खपत यहाँ दिखेगी।</string>
     <string name="home_energy_meter_hint">कुल मुख्य मीटर से लिया जाता है; प्लग उसके हिस्सों के रूप में दिखते हैं, कुछ भी दो बार नहीं गिना जाता।</string>
+    <string name="rule_share">नियम साझा करें</string>
+    <string name="rule_share_desc">यह टेक्स्ट भेजें या QR कोड किसी दूसरे SwitchGuard को दिखाएँ। इसमें केवल नियम और उसके डिवाइसों के नाम हैं, कोई कुंजी या खाता जानकारी नहीं। यह बंद रूप में जुड़ता है; डिवाइस नाम से मिलाए जाते हैं।</string>
+    <string name="rule_share_too_long">QR कोड के लिए बहुत लंबा: टेक्स्ट भेजें।</string>
+    <string name="rule_share_copied">कॉपी हो गया</string>
+    <string name="rule_import">नियम आयात करें</string>
+    <string name="rule_import_action">आयात करें</string>
+    <string name="rule_import_hint">साझा किए गए नियम का टेक्स्ट चिपकाएँ (SGRULE1: से शुरू होता है)।</string>
+    <string name="rule_import_bad">इस टेक्स्ट में कोई मान्य साझा नियम नहीं है।</string>
+    <string name="rule_import_done">\"%1$s\" बंद रूप में जुड़ गया। जाँचें और चालू करें।</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d डिवाइस या आइटम यहाँ नहीं मिला: एडिटर में चुनें।</item>
+        <item quantity="other">%1$d डिवाइस या आइटम यहाँ नहीं मिले: एडिटर में चुनें।</item>
+    </plurals>
 </resources>

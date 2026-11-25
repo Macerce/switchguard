@@ -2095,4 +2095,19 @@
     <string name="home_energy_previous">Попередній період: %1$s</string>
     <string name="home_energy_empty">Поки жоден пристрій не вимірює енергію. Споживання з’явиться тут, коли відстежуватиметься розетка або лічильник із вимірюванням потужності.</string>
     <string name="home_energy_meter_hint">Підсумок береться з основного лічильника; розетки показано як його частини, нічого не рахується двічі.</string>
+    <string name="rule_share">Поділитися правилом</string>
+    <string name="rule_share_desc">Надішліть цей текст або покажіть QR-код іншому SwitchGuard. Усередині лише правило й назви його пристроїв, без ключів і даних облікового запису. Правило додасться вимкненим; пристрої зіставляються за назвою.</string>
+    <string name="rule_share_too_long">Задовго для QR-коду: надішліть текст.</string>
+    <string name="rule_share_copied">Скопійовано</string>
+    <string name="rule_import">Імпорт правила</string>
+    <string name="rule_import_action">Імпортувати</string>
+    <string name="rule_import_hint">Вставте текст правила (починається з SGRULE1:).</string>
+    <string name="rule_import_bad">У цьому тексті немає коректного правила.</string>
+    <string name="rule_import_done">«%1$s» додано вимкненим. Перевірте й увімкніть.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">Не знайдено: %1$d пристрій або елемент — виберіть у редакторі.</item>
+        <item quantity="few">Не знайдено: %1$d пристрої або елементи — виберіть у редакторі.</item>
+        <item quantity="many">Не знайдено: %1$d пристроїв або елементів — виберіть у редакторі.</item>
+        <item quantity="other">Не знайдено: %1$d пристрою або елемента — виберіть у редакторі.</item>
+    </plurals>
 </resources>

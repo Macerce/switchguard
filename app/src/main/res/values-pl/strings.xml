@@ -2124,4 +2124,19 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="home_energy_previous">Poprzedni okres: %1$s</string>
     <string name="home_energy_empty">Żadne urządzenie nie mierzy jeszcze energii. Zużycie pojawi się tutaj, gdy będzie monitorowane gniazdko lub licznik mierzący moc.</string>
     <string name="home_energy_meter_hint">Suma pochodzi z licznika głównego; gniazdka są pokazane jako jego części, nic nie jest liczone podwójnie.</string>
+    <string name="rule_share">Udostępnij regułę</string>
+    <string name="rule_share_desc">Wyślij ten tekst lub pokaż kod QR innemu SwitchGuard. Zawiera tylko regułę i nazwy używanych urządzeń, bez kluczy i danych konta. Zostanie dodana wyłączona; urządzenia są dopasowywane po nazwie.</string>
+    <string name="rule_share_too_long">Za długie na kod QR: wyślij tekst.</string>
+    <string name="rule_share_copied">Skopiowano</string>
+    <string name="rule_import">Importuj regułę</string>
+    <string name="rule_import_action">Importuj</string>
+    <string name="rule_import_hint">Wklej tekst udostępnionej reguły (zaczyna się od SGRULE1:).</string>
+    <string name="rule_import_bad">Brak prawidłowej udostępnionej reguły w tym tekście.</string>
+    <string name="rule_import_done">Dodano „%1$s” (wyłączona). Sprawdź i włącz.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">Nie znaleziono %1$d urządzenia lub elementu: wybierz je w edytorze.</item>
+        <item quantity="few">Nie znaleziono %1$d urządzeń lub elementów: wybierz je w edytorze.</item>
+        <item quantity="many">Nie znaleziono %1$d urządzeń lub elementów: wybierz je w edytorze.</item>
+        <item quantity="other">Nie znaleziono %1$d urządzeń lub elementów: wybierz je w edytorze.</item>
+    </plurals>
 </resources>

@@ -1994,4 +1994,16 @@
     <string name="home_energy_previous">上一周期：%1$s</string>
     <string name="home_energy_empty">还没有计量电能的设备。监控可测功率的插座或电表后，用电量会显示在这里。</string>
     <string name="home_energy_meter_hint">总量取自主电表；插座显示为其组成部分，不会重复计算。</string>
+    <string name="rule_share">分享规则</string>
+    <string name="rule_share_desc">将此文本发送或把二维码给另一台 SwitchGuard。只包含规则及其所用设备的名称，不含密钥或账户信息。导入后默认关闭；设备按名称匹配。</string>
+    <string name="rule_share_too_long">内容太长，无法生成二维码：请发送文本。</string>
+    <string name="rule_share_copied">已复制</string>
+    <string name="rule_import">导入规则</string>
+    <string name="rule_import_action">导入</string>
+    <string name="rule_import_hint">粘贴分享的规则文本（以 SGRULE1: 开头）。</string>
+    <string name="rule_import_bad">此文本中没有有效的分享规则。</string>
+    <string name="rule_import_done">已添加“%1$s”（已关闭）。检查后再开启。</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">此处找不到 %1$d 个设备或项目：请在编辑器中选择。</item>
+    </plurals>
 </resources>

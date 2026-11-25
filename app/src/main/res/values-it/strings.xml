@@ -2059,4 +2059,18 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="home_energy_previous">Periodo precedente: %1$s</string>
     <string name="home_energy_empty">Nessun dispositivo misura ancora l’energia. Il consumo appare qui quando viene monitorata una presa o un contatore che misura la potenza.</string>
     <string name="home_energy_meter_hint">Il totale viene dal contatore principale; le prese sono mostrate come sue parti, nulla è contato due volte.</string>
+    <string name="rule_share">Condividi regola</string>
+    <string name="rule_share_desc">Invia questo testo o mostra il codice QR a un altro SwitchGuard. Contiene solo la regola e i nomi dei dispositivi usati, nessuna chiave o dato dell’account. Viene aggiunta disattivata; i dispositivi sono abbinati per nome.</string>
+    <string name="rule_share_too_long">Troppo lungo per un codice QR: invia il testo.</string>
+    <string name="rule_share_copied">Copiato</string>
+    <string name="rule_import">Importa regola</string>
+    <string name="rule_import_action">Importa</string>
+    <string name="rule_import_hint">Incolla il testo della regola condivisa (inizia con SGRULE1:).</string>
+    <string name="rule_import_bad">Nessuna regola condivisa valida in questo testo.</string>
+    <string name="rule_import_done">\"%1$s\" aggiunta, disattivata. Controllala e attivala.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d dispositivo o elemento non trovato qui: sceglilo nell’editor.</item>
+        <item quantity="many">%1$d dispositivi o elementi non trovati qui: sceglili nell’editor.</item>
+        <item quantity="other">%1$d dispositivi o elementi non trovati qui: sceglili nell’editor.</item>
+    </plurals>
 </resources>

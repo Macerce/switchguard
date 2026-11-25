@@ -1945,4 +1945,16 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="home_energy_previous">Periode sebelumnya: %1$s</string>
     <string name="home_energy_empty">Belum ada perangkat yang mengukur energi. Konsumsi muncul di sini setelah colokan atau meter pengukur daya dipantau.</string>
     <string name="home_energy_meter_hint">Total diambil dari meter utama; colokan ditampilkan sebagai bagiannya, tidak ada yang dihitung dua kali.</string>
+    <string name="rule_share">Bagikan aturan</string>
+    <string name="rule_share_desc">Kirim teks ini atau tunjukkan kode QR ke SwitchGuard lain. Hanya berisi aturan dan nama perangkat yang dipakai, tanpa kunci atau data akun. Ditambahkan dalam keadaan mati; perangkat dicocokkan berdasarkan nama.</string>
+    <string name="rule_share_too_long">Terlalu panjang untuk kode QR: kirim teksnya.</string>
+    <string name="rule_share_copied">Disalin</string>
+    <string name="rule_import">Impor aturan</string>
+    <string name="rule_import_action">Impor</string>
+    <string name="rule_import_hint">Tempel teks aturan yang dibagikan (diawali SGRULE1:).</string>
+    <string name="rule_import_bad">Tidak ada aturan bersama yang valid di teks ini.</string>
+    <string name="rule_import_done">\"%1$s\" ditambahkan dalam keadaan mati. Periksa lalu nyalakan.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">%1$d perangkat atau item tidak ditemukan di sini: pilih di editor.</item>
+    </plurals>
 </resources>

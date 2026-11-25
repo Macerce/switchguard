@@ -2052,4 +2052,17 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="home_energy_previous">Vorige periode: %1$s</string>
     <string name="home_energy_empty">Nog geen apparaat meet energie. Het verbruik verschijnt hier zodra een stekker of meter met vermogensmeting wordt bewaakt.</string>
     <string name="home_energy_meter_hint">Het totaal komt van de hoofdmeter; stekkers worden als delen ervan getoond, niets wordt dubbel geteld.</string>
+    <string name="rule_share">Regel delen</string>
+    <string name="rule_share_desc">Stuur deze tekst of toon de QR-code aan een andere SwitchGuard. Alleen de regel en de namen van de gebruikte apparaten zitten erin, geen sleutels of accountgegevens. Hij wordt uitgeschakeld toegevoegd; apparaten worden op naam gekoppeld.</string>
+    <string name="rule_share_too_long">Te lang voor een QR-code: stuur de tekst.</string>
+    <string name="rule_share_copied">Gekopieerd</string>
+    <string name="rule_import">Regel importeren</string>
+    <string name="rule_import_action">Importeren</string>
+    <string name="rule_import_hint">Plak de gedeelde regeltekst (begint met SGRULE1:).</string>
+    <string name="rule_import_bad">Geen geldige gedeelde regel in deze tekst.</string>
+    <string name="rule_import_done">‘%1$s’ uitgeschakeld toegevoegd. Controleer en zet aan.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d apparaat of item niet gevonden: kies het in de editor.</item>
+        <item quantity="other">%1$d apparaten of items niet gevonden: kies ze in de editor.</item>
+    </plurals>
 </resources>

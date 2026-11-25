@@ -2087,4 +2087,18 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="home_energy_previous">Période précédente : %1$s</string>
     <string name="home_energy_empty">Aucun appareil ne mesure encore l’énergie. La consommation apparaît ici dès qu’une prise ou un compteur mesurant la puissance est surveillé.</string>
     <string name="home_energy_meter_hint">Le total provient du compteur principal ; les prises en sont des parts, rien n’est compté deux fois.</string>
+    <string name="rule_share">Partager la règle</string>
+    <string name="rule_share_desc">Envoyez ce texte ou montrez le QR code à un autre SwitchGuard. Seuls la règle et les noms des appareils utilisés sont inclus, ni clés ni données de compte. Elle est ajoutée désactivée ; les appareils sont associés par leur nom.</string>
+    <string name="rule_share_too_long">Trop long pour un QR code : envoyez plutôt le texte.</string>
+    <string name="rule_share_copied">Copié</string>
+    <string name="rule_import">Importer une règle</string>
+    <string name="rule_import_action">Importer</string>
+    <string name="rule_import_hint">Collez le texte de la règle partagée (il commence par SGRULE1:).</string>
+    <string name="rule_import_bad">Aucune règle partagée valide dans ce texte.</string>
+    <string name="rule_import_done">« %1$s » ajoutée, désactivée. Vérifiez-la puis activez-la.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d appareil ou élément introuvable ici : choisissez-le dans l’éditeur.</item>
+        <item quantity="many">%1$d appareils ou éléments introuvables ici : choisissez-les dans l’éditeur.</item>
+        <item quantity="other">%1$d appareils ou éléments introuvables ici : choisissez-les dans l’éditeur.</item>
+    </plurals>
 </resources>

@@ -2016,4 +2016,16 @@
     <string name="home_energy_previous">前の期間: %1$s</string>
     <string name="home_energy_empty">まだ電力を計測する機器がありません。電力を計測するプラグやメーターを監視すると、ここに使用量が表示されます。</string>
     <string name="home_energy_meter_hint">合計はメインメーターの値です。プラグはその内訳として表示され、二重に数えません。</string>
+    <string name="rule_share">ルールを共有</string>
+    <string name="rule_share_desc">このテキストを送るか、QR コードを別の SwitchGuard に見せてください。ルールと使用する機器名のみで、キーやアカウント情報は含みません。オフの状態で追加され、機器は名前で照合されます。</string>
+    <string name="rule_share_too_long">QR コードには長すぎます。テキストを送ってください。</string>
+    <string name="rule_share_copied">コピーしました</string>
+    <string name="rule_import">ルールを読み込む</string>
+    <string name="rule_import_action">読み込む</string>
+    <string name="rule_import_hint">共有されたルールのテキストを貼り付けてください（SGRULE1: で始まります）。</string>
+    <string name="rule_import_bad">このテキストに有効な共有ルールがありません。</string>
+    <string name="rule_import_done">「%1$s」をオフで追加しました。確認してからオンにしてください。</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">%1$d 件の機器または項目が見つかりません。エディターで選んでください。</item>
+    </plurals>
 </resources>

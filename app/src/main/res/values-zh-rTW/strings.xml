@@ -2015,4 +2015,16 @@
     <string name="home_energy_previous">上一期間：%1$s</string>
     <string name="home_energy_empty">還沒有計量電能的裝置。監控可測功率的插座或電表後，用電量會顯示在這裡。</string>
     <string name="home_energy_meter_hint">總量取自主電表；插座顯示為其組成部分，不會重複計算。</string>
+    <string name="rule_share">分享規則</string>
+    <string name="rule_share_desc">將此文字傳送或把 QR 碼給另一台 SwitchGuard。只包含規則及其所用裝置的名稱，不含金鑰或帳戶資料。匯入後預設關閉；裝置依名稱比對。</string>
+    <string name="rule_share_too_long">內容太長，無法產生 QR 碼：請傳送文字。</string>
+    <string name="rule_share_copied">已複製</string>
+    <string name="rule_import">匯入規則</string>
+    <string name="rule_import_action">匯入</string>
+    <string name="rule_import_hint">貼上分享的規則文字（以 SGRULE1: 開頭）。</string>
+    <string name="rule_import_bad">此文字中沒有有效的分享規則。</string>
+    <string name="rule_import_done">已新增「%1$s」（已關閉）。檢查後再開啟。</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">此處找不到 %1$d 個裝置或項目：請在編輯器中選擇。</item>
+    </plurals>
 </resources>

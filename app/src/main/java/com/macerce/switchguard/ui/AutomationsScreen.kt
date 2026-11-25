@@ -110,6 +110,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
@@ -261,6 +263,8 @@ fun AutomationsScreen(modifier: Modifier) {
         )
         return
     }
+    var importing by rememberSaveable { mutableStateOf(false) }
+    if (importing) RuleImportDialog(onDismiss = { importing = false }) { importing = false; if (AutomationTab.AUTOMATIONS.of(listOf(it)).isNotEmpty()) editing = it.id }
     if (pickTemplate) {
         TemplatePicker(devices.filterNot { DeviceCategory.isCategory(it.id) }, onDismiss = { pickTemplate = false }) { t ->
             pickTemplate = false
@@ -271,7 +275,11 @@ fun AutomationsScreen(modifier: Modifier) {
 
     Box(modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize()) {
-            AppTopBar(stringResource(R.string.tab_automations))
+            AppTopBar(stringResource(R.string.tab_automations), actions = {
+                IconButton(modifier = Modifier.tvFocusRing(), onClick = { importing = true }) {
+                    Icon(Icons.Rounded.Download, stringResource(R.string.rule_import))
+                }
+            })
             LazyColumn(
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 96.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -878,6 +886,8 @@ fun AutomationEditor(
         loopGuard = if (alert) 0 else loopGuard,
     )
 
+    var showShare by remember { mutableStateOf(false) }
+    if (showShare && existing != null) RuleShareDialog(existing) { showShare = false }
     Column(modifier.fillMaxSize()) {
         AppTopBar(
             stringResource(
@@ -898,6 +908,9 @@ fun AutomationEditor(
                     }) { Icon(Icons.Rounded.PlayArrow, stringResource(R.string.rule_run_now)) }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = { showTrace = true }) {
                         Icon(Icons.Rounded.History, stringResource(R.string.trace_title))
+                    }
+                    if (!alert) IconButton(modifier = Modifier.tvFocusRing(), onClick = { showShare = true }) {
+                        Icon(Icons.Rounded.Share, stringResource(R.string.rule_share))
                     }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) {
                         Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete))

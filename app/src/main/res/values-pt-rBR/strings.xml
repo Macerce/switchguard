@@ -2088,4 +2088,18 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="home_energy_previous">Período anterior: %1$s</string>
     <string name="home_energy_empty">Nenhum dispositivo mede energia ainda. O consumo aparece aqui quando uma tomada ou medidor que mede potência é monitorado.</string>
     <string name="home_energy_meter_hint">O total vem do medidor principal; as tomadas aparecem como partes dele, nada é contado duas vezes.</string>
+    <string name="rule_share">Compartilhar regra</string>
+    <string name="rule_share_desc">Envie este texto ou mostre o QR code a outro SwitchGuard. Inclui só a regra e os nomes dos dispositivos usados, sem chaves ou dados da conta. É adicionada desligada; os dispositivos são associados pelo nome.</string>
+    <string name="rule_share_too_long">Longo demais para um QR code: envie o texto.</string>
+    <string name="rule_share_copied">Copiado</string>
+    <string name="rule_import">Importar regra</string>
+    <string name="rule_import_action">Importar</string>
+    <string name="rule_import_hint">Cole o texto da regra compartilhada (começa com SGRULE1:).</string>
+    <string name="rule_import_bad">Não há regra compartilhada válida neste texto.</string>
+    <string name="rule_import_done">\"%1$s\" adicionada, desligada. Confira e ligue.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d dispositivo ou item não foi encontrado aqui: escolha no editor.</item>
+        <item quantity="many">%1$d dispositivos ou itens não foram encontrados aqui: escolha no editor.</item>
+        <item quantity="other">%1$d dispositivos ou itens não foram encontrados aqui: escolha no editor.</item>
+    </plurals>
 </resources>

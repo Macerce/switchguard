@@ -2016,4 +2016,16 @@
     <string name="home_energy_previous">이전 기간: %1$s</string>
     <string name="home_energy_empty">아직 에너지를 측정하는 기기가 없습니다. 전력을 측정하는 플러그나 계량기를 모니터링하면 여기에 사용량이 표시됩니다.</string>
     <string name="home_energy_meter_hint">합계는 주 계량기 값입니다. 플러그는 그 일부로 표시되어 중복 계산되지 않습니다.</string>
+    <string name="rule_share">규칙 공유</string>
+    <string name="rule_share_desc">이 텍스트를 보내거나 QR 코드를 다른 SwitchGuard에 보여 주세요. 규칙과 사용하는 기기 이름만 들어 있으며 키나 계정 정보는 없습니다. 꺼진 상태로 추가되며 기기는 이름으로 연결됩니다.</string>
+    <string name="rule_share_too_long">QR 코드로 만들기에 너무 깁니다. 텍스트를 보내세요.</string>
+    <string name="rule_share_copied">복사됨</string>
+    <string name="rule_import">규칙 가져오기</string>
+    <string name="rule_import_action">가져오기</string>
+    <string name="rule_import_hint">공유된 규칙 텍스트를 붙여 넣으세요(SGRULE1:로 시작).</string>
+    <string name="rule_import_bad">이 텍스트에 올바른 공유 규칙이 없습니다.</string>
+    <string name="rule_import_done">\"%1$s\"이(가) 꺼진 상태로 추가되었습니다. 확인 후 켜세요.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="other">기기 또는 항목 %1$d개를 찾을 수 없습니다. 편집기에서 선택하세요.</item>
+    </plurals>
 </resources>

@@ -2059,4 +2059,17 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="home_energy_previous">Previous period: %1$s</string>
     <string name="home_energy_empty">No device measures energy yet. Consumption appears here once a plug or meter that measures power is monitored.</string>
     <string name="home_energy_meter_hint">The total is taken from the main meter; plugs are shown as its parts so nothing is counted twice.</string>
+    <string name="rule_share">Share rule</string>
+    <string name="rule_share_desc">Send this text or show the QR code to another SwitchGuard. Only the rule and the names of the devices it uses are included, no keys or account data. It is added switched off; devices are matched by name.</string>
+    <string name="rule_share_too_long">Too long for a QR code: send the text instead.</string>
+    <string name="rule_share_copied">Copied</string>
+    <string name="rule_import">Import rule</string>
+    <string name="rule_import_action">Import</string>
+    <string name="rule_import_hint">Paste the shared rule text (it starts with SGRULE1:).</string>
+    <string name="rule_import_bad">No valid shared rule in this text.</string>
+    <string name="rule_import_done">\"%1$s\" added, switched off. Check it and switch it on.</string>
+    <plurals name="rule_import_unresolved">
+        <item quantity="one">%1$d device or item was not found here: choose it in the editor.</item>
+        <item quantity="other">%1$d devices or items were not found here: choose them in the editor.</item>
+    </plurals>
 </resources>
