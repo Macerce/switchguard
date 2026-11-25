@@ -23,6 +23,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -34,6 +35,7 @@ import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -152,6 +154,18 @@ fun SceneEditor(initial: Scene?, devices: List<DeviceSnapshot>, onSave: (Scene) 
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
             )
+            // Anlık sahne: şu an açık/kapalı olan her şey seçilir; kullanıcı istemediklerini "Dokunma"ya çeker.
+            TextButton(
+                onClick = {
+                    choice.clear()
+                    devices.filter { it.online }.forEach { d -> d.switches.forEach { (ch, on) -> choice["${d.id}/$ch"] = on } }
+                },
+                modifier = Modifier.padding(horizontal = 12.dp).tvFocusRing(),
+            ) {
+                Icon(Icons.Rounded.CameraAlt, null)
+                Spacer(Modifier.size(8.dp))
+                Text(stringResource(R.string.scene_from_current))
+            }
             SectionCard {
                 val rows = devices.flatMap { d -> d.switches.keys.sorted().map { d to it } }
                 if (rows.isEmpty()) Text(stringResource(R.string.no_devices), Modifier.padding(20.dp))

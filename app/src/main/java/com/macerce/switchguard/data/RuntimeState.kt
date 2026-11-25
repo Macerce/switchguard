@@ -117,6 +117,15 @@ class RuntimeState private constructor(context: Context) {
     var actionSteps: List<com.macerce.switchguard.core.ActionSteps.Due>
         get() = com.macerce.switchguard.core.ActionSteps.fromJson(prefs.getString("actionSteps", null))
         set(v) = put { putString("actionSteps", com.macerce.switchguard.core.ActionSteps.toJson(v)) }
+    /** Kural kimliği → o kuralın "durumu hatırla" eylemiyle kaydettiği kanal durumları ("geri getir" bunlara döner). */
+    var savedStates: Map<String, List<com.macerce.switchguard.core.SceneAction>>
+        get() = runCatching {
+            val o = org.json.JSONObject(prefs.getString("savedStates", "{}")!!)
+            o.keys().asSequence().associateWith { com.macerce.switchguard.core.StateSnapshot.fromJson(o.getString(it)) }
+        }.getOrDefault(emptyMap())
+        set(v) = put {
+            putString("savedStates", org.json.JSONObject().apply { v.forEach { (k, list) -> put(k, com.macerce.switchguard.core.StateSnapshot.toJson(list)) } }.toString())
+        }
     /** Saatli sohbet şablonlarının son çalıştığı an (şablon kimliği → zaman). */
     var templateRuns: Map<String, Long>
         get() = runCatching { org.json.JSONObject(prefs.getString("templateRuns", "{}")!!).let { o -> o.keys().asSequence().associateWith { o.getLong(it) } } }.getOrDefault(emptyMap())

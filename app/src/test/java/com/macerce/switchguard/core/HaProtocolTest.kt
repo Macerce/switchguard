@@ -33,4 +33,24 @@ class HaProtocolTest {
         assertEquals(s, HaProtocol.serverFromJson(s.toJson()))
         assertNull(HaProtocol.serverFromJson("""{"l":"","r":"","t":"x"}"""))
     }
+
+    @Test
+    fun websocket() {
+        assertEquals("ws://192.168.1.5:8123/api/websocket", HaProtocol.wsUrl("192.168.1.5"))
+        assertEquals("wss://ev.duckdns.org/api/websocket", HaProtocol.wsUrl("ev.duckdns.org"))
+        assertEquals(HaProtocol.WsMessage.AuthRequired, HaProtocol.parseWs("""{"type":"auth_required","ha_version":"2026.11"}"""))
+        assertEquals(HaProtocol.WsMessage.AuthOk, HaProtocol.parseWs("""{"type":"auth_ok"}"""))
+        assertEquals(HaProtocol.WsMessage.AuthInvalid("bad"), HaProtocol.parseWs("""{"type":"auth_invalid","message":"bad"}"""))
+        assertEquals(HaProtocol.WsMessage.Result(1, true), HaProtocol.parseWs("""{"id":1,"type":"result","success":true}"""))
+        val ev = """{"id":1,"type":"event","event":{"event_type":"state_changed","data":{"entity_id":"switch.priz",
+            "new_state":{"entity_id":"switch.priz","state":"on","attributes":{"friendly_name":"Priz"}}}}}"""
+        val m = HaProtocol.parseWs(ev) as HaProtocol.WsMessage.StateChanged
+        assertEquals("switch.priz", m.entityId)
+        assertEquals(true, m.state?.on)
+        val removed = HaProtocol.parseWs("""{"type":"event","event":{"data":{"entity_id":"switch.x","new_state":null}}}""")
+        assertEquals(HaProtocol.WsMessage.StateChanged("switch.x", null), removed)
+        assertEquals(2, HaProtocol.parseWsBatch("[$ev,{\"type\":\"auth_ok\"}]").size)
+        assertEquals(HaProtocol.WsMessage.Other, HaProtocol.parseWs("bozuk"))
+        assertTrue(HaProtocol.wsAuth("t").contains("\"access_token\":\"t\""))
+    }
 }

@@ -67,7 +67,8 @@ class Notifier(private val context: Context, private val store: Store) {
      * Cihaza özel ses varsa bildirim sessiz kanala gider ve ses bir kez elle çalınır:
      * Android'de kanal sesi sonradan değiştirilemediği için cihaz başına ses ancak böyle olur.
      */
-    fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null, key: String? = null) {
+    /** [offTarget]: (cihaz, kanal) verilirse bildirimde "Kapat" düğmesi ([NotificationActions]). */
+    fun notifyEvent(text: String, deviceSound: String? = null, title: String? = null, key: String? = null, offTarget: Pair<String, Int>? = null) {
         val custom = deviceSound?.let(Uri::parse)
         if (custom != null) playOnce(custom)
         // Aynı cihazın aynı olayı öncekinin yerine geçer ([key]); anahtarsızlar dönen aralıktan kimlik alır.
@@ -90,6 +91,14 @@ class Notifier(private val context: Context, private val store: Store) {
                 .setGroup(GROUP_EVENTS)
                 .setContentIntent(openApp())
                 .setAutoCancel(true)
+                .apply {
+                    offTarget?.let { (device, channel) ->
+                        addAction(Notification.Action.Builder(
+                            null, context.getString(R.string.notif_action_turn_off),
+                            NotificationActions.turnOffIntent(context, device, channel, id),
+                        ).build())
+                    }
+                }
                 .build()
         )
     }

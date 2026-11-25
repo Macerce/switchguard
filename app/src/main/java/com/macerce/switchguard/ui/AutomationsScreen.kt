@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material.icons.rounded.HourglassTop
+import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Restore
+import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Devices
 import androidx.compose.material.icons.rounded.Schedule
 import androidx.compose.material.icons.rounded.CalendarMonth
 import androidx.compose.material.icons.rounded.Rule
@@ -150,6 +154,7 @@ import com.macerce.switchguard.core.AutoAction
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.AutomationTab
 import com.macerce.switchguard.core.DeviceCategory
+import com.macerce.switchguard.core.DeviceGroup
 import com.macerce.switchguard.core.DeviceSnapshot
 import com.macerce.switchguard.core.Trigger
 import com.macerce.switchguard.core.TriggerKind
@@ -172,6 +177,8 @@ fun AutomationsScreen(modifier: Modifier) {
     val devices = remember(version) { automationDevices(store.snapshotsWithGroups, context.resources) }
     val monitoring = remember(version) { store.monitoringEnabled }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
+    var templateName by rememberSaveable { mutableStateOf<String?>(null) }
+    var pickTemplate by rememberSaveable { mutableStateOf(false) }
     var editingScene by rememberSaveable { mutableStateOf<String?>(null) }
     var editingGroup by rememberSaveable { mutableStateOf<String?>(null) }
     var editingCycle by rememberSaveable { mutableStateOf<String?>(null) }
@@ -226,17 +233,27 @@ fun AutomationsScreen(modifier: Modifier) {
     }
 
     editing?.let { id ->
-        BackHandler { editing = null }
+        BackHandler { editing = null; templateName = null }
+        val template = templateName?.let { t -> runCatching { com.macerce.switchguard.core.AutomationTemplate.valueOf(t) }.getOrNull() }
+            ?.let { t -> t.pickDevice(devices.filterNot { DeviceCategory.isCategory(it.id) })?.let { d -> t.build(d, stringResource(t.title())) } }
         AutomationEditor(
-            tab = AutomationTab.AUTOMATIONS,
+            tab = template?.let { AutomationTab.tabOf(it) } ?: AutomationTab.AUTOMATIONS,
             initial = automations.firstOrNull { it.id == id },
             devices = devices,
             modifier = modifier,
-            onSave = { store.saveAutomation(it); editing = null },
-            onDelete = { store.deleteAutomation(id); editing = null },
-            onBack = { editing = null },
+            onSave = { store.saveAutomation(it); editing = null; templateName = null },
+            onDelete = { store.deleteAutomation(id); com.macerce.switchguard.data.TraceLog.clear(context, id); editing = null },
+            onBack = { editing = null; templateName = null },
+            template = template,
         )
         return
+    }
+    if (pickTemplate) {
+        TemplatePicker(devices.filterNot { DeviceCategory.isCategory(it.id) }, onDismiss = { pickTemplate = false }) { t ->
+            pickTemplate = false
+            templateName = t?.name
+            editing = NEW_AUTOMATION
+        }
     }
 
     Box(modifier.fillMaxSize()) {
@@ -280,7 +297,7 @@ fun AutomationsScreen(modifier: Modifier) {
             }
         }
         ExtendedFloatingActionButton(
-            onClick = { editing = NEW_AUTOMATION },
+            onClick = { pickTemplate = true },
             icon = { Icon(Icons.Rounded.Add, null) },
             text = { Text(stringResource(R.string.automation_add)) },
             modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).tvFocusRing(RoundedCornerShape(16.dp)),
@@ -324,6 +341,8 @@ fun AutomationCard(
         ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow to Hue.PURPLE
         ActionKind.START_CYCLE -> Icons.Rounded.Repeat to Hue.TEAL
         ActionKind.STOP_CYCLE -> Icons.Rounded.Stop to Hue.SLATE
+        ActionKind.SAVE_STATE -> Icons.Rounded.Bookmark to Hue.AMBER
+        ActionKind.RESTORE_STATE -> Icons.Rounded.Restore to Hue.AMBER
     }
     val (whenText, thenText) = describe(a, devices)
     val shape = RoundedCornerShape(24.dp)
@@ -344,6 +363,7 @@ fun AutomationCard(
             Clause(stringResource(R.string.auto_if), whenText)
             Spacer(Modifier.height(2.dp))
             Clause(stringResource(R.string.auto_then), thenText)
+            LastRunLine(a.id)
         }
         Spacer(Modifier.width(8.dp))
         Switch(checked = a.enabled, onCheckedChange = onToggle)
@@ -431,6 +451,11 @@ internal fun actionText(act: com.macerce.switchguard.core.AutoAction, devices: L
         act.kind == ActionKind.RUN_SCENE -> {
             val scene = Store.get(context).scenes.firstOrNull { it.id == act.deviceId }
             stringResource(R.string.auto_action_scene, scene?.name ?: stringResource(R.string.device_missing))
+        }
+        act.kind == ActionKind.SAVE_STATE -> {
+            val target = Store.get(context).scenes.firstOrNull { it.id == act.deviceId }?.name
+                ?: devices.firstOrNull { it.id == act.deviceId }?.name
+            stringResource(act.kind.title()) + ": " + (target ?: stringResource(R.string.device_missing))
         }
         else -> stringResource(act.kind.title())
     }
@@ -558,6 +583,8 @@ fun ActionKind.title(): Int = when (this) {
     ActionKind.RUN_SCENE -> R.string.act_run_scene
     ActionKind.START_CYCLE -> R.string.act_start_cycle
     ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
+    ActionKind.SAVE_STATE -> R.string.act_save_state
+    ActionKind.RESTORE_STATE -> R.string.act_restore_state
 }
 
 // ---------------------------------------------------------------- düzenleyici
@@ -576,7 +603,11 @@ fun AutomationEditor(
     onSave: (Automation) -> Unit,
     onDelete: () -> Unit,
     onBack: () -> Unit,
+    /** Yeni kayıt bir şablondan dolduruluyor (kimliği yok, kaydedilince yeni kural olur). */
+    template: Automation? = null,
 ) {
+    val existing = initial
+    @Suppress("NAME_SHADOWING") val initial = initial ?: template
     val alert = tab == AutomationTab.ALERTS
     val first = devices.firstOrNull()
     var name by rememberSaveable { mutableStateOf(initial?.name ?: "") }
@@ -595,6 +626,8 @@ fun AutomationEditor(
     var windowDays by rememberSaveable { mutableStateOf(initial?.window?.days ?: ActiveWindow.ALL_DAYS) }
     var presenceRule by rememberSaveable { mutableStateOf(initial?.presence) }
     var sceneId by rememberSaveable { mutableStateOf(initial?.action?.takeIf { it.kind == ActionKind.RUN_SCENE }?.deviceId ?: "") }
+    // "Durumu hatırla" hedefi: tek cihaz ya da bir sahnenin cihazları; hiçbir zaman "hepsi" değil.
+    var saveScope by rememberSaveable { mutableStateOf(initial?.action?.takeIf { it.kind == ActionKind.SAVE_STATE }?.deviceId ?: "") }
     val sceneList = Store.get(LocalContext.current).scenes.let { remember(it) { it } }
     val cycleList = Store.get(LocalContext.current).cycles.let { remember(it) { it } }
     var triggerCycle by rememberSaveable { mutableStateOf(initial?.trigger?.takeIf { it.kind.usesCycle }?.deviceId ?: cycleList.firstOrNull()?.id.orEmpty()) }
@@ -624,6 +657,8 @@ fun AutomationEditor(
     // Ek eylemler (yalnız Otomasyon sekmesinde): ilk eylemden sonra sırayla, her biri kendi beklemesiyle.
     val extras = rememberSaveable(saver = extraActionsSaver) { mutableStateListOf<AutoAction>().apply { initial?.extraActions?.let(::addAll) } }
     var confirmDelete by remember { mutableStateOf(false) }
+    var showTrace by rememberSaveable { mutableStateOf(false) }
+    if (showTrace && existing != null) TraceSheet(existing, devices) { showTrace = false }
     // Kumanda: açan öğe (Ekle, kart) ekrandan kalkınca odak yan menüye düşüyordu; düzenleyicide geri okuna ver.
     // Ad alanına verilmez: programla odaklanınca TV klavyesi kendiliğinden açılıyor.
     val tv = LocalIsTv.current
@@ -681,6 +716,7 @@ fun AutomationEditor(
         conds.all { it.valid(targets) } &&
         (!actionKind.usesDevice || (dst != null && !DeviceCategory.isCategory(dst.id) && !dst.sensorOnly)) &&
         (actionKind != ActionKind.RUN_SCENE || sceneList.any { it.id == sceneId }) &&
+        (actionKind != ActionKind.SAVE_STATE || snapshotTargetValid(saveScope, actionTargets, sceneList)) &&
         (!triggerKind.usesCycle || cycleList.any { it.id == triggerCycle }) &&
         (!actionKind.usesCycle || cycleList.any { it.id == actionCycle }) &&
         (!triggerKind.isClock || clockDays != 0) &&
@@ -688,7 +724,7 @@ fun AutomationEditor(
 
     // Kaydedilecek otomasyon; aşağıdaki özet de bundan okunur.
     val draft = Automation(
-        id = initial?.id ?: NEW_AUTOMATION,
+        id = existing?.id ?: NEW_AUTOMATION,
         name = name.trim(),
         enabled = initial?.enabled ?: true,
         trigger = Trigger(
@@ -721,6 +757,7 @@ fun AutomationEditor(
         action = when {
             actionKind.usesDevice -> AutoAction(actionKind, actionDevice, actionChannel)
             actionKind == ActionKind.RUN_SCENE -> AutoAction(actionKind, sceneId)
+            actionKind == ActionKind.SAVE_STATE -> AutoAction(actionKind, saveScope)
             actionKind.usesCycle -> AutoAction(actionKind, actionCycle)
             else -> AutoAction(actionKind)
         },
@@ -736,14 +773,17 @@ fun AutomationEditor(
         AppTopBar(
             stringResource(
                 when {
-                    alert -> if (initial == null) R.string.alert_new else R.string.alert_edit
-                    else -> if (initial == null) R.string.automation_new else R.string.automation_edit
+                    alert -> if (existing == null) R.string.alert_new else R.string.alert_edit
+                    else -> if (existing == null) R.string.automation_new else R.string.automation_edit
                 }
             ),
             navigationIcon = { Box(Modifier.focusRequester(entry).focusGroup()) { BackButton(onBack) } },
             small = true,
             actions = {
-                if (initial != null) {
+                if (existing != null) {
+                    IconButton(modifier = Modifier.tvFocusRing(), onClick = { showTrace = true }) {
+                        Icon(Icons.Rounded.History, stringResource(R.string.trace_title))
+                    }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) {
                         Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete))
                     }
@@ -884,6 +924,14 @@ fun AutomationEditor(
                 FieldLabel(stringResource(R.string.automation_action))
                 OptionGrid(tab.actions, actionKind, { it.icon() }, { stringResource(it.editorTitle()) }, hue = { it.hue() }) { actionKind = it }
                 if (actionKind.usesCycle) CyclePick(cycleList, actionCycle) { actionCycle = it }
+                if (actionKind == ActionKind.SAVE_STATE) {
+                    if (!snapshotTargetValid(saveScope, actionTargets, sceneList)) saveScope = snapshotDefault(actionTargets)
+                    SnapshotScope(actionTargets, sceneList, saveScope) { saveScope = it }
+                }
+                if (actionKind == ActionKind.RESTORE_STATE) {
+                    Text(stringResource(R.string.snap_restore_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 6.dp))
+                }
                 if (actionKind == ActionKind.RUN_SCENE) {
                     FieldLabel(stringResource(R.string.scenes_title))
                     if (sceneList.isEmpty()) {
@@ -1099,7 +1147,7 @@ fun AutomationEditor(
 
             PillButton(
                 stringResource(R.string.action_save),
-                onClick = { onSave(draft.copy(id = initial?.id ?: UUID.randomUUID().toString())) },
+                onClick = { onSave(draft.copy(id = existing?.id ?: UUID.randomUUID().toString())) },
                 enabled = valid,
                 icon = Icons.Rounded.Check,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
@@ -1666,6 +1714,8 @@ private fun ActionKind.icon(): ImageVector = when (this) {
     ActionKind.RUN_SCENE -> Icons.Rounded.PlayArrow
     ActionKind.START_CYCLE -> Icons.Rounded.Repeat
     ActionKind.STOP_CYCLE -> Icons.Rounded.Stop
+    ActionKind.SAVE_STATE -> Icons.Rounded.Bookmark
+    ActionKind.RESTORE_STATE -> Icons.Rounded.Restore
 }
 
 private fun ActionKind.hue(): Hue = when (this) {
@@ -1676,6 +1726,7 @@ private fun ActionKind.hue(): Hue = when (this) {
     ActionKind.RUN_SCENE -> Hue.PURPLE
     ActionKind.START_CYCLE -> Hue.TEAL
     ActionKind.STOP_CYCLE -> Hue.SLATE
+    ActionKind.SAVE_STATE, ActionKind.RESTORE_STATE -> Hue.AMBER
 }
 
 private fun ActionKind.editorTitle(): Int = when (this) {
@@ -1686,6 +1737,31 @@ private fun ActionKind.editorTitle(): Int = when (this) {
     ActionKind.RUN_SCENE -> R.string.act_run_scene
     ActionKind.START_CYCLE -> R.string.act_start_cycle
     ActionKind.STOP_CYCLE -> R.string.act_stop_cycle
+    ActionKind.SAVE_STATE -> R.string.act_save_state
+    ActionKind.RESTORE_STATE -> R.string.act_restore_state
+}
+
+/** "Durumu hatırla" hedefi geçerli mi: gerçek bir cihaz (grup/kategori değil) ya da var olan bir sahne. Boş = geçersiz. */
+internal fun snapshotTargetValid(id: String, targets: List<DeviceSnapshot>, scenes: List<com.macerce.switchguard.core.Scene>): Boolean =
+    id.isNotEmpty() && (scenes.any { it.id == id } || targets.any { it.id == id && !DeviceGroup.isGroup(it.id) && !DeviceCategory.isCategory(it.id) })
+
+internal fun snapshotDefault(targets: List<DeviceSnapshot>): String =
+    targets.firstOrNull { !DeviceGroup.isGroup(it.id) && !DeviceCategory.isCategory(it.id) }?.id.orEmpty()
+
+/** "Durumu hatırla" hedefi: tek cihaz ya da (varsa) bir sahnenin cihazları. Tüm hesap hiçbir zaman seçilemez. */
+@Composable
+internal fun SnapshotScope(targets: List<DeviceSnapshot>, scenes: List<com.macerce.switchguard.core.Scene>, selected: String, onPick: (String) -> Unit) {
+    val devices = remember(targets) { targets.filter { !DeviceGroup.isGroup(it.id) && !DeviceCategory.isCategory(it.id) } }
+    FieldLabel(stringResource(R.string.automation_device))
+    DeviceChooser(devices, selected) { onPick(it.id) }
+    if (scenes.isNotEmpty()) {
+        FieldLabel(stringResource(R.string.snap_or_scene))
+        // Seçili bir cihazsa hiçbir sahne çipi seçili görünmez.
+        OptionGrid(scenes.map { it.id }, selected, { Icons.Rounded.PlayArrow },
+            { id: String -> scenes.firstOrNull { it.id == id }?.name.orEmpty() }) { onPick(it) }
+    }
+    Text(stringResource(R.string.snap_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(top = 6.dp))
 }
 
 /** Açılır seçim kutusu. */
@@ -1782,6 +1858,7 @@ internal fun extraValid(x: AutoAction, targets: List<DeviceSnapshot>, scenes: Li
     x.kind.usesDevice -> targets.any { it.id == x.deviceId }
     x.kind == ActionKind.RUN_SCENE -> scenes.any { it.id == x.deviceId }
     x.kind.usesCycle -> cycles.any { it.id == x.deviceId }
+    x.kind == ActionKind.SAVE_STATE -> snapshotTargetValid(x.deviceId, targets, scenes)
     else -> true
 }
 
@@ -1803,6 +1880,7 @@ private fun ExtraActionEditor(
             val target = when {
                 k.usesDevice -> x.deviceId.takeIf { id -> targets.any { it.id == id } } ?: targets.firstOrNull()?.id.orEmpty()
                 k == ActionKind.RUN_SCENE -> scenes.firstOrNull()?.id.orEmpty()
+                k == ActionKind.SAVE_STATE -> x.deviceId.takeIf { snapshotTargetValid(it, targets, scenes) } ?: snapshotDefault(targets)
                 k.usesCycle -> cycles.firstOrNull()?.id.orEmpty()
                 else -> ""
             }
@@ -1822,6 +1900,7 @@ private fun ExtraActionEditor(
             else OptionGrid(scenes.map { it.id }, x.deviceId, { Icons.Rounded.PlayArrow }, { id -> scenes.first { it.id == id }.name }) { onChange(x.copy(deviceId = it)) }
         }
         if (x.kind.usesCycle) CyclePick(cycles, x.deviceId) { onChange(x.copy(deviceId = it)) }
+        if (x.kind == ActionKind.SAVE_STATE) SnapshotScope(targets, scenes, x.deviceId) { onChange(x.copy(deviceId = it)) }
         Stepper(stringResource(R.string.rule_action_wait), x.waitMinutes, DELAY_STEPS, zeroLabel = stringResource(R.string.automation_now)) { onChange(x.copy(waitMinutes = it)) }
         TextButton(modifier = Modifier.padding(top = 4.dp).tvFocusRing(), onClick = onDelete) {
             Icon(Icons.Rounded.Delete, null, tint = MaterialTheme.colorScheme.error)

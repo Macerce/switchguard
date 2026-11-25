@@ -74,9 +74,15 @@ enum class ActionKind {
     /** Sahneyi çalıştır: [AutoAction.deviceId] = sahne kimliği. */
     RUN_SCENE,
     /** Döngüyü başlat / durdur: [AutoAction.deviceId] = döngü kimliği. */
-    START_CYCLE, STOP_CYCLE;
+    START_CYCLE, STOP_CYCLE,
+    /**
+     * Şu anki aç/kapalı durumu hatırla ([AutoAction.deviceId] = tek cihaz ya da sahne kimliği: o sahnenin cihazları;
+     * "tüm cihazlar" yoktur) / aynı kuralın hatırladığı duruma geri döndür ([StateSnapshot]).
+     */
+    SAVE_STATE, RESTORE_STATE;
 
     val usesDevice get() = this == TURN_ON || this == TURN_OFF
+    val usesSnapshot get() = this == SAVE_STATE || this == RESTORE_STATE
     val usesCycle get() = this == START_CYCLE || this == STOP_CYCLE
 }
 
@@ -113,8 +119,19 @@ data class Automation(
 
     /** Tetiklenen kural şimdi uygulanabilir mi (saat aralığı, ek koşullar, evde/dışarıda). */
     fun allowed(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Boolean =
-        (window?.contains(now) ?: true) && Condition.allHold(conditions, conditionMatch, devices, outdoorTemp) &&
-            (presence == null || away == null || (presence == PresenceRule.AWAY) == away)
+        verdict(devices, now, away, outdoorTemp).ok
+
+    /** [allowed]'ın ayrıntısı (kural izi için): hangi sınama tuttu, hangisi tutmadı. */
+    fun verdict(devices: Map<String, DeviceSnapshot>, now: Long, away: Boolean? = null, outdoorTemp: Double? = null): Verdict {
+        val each = conditions.map { it.holds(devices, outdoorTemp) }
+        val condsOk = each.isEmpty() || if (conditionMatch == ConditionMatch.ALL) each.all { it } else each.any { it }
+        return Verdict(
+            windowOk = window?.contains(now) ?: true,
+            conds = each,
+            condsOk = condsOk,
+            presenceOk = presence == null || away == null || (presence == PresenceRule.AWAY) == away,
+        )
+    }
 
     companion object {
         fun listToJson(list: List<Automation>): String = JSONArray().apply {
@@ -239,6 +256,30 @@ class AutomationEngine {
     /** Son verilen ortam (evde/dışarıda); tetiklenen kuralların koşulları buna göre. */
     private var env = Environment()
 
+    /** Kural izi: her tetiklenişin sonucu (çalıştı, gecikti, engellendi). Tek thread'den çağrılır. */
+    var onTrace: ((TraceEntry) -> Unit)? = null
+
+    private fun trace(a: Automation, now: Long, outcome: TraceOutcome, conds: List<Boolean>, current: Map<String, DeviceSnapshot>) {
+        val cb = onTrace ?: return
+        val t = a.trigger
+        val d = current[t.deviceId]
+        val value = when {
+            t.kind.usesChannelPower -> d?.channelPowerOf(t.channel)
+            t.kind.usesWatts -> d?.power
+            t.kind.usesSensorValue -> t.sensor?.let { d?.sensors?.get(it) }
+            t.kind.usesTemp -> env.outdoorTemp
+            else -> null
+        }
+        cb(TraceEntry(a.id, now, outcome, conds, value, env.away))
+    }
+
+    /** [Automation.allowed]; tutmazsa izine "engellendi" yazar (art arda aynıları tek satırda sayılır). */
+    private fun allowedTraced(a: Automation, current: Map<String, DeviceSnapshot>, now: Long): Boolean {
+        val v = a.verdict(current, now, env.away, env.outdoorTemp)
+        if (!v.ok) trace(a, now, v.outcome, v.conds, current)
+        return v.ok
+    }
+
     /**
      * Yeni cihaz durumlarını işler; şimdi çalıştırılması gereken otomasyonları döndürür.
      * [previous] içinde olmayan cihazlar için anlık (değişim) tetikleyicileri çalışmaz.
@@ -300,6 +341,7 @@ class AutomationEngine {
     /** Süre tetikleyicilerini ve vakti gelen gecikmeli eylemleri döndürür. */
     fun onTick(current: Map<String, DeviceSnapshot>, automations: List<Automation>, now: Long, env: Environment = Environment()): List<Automation> {
         this.env = env
+        val devicesNow = current
         val out = (durationHits(current, automations, now) + channelPowerHits(current, automations, now) +
             powerHoldHits(current, automations, now) + sunHits(current, automations, now, env) +
             tempHits(current, automations, now, env) + clockHits(current, automations, now)).toMutableList()
@@ -307,7 +349,10 @@ class AutomationEngine {
         pending.removeAll(due)
         // Bekleme sırasında kapatılan ya da silinen otomasyonun eylemi yapılmaz; düzenlendiyse güncel hali kullanılır.
         val current = automations.associateBy { it.id }
-        out += due.mapNotNull { p -> current[p.automation.id]?.takeIf { it.enabled } }
+        due.mapNotNull { p -> current[p.automation.id]?.takeIf { it.enabled } }.forEach { a ->
+            out += a
+            trace(a, now, TraceOutcome.RAN, emptyList(), devicesNow)
+        }
         return out
     }
 
@@ -350,7 +395,7 @@ class AutomationEngine {
             val dk = durationKey(a)
             if (dk in durationFired || now - start < t.minutes * 60_000L) continue
             // Saat aralığı dışında ya da koşul sağlanmıyorsa harcanmaz: aralık açılınca/koşul sağlanınca tetiklenir.
-            if (!a.allowed(current, now, env.away, env.outdoorTemp)) continue
+            if (!allowedTraced(a, current, now)) continue
             durationFired += dk
             fire(a, now, fired, current)
         }
@@ -376,7 +421,7 @@ class AutomationEngine {
             }
             if (power < t.watts) {
                 val start = lowSince.getOrPut(a.id) { now }
-                if (a.id !in lowFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away, env.outdoorTemp)) {
+                if (a.id !in lowFired && now - start >= t.minutes * 60_000L && allowedTraced(a, current, now)) {
                     lowFired += a.id
                     fire(a, now, fired, current)
                 }
@@ -407,7 +452,7 @@ class AutomationEngine {
             val above = t.kind == TriggerKind.POWER_ABOVE
             if (if (above) power > t.watts else power < t.watts) {
                 val start = holdSince.getOrPut(a.id) { now }
-                if (a.id !in holdFired && now - start >= t.minutes * 60_000L && a.allowed(current, now, env.away, env.outdoorTemp)) {
+                if (a.id !in holdFired && now - start >= t.minutes * 60_000L && allowedTraced(a, current, now)) {
                     holdFired += a.id
                     fire(a, now, fired, current)
                 }
@@ -477,7 +522,7 @@ class AutomationEngine {
             val condition = if (above) temp > t.watts else temp < t.watts
             val rearm = if (above) temp < t.watts - 1 else temp > t.watts + 1
             val armed = tempArmed[a.id] ?: true
-            if (condition && armed && a.allowed(current, now, env.away, env.outdoorTemp)) {
+            if (condition && armed && allowedTraced(a, current, now)) {
                 tempArmed[a.id] = false
                 fire(a, now, fired, current)
             } else if (rearm) tempArmed[a.id] = true
@@ -562,13 +607,19 @@ class AutomationEngine {
 
     private fun fire(a: Automation, now: Long, out: MutableList<Automation>, current: Map<String, DeviceSnapshot>) {
         // Saat aralığı ve "ve" koşulu.
-        if (!a.allowed(current, now, env.away, env.outdoorTemp)) return
+        val v = a.verdict(current, now, env.away, env.outdoorTemp)
+        if (!v.ok) return trace(a, now, v.outcome, v.conds, current)
         // Birbirini tetikleyen otomasyonların sonsuz döngüye girmesini engeller.
         val last = lastFiredAt[a.id]
-        if (last != null && now - last < MIN_INTERVAL_MS) return
+        if (last != null && now - last < MIN_INTERVAL_MS) return trace(a, now, TraceOutcome.THROTTLED, v.conds, current)
         lastFiredAt[a.id] = now
-        if (a.delayMinutes > 0) pending += Pending(a, now + a.delayMinutes * 60_000L)
-        else out += a
+        if (a.delayMinutes > 0) {
+            pending += Pending(a, now + a.delayMinutes * 60_000L)
+            trace(a, now, TraceOutcome.DELAYED, v.conds, current)
+        } else {
+            out += a
+            trace(a, now, TraceOutcome.RAN, v.conds, current)
+        }
     }
 
     private fun key(deviceId: String, channel: Int) = "$deviceId/$channel"

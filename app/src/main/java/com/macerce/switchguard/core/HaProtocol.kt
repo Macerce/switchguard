@@ -66,4 +66,57 @@ object HaProtocol {
 
     fun servicePath(entityId: String, on: Boolean) = "/api/services/${entityId.substringBefore('.')}/${if (on) "turn_on" else "turn_off"}"
     fun serviceBody(entityId: String): String = JSONObject().put("entity_id", entityId).toString()
+
+    // ---------------------------------------------------------------- WebSocket (/api/websocket)
+    // Sunucu "auth_required" yollar → istemci {"type":"auth","access_token":..} → "auth_ok" / "auth_invalid";
+    // sonra {"id":1,"type":"subscribe_events","event_type":"state_changed"} ile her durum değişikliği anında gelir.
+
+    /** "http://x:8123" → "ws://x:8123/api/websocket"; https → wss. */
+    fun wsUrl(base: String): String {
+        val b = normalize(base)
+        return when {
+            b.startsWith("https://") -> "wss://" + b.removePrefix("https://")
+            b.startsWith("http://") -> "ws://" + b.removePrefix("http://")
+            else -> b
+        } + "/api/websocket"
+    }
+
+    fun wsAuth(token: String): String = JSONObject().put("type", "auth").put("access_token", token).toString()
+
+    fun wsSubscribe(id: Int): String = JSONObject().put("id", id).put("type", "subscribe_events").put("event_type", "state_changed").toString()
+
+    sealed class WsMessage {
+        object AuthRequired : WsMessage()
+        object AuthOk : WsMessage()
+        data class AuthInvalid(val message: String) : WsMessage()
+        /** [state] null: varlık silindi. */
+        data class StateChanged(val entityId: String, val state: Entity?) : WsMessage()
+        /** Abonelik sonucu ("result"). */
+        data class Result(val id: Int, val success: Boolean) : WsMessage()
+        object Other : WsMessage()
+    }
+
+    /** Sunucudan gelen tek ileti (toplu "[...]" dizileri [parseWsBatch] ile). */
+    fun parseWs(text: String): WsMessage = runCatching { ws(JSONObject(text)) }.getOrDefault(WsMessage.Other)
+
+    /** Sunucu iletileri birleştirebilir (`[{..},{..}]`). */
+    fun parseWsBatch(text: String): List<WsMessage> = runCatching {
+        val t = text.trimStart()
+        if (t.startsWith("[")) JSONArray(t).let { a -> (0 until a.length()).mapNotNull { a.optJSONObject(it)?.let(::ws) } }
+        else listOf(ws(JSONObject(t)))
+    }.getOrDefault(emptyList())
+
+    private fun ws(o: JSONObject): WsMessage = when (o.optString("type")) {
+        "auth_required" -> WsMessage.AuthRequired
+        "auth_ok" -> WsMessage.AuthOk
+        "auth_invalid" -> WsMessage.AuthInvalid(o.optString("message"))
+        "result" -> WsMessage.Result(o.optInt("id"), o.optBoolean("success"))
+        "event" -> {
+            val data = o.optJSONObject("event")?.optJSONObject("data")
+            val id = data?.optString("entity_id").orEmpty()
+            if (id.isEmpty()) WsMessage.Other
+            else WsMessage.StateChanged(id, data?.optJSONObject("new_state")?.let(::entity))
+        }
+        else -> WsMessage.Other
+    }
 }

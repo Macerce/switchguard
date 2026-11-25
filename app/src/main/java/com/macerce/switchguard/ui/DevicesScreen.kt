@@ -200,6 +200,7 @@ fun DevicesScreen(
     // Alan sayfası (Home Assistant'taki gibi): alan kartına dokununca yalnız o alanın cihazları gösterilir.
     val inviteDismissed = remember(version) { store.areasInviteDismissed }
     var openAreaId by rememberSaveable { mutableStateOf<String?>(null) }
+    var relayPanelId by rememberSaveable { mutableStateOf<String?>(null) }
     val openArea = layout.categories.firstOrNull { it.id == openAreaId }
     // Alan kartlarının sürükle-bırak sırası (cihazlarınki gibi): bırakınca bir kez kaydedilir.
     val areaOrder = remember { DragOrder() }
@@ -257,6 +258,12 @@ fun DevicesScreen(
         saveLayout(store.deviceLayout.renameCategory(openArea.id, it))
     }
     BackHandler(enabled = editMode) { editMode = false }
+    relayPanelId?.let { id ->
+        // Canlı durum: panel açıkken röle değişince düğmeler de değişir; cihaz kaybolursa panel kapanır.
+        val d = store.snapshotsWithGroups.firstOrNull { it.id == id }
+        if (d == null) relayPanelId = null
+        else RelayPanel(d, onDetails = { relayPanelId = null; onOpenDevice(id) }, onDismiss = { relayPanelId = null })
+    }
     BackHandler(enabled = !editMode && openArea != null) { openAreaId = null }
     var refreshing by remember { mutableStateOf(false) }
     // Bağlantı yokken bulut cihazlarının durumu son bilinen: kartlar soluk (yerel ağdakiler güncel kalır).
@@ -556,6 +563,8 @@ fun DevicesScreen(
                                     onClick = {
                                         if (!editMode && !order.dragging && movingId == null) {
                                             if (DeviceGroup.isGroup(device.id)) editingGroup = device.id.removePrefix(DeviceGroup.PREFIX)
+                                            // Çok röleli cihaz: tek dokunuşta röleleri açıp kapatma paneli (detay panelden açılır).
+                                            else if (device.isMultiChannel && !device.sensorOnly) relayPanelId = device.id
                                             else onOpenDevice(device.id)
                                         }
                                     },
@@ -1274,3 +1283,17 @@ enum class DeviceFilter(val label: Int) {
 
 /** Alan kartlarının ızgara anahtarı öneki (cihaz kimlikleriyle karışmasın). */
 private const val AREA_KEY = "area-"
+
+/** Çok röleli cihazın hızlı paneli: her röle için büyük aç/kapa düğmesi (kapatırken onay kuralı geçerli) ve "Ayrıntılar". */
+@Composable
+private fun RelayPanel(device: DeviceSnapshot, onDetails: () -> Unit, onDismiss: () -> Unit) {
+    AdaptiveSheet(device.name, onDismiss, footer = {
+        TextButton(onClick = onDetails, modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.relay_panel_details)) }
+    }) {
+        if (!device.online) {
+            Text(stringResource(R.string.relay_panel_offline), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.padding(bottom = 8.dp))
+        }
+        ChannelButtons(device)
+    }
+}

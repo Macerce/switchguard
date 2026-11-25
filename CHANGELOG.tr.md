@@ -6,6 +6,16 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.54.0 — 2026-11-25
+**Yeni**
+- Her kural için çalışma geçmişi ("neden çalıştı / neden çalışmadı?"): her tetikleniş saatiyle, o anki değerle, hangi koşulun tutup tutmadığıyla ve her eylemin sonucuyla kaydedilir. Kural kartının altında "Son: 14:02 · Çalıştı" satırı; geçmiş düğmesi kural düzenleyicisinde. Art arda aynı nedenle engellenenler tek satırda sayılır.
+- Durumu hatırla / geri getir: kural tek bir cihazın (ya da bir sahnenin cihazlarının) açık/kapalı durumunu hatırlar, aynı kuralın sonraki adımı geri getirir. Hiçbir zaman tüm hesaba uygulanmaz; yalnız değişen kanallara komut gider.
+- Kural eklerken hazır şablonlar: unutulan cihaz, uzun süre açık, çevrimdışı oldu, makine bitti, dondurucu/pompa durdu, yüksek tüketim, durdur-geri getir, gün batımında aç, gece kapat, hafta içi sabah aç. Enerji ölçümü isteyenler yalnız ölçen cihaz varsa çıkar.
+- Kural bildirimlerinde, tetikleyen cihaz açıksa "Kapat" düğmesi (kapatırken onay istenen cihazlarda yok).
+- Çok röleli cihazlar: tek dokunuşta her röle için büyük aç/kapa düğmeli küçük panel açılır; "Ayrıntılar" cihaz sayfasını açar.
+- Sahne düzenleyicide "Şu anki durumdan doldur".
+- Home Assistant: durumlar WebSocket ile anında gelir; bağlıyken yoklama dakikada bire iner, bağlantı koparsa 5 sn'lik yoklamaya döner.
+
 ## 2.53.0 — 2026-11-25
 **Yeni**
 - Ana ekrandaki alan kartları cihaz kartları gibi düzenlenir: basılı tutup sürükleyerek sıralanır; düzenleme kipinde her alanın araç çubuğu var: taşı, küçük/büyük yap, simge seç, ana ekranda gizle, yeniden adlandır, sil (cihazlar silinmez).

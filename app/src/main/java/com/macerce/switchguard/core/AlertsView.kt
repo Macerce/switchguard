@@ -9,7 +9,7 @@ enum class AutomationTab(
     val actions: List<ActionKind>,
 ) {
     ALERTS(listOf(ActionKind.ALARM, ActionKind.NOTIFY)),
-    AUTOMATIONS(listOf(ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.RUN_SCENE, ActionKind.START_CYCLE, ActionKind.STOP_CYCLE));
+    AUTOMATIONS(listOf(ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.RUN_SCENE, ActionKind.START_CYCLE, ActionKind.STOP_CYCLE, ActionKind.SAVE_STATE, ActionKind.RESTORE_STATE));
 
     /** Bu sekmedeki kayıtlar, listedeki sırayla. */
     fun of(list: List<Automation>): List<Automation> = list.filter { tabOf(it) == this }
@@ -19,7 +19,8 @@ enum class AutomationTab(
 
         fun tabOf(kind: ActionKind): AutomationTab = when (kind) {
             ActionKind.ALARM, ActionKind.NOTIFY -> ALERTS
-            ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.RUN_SCENE, ActionKind.START_CYCLE, ActionKind.STOP_CYCLE -> AUTOMATIONS
+            ActionKind.TURN_ON, ActionKind.TURN_OFF, ActionKind.RUN_SCENE, ActionKind.START_CYCLE, ActionKind.STOP_CYCLE,
+            ActionKind.SAVE_STATE, ActionKind.RESTORE_STATE -> AUTOMATIONS
         }
     }
 }

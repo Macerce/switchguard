@@ -6,6 +6,16 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.54.0 — 2026-11-25
+**New**
+- Run history for every rule ("why did it run / why didn't it?"): each trigger is logged with the time, the value at that moment, which condition held or failed, and the result of every action. A "Last: 14:02 · Ran" line sits under each rule card; the history button is in the rule editor. Repeated identical blocks collapse into one row.
+- Remember / restore state: a rule can remember whether one device (or a scene's devices) is on or off, and a later step in the same rule puts it back. It never applies to the whole account, and only changed channels get a command.
+- Ready-made rule templates when adding a rule: forgotten device, on too long, went offline, machine finished, freezer/pump stopped, high consumption, pause-and-restore, sunset on, night off, weekday morning on. Templates that need energy metering only appear if you have such a device.
+- Notifications from rules get a "Turn off" button when the triggering device is on (not shown for devices that ask before turning off).
+- Multi-relay devices: one tap opens a small panel with a big on/off button per relay; "Details" opens the full device page.
+- Scene editor: "Fill from current state".
+- Home Assistant: states arrive instantly over WebSocket; polling drops to once a minute while connected and falls back to every 5 s if the connection drops.
+
 ## 2.53.0 — 2026-11-25
 **New**
 - Area cards on the home screen are editable like device cards: long-press and drag to reorder; in edit mode each area gets a toolbar to move it, make it small or large, pick an icon, hide it from the home screen, rename or delete it (devices are kept).

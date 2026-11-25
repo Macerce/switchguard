@@ -114,6 +114,8 @@
         </service>
 
         <receiver android:name=".service.TickReceiver" android:exported="false" />
+        <!-- Bildirimdeki "Kapat" düğmesi (yalnız uygulamanın kendi PendingIntent'i). -->
+        <receiver android:name=".service.NotificationActions" android:exported="false" />
         <!-- Widget alıcıları dışa kapalı: sistemin widget yayınları ve uygulamanın kendi PendingIntent'leri yine ulaşır,
              başka uygulamalar cihazları sessizce açıp kapatamaz. -->
         <!-- Ana ekran widget'ı: izleme durumu ve çalan alarm. -->

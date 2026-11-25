@@ -78,6 +78,26 @@ abstract class PolledLan(val brand: String) {
         if (devices.isEmpty()) { stop(); return }
         startDiscovery(context)
         if (poll == null) poll = io.scheduleWithFixedDelay({ pollAll() }, 0, pollMs, TimeUnit.MILLISECONDS)
+        onStarted()
+    }
+
+    /** İzleme başladı / sürüyor (her [start] çağrısında; tekrar çağrılabilir olmalı). */
+    protected open fun onStarted() {}
+
+    /** İzleme durdu. */
+    protected open fun onStopped() {}
+
+    /** true: bu yoklama turu atlanır (ör. anlık bağlantı varken seyrek yoklama). */
+    protected open fun skipPoll(): Boolean = false
+
+    /** İzlenen cihazlar (bu markadan). */
+    protected fun watched(): List<LocalDevice> = devices
+
+    /** Dışarıdan gelen anlık okuma (ör. WebSocket olayı); null = ulaşılamıyor. Değiştiyse dinleyici çağrılır. */
+    protected fun pushReading(id: String, r: LocalReading?) {
+        val changed = if (r == null) readings.remove(id) != null else readings.put(id, r) != r
+        if (r != null) misses.remove(id)
+        if (changed) onChange?.invoke()
     }
 
     @Synchronized
@@ -90,6 +110,7 @@ abstract class PolledLan(val brand: String) {
         devices = emptyList()
         readings.clear()
         misses.clear()
+        onStopped()
     }
 
     @Synchronized
@@ -100,6 +121,7 @@ abstract class PolledLan(val brand: String) {
     fun pollNow() = io.execute { pollAll() }
 
     private fun pollAll() {
+        if (skipPoll()) return
         var changed = false
         for (d in devices) {
             val host = host(d) ?: continue

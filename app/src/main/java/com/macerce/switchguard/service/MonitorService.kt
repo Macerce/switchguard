@@ -1,5 +1,9 @@
 package com.macerce.switchguard.service
 
+import com.macerce.switchguard.core.StepResult
+import com.macerce.switchguard.core.TraceStep
+import com.macerce.switchguard.core.StateSnapshot
+import com.macerce.switchguard.core.ConfirmOff
 import com.macerce.switchguard.api.HookClient
 import com.macerce.switchguard.core.Heartbeat
 import com.macerce.switchguard.core.AlertHooks
@@ -125,7 +129,10 @@ class MonitorService : Service() {
     private val labels: ChangeLabels get() = strings.labels
     private lateinit var metrics: MetricsLog
     private lateinit var runtime: RuntimeState
-    private var automations = AutomationEngine()
+    private var automations = newEngine()
+
+    /** Kural motoru; tetiklenişler kural izine yazılır. */
+    private fun newEngine() = AutomationEngine().also { e -> e.onTrace = { com.macerce.switchguard.data.TraceLog.record(this, it) } }
 
     private val blindWatch = BlindWatch()
     /** Kapatılan ama sürmekte olan alarmların hatırlatmaları (bkz. [checkReminders]). */
@@ -385,7 +392,7 @@ class MonitorService : Service() {
             outage = OutageWatch()
             // Bekçi: diğer cihaz "izleme kapatıldı"yı görsün, sessizlik alarmı vermesin.
             if (store.watchdogMode == Store.WATCHDOG_SEND) sendBeat(System.currentTimeMillis(), stopped = true)
-            automations = AutomationEngine()
+            automations = newEngine()
             reminders = AlarmReminders()
             notifier.clearBlind()
             notifier.stopAlarm()
@@ -399,6 +406,7 @@ class MonitorService : Service() {
     }
 
     override fun onDestroy() {
+        com.macerce.switchguard.data.TraceLog.flush()
         instance = null
         running = false
         networkCallback?.let { getSystemService(ConnectivityManager::class.java).unregisterNetworkCallback(it) }
@@ -1175,7 +1183,7 @@ class MonitorService : Service() {
     private fun startSteps(a: Automation) {
         if (a.extraActions.isEmpty()) return
         val (immediate, later) = ActionSteps.plan(a, System.currentTimeMillis())
-        immediate.forEach { i -> execute(a.copy(action = a.extraActions[i])) }
+        immediate.forEach { i -> execute(a.copy(action = a.extraActions[i]), step = i + 1) }
         runtime.actionSteps = runtime.actionSteps.filterNot { it.automationId == a.id } + later
     }
 
@@ -1189,7 +1197,7 @@ class MonitorService : Service() {
         val byId = store.engineAutomations().associateBy { it.id }
         for (d in due.sortedBy { it.at }) {
             val a = byId[d.automationId]?.takeIf { it.enabled } ?: continue
-            a.extraActions.getOrNull(d.step)?.let { execute(a.copy(action = it)) }
+            a.extraActions.getOrNull(d.step)?.let { execute(a.copy(action = it), step = d.step + 1) }
         }
     }
 
@@ -1207,35 +1215,62 @@ class MonitorService : Service() {
         wakeIn((due - System.currentTimeMillis()).coerceAtLeast(0) + 50)
     }
 
-    private fun execute(a: Automation) {
+    /** Kural izine eylem sonucu ([step] 0 = ilk eylem). */
+    private fun traceStep(a: Automation, step: Int, result: StepResult, error: String = "") =
+        com.macerce.switchguard.data.TraceLog.step(this, a.id, TraceStep(step, result, System.currentTimeMillis(), error))
+
+    private fun execute(a: Automation, step: Int = 0) {
+        fun logMissing(deviceId: String = "") {
+            val args = EventArgs.AutoMissing(a.name)
+            log.add(deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+            traceStep(a, step, StepResult.MISSING)
+        }
         when (a.action.kind) {
             ActionKind.TURN_ON, ActionKind.TURN_OFF -> {
                 val on = a.action.kind == ActionKind.TURN_ON
-                if (DeviceGroup.isGroup(a.action.deviceId)) return executeGroup(a, on)
-                val target = store.snapshots.firstOrNull { it.id == a.action.deviceId }
-                if (target == null) {
-                    val args = EventArgs.AutoMissing(a.name)
-                    log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
-                    return
+                if (DeviceGroup.isGroup(a.action.deviceId)) return executeGroup(a, on, step)
+                val target = store.snapshots.firstOrNull { it.id == a.action.deviceId } ?: return logMissing(a.action.deviceId)
+                sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true) { sent ->
+                    traceStep(a, step, if (sent) StepResult.DONE else StepResult.FAILED)
                 }
-                sendAutomationSwitch(a.name, target, a.action.channel, on, attempt = 1, logSuccess = true)
             }
             ActionKind.START_CYCLE, ActionKind.STOP_CYCLE -> {
-                if (!cycleButton(a.action.deviceId, a.action.kind == ActionKind.START_CYCLE, a.name)) {
-                    val args = EventArgs.AutoMissing(a.name)
-                    log.add("", a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
-                }
+                if (!cycleButton(a.action.deviceId, a.action.kind == ActionKind.START_CYCLE, a.name)) logMissing()
+                else traceStep(a, step, StepResult.DONE)
             }
             ActionKind.RUN_SCENE -> {
-                if (ChatTemplate.isTemplate(a.action.deviceId)) return runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
-                val scene = store.scenes.firstOrNull { it.id == a.action.deviceId }
-                if (scene == null) {
-                    val args = EventArgs.AutoMissing(a.name)
-                    log.add("", a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
-                    return
+                if (ChatTemplate.isTemplate(a.action.deviceId)) {
+                    runTemplate(a.action.deviceId.removePrefix(ChatTemplate.PREFIX))
+                    return traceStep(a, step, StepResult.DONE)
                 }
+                val scene = store.scenes.firstOrNull { it.id == a.action.deviceId } ?: return logMissing()
                 // Ağ işi: izleme iş parçacığı beklemesin.
-                telegram.execute { runBlocking { Actions.runScene(this@MonitorService, scene, a.name) } }
+                telegram.execute {
+                    val (ok, bad) = runBlocking { Actions.runScene(this@MonitorService, scene, a.name) }
+                    traceStep(a, step, if (bad == 0) StepResult.DONE else StepResult.FAILED, if (bad == 0) "" else "$ok/${ok + bad}")
+                }
+            }
+            ActionKind.SAVE_STATE -> {
+                // Yalnız seçilen cihaz ya da sahnenin cihazları; hedef boşsa hiçbir şey kaydedilmez (asla "tüm hesap").
+                val target = a.action.deviceId
+                val only = store.scenes.firstOrNull { it.id == target }?.actions?.map { it.deviceId }?.toSet()
+                    ?: setOf(target).takeIf { target.isNotEmpty() && store.snapshots.any { it.id == target } }
+                    ?: return logMissing(target)
+                val saved = StateSnapshot.capture(store.snapshots, only) { DeviceGroup.isGroup(it) || DeviceCategory.isCategory(it) }
+                // Her kuralın kendi kaydı: "geri getir" yalnız aynı kuralın hatırladığına döner.
+                runtime.savedStates = runtime.savedStates + (a.id to saved)
+                traceStep(a, step, StepResult.DONE, saved.size.toString())
+            }
+            ActionKind.RESTORE_STATE -> {
+                val saved = runtime.savedStates[a.id].orEmpty()
+                if (saved.isEmpty()) return logMissing()
+                val changes = StateSnapshot.changes(saved, store.snapshots.associateBy { it.id })
+                if (changes.isEmpty()) return traceStep(a, step, StepResult.DONE, "0")
+                val scene = com.macerce.switchguard.core.Scene("saved-state", a.name, changes)
+                telegram.execute {
+                    val (ok, bad) = runBlocking { Actions.runScene(this@MonitorService, scene, a.name) }
+                    traceStep(a, step, if (bad == 0) StepResult.DONE else StepResult.FAILED, "$ok/${ok + bad}")
+                }
             }
             ActionKind.ALARM, ActionKind.NOTIFY -> {
                 val source = store.snapshotsWithGroups.firstOrNull { it.id == a.trigger.deviceId }
@@ -1246,11 +1281,18 @@ class MonitorService : Service() {
                 val effective = RuleEngine.effective(action, quiet = quietNow(), critical = store.bypassesQuiet(a.trigger.deviceId))
                 log.add(a.trigger.deviceId, source?.name ?: a.name, EventKind.AUTOMATION, text, effective.name, args)
                 val sound = rules.soundUri
+                // Tetikleyen cihaz şu an açıksa bildirimde "Kapat" düğmesi (kapatırken onay istenen cihazlarda yok).
+                val offTarget = source?.takeIf {
+                    a.trigger.kind.usesDevice && it.online && !it.sensorOnly && !DeviceCategory.isCategory(it.id) &&
+                        it.switches[a.trigger.channel] == true &&
+                        !ConfirmOff.needed(it.id, false, store.confirmOff, store.groups, store.snapshots.associateBy { d -> d.id })
+                }?.let { it.id to a.trigger.channel }
                 when (effective) {
                     AlertAction.ALARM -> addAlarm(text, sound, critical = isCritical(a.trigger.deviceId))
-                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = "auto/" + a.id)
+                    AlertAction.NOTIFY -> notifier.notifyEvent(text, sound, key = "auto/" + a.id, offTarget = offTarget)
                     AlertAction.IGNORE -> Unit
                 }
+                traceStep(a, step, if (effective == AlertAction.IGNORE) StepResult.SILENCED else StepResult.DONE)
             }
         }
     }
@@ -1259,21 +1301,24 @@ class MonitorService : Service() {
      * Otomasyonun grup eylemi: değişmesi gereken her üyeye komut gider. Hepsi giderse grup adıyla
      * tek satır yazılır; gidemeyen her üye kendi adıyla ayrı kayda düşer ve yeniden denenir.
      */
-    private fun executeGroup(a: Automation, on: Boolean) {
+    private fun executeGroup(a: Automation, on: Boolean, step: Int = 0) {
         val group = store.groups.firstOrNull { it.deviceId == a.action.deviceId }
         if (group == null) {
             val args = EventArgs.AutoMissing(a.name)
             log.add(a.action.deviceId, a.name, EventKind.AUTOMATION, args.render(a.name, strings), "", args)
+            traceStep(a, step, StepResult.MISSING)
             return
         }
         val targets = group.targets(store.snapshots.associateBy { it.id }, on)
         // Sonuçlar izleme thread'inde tek tek gelir; hepsi gelince hepsi gittiyse grup adıyla tek satır yazılır.
         var left = targets.size
         var allSent = true
+        if (targets.isEmpty()) traceStep(a, step, StepResult.DONE, "0")
         for ((device, channel) in targets) {
             sendAutomationSwitch(a.name, device, channel, on, attempt = 1, logSuccess = false) { sent ->
                 if (!sent) allSent = false
-                if (--left == 0 && allSent) {
+                if (--left == 0) traceStep(a, step, if (allSent) StepResult.DONE else StepResult.FAILED)
+                if (left == 0 && allSent) {
                     val args = EventArgs.AutoSwitch(a.name, 0, false, on)
                     log.add(group.deviceId, group.name, EventKind.AUTOMATION, args.render(group.name, strings), "", args)
                 }
