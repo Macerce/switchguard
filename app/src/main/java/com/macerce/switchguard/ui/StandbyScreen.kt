@@ -47,7 +47,6 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.ui.draw.drawBehind
 import com.macerce.switchguard.core.DeviceKinds
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -255,47 +254,42 @@ class StandbyActivity : ComponentActivity() {
     }
 }
 
-// TV panosuyla aynı görünüm: koyu zemin, yavaş süzülen ışıklar, cam kartlar (bkz. TvHome).
-// Ev panosu düzeni: düz koyu zemin, dolgun kartlar, sade yazı; renk yalnız açık cihazın simgesinde ve uyarılarda.
-private val Bg = Color(0xFF111318)
-private val Bg2 = Color(0xFF15181E)
-private val Card = Color(0xFF1C1F25)
-private val Ink = Color(0xFFE8E8EA)
-private val Dim = Color(0xFF9DA1A8)
-private val Faint = Card
-private val Edge = Color(0x0DFFFFFF)
-private val Teal = Color(0xFF5BB0E8)
-private val Ok = Color(0xFF6CC28A)
-private val Amber = Color(0xFFF2B84B)
-private val Red = Color(0xFFE57373)
-private val Sheet = Color(0xF5202329)
-private val CardShape = RoundedCornerShape(16.dp)
+// Home Assistant koyu tema: #111111 zemin, #1C1C1C kart, %12 ayırıcı kenar, 12 dp köşe; durum renkleri HA'nınkiler.
+private val Bg = Color(0xFF111111)
+private val Card = Color(0xFF1C1C1C)
+private val Ink = Color(0xFFE1E1E1)
+private val Dim = Color(0xFF9B9B9B)
+private val Faint = Color(0xFF2C2C2C)
+private val Edge = Color(0x1FE1E1E1)
+private val Teal = Color(0xFF03A9F4)
+private val Ok = Color(0xFF43A047)
+private val Amber = Color(0xFFFFA600)
+private val Red = Color(0xFFDB4437)
+private val Inactive = Color(0xFF6F6F6F)
+private val StateIcon = Color(0xFF44739E)
+private val Sheet = Color(0xF5262626)
+private val CardShape = RoundedCornerShape(12.dp)
 
-/** Açık cihazın rengi, türüne göre (ışık/priz sarı, su mavi, soğutma/hava camgöbeği, ısıtma turuncu, kapı mor). */
+/** Açık cihazın HA durum rengi: ışık/priz amber, su ve soğutma mavi, hava camgöbeği, ısıtma turuncu, kapı mor. */
 private fun onColor(kind: DeviceKind): Color = when (kind) {
-    DeviceKind.WATER -> Color(0xFF64B5F6)
-    DeviceKind.COLD, DeviceKind.AIR -> Color(0xFF4DD0E1)
-    DeviceKind.HEAT -> Color(0xFFFF8A65)
-    DeviceKind.DOOR -> Color(0xFFB39DDB)
-    else -> Color(0xFFFFC14D)
+    DeviceKind.WATER, DeviceKind.COLD -> Color(0xFF2196F3)
+    DeviceKind.AIR -> Color(0xFF00BCD4)
+    DeviceKind.HEAT -> Color(0xFFFF9800)
+    DeviceKind.DOOR -> Color(0xFF9C27B0)
+    else -> Color(0xFFFFC107)
 }
 
-/** Cam kart: hafif beyaz zemin + ince kenar; [tint] verilirse o renkte yatay ışık (uyarı/alarm). */
-private fun Modifier.glass(radius: Int = 16, tint: Color? = null): Modifier {
-    val shape = RoundedCornerShape(radius.dp)
-    val c = clip(shape)
-    return if (tint != null) {
-        c.background(Card, shape).background(tint.copy(alpha = 0.10f), shape).border(1.dp, tint.copy(alpha = 0.30f), shape)
-    } else c.background(Faint, shape).border(1.dp, Edge, shape)
-}
+/** HA kartı (ha-card): düz kart zemini, ince ayırıcı kenar. */
+private fun Modifier.glass(): Modifier = clip(CardShape).background(Card, CardShape).border(1.dp, Edge, CardShape)
 
 private data class PowerView(val series: List<Double>, val todayKwh: Double)
 
 /** Panonun etkinliğe bağlı işleri: konuşma tanıma penceresi ve kilit açtırma. */
 class StandbyHost(val listen: () -> Unit, val unlocked: (() -> Unit) -> Unit)
 
-/** Izgara hücresi (~40 dp) ve aralık: telefon dikeyde 8 sütun, yatayda ~19, tablette 25+. */
+/** Sütun (~40 dp; telefon dikeyde 8 sütun, cihaz kutusu yarım genişlik) ve HA bölüm ızgarasındaki gibi 56 dp satır, 8 dp aralık. */
 private val CellTarget = 38.dp
+private val RowH = 56.dp
 private val Gap = 8.dp
 
 private fun channelsOf(d: DeviceSnapshot): List<Int> =
@@ -470,15 +464,6 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                 else Modifier
             ),
     ) {
-        // Zemin: hareketli ışık yerine durumu belli eden çok hafif, sabit bir ışık.
-        Box(
-            Modifier.fillMaxSize().alpha(if (night) 0.5f else 1f).drawBehind {
-                drawRect(Brush.verticalGradient(listOf(Bg2, Bg)))
-                val c = Offset(size.width * 0.15f, 0f)
-                val rad = size.maxDimension * 0.7f
-                drawCircle(Brush.radialGradient(listOf(accent.copy(alpha = 0.05f), Color.Transparent), center = c, radius = rad), radius = rad, center = c)
-            },
-        )
         BoxWithConstraints(
             Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 14.dp)
                 .then(if (editing) Modifier else Modifier.offset(sx.dp, sy.dp).alpha(if (night) 0.55f else 1f)),
@@ -502,7 +487,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                     when (id) {
                         StandbyGrid.CLOCK -> ClockWidget(now, w, h)
                         StandbyGrid.WEATHER -> WeatherWidget(weather, lat != null, w, h)
-                        StandbyGrid.STATUS -> StatusWidget(alarmLines, conn.state, offlineNames, monitored.size, away, accent, h)
+                        StandbyGrid.STATUS -> StatusWidget(alarmLines, conn.state, offlineNames, monitored.size, away, w, h)
                         StandbyGrid.POWER -> PowerWidget(livePower, power, w, h)
                         StandbyGrid.RECENT -> Recent(recent.take(rowsFor(h)), Modifier.fillMaxSize())
                         StandbyGrid.UPCOMING -> Upcoming(upcoming.take(rowsFor(h)), now, Modifier.fillMaxSize())
@@ -511,7 +496,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
                             StandbyGrid.parseDevice(id)?.let { (did, ch) ->
                                 tiles.firstOrNull { it.id == did }?.let { d -> DeviceWidget(d, ch, accent, w, h, editing, onToggle) }
                             }
-                            StandbyGrid.parseSensor(id)?.let { sid -> sensors.firstOrNull { it.id == sid }?.let { SensorWidget(it, h) } }
+                            StandbyGrid.parseSensor(id)?.let { sid -> sensors.firstOrNull { it.id == sid }?.let { SensorWidget(it, w, h) } }
                         }
                     }
                 }
@@ -608,7 +593,7 @@ fun StandbyBoardScreen(onOpenApp: (() -> Unit)?, onClose: (() -> Unit)?, host: S
 }
 
 /** Liste widget'ında yüksekliğe sığan satır sayısı. */
-private fun rowsFor(h: Dp): Int = maxOf(1, ((h - 46.dp) / 50.dp).toInt())
+private fun rowsFor(h: Dp): Int = maxOf(1, ((h - 64.dp) / 48.dp).toInt())
 
 /**
  * Widget ızgarası. Basılı tutunca düzenleme açılır ve widget sürüklenir; diğer widget'lar yerinden oynamaz. Bırakılacak
@@ -632,7 +617,8 @@ private fun WidgetGrid(
     body: @Composable (String, Dp, Dp) -> Unit,
 ) {
     val density = LocalDensity.current
-    val step = with(density) { (cell + Gap).toPx() }
+    val stepX = with(density) { (cell + Gap).toPx() }
+    val stepY = with(density) { (RowH + Gap).toPx() }
     val gapPx = with(density) { Gap.toPx() }
     val latest = rememberUpdatedState(placed)
     val place = rememberUpdatedState(onPlace)
@@ -647,12 +633,12 @@ private fun WidgetGrid(
         val me = latest.value.firstOrNull { it.item.id == id } ?: return null
         val s = sizing?.takeIf { it.first == id }
         return if (s != null) {
-            val (w, h) = StandbyGrid.clampSize(id, ((s.second + gapPx) / step).roundToInt(), ((s.third + gapPx) / step).roundToInt(), cols)
+            val (w, h) = StandbyGrid.clampSize(id, ((s.second + gapPx) / stepX).roundToInt(), ((s.third + gapPx) / stepY).roundToInt(), cols)
             intArrayOf(me.x, me.y, w, h)
         } else if (dragId == id) {
             intArrayOf(
-                (dragPos.x / step).roundToInt().coerceIn(0, maxOf(0, cols - me.w)),
-                (dragPos.y / step).roundToInt().coerceAtLeast(0), me.w, me.h,
+                (dragPos.x / stepX).roundToInt().coerceIn(0, maxOf(0, cols - me.w)),
+                (dragPos.y / stepY).roundToInt().coerceAtLeast(0), me.w, me.h,
             )
         } else null
     }
@@ -663,7 +649,7 @@ private fun WidgetGrid(
         val speed = with(density) { 12.dp.toPx() }
         while (dragId == id) {
             val me = latest.value.firstOrNull { it.item.id == id }
-            val hPx = (me?.h ?: 1) * step - gapPx
+            val hPx = (me?.h ?: 1) * stepY - gapPx
             val top = dragPos.y + topPad - scroll.value
             val want = when {
                 top < edge -> -speed
@@ -682,14 +668,15 @@ private fun WidgetGrid(
     val rows = maxOf(
         placed.maxOfOrNull { it.y + it.h } ?: 0,
         ghost?.second?.let { it[1] + it[3] } ?: 0,
-    ) + if (editing) 3 else 0
+    ) + if (editing) 2 else 0
     fun span(n: Int) = cell * n + Gap * (n - 1)
-    Box(Modifier.fillMaxWidth().height(if (rows == 0) 0.dp else span(rows))) {
+    fun spanY(n: Int) = RowH * n + Gap * (n - 1)
+    Box(Modifier.fillMaxWidth().height(if (rows == 0) 0.dp else spanY(rows))) {
         ghost?.let { (id, t) ->
             // Taşırken dolu yer de olur (yer değiştirir); boyutlarken yalnız boş alan.
             val ok = if (dragId == id) true else StandbyGrid.canPlace(latest.value, id, t[0], t[1], t[2], t[3], cols)
             Box(
-                Modifier.offset { IntOffset((t[0] * step).roundToInt(), (t[1] * step).roundToInt()) }.size(span(t[2]), span(t[3]))
+                Modifier.offset { IntOffset((t[0] * stepX).roundToInt(), (t[1] * stepY).roundToInt()) }.size(span(t[2]), spanY(t[3]))
                     .clip(CardShape).background((if (ok) Teal else Red).copy(alpha = 0.10f))
                     .border(1.5.dp, (if (ok) Teal else Red).copy(alpha = 0.6f), CardShape),
             )
@@ -699,10 +686,10 @@ private fun WidgetGrid(
             val dragging = dragId == id
             val live = sizing?.takeIf { it.first == id }
             val w = if (live != null) with(density) { live.second.toDp() } else span(p.w)
-            val h = if (live != null) with(density) { live.third.toDp() } else span(p.h)
+            val h = if (live != null) with(density) { live.third.toDp() } else spanY(p.h)
             Box(
                 Modifier
-                    .offset { if (dragging) IntOffset(dragPos.x.roundToInt(), dragPos.y.roundToInt()) else IntOffset((p.x * step).roundToInt(), (p.y * step).roundToInt()) }
+                    .offset { if (dragging) IntOffset(dragPos.x.roundToInt(), dragPos.y.roundToInt()) else IntOffset((p.x * stepX).roundToInt(), (p.y * stepY).roundToInt()) }
                     .size(w, h)
                     .zIndex(if (dragging || live != null) 1f else 0f)
                     .graphicsLayer {
@@ -717,7 +704,7 @@ private fun WidgetGrid(
                                 onDragStart = {
                                     startEdit.value()
                                     val me = latest.value.firstOrNull { it.item.id == id }
-                                    if (me != null) { dragPos = Offset(me.x * step, me.y * step); dragId = id }
+                                    if (me != null) { dragPos = Offset(me.x * stepX, me.y * stepY); dragId = id }
                                 },
                                 onDrag = { change, amount ->
                                     change.consume()
@@ -743,11 +730,11 @@ private fun WidgetGrid(
                             detectDragGestures(
                                 onDragStart = {
                                     val me = latest.value.firstOrNull { it.item.id == id }
-                                    if (me != null) sizing = Triple(id, me.w * step - gapPx, me.h * step - gapPx)
+                                    if (me != null) sizing = Triple(id, me.w * stepX - gapPx, me.h * stepY - gapPx)
                                 },
                                 onDrag = { change, amount ->
                                     change.consume()
-                                    sizing = sizing?.let { (i, sw, sh) -> Triple(i, (sw + amount.x).coerceAtLeast(step), (sh + amount.y).coerceAtLeast(step)) }
+                                    sizing = sizing?.let { (i, sw, sh) -> Triple(i, (sw + amount.x).coerceAtLeast(stepX - gapPx), (sh + amount.y).coerceAtLeast(stepY - gapPx)) }
                                 },
                                 onDragEnd = {
                                     target(id)?.let { t -> place.value(id, t[0], t[1], t[2], t[3]) }
@@ -800,117 +787,110 @@ private fun BoardAction(icon: ImageVector, label: String, onClick: () -> Unit) {
 }
 
 /**
- * Cihaz widget'ı (TV'deki kartın eşi): açıkken altından vurgu renginde ışık yükselir, simge dolu daire olur.
- * Küçükken yalnız simge + ad, geniş tek satırda simge yanında durum, büyükken TV kartı düzeni.
+ * Home Assistant "tile" kartı: 36 dp yuvarlak simge (renginin %20'si zeminde), 14 sp kalın ad, altında 12 sp durum.
+ * Geniş/kısa kutuda yatay, uzun kutuda dikey (ortalı) düzen. [color] null ise etkin değil (gri).
  */
 @Composable
-private fun DeviceWidget(d: DeviceSnapshot, ch: Int, accent: Color, w: Dp, h: Dp, editing: Boolean, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
-    val on = d.online && d.switches[ch] == true
-    val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud, d.sensorOnly) { DeviceKinds.of(d) }
-    val color = onColor(kind)
-    val name = if (d.isMultiChannel) "${d.name} · ${ch + 1}" else d.name
-    val watts = d.power?.takeIf { on && it >= 1 }?.let { " · " + boardWatts(it) }.orEmpty()
-    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title) + watts
-    val small = minOf(w, h)
-    val circle = (small * 0.42f).coerceIn(34.dp, 52.dp)
-    val iconTint by animateColorAsState(if (on) color else if (d.online) Ink.copy(alpha = 0.75f) else Dim, tween(250), label = "devIcon")
-    val badge by animateColorAsState(if (on) color.copy(alpha = 0.20f) else Color.White.copy(alpha = 0.06f), tween(250), label = "devBadge")
-    val iconCircle: @Composable () -> Unit = {
-        Box(Modifier.size(circle).background(badge, CircleShape), contentAlignment = Alignment.Center) {
-            Icon(if (d.online) kind.icon() else Icons.Rounded.CloudOff, null, tint = iconTint, modifier = Modifier.size(circle * 0.54f))
+private fun HaTile(icon: ImageVector, color: Color?, name: String, state: String, w: Dp, h: Dp, onClick: (() -> Unit)? = null) {
+    val tint by animateColorAsState(color ?: Inactive, tween(250), label = "tileIcon")
+    val iconBox: @Composable () -> Unit = {
+        Box(Modifier.size(36.dp).background(tint.copy(alpha = 0.2f), CircleShape), contentAlignment = Alignment.Center) {
+            Icon(icon, null, tint = tint, modifier = Modifier.size(24.dp))
         }
     }
-    val nameSize = dpSp((small.value * 0.15f).coerceIn(13f, 18f))
-    val stateSize = dpSp((small.value * 0.115f).coerceIn(11f, 14f))
-    val labels: @Composable (Modifier, TextAlign) -> Unit = { m, align ->
+    val vertical = h >= 112.dp && w < h * 1.5f
+    val align = if (vertical) TextAlign.Center else TextAlign.Start
+    val texts: @Composable (Modifier) -> Unit = { m ->
         Column(m) {
-            Text(name, color = Ink, fontSize = nameSize, fontWeight = FontWeight.SemiBold, lineHeight = nameSize * 1.2f,
-                maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = Modifier.fillMaxWidth())
-            Text(state, color = if (!d.online) Red else Dim, fontSize = stateSize, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                textAlign = align, modifier = Modifier.fillMaxWidth())
+            Text(name, color = Ink, fontSize = dpSp(14f), fontWeight = FontWeight.Medium, lineHeight = dpSp(20f), letterSpacing = 0.1.sp,
+                maxLines = if (vertical) 2 else 1, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = Modifier.fillMaxWidth())
+            Text(state, color = Dim, fontSize = dpSp(12f), lineHeight = dpSp(16f), letterSpacing = 0.4.sp,
+                maxLines = 1, overflow = TextOverflow.Ellipsis, textAlign = align, modifier = Modifier.fillMaxWidth())
         }
     }
     Box(
-        Modifier.fillMaxSize().clip(CardShape).background(Card, CardShape).border(1.dp, Edge, CardShape)
-            .alpha(if (d.online) 1f else 0.65f)
-            .then(if (onToggle != null && d.online && !editing) Modifier.clickable { onToggle(d, ch, !on) } else Modifier)
-            .padding(if (small < 90.dp) 10.dp else 14.dp),
+        Modifier.fillMaxSize().glass().then(onClick?.let { Modifier.clickable(onClick = it) } ?: Modifier).padding(10.dp),
+        contentAlignment = Alignment.Center,
     ) {
-        when {
-            // Büyük: simge üstte, ad ve durum altta.
-            h >= 140.dp && w >= 120.dp -> Column(Modifier.fillMaxSize()) {
-                iconCircle()
-                Spacer(Modifier.weight(1f))
-                labels(Modifier, TextAlign.Start)
-            }
-            // Yatay: simge solda, ad ve durum yanında.
-            w >= h * 1.4f && w >= 120.dp -> Row(Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
-                iconCircle()
-                Spacer(Modifier.width(12.dp))
-                labels(Modifier.weight(1f), TextAlign.Start)
-            }
-            // Küçük: ortada simge, altında ad ve durum.
-            else -> Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceEvenly) {
-                iconCircle()
-                labels(Modifier, TextAlign.Center)
-            }
+        if (vertical) Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            iconBox()
+            Spacer(Modifier.height(10.dp))
+            texts(Modifier)
+        } else Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            iconBox()
+            Spacer(Modifier.width(10.dp))
+            texts(Modifier.weight(1f))
         }
     }
 }
 
-/**
- * Oda sensörü widget'ı: büyük sıcaklık/nem; kapı açık, hareket ya da su kaçağı kırmızı/turuncu.
- * Pil yalnızca %20'nin altındaysa gösterilir.
- */
+/** Cihaz kanalı: HA anahtar kutusu; dokununca açılır/kapanır, açıkken türünün renginde, watt durumun yanında. */
 @Composable
-private fun SensorWidget(d: DeviceSnapshot, h: Dp) {
+private fun DeviceWidget(d: DeviceSnapshot, ch: Int, @Suppress("UNUSED_PARAMETER") accent: Color, w: Dp, h: Dp, editing: Boolean, onToggle: ((DeviceSnapshot, Int, Boolean) -> Unit)?) {
+    val on = d.online && d.switches[ch] == true
+    val kind = remember(d.name, d.isMultiChannel, d.hasEnergy, d.cloud, d.sensorOnly) { DeviceKinds.of(d) }
+    val name = if (d.isMultiChannel) "${d.name} · ${ch + 1}" else d.name
+    val watts = d.power?.takeIf { on && it >= 1 }?.let { " · " + boardWatts(it) }.orEmpty()
+    val state = stringResource(if (!d.online) R.string.label_offline_title else if (on) R.string.state_on_title else R.string.state_off_title) + watts
+    HaTile(
+        if (d.online) kind.icon() else Icons.Rounded.CloudOff, if (on) onColor(kind) else null, name, state, w, h,
+        onClick = if (onToggle != null && d.online && !editing) ({ onToggle(d, ch, !on) }) else null,
+    )
+}
+
+/** Oda sensörü: HA sensör kutusu; durumda sıcaklık/nem, kapı/hareket/su; düşük pil (%20 altı) sonda. */
+@Composable
+private fun SensorWidget(d: DeviceSnapshot, w: Dp, h: Dp) {
     val res = LocalContext.current.resources
     val s = d.sensors
     val alert = d.online && (d.sensorActive(SensorKind.WATER) == true || d.sensorActive(SensorKind.DOOR) == true)
     val busy = d.online && d.sensorActive(SensorKind.MOTION) == true
-    val accent = when { alert -> Red; busy -> Amber; else -> Teal }
-    val big = dpSp((h.value * 0.32f).coerceIn(18f, 56f))
-    val mid = dpSp((h.value * 0.18f).coerceIn(13f, 30f))
-    Column(
-        Modifier.fillMaxSize().glass(tint = if (alert) accent else null)
-            .alpha(if (d.online) 1f else 0.5f).padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            val icon = s.keys.firstOrNull { it != SensorKind.BATTERY }?.icon() ?: Icons.Rounded.Sensors
-            Icon(if (d.online) icon else Icons.Rounded.CloudOff, null, tint = if (d.online) accent else Dim, modifier = Modifier.size(16.dp))
-            Text(d.name, color = Dim, fontSize = 13.sp, fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        }
-        Row(verticalAlignment = Alignment.Bottom, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            s[SensorKind.TEMPERATURE]?.let { Text(formatNumber(it) + "°", color = Ink, fontSize = big, fontWeight = FontWeight.Normal, maxLines = 1) }
-            s[SensorKind.HUMIDITY]?.let { Text(formatNumber(it.roundToInt().toDouble()) + " %", color = Dim, fontSize = mid, maxLines = 1) }
-            for (k in listOf(SensorKind.DOOR, SensorKind.MOTION, SensorKind.WATER)) {
-                val v = s[k] ?: continue
-                Text(res.getString(k.stateLabel(v >= 0.5)), color = if (v >= 0.5) accent else Ink, fontSize = mid, fontWeight = FontWeight.Medium, maxLines = 1)
-            }
-            s[SensorKind.BATTERY]?.takeIf { it < 20 }?.let { Text("🔋 " + it.roundToInt() + " %", color = Amber, fontSize = 13.sp, maxLines = 1) }
-        }
+    val parts = buildList {
+        s[SensorKind.TEMPERATURE]?.let { add(formatNumber(it) + " °C") }
+        s[SensorKind.HUMIDITY]?.let { add(formatNumber(it.roundToInt().toDouble()) + " %") }
+        for (k in listOf(SensorKind.DOOR, SensorKind.MOTION, SensorKind.WATER)) s[k]?.let { add(res.getString(k.stateLabel(it >= 0.5))) }
+        s[SensorKind.BATTERY]?.takeIf { it < 20 }?.let { add("🔋 " + it.roundToInt() + " %") }
+    }
+    val state = if (!d.online) stringResource(R.string.label_offline_title) else parts.joinToString(" · ")
+    val icon = s.keys.firstOrNull { it != SensorKind.BATTERY }?.icon() ?: Icons.Rounded.Sensors
+    HaTile(if (d.online) icon else Icons.Rounded.CloudOff, if (!d.online) null else if (alert) Red else if (busy) Amber else Teal, d.name, state, w, h)
+}
+
+/** HA kart başlığı (card-header): 24 sp, normal kalınlık. */
+@Composable
+private fun CardHeader(text: String) {
+    Text(
+        text, color = Ink, fontSize = dpSp(24f), lineHeight = dpSp(32f), letterSpacing = (-0.3).sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+    )
+}
+
+/** HA varlık kartı (entities): başlık ve 40 dp satırlar. */
+@Composable
+private fun EntitiesCard(title: String, modifier: Modifier, rows: @Composable () -> Unit) {
+    Column(modifier.glass()) {
+        CardHeader(title)
+        Column(Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) { rows() }
     }
 }
 
 /** Açık kurallar: ad ve "Eğer → O zaman" özeti; uyarılar zil, otomasyonlar şimşek simgesiyle. */
 @Composable
 private fun Rules(list: List<Automation>, devices: List<DeviceSnapshot>, max: Int, modifier: Modifier) {
-    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        BoardTitle(stringResource(R.string.automations_rules_title) + " · " + list.size)
+    EntitiesCard(stringResource(R.string.automations_rules_title) + " · " + list.size, modifier) {
         for (a in list.take(max)) {
             val (cond, act) = describe(a, devices)
             val alert = a.action.kind == ActionKind.ALARM || a.action.kind == ActionKind.NOTIFY
             BoardRow(
                 if (alert) Icons.Rounded.NotificationsActive else Icons.Rounded.Bolt,
-                if (a.action.kind == ActionKind.ALARM) Red else if (alert) Amber else Dim,
+                if (a.action.kind == ActionKind.ALARM) Red else if (alert) Amber else StateIcon,
                 a.name.ifBlank { cond }, "", sub = "$cond → $act", lines = 1,
             )
         }
     }
 }
 
-/** Saat widget'ı: zemini yok (ana ekran saati gibi); tarih yalnız yükseklik yetince. */
+/** Saat kartı (HA clock kartı): ortada büyük saat, yer varsa altında tarih. */
 @Composable
 private fun ClockWidget(now: Long, w: Dp, h: Dp) {
     val locale = LocalConfiguration.current.locales[0]
@@ -923,16 +903,17 @@ private fun ClockWidget(now: Long, w: Dp, h: Dp) {
     val date = remember(now / 60_000, locale) {
         android.text.format.DateFormat.format(android.text.format.DateFormat.getBestDateTimePattern(locale, "EEEEdMMMM"), now).toString()
     }
-    val showDate = h >= 110.dp
-    val size = minOf(h.value * (if (showDate) 0.6f else 0.78f), w.value * (if (h24) 0.27f else 0.2f))
-    Column(Modifier.fillMaxSize().padding(horizontal = 4.dp), verticalArrangement = Arrangement.Center) {
-        Text(
-            time, color = Ink, fontSize = dpSp(size), fontWeight = FontWeight.Light, letterSpacing = (-1).sp,
-            lineHeight = dpSp(size * 1.04f), maxLines = 1, softWrap = false,
-        )
+    val inner = h - 24.dp
+    val showDate = inner >= 80.dp
+    val size = minOf(inner.value * (if (showDate) 0.6f else 0.8f), w.value * (if (h24) 0.25f else 0.19f))
+    Column(
+        Modifier.fillMaxSize().glass().padding(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center,
+    ) {
+        Text(time, color = Ink, fontSize = dpSp(size), lineHeight = dpSp(size * 1.1f), maxLines = 1, softWrap = false)
         if (showDate) Text(
-            date.replaceFirstChar { it.titlecase(locale) }, color = Dim, fontSize = dpSp((h.value * 0.085f).coerceIn(13f, 24f)),
-            maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(start = 4.dp),
+            date.replaceFirstChar { it.titlecase(locale) }, color = Dim, fontSize = dpSp((inner.value * 0.14f).coerceIn(14f, 22f)),
+            maxLines = 1, overflow = TextOverflow.Ellipsis,
         )
     }
 }
@@ -940,24 +921,32 @@ private fun ClockWidget(now: Long, w: Dp, h: Dp) {
 @Composable
 private fun is24h(): Boolean = android.text.format.DateFormat.is24HourFormat(LocalContext.current)
 
-/** Hava widget'ı: simge, büyük sıcaklık; genişlik yetince durum ve en düşük/en yüksek. */
+/** Hava kartı (HA weather-forecast): solda simge, durum ve en düşük/en yüksek; sağda büyük sıcaklık. */
 @Composable
 private fun WeatherWidget(w: WeatherClient.Today?, hasLocation: Boolean, width: Dp, h: Dp) {
-    Row(Modifier.fillMaxSize().padding(horizontal = 6.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+    Row(
+        Modifier.fillMaxSize().glass().padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         if (w == null) {
-            if (!hasLocation) Text(stringResource(R.string.board_no_location), color = Dim, fontSize = 13.sp, maxLines = 3, overflow = TextOverflow.Ellipsis)
+            if (!hasLocation) Text(stringResource(R.string.board_no_location), color = Dim, fontSize = 14.sp, maxLines = 3, overflow = TextOverflow.Ellipsis)
             return@Row
         }
         val (icon, label) = weatherLook(w.code, w.isDay)
-        Icon(icon, null, tint = if (w.code == 0 && w.isDay) Amber else Ink.copy(alpha = 0.85f), modifier = Modifier.size((h * 0.45f).coerceIn(24.dp, 96.dp)))
-        Text("${w.temp.roundToInt()}°", color = Ink, fontSize = dpSp((h.value * 0.46f).coerceIn(20f, 88f)), fontWeight = FontWeight.Light, maxLines = 1)
-        if (width >= 170.dp) Column {
-            Text(stringResource(label), color = Ink, fontSize = dpSp((h.value * 0.17f).coerceIn(13f, 24f)), fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        val sunny = w.code <= 2 && w.isDay
+        Icon(icon, null, tint = if (sunny) Color(0xFFFFC107) else Color(0xFFB0BEC5), modifier = Modifier.size(((h - 16.dp) * 0.8f).coerceIn(32.dp, 96.dp)))
+        if (width >= 200.dp) Column(Modifier.weight(1f)) {
+            Text(stringResource(label), color = Ink, fontSize = dpSp(16f), lineHeight = dpSp(22f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             val parts = listOfNotNull(
-                if (w.min != null && w.max != null) "↓${w.min.roundToInt()}°  ↑${w.max.roundToInt()}°" else null,
+                if (w.min != null && w.max != null) "${w.max.roundToInt()}° / ${w.min.roundToInt()}°" else null,
                 w.rainChance?.takeIf { it > 0 }?.let { stringResource(R.string.board_rain, it) },
             )
-            if (parts.isNotEmpty()) Text(parts.joinToString("  ·  "), color = Dim, fontSize = dpSp((h.value * 0.14f).coerceIn(11f, 20f)), maxLines = 2)
+            if (parts.isNotEmpty()) Text(parts.joinToString(" · "), color = Dim, fontSize = dpSp(14f), maxLines = 1, overflow = TextOverflow.Ellipsis)
+        } else Spacer(Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.Top) {
+            val t = (h.value * 0.3f).coerceIn(28f, 64f)
+            Text("${w.temp.roundToInt()}", color = Ink, fontSize = dpSp(t), lineHeight = dpSp(t * 1.1f), maxLines = 1)
+            Text("°C", color = Dim, fontSize = dpSp(t * 0.5f), maxLines = 1, modifier = Modifier.padding(top = (t * 0.12f).dp))
         }
     }
 }
@@ -976,9 +965,9 @@ internal fun weatherLook(code: Int, day: Boolean): Pair<ImageVector, Int> = when
     else -> Icons.Rounded.Cloud to R.string.weather_cloudy
 }
 
-/** Kritik durum: alarm > bağlantı sorunu > çevrimdışı cihaz > her şey yolunda; altında evde/dışarıda. */
+/** Kritik durum (HA tile): alarm > bağlantı sorunu > çevrimdışı cihaz > her şey yolunda; durumda ayrıntı ve evde/dışarıda. */
 @Composable
-private fun StatusWidget(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean, accent: Color, h: Dp) {
+private fun StatusWidget(alarm: List<String>, conn: ConnState, offline: List<String>, watched: Int, away: Boolean, w: Dp, h: Dp) {
     val (color, title, detail) = when {
         alarm.isNotEmpty() -> Triple(Red, stringResource(R.string.board_alarm), alarm.last())
         conn == ConnState.NO_INTERNET -> Triple(Amber, stringResource(R.string.board_no_internet), null)
@@ -988,29 +977,16 @@ private fun StatusWidget(alarm: List<String>, conn: ConnState, offline: List<Str
         offline.isNotEmpty() -> Triple(Amber, stringResource(R.string.board_offline, offline.size), offline.joinToString(", "))
         else -> Triple(Ok, stringResource(R.string.board_all_ok), stringResource(R.string.board_watching, watched))
     }
-    val ok = color == Ok
-    Row(
-        Modifier.fillMaxSize().glass(tint = if (ok) null else color).padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp),
-    ) {
-        Box(Modifier.size(40.dp).background(color.copy(alpha = 0.16f), CircleShape), contentAlignment = Alignment.Center) {
-            Icon(if (ok) Icons.Rounded.CheckCircle else Icons.Rounded.ErrorOutline, null, tint = color, modifier = Modifier.size(22.dp))
-        }
-        Column(Modifier.weight(1f)) {
-            Text(title, color = Ink, fontSize = dpSp((h.value * 0.17f).coerceIn(15f, 22f)), fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-            val sub = listOfNotNull(detail, stringResource(if (away) R.string.board_away else R.string.board_home)).joinToString(" · ")
-            Text(sub, color = Dim, fontSize = dpSp((h.value * 0.13f).coerceIn(12f, 20f)), maxLines = maxOf(1, ((h - 50.dp) / 18.dp).toInt()), overflow = TextOverflow.Ellipsis)
-        }
-    }
+    val sub = listOfNotNull(detail, stringResource(if (away) R.string.board_away else R.string.board_home)).joinToString(" · ")
+    HaTile(if (color == Ok) Icons.Rounded.CheckCircle else Icons.Rounded.ErrorOutline, color, title, sub, w, h)
 }
 
-/** Güç widget'ı: yarım daire gösterge; yükseklik yetince son 6 saatin eğrisi. */
+/** Güç kartı (HA gauge): yarım daire gösterge; yükseklik yetince son 6 saatin eğrisi. */
 @Composable
 private fun PowerWidget(watts: Double, p: PowerView?, w: Dp, h: Dp) {
-    Box(Modifier.fillMaxSize().glass().padding(12.dp), contentAlignment = Alignment.Center) {
-        val iw = w - 24.dp
-        val ih = h - 24.dp
+    Box(Modifier.fillMaxSize().glass().padding(16.dp), contentAlignment = Alignment.Center) {
+        val iw = w - 32.dp
+        val ih = h - 32.dp
         val withChart = minOf(iw, (ih - 72.dp) * 2)
         val chart = p != null && withChart >= 120.dp
         val width = if (chart) withChart else minOf(iw, (ih - 4.dp) * 2)
@@ -1025,7 +1001,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
     val max = StandbyBoard.gaugeMax(peak)
     val frac = (watts / max).toFloat().coerceIn(0f, 1f)
     val arcColor = when {
-        frac < 0.5f -> Teal
+        frac < 0.5f -> Ok
         frac < 0.8f -> Amber
         else -> Red
     }
@@ -1042,7 +1018,7 @@ private fun PowerGauge(watts: Double, series: List<Double>, todayKwh: Double, wi
                 }
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(boardWatts(watts), color = Ink, fontSize = dpSp((width.value * 0.14f).coerceIn(16f, 48f)), fontWeight = FontWeight.Light, maxLines = 1)
+                Text(boardWatts(watts), color = Ink, fontSize = dpSp((width.value * 0.12f).coerceIn(16f, 40f)), maxLines = 1)
                 Text(stringResource(R.string.board_power_now, boardWatts(max)), color = Dim, fontSize = dpSp((width.value * 0.05f).coerceIn(10f, 15f)), maxLines = 1)
             }
         }
@@ -1073,20 +1049,14 @@ private fun boardWatts(w: Double): String =
     if (w >= 10_000) String.format(Locale.getDefault(), "%.1f kW", w / 1000) else "${w.roundToInt()} W"
 
 @Composable
-private fun BoardTitle(text: String) {
-    Text(text, color = Ink, fontSize = 15.sp, fontWeight = FontWeight.SemiBold, maxLines = 1)
-}
-
-@Composable
 private fun Recent(list: List<LoggedEvent>, modifier: Modifier) {
     val context = LocalContext.current
     val strings = remember(context) { EventLog.strings(context) }
-    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        BoardTitle(stringResource(R.string.board_recent))
-        if (list.isEmpty()) Text(stringResource(R.string.board_no_recent), color = Dim, fontSize = 15.sp)
+    EntitiesCard(stringResource(R.string.board_recent), modifier) {
+        if (list.isEmpty()) Text(stringResource(R.string.board_no_recent), color = Dim, fontSize = 14.sp)
         for (e in list) {
             val alarm = e.action == AlertAction.ALARM.name
-            BoardRow(icon = e.icon(), tint = if (alarm) Red else Dim, text = e.text(strings), time = eventTime(e.time), lines = 2)
+            BoardRow(icon = e.icon(), tint = if (alarm) Red else StateIcon, text = e.text(strings), time = eventTime(e.time), lines = 2)
         }
     }
 }
@@ -1107,9 +1077,8 @@ private fun eventTime(t: Long): String {
 private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, modifier: Modifier) {
     val context = LocalContext.current
     val durations = remember(context) { EventLog.durations(context) }
-    Column(modifier.glass().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        BoardTitle(stringResource(R.string.board_upcoming))
-        if (list.isEmpty()) Text(stringResource(R.string.board_no_upcoming), color = Dim, fontSize = 15.sp)
+    EntitiesCard(stringResource(R.string.board_upcoming), modifier) {
+        if (list.isEmpty()) Text(stringResource(R.string.board_no_upcoming), color = Dim, fontSize = 14.sp)
         for (u in list) {
             val (icon, kind) = when (u.kind) {
                 UpcomingKind.SUNRISE -> Icons.Rounded.WbTwilight to R.string.board_kind_sunrise
@@ -1122,7 +1091,7 @@ private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, modifier: Mod
             // Dakikaya yuvarlanır: saniye saniye değişen yazı gözü yormasın.
             val left = ((u.time - now + 59_999) / 60_000) * 60_000
             BoardRow(
-                icon = icon, tint = Teal,
+                icon = icon, tint = StateIcon,
                 text = "${u.name} · ${stringResource(kind)}",
                 time = DateFormat.getTimeInstance(DateFormat.SHORT).format(Date(u.time)),
                 sub = stringResource(R.string.board_in, DurationText.format(left, durations)),
@@ -1131,16 +1100,16 @@ private fun Upcoming(list: List<StandbyBoard.Upcoming>, now: Long, modifier: Mod
     }
 }
 
+/** HA varlık satırı: 40 dp simge alanı (zeminsiz), 16 dp boşluk, ad; sağda zaman. */
 @Composable
 private fun BoardRow(icon: ImageVector, tint: Color, text: String, time: String, sub: String? = null, lines: Int = 1) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        Box(Modifier.size(32.dp).clip(CircleShape).background(tint.copy(alpha = 0.12f)), contentAlignment = Alignment.Center) {
-            Icon(icon, null, tint = tint, modifier = Modifier.size(17.dp))
-        }
+    Row(Modifier.heightIn(min = 40.dp), verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) { Icon(icon, null, tint = tint, modifier = Modifier.size(24.dp)) }
+        Spacer(Modifier.width(16.dp))
         Column(Modifier.weight(1f)) {
-            Text(text, color = Ink.copy(alpha = 0.92f), fontSize = 14.sp, lineHeight = 19.sp, maxLines = lines, overflow = TextOverflow.Ellipsis)
-            if (sub != null) Text(sub, color = Dim, fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(text, color = Ink, fontSize = dpSp(14f), lineHeight = dpSp(20f), maxLines = lines, overflow = TextOverflow.Ellipsis)
+            if (sub != null) Text(sub, color = Dim, fontSize = dpSp(12f), lineHeight = dpSp(16f), maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
-        Text(time, color = Dim, fontSize = 12.sp, maxLines = 1)
+        if (time.isNotEmpty()) Text(time, color = Dim, fontSize = dpSp(14f), maxLines = 1, modifier = Modifier.padding(start = 8.dp))
     }
 }

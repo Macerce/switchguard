@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.50.0 — 2026-11-25
+**New**
+- Standby screen now uses the Home Assistant card layout: 56 dp rows with 8 dp gaps, #1C1C1C cards with a thin divider border and 12 dp corners, tile cards for devices, sensors and status (36 dp round icon, name above state), an entities-style card with a large title for recent events, upcoming and rules, a centred clock card, a weather card with the temperature on the right and a gauge card for power. Your saved layout is converted to the new rows automatically.
+
 ## 2.49.2 — 2026-11-25
 **New**
 - Standby screen redesigned in a calm home-dashboard style: solid dark cards, device name first with its state underneath, the icon of a device that is on is coloured by type (lights and plugs yellow, water blue, cooling cyan, heating orange), live watts next to the state, no moving glow in the background.

@@ -10,8 +10,9 @@ class StandbyGridTest {
     fun parseFormatRoundTrip() {
         val s = StandbyGrid.State(listOf(Item("clock", 4, 2, 3, 1), Item("dev:a:b:1", 2, 1)), setOf("rules"))
         assertEquals(s, StandbyGrid.parse(StandbyGrid.format(s)))
-        // Konumsuz eski kayıt da okunur.
-        assertEquals(Item("clock", 4, 2), StandbyGrid.parse("clock=4x2|").items.single())
+        // Konumsuz eski (kare hücreli) kayıt da okunur; satırlar 56 dp ızgaraya çevrilir.
+        assertEquals(Item("clock", 4, 1), StandbyGrid.parse("clock=4x2|").items.single())
+        assertEquals(Item("rules", 8, 4, 0, 3), StandbyGrid.parse("rules=8x5@0,4|").items.single())
         assertEquals(StandbyGrid.State(emptyList(), emptySet()), StandbyGrid.parse("CLOCK:0:100"))
         assertEquals("a:b" to 1, StandbyGrid.parseDevice("dev:a:b:1"))
         assertNull(StandbyGrid.parseSensor("dev:x:0"))
@@ -52,7 +53,7 @@ class StandbyGridTest {
         // Kendi alanına dokunarak büyüme serbest.
         val grown = StandbyGrid.place(placed, "a", 0, 0, 2, 3, 8)!!
         assertEquals(3, grown.first().h)
-        assertEquals(2 to 2, StandbyGrid.clampSize("dev:x:0", 1, 1, 8))
+        assertEquals(2 to 1, StandbyGrid.clampSize("dev:x:0", 1, 1, 8))
         assertEquals(8 to StandbyGrid.MAX_H, StandbyGrid.clampSize("dev:x:0", 30, 99, 8))
     }
 

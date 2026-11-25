@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.50.0 — 2026-11-25
+**Yeni**
+- Bekleme ekranı Home Assistant kart düzenine geçti: 56 dp satırlar ve 8 dp aralık, ince kenarlı 12 dp köşeli #1C1C1C kartlar; cihaz, sensör ve durum için "tile" kartı (36 dp yuvarlak simge, ad üstte durum altta), son hareketler/yakında/kurallar için büyük başlıklı varlık kartı, ortalı saat kartı, sıcaklığı sağda hava kartı ve güç için gösterge kartı. Kayıtlı düzeniniz yeni satırlara kendiliğinden çevrilir.
+
 ## 2.49.2 — 2026-11-25
 **Yeni**
 - Bekleme ekranı sakin bir ev panosu düzenine geçti: düz koyu kartlar, önce cihaz adı altında durumu, açık cihazın simgesi türüne göre renkli (ışık ve priz sarı, su mavi, soğutma camgöbeği, ısıtma turuncu), durum yanında anlık watt, zeminde hareketli ışık yok.

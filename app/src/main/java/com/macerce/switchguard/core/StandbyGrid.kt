@@ -44,21 +44,25 @@ object StandbyGrid {
      * sayısına kadar serbestçe büyütülür.
      */
     fun defaultSize(id: String): Pair<Int, Int> = when {
-        id == CLOCK -> 8 to 4
-        id == WEATHER || id == STATUS -> 8 to 2
-        id == POWER -> 8 to 4
-        id == RECENT || id == UPCOMING || id == RULES -> 8 to 5
-        else -> 4 to 2
+        id == CLOCK || id == WEATHER -> 8 to 2
+        id == STATUS -> 8 to 1
+        id == POWER -> 8 to 3
+        id == RECENT || id == UPCOMING || id == RULES -> 8 to 4
+        else -> 4 to 1
     }
 
     fun minSize(id: String): Pair<Int, Int> = when {
-        id == CLOCK || id == WEATHER || id == STATUS -> 3 to 2
-        id == POWER -> 4 to 3
-        id == RECENT || id == UPCOMING || id == RULES -> 4 to 3
-        else -> 2 to 2
+        id == CLOCK || id == WEATHER || id == STATUS -> 3 to 1
+        id == POWER -> 4 to 2
+        id == RECENT || id == UPCOMING || id == RULES -> 4 to 2
+        else -> 2 to 1
     }
 
-    const val MAX_H = 24
+    const val MAX_H = 16
+
+    /** Satır yüksekliği 56 dp oldu (Home Assistant bölüm ızgarası); eski kare hücreli (46 dp adım) kayıt buna çevrilir. */
+    private const val V2 = "v2#"
+    private fun oldRows(n: Int) = Math.round(n * 46 / 64.0).toInt()
 
     fun item(id: String): Item = defaultSize(id).let { (w, h) -> Item(id, w, h) }
 
@@ -71,22 +75,24 @@ object StandbyGrid {
     /** "clock=4x2@0,0;dev:abc:0=2x1|rules;sen:x" — konum isteğe bağlı; bozuk parçalar atlanır. */
     fun parse(text: String?): State {
         if (text.isNullOrBlank()) return State(emptyList(), emptySet())
-        val (itemsPart, removedPart) = text.split('|', limit = 2).let { it[0] to it.getOrElse(1) { "" } }
+        val old = !text.startsWith(V2)
+        val (itemsPart, removedPart) = text.removePrefix(V2).split('|', limit = 2).let { it[0] to it.getOrElse(1) { "" } }
         val items = itemsPart.split(';').mapNotNull { part ->
             val eq = part.lastIndexOf('=')
             if (eq <= 0) return@mapNotNull null
             val id = part.substring(0, eq)
             val spec = part.substring(eq + 1).split('@', limit = 2)
-            val (w, h) = spec[0].split('x').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 } ?: return@mapNotNull null
-            if (w !in 1..60 || h !in 1..MAX_H) return@mapNotNull null
+            val (w, h0) = spec[0].split('x').mapNotNull { it.toIntOrNull() }.takeIf { it.size == 2 } ?: return@mapNotNull null
+            val h = if (old) oldRows(h0).coerceIn(1, MAX_H) else h0
+            if (w !in 1..60 || h0 < 1 || h !in 1..MAX_H) return@mapNotNull null
             val pos = spec.getOrNull(1)?.split(',')?.mapNotNull { it.toIntOrNull() }?.takeIf { it.size == 2 && it[0] >= 0 && it[1] >= 0 }
-            Item(id, w, h, pos?.get(0) ?: -1, pos?.get(1) ?: -1)
+            Item(id, w, h, pos?.get(0) ?: -1, pos?.get(1)?.let { if (old) oldRows(it) else it } ?: -1)
         }.distinctBy { it.id }
         val removed = removedPart.split(';').filter { it.isNotBlank() }.toSet() - items.map { it.id }.toSet()
         return State(items, removed)
     }
 
-    fun format(state: State): String =
+    fun format(state: State): String = V2 +
         state.items.joinToString(";") { "${it.id}=${it.w}x${it.h}" + if (it.x >= 0 && it.y >= 0) "@${it.x},${it.y}" else "" } +
             "|" + state.removed.joinToString(";")
 
