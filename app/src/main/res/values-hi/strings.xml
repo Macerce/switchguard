@@ -1994,4 +1994,12 @@
         <item quantity="one">%1$d डिवाइस या आइटम यहाँ नहीं मिला: एडिटर में चुनें।</item>
         <item quantity="other">%1$d डिवाइस या आइटम यहाँ नहीं मिले: एडिटर में चुनें।</item>
     </plurals>
+    <string name="rule_to_device">डिवाइस में लिखें</string>
+    <string name="rule_to_device_action">लिखें</string>
+    <string name="rule_to_device_done">डिवाइस में लिख दिया गया। दो बार न चले, इसलिए इस फ़ोन का नियम बंद कर दिया गया; टाइमर डिवाइस पेज पर हैं।</string>
+    <string name="rule_to_device_failed">डिवाइस में नहीं लिखा जा सका: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">यह नियम डिवाइस में ही %1$d टाइमर बन जाएगा, ताकि फ़ोन बंद या ऑफ़लाइन होने पर भी चले। फिर इस फ़ोन का नियम बंद हो जाएगा।</item>
+        <item quantity="other">यह नियम डिवाइसों में ही %1$d टाइमर बन जाएगा, ताकि फ़ोन बंद या ऑफ़लाइन होने पर भी चले। फिर इस फ़ोन का नियम बंद हो जाएगा।</item>
+    </plurals>
 </resources>

@@ -2073,4 +2073,13 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
         <item quantity="many">%1$d dispositivi o elementi non trovati qui: sceglili nell’editor.</item>
         <item quantity="other">%1$d dispositivi o elementi non trovati qui: sceglili nell’editor.</item>
     </plurals>
+    <string name="rule_to_device">Scrivi nel dispositivo</string>
+    <string name="rule_to_device_action">Scrivi</string>
+    <string name="rule_to_device_done">Scritto nel dispositivo. La regola su questo telefono è stata disattivata per non eseguirla due volte; i timer sono nella pagina del dispositivo.</string>
+    <string name="rule_to_device_failed">Impossibile scrivere nel dispositivo: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">La regola diventa %1$d timer nel dispositivo stesso e funziona anche a telefono spento o offline. Poi viene disattivata su questo telefono.</item>
+        <item quantity="many">La regola diventa %1$d timer nei dispositivi stessi e funziona anche a telefono spento o offline. Poi viene disattivata su questo telefono.</item>
+        <item quantity="other">La regola diventa %1$d timer nei dispositivi stessi e funziona anche a telefono spento o offline. Poi viene disattivata su questo telefono.</item>
+    </plurals>
 </resources>

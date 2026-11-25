@@ -1999,4 +1999,11 @@
     <plurals name="rule_import_unresolved">
         <item quantity="other">ไม่พบอุปกรณ์หรือรายการ %1$d รายการที่นี่ ให้เลือกในตัวแก้ไข</item>
     </plurals>
+    <string name="rule_to_device">เขียนลงอุปกรณ์</string>
+    <string name="rule_to_device_action">เขียน</string>
+    <string name="rule_to_device_done">เขียนลงอุปกรณ์แล้ว ปิดกฎบนโทรศัพท์นี้เพื่อไม่ให้ทำงานซ้ำ ตัวตั้งเวลาอยู่ในหน้าอุปกรณ์</string>
+    <string name="rule_to_device_failed">เขียนลงอุปกรณ์ไม่สำเร็จ: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">กฎนี้จะกลายเป็นตัวตั้งเวลา %1$d รายการบนอุปกรณ์เอง จึงทำงานได้แม้โทรศัพท์ปิดหรือออฟไลน์ จากนั้นกฎบนโทรศัพท์นี้จะถูกปิด</item>
+    </plurals>
 </resources>

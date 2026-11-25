@@ -2072,4 +2072,13 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
         <item quantity="many">%1$d dispositivos o elementos no se encontraron aquí: elígelos en el editor.</item>
         <item quantity="other">%1$d dispositivos o elementos no se encontraron aquí: elígelos en el editor.</item>
     </plurals>
+    <string name="rule_to_device">Guardar en el dispositivo</string>
+    <string name="rule_to_device_action">Guardar</string>
+    <string name="rule_to_device_done">Guardado en el dispositivo. La regla de este teléfono se desactivó para que no se ejecute dos veces; los temporizadores están en la página del dispositivo.</string>
+    <string name="rule_to_device_failed">No se pudo guardar en el dispositivo: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">La regla se convierte en %1$d temporizador en el propio dispositivo y funciona aunque el teléfono esté apagado o sin conexión. Después se desactiva en este teléfono.</item>
+        <item quantity="many">La regla se convierte en %1$d temporizadores en los propios dispositivos y funciona aunque el teléfono esté apagado o sin conexión. Después se desactiva en este teléfono.</item>
+        <item quantity="other">La regla se convierte en %1$d temporizadores en los propios dispositivos y funciona aunque el teléfono esté apagado o sin conexión. Después se desactiva en este teléfono.</item>
+    </plurals>
 </resources>

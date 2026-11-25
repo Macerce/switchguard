@@ -2063,4 +2063,12 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
         <item quantity="one">%1$d Gerät oder Element wurde hier nicht gefunden: im Editor auswählen.</item>
         <item quantity="other">%1$d Geräte oder Elemente wurden hier nicht gefunden: im Editor auswählen.</item>
     </plurals>
+    <string name="rule_to_device">Ins Gerät schreiben</string>
+    <string name="rule_to_device_action">Schreiben</string>
+    <string name="rule_to_device_done">Ins Gerät geschrieben. Die Regel auf diesem Telefon wurde ausgeschaltet, damit sie nicht doppelt läuft; die Zeitpläne stehen auf der Geräteseite.</string>
+    <string name="rule_to_device_failed">Konnte nicht ins Gerät schreiben: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">Die Regel wird zu %1$d Zeitplan im Gerät selbst und läuft auch, wenn das Telefon aus oder offline ist. Danach wird die Regel auf dem Telefon ausgeschaltet.</item>
+        <item quantity="other">Die Regel wird zu %1$d Zeitplänen in den Geräten selbst und läuft auch, wenn das Telefon aus oder offline ist. Danach wird die Regel auf dem Telefon ausgeschaltet.</item>
+    </plurals>
 </resources>

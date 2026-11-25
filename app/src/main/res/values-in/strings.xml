@@ -1957,4 +1957,11 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <plurals name="rule_import_unresolved">
         <item quantity="other">%1$d perangkat atau item tidak ditemukan di sini: pilih di editor.</item>
     </plurals>
+    <string name="rule_to_device">Tulis ke perangkat</string>
+    <string name="rule_to_device_action">Tulis</string>
+    <string name="rule_to_device_done">Ditulis ke perangkat. Aturan di ponsel ini dimatikan agar tidak berjalan dua kali; timer ada di halaman perangkat.</string>
+    <string name="rule_to_device_failed">Gagal menulis ke perangkat: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">Aturan ini menjadi %1$d timer di perangkat itu sendiri, jadi tetap berjalan saat ponsel mati atau offline. Lalu aturan di ponsel ini dimatikan.</item>
+    </plurals>
 </resources>

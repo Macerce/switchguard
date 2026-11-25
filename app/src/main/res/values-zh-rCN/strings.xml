@@ -2006,4 +2006,11 @@
     <plurals name="rule_import_unresolved">
         <item quantity="other">此处找不到 %1$d 个设备或项目：请在编辑器中选择。</item>
     </plurals>
+    <string name="rule_to_device">写入设备</string>
+    <string name="rule_to_device_action">写入</string>
+    <string name="rule_to_device_done">已写入设备。为避免重复执行，本手机上的规则已关闭；定时器在设备页面中。</string>
+    <string name="rule_to_device_failed">无法写入设备：%1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">此规则将变为设备上的 %1$d 个定时器，即使手机关机或离线也会运行。之后本手机上的规则会关闭。</item>
+    </plurals>
 </resources>

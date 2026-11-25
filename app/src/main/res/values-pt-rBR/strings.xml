@@ -2102,4 +2102,13 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
         <item quantity="many">%1$d dispositivos ou itens não foram encontrados aqui: escolha no editor.</item>
         <item quantity="other">%1$d dispositivos ou itens não foram encontrados aqui: escolha no editor.</item>
     </plurals>
+    <string name="rule_to_device">Gravar no dispositivo</string>
+    <string name="rule_to_device_action">Gravar</string>
+    <string name="rule_to_device_done">Gravado no dispositivo. A regra deste celular foi desligada para não rodar duas vezes; os timers estão na página do dispositivo.</string>
+    <string name="rule_to_device_failed">Não foi possível gravar no dispositivo: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">A regra vira %1$d timer no próprio dispositivo e funciona mesmo com o celular desligado ou sem internet. Depois ela é desligada neste celular.</item>
+        <item quantity="many">A regra vira %1$d timers nos próprios dispositivos e funciona mesmo com o celular desligado ou sem internet. Depois ela é desligada neste celular.</item>
+        <item quantity="other">A regra vira %1$d timers nos próprios dispositivos e funciona mesmo com o celular desligado ou sem internet. Depois ela é desligada neste celular.</item>
+    </plurals>
 </resources>

@@ -1999,4 +1999,11 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <plurals name="rule_import_unresolved">
         <item quantity="other">Không tìm thấy %1$d thiết bị hoặc mục ở đây: hãy chọn trong trình chỉnh sửa.</item>
     </plurals>
+    <string name="rule_to_device">Ghi vào thiết bị</string>
+    <string name="rule_to_device_action">Ghi</string>
+    <string name="rule_to_device_done">Đã ghi vào thiết bị. Quy tắc trên điện thoại này đã tắt để không chạy hai lần; bộ hẹn giờ nằm ở trang thiết bị.</string>
+    <string name="rule_to_device_failed">Không ghi được vào thiết bị: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">Quy tắc này trở thành %1$d bộ hẹn giờ ngay trên thiết bị, nên vẫn chạy khi điện thoại tắt hoặc mất mạng. Sau đó quy tắc trên điện thoại sẽ tắt.</item>
+    </plurals>
 </resources>

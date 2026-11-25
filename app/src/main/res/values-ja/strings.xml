@@ -2028,4 +2028,11 @@
     <plurals name="rule_import_unresolved">
         <item quantity="other">%1$d 件の機器または項目が見つかりません。エディターで選んでください。</item>
     </plurals>
+    <string name="rule_to_device">機器に書き込む</string>
+    <string name="rule_to_device_action">書き込む</string>
+    <string name="rule_to_device_done">機器に書き込みました。二重に動かないよう、この電話のルールはオフにしました。タイマーは機器ページにあります。</string>
+    <string name="rule_to_device_failed">機器に書き込めませんでした: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">このルールは機器自体の %1$d 件のタイマーになり、電話がオフやオフラインでも動作します。その後、この電話のルールはオフになります。</item>
+    </plurals>
 </resources>

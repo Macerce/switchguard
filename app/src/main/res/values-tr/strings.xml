@@ -2068,4 +2068,12 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
         <item quantity="one">%1$d cihaz ya da öğe burada bulunamadı: düzenleyicide seçin.</item>
         <item quantity="other">%1$d cihaz ya da öğe burada bulunamadı: düzenleyicide seçin.</item>
     </plurals>
+    <string name="rule_to_device">Cihaza yaz</string>
+    <string name="rule_to_device_action">Yaz</string>
+    <string name="rule_to_device_done">Cihaza yazıldı. İki kez çalışmasın diye bu telefondaki kural kapatıldı; zamanlayıcılar cihaz sayfasında.</string>
+    <string name="rule_to_device_failed">Cihaza yazılamadı: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">Bu kural cihazın kendisinde %1$d zamanlayıcı olur; telefon kapalı ya da internetsizken de çalışır. Ardından bu telefondaki kural kapatılır.</item>
+        <item quantity="other">Bu kural cihazların kendisinde %1$d zamanlayıcı olur; telefon kapalı ya da internetsizken de çalışır. Ardından bu telefondaki kural kapatılır.</item>
+    </plurals>
 </resources>

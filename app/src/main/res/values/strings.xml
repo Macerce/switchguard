@@ -2072,4 +2072,12 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
         <item quantity="one">%1$d device or item was not found here: choose it in the editor.</item>
         <item quantity="other">%1$d devices or items were not found here: choose them in the editor.</item>
     </plurals>
+    <string name="rule_to_device">Write to device</string>
+    <string name="rule_to_device_action">Write</string>
+    <string name="rule_to_device_done">Written to the device. The rule on this phone was switched off so it does not run twice; the timers are on the device page.</string>
+    <string name="rule_to_device_failed">Could not write to the device: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">This rule becomes %1$d timer on the device itself, so it runs even when this phone is off or offline. The rule on this phone is then switched off.</item>
+        <item quantity="other">This rule becomes %1$d timers on the devices themselves, so it runs even when this phone is off or offline. The rule on this phone is then switched off.</item>
+    </plurals>
 </resources>

@@ -2139,4 +2139,14 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
         <item quantity="many">Nie znaleziono %1$d urządzeń lub elementów: wybierz je w edytorze.</item>
         <item quantity="other">Nie znaleziono %1$d urządzeń lub elementów: wybierz je w edytorze.</item>
     </plurals>
+    <string name="rule_to_device">Zapisz w urządzeniu</string>
+    <string name="rule_to_device_action">Zapisz</string>
+    <string name="rule_to_device_done">Zapisano w urządzeniu. Reguła na tym telefonie została wyłączona, by nie działała podwójnie; harmonogramy są na stronie urządzenia.</string>
+    <string name="rule_to_device_failed">Nie udało się zapisać w urządzeniu: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">Reguła stanie się %1$d harmonogramem w samym urządzeniu i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
+        <item quantity="few">Reguła stanie się %1$d harmonogramami w urządzeniach i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
+        <item quantity="many">Reguła stanie się %1$d harmonogramami w urządzeniach i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
+        <item quantity="other">Reguła stanie się %1$d harmonogramami w urządzeniach i zadziała nawet przy wyłączonym telefonie. Potem zostanie wyłączona na tym telefonie.</item>
+    </plurals>
 </resources>

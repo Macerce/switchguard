@@ -112,6 +112,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Download
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material.icons.rounded.Memory
 import androidx.compose.material.icons.rounded.AutoMode
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Button
@@ -888,6 +889,13 @@ fun AutomationEditor(
 
     var showShare by remember { mutableStateOf(false) }
     if (showShare && existing != null) RuleShareDialog(existing) { showShare = false }
+    // Basit saatli kural cihazın kendi zamanlayıcısına da yazılabilir (telefon kapalıyken de çalışsın).
+    val toDeviceContext = LocalContext.current
+    val toDevice = remember(existing) {
+        existing?.let { com.macerce.switchguard.core.RuleToDevice.plan(it, Store.get(toDeviceContext).snapshots.associateBy { d -> d.id }) }
+    }
+    var askToDevice by remember { mutableStateOf(false) }
+    if (askToDevice && existing != null && toDevice != null) RuleToDeviceDialog(existing, toDevice) { askToDevice = false }
     Column(modifier.fillMaxSize()) {
         AppTopBar(
             stringResource(
@@ -911,6 +919,9 @@ fun AutomationEditor(
                     }
                     if (!alert) IconButton(modifier = Modifier.tvFocusRing(), onClick = { showShare = true }) {
                         Icon(Icons.Rounded.Share, stringResource(R.string.rule_share))
+                    }
+                    if (toDevice != null) IconButton(modifier = Modifier.tvFocusRing(), onClick = { askToDevice = true }) {
+                        Icon(Icons.Rounded.Memory, stringResource(R.string.rule_to_device))
                     }
                     IconButton(modifier = Modifier.tvFocusRing(), onClick = { confirmDelete = true }) {
                         Icon(Icons.Rounded.Delete, stringResource(R.string.action_delete))

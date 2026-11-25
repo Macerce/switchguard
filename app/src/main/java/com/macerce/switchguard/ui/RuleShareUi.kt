@@ -33,6 +33,7 @@ import com.macerce.switchguard.R
 import com.macerce.switchguard.core.Automation
 import com.macerce.switchguard.core.RuleShare
 import com.macerce.switchguard.data.Store
+import kotlinx.coroutines.launch
 
 /** Kuralların başvurabileceği her şeyin adı: cihaz, grup, yardımcı, sahne, döngü, bölge, kural. */
 fun ruleRefNames(store: Store): Map<String, String> = buildMap {
@@ -108,6 +109,46 @@ fun RuleImportDialog(onDismiss: () -> Unit, onImported: (Automation) -> Unit) {
             }, enabled = text.isNotBlank(), modifier = Modifier.tvFocusRing()) { Text(stringResource(R.string.rule_import_action)) }
         },
         dismissButton = { TextButton(onClick = onDismiss, modifier = Modifier.tvFocusRing()) { Text(stringResource(android.R.string.cancel)) } },
+    )
+}
+
+/**
+ * Kuralı cihaz zamanlayıcısı olarak yazma onayı. Yazılınca kural telefonda kapatılır (iki kez çalışmasın); cihazdaki
+ * zamanlayıcılar cihaz sayfasında görünür ve oradan silinir.
+ */
+@Composable
+fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core.RuleToDevice.Planned>, onDismiss: () -> Unit) {
+    val context = LocalContext.current
+    val store = remember { Store.get(context) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var busy by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = { if (!busy) onDismiss() },
+        title = { Text(stringResource(R.string.rule_to_device)) },
+        text = { Text(context.resources.getQuantityString(R.plurals.rule_to_device_desc, plan.size, plan.size)) },
+        confirmButton = {
+            TextButton(enabled = !busy, modifier = Modifier.tvFocusRing(), onClick = {
+                busy = true
+                scope.launch {
+                    val devices = store.snapshots.associateBy { it.id }
+                    var error: String? = null
+                    for (p in plan) {
+                        val d = devices[p.deviceId] ?: continue
+                        Actions.saveTimer(context, d, p.timer.id, p.timer).onFailure { error = it.message ?: it.javaClass.simpleName }
+                        if (error != null) break
+                    }
+                    if (error == null) store.saveAutomation(rule.copy(enabled = false))
+                    Toast.makeText(
+                        context,
+                        error?.let { context.getString(R.string.rule_to_device_failed, it) } ?: context.getString(R.string.rule_to_device_done),
+                        Toast.LENGTH_LONG,
+                    ).show()
+                    busy = false
+                    onDismiss()
+                }
+            }) { Text(stringResource(R.string.rule_to_device_action)) }
+        },
+        dismissButton = { TextButton(enabled = !busy, onClick = onDismiss, modifier = Modifier.tvFocusRing()) { Text(stringResource(android.R.string.cancel)) } },
     )
 }
 

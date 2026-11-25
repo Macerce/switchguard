@@ -2065,4 +2065,12 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
         <item quantity="one">%1$d apparaat of item niet gevonden: kies het in de editor.</item>
         <item quantity="other">%1$d apparaten of items niet gevonden: kies ze in de editor.</item>
     </plurals>
+    <string name="rule_to_device">In apparaat opslaan</string>
+    <string name="rule_to_device_action">Opslaan</string>
+    <string name="rule_to_device_done">In het apparaat opgeslagen. De regel op deze telefoon is uitgezet zodat hij niet dubbel loopt; de timers staan op de apparaatpagina.</string>
+    <string name="rule_to_device_failed">Kon niet in het apparaat opslaan: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">De regel wordt %1$d timer in het apparaat zelf en werkt ook als de telefoon uit of offline is. Daarna wordt hij op deze telefoon uitgezet.</item>
+        <item quantity="other">De regel wordt %1$d timers in de apparaten zelf en werkt ook als de telefoon uit of offline is. Daarna wordt hij op deze telefoon uitgezet.</item>
+    </plurals>
 </resources>

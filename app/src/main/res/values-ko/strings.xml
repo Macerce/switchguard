@@ -2028,4 +2028,11 @@
     <plurals name="rule_import_unresolved">
         <item quantity="other">기기 또는 항목 %1$d개를 찾을 수 없습니다. 편집기에서 선택하세요.</item>
     </plurals>
+    <string name="rule_to_device">기기에 쓰기</string>
+    <string name="rule_to_device_action">쓰기</string>
+    <string name="rule_to_device_done">기기에 썼습니다. 두 번 실행되지 않도록 이 휴대폰의 규칙을 껐습니다. 타이머는 기기 페이지에 있습니다.</string>
+    <string name="rule_to_device_failed">기기에 쓰지 못했습니다: %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">이 규칙은 기기 자체의 타이머 %1$d개가 되어 휴대폰이 꺼져 있거나 오프라인이어도 실행됩니다. 이후 이 휴대폰의 규칙은 꺼집니다.</item>
+    </plurals>
 </resources>

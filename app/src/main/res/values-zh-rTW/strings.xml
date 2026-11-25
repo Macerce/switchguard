@@ -2027,4 +2027,11 @@
     <plurals name="rule_import_unresolved">
         <item quantity="other">此處找不到 %1$d 個裝置或項目：請在編輯器中選擇。</item>
     </plurals>
+    <string name="rule_to_device">寫入裝置</string>
+    <string name="rule_to_device_action">寫入</string>
+    <string name="rule_to_device_done">已寫入裝置。為避免重複執行，本手機上的規則已關閉；定時器在裝置頁面中。</string>
+    <string name="rule_to_device_failed">無法寫入裝置：%1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="other">此規則將變為裝置上的 %1$d 個定時器，即使手機關機或離線也會執行。之後本手機上的規則會關閉。</item>
+    </plurals>
 </resources>

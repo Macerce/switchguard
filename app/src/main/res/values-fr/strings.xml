@@ -2101,4 +2101,13 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
         <item quantity="many">%1$d appareils ou éléments introuvables ici : choisissez-les dans l’éditeur.</item>
         <item quantity="other">%1$d appareils ou éléments introuvables ici : choisissez-les dans l’éditeur.</item>
     </plurals>
+    <string name="rule_to_device">Écrire dans l’appareil</string>
+    <string name="rule_to_device_action">Écrire</string>
+    <string name="rule_to_device_done">Écrit dans l’appareil. La règle de ce téléphone a été désactivée pour ne pas s’exécuter deux fois ; les minuteries sont sur la page de l’appareil.</string>
+    <string name="rule_to_device_failed">Écriture dans l’appareil impossible : %1$s</string>
+    <plurals name="rule_to_device_desc">
+        <item quantity="one">La règle devient %1$d minuterie dans l’appareil lui-même et fonctionne même téléphone éteint ou hors ligne. Elle est ensuite désactivée sur ce téléphone.</item>
+        <item quantity="many">La règle devient %1$d minuteries dans les appareils eux-mêmes et fonctionne même téléphone éteint ou hors ligne. Elle est ensuite désactivée sur ce téléphone.</item>
+        <item quantity="other">La règle devient %1$d minuteries dans les appareils eux-mêmes et fonctionne même téléphone éteint ou hors ligne. Elle est ensuite désactivée sur ce téléphone.</item>
+    </plurals>
 </resources>
