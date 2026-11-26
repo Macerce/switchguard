@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.57.1 — 2026-11-26
+**İyileştirme**
+- **Bu cihazı neler kontrol ediyor?** sayfasından zamanlayıcı cihazdan silinebilir (onay sorulur). SwitchGuard'da cihaz sayfasından eklenen zamanlayıcılar böyle işaretlenir; sayfa kapanınca cihaz sayfasındaki zamanlayıcı listesi yenilenir.
+
 ## 2.57.0 — 2026-11-26
 **Yeni**
 - **Bu cihazı neler kontrol ediyor?** (cihaz sayfası): tek dokunuşla cihazı açıp kapatabilecek her şey — cihazın kendisindeki zamanlayıcılar (o an okunur; her biri için SwitchGuard kuralı mı, silinmiş kural mı, eWeLink uygulaması mı yazdı) ve SwitchGuard kuralları (doğrudan ya da grup, alan, sahne, döngü üzerinden; açıp kapatıyor mu, yalnız izliyor mu), sahneler, döngüler, gruplar ve alanlar.

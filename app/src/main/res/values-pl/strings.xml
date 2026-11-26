@@ -2165,7 +2165,7 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="usage_device_timers">W urządzeniu (działa nawet przy wyłączonym telefonie)</string>
     <string name="usage_timer_rule">Zapisane przez regułę SwitchGuard: %1$s</string>
     <string name="usage_timer_orphan">Zapisane przez SwitchGuard (reguła usunięta)</string>
-    <string name="usage_timer_ewelink">Ustawione w aplikacji eWeLink lub w urządzeniu</string>
+    <string name="usage_timer_ewelink">Ustawione w aplikacji eWeLink (lub starszej wersji SwitchGuard)</string>
     <string name="usage_timers_none">Brak harmonogramów w urządzeniu.</string>
     <string name="usage_timers_unsupported">Nie można odczytać własnych harmonogramów tego urządzenia (tylko urządzenia eWeLink).</string>
     <string name="usage_rules">Reguły SwitchGuard</string>
@@ -2175,4 +2175,8 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="usage_group_desc">Przełączenie grupy lub obszaru przełącza też to urządzenie</string>
     <string name="usage_none">Żadna reguła, scena ani cykl SwitchGuard nie używa tego urządzenia.</string>
     <string name="usage_footer">Harmonogramy działają w samym urządzeniu. Reguły, sceny i cykle działają na tym telefonie, gdy monitorowanie jest włączone.</string>
+    <string name="usage_timer_delete_title">Usunąć harmonogram z urządzenia?</string>
+    <string name="usage_timer_delete_text">%1$s\nUrządzenie przestanie przełączać się o tej godzinie. Zostanie też usunięte z aplikacji eWeLink.</string>
+    <string name="usage_timer_deleted">Harmonogram usunięty z urządzenia.</string>
+    <string name="usage_timer_manual">Dodane na stronie urządzenia w SwitchGuard</string>
 </resources>

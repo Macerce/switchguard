@@ -2087,7 +2087,7 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="usage_device_timers">Auf dem Gerät (läuft auch bei ausgeschaltetem Telefon)</string>
     <string name="usage_timer_rule">Von SwitchGuard-Regel geschrieben: %1$s</string>
     <string name="usage_timer_orphan">Von SwitchGuard geschrieben (Regel gelöscht)</string>
-    <string name="usage_timer_ewelink">In der eWeLink-App oder am Gerät eingestellt</string>
+    <string name="usage_timer_ewelink">In der eWeLink-App (oder einer älteren SwitchGuard-Version) eingestellt</string>
     <string name="usage_timers_none">Keine Timer auf dem Gerät.</string>
     <string name="usage_timers_unsupported">Die eigenen Timer dieses Geräts können nicht gelesen werden (nur eWeLink-Geräte).</string>
     <string name="usage_rules">SwitchGuard-Regeln</string>
@@ -2097,4 +2097,8 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="usage_group_desc">Wird die Gruppe/der Bereich geschaltet, schaltet auch dieses Gerät</string>
     <string name="usage_none">Keine SwitchGuard-Regel, -Szene oder -Zyklus nutzt dieses Gerät.</string>
     <string name="usage_footer">Timer laufen auf dem Gerät selbst. Regeln, Szenen und Zyklen laufen auf diesem Telefon, solange die Überwachung an ist.</string>
+    <string name="usage_timer_delete_title">Timer vom Gerät löschen?</string>
+    <string name="usage_timer_delete_text">%1$s\nDas Gerät schaltet zu dieser Zeit nicht mehr. Er wird auch aus der eWeLink-App entfernt.</string>
+    <string name="usage_timer_deleted">Timer vom Gerät gelöscht.</string>
+    <string name="usage_timer_manual">In SwitchGuard auf der Geräteseite hinzugefügt</string>
 </resources>

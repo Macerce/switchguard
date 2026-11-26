@@ -2050,7 +2050,7 @@
     <string name="usage_device_timers">裝置本身（手機關機時也會執行）</string>
     <string name="usage_timer_rule">由 SwitchGuard 規則寫入：%1$s</string>
     <string name="usage_timer_orphan">由 SwitchGuard 寫入（規則已刪除）</string>
-    <string name="usage_timer_ewelink">在 eWeLink 應用程式或裝置上設定</string>
+    <string name="usage_timer_ewelink">在 eWeLink 應用程式（或舊版 SwitchGuard）中設定</string>
     <string name="usage_timers_none">裝置上沒有定時。</string>
     <string name="usage_timers_unsupported">無法讀取此裝置本身的定時（僅限 eWeLink 裝置）。</string>
     <string name="usage_rules">SwitchGuard 規則</string>
@@ -2060,4 +2060,8 @@
     <string name="usage_group_desc">開關該群組或區域時也會開關此裝置</string>
     <string name="usage_none">沒有 SwitchGuard 規則、場景或循環使用此裝置。</string>
     <string name="usage_footer">定時在裝置本身執行。規則、場景和循環在監控開啟時於此手機上執行。</string>
+    <string name="usage_timer_delete_title">從裝置刪除定時？</string>
+    <string name="usage_timer_delete_text">%1$s\n裝置將不再於此時間開關。也會從 eWeLink 應用程式中刪除。</string>
+    <string name="usage_timer_deleted">已從裝置刪除定時。</string>
+    <string name="usage_timer_manual">在 SwitchGuard 裝置頁新增</string>
 </resources>

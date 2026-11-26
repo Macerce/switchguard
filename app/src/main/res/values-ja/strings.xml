@@ -2051,7 +2051,7 @@
     <string name="usage_device_timers">機器本体（スマホがオフでも動作）</string>
     <string name="usage_timer_rule">SwitchGuard のルールが書き込み：%1$s</string>
     <string name="usage_timer_orphan">SwitchGuard が書き込み（ルールは削除済み）</string>
-    <string name="usage_timer_ewelink">eWeLink アプリまたは機器で設定</string>
+    <string name="usage_timer_ewelink">eWeLink アプリ（または旧バージョンの SwitchGuard）で設定</string>
     <string name="usage_timers_none">機器にタイマーはありません。</string>
     <string name="usage_timers_unsupported">この機器自体のタイマーは読み取れません（eWeLink 機器のみ）。</string>
     <string name="usage_rules">SwitchGuard のルール</string>
@@ -2061,4 +2061,8 @@
     <string name="usage_group_desc">グループやエリアを切り替えるとこの機器も切り替わります</string>
     <string name="usage_none">この機器を使う SwitchGuard のルール・シーン・サイクルはありません。</string>
     <string name="usage_footer">タイマーは機器本体で動作します。ルール・シーン・サイクルは監視がオンの間このスマホで動作します。</string>
+    <string name="usage_timer_delete_title">機器からタイマーを削除しますか？</string>
+    <string name="usage_timer_delete_text">%1$s\nこの時刻に機器がオン/オフしなくなります。eWeLink アプリからも削除されます。</string>
+    <string name="usage_timer_deleted">機器からタイマーを削除しました。</string>
+    <string name="usage_timer_manual">SwitchGuard の機器ページで追加</string>
 </resources>

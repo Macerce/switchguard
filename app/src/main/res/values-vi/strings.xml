@@ -2022,7 +2022,7 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="usage_device_timers">Trên thiết bị (chạy cả khi điện thoại tắt)</string>
     <string name="usage_timer_rule">Do quy tắc SwitchGuard ghi: %1$s</string>
     <string name="usage_timer_orphan">Do SwitchGuard ghi (quy tắc đã bị xóa)</string>
-    <string name="usage_timer_ewelink">Đặt trong ứng dụng eWeLink hoặc trên thiết bị</string>
+    <string name="usage_timer_ewelink">Đặt trong ứng dụng eWeLink (hoặc phiên bản SwitchGuard cũ)</string>
     <string name="usage_timers_none">Không có hẹn giờ trên thiết bị.</string>
     <string name="usage_timers_unsupported">Không đọc được hẹn giờ riêng của thiết bị này (chỉ thiết bị eWeLink).</string>
     <string name="usage_rules">Quy tắc SwitchGuard</string>
@@ -2032,4 +2032,8 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="usage_group_desc">Bật/tắt nhóm hoặc khu vực cũng bật/tắt thiết bị này</string>
     <string name="usage_none">Không có quy tắc, cảnh hay chu kỳ SwitchGuard nào dùng thiết bị này.</string>
     <string name="usage_footer">Hẹn giờ chạy trên chính thiết bị. Quy tắc, cảnh và chu kỳ chạy trên điện thoại này khi đang bật theo dõi.</string>
+    <string name="usage_timer_delete_title">Xóa hẹn giờ khỏi thiết bị?</string>
+    <string name="usage_timer_delete_text">%1$s\nThiết bị sẽ không bật/tắt vào giờ này nữa. Cũng bị xóa khỏi ứng dụng eWeLink.</string>
+    <string name="usage_timer_deleted">Đã xóa hẹn giờ khỏi thiết bị.</string>
+    <string name="usage_timer_manual">Thêm từ trang thiết bị trong SwitchGuard</string>
 </resources>

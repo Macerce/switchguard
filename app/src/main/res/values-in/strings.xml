@@ -1980,7 +1980,7 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="usage_device_timers">Di perangkat (tetap berjalan saat ponsel mati)</string>
     <string name="usage_timer_rule">Ditulis oleh aturan SwitchGuard: %1$s</string>
     <string name="usage_timer_orphan">Ditulis oleh SwitchGuard (aturan sudah dihapus)</string>
-    <string name="usage_timer_ewelink">Diatur di aplikasi eWeLink atau di perangkat</string>
+    <string name="usage_timer_ewelink">Diatur di aplikasi eWeLink (atau versi SwitchGuard lama)</string>
     <string name="usage_timers_none">Tidak ada timer di perangkat.</string>
     <string name="usage_timers_unsupported">Timer bawaan perangkat ini tidak bisa dibaca (hanya perangkat eWeLink).</string>
     <string name="usage_rules">Aturan SwitchGuard</string>
@@ -1990,4 +1990,8 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="usage_group_desc">Menyalakan/mematikan grup atau area juga memengaruhi perangkat ini</string>
     <string name="usage_none">Tidak ada aturan, adegan, atau siklus SwitchGuard yang memakai perangkat ini.</string>
     <string name="usage_footer">Timer berjalan di perangkat itu sendiri. Aturan, adegan, dan siklus berjalan di ponsel ini selama pemantauan aktif.</string>
+    <string name="usage_timer_delete_title">Hapus timer dari perangkat?</string>
+    <string name="usage_timer_delete_text">%1$s\nPerangkat tidak lagi menyala/mati pada waktu ini. Juga dihapus dari aplikasi eWeLink.</string>
+    <string name="usage_timer_deleted">Timer dihapus dari perangkat.</string>
+    <string name="usage_timer_manual">Ditambahkan dari halaman perangkat di SwitchGuard</string>
 </resources>

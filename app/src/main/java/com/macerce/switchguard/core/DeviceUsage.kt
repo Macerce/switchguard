@@ -51,4 +51,8 @@ object DeviceUsage {
 
     /** SwitchGuard'ın yazdığı bir zamanlayıcı mı (kuralı silinmiş olsa da). */
     fun isAppTimer(timerId: String) = timerId.startsWith("sg-")
+
+    /** SwitchGuard'ın cihaz sayfasından elle eklenen zamanlayıcıların kimlik öneki (eWeLink uygulamasındakilerden ayırmak için). */
+    const val MANUAL_PREFIX = "sgm-"
+
 }

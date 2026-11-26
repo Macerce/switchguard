@@ -48,6 +48,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -121,10 +122,11 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
             SensorHistorySection(device)
 
             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
-            if (device.cloud == Cloud.EWELINK) TimersSection(device)
+            var timersKey by remember { mutableIntStateOf(0) }
+            if (device.cloud == Cloud.EWELINK) TimersSection(device, timersKey)
             // Cihazı neyin açıp kapattığı: cihazdaki zamanlayıcılar + bu telefondaki kurallar, sahneler, döngüler.
             if (!com.macerce.switchguard.core.DeviceGroup.isGroup(device.id)) {
-                Box(Modifier.padding(top = 8.dp)) { DeviceUsageRow(device) }
+                Box(Modifier.padding(top = 8.dp)) { DeviceUsageRow(device, onClosed = { timersKey++ }) }
             }
 
             DeviceAlertRules(deviceId)

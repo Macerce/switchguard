@@ -2051,7 +2051,7 @@
     <string name="usage_device_timers">기기 자체(휴대폰이 꺼져도 실행)</string>
     <string name="usage_timer_rule">SwitchGuard 규칙이 기록: %1$s</string>
     <string name="usage_timer_orphan">SwitchGuard가 기록(규칙 삭제됨)</string>
-    <string name="usage_timer_ewelink">eWeLink 앱 또는 기기에서 설정</string>
+    <string name="usage_timer_ewelink">eWeLink 앱(또는 이전 SwitchGuard 버전)에서 설정</string>
     <string name="usage_timers_none">기기에 타이머가 없습니다.</string>
     <string name="usage_timers_unsupported">이 기기 자체의 타이머는 읽을 수 없습니다(eWeLink 기기만).</string>
     <string name="usage_rules">SwitchGuard 규칙</string>
@@ -2061,4 +2061,8 @@
     <string name="usage_group_desc">그룹이나 영역을 켜고 끄면 이 기기도 켜지고 꺼집니다</string>
     <string name="usage_none">이 기기를 사용하는 SwitchGuard 규칙, 장면, 사이클이 없습니다.</string>
     <string name="usage_footer">타이머는 기기 자체에서 실행됩니다. 규칙, 장면, 사이클은 모니터링이 켜져 있는 동안 이 휴대폰에서 실행됩니다.</string>
+    <string name="usage_timer_delete_title">기기에서 타이머를 삭제할까요?</string>
+    <string name="usage_timer_delete_text">%1$s\n이 시간에 기기가 더 이상 켜지거나 꺼지지 않습니다. eWeLink 앱에서도 삭제됩니다.</string>
+    <string name="usage_timer_deleted">기기에서 타이머를 삭제했습니다.</string>
+    <string name="usage_timer_manual">SwitchGuard 기기 페이지에서 추가함</string>
 </resources>

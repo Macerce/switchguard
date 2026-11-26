@@ -465,7 +465,7 @@ internal fun PeriodBars(summary: EnergySummary, selected: Int?, locale: Locale, 
 
 /** Cihazın eWeLink zamanlayıcıları: telefon kapalıyken de cihazda çalışır. */
 @Composable
-fun TimersSection(device: DeviceSnapshot) {
+fun TimersSection(device: DeviceSnapshot, refreshKey: Int = 0) {
     val context = LocalContext.current
     val resources = LocalResources.current
     val scope = rememberCoroutineScope()
@@ -475,7 +475,7 @@ fun TimersSection(device: DeviceSnapshot) {
     var editing by remember { mutableStateOf<RepeatTimer?>(null) }
     val rules = remember(entries) { com.macerce.switchguard.data.Store.get(context).automations }
 
-    LaunchedEffect(device.id) {
+    LaunchedEffect(device.id, refreshKey) {
         Actions.loadTimers(context, device.id)
             .onSuccess { entries = it; error = null }
             .onFailure {
@@ -540,7 +540,7 @@ fun TimersSection(device: DeviceSnapshot) {
                     stringResource(R.string.timer_add),
                     if (full) stringResource(R.string.timer_full, DeviceTimers.MAX_TIMERS) else stringResource(R.string.timer_add_desc),
                     Modifier.tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(enabled = !busy && !full) {
-                        editing = RepeatTimer(UUID.randomUUID().toString(), true, 7, 0, DeviceTimers.ALL_DAYS, 0, true)
+                        editing = RepeatTimer(com.macerce.switchguard.core.DeviceUsage.MANUAL_PREFIX + UUID.randomUUID().toString(), true, 7, 0, DeviceTimers.ALL_DAYS, 0, true)
                     },
                 )
             }

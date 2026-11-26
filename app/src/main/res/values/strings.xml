@@ -2096,7 +2096,7 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="usage_device_timers">On the device (runs even with the phone off)</string>
     <string name="usage_timer_rule">Written by SwitchGuard rule: %1$s</string>
     <string name="usage_timer_orphan">Written by SwitchGuard (the rule was deleted)</string>
-    <string name="usage_timer_ewelink">Set in the eWeLink app or on the device</string>
+    <string name="usage_timer_ewelink">Set in the eWeLink app (or an older SwitchGuard version)</string>
     <string name="usage_timers_none">No timers on the device.</string>
     <string name="usage_timers_unsupported">This device\'s own timers can\'t be read (only eWeLink devices).</string>
     <string name="usage_rules">SwitchGuard rules</string>
@@ -2106,4 +2106,8 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     <string name="usage_group_desc">Switching the group or area switches this device too</string>
     <string name="usage_none">No SwitchGuard rule, scene or cycle uses this device.</string>
     <string name="usage_footer">Timers run on the device itself. Rules, scenes and cycles run on this phone while monitoring is on.</string>
+    <string name="usage_timer_delete_title">Delete timer from the device?</string>
+    <string name="usage_timer_delete_text">%1$s\nThe device will no longer switch at this time. This also removes it from the eWeLink app.</string>
+    <string name="usage_timer_deleted">Timer deleted from the device.</string>
+    <string name="usage_timer_manual">Added on this device\'s page in SwitchGuard</string>
 </resources>

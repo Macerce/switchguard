@@ -2089,7 +2089,7 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="usage_device_timers">Op het apparaat (werkt ook als de telefoon uit staat)</string>
     <string name="usage_timer_rule">Geschreven door SwitchGuard-regel: %1$s</string>
     <string name="usage_timer_orphan">Geschreven door SwitchGuard (regel verwijderd)</string>
-    <string name="usage_timer_ewelink">Ingesteld in de eWeLink-app of op het apparaat</string>
+    <string name="usage_timer_ewelink">Ingesteld in de eWeLink-app (of een oudere SwitchGuard-versie)</string>
     <string name="usage_timers_none">Geen timers op het apparaat.</string>
     <string name="usage_timers_unsupported">De eigen timers van dit apparaat kunnen niet worden gelezen (alleen eWeLink-apparaten).</string>
     <string name="usage_rules">SwitchGuard-regels</string>
@@ -2099,4 +2099,8 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     <string name="usage_group_desc">Schakelen van de groep of ruimte schakelt ook dit apparaat</string>
     <string name="usage_none">Geen SwitchGuard-regel, -scène of -cyclus gebruikt dit apparaat.</string>
     <string name="usage_footer">Timers draaien op het apparaat zelf. Regels, scènes en cycli draaien op deze telefoon zolang bewaking aan staat.</string>
+    <string name="usage_timer_delete_title">Timer van het apparaat verwijderen?</string>
+    <string name="usage_timer_delete_text">%1$s\nHet apparaat schakelt dan niet meer op dit tijdstip. Ook verwijderd uit de eWeLink-app.</string>
+    <string name="usage_timer_deleted">Timer van het apparaat verwijderd.</string>
+    <string name="usage_timer_manual">Toegevoegd op de apparaatpagina in SwitchGuard</string>
 </resources>

@@ -2097,7 +2097,7 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="usage_device_timers">En el dispositivo (funciona aunque el teléfono esté apagado)</string>
     <string name="usage_timer_rule">Escrito por la regla de SwitchGuard: %1$s</string>
     <string name="usage_timer_orphan">Escrito por SwitchGuard (la regla se eliminó)</string>
-    <string name="usage_timer_ewelink">Configurado en la app eWeLink o en el dispositivo</string>
+    <string name="usage_timer_ewelink">Configurado en la app eWeLink (o en una versión anterior de SwitchGuard)</string>
     <string name="usage_timers_none">No hay temporizadores en el dispositivo.</string>
     <string name="usage_timers_unsupported">No se pueden leer los temporizadores propios de este dispositivo (solo dispositivos eWeLink).</string>
     <string name="usage_rules">Reglas de SwitchGuard</string>
@@ -2107,4 +2107,8 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     <string name="usage_group_desc">Al encender/apagar el grupo o área también se enciende/apaga este dispositivo</string>
     <string name="usage_none">Ninguna regla, escena o ciclo de SwitchGuard usa este dispositivo.</string>
     <string name="usage_footer">Los temporizadores funcionan en el propio dispositivo. Las reglas, escenas y ciclos funcionan en este teléfono mientras la supervisión está activa.</string>
+    <string name="usage_timer_delete_title">¿Eliminar el temporizador del dispositivo?</string>
+    <string name="usage_timer_delete_text">%1$s\nEl dispositivo dejará de encenderse/apagarse a esta hora. También se quita de la app eWeLink.</string>
+    <string name="usage_timer_deleted">Temporizador eliminado del dispositivo.</string>
+    <string name="usage_timer_manual">Añadido en la página del dispositivo en SwitchGuard</string>
 </resources>

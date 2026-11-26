@@ -2092,7 +2092,7 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="usage_device_timers">Cihazın kendisinde (telefon kapalıyken de çalışır)</string>
     <string name="usage_timer_rule">SwitchGuard kuralı yazdı: %1$s</string>
     <string name="usage_timer_orphan">SwitchGuard yazdı (kural silinmiş)</string>
-    <string name="usage_timer_ewelink">eWeLink uygulamasından ya da cihazdan kurulmuş</string>
+    <string name="usage_timer_ewelink">eWeLink uygulamasından (ya da SwitchGuard\'ın eski sürümünden) kurulmuş</string>
     <string name="usage_timers_none">Cihazda zamanlayıcı yok.</string>
     <string name="usage_timers_unsupported">Bu cihazın kendi zamanlayıcıları okunamıyor (yalnız eWeLink cihazları).</string>
     <string name="usage_rules">SwitchGuard kuralları</string>
@@ -2102,4 +2102,8 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="usage_group_desc">Grup ya da alan açılıp kapanınca bu cihaz da açılıp kapanır</string>
     <string name="usage_none">Bu cihazı kullanan SwitchGuard kuralı, sahnesi ya da döngüsü yok.</string>
     <string name="usage_footer">Zamanlayıcılar cihazın kendisinde çalışır. Kurallar, sahneler ve döngüler izleme açıkken bu telefonda çalışır.</string>
+    <string name="usage_timer_delete_title">Zamanlayıcı cihazdan silinsin mi?</string>
+    <string name="usage_timer_delete_text">%1$s\nCihaz bu saatte artık açılıp kapanmaz. eWeLink uygulamasından da silinir.</string>
+    <string name="usage_timer_deleted">Zamanlayıcı cihazdan silindi.</string>
+    <string name="usage_timer_manual">SwitchGuard\'da cihaz sayfasından eklenmiş</string>
 </resources>
