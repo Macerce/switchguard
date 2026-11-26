@@ -2082,4 +2082,13 @@ Turning devices on and off and scenes must be allowed in the app (Alerts → Sma
     </plurals>
     <string name="rule_options_tag">OPTIONS</string>
     <string name="rule_options">Loop guard and run mode</string>
+    <string name="rule_device_sync_title">Timers on the device</string>
+    <string name="rule_device_sync_update">This rule is written to the device, and the device keeps running the old times until it is updated. Update the device now?</string>
+    <string name="rule_device_sync_gone">After this change the rule can no longer run on the device (only simple timed rules that switch eWeLink devices can). Remove its old timers from the device?</string>
+    <string name="rule_device_sync_deleted">The deleted rule was written to the device and its timers are still there, so the device keeps switching. Remove them from the device too?</string>
+    <string name="rule_device_update">Update</string>
+    <string name="rule_device_remove">Remove</string>
+    <string name="rule_device_keep">Keep on device</string>
+    <string name="rule_device_removed">Timers removed from the device.</string>
+    <string name="rule_on_device_note">Written to the device: the device runs it on its own. Keep it off here so it does not run twice; after a change you will be asked to update the device.</string>
 </resources>

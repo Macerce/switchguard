@@ -2073,4 +2073,13 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     </plurals>
     <string name="rule_options_tag">OPTIONEN</string>
     <string name="rule_options">Schleifenschutz und Ausführungsmodus</string>
+    <string name="rule_device_sync_title">Timer auf dem Gerät</string>
+    <string name="rule_device_sync_update">Diese Regel ist auf das Gerät geschrieben; es läuft mit den alten Zeiten weiter, bis es aktualisiert wird. Gerät jetzt aktualisieren?</string>
+    <string name="rule_device_sync_gone">Nach dieser Änderung kann die Regel nicht mehr auf dem Gerät laufen (nur einfache Zeitregeln, die eWeLink-Geräte schalten). Alte Timer vom Gerät entfernen?</string>
+    <string name="rule_device_sync_deleted">Die gelöschte Regel war auf das Gerät geschrieben und ihre Timer sind noch dort, das Gerät schaltet also weiter. Auch vom Gerät entfernen?</string>
+    <string name="rule_device_update">Aktualisieren</string>
+    <string name="rule_device_remove">Entfernen</string>
+    <string name="rule_device_keep">Auf Gerät lassen</string>
+    <string name="rule_device_removed">Timer vom Gerät entfernt.</string>
+    <string name="rule_on_device_note">Auf das Gerät geschrieben: Das Gerät führt sie selbst aus. Hier ausgeschaltet lassen, damit sie nicht doppelt läuft; nach einer Änderung wird gefragt, ob das Gerät aktualisiert werden soll.</string>
 </resources>

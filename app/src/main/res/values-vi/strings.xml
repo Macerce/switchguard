@@ -2008,4 +2008,13 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     </plurals>
     <string name="rule_options_tag">TÙY CHỌN</string>
     <string name="rule_options">Chống lặp và chế độ chạy</string>
+    <string name="rule_device_sync_title">Hẹn giờ trên thiết bị</string>
+    <string name="rule_device_sync_update">Quy tắc này đã được ghi vào thiết bị; thiết bị vẫn chạy theo giờ cũ cho đến khi được cập nhật. Cập nhật thiết bị ngay?</string>
+    <string name="rule_device_sync_gone">Sau thay đổi này quy tắc không thể chạy trên thiết bị nữa (chỉ quy tắc hẹn giờ đơn giản bật/tắt thiết bị eWeLink mới được). Xóa hẹn giờ cũ khỏi thiết bị?</string>
+    <string name="rule_device_sync_deleted">Quy tắc đã xóa từng được ghi vào thiết bị và hẹn giờ vẫn còn đó, nên thiết bị vẫn tiếp tục bật/tắt. Xóa luôn khỏi thiết bị?</string>
+    <string name="rule_device_update">Cập nhật</string>
+    <string name="rule_device_remove">Xóa</string>
+    <string name="rule_device_keep">Giữ trên thiết bị</string>
+    <string name="rule_device_removed">Đã xóa hẹn giờ khỏi thiết bị.</string>
+    <string name="rule_on_device_note">Đã ghi vào thiết bị: thiết bị tự chạy. Để tắt ở đây để không chạy hai lần; sau khi thay đổi bạn sẽ được hỏi cập nhật thiết bị.</string>
 </resources>

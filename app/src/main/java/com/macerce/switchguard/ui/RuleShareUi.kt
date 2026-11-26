@@ -121,7 +121,6 @@ fun RuleImportDialog(onDismiss: () -> Unit, onImported: (Automation) -> Unit) {
 fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core.RuleToDevice.Planned>, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val res = androidx.compose.ui.platform.LocalResources.current
-    val store = remember { Store.get(context) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
     var busy by remember { mutableStateOf(false) }
     AlertDialog(
@@ -132,14 +131,7 @@ fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core
             TextButton(enabled = !busy, modifier = Modifier.tvFocusRing(), onClick = {
                 busy = true
                 scope.launch {
-                    val devices = store.snapshots.associateBy { it.id }
-                    var error: String? = null
-                    for (p in plan) {
-                        val d = devices[p.deviceId] ?: continue
-                        Actions.saveTimer(context, d, p.timer.id, p.timer).onFailure { error = it.message ?: it.javaClass.simpleName }
-                        if (error != null) break
-                    }
-                    if (error == null) store.saveAutomation(rule.copy(enabled = false))
+                    val error = Actions.writeRuleTimers(context, rule, plan).exceptionOrNull()?.let { it.message ?: it.javaClass.simpleName }
                     Toast.makeText(
                         context,
                         error?.let { res.getString(R.string.rule_to_device_failed, it) } ?: res.getString(R.string.rule_to_device_done),
@@ -151,6 +143,59 @@ fun RuleToDeviceDialog(rule: Automation, plan: List<com.macerce.switchguard.core
             }) { Text(stringResource(R.string.rule_to_device_action)) }
         },
         dismissButton = { TextButton(enabled = !busy, onClick = onDismiss, modifier = Modifier.tvFocusRing()) { Text(stringResource(android.R.string.cancel)) } },
+    )
+}
+
+/**
+ * Cihaza yazılmış bir kural değişince ya da silinince cihazdaki zamanlayıcılar kendiliğinden değişmez; sorulur.
+ * [rule] null: kural silindi → zamanlayıcıları sil. [plan] null: kural artık cihaza yazılamıyor → eskileri sil.
+ * Aksi halde: cihazı yeni kurala göre güncelle.
+ */
+@Composable
+fun RuleDeviceSyncDialog(
+    ruleId: String, rule: Automation?, plan: List<com.macerce.switchguard.core.RuleToDevice.Planned>?, onDismiss: () -> Unit,
+) {
+    val context = LocalContext.current
+    val res = androidx.compose.ui.platform.LocalResources.current
+    val store = remember { Store.get(context) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    var busy by remember { mutableStateOf(false) }
+    val update = rule != null && plan != null
+    AlertDialog(
+        onDismissRequest = { if (!busy) onDismiss() },
+        title = { Text(stringResource(R.string.rule_device_sync_title)) },
+        text = {
+            Text(stringResource(when {
+                rule == null -> R.string.rule_device_sync_deleted
+                plan == null -> R.string.rule_device_sync_gone
+                else -> R.string.rule_device_sync_update
+            }))
+        },
+        confirmButton = {
+            TextButton(enabled = !busy, modifier = Modifier.tvFocusRing(), onClick = {
+                busy = true
+                scope.launch {
+                    val result = if (update) Actions.writeRuleTimers(context, rule!!, plan!!)
+                    else Actions.removeRuleTimers(context, ruleId, store.ruleDevices(ruleId))
+                    val error = result.exceptionOrNull()?.let { it.message ?: it.javaClass.simpleName }
+                    val msg = when {
+                        error != null -> res.getString(R.string.rule_to_device_failed, error)
+                        update -> res.getString(R.string.rule_to_device_done)
+                        else -> res.getString(R.string.rule_device_removed)
+                    }
+                    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+                    busy = false
+                    onDismiss()
+                }
+            }) { Text(stringResource(if (update) R.string.rule_device_update else R.string.rule_device_remove)) }
+        },
+        dismissButton = {
+            TextButton(enabled = !busy, modifier = Modifier.tvFocusRing(), onClick = {
+                // Silinen kuralın zamanlayıcıları bilerek cihazda bırakıldı: artık uygulamanın değil, cihaz sayfasının işi.
+                if (rule == null) store.setRuleDevices(ruleId, emptySet())
+                onDismiss()
+            }) { Text(stringResource(if (rule == null) R.string.rule_device_keep else R.string.action_later)) }
+        },
     )
 }
 

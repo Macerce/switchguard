@@ -2151,4 +2151,13 @@
     </plurals>
     <string name="rule_options_tag">ПАРАМЕТРЫ</string>
     <string name="rule_options">Защита от зацикливания и режим запуска</string>
+    <string name="rule_device_sync_title">Таймеры на устройстве</string>
+    <string name="rule_device_sync_update">Это правило записано на устройство, и оно работает по старому времени, пока его не обновить. Обновить устройство сейчас?</string>
+    <string name="rule_device_sync_gone">После этого изменения правило больше не может работать на устройстве (только простые правила по времени для устройств eWeLink). Удалить старые таймеры с устройства?</string>
+    <string name="rule_device_sync_deleted">Удалённое правило было записано на устройство, и его таймеры всё ещё там — устройство продолжит переключаться. Удалить их и с устройства?</string>
+    <string name="rule_device_update">Обновить</string>
+    <string name="rule_device_remove">Удалить</string>
+    <string name="rule_device_keep">Оставить</string>
+    <string name="rule_device_removed">Таймеры удалены с устройства.</string>
+    <string name="rule_on_device_note">Записано на устройство: оно выполняет правило само. Оставьте его здесь выключенным, чтобы не было двойного срабатывания; после изменения будет предложено обновить устройство.</string>
 </resources>

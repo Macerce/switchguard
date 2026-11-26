@@ -2037,4 +2037,13 @@
     </plurals>
     <string name="rule_options_tag">オプション</string>
     <string name="rule_options">ループ保護と実行モード</string>
+    <string name="rule_device_sync_title">機器のタイマー</string>
+    <string name="rule_device_sync_update">このルールは機器に書き込まれており、更新するまで機器は古い時刻で動作し続けます。今すぐ機器を更新しますか？</string>
+    <string name="rule_device_sync_gone">この変更でルールは機器上で動作できなくなりました（eWeLink 機器をオン/オフする単純な時刻ルールのみ対応）。古いタイマーを機器から削除しますか？</string>
+    <string name="rule_device_sync_deleted">削除したルールは機器に書き込まれており、タイマーがまだ残っているため機器はオン/オフを続けます。機器からも削除しますか？</string>
+    <string name="rule_device_update">更新</string>
+    <string name="rule_device_remove">削除</string>
+    <string name="rule_device_keep">機器に残す</string>
+    <string name="rule_device_removed">機器からタイマーを削除しました。</string>
+    <string name="rule_on_device_note">機器に書き込み済み：機器が単独で実行します。二重に動かないようここではオフのままにしてください。変更すると機器の更新を確認します。</string>
 </resources>

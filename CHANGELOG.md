@@ -6,6 +6,10 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.56.2 — 2026-11-26
+**Improved**
+- **Write to device** keeps track of the timers it wrote. After you change such a rule, the app asks to update the device (or to remove the old timers if the rule can no longer run there); after you delete it, the app asks to remove its timers from the device too. Writing again replaces the old timers instead of leaving extra ones. The rule editor shows a note when a rule is on the device.
+
 ## 2.56.1 — 2026-11-26
 **Improved**
 - Area cards on the home screen use the same style as device cards: when something in the area is on, the card stays calm with an amber icon and a thin amber edge.

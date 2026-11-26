@@ -201,6 +201,43 @@ object Actions {
             }
         }
 
+    /** Kuralın cihazlara yazdığı zamanlayıcıları siler ve kaydı temizler. Kuralın "sg-…" kimlikli olanlarına dokunur, başkasına değil. */
+    suspend fun removeRuleTimers(context: Context, ruleId: String, deviceIds: Collection<String>): Result<Unit> = runCatching {
+        val store = Store.get(context)
+        val devices = store.snapshots.associateBy { it.id }
+        for (id in deviceIds) {
+            val d = devices[id] ?: continue
+            val own = loadTimers(context, id).getOrThrow()
+                .map { it.timer?.id ?: it.raw.optString("mId") }
+                .filter { com.macerce.switchguard.core.RuleToDevice.owns(it, ruleId) }
+            for (t in own) saveTimer(context, d, t, null).getOrThrow()
+        }
+        store.setRuleDevices(ruleId, store.ruleDevices(ruleId) - deviceIds.toSet())
+    }
+
+    /**
+     * Kuralı cihazlara zamanlayıcı olarak yazar: önce kuralın eski zamanlayıcıları silinir (adım ya da cihaz değişmiş
+     * olabilir), sonra yenileri yazılır, kayıt tutulur ve telefondaki kural kapatılır (iki kez çalışmasın).
+     */
+    suspend fun writeRuleTimers(
+        context: Context, rule: com.macerce.switchguard.core.Automation, plan: List<com.macerce.switchguard.core.RuleToDevice.Planned>,
+    ): Result<Unit> = runCatching {
+        val store = Store.get(context)
+        removeRuleTimers(context, rule.id, store.ruleDevices(rule.id) + plan.map { it.deviceId }).getOrThrow()
+        val devices = store.snapshots.associateBy { it.id }
+        val written = mutableSetOf<String>()
+        try {
+            for (p in plan) {
+                val d = devices[p.deviceId] ?: continue
+                saveTimer(context, d, p.timer.id, p.timer).getOrThrow()
+                written += d.id
+            }
+        } finally {
+            store.setRuleDevices(rule.id, written)
+        }
+        store.saveAutomation(rule.copy(enabled = false))
+    }
+
     /** Enerji ölçen cihazdan bir süre canlı güç ister (detay ekranı açıkken). */
     suspend fun requestLiveEnergy(context: Context, device: DeviceSnapshot) = withContext(Dispatchers.IO) {
         runCatching { EwelinkClient(Store.get(context)).requestLiveEnergy(device) }

@@ -2008,4 +2008,13 @@
     </plurals>
     <string name="rule_options_tag">ตัวเลือก</string>
     <string name="rule_options">ป้องกันการวนซ้ำและโหมดการทำงาน</string>
+    <string name="rule_device_sync_title">ตัวตั้งเวลาบนอุปกรณ์</string>
+    <string name="rule_device_sync_update">กฎนี้ถูกเขียนลงอุปกรณ์แล้ว อุปกรณ์จะยังทำงานตามเวลาเดิมจนกว่าจะอัปเดต อัปเดตอุปกรณ์ตอนนี้เลยไหม</string>
+    <string name="rule_device_sync_gone">หลังการเปลี่ยนนี้ กฎจะทำงานบนอุปกรณ์ไม่ได้อีก (ได้เฉพาะกฎตั้งเวลาแบบง่ายที่เปิด/ปิดอุปกรณ์ eWeLink) ลบตัวตั้งเวลาเดิมออกจากอุปกรณ์ไหม</string>
+    <string name="rule_device_sync_deleted">กฎที่ลบเคยถูกเขียนลงอุปกรณ์ และตัวตั้งเวลายังอยู่ อุปกรณ์จึงยังเปิด/ปิดต่อไป ลบออกจากอุปกรณ์ด้วยไหม</string>
+    <string name="rule_device_update">อัปเดต</string>
+    <string name="rule_device_remove">ลบ</string>
+    <string name="rule_device_keep">เก็บไว้บนอุปกรณ์</string>
+    <string name="rule_device_removed">ลบตัวตั้งเวลาออกจากอุปกรณ์แล้ว</string>
+    <string name="rule_on_device_note">เขียนลงอุปกรณ์แล้ว: อุปกรณ์ทำงานเอง ปิดไว้ที่นี่เพื่อไม่ให้ทำงานซ้ำ เมื่อแก้ไขจะมีการถามให้อัปเดตอุปกรณ์</string>
 </resources>

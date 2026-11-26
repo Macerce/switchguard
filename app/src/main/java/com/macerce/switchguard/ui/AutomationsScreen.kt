@@ -249,6 +249,12 @@ fun AutomationsScreen(modifier: Modifier) {
         return
     }
 
+    // Cihaza yazılmış kural değişti / silindi: cihazdaki zamanlayıcılar için sor.
+    var deviceSync by remember { mutableStateOf<Pair<String, Automation?>?>(null) }
+    deviceSync?.let { (rid, rule) ->
+        val plan = remember(rule) { rule?.let { com.macerce.switchguard.core.RuleToDevice.plan(it, store.snapshots.associateBy { d -> d.id }) } }
+        RuleDeviceSyncDialog(rid, rule, plan) { deviceSync = null }
+    }
     editing?.let { id ->
         BackHandler { editing = null; templateName = null }
         val template = templateName?.let { t -> runCatching { com.macerce.switchguard.core.AutomationTemplate.valueOf(t) }.getOrNull() }
@@ -258,8 +264,20 @@ fun AutomationsScreen(modifier: Modifier) {
             initial = automations.firstOrNull { it.id == id },
             devices = devices,
             modifier = modifier,
-            onSave = { store.saveAutomation(it); editing = null; templateName = null },
-            onDelete = { store.deleteAutomation(id); com.macerce.switchguard.data.TraceLog.clear(context, id); editing = null },
+            onSave = { a ->
+                val old = automations.firstOrNull { it.id == a.id }
+                store.saveAutomation(a)
+                if (old != null && store.ruleDevices(a.id).isNotEmpty()) {
+                    val devs = store.snapshots.associateBy { it.id }
+                    val plan = { r: Automation -> com.macerce.switchguard.core.RuleToDevice.plan(r, devs) }
+                    if (plan(old.copy(enabled = true, name = "")) != plan(a.copy(enabled = true, name = ""))) deviceSync = a.id to a
+                }
+                editing = null; templateName = null
+            },
+            onDelete = {
+                store.deleteAutomation(id); com.macerce.switchguard.data.TraceLog.clear(context, id); editing = null
+                if (store.ruleDevices(id).isNotEmpty()) deviceSync = id to null
+            },
             onBack = { editing = null; templateName = null },
             template = template,
         )
@@ -951,6 +969,18 @@ fun AutomationEditor(
                 ),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp).tvTextField(),
             )
+            // Cihaza yazılmış kural: cihaz kendi başına çalıştırır; değişince kayıtta cihazı güncellemek sorulur.
+            val onDevice = remember(existing) { existing?.let { Store.get(toDeviceContext).ruleDevices(it.id).size } ?: 0 }
+            if (onDevice > 0) Row(
+                Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(Icons.Rounded.Memory, null, Modifier.size(18.dp), tint = MaterialTheme.colorScheme.primary)
+                Text(
+                    stringResource(R.string.rule_on_device_note),
+                    style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
 
             // ------------------------------------------------ Eğer
             // Videodaki düzen: EĞER ve İSE kartlarında seçili tetikleyici / eylem renkli çerçeveli satırdır; dokununca

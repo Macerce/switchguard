@@ -705,6 +705,19 @@ class Store private constructor(context: Context) : SharedPreferences.OnSharedPr
 
     fun deleteAutomation(id: String) { automations = automations.filterNot { it.id == id } }
 
+    /** Cihaza zamanlayıcı olarak yazılmış kurallar: "kuralId|cihazId" kayıtları. */
+    private var ruleOnDevice: Set<String>
+        get() = prefs.getStringSet("ruleOnDevice", null) ?: emptySet()
+        set(v) = put { putStringSet("ruleOnDevice", v) }
+
+    /** Kuralın zamanlayıcılarının yazıldığı cihazlar (boşsa cihaza yazılmamış). */
+    fun ruleDevices(ruleId: String): Set<String> =
+        ruleOnDevice.mapNotNullTo(mutableSetOf()) { r -> r.split('|', limit = 2).takeIf { it.size == 2 && it[0] == ruleId }?.get(1) }
+
+    fun setRuleDevices(ruleId: String, deviceIds: Set<String>) {
+        ruleOnDevice = ruleOnDevice.filterNot { it.startsWith("$ruleId|") }.toSet() + deviceIds.map { "$ruleId|$it" }
+    }
+
     // --- Günlük özet ---
     var dailySummaryEnabled: Boolean
         get() = prefs.getBoolean("summaryEnabled", false)

@@ -2075,4 +2075,13 @@ Apparaten aan- en uitzetten en scènes moeten in de app zijn toegestaan (Waarsch
     </plurals>
     <string name="rule_options_tag">OPTIES</string>
     <string name="rule_options">Lusbeveiliging en uitvoermodus</string>
+    <string name="rule_device_sync_title">Timers op het apparaat</string>
+    <string name="rule_device_sync_update">Deze regel staat op het apparaat, dat de oude tijden blijft gebruiken tot het wordt bijgewerkt. Apparaat nu bijwerken?</string>
+    <string name="rule_device_sync_gone">Na deze wijziging kan de regel niet meer op het apparaat draaien (alleen eenvoudige tijdregels die eWeLink-apparaten schakelen). Oude timers van het apparaat verwijderen?</string>
+    <string name="rule_device_sync_deleted">De verwijderde regel stond op het apparaat en de timers staan er nog, dus het apparaat blijft schakelen. Ook van het apparaat verwijderen?</string>
+    <string name="rule_device_update">Bijwerken</string>
+    <string name="rule_device_remove">Verwijderen</string>
+    <string name="rule_device_keep">Op apparaat laten</string>
+    <string name="rule_device_removed">Timers van het apparaat verwijderd.</string>
+    <string name="rule_on_device_note">Op het apparaat geschreven: het apparaat voert hem zelf uit. Laat hem hier uit zodat hij niet dubbel draait; na een wijziging wordt gevraagd het apparaat bij te werken.</string>
 </resources>

@@ -1966,4 +1966,13 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     </plurals>
     <string name="rule_options_tag">OPSI</string>
     <string name="rule_options">Pelindung loop dan mode jalan</string>
+    <string name="rule_device_sync_title">Timer di perangkat</string>
+    <string name="rule_device_sync_update">Aturan ini tertulis di perangkat, dan perangkat tetap memakai waktu lama sampai diperbarui. Perbarui perangkat sekarang?</string>
+    <string name="rule_device_sync_gone">Setelah perubahan ini aturan tidak bisa lagi berjalan di perangkat (hanya aturan waktu sederhana yang menyalakan/mematikan perangkat eWeLink). Hapus timer lamanya dari perangkat?</string>
+    <string name="rule_device_sync_deleted">Aturan yang dihapus tertulis di perangkat dan timernya masih ada, jadi perangkat tetap menyala/mati. Hapus juga dari perangkat?</string>
+    <string name="rule_device_update">Perbarui</string>
+    <string name="rule_device_remove">Hapus</string>
+    <string name="rule_device_keep">Biarkan di perangkat</string>
+    <string name="rule_device_removed">Timer dihapus dari perangkat.</string>
+    <string name="rule_on_device_note">Tertulis di perangkat: perangkat menjalankannya sendiri. Biarkan mati di sini agar tidak berjalan dua kali; setelah diubah Anda akan ditanya untuk memperbarui perangkat.</string>
 </resources>

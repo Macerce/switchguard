@@ -2004,4 +2004,13 @@
     </plurals>
     <string name="rule_options_tag">विकल्प</string>
     <string name="rule_options">लूप सुरक्षा और चलने का तरीका</string>
+    <string name="rule_device_sync_title">डिवाइस पर टाइमर</string>
+    <string name="rule_device_sync_update">यह नियम डिवाइस पर लिखा है; अपडेट होने तक डिवाइस पुराने समय पर चलता रहेगा। अभी डिवाइस अपडेट करें?</string>
+    <string name="rule_device_sync_gone">इस बदलाव के बाद नियम डिवाइस पर नहीं चल सकता (केवल eWeLink डिवाइस चालू/बंद करने वाले सरल समय नियम चल सकते हैं)। पुराने टाइमर डिवाइस से हटाएँ?</string>
+    <string name="rule_device_sync_deleted">हटाया गया नियम डिवाइस पर लिखा था और उसके टाइमर अभी भी वहाँ हैं, इसलिए डिवाइस चालू/बंद होता रहेगा। उन्हें डिवाइस से भी हटाएँ?</string>
+    <string name="rule_device_update">अपडेट करें</string>
+    <string name="rule_device_remove">हटाएँ</string>
+    <string name="rule_device_keep">डिवाइस पर रहने दें</string>
+    <string name="rule_device_removed">टाइमर डिवाइस से हटा दिए गए।</string>
+    <string name="rule_on_device_note">डिवाइस पर लिखा है: डिवाइस इसे खुद चलाता है। दो बार न चले इसलिए यहाँ बंद रखें; बदलाव के बाद डिवाइस अपडेट करने को पूछा जाएगा।</string>
 </resources>

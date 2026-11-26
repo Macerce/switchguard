@@ -2015,4 +2015,13 @@
     </plurals>
     <string name="rule_options_tag">选项</string>
     <string name="rule_options">循环保护与运行模式</string>
+    <string name="rule_device_sync_title">设备上的定时</string>
+    <string name="rule_device_sync_update">此规则已写入设备，设备在更新前会继续按旧时间运行。现在更新设备吗？</string>
+    <string name="rule_device_sync_gone">此更改后规则无法再在设备上运行（仅支持开关 eWeLink 设备的简单定时规则）。从设备删除旧定时吗？</string>
+    <string name="rule_device_sync_deleted">已删除的规则曾写入设备，其定时仍在设备上，设备会继续开关。也从设备删除吗？</string>
+    <string name="rule_device_update">更新</string>
+    <string name="rule_device_remove">删除</string>
+    <string name="rule_device_keep">保留在设备上</string>
+    <string name="rule_device_removed">已从设备删除定时。</string>
+    <string name="rule_on_device_note">已写入设备：设备会自行运行。请在此保持关闭以免重复运行；更改后会询问是否更新设备。</string>
 </resources>

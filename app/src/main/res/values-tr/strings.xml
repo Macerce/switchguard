@@ -2078,4 +2078,13 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     </plurals>
     <string name="rule_options_tag">SEÇENEKLER</string>
     <string name="rule_options">Döngü koruması ve çalışma kipi</string>
+    <string name="rule_device_sync_title">Cihazdaki zamanlayıcılar</string>
+    <string name="rule_device_sync_update">Bu kural cihaza yazılı; cihaz güncellenene kadar eski saatlerle çalışmaya devam eder. Cihaz şimdi güncellensin mi?</string>
+    <string name="rule_device_sync_gone">Bu değişiklikten sonra kural artık cihazda çalışamaz (yalnız eWeLink cihazlarını açıp kapatan basit saatli kurallar çalışabilir). Eski zamanlayıcıları cihazdan silinsin mi?</string>
+    <string name="rule_device_sync_deleted">Silinen kural cihaza yazılmıştı ve zamanlayıcıları hâlâ cihazda; cihaz açıp kapatmaya devam eder. Cihazdan da silinsin mi?</string>
+    <string name="rule_device_update">Güncelle</string>
+    <string name="rule_device_remove">Sil</string>
+    <string name="rule_device_keep">Cihazda kalsın</string>
+    <string name="rule_device_removed">Zamanlayıcılar cihazdan silindi.</string>
+    <string name="rule_on_device_note">Cihaza yazılı: cihaz kendi başına çalıştırır. İki kez çalışmasın diye burada kapalı kalsın; değiştirirsen cihazı güncellemek sorulur.</string>
 </resources>

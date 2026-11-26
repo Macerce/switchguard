@@ -6,6 +6,10 @@ En yeni sürüm en üsttedir. Sürüm numaraları: **büyük.orta.küçük**; k�
 
 ---
 
+## 2.56.2 — 2026-11-26
+**İyileştirme**
+- **Cihaza yaz** yazdığı zamanlayıcıları hatırlar. Böyle bir kural değişince cihazın güncellenmesi sorulur (kural artık cihazda çalışamıyorsa eski zamanlayıcıların silinmesi); kural silinince zamanlayıcıların cihazdan da silinmesi sorulur. Yeniden yazmak eskilerin üstüne yazar, fazladan zamanlayıcı bırakmaz. Kural düzenleyicide cihaza yazılı kurallar için not görünür.
+
 ## 2.56.1 — 2026-11-26
 **İyileştirme**
 - Ana ekrandaki alan kartları cihaz kartlarıyla aynı stilde: alanda açık bir şey varsa kart sakin kalır, simgesi amber dolar ve kenarında ince amber çizgi olur.

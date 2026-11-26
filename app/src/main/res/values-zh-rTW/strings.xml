@@ -2036,4 +2036,13 @@
     </plurals>
     <string name="rule_options_tag">選項</string>
     <string name="rule_options">迴圈保護與執行模式</string>
+    <string name="rule_device_sync_title">裝置上的定時</string>
+    <string name="rule_device_sync_update">此規則已寫入裝置，裝置在更新前會繼續依舊時間執行。現在更新裝置嗎？</string>
+    <string name="rule_device_sync_gone">此變更後規則無法再於裝置上執行（僅支援開關 eWeLink 裝置的簡單定時規則）。從裝置刪除舊定時嗎？</string>
+    <string name="rule_device_sync_deleted">已刪除的規則曾寫入裝置，其定時仍在裝置上，裝置會繼續開關。也從裝置刪除嗎？</string>
+    <string name="rule_device_update">更新</string>
+    <string name="rule_device_remove">刪除</string>
+    <string name="rule_device_keep">保留在裝置上</string>
+    <string name="rule_device_removed">已從裝置刪除定時。</string>
+    <string name="rule_on_device_note">已寫入裝置：裝置會自行執行。請在此保持關閉以免重複執行；變更後會詢問是否更新裝置。</string>
 </resources>

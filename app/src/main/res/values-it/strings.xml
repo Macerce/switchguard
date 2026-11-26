@@ -2084,4 +2084,13 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     </plurals>
     <string name="rule_options_tag">OPZIONI</string>
     <string name="rule_options">Protezione dai cicli e modalità di esecuzione</string>
+    <string name="rule_device_sync_title">Timer sul dispositivo</string>
+    <string name="rule_device_sync_update">Questa regola è scritta sul dispositivo, che continua con gli orari vecchi finché non viene aggiornato. Aggiornare ora il dispositivo?</string>
+    <string name="rule_device_sync_gone">Dopo questa modifica la regola non può più funzionare sul dispositivo (solo regole orarie semplici che accendono/spengono dispositivi eWeLink). Rimuovere i vecchi timer dal dispositivo?</string>
+    <string name="rule_device_sync_deleted">La regola eliminata era scritta sul dispositivo e i suoi timer sono ancora lì, quindi continua ad accendere e spegnere. Rimuoverli anche dal dispositivo?</string>
+    <string name="rule_device_update">Aggiorna</string>
+    <string name="rule_device_remove">Rimuovi</string>
+    <string name="rule_device_keep">Lascia sul dispositivo</string>
+    <string name="rule_device_removed">Timer rimossi dal dispositivo.</string>
+    <string name="rule_on_device_note">Scritta sul dispositivo: la esegue da solo. Lasciala spenta qui per non eseguirla due volte; dopo una modifica ti verrà chiesto di aggiornare il dispositivo.</string>
 </resources>

@@ -36,4 +36,11 @@ class RuleToDeviceTest {
         assertNull(RuleToDevice.plan(rule(AutoAction(ActionKind.TURN_ON, "a"), conds = listOf(Condition(ConditionKind.IS_ON, "a"))), dev))
         assertNull(RuleToDevice.plan(rule(AutoAction(ActionKind.TURN_ON, "a"), AutoAction(ActionKind.DELAY, seconds = 30)), dev))
     }
+
+    @Test
+    fun ownsOnlyTimersOfThatRule() {
+        assert(RuleToDevice.owns(RuleToDevice.timerId("rule-1", 7), "rule-1"))
+        assert(!RuleToDevice.owns(RuleToDevice.timerId("rule-12", 0), "rule-1"))
+        assert(!RuleToDevice.owns("3f2a-uuid", "rule-1"))
+    }
 }

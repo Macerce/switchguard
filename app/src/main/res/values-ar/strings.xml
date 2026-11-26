@@ -2227,4 +2227,13 @@
     </plurals>
     <string name="rule_options_tag">خيارات</string>
     <string name="rule_options">الحماية من التكرار ووضع التشغيل</string>
+    <string name="rule_device_sync_title">المؤقتات على الجهاز</string>
+    <string name="rule_device_sync_update">هذه القاعدة مكتوبة على الجهاز، ويستمر بالعمل بالأوقات القديمة حتى يتم تحديثه. تحديث الجهاز الآن؟</string>
+    <string name="rule_device_sync_gone">بعد هذا التغيير لم يعد بإمكان القاعدة العمل على الجهاز (فقط القواعد الزمنية البسيطة لتشغيل وإيقاف أجهزة eWeLink). إزالة المؤقتات القديمة من الجهاز؟</string>
+    <string name="rule_device_sync_deleted">كانت القاعدة المحذوفة مكتوبة على الجهاز وما زالت مؤقتاتها هناك، لذا سيستمر الجهاز في التشغيل والإيقاف. إزالتها من الجهاز أيضًا؟</string>
+    <string name="rule_device_update">تحديث</string>
+    <string name="rule_device_remove">إزالة</string>
+    <string name="rule_device_keep">إبقاء على الجهاز</string>
+    <string name="rule_device_removed">تمت إزالة المؤقتات من الجهاز.</string>
+    <string name="rule_on_device_note">مكتوبة على الجهاز: يشغّلها الجهاز بنفسه. أبقها متوقفة هنا كي لا تعمل مرتين؛ بعد أي تغيير سيُطلب منك تحديث الجهاز.</string>
 </resources>

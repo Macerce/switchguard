@@ -2083,4 +2083,13 @@ Encender y apagar dispositivos y las escenas debe permitirse en la app (Alertas 
     </plurals>
     <string name="rule_options_tag">OPCIONES</string>
     <string name="rule_options">Protección de bucle y modo de ejecución</string>
+    <string name="rule_device_sync_title">Temporizadores en el dispositivo</string>
+    <string name="rule_device_sync_update">Esta regla está escrita en el dispositivo, que seguirá usando los horarios antiguos hasta que se actualice. ¿Actualizar el dispositivo ahora?</string>
+    <string name="rule_device_sync_gone">Tras este cambio la regla ya no puede ejecutarse en el dispositivo (solo reglas horarias simples que encienden/apagan dispositivos eWeLink). ¿Quitar sus temporizadores antiguos del dispositivo?</string>
+    <string name="rule_device_sync_deleted">La regla eliminada estaba escrita en el dispositivo y sus temporizadores siguen allí, así que seguirá encendiendo y apagando. ¿Quitarlos también del dispositivo?</string>
+    <string name="rule_device_update">Actualizar</string>
+    <string name="rule_device_remove">Quitar</string>
+    <string name="rule_device_keep">Dejar en el dispositivo</string>
+    <string name="rule_device_removed">Temporizadores quitados del dispositivo.</string>
+    <string name="rule_on_device_note">Escrita en el dispositivo: el dispositivo la ejecuta por sí solo. Déjala apagada aquí para que no se ejecute dos veces; tras un cambio se te pedirá actualizar el dispositivo.</string>
 </resources>

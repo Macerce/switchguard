@@ -2151,4 +2151,13 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     </plurals>
     <string name="rule_options_tag">OPCJE</string>
     <string name="rule_options">Ochrona przed pętlą i tryb działania</string>
+    <string name="rule_device_sync_title">Harmonogramy w urządzeniu</string>
+    <string name="rule_device_sync_update">Ta reguła jest zapisana w urządzeniu, które działa według starych godzin, dopóki nie zostanie zaktualizowane. Zaktualizować urządzenie teraz?</string>
+    <string name="rule_device_sync_gone">Po tej zmianie reguła nie może już działać w urządzeniu (tylko proste reguły czasowe przełączające urządzenia eWeLink). Usunąć stare harmonogramy z urządzenia?</string>
+    <string name="rule_device_sync_deleted">Usunięta reguła była zapisana w urządzeniu i jej harmonogramy nadal tam są, więc urządzenie dalej przełącza. Usunąć je też z urządzenia?</string>
+    <string name="rule_device_update">Aktualizuj</string>
+    <string name="rule_device_remove">Usuń</string>
+    <string name="rule_device_keep">Zostaw w urządzeniu</string>
+    <string name="rule_device_removed">Harmonogramy usunięte z urządzenia.</string>
+    <string name="rule_on_device_note">Zapisana w urządzeniu: urządzenie wykonuje ją samo. Zostaw ją tu wyłączoną, by nie działała podwójnie; po zmianie pojawi się pytanie o aktualizację urządzenia.</string>
 </resources>

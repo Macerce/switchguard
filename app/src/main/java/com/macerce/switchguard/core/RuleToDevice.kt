@@ -46,7 +46,12 @@ object RuleToDevice {
     }
 
     /** Aynı kural yeniden yazılınca eski kayıtların üstüne gelsin: kimlik kurala ve adıma bağlı. */
-    fun timerId(ruleId: String, step: Int) = "sg-" + ruleId.filter { it.isLetterOrDigit() }.take(12) + "-" + step
+    fun timerId(ruleId: String, step: Int) = prefix(ruleId) + step
+
+    /** Bu kuralın cihaza yazdığı zamanlayıcı mı (adım sayısı değişse de eskileri bulunur). */
+    fun owns(timerId: String, ruleId: String) = timerId.startsWith(prefix(ruleId))
+
+    private fun prefix(ruleId: String) = "sg-" + ruleId.filter { it.isLetterOrDigit() }.take(12) + "-"
 
     /** Kural günleri (bit 0 = pazartesi … bit 6 = pazar) → cron günleri (0 = pazar … 6 = cumartesi), [shift] gün ileri. */
     fun cronDays(ruleDays: Int, shift: Int): Set<Int> =

@@ -2113,4 +2113,13 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     </plurals>
     <string name="rule_options_tag">OPÇÕES</string>
     <string name="rule_options">Proteção de loop e modo de execução</string>
+    <string name="rule_device_sync_title">Timers no dispositivo</string>
+    <string name="rule_device_sync_update">Esta regra está gravada no dispositivo, que continua com os horários antigos até ser atualizado. Atualizar o dispositivo agora?</string>
+    <string name="rule_device_sync_gone">Após esta mudança a regra não pode mais rodar no dispositivo (só regras de horário simples que ligam/desligam dispositivos eWeLink). Remover os timers antigos do dispositivo?</string>
+    <string name="rule_device_sync_deleted">A regra excluída estava gravada no dispositivo e os timers ainda estão lá, então ele continua ligando e desligando. Remover do dispositivo também?</string>
+    <string name="rule_device_update">Atualizar</string>
+    <string name="rule_device_remove">Remover</string>
+    <string name="rule_device_keep">Manter no dispositivo</string>
+    <string name="rule_device_removed">Timers removidos do dispositivo.</string>
+    <string name="rule_on_device_note">Gravada no dispositivo: ele a executa sozinho. Deixe desligada aqui para não rodar duas vezes; após uma mudança será perguntado se deseja atualizar o dispositivo.</string>
 </resources>

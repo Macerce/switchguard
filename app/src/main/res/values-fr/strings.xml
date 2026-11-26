@@ -2112,4 +2112,13 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     </plurals>
     <string name="rule_options_tag">OPTIONS</string>
     <string name="rule_options">Protection anti-boucle et mode d’exécution</string>
+    <string name="rule_device_sync_title">Minuteries sur l\'appareil</string>
+    <string name="rule_device_sync_update">Cette règle est écrite sur l\'appareil, qui garde les anciens horaires tant qu\'il n\'est pas mis à jour. Mettre l\'appareil à jour maintenant ?</string>
+    <string name="rule_device_sync_gone">Après cette modification, la règle ne peut plus fonctionner sur l\'appareil (seules les règles horaires simples qui commutent des appareils eWeLink le peuvent). Supprimer ses anciennes minuteries de l\'appareil ?</string>
+    <string name="rule_device_sync_deleted">La règle supprimée était écrite sur l\'appareil et ses minuteries y sont toujours : l\'appareil continue de commuter. Les supprimer aussi de l\'appareil ?</string>
+    <string name="rule_device_update">Mettre à jour</string>
+    <string name="rule_device_remove">Supprimer</string>
+    <string name="rule_device_keep">Garder sur l\'appareil</string>
+    <string name="rule_device_removed">Minuteries supprimées de l\'appareil.</string>
+    <string name="rule_on_device_note">Écrite sur l\'appareil : il l\'exécute seul. Laissez-la désactivée ici pour éviter un double déclenchement ; après une modification, la mise à jour de l\'appareil vous sera proposée.</string>
 </resources>
