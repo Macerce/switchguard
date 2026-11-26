@@ -2093,4 +2093,19 @@ L\'accensione e lo spegnimento dei dispositivi e le scene devono essere consenti
     <string name="rule_device_keep">Lascia sul dispositivo</string>
     <string name="rule_device_removed">Timer rimossi dal dispositivo.</string>
     <string name="rule_on_device_note">Scritta sul dispositivo: la esegue da solo. Lasciala spenta qui per non eseguirla due volte; dopo una modifica ti verrà chiesto di aggiornare il dispositivo.</string>
+    <string name="usage_title">Cosa controlla questo dispositivo?</string>
+    <string name="usage_desc">Controlla i timer sul dispositivo e le regole, scene e cicli che lo usano</string>
+    <string name="usage_device_timers">Sul dispositivo (funziona anche a telefono spento)</string>
+    <string name="usage_timer_rule">Scritto dalla regola SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">Scritto da SwitchGuard (regola eliminata)</string>
+    <string name="usage_timer_ewelink">Impostato nell\'app eWeLink o sul dispositivo</string>
+    <string name="usage_timers_none">Nessun timer sul dispositivo.</string>
+    <string name="usage_timers_unsupported">I timer propri di questo dispositivo non si possono leggere (solo dispositivi eWeLink).</string>
+    <string name="usage_rules">Regole SwitchGuard</string>
+    <string name="usage_switches">Accende/spegne questo dispositivo</string>
+    <string name="usage_watches">Lo usa come attivatore o condizione</string>
+    <string name="usage_groups">Gruppi e aree</string>
+    <string name="usage_group_desc">Accendere/spegnere il gruppo o l\'area agisce anche su questo dispositivo</string>
+    <string name="usage_none">Nessuna regola, scena o ciclo SwitchGuard usa questo dispositivo.</string>
+    <string name="usage_footer">I timer funzionano sul dispositivo stesso. Regole, scene e cicli funzionano su questo telefono mentre il monitoraggio è attivo.</string>
 </resources>

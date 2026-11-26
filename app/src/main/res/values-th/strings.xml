@@ -2017,4 +2017,19 @@
     <string name="rule_device_keep">เก็บไว้บนอุปกรณ์</string>
     <string name="rule_device_removed">ลบตัวตั้งเวลาออกจากอุปกรณ์แล้ว</string>
     <string name="rule_on_device_note">เขียนลงอุปกรณ์แล้ว: อุปกรณ์ทำงานเอง ปิดไว้ที่นี่เพื่อไม่ให้ทำงานซ้ำ เมื่อแก้ไขจะมีการถามให้อัปเดตอุปกรณ์</string>
+    <string name="usage_title">อะไรควบคุมอุปกรณ์นี้อยู่</string>
+    <string name="usage_desc">ตรวจตัวตั้งเวลาบนอุปกรณ์ และกฎ ฉาก รอบการทำงานที่ใช้อุปกรณ์นี้</string>
+    <string name="usage_device_timers">บนอุปกรณ์เอง (ทำงานแม้ปิดโทรศัพท์)</string>
+    <string name="usage_timer_rule">เขียนโดยกฎ SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">เขียนโดย SwitchGuard (กฎถูกลบแล้ว)</string>
+    <string name="usage_timer_ewelink">ตั้งจากแอป eWeLink หรือบนอุปกรณ์</string>
+    <string name="usage_timers_none">ไม่มีตัวตั้งเวลาบนอุปกรณ์</string>
+    <string name="usage_timers_unsupported">อ่านตัวตั้งเวลาของอุปกรณ์นี้ไม่ได้ (เฉพาะอุปกรณ์ eWeLink)</string>
+    <string name="usage_rules">กฎ SwitchGuard</string>
+    <string name="usage_switches">เปิด/ปิดอุปกรณ์นี้</string>
+    <string name="usage_watches">ใช้เป็นตัวกระตุ้นหรือเงื่อนไข</string>
+    <string name="usage_groups">กลุ่มและพื้นที่</string>
+    <string name="usage_group_desc">เมื่อเปิด/ปิดกลุ่มหรือพื้นที่ อุปกรณ์นี้ก็เปิด/ปิดด้วย</string>
+    <string name="usage_none">ไม่มีกฎ ฉาก หรือรอบการทำงานของ SwitchGuard ที่ใช้อุปกรณ์นี้</string>
+    <string name="usage_footer">ตัวตั้งเวลาทำงานบนอุปกรณ์เอง กฎ ฉาก และรอบการทำงานทำงานบนโทรศัพท์นี้ขณะเปิดการเฝ้าดู</string>
 </resources>

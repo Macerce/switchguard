@@ -2122,4 +2122,19 @@ Ligar e desligar dispositivos e executar cenas precisa ser permitido no app (Ale
     <string name="rule_device_keep">Manter no dispositivo</string>
     <string name="rule_device_removed">Timers removidos do dispositivo.</string>
     <string name="rule_on_device_note">Gravada no dispositivo: ele a executa sozinho. Deixe desligada aqui para não rodar duas vezes; após uma mudança será perguntado se deseja atualizar o dispositivo.</string>
+    <string name="usage_title">O que controla este dispositivo?</string>
+    <string name="usage_desc">Consulte os timers no dispositivo e as regras, cenas e ciclos que o usam</string>
+    <string name="usage_device_timers">No dispositivo (funciona mesmo com o celular desligado)</string>
+    <string name="usage_timer_rule">Gravado pela regra do SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">Gravado pelo SwitchGuard (a regra foi excluída)</string>
+    <string name="usage_timer_ewelink">Definido no app eWeLink ou no dispositivo</string>
+    <string name="usage_timers_none">Nenhum timer no dispositivo.</string>
+    <string name="usage_timers_unsupported">Os timers próprios deste dispositivo não podem ser lidos (só dispositivos eWeLink).</string>
+    <string name="usage_rules">Regras do SwitchGuard</string>
+    <string name="usage_switches">Liga/desliga este dispositivo</string>
+    <string name="usage_watches">Usa como gatilho ou condição</string>
+    <string name="usage_groups">Grupos e áreas</string>
+    <string name="usage_group_desc">Ligar/desligar o grupo ou área liga/desliga este dispositivo também</string>
+    <string name="usage_none">Nenhuma regra, cena ou ciclo do SwitchGuard usa este dispositivo.</string>
+    <string name="usage_footer">Os timers rodam no próprio dispositivo. Regras, cenas e ciclos rodam neste celular enquanto o monitoramento está ligado.</string>
 </resources>

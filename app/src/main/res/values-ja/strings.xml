@@ -2046,4 +2046,19 @@
     <string name="rule_device_keep">機器に残す</string>
     <string name="rule_device_removed">機器からタイマーを削除しました。</string>
     <string name="rule_on_device_note">機器に書き込み済み：機器が単独で実行します。二重に動かないようここではオフのままにしてください。変更すると機器の更新を確認します。</string>
+    <string name="usage_title">この機器を制御しているもの</string>
+    <string name="usage_desc">機器のタイマーと、この機器を使うルール・シーン・サイクルを確認</string>
+    <string name="usage_device_timers">機器本体（スマホがオフでも動作）</string>
+    <string name="usage_timer_rule">SwitchGuard のルールが書き込み：%1$s</string>
+    <string name="usage_timer_orphan">SwitchGuard が書き込み（ルールは削除済み）</string>
+    <string name="usage_timer_ewelink">eWeLink アプリまたは機器で設定</string>
+    <string name="usage_timers_none">機器にタイマーはありません。</string>
+    <string name="usage_timers_unsupported">この機器自体のタイマーは読み取れません（eWeLink 機器のみ）。</string>
+    <string name="usage_rules">SwitchGuard のルール</string>
+    <string name="usage_switches">この機器をオン/オフ</string>
+    <string name="usage_watches">トリガーまたは条件として使用</string>
+    <string name="usage_groups">グループとエリア</string>
+    <string name="usage_group_desc">グループやエリアを切り替えるとこの機器も切り替わります</string>
+    <string name="usage_none">この機器を使う SwitchGuard のルール・シーン・サイクルはありません。</string>
+    <string name="usage_footer">タイマーは機器本体で動作します。ルール・シーン・サイクルは監視がオンの間このスマホで動作します。</string>
 </resources>

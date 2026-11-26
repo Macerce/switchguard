@@ -2013,4 +2013,19 @@
     <string name="rule_device_keep">डिवाइस पर रहने दें</string>
     <string name="rule_device_removed">टाइमर डिवाइस से हटा दिए गए।</string>
     <string name="rule_on_device_note">डिवाइस पर लिखा है: डिवाइस इसे खुद चलाता है। दो बार न चले इसलिए यहाँ बंद रखें; बदलाव के बाद डिवाइस अपडेट करने को पूछा जाएगा।</string>
+    <string name="usage_title">इस डिवाइस को क्या नियंत्रित करता है?</string>
+    <string name="usage_desc">डिवाइस पर टाइमर और इसे इस्तेमाल करने वाले नियम, सीन और चक्र जाँचें</string>
+    <string name="usage_device_timers">डिवाइस पर ही (फ़ोन बंद होने पर भी चलता है)</string>
+    <string name="usage_timer_rule">SwitchGuard नियम ने लिखा: %1$s</string>
+    <string name="usage_timer_orphan">SwitchGuard ने लिखा (नियम हटा दिया गया)</string>
+    <string name="usage_timer_ewelink">eWeLink ऐप या डिवाइस पर सेट किया गया</string>
+    <string name="usage_timers_none">डिवाइस पर कोई टाइमर नहीं।</string>
+    <string name="usage_timers_unsupported">इस डिवाइस के अपने टाइमर पढ़े नहीं जा सकते (केवल eWeLink डिवाइस)।</string>
+    <string name="usage_rules">SwitchGuard नियम</string>
+    <string name="usage_switches">इस डिवाइस को चालू/बंद करता है</string>
+    <string name="usage_watches">इसे ट्रिगर या शर्त के रूप में उपयोग करता है</string>
+    <string name="usage_groups">समूह और क्षेत्र</string>
+    <string name="usage_group_desc">समूह या क्षेत्र चालू/बंद करने पर यह डिवाइस भी चालू/बंद होता है</string>
+    <string name="usage_none">कोई SwitchGuard नियम, सीन या चक्र इस डिवाइस का उपयोग नहीं करता।</string>
+    <string name="usage_footer">टाइमर डिवाइस पर ही चलते हैं। नियम, सीन और चक्र निगरानी चालू रहने तक इस फ़ोन पर चलते हैं।</string>
 </resources>

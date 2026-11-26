@@ -473,6 +473,7 @@ fun TimersSection(device: DeviceSnapshot) {
     var error by remember { mutableStateOf<String?>(null) }
     var busy by remember { mutableStateOf(false) }
     var editing by remember { mutableStateOf<RepeatTimer?>(null) }
+    val rules = remember(entries) { com.macerce.switchguard.data.Store.get(context).automations }
 
     LaunchedEffect(device.id) {
         Actions.loadTimers(context, device.id)
@@ -521,7 +522,11 @@ fun TimersSection(device: DeviceSnapshot) {
                             formatMinute(context, t.hour * 60 + t.minute) + " · " +
                                 (if (device.isMultiChannel) stringResource(R.string.channel_n, t.channel + 1) + " " else "") +
                                 stringResource(if (t.on) R.string.auto_action_turn_on else R.string.auto_action_turn_off),
-                            daysLabel(t.days),
+                            daysLabel(t.days) + (
+                                if (!com.macerce.switchguard.core.DeviceUsage.isAppTimer(t.id)) ""
+                                else "\n" + (com.macerce.switchguard.core.DeviceUsage.timerRule(t.id, rules)
+                                    ?.let { resources.getString(R.string.usage_timer_rule, it.name) } ?: resources.getString(R.string.usage_timer_orphan))
+                            ),
                             Modifier.tvFocusRing(RoundedCornerShape(12.dp), inside = true).clickable(enabled = !busy) { editing = t },
                         ) {
                             Switch(checked = t.enabled, enabled = !busy, onCheckedChange = { save(t.id, t.copy(enabled = it)) })

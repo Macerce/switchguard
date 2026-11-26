@@ -2024,4 +2024,19 @@
     <string name="rule_device_keep">保留在设备上</string>
     <string name="rule_device_removed">已从设备删除定时。</string>
     <string name="rule_on_device_note">已写入设备：设备会自行运行。请在此保持关闭以免重复运行；更改后会询问是否更新设备。</string>
+    <string name="usage_title">哪些内容在控制此设备？</string>
+    <string name="usage_desc">查看设备上的定时以及使用它的规则、场景和循环</string>
+    <string name="usage_device_timers">设备本身（手机关机时也会运行）</string>
+    <string name="usage_timer_rule">由 SwitchGuard 规则写入：%1$s</string>
+    <string name="usage_timer_orphan">由 SwitchGuard 写入（规则已删除）</string>
+    <string name="usage_timer_ewelink">在 eWeLink 应用或设备上设置</string>
+    <string name="usage_timers_none">设备上没有定时。</string>
+    <string name="usage_timers_unsupported">无法读取此设备自身的定时（仅限 eWeLink 设备）。</string>
+    <string name="usage_rules">SwitchGuard 规则</string>
+    <string name="usage_switches">开关此设备</string>
+    <string name="usage_watches">用作触发或条件</string>
+    <string name="usage_groups">分组和区域</string>
+    <string name="usage_group_desc">开关该分组或区域时也会开关此设备</string>
+    <string name="usage_none">没有 SwitchGuard 规则、场景或循环使用此设备。</string>
+    <string name="usage_footer">定时在设备本身运行。规则、场景和循环在监控开启时于此手机上运行。</string>
 </resources>

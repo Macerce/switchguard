@@ -2017,4 +2017,19 @@ Việc bật/tắt thiết bị và kịch bản phải được cho phép trong
     <string name="rule_device_keep">Giữ trên thiết bị</string>
     <string name="rule_device_removed">Đã xóa hẹn giờ khỏi thiết bị.</string>
     <string name="rule_on_device_note">Đã ghi vào thiết bị: thiết bị tự chạy. Để tắt ở đây để không chạy hai lần; sau khi thay đổi bạn sẽ được hỏi cập nhật thiết bị.</string>
+    <string name="usage_title">Điều gì đang điều khiển thiết bị này?</string>
+    <string name="usage_desc">Kiểm tra hẹn giờ trên thiết bị và các quy tắc, cảnh, chu kỳ dùng nó</string>
+    <string name="usage_device_timers">Trên thiết bị (chạy cả khi điện thoại tắt)</string>
+    <string name="usage_timer_rule">Do quy tắc SwitchGuard ghi: %1$s</string>
+    <string name="usage_timer_orphan">Do SwitchGuard ghi (quy tắc đã bị xóa)</string>
+    <string name="usage_timer_ewelink">Đặt trong ứng dụng eWeLink hoặc trên thiết bị</string>
+    <string name="usage_timers_none">Không có hẹn giờ trên thiết bị.</string>
+    <string name="usage_timers_unsupported">Không đọc được hẹn giờ riêng của thiết bị này (chỉ thiết bị eWeLink).</string>
+    <string name="usage_rules">Quy tắc SwitchGuard</string>
+    <string name="usage_switches">Bật/tắt thiết bị này</string>
+    <string name="usage_watches">Dùng làm kích hoạt hoặc điều kiện</string>
+    <string name="usage_groups">Nhóm và khu vực</string>
+    <string name="usage_group_desc">Bật/tắt nhóm hoặc khu vực cũng bật/tắt thiết bị này</string>
+    <string name="usage_none">Không có quy tắc, cảnh hay chu kỳ SwitchGuard nào dùng thiết bị này.</string>
+    <string name="usage_footer">Hẹn giờ chạy trên chính thiết bị. Quy tắc, cảnh và chu kỳ chạy trên điện thoại này khi đang bật theo dõi.</string>
 </resources>

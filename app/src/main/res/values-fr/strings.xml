@@ -2121,4 +2121,19 @@ L\'allumage et l\'extinction des appareils et les scènes doivent être autoris�
     <string name="rule_device_keep">Garder sur l\'appareil</string>
     <string name="rule_device_removed">Minuteries supprimées de l\'appareil.</string>
     <string name="rule_on_device_note">Écrite sur l\'appareil : il l\'exécute seul. Laissez-la désactivée ici pour éviter un double déclenchement ; après une modification, la mise à jour de l\'appareil vous sera proposée.</string>
+    <string name="usage_title">Qu\'est-ce qui pilote cet appareil ?</string>
+    <string name="usage_desc">Vérifier les minuteries de l\'appareil et les règles, scènes et cycles qui l\'utilisent</string>
+    <string name="usage_device_timers">Sur l\'appareil (fonctionne même téléphone éteint)</string>
+    <string name="usage_timer_rule">Écrit par la règle SwitchGuard : %1$s</string>
+    <string name="usage_timer_orphan">Écrit par SwitchGuard (règle supprimée)</string>
+    <string name="usage_timer_ewelink">Réglé dans l\'app eWeLink ou sur l\'appareil</string>
+    <string name="usage_timers_none">Aucune minuterie sur l\'appareil.</string>
+    <string name="usage_timers_unsupported">Les minuteries propres à cet appareil ne peuvent pas être lues (appareils eWeLink uniquement).</string>
+    <string name="usage_rules">Règles SwitchGuard</string>
+    <string name="usage_switches">Commute cet appareil</string>
+    <string name="usage_watches">L\'utilise comme déclencheur ou condition</string>
+    <string name="usage_groups">Groupes et zones</string>
+    <string name="usage_group_desc">Commuter le groupe ou la zone commute aussi cet appareil</string>
+    <string name="usage_none">Aucune règle, scène ou cycle SwitchGuard n\'utilise cet appareil.</string>
+    <string name="usage_footer">Les minuteries tournent sur l\'appareil lui-même. Les règles, scènes et cycles tournent sur ce téléphone tant que la surveillance est active.</string>
 </resources>

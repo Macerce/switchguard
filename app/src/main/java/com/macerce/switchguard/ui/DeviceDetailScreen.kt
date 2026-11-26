@@ -122,6 +122,10 @@ fun DeviceDetailScreen(deviceId: String, onBack: () -> Unit) {
 
             // Zamanlayıcılar eWeLink cihazlarının kendi özelliği.
             if (device.cloud == Cloud.EWELINK) TimersSection(device)
+            // Cihazı neyin açıp kapattığı: cihazdaki zamanlayıcılar + bu telefondaki kurallar, sahneler, döngüler.
+            if (!com.macerce.switchguard.core.DeviceGroup.isGroup(device.id)) {
+                Box(Modifier.padding(top = 8.dp)) { DeviceUsageRow(device) }
+            }
 
             DeviceAlertRules(deviceId)
 

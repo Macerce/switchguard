@@ -2087,4 +2087,19 @@ Aç/kapa ve sahneler uygulamada açılmalıdır (Uyarılar → Akıllı uyarıla
     <string name="rule_device_keep">Cihazda kalsın</string>
     <string name="rule_device_removed">Zamanlayıcılar cihazdan silindi.</string>
     <string name="rule_on_device_note">Cihaza yazılı: cihaz kendi başına çalıştırır. İki kez çalışmasın diye burada kapalı kalsın; değiştirirsen cihazı güncellemek sorulur.</string>
+    <string name="usage_title">Bu cihazı neler kontrol ediyor?</string>
+    <string name="usage_desc">Cihazdaki zamanlayıcıları ve onu kullanan kural, sahne ve döngüleri sorgula</string>
+    <string name="usage_device_timers">Cihazın kendisinde (telefon kapalıyken de çalışır)</string>
+    <string name="usage_timer_rule">SwitchGuard kuralı yazdı: %1$s</string>
+    <string name="usage_timer_orphan">SwitchGuard yazdı (kural silinmiş)</string>
+    <string name="usage_timer_ewelink">eWeLink uygulamasından ya da cihazdan kurulmuş</string>
+    <string name="usage_timers_none">Cihazda zamanlayıcı yok.</string>
+    <string name="usage_timers_unsupported">Bu cihazın kendi zamanlayıcıları okunamıyor (yalnız eWeLink cihazları).</string>
+    <string name="usage_rules">SwitchGuard kuralları</string>
+    <string name="usage_switches">Bu cihazı açıp kapatır</string>
+    <string name="usage_watches">Tetikleyici ya da koşul olarak kullanır</string>
+    <string name="usage_groups">Gruplar ve alanlar</string>
+    <string name="usage_group_desc">Grup ya da alan açılıp kapanınca bu cihaz da açılıp kapanır</string>
+    <string name="usage_none">Bu cihazı kullanan SwitchGuard kuralı, sahnesi ya da döngüsü yok.</string>
+    <string name="usage_footer">Zamanlayıcılar cihazın kendisinde çalışır. Kurallar, sahneler ve döngüler izleme açıkken bu telefonda çalışır.</string>
 </resources>

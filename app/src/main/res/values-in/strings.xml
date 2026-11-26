@@ -1975,4 +1975,19 @@ Menyalakan dan mematikan perangkat serta skenario harus diizinkan di aplikasi (P
     <string name="rule_device_keep">Biarkan di perangkat</string>
     <string name="rule_device_removed">Timer dihapus dari perangkat.</string>
     <string name="rule_on_device_note">Tertulis di perangkat: perangkat menjalankannya sendiri. Biarkan mati di sini agar tidak berjalan dua kali; setelah diubah Anda akan ditanya untuk memperbarui perangkat.</string>
+    <string name="usage_title">Apa yang mengendalikan perangkat ini?</string>
+    <string name="usage_desc">Periksa timer di perangkat serta aturan, adegan, dan siklus yang memakainya</string>
+    <string name="usage_device_timers">Di perangkat (tetap berjalan saat ponsel mati)</string>
+    <string name="usage_timer_rule">Ditulis oleh aturan SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">Ditulis oleh SwitchGuard (aturan sudah dihapus)</string>
+    <string name="usage_timer_ewelink">Diatur di aplikasi eWeLink atau di perangkat</string>
+    <string name="usage_timers_none">Tidak ada timer di perangkat.</string>
+    <string name="usage_timers_unsupported">Timer bawaan perangkat ini tidak bisa dibaca (hanya perangkat eWeLink).</string>
+    <string name="usage_rules">Aturan SwitchGuard</string>
+    <string name="usage_switches">Menyalakan/mematikan perangkat ini</string>
+    <string name="usage_watches">Memakainya sebagai pemicu atau syarat</string>
+    <string name="usage_groups">Grup dan area</string>
+    <string name="usage_group_desc">Menyalakan/mematikan grup atau area juga memengaruhi perangkat ini</string>
+    <string name="usage_none">Tidak ada aturan, adegan, atau siklus SwitchGuard yang memakai perangkat ini.</string>
+    <string name="usage_footer">Timer berjalan di perangkat itu sendiri. Aturan, adegan, dan siklus berjalan di ponsel ini selama pemantauan aktif.</string>
 </resources>

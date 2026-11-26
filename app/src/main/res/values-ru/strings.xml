@@ -2160,4 +2160,19 @@
     <string name="rule_device_keep">Оставить</string>
     <string name="rule_device_removed">Таймеры удалены с устройства.</string>
     <string name="rule_on_device_note">Записано на устройство: оно выполняет правило само. Оставьте его здесь выключенным, чтобы не было двойного срабатывания; после изменения будет предложено обновить устройство.</string>
+    <string name="usage_title">Что управляет этим устройством?</string>
+    <string name="usage_desc">Проверить таймеры на устройстве и правила, сцены и циклы, которые его используют</string>
+    <string name="usage_device_timers">На самом устройстве (работает и при выключенном телефоне)</string>
+    <string name="usage_timer_rule">Записано правилом SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">Записано SwitchGuard (правило удалено)</string>
+    <string name="usage_timer_ewelink">Задано в приложении eWeLink или на устройстве</string>
+    <string name="usage_timers_none">На устройстве нет таймеров.</string>
+    <string name="usage_timers_unsupported">Собственные таймеры этого устройства прочитать нельзя (только устройства eWeLink).</string>
+    <string name="usage_rules">Правила SwitchGuard</string>
+    <string name="usage_switches">Включает/выключает устройство</string>
+    <string name="usage_watches">Использует как триггер или условие</string>
+    <string name="usage_groups">Группы и зоны</string>
+    <string name="usage_group_desc">Включение/выключение группы или зоны переключает и это устройство</string>
+    <string name="usage_none">Ни одно правило, сцена или цикл SwitchGuard не использует это устройство.</string>
+    <string name="usage_footer">Таймеры работают на самом устройстве. Правила, сцены и циклы работают на этом телефоне, пока включён мониторинг.</string>
 </resources>

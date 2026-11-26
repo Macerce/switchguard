@@ -2160,4 +2160,19 @@ Włączanie i wyłączanie urządzeń oraz sceny muszą być dozwolone w aplikac
     <string name="rule_device_keep">Zostaw w urządzeniu</string>
     <string name="rule_device_removed">Harmonogramy usunięte z urządzenia.</string>
     <string name="rule_on_device_note">Zapisana w urządzeniu: urządzenie wykonuje ją samo. Zostaw ją tu wyłączoną, by nie działała podwójnie; po zmianie pojawi się pytanie o aktualizację urządzenia.</string>
+    <string name="usage_title">Co steruje tym urządzeniem?</string>
+    <string name="usage_desc">Sprawdź harmonogramy w urządzeniu oraz reguły, sceny i cykle, które go używają</string>
+    <string name="usage_device_timers">W urządzeniu (działa nawet przy wyłączonym telefonie)</string>
+    <string name="usage_timer_rule">Zapisane przez regułę SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">Zapisane przez SwitchGuard (reguła usunięta)</string>
+    <string name="usage_timer_ewelink">Ustawione w aplikacji eWeLink lub w urządzeniu</string>
+    <string name="usage_timers_none">Brak harmonogramów w urządzeniu.</string>
+    <string name="usage_timers_unsupported">Nie można odczytać własnych harmonogramów tego urządzenia (tylko urządzenia eWeLink).</string>
+    <string name="usage_rules">Reguły SwitchGuard</string>
+    <string name="usage_switches">Przełącza to urządzenie</string>
+    <string name="usage_watches">Używa go jako wyzwalacza lub warunku</string>
+    <string name="usage_groups">Grupy i obszary</string>
+    <string name="usage_group_desc">Przełączenie grupy lub obszaru przełącza też to urządzenie</string>
+    <string name="usage_none">Żadna reguła, scena ani cykl SwitchGuard nie używa tego urządzenia.</string>
+    <string name="usage_footer">Harmonogramy działają w samym urządzeniu. Reguły, sceny i cykle działają na tym telefonie, gdy monitorowanie jest włączone.</string>
 </resources>

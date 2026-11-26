@@ -6,6 +6,11 @@ Newest first. Versions are **major.minor.patch**: patch = fixes, minor = new fea
 
 ---
 
+## 2.57.0 — 2026-11-26
+**New**
+- **What controls this device?** (device page): one tap shows everything that can switch the device — the timers on the device itself (read live; each marked as written by a SwitchGuard rule, by a deleted rule, or set in the eWeLink app) and the SwitchGuard rules (directly or through a group, area, scene or cycle; switching it or only watching it), scenes, cycles, groups and areas.
+- The device's timer list also shows which SwitchGuard rule wrote a timer.
+
 ## 2.56.2 — 2026-11-26
 **Improved**
 - **Write to device** keeps track of the timers it wrote. After you change such a rule, the app asks to update the device (or to remove the old timers if the rule can no longer run there); after you delete it, the app asks to remove its timers from the device too. Writing again replaces the old timers instead of leaving extra ones. The rule editor shows a note when a rule is on the device.

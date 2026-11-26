@@ -2082,4 +2082,19 @@ Das Ein- und Ausschalten von Geräten und Szenen muss in der App erlaubt sein (W
     <string name="rule_device_keep">Auf Gerät lassen</string>
     <string name="rule_device_removed">Timer vom Gerät entfernt.</string>
     <string name="rule_on_device_note">Auf das Gerät geschrieben: Das Gerät führt sie selbst aus. Hier ausgeschaltet lassen, damit sie nicht doppelt läuft; nach einer Änderung wird gefragt, ob das Gerät aktualisiert werden soll.</string>
+    <string name="usage_title">Was steuert dieses Gerät?</string>
+    <string name="usage_desc">Timer auf dem Gerät sowie Regeln, Szenen und Zyklen prüfen, die es nutzen</string>
+    <string name="usage_device_timers">Auf dem Gerät (läuft auch bei ausgeschaltetem Telefon)</string>
+    <string name="usage_timer_rule">Von SwitchGuard-Regel geschrieben: %1$s</string>
+    <string name="usage_timer_orphan">Von SwitchGuard geschrieben (Regel gelöscht)</string>
+    <string name="usage_timer_ewelink">In der eWeLink-App oder am Gerät eingestellt</string>
+    <string name="usage_timers_none">Keine Timer auf dem Gerät.</string>
+    <string name="usage_timers_unsupported">Die eigenen Timer dieses Geräts können nicht gelesen werden (nur eWeLink-Geräte).</string>
+    <string name="usage_rules">SwitchGuard-Regeln</string>
+    <string name="usage_switches">Schaltet dieses Gerät</string>
+    <string name="usage_watches">Nutzt es als Auslöser oder Bedingung</string>
+    <string name="usage_groups">Gruppen und Bereiche</string>
+    <string name="usage_group_desc">Wird die Gruppe/der Bereich geschaltet, schaltet auch dieses Gerät</string>
+    <string name="usage_none">Keine SwitchGuard-Regel, -Szene oder -Zyklus nutzt dieses Gerät.</string>
+    <string name="usage_footer">Timer laufen auf dem Gerät selbst. Regeln, Szenen und Zyklen laufen auf diesem Telefon, solange die Überwachung an ist.</string>
 </resources>

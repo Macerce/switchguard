@@ -2236,4 +2236,19 @@
     <string name="rule_device_keep">إبقاء على الجهاز</string>
     <string name="rule_device_removed">تمت إزالة المؤقتات من الجهاز.</string>
     <string name="rule_on_device_note">مكتوبة على الجهاز: يشغّلها الجهاز بنفسه. أبقها متوقفة هنا كي لا تعمل مرتين؛ بعد أي تغيير سيُطلب منك تحديث الجهاز.</string>
+    <string name="usage_title">ما الذي يتحكم في هذا الجهاز؟</string>
+    <string name="usage_desc">افحص المؤقتات على الجهاز والقواعد والمشاهد والدورات التي تستخدمه</string>
+    <string name="usage_device_timers">على الجهاز نفسه (يعمل حتى والهاتف مغلق)</string>
+    <string name="usage_timer_rule">كتبته قاعدة SwitchGuard: %1$s</string>
+    <string name="usage_timer_orphan">كتبه SwitchGuard (القاعدة محذوفة)</string>
+    <string name="usage_timer_ewelink">مضبوط من تطبيق eWeLink أو من الجهاز</string>
+    <string name="usage_timers_none">لا توجد مؤقتات على الجهاز.</string>
+    <string name="usage_timers_unsupported">لا يمكن قراءة مؤقتات هذا الجهاز (أجهزة eWeLink فقط).</string>
+    <string name="usage_rules">قواعد SwitchGuard</string>
+    <string name="usage_switches">يشغّل/يوقف هذا الجهاز</string>
+    <string name="usage_watches">يستخدمه كمشغّل أو شرط</string>
+    <string name="usage_groups">المجموعات والمناطق</string>
+    <string name="usage_group_desc">تشغيل/إيقاف المجموعة أو المنطقة يشغّل/يوقف هذا الجهاز أيضًا</string>
+    <string name="usage_none">لا توجد قاعدة أو مشهد أو دورة في SwitchGuard تستخدم هذا الجهاز.</string>
+    <string name="usage_footer">تعمل المؤقتات على الجهاز نفسه. تعمل القواعد والمشاهد والدورات على هذا الهاتف أثناء تشغيل المراقبة.</string>
 </resources>
